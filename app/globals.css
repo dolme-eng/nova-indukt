@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Note: Fonts are loaded via next/font in layout.tsx for optimal performance */
+
+@layer base {
+  :root {
+    --background: 0 0% 97.3%;
+    --foreground: 200 18% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 200 18% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 18% 20%;
+    --primary: 161 51% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 200 18% 20%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 200 9% 46%;
+    --accent: 161 51% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 14 78% 62%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 200 9% 75%;
+    --input: 200 9% 75%;
+    --ring: 161 51% 55%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  /* German UX: WCAG 2.1 AA - Focus visible */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-[#4ECCA3] ring-2 ring-[#4ECCA3] ring-offset-2;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    line-height: 1.6;
+  }
+
+  /* German UX: Optimal reading width (66-75 chars) */
+  p, article {
+    max-width: 70ch;
+  }
+}
+
+@layer components {
+  /* Font classes will be applied via next/font in layout.tsx */
+  .font-inter {
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  .font-heading {
+    font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  }
+
+  .font-subheading {
+    font-family: var(--font-satoshi), system-ui, sans-serif;
+  }
+}
+
+/* German UX: Minimum touch target 44x44px */
+@layer base {
+  button, 
+  a,
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Skip link for accessibility */
+  .skip-link {
+    @apply absolute -top-10 left-4 z-[9999] bg-[#4ECCA3] text-white px-4 py-2 rounded-lg font-medium transition-all;
+  }
+  
+  .skip-link:focus {
+    @apply top-4;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

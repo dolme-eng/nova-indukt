@@ -1,0 +1,637 @@
+{
+  "metadata": {
+    "title": "NOVA INDUKT | Premium Induktions-Kochgeschirr",
+    "description": "Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche."
+  },
+  "nav": {
+    "home": "Startseite",
+    "products": "Produkte",
+    "about": "Über uns",
+    "technology": "Technologie",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "account": "Mein Konto",
+    "cart": "Warenkorb",
+    "wishlist": "Wunschliste",
+    "search": "Suchen",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden"
+  },
+  "hero": {
+    "slide1": {
+      "title": "Die Zukunft der Induktion",
+      "subtitle": "Premium-Küchenzubehör für maximale Performance",
+      "cta": "Jetzt entdecken",
+      "tag": "Neuheiten 2026"
+    },
+    "slide2": {
+      "title": "Professionelle Topfsets",
+      "subtitle": "Made in Germany - 2 Jahre Garantie",
+      "cta": "Angebote entdecken",
+      "tag": "-30% Rabatt"
+    },
+    "slide3": {
+      "title": "Smarte Küchentechnologie",
+      "subtitle": "EcoPower & SmartHeat Technology",
+      "cta": "Mehr erfahren",
+      "tag": "Innovation"
+    },
+    "catalog": "Katalog"
+  },
+  "trust": {
+    "shipping": "Kostenlose Lieferung ab 500€",
+    "shippingDesc": "Ab 500€",
+    "freeShipping": "Kostenlose Lieferung ab 500€",
+    "freeShippingDesc": "Ab 500€",
+    "returns": "30 Tage Rückgabe",
+    "returnsDesc": "Kostenlos",
+    "warranty": "2 Jahre Garantie",
+    "warrantyDesc": "Auf alles",
+    "support": "Premium Support",
+    "supportDesc": "Mo-Fr",
+    "madeInGermany": "Made in Germany"
+  },
+  "categories": {
+    "title": "Unsere Kategorien",
+    "popular": "Beliebte Kategorien",
+    "all": "Alle Kategorien",
+    "viewAll": "Alle ansehen",
+    "cooking": "Kochen",
+    "preparation": "Vorbereitung",
+    "artDeVivre": "Art de Vivre",
+    "accessories": "Zubehör"
+  },
+  "deals": {
+    "title": "Flash Deals",
+    "subtitle": "Nur für kurze Zeit",
+    "endsIn": "Endet in 04:23:15",
+    "stock": "Nur noch {count} verfügbar"
+  },
+  "bestsellers": {
+    "title": "Bestseller",
+    "subtitle": "Unsere meistverkauften Produkte"
+  },
+  "badges": {
+    "premium": "Premium",
+    "bestseller": "Bestseller",
+    "new": "Neu"
+  },
+  "products": {
+    "title": "Produkte",
+    "products": "Produkte",
+    "bestsellers": "Unsere Bestseller",
+    "bestsellersSubtitle": "Handverlesene Produkte für die moderne Küche",
+    "viewAll": "Alle Produkte ansehen",
+    "addToCart": "In den Warenkorb",
+    "wishlist": "Zur Wunschliste",
+    "wishlistAdded": "Zur Wunschliste hinzugefügt",
+    "wishlistRemoved": "Aus der Wunschliste entfernt",
+    "inStock": "Auf Lager - Nur noch {count} verfügbar",
+    "limited": "Nur noch {count} verfügbar",
+    "outOfStock": "Nicht verfügbar",
+    "new": "Neu",
+    "bestseller": "Bestseller",
+    "premium": "Premium",
+    "search": "Produkte suchen...",
+    "noResults": "Keine Produkte gefunden",
+    "tryDifferent": "Versuchen Sie es mit anderen Suchbegriffen",
+    "reviews": "Rezensionen",
+    "viewProduct": "Zum Produkt",
+    "freeShipping": "Kostenloser Versand",
+    "warranty": "{years} Jahre Garantie",
+    "returns": "{days} Tage Rückgabe",
+    "sku": "Artikelnummer",
+    "tabDescription": "Beschreibung",
+    "tabSpecs": "Technische Daten",
+    "tabReviews": "Bewertungen",
+    "productDescription": "Produktbeschreibung",
+    "technicalData": "Technische Daten",
+    "relatedProducts": "Ähnliche Produkte",
+    "yes": "Ja",
+    "no": "Nein",
+    "specs": {
+      "material": "Material",
+      "dimensions": "Abmessungen",
+      "weight": "Gewicht",
+      "dishwasher": "Spülmaschinenfest",
+      "induction": "Induktionsgeeignet"
+    },
+    "features": {
+      "smartHeat": {
+        "title": "SmartHeat™ Technology",
+        "desc": "Präzise Temperaturkontrolle"
+      },
+      "ecoPower": {
+        "title": "EcoPower™ System",
+        "desc": "Energieeffizient"
+      },
+      "safetyGuard": {
+        "title": "SafetyGuard™",
+        "desc": "Maximale Sicherheit"
+      },
+      "premium": {
+        "title": "Premium Qualität",
+        "desc": "Made in Germany"
+      }
+    }
+  },
+  "product": {
+    "back": "Zurück",
+    "nav": {
+      "home": "Startseite"
+    },
+    "products": {
+      "title": "Produkte"
+    },
+    "wishlist": {
+      "added": "Zur Wunschliste hinzugefügt",
+      "removed": "Aus der Wunschliste entfernt"
+    },
+    "freeShipping": "Kostenloser Versand",
+    "warranty": "{years} Jahre Garantie",
+    "returns": "{days} Tage Rückgabe",
+    "addToCart": "In den Warenkorb",
+    "inStock": "Auf Lager - Nur noch {count} verfügbar",
+    "outOfStock": "Nicht verfügbar",
+    "sku": "Artikelnummer",
+    "tabDescription": "Beschreibung",
+    "tabSpecs": "Spezifikationen",
+    "tabReviews": "Bewertungen",
+    "productDescription": "Produktbeschreibung",
+    "technicalData": "Technische Daten",
+    "specs": {
+      "material": "Material",
+      "dimensions": "Maße",
+      "weight": "Gewicht",
+      "dishwasher": "Spülmaschinengeeignet",
+      "induction": "Induktionsgeeignet"
+    },
+    "features": {
+      "smartHeat": {
+        "title": "SmartHeat™ Technologie",
+        "desc": "Präzise Temperaturkontrolle"
+      },
+      "ecoPower": {
+        "title": "EcoPower™ System",
+        "desc": "Energieeffizient"
+      },
+      "safetyGuard": {
+        "title": "SafetyGuard™",
+        "desc": "Maximale Sicherheit"
+      },
+      "premium": {
+        "title": "Premium Qualität",
+        "desc": "Made in Germany"
+      }
+    },
+    "yes": "Ja",
+    "no": "Nein",
+    "relatedProducts": "Verwandte Produkte"
+  },
+  "tech": {
+    "tag": "Unsere Technologie",
+    "title": "Innovation trifft Handwerk",
+    "subtitle": "Entdecke Technologien, die dein Kochen revolutionieren",
+    "smartHeat": "SmartHeat Technology",
+    "smartHeatDesc": "Präzise Temperaturkontrolle für perfekte Ergebnisse",
+    "ecoPower": "EcoPower System",
+    "ecoPowerDesc": "Bis zu 40% Energieeinsparung durch Innovation",
+    "safety": "SafetyGuard Pro",
+    "safetyDesc": "Maximale Sicherheit für dich und deine Familie",
+    "learnMore": "Mehr erfahren"
+  },
+  "blog": {
+    "title": "Expertenwissen",
+    "subtitle": "Tipps & Guides für deine Küche",
+    "viewAll": "Alle Artikel",
+    "readMore": "Weiterlesen",
+    "searchPlaceholder": "Artikel durchsuchen...",
+    "allCategories": "Alle Kategorien",
+    "noResults": "Keine Artikel gefunden",
+    "tryDifferent": "Versuchen Sie andere Suchbegriffe",
+    "nav": {
+      "home": "Startseite"
+    },
+    "backToHome": "Zurück zur Startseite"
+  },
+  "newsletter": {
+    "tag": "Newsletter",
+    "title": "Werde Induktions-Experte",
+    "subtitle": "Erhalte exklusive Tipps, Rezepte und Angebote direkt in dein Postfach.",
+    "placeholder": "Deine E-Mail-Adresse",
+    "submit": "Anmelden"
+  },
+  "cart": {
+    "title": "Warenkorb",
+    "titleWithCount": "Warenkorb ({count})",
+    "empty": "Ihr Warenkorb ist leer",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "freeShipping": "Kostenlos",
+    "freeShippingHint": "Noch {amount} € bis zum kostenlosen Versand",
+    "total": "Gesamt",
+    "checkout": "Zur Kasse",
+    "continue": "Weiter einkaufen",
+    "promo": "Gutscheincode",
+    "apply": "Anwenden",
+    "vat": "inkl. 19% MwSt.",
+    "securePayment": "Sichere Zahlung",
+    "deliveryTime": "Lieferung in 2-4 Werktagen",
+    "summary": "Zusammenfassung",
+    "remove": "Entfernen",
+    "addToCart": "In den Warenkorb",
+    "add": "Hinzugefügt",
+    "cartAdd": "Hinzugefügt"
+  },
+  "checkout": {
+    "title": "Kasse",
+    "nav": {
+      "home": "Startseite"
+    },
+    "cart": {
+      "title": "Warenkorb"
+    },
+    "backToCart": "Zurück zum Warenkorb",
+    "step1": "Lieferung",
+    "step2": "Zahlung",
+    "step3": "Bestätigung",
+    "shipping": {
+      "title": "Lieferadresse",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "address": "Straße und Hausnummer",
+      "zipCode": "PLZ",
+      "city": "Stadt",
+      "country": "Land",
+      "continue": "Weiter zur Zahlung"
+    },
+    "payment": {
+      "title": "Zahlungsmethode",
+      "card": "Kreditkarte",
+      "paypal": "PayPal",
+      "sofort": "Sofortüberweisung",
+      "cardName": "Karteninhaber",
+      "cardNumber": "Kartennummer",
+      "expiry": "Ablaufdatum",
+      "cvc": "CVC",
+      "secure": "Ihre Zahlungsdaten sind SSL-verschlüsselt",
+      "back": "Zurück",
+      "pay": "Jetzt bezahlen",
+      "processing": "Wird verarbeitet..."
+    },
+    "summary": {
+      "title": "Bestellübersicht",
+      "items": "Artikel",
+      "orderNumber": "Bestellnummer"
+    },
+    "success": {
+      "title": "Vielen Dank für Ihre Bestellung!",
+      "subtitle": "Ihre Bestellung wurde erfolgreich aufgegeben.",
+      "backHome": "Zurück zur Startseite"
+    },
+    "emptyCart": "Warenkorb ist leer",
+    "emptyCartMessage": "Fügen Sie Artikel hinzu, um fortzufahren.",
+    "backToProducts": "Zurück zu den Produkten"
+  },
+  "auth": {
+    "login": {
+      "title": "Anmelden",
+      "subtitle": "Melden Sie sich an, um auf Ihr Konto zuzugreifen",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort verbergen",
+      "submit": "Anmelden",
+      "loading": "Wird angemeldet...",
+      "noAccount": "Noch kein Konto?",
+      "register": "Jetzt registrieren",
+      "success": "Erfolgreich angemeldet!",
+      "error": "Ungültige Anmeldedaten"
+    },
+    "register": {
+      "title": "Registrieren",
+      "subtitle": "Erstellen Sie ein Konto, um alle Funktionen zu nutzen",
+      "name": "Vollständiger Name",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "gdpr": "Ich stimme der Datenschutzerklärung zu",
+      "newsletter": "Newsletter abonnieren (optional)",
+      "submit": "Konto erstellen",
+      "loading": "Wird registriert...",
+      "hasAccount": "Bereits ein Konto?",
+      "login": "Hier anmelden",
+      "success": "Konto erfolgreich erstellt!",
+      "error": "Registrierung fehlgeschlagen",
+      "passwordMismatch": "Passwörter stimmen nicht überein"
+    },
+    "logout": "Abmelden"
+  },
+  "account": {
+    "title": "Mein Konto",
+    "overview": "Übersicht",
+    "orders": "Bestellungen",
+    "wishlist": "Wunschliste",
+    "addresses": "Adressen",
+    "payment": "Zahlungsmethoden",
+    "settings": "Einstellungen",
+    "welcome": "Willkommen zurück",
+    "memberSince": "Mitglied seit",
+    "quickActions": "Schnellzugriff",
+    "recentOrders": "Letzte Bestellungen",
+    "noOrders": "Noch keine Bestellungen",
+    "noWishlist": "Ihre Wunschliste ist leer",
+    "noWishlistHint": "Durchsuchen Sie unsere Produkte und fügen Sie Artikel hinzu.",
+    "browseProducts": "Produkte entdecken",
+    "mobileMenu": "Menü"
+  },
+  "wishlist": {
+    "title": "Wunschliste",
+    "empty": "Ihre Wunschliste ist leer",
+    "emptyHint": "Speichern Sie Ihre Lieblingsprodukte für später.",
+    "browse": "Produkte entdecken",
+    "remove": "Entfernen",
+    "addToCart": "In den Warenkorb"
+  },
+  "footer": {
+    "tagline": "Premium-Küchenzubehör für maximale Performance.",
+    "company": "Unternehmen",
+    "support": "Support",
+    "legal": "Rechtliches",
+    "imprint": "Impressum",
+    "terms": "AGB",
+    "privacy": "Datenschutz",
+    "withdrawal": "Widerrufsrecht",
+    "securePayment": "Sichere Zahlung",
+    "ssl": "SSL-Verschlüsselt",
+    "moneyBack": "Geld-zurück-Garantie",
+    "flexiblePayment": "Flexible Zahlung",
+    "paymentOptions": "Verschiedene Optionen",
+    "paymentMethods": "Zahlungsarten",
+    "shippingPartners": "Versandpartner",
+    "sslEncryption": "SSL-Verschlüsselung",
+    "trustedShops": "Trusted Shops",
+    "tuvCertified": "TÜV geprüft",
+    "sustainable": "Nachhaltig",
+    "allRightsReserved": "Alle Rechte vorbehalten.",
+    "pricesIncludeVat": "Alle Preise inkl. MwSt."
+  },
+  "cookies": {
+    "title": "Wir verwenden Cookies",
+    "description": "Wir nutzen Cookies für den Betrieb der Seite, Analyse und Marketing.",
+    "learnMore": "Mehr erfahren",
+    "acceptAll": "Alle akzeptieren",
+    "acceptNecessary": "Nur notwendige",
+    "settings": "Cookie-Einstellungen",
+    "saveSelection": "Auswahl speichern",
+    "back": "Zurück",
+    "selection": "Ihre Auswahl",
+    "cookies": "Cookies",
+    "optional": "Optional",
+    "necessary": {
+      "title": "Notwendige Cookies",
+      "required": "Erforderlich",
+      "description": "Für den Betrieb der Website unbedingt erforderlich."
+    },
+    "analytics": {
+      "title": "Analyse-Cookies",
+      "description": "Helfen uns zu verstehen, wie Besucher mit der Website interagieren."
+    },
+    "marketing": {
+      "title": "Marketing-Cookies",
+      "description": "Werden verwendet, um relevante Werbung anzuzeigen."
+    }
+  },
+  "language": "Sprache",
+  "loading": "Laden...",
+  "actions": {
+    "explore": "Entdecken",
+    "learnMore": "Mehr erfahren",
+    "subscribe": "Abonnieren",
+    "buyNow": "Jetzt kaufen",
+    "addToCart": "In den Warenkorb",
+    "remove": "Entfernen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "back": "Zurück",
+    "continue": "Weiter",
+    "close": "Schließen"
+  },
+  "filter": "Filter",
+  "filters": {
+    "title": "Filter",
+    "categories": "Kategorien"
+  },
+  "reset": "Zurücksetzen",
+  "priceRange": "Preisbereich",
+  "results": {
+    "single": "Ergebnis",
+    "multiple": "Ergebnisse"
+  },
+  "sort": {
+    "newest": "Neueste zuerst",
+    "rating": "Beste Bewertung",
+    "priceAsc": "Preis: Aufsteigend",
+    "priceDesc": "Preis: Absteigend",
+    "relevance": "Relevanz",
+    "featured": "Empfohlen"
+  },
+  "noResults": {
+    "title": "Keine Ergebnisse gefunden",
+    "description": "Versuchen Sie es mit anderen Suchbegriffen oder Filtern."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "nav": {
+      "home": "Startseite"
+    },
+    "messageSent": "Nachricht gesendet!",
+    "messageSentDescription": "Wir werden uns so schnell wie möglich bei Ihnen melden.",
+    "address": "Adresse",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "hours": "Öffnungszeiten",
+    "form": {
+      "name": "Name",
+      "email": "E-Mail",
+      "subject": "Betreff",
+      "message": "Nachricht",
+      "send": "Nachricht senden",
+      "sending": "Wird gesendet..."
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "Über NOVA INDUKT",
+      "description": "Seit 2018 entwickeln wir hochwertiges Kochgeschirr für Induktion, das deutsche Ingenieurskunst mit modernem Design verbindet. Unser Ziel: Das perfekte Kocherlebnis für jeden Haushalt."
+    },
+    "story": {
+      "title": "Unsere Geschichte",
+      "paragraph1": "NOVA INDUKT wurde 2018 in Berlin gegründet mit einer klaren Vision: Hochwertiges Kochgeschirr zu entwickeln, das speziell auf die Anforderungen moderner Induktionskochfelder abgestimmt ist. Was als kleines Startup begann, hat sich zu einem der führenden Anbieter für Premium-Küchenzubehör in Deutschland entwickelt.",
+      "paragraph2": "Unsere Produkte werden in Zusammenarbeit mit deutschen Ingenieuren und Designern entwickelt und unterliegen strengsten Qualitätskontrollen. Wir glauben daran, dass gutes Kochgeschirr nicht nur funktional, sondern auch nachhaltig sein muss.",
+      "paragraph3": "Heute beliefern wir Kunden in ganz Deutschland und der EU mit unseren Produkten und arbeiten kontinuierlich an innovativen Lösungen für die Küche der Zukunft."
+    },
+    "values": {
+      "title": "Unsere Werte",
+      "quality": {
+        "title": "Deutsche Qualität",
+        "description": "Entwickelt in Deutschland, gefertigt nach höchsten Standards. Jedes Produkt durchläuft strenge Qualitätskontrollen."
+      },
+      "sustainability": {
+        "title": "Nachhaltigkeit",
+        "description": "Umweltbewusste Materialien und energieeffiziente Technologien für eine grünere Küche."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Stetige Forschung und Entwicklung für bessere Kochergebnisse und mehr Effizienz."
+      }
+    },
+    "stats": {
+      "title": "NOVA INDUKT in Zahlen",
+      "founded": "Gegründet",
+      "customers": "Zufriedene Kunden",
+      "products": "Produkte",
+      "employees": "Mitarbeiter"
+    },
+    "location": {
+      "title": "Unser Standort",
+      "headquarters": "Hauptsitz Berlin",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "hours": "Öffnungszeiten",
+      "hoursWeekday": "Mo - Fr: 9:00 - 18:00 Uhr",
+      "hoursSaturday": "Sa: 10:00 - 14:00 Uhr",
+      "hoursSunday": "So: Geschlossen",
+      "mapView": "Kartenansicht",
+      "mapIntegration": "(Integration Google Maps/Mapbox)"
+    },
+    "team": {
+      "title": "Unser Team",
+      "ceo": {
+        "role": "Geschäftsführer",
+        "description": "Gründer und Visionär mit 15 Jahren Erfahrung in der Küchenbranche."
+      },
+      "product": {
+        "role": "Produktentwicklung",
+        "description": "Leidenschaftliche Köchin und Ingenieurin für perfekte Kochergebnisse."
+      },
+      "support": {
+        "role": "Kundenservice",
+        "description": "Ihr Ansprechpartner für alle Fragen rund um unsere Produkte."
+      }
+    },
+    "promise": {
+      "title": "Unser Versprechen",
+      "description": "Wir stehen für Qualität, die Sie spüren können. Jedes unserer Produkte wird mit Sorgfalt entwickelt und getestet, um Ihnen ein überragendes Kocherlebnis zu bieten. Wenn Sie nicht zufrieden sind, sind wir es auch nicht - deshalb bieten wir eine 30-Tage-Geld-zurück-Garantie auf alle Produkte.",
+      "years": "Jahre",
+      "warranty": "Garantie",
+      "days": "Tage",
+      "returns": "Rückgabe",
+      "free": "Kostenlos",
+      "shipping": "Versand ab 500€"
+    },
+    "certifications": {
+      "title": "Zertifizierungen",
+      "madeInGermany": "Made in Germany",
+      "eco": "Eco Certified",
+      "tuv": "TÜV Geprüft",
+      "trusted": "Trusted Shop"
+    }
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "nav": {
+      "home": "Startseite"
+    },
+    "searchPlaceholder": "Fragen durchsuchen...",
+    "all": "Alle",
+    "noResults": "Keine Fragen gefunden.",
+    "categories": {
+      "shipping": "Versand",
+      "payment": "Zahlung",
+      "returns": "Rückgabe",
+      "product": "Produkt",
+      "warranty": "Garantie",
+      "support": "Support"
+    },
+    "questions": {
+      "shipping": {
+        "time": {
+          "question": "Wie lange dauert der Versand?",
+          "answer": "Der Versand innerhalb Deutschlands dauert in der Regel 2-3 Werktage. Express-Versand ist gegen Aufpreis möglich."
+        }
+      },
+      "payment": {
+        "methods": {
+          "question": "Welche Zahlungsmethoden akzeptieren Sie?",
+          "answer": "Wir akzeptieren Kreditkarte, PayPal, Klarna, Apple Pay und Google Pay."
+        }
+      },
+      "returns": {
+        "how": {
+          "question": "Wie kann ich eine Rückgabe durchführen?",
+          "answer": "Sie können Artikel innerhalb von 30 Tagen zurückgeben. Loggen Sie sich ein und wählen Sie \"Rückgabe\" in Ihren Bestellungen."
+        }
+      },
+      "warranty": {
+        "duration": {
+          "question": "Wie lange ist die Garantie?",
+          "answer": "Alle Produkte haben 2 Jahre Herstellergarantie. Premium-Produkte haben erweiterte Garantiebedingungen."
+        }
+      },
+      "product": {
+        "induction": {
+          "question": "Sind die Produkte induktionsgeeignet?",
+          "answer": "Ja, alle unsere Produkte sind für Induktionsherde optimiert und getestet."
+        }
+      },
+      "support": {
+        "contact": {
+          "question": "Wie erreiche ich den Kundenservice?",
+          "answer": "Erreichen Sie uns per E-Mail, Telefon oder Live-Chat. Wir sind Mo-Fr 9-18 Uhr für Sie da."
+        }
+      }
+    }
+  },
+  "search": {
+    "placeholder": "Suchen..."
+  },
+  "breadcrumb": {
+    "home": "Startseite"
+  },
+  "errors": {
+    "required": "Pflichtfeld",
+    "invalidEmail": "Ungültige E-Mail-Adresse",
+    "minLength": "Mindestens {count} Zeichen",
+    "generic": "Ein Fehler ist aufgetreten"
+  },
+  "reviews": {
+    "title": "Kundenbewertungen",
+    "basedOn": "Basierend auf {count} Bewertungen",
+    "writeReview": {
+      "title": "Teilen Sie Ihre Meinung",
+      "description": "Ihre Bewertung hilft anderen Kunden bei ihrer Entscheidung.",
+      "button": "Bewertung schreiben"
+    },
+    "sortBy": "Sortieren nach:",
+    "sort": {
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "helpful": "Hilfreichste",
+      "highest": "Höchste Bewertung",
+      "lowest": "Niedrigste Bewertung"
+    },
+    "stars": "Sterne",
+    "verifiedPurchase": "Verifizierter Kauf",
+    "helpful": "Hilfreich",
+    "report": "Melden",
+    "showLess": "Weniger anzeigen",
+    "readMore": "Mehr lesen",
+    "noResults": "Keine Bewertungen mit diesem Filter gefunden.",
+    "resetFilter": "Filter zurücksetzen",
+    "loadMore": "Mehr Bewertungen laden"
+  }
+}

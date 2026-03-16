@@ -1,0 +1,123 @@
+import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
+import { notFound } from 'next/navigation'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, getTranslations, unstable_setRequestLocale } from 'next-intl/server'
+import '../globals.css'
+import { Toaster } from 'sonner'
+import { Header } from '@/components/layout/header'
+import { Footer } from '@/components/layout/footer'
+import { CookieConsent } from '@/components/cookie-consent'
+import { PageTransition } from '@/components/page-transition'
+import { CustomCursor } from '@/components/custom-cursor'
+import { SmoothScrollProvider } from '@/components/smooth-scroll'
+import { locales } from '@/i18n'
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+export async function generateMetadata({params: {locale}}: {params: {locale: string}}) {
+  const t = await getTranslations({locale, namespace: 'metadata'})
+  
+  return {
+    title: {
+      default: t('title'),
+      template: '%s | NOVA INDUKT'
+    },
+    description: t('description'),
+    keywords: ['Induktion', 'Kochgeschirr', 'Pfannen', 'Töpfe', 'Premium', 'Deutschland', 'Küche'],
+    authors: [{ name: 'NOVA INDUKT' }],
+    creator: 'NOVA INDUKT',
+    metadataBase: new URL('https://nova-indukt.de'),
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        'de': '/de',
+        'en': '/en',
+        'fr': '/fr',
+      },
+    },
+    icons: {
+      icon: '/fav.ico',
+      shortcut: '/fav.ico',
+      apple: '/fav.ico',
+    },
+    openGraph: {
+      type: 'website',
+      locale: locale === 'de' ? 'de_DE' : locale === 'en' ? 'en_US' : 'fr_FR',
+      alternateLocale: ['de_DE', 'en_US', 'fr_FR'],
+      siteName: 'NOVA INDUKT',
+    },
+  }
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f5f4f1' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1917' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+}
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({locale}))
+}
+
+export default async function LocaleLayout({
+  children,
+  params: {locale}
+}: {
+  children: React.ReactNode
+  params: {locale: string}
+}) {
+  // Validate that the incoming `locale` parameter is valid
+  if (!locales.includes(locale as any)) notFound()
+
+  // Enable static rendering
+  unstable_setRequestLocale(locale)
+
+  // Get messages for the current locale
+  const messages = await getMessages()
+
+  return (
+    <html lang={locale} className={`${inter.variable}`}>
+      <body className="font-sans antialiased min-h-screen bg-background text-foreground">
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <a href="#main-content" className="skip-link">
+            Zum Hauptinhalt springen
+          </a>
+          <div className="flex min-h-screen flex-col">
+            <Header locale={locale} />
+            <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">
+              <SmoothScrollProvider>
+                <PageTransition>
+                  {children}
+                </PageTransition>
+              </SmoothScrollProvider>
+            </main>
+            <Footer locale={locale} />
+          </div>
+          <Toaster 
+            position="bottom-right" 
+            toastOptions={{
+              style: {
+                background: '#fff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px',
+                padding: '16px',
+              },
+            }}
+            richColors
+            closeButton
+          />
+          <CookieConsent />
+          <CustomCursor />
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  )
+}
