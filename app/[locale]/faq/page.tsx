@@ -21,7 +21,7 @@ interface FAQItem {
   category: string
 }
 
-function FAQContent({ locale }: FAQContentProps) {
+function FAQContent() {
   const t = useTranslations('faq')
   const [searchQuery, setSearchQuery] = useState('')
   const [openItems, setOpenItems] = useState<string[]>(['shipping-1'])
@@ -213,6 +213,6 @@ function FAQContent({ locale }: FAQContentProps) {
 }
 
 // Server component wrapper
-export default function FAQPage({ params }: { params: { locale: string } }) {
-  return <FAQContent locale={params.locale} />
+export default function FAQPage() {
+  return <FAQContent />
 }

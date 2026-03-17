@@ -33,12 +33,7 @@ export async function generateMetadata({params: {locale}}: {params: {locale: str
     creator: 'NOVA INDUKT',
     metadataBase: new URL('https://nova-indukt.de'),
     alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        'de': '/de',
-        'en': '/en',
-        'fr': '/fr',
-      },
+      canonical: '/de',
     },
     icons: {
       icon: '/fav.ico',
@@ -47,8 +42,7 @@ export async function generateMetadata({params: {locale}}: {params: {locale: str
     },
     openGraph: {
       type: 'website',
-      locale: locale === 'de' ? 'de_DE' : locale === 'en' ? 'en_US' : 'fr_FR',
-      alternateLocale: ['de_DE', 'en_US', 'fr_FR'],
+      locale: 'de_DE',
       siteName: 'NOVA INDUKT',
     },
   }
@@ -91,7 +85,7 @@ export default async function LocaleLayout({
             Zum Hauptinhalt springen
           </a>
           <div className="flex min-h-screen flex-col">
-            <Header locale={locale} />
+            <Header />
             <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">
               <SmoothScrollProvider>
                 <PageTransition>
@@ -99,7 +93,7 @@ export default async function LocaleLayout({
                 </PageTransition>
               </SmoothScrollProvider>
             </main>
-            <Footer locale={locale} />
+            <Footer />
           </div>
           <Toaster 
             position="bottom-right" 

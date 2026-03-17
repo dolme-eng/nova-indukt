@@ -56,10 +56,9 @@ function useWishlist() {
 
 interface ProductContentProps {
   product: Product
-  locale: string
 }
 
-export function ProductContent({ product, locale }: ProductContentProps) {
+export function ProductContent({ product }: ProductContentProps) {
   const t = useTranslations('product')
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -94,7 +93,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
     } else {
       addToWishlist({
         id: product.id,
-        name: product.name[locale as 'de' | 'en' | 'fr'],
+        name: product.name.de,
         price: product.price,
         image: product.images[0],
         slug: product.slug
@@ -106,7 +105,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
   }
 
   const getLocalizedName = (item: { name: { de: string; en: string; fr: string } }) => {
-    return item.name[locale as 'de' | 'en' | 'fr']
+    return item.name.de
   }
 
   const category = categories.find(c => c.id === product.category)
@@ -130,13 +129,13 @@ export function ProductContent({ product, locale }: ProductContentProps) {
               <div className="flex-shrink-0 w-12 h-12 relative rounded-lg overflow-hidden">
                 <Image
                   src={product.images[0]}
-                  alt={product.name[locale as 'de' | 'en' | 'fr']}
+                  alt={product.name.de}
                   fill
                   className="object-cover"
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 truncate text-sm">{product.name[locale as 'de' | 'en' | 'fr']}</p>
+                <p className="font-semibold text-gray-900 truncate text-sm">{product.name.de}</p>
                 <p className="text-[#4ECCA3] font-bold">{product.price} €</p>
               </div>
               <motion.button
@@ -172,7 +171,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
                 </>
               )}
               <ChevronRight className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-900 font-medium truncate max-w-xs">{product.name[locale as 'de' | 'en' | 'fr']}</span>
+              <span className="text-gray-900 font-medium truncate max-w-xs">{product.name.de}</span>
             </div>
           </div>
         </div>
@@ -191,7 +190,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
             >
               <Image
                 src={product.images[selectedImage]}
-                alt={product.name[locale as 'de' | 'en' | 'fr']}
+                alt={product.name.de}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 priority
@@ -254,7 +253,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
                   >
                     <Image 
                       src={img} 
-                      alt={`${product.name[locale as 'de' | 'en' | 'fr']} - ${index + 1}`} 
+                      alt={`${product.name.de} - ${index + 1}`} 
                       fill 
                       className="object-cover" 
                       sizes="80px"
@@ -282,16 +281,16 @@ export function ProductContent({ product, locale }: ProductContentProps) {
                   <span className="text-xs sm:text-sm text-gray-500 ml-1">({product.reviewCount})</span>
                 </div>
               </div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 font-heading mb-2">{product.name[locale as 'de' | 'en' | 'fr']}</h1>
-              <p className="text-gray-600 text-sm sm:text-base">{product.shortDescription[locale as 'de' | 'en' | 'fr']}</p>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 font-heading mb-2">{product.name.de}</h1>
+              <p className="text-gray-600 text-sm sm:text-base">{product.shortDescription.de}</p>
             </div>
 
             {/* Price */}
             <div className="flex flex-wrap items-baseline gap-2 sm:gap-4 py-3 sm:py-4 border-y border-gray-200">
-              <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">{product.price} €</span>
+              <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#4ECCA3]">{product.price} €</span>
               {product.oldPrice && (
                 <>
-                  <span className="text-lg sm:text-xl text-gray-400 line-through">{product.oldPrice} €</span>
+                  <span className="text-lg sm:text-xl text-red-500 line-through decoration-black">{product.oldPrice} €</span>
                   <span className="px-2 py-1 bg-red-100 text-red-600 text-xs sm:text-sm font-bold rounded-full">
                     -{Math.round((1 - product.price / product.oldPrice) * 100)}%
                   </span>
@@ -401,7 +400,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
               {activeTab === 'description' && (
                 <motion.div key="description" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="max-w-3xl">
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('productDescription')}</h3>
-                  <p className="text-gray-600 leading-relaxed">{product.description[locale as 'de' | 'en' | 'fr']}</p>
+                  <p className="text-gray-600 leading-relaxed">{product.description.de}</p>
                   <div className="mt-8 grid sm:grid-cols-2 gap-4">
                     {[
                       { icon: Zap, title: t('features.smartHeat.title'), desc: t('features.smartHeat.desc') },
@@ -459,7 +458,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
                 label: t('tabDescription'),
                 content: (
                   <div className="pt-4">
-                    <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{product.description[locale as 'de' | 'en' | 'fr']}</p>
+                    <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{product.description.de}</p>
                     <div className="mt-6 grid gap-3">
                       {[
                         { icon: Zap, title: t('features.smartHeat.title'), desc: t('features.smartHeat.desc') },
@@ -562,17 +561,17 @@ export function ProductContent({ product, locale }: ProductContentProps) {
                     <div className="relative aspect-square bg-gray-100">
                       <Image 
                         src={item.images[0]} 
-                        alt={item.name[locale as 'de' | 'en' | 'fr']} 
+                        alt={item.name.de} 
                         fill 
                         className="object-cover group-hover:scale-105 transition-transform duration-500" 
                         sizes="(max-width: 640px) 50vw, 25vw"
                       />
                     </div>
                     <div className="p-3 sm:p-4">
-                      <h3 className="font-medium text-gray-900 mb-1.5 sm:mb-2 line-clamp-1 group-hover:text-[#4ECCA3] transition-colors text-sm sm:text-base">{item.name[locale as 'de' | 'en' | 'fr']}</h3>
+                      <h3 className="font-medium text-gray-900 mb-1.5 sm:mb-2 line-clamp-1 group-hover:text-[#4ECCA3] transition-colors text-sm sm:text-base">{item.name.de}</h3>
                       <div className="flex items-center gap-2">
-                        <span className="text-base sm:text-lg font-bold text-gray-900">{item.price} €</span>
-                        {item.oldPrice && <span className="text-xs sm:text-sm text-gray-400 line-through">{item.oldPrice} €</span>}
+                        <span className="text-base sm:text-lg font-bold text-[#4ECCA3]">{item.price} €</span>
+                        {item.oldPrice && <span className="text-xs sm:text-sm text-red-500 line-through decoration-black">{item.oldPrice} €</span>}
                       </div>
                     </div>
                   </Link>
@@ -589,7 +588,7 @@ export function ProductContent({ product, locale }: ProductContentProps) {
           isOpen={lightboxOpen}
           onClose={() => setLightboxOpen(false)}
           onNavigate={setSelectedImage}
-          productName={product.name[locale as 'de' | 'en' | 'fr']}
+          productName={product.name.de}
         />
       </div>
     </article>

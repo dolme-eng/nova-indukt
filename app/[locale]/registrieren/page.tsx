@@ -9,10 +9,10 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, User, XCircle } from 
 import { useAuth } from '@/lib/store/auth'
 
 interface RegisterContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function RegisterContent({ locale }: RegisterContentProps) {
+function RegisterContent() {
   const router = useRouter()
   const t = useTranslations('auth.register')
   const { register } = useAuth()
@@ -56,7 +56,7 @@ function RegisterContent({ locale }: RegisterContentProps) {
     if (result) {
       setSuccess(true)
       setTimeout(() => {
-        router.push(`/${locale}/mein-konto`)
+        router.push('/mein-konto')
       }, 1000)
     } else {
       setError(t('error'))
@@ -70,7 +70,7 @@ function RegisterContent({ locale }: RegisterContentProps) {
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href={`/${locale}`} className="text-2xl font-bold text-gray-900">
+          <Link href="/" className="text-2xl font-bold text-gray-900">
             NOVA INDUKT
           </Link>
           <p className="mt-2 text-gray-600">{t('subtitle')}</p>
@@ -228,7 +228,7 @@ function RegisterContent({ locale }: RegisterContentProps) {
             <p className="text-center text-sm text-gray-600">
               {t('hasAccount')}{' '}
               <Link 
-                href={`/${locale}/anmelden`}
+                href="/anmelden"
                 className="text-[#4ECCA3] font-medium hover:underline"
               >
                 {t('login')}
@@ -241,6 +241,6 @@ function RegisterContent({ locale }: RegisterContentProps) {
   )
 }
 
-export default function RegisterPage({ params }: { params: { locale: string } }) {
-  return <RegisterContent locale={params.locale} />
+export default function RegisterPage() {
+  return <RegisterContent />
 }

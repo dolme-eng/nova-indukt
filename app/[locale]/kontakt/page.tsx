@@ -9,10 +9,10 @@ import {
 } from 'lucide-react'
 
 interface KontaktContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function KontaktContent({ locale }: KontaktContentProps) {
+function KontaktContent() {
   const t = useTranslations('contact')
   const [formData, setFormData] = useState({
     name: '',
@@ -177,6 +177,6 @@ function KontaktContent({ locale }: KontaktContentProps) {
 }
 
 // Server component wrapper
-export default function KontaktPage({ params }: { params: { locale: string } }) {
-  return <KontaktContent locale={params.locale} />
+export default function KontaktPage() {
+  return <KontaktContent />
 }

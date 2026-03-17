@@ -23,10 +23,10 @@ interface WishlistItem {
 }
 
 interface WishlistContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function WishlistContent({ locale }: WishlistContentProps) {
+function WishlistContent() {
   const t = useTranslations('wishlist')
   const tn = useTranslations('nav')
   const tc = useTranslations('cart')
@@ -136,11 +136,11 @@ function WishlistContent({ locale }: WishlistContentProps) {
   }
 
   const getLocalizedName = (name: { de: string; en: string; fr: string }) => {
-    return name[locale as 'de' | 'en' | 'fr']
+    return name.de
   }
 
   const getLocalizedDescription = (desc: { de: string; en: string; fr: string }) => {
-    return desc[locale as 'de' | 'en' | 'fr']
+    return desc.de
   }
 
   if (!isHydrated) {
@@ -303,6 +303,6 @@ function WishlistContent({ locale }: WishlistContentProps) {
   )
 }
 
-export default function WishlistPage({ params }: { params: { locale: string } }) {
-  return <WishlistContent locale={params.locale} />
+export default function WishlistPage() {
+  return <WishlistContent />
 }

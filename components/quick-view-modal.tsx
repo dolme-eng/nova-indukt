@@ -12,10 +12,9 @@ interface QuickViewModalProps {
   product: Product | null
   isOpen: boolean
   onClose: () => void
-  locale: string
 }
 
-export function QuickViewModal({ product, isOpen, onClose, locale }: QuickViewModalProps) {
+export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps) {
   const t = useTranslations()
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
@@ -23,11 +22,11 @@ export function QuickViewModal({ product, isOpen, onClose, locale }: QuickViewMo
   if (!product) return null
 
   const getLocalizedName = () => {
-    return product.name[locale as 'de' | 'en' | 'fr']
+    return product.name.de
   }
 
   const getLocalizedDescription = () => {
-    return product.shortDescription[locale as 'de' | 'en' | 'fr']
+    return product.shortDescription.de
   }
 
   return (
@@ -121,9 +120,9 @@ export function QuickViewModal({ product, isOpen, onClose, locale }: QuickViewMo
                   </div>
 
                   <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-bold text-gray-900">{product.price} €</span>
+                    <span className="text-3xl font-bold text-[#4ECCA3]">{product.price} €</span>
                     {product.oldPrice && (
-                      <span className="text-lg text-gray-400 line-through">{product.oldPrice} €</span>
+                      <span className="text-lg text-red-500 line-through decoration-black">{product.oldPrice} €</span>
                     )}
                   </div>
 

@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export default function ProductPage({ 
   params 
 }: { 
-  params: { slug: string; locale: string } 
+  params: { slug: string } 
 }) {
   // Find product by slug
   const product = products.find(p => p.slug === params.slug)
@@ -21,5 +21,5 @@ export default function ProductPage({
     notFound()
   }
 
-  return <ProductContent product={product} locale={params.locale} />
+  return <ProductContent product={product} />
 }

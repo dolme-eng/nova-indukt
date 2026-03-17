@@ -10,10 +10,10 @@ import {
 import { Link } from '@/navigation'
 
 interface TechnologieContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function TechnologieContent({ locale }: TechnologieContentProps) {
+function TechnologieContent() {
   const t = useTranslations('tech')
 
   const features = [
@@ -309,6 +309,6 @@ function TechnologieContent({ locale }: TechnologieContentProps) {
   )
 }
 
-export default function TechnologiePage({ params }: { params: { locale: string } }) {
-  return <TechnologieContent locale={params.locale} />
+export default function TechnologiePage() {
+  return <TechnologieContent />
 }

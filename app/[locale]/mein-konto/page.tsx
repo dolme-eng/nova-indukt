@@ -51,8 +51,7 @@ const TABS = [
   { id: 'settings', labelKey: 'settings', icon: Settings },
 ]
 
-export default function AccountPage({ params }: { params: { locale: string } }) {
-  const { locale } = params
+export default function AccountPage() {
   const t = useTranslations('account')
   const router = useRouter()
   const { user, isAuthenticated, logout } = useAuth()
@@ -66,12 +65,12 @@ export default function AccountPage({ params }: { params: { locale: string } }) 
   useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
-    if (mounted && !isAuthenticated) router.push(`/${locale}/anmelden`)
-  }, [mounted, isAuthenticated, router, locale])
+    if (mounted && !isAuthenticated) router.push('/anmelden')
+  }, [mounted, isAuthenticated, router])
 
   const handleLogout = () => {
     logout()
-    router.push(`/${locale}`)
+    router.push('/')
   }
 
   const handleAddToCart = (item: WishlistItem) => {
@@ -111,13 +110,13 @@ export default function AccountPage({ params }: { params: { locale: string } }) 
 
   const renderTab = () => {
     switch (activeTab) {
-      case 'overview': return <OverviewTab user={user} wishlistCount={wishlistCount} locale={locale} setActiveTab={setActiveTab} />
+      case 'overview': return <OverviewTab user={user} wishlistCount={wishlistCount} setActiveTab={setActiveTab} />
       case 'orders': return <OrdersTab />
-      case 'wishlist': return <WishlistTab items={wishlistItems} onRemove={removeItem} onAddToCart={handleAddToCart} locale={locale} />
+      case 'wishlist': return <WishlistTab items={wishlistItems} onRemove={removeItem} onAddToCart={handleAddToCart} />
       case 'addresses': return <AddressesTab />
       case 'payment': return <PaymentTab />
       case 'settings': return <SettingsTab user={user} />
-      default: return <OverviewTab user={user} wishlistCount={wishlistCount} locale={locale} setActiveTab={setActiveTab} />
+      default: return <OverviewTab user={user} wishlistCount={wishlistCount} setActiveTab={setActiveTab} />
     }
   }
 
@@ -230,7 +229,7 @@ export default function AccountPage({ params }: { params: { locale: string } }) 
 }
 
 // Tab Components
-function OverviewTab({ user, wishlistCount, locale, setActiveTab }: any) {
+function OverviewTab({ user, wishlistCount, setActiveTab }: any) {
   const t = useTranslations('account')
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -252,7 +251,7 @@ function OverviewTab({ user, wishlistCount, locale, setActiveTab }: any) {
         </div>
         <h3 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">{t('noOrders')}</h3>
         <p className="text-gray-600 mb-4 text-sm sm:text-base">{t('overview')}</p>
-        <Link href={`/${locale}/produkte`} className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
+        <Link href="/produkte" className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
           <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
           {t('browseProducts')}
         </Link>
@@ -286,7 +285,7 @@ function OrdersTab() {
   )
 }
 
-function WishlistTab({ items, onRemove, onAddToCart, locale }: { items: WishlistItem[], onRemove: (id: string) => void, onAddToCart: (item: WishlistItem) => void, locale: string }) {
+function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], onRemove: (id: string) => void, onAddToCart: (item: WishlistItem) => void }) {
   const t = useTranslations('account')
   const tw = useTranslations('wishlist')
   const tc = useTranslations('cart')
@@ -298,7 +297,7 @@ function WishlistTab({ items, onRemove, onAddToCart, locale }: { items: Wishlist
         </div>
         <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{t('noWishlist')}</h2>
         <p className="text-gray-600 mb-4 text-sm sm:text-base">{t('noWishlistHint')}</p>
-        <Link href={`/${locale}/produkte`} className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
+        <Link href="/produkte" className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
           {t('browseProducts')}
         </Link>
       </div>
@@ -316,13 +315,13 @@ function WishlistTab({ items, onRemove, onAddToCart, locale }: { items: Wishlist
         {items.map(item => (
           <div key={item.id} className="bg-white rounded-xl sm:rounded-2xl shadow-sm overflow-hidden group border border-gray-100">
             <div className="relative aspect-[4/3] bg-gray-100">
-              <Image src={item.image} alt={item.name[locale as 'de' | 'en' | 'fr']} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" />
+              <Image src={item.image} alt={item.name.de} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" />
               <button onClick={() => onRemove(item.id)} className="absolute top-2 right-2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-red-50">
                 <Trash2 className="w-4 h-4 text-red-500" />
               </button>
             </div>
             <div className="p-3 sm:p-4">
-              <h3 className="font-medium text-gray-900 line-clamp-1 mb-1 text-sm sm:text-base">{item.name[locale as 'de' | 'en' | 'fr']}</h3>
+              <h3 className="font-medium text-gray-900 line-clamp-1 mb-1 text-sm sm:text-base">{item.name.de}</h3>
               <p className="text-base sm:text-lg font-bold text-[#4ECCA3]">{item.price.toFixed(2)} €</p>
               <button onClick={() => onAddToCart(item)} className="w-full mt-2 sm:mt-3 py-2 sm:py-2.5 bg-[#4ECCA3] text-white text-xs sm:text-sm font-medium rounded-lg sm:rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2">
                 <Plus className="w-4 h-4" />

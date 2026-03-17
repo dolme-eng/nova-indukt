@@ -54,10 +54,10 @@ function useWishlist() {
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'rating' | 'newest'
 
 interface ProductsContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function ProductsContent({ locale }: ProductsContentProps) {
+function ProductsContent() {
   const t = useTranslations()
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
@@ -71,7 +71,7 @@ function ProductsContent({ locale }: ProductsContentProps) {
   const filteredProducts = useMemo(() => {
     let filtered = products.filter(product => {
       const matchesSearch = searchQuery === '' || 
-        product.name[locale as 'de' | 'en' | 'fr'].toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.de.toLowerCase().includes(searchQuery.toLowerCase())
       const matchesCategory = selectedCategory === null || product.category === selectedCategory
       return matchesSearch && matchesCategory
     })
@@ -94,7 +94,7 @@ function ProductsContent({ locale }: ProductsContentProps) {
     }
 
     return filtered
-  }, [searchQuery, selectedCategory, sortBy, locale])
+  }, [searchQuery, selectedCategory, sortBy])
 
   const handleAddToCart = (product: typeof products[0]) => {
     addToCart(product, 1)
@@ -110,7 +110,7 @@ function ProductsContent({ locale }: ProductsContentProps) {
     } else {
       addToWishlist({
         id: product.id,
-        name: product.name[locale as 'de' | 'en' | 'fr'],
+        name: product.name.de,
         price: product.price,
         image: product.images[0],
         slug: product.slug
@@ -202,7 +202,7 @@ function ProductsContent({ locale }: ProductsContentProps) {
                 >
                   <option value="">{t('categories.all')}</option>
                   {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>{cat.name[locale as 'de' | 'en' | 'fr']}</option>
+                    <option key={cat.id} value={cat.id}>{cat.name.de}</option>
                   ))}
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
@@ -258,7 +258,7 @@ function ProductsContent({ locale }: ProductsContentProps) {
                   )}
                   {selectedCategory && (
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 rounded-full text-xs sm:text-sm">
-                      {categories.find(c => c.id === selectedCategory)?.name[locale as 'de' | 'en' | 'fr']}
+                      {categories.find(c => c.id === selectedCategory)?.name.de}
                       <button onClick={() => setSelectedCategory(null)} className="p-0.5 hover:text-red-500">
                         <X className="w-3 h-3" />
                       </button>
@@ -309,7 +309,7 @@ function ProductsContent({ locale }: ProductsContentProps) {
               >
                 <Image
                   src={product.images[0]}
-                  alt={product.name[locale as 'de' | 'en' | 'fr']}
+                  alt={product.name.de}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes={viewMode === 'list' ? '(max-width: 640px) 100vw, 200px' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
@@ -362,21 +362,21 @@ function ProductsContent({ locale }: ProductsContentProps) {
 
                 <Link href={`/produkt/${product.slug}`}>
                   <h3 className="font-semibold text-gray-900 mb-1 sm:mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors text-sm sm:text-base">
-                    {product.name[locale as 'de' | 'en' | 'fr']}
+                    {product.name.de}
                   </h3>
                 </Link>
 
                 {viewMode === 'list' && (
                   <p className="text-gray-600 text-sm line-clamp-2 mb-3 hidden sm:block">
-                    {product.shortDescription[locale as 'de' | 'en' | 'fr']}
+                    {product.shortDescription.de}
                   </p>
                 )}
 
                 <div className="mt-auto flex items-center justify-between gap-2">
                   <div className="flex items-baseline gap-1.5 sm:gap-2">
-                    <span className="text-lg sm:text-xl font-bold text-gray-900">{product.price} €</span>
+                    <span className="text-lg sm:text-xl font-bold text-[#4ECCA3]">{product.price} €</span>
                     {product.oldPrice && (
-                      <span className="text-xs sm:text-sm text-gray-400 line-through">{product.oldPrice} €</span>
+                      <span className="text-xs sm:text-sm text-red-500 line-through decoration-black">{product.oldPrice} €</span>
                     )}
                   </div>
 
@@ -499,7 +499,7 @@ function ProductsContent({ locale }: ProductsContentProps) {
                             : 'hover:bg-gray-100'
                         }`}
                       >
-                        {cat.name[locale as 'de' | 'en' | 'fr']}
+                        {cat.name.de}
                         <span className="ml-2 text-gray-400 text-sm">({cat.count})</span>
                       </button>
                     ))}
@@ -550,6 +550,6 @@ function ProductsContent({ locale }: ProductsContentProps) {
   )
 }
 
-export default function ProductsPage({ params }: { params: { locale: string } }) {
-  return <ProductsContent locale={params.locale} />
+export default function ProductsPage() {
+  return <ProductsContent />
 }

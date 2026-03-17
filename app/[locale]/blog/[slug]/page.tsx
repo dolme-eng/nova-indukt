@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: { params: { slug: string; loc
     }
   }
 
-  const title = post.title[params.locale as 'de' | 'en' | 'fr']
-  const description = post.excerpt[params.locale as 'de' | 'en' | 'fr']
+  const title = post.title.de
+  const description = post.excerpt.de
 
   return {
     title: `${title} | Blog | NOVA INDUKT`,
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: { slug: string; loc
 }
 
 // Blog content with rich text for each post
-const blogContent: Record<string, Record<'de' | 'en' | 'fr', string[]>> = {
+const blogContent: Record<string, Record<'de', string[]>> = {
   'pfanne-kaufratgeber': {
     de: [
       'Die Wahl der richtigen Pfanne für Ihr Induktionskochfeld ist entscheidend für ein optimales Kocherlebnis. In diesem Ratgeber zeigen wir Ihnen, worauf Sie beim Kauf unbedingt achten sollten.',
@@ -446,10 +446,10 @@ function renderContent(content: string[]): JSX.Element {
 export default function BlogPostPage({ 
   params 
 }: { 
-  params: { slug: string; locale: string } 
+  params: { slug: string } 
 }) {
   // Enable static rendering
-  setRequestLocale(params.locale)
+  setRequestLocale('de')
   
   const post = blogPosts.find(p => p.slug === params.slug)
   
@@ -457,10 +457,9 @@ export default function BlogPostPage({
     notFound()
   }
 
-  const locale = params.locale as 'de' | 'en' | 'fr'
-  const title = post.title[locale]
-  const excerpt = post.excerpt[locale]
-  const content = blogContent[post.slug]?.[locale] || []
+  const title = post.title.de
+  const excerpt = post.excerpt.de
+  const content = blogContent[post.slug]?.de || []
 
   // Get related posts (same category, excluding current)
   const relatedPosts = blogPosts
@@ -502,7 +501,7 @@ export default function BlogPostPage({
             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-8">
               <span className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                {new Date(post.date).toLocaleDateString(locale === 'de' ? 'de-DE' : locale === 'fr' ? 'fr-FR' : 'en-US', {
+                {new Date(post.date).toLocaleDateString('de-DE', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
@@ -557,7 +556,7 @@ export default function BlogPostPage({
           {relatedPosts.length > 0 && (
             <div className="mt-12">
               <h2 className="text-xl font-bold text-gray-900 mb-6">
-                {locale === 'de' ? 'Verwandte Artikel' : locale === 'en' ? 'Related Articles' : 'Articles connexes'}
+                Verwandte Artikel
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {relatedPosts.map((relatedPost) => (
@@ -569,7 +568,7 @@ export default function BlogPostPage({
                     <div className="relative aspect-video">
                       <Image
                         src={relatedPost.image}
-                        alt={relatedPost.title[locale]}
+                        alt={relatedPost.title.de}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
@@ -577,7 +576,7 @@ export default function BlogPostPage({
                     <div className="p-4">
                       <span className="text-xs text-[#4ECCA3] font-medium">{relatedPost.category}</span>
                       <h3 className="font-semibold text-gray-900 mt-1 group-hover:text-[#4ECCA3] transition-colors">
-                        {relatedPost.title[locale]}
+                        {relatedPost.title.de}
                       </h3>
                     </div>
                   </Link>

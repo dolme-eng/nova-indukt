@@ -5,11 +5,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Facebook, Instagram, Twitter, Youtube, CreditCard, Truck, ShieldCheck, RotateCcw } from 'lucide-react'
 
-interface FooterProps {
-  locale: string
-}
-
-export function Footer({ locale }: FooterProps) {
+export function Footer() {
   const t = useTranslations()
   const currentYear = new Date().getFullYear()
 

@@ -13,10 +13,10 @@ import {
 import { products, Product, categories } from '@/lib/data/products'
 
 interface SearchContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function SearchContent({ locale }: SearchContentProps) {
+function SearchContent() {
   const t = useTranslations()
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') || ''
@@ -32,8 +32,8 @@ function SearchContent({ locale }: SearchContentProps) {
   const filteredProducts = useMemo(() => {
     let result = products.filter(product => {
       const matchesSearch = searchQuery === '' || 
-        product.name[locale as 'de' | 'en' | 'fr'].toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description[locale as 'de' | 'en' | 'fr'].toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.de.toLowerCase().includes(searchQuery.toLowerCase())
       
       const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
       const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1]
@@ -58,10 +58,10 @@ function SearchContent({ locale }: SearchContentProps) {
     }
 
     return result
-  }, [searchQuery, selectedCategory, priceRange, sortBy, locale])
+  }, [searchQuery, selectedCategory, priceRange, sortBy])
 
   const getLocalizedName = (item: { name: { de: string; en: string; fr: string } }) => {
-    return item.name[locale as 'de' | 'en' | 'fr']
+    return item.name.de
   }
 
   return (
@@ -145,7 +145,7 @@ function SearchContent({ locale }: SearchContentProps) {
                         onChange={(e) => setSelectedCategory(e.target.value)}
                         className="w-4 h-4 text-[#4ECCA3]"
                       />
-                      <span className="text-gray-600">{cat.name[locale as 'de' | 'en' | 'fr']}</span>
+                      <span className="text-gray-600">{cat.name.de}</span>
                     </label>
                   ))}
                 </div>
@@ -227,7 +227,6 @@ function SearchContent({ locale }: SearchContentProps) {
                   <ProductCard 
                     key={product.id} 
                     product={product} 
-                    locale={locale as 'de' | 'en' | 'fr'}
                     viewMode={viewMode}
                     index={index}
                   />
@@ -252,12 +251,10 @@ function SearchContent({ locale }: SearchContentProps) {
 // Product Card Component
 function ProductCard({ 
   product, 
-  locale, 
   viewMode, 
   index 
 }: { 
   product: Product
-  locale: 'de' | 'en' | 'fr'
   viewMode: 'grid' | 'list'
   index: number
 }) {
@@ -274,7 +271,7 @@ function ProductCard({
         <div className={`relative bg-gray-100 ${viewMode === 'list' ? 'w-48 h-48 flex-shrink-0' : 'aspect-square'}`}>
           <Image
             src={product.images[0]}
-            alt={product.name[locale]}
+            alt={product.name.de}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
@@ -295,16 +292,16 @@ function ProductCard({
             <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
           </div>
           <h3 className="font-medium text-gray-900 mb-2 group-hover:text-[#4ECCA3] transition-colors">
-            {product.name[locale]}
+            {product.name.de}
           </h3>
           <p className="text-gray-600 text-sm line-clamp-2 mb-3 hidden sm:block">
-            {product.shortDescription[locale]}
+            {product.shortDescription.de}
           </p>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-gray-900">{product.price} €</span>
+              <span className="text-xl font-bold text-[#4ECCA3]">{product.price} €</span>
               {product.oldPrice && (
-                <span className="text-sm text-gray-400 line-through">{product.oldPrice} €</span>
+                <span className="text-sm text-red-500 line-through decoration-black">{product.oldPrice} €</span>
               )}
             </div>
             <div className="flex items-center gap-2">
@@ -323,7 +320,7 @@ function ProductCard({
 }
 
 // Main page component with Suspense
-export default function SuchePage({ params }: { params: { locale: string } }) {
+export default function SuchePage() {
   const t = useTranslations()
   return (
     <Suspense fallback={
@@ -334,7 +331,7 @@ export default function SuchePage({ params }: { params: { locale: string } }) {
         </div>
       </div>
     }>
-      <SearchContent locale={params.locale} />
+      <SearchContent />
     </Suspense>
   )
 }

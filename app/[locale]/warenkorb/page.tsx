@@ -13,10 +13,10 @@ import { useCart } from '@/lib/store/cart'
 import { useState, useEffect } from 'react'
 
 interface CartContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function CartContent({ locale }: CartContentProps) {
+function CartContent() {
   const router = useRouter()
   const t = useTranslations('cart')
   const { items, totalItems, totalPrice, updateQuantity, removeItem, isHydrated } = useCart()
@@ -146,7 +146,7 @@ function CartContent({ locale }: CartContentProps) {
                     >
                       <Image 
                         src={item.product.images[0]} 
-                        alt={item.product.name[locale as 'de' | 'en' | 'fr']} 
+                        alt={item.product.name.de} 
                         fill 
                         className="object-cover hover:scale-105 transition-transform duration-300" 
                         sizes="(max-width: 640px) 80px, 112px"
@@ -160,7 +160,7 @@ function CartContent({ locale }: CartContentProps) {
                           href={`/produkt/${item.product.slug}`}
                           className="font-medium text-gray-900 hover:text-[#4ECCA3] transition-colors line-clamp-2 text-sm sm:text-base"
                         >
-                          {item.product.name[locale as 'de' | 'en' | 'fr']}
+                          {item.product.name.de}
                         </Link>
                         {/* Remove Button - Desktop */}
                         <button 
@@ -178,7 +178,7 @@ function CartContent({ locale }: CartContentProps) {
                           {item.product.price.toFixed(2)} €
                         </span>
                         {item.product.oldPrice && (
-                          <span className="text-xs sm:text-sm text-gray-400 line-through">
+                          <span className="text-xs sm:text-sm text-red-500 line-through decoration-black">
                             {item.product.oldPrice.toFixed(2)} €
                           </span>
                         )}
@@ -276,7 +276,7 @@ function CartContent({ locale }: CartContentProps) {
                 <motion.button 
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  onClick={() => router.push(`/${locale}/kasse`)}
+                  onClick={() => router.push('/kasse')}
                   className="w-full py-3.5 sm:py-4 bg-[#4ECCA3] text-white font-semibold rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2 text-base shadow-lg shadow-[#4ECCA3]/20"
                 >
                   {t('checkout')} <ArrowRight className="w-5 h-5" />
@@ -317,7 +317,7 @@ function CartContent({ locale }: CartContentProps) {
             </div>
             <motion.button 
               whileTap={{ scale: 0.95 }}
-              onClick={() => router.push(`/${locale}/kasse`)}
+              onClick={() => router.push('/kasse')}
               className="flex-1 max-w-xs py-3 bg-[#4ECCA3] text-white font-semibold rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               {t('checkout')} <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -343,6 +343,6 @@ function CartContent({ locale }: CartContentProps) {
   )
 }
 
-export default function CartPage({ params }: { params: { locale: string } }) {
-  return <CartContent locale={params.locale} />
+export default function CartPage() {
+  return <CartContent />
 }

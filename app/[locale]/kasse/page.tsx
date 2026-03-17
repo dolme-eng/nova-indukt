@@ -15,19 +15,24 @@ import { useAuth } from '@/lib/store/auth'
 import Link from 'next/link'
 
 interface CheckoutContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
 const SHIPPING_COST = 9.99
 const FREE_SHIPPING_THRESHOLD = 500
 
-function CheckoutContent({ locale }: CheckoutContentProps) {
+function CheckoutContent() {
   const router = useRouter()
   const t = useTranslations('checkout')
   const tc = useTranslations('cart')
   const { items, totalPrice, clearCart } = useCart()
   const { user, isAuthenticated } = useAuth()
-  
+  const mounted = useRef(false)
+
+  useEffect(() => {
+    if (mounted.current && !isAuthenticated) router.push('/anmelden')
+  }, [mounted, isAuthenticated, router])
+
   const [step, setStep] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
@@ -89,7 +94,7 @@ function CheckoutContent({ locale }: CheckoutContentProps) {
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{t('emptyCart')}</h1>
             <p className="text-gray-600 mb-6 text-sm sm:text-base">{t('emptyCartMessage')}</p>
             <Link 
-              href={`/${locale}/produkte`}
+              href="/produkte"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -175,14 +180,14 @@ function CheckoutContent({ locale }: CheckoutContentProps) {
             
             <div className="flex flex-col sm:flex-row gap-3">
               <Link 
-                href={`/${locale}/produkte`}
+                href="/produkte"
                 className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base"
               >
                 <Package className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('success.backProducts') || 'Continue Shopping'}
               </Link>
               <Link 
-                href={`/${locale}`}
+                href="/"
                 className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-200 text-gray-700 font-medium rounded-xl hover:border-gray-300 transition-colors text-sm sm:text-base"
               >
                 {t('success.backHome')}
@@ -218,7 +223,7 @@ function CheckoutContent({ locale }: CheckoutContentProps) {
       <div className="container mx-auto px-4 py-4 sm:py-6 lg:py-8 max-w-6xl">
         {/* Header */}
         <div className="mb-4 sm:mb-6 lg:mb-8">
-          <Link href={`/${locale}/warenkorb`} className="hidden lg:inline-flex items-center gap-2 text-gray-600 hover:text-[#4ECCA3] transition-colors mb-4 text-sm">
+          <Link href="/warenkorb" className="hidden lg:inline-flex items-center gap-2 text-gray-600 hover:text-[#4ECCA3] transition-colors mb-4 text-sm">
             <ArrowLeft className="w-4 h-4" />
             {t('backToCart')}
           </Link>
@@ -594,7 +599,7 @@ function CheckoutContent({ locale }: CheckoutContentProps) {
                     <div className="relative w-14 h-14 bg-gray-100 rounded-lg flex-shrink-0">
                       <Image
                         src={item.product.images[0]}
-                        alt={item.product.name[locale as 'de' | 'en' | 'fr']}
+                        alt={item.product.name.de}
                         fill
                         className="object-cover rounded-lg"
                         sizes="56px"
@@ -602,7 +607,7 @@ function CheckoutContent({ locale }: CheckoutContentProps) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 line-clamp-1">
-                        {item.product.name[locale as 'de' | 'en' | 'fr']}
+                        {item.product.name.de}
                       </p>
                       <p className="text-xs text-gray-500">{item.quantity}x</p>
                       <p className="text-sm font-medium text-[#4ECCA3]">
@@ -689,7 +694,7 @@ function CheckoutContent({ locale }: CheckoutContentProps) {
                 <div className="space-y-2 mb-3 pb-3 border-b">
                   {items.map((item) => (
                     <div key={item.product.id} className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600 line-clamp-1 flex-1">{item.product.name[locale as 'de' | 'en' | 'fr']}</span>
+                      <span className="text-gray-600 line-clamp-1 flex-1">{item.product.name.de}</span>
                       <span className="font-medium ml-2">{(item.product.price * item.quantity).toFixed(2)} €</span>
                     </div>
                   ))}
@@ -746,6 +751,6 @@ function CheckoutContent({ locale }: CheckoutContentProps) {
   )
 }
 
-export default function CheckoutPage({ params }: { params: { locale: string } }) {
-  return <CheckoutContent locale={params.locale} />
+export default function CheckoutPage() {
+  return <CheckoutContent />
 }

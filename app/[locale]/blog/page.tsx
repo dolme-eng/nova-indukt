@@ -11,18 +11,15 @@ import {
 } from 'lucide-react'
 import { blogPosts } from '@/lib/data/products'
 
-interface BlogContentProps {
-  locale: string
-}
 
-function BlogContent({ locale }: BlogContentProps) {
+function BlogContent() {
   const t = useTranslations('blog')
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredPosts = blogPosts.filter(post => {
     const searchLower = searchQuery.toLowerCase()
-    const title = post.title[locale as 'de' | 'en' | 'fr'].toLowerCase()
-    const excerpt = post.excerpt[locale as 'de' | 'en' | 'fr'].toLowerCase()
+    const title = post.title.de.toLowerCase()
+    const excerpt = post.excerpt.de.toLowerCase()
     const category = post.category.toLowerCase()
     return title.includes(searchLower) || excerpt.includes(searchLower) || category.includes(searchLower)
   })
@@ -128,7 +125,7 @@ function BlogContent({ locale }: BlogContentProps) {
                     <div className="relative aspect-video overflow-hidden">
                       <Image
                         src={post.image}
-                        alt={post.title[locale as 'de' | 'en' | 'fr']}
+                        alt={post.title.de}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -144,7 +141,7 @@ function BlogContent({ locale }: BlogContentProps) {
                       <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500 mb-3">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                          {new Date(post.date).toLocaleDateString(locale === 'de' ? 'de-DE' : locale === 'fr' ? 'fr-FR' : 'en-US')}
+                          {new Date(post.date).toLocaleDateString('de-DE')}
                         </span>
                         <span className="flex items-center gap-1">
                           <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -152,10 +149,10 @@ function BlogContent({ locale }: BlogContentProps) {
                         </span>
                       </div>
                       <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-[#4ECCA3] transition-colors line-clamp-2">
-                        {post.title[locale as 'de' | 'en' | 'fr']}
+                        {post.title.de}
                       </h2>
                       <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-                        {post.excerpt[locale as 'de' | 'en' | 'fr']}
+                        {post.excerpt.de}
                       </p>
                       <div className="flex items-center justify-between">
                         <span className="flex items-center gap-1 text-xs sm:text-sm text-gray-500">
@@ -191,6 +188,6 @@ function BlogContent({ locale }: BlogContentProps) {
   )
 }
 
-export default function BlogPage({ params }: { params: { locale: string } }) {
-  return <BlogContent locale={params.locale} />
+export default function BlogPage() {
+  return <BlogContent />
 }

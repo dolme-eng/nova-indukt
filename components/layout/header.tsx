@@ -8,17 +8,7 @@ import { Link, usePathname } from '@/navigation'
 import { useCart } from '@/lib/store/cart'
 import { motion, AnimatePresence } from 'framer-motion'
 
-interface HeaderProps {
-  locale: string
-}
-
-const languages = [
-  { code: 'de', label: 'DE', name: 'Deutsch' },
-  { code: 'en', label: 'EN', name: 'English' },
-  { code: 'fr', label: 'FR', name: 'Français' },
-]
-
-export function Header({ locale }: HeaderProps) {
+export function Header() {
   const pathname = usePathname()
   const t = useTranslations()
   const { totalItems } = useCart()
@@ -51,13 +41,6 @@ export function Header({ locale }: HeaderProps) {
     }
     return () => { document.body.style.overflow = 'unset' }
   }, [mobileMenuOpen])
-
-  const switchLocale = (newLocale: string) => {
-    // Set cookie for middleware to respect manual choice
-    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=${365 * 24 * 60 * 60}`
-    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`)
-    window.location.href = newPath || `/${newLocale}`
-  }
 
   const isActive = (href: string) => pathname === href || pathname === `${href}/`
 
@@ -116,24 +99,6 @@ export function Header({ locale }: HeaderProps) {
               >
                 <Search className="w-5 h-5 sm:w-5 sm:h-5" />
               </Link>
-
-              {/* Language - Desktop */}
-              <div className="hidden md:flex items-center gap-1 ml-1">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => switchLocale(lang.code)}
-                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                      locale === lang.code 
-                        ? 'text-[#4ECCA3] bg-[#4ECCA3]/10' 
-                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-                    }`}
-                    aria-label={lang.name}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
-              </div>
 
               {/* Wishlist */}
               <Link 
@@ -264,28 +229,6 @@ export function Header({ locale }: HeaderProps) {
                   </motion.div>
                 ))}
               </nav>
-              
-              <div className="border-t p-4">
-                <p className="text-xs text-gray-400 uppercase tracking-wider mb-3 font-semibold">{t('language')}</p>
-                <div className="flex gap-2">
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => {
-                        switchLocale(lang.code)
-                        setMobileMenuOpen(false)
-                      }}
-                      className={`flex-1 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                        locale === lang.code 
-                          ? 'bg-[#4ECCA3] text-white shadow-md' 
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {lang.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
               
               <div className="border-t p-4">
                 <Link

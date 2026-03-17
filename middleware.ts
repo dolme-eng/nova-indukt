@@ -9,7 +9,7 @@ export default createMiddleware({
   defaultLocale,
   
   // Locale detection settings
-  localeDetection: true,
+  localeDetection: false,
   
   // Cookie settings
   localeCookie: {

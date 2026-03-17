@@ -9,10 +9,10 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle } from 'lucid
 import { useAuth } from '@/lib/store/auth'
 
 interface LoginContentProps {
-  locale: string
+  // No props needed - only German locale
 }
 
-function LoginContent({ locale }: LoginContentProps) {
+function LoginContent() {
   const router = useRouter()
   const t = useTranslations('auth.login')
   const { login } = useAuth()
@@ -33,7 +33,7 @@ function LoginContent({ locale }: LoginContentProps) {
     if (result) {
       setSuccess(true)
       setTimeout(() => {
-        router.push(`/${locale}/mein-konto`)
+        router.push('/mein-konto')
       }, 1000)
     } else {
       setError(t('error'))
@@ -47,7 +47,7 @@ function LoginContent({ locale }: LoginContentProps) {
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href={`/${locale}`} className="text-2xl font-bold text-gray-900">
+          <Link href="/" className="text-2xl font-bold text-gray-900">
             NOVA INDUKT
           </Link>
           <p className="mt-2 text-gray-600">{t('subtitle')}</p>
@@ -141,7 +141,7 @@ function LoginContent({ locale }: LoginContentProps) {
             <p className="text-center text-sm text-gray-600">
               {t('noAccount')}{' '}
               <Link 
-                href={`/${locale}/registrieren`}
+                href="/registrieren"
                 className="text-[#4ECCA3] font-medium hover:underline"
               >
                 {t('register')}
@@ -158,6 +158,6 @@ function LoginContent({ locale }: LoginContentProps) {
   )
 }
 
-export default function LoginPage({ params }: { params: { locale: string } }) {
-  return <LoginContent locale={params.locale} />
+export default function LoginPage() {
+  return <LoginContent />
 }

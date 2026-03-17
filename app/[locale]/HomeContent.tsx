@@ -19,7 +19,7 @@ import { MagneticButton } from '@/components/magnetic-button'
 // Flash deals - deterministic discount based on product id to avoid hydration mismatch
 const flashDeals = products.slice(0, 4).map(p => ({...p, discount: ((p.id.charCodeAt(0) + p.id.charCodeAt(p.id.length - 1)) % 25) + 15}))
 
-export function HomeContent({ locale }: { locale: string }) {
+export function HomeContent() {
   const t = useTranslations()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [email, setEmail] = useState('')
@@ -34,7 +34,7 @@ export function HomeContent({ locale }: { locale: string }) {
   }, [slides.length])
 
   const getLocalizedName = (item: { name: { de: string; en: string; fr: string } }) => {
-    return item.name[locale as 'de' | 'en' | 'fr']
+    return item.name.de
   }
 
   const heroImages = [
@@ -269,7 +269,6 @@ export function HomeContent({ locale }: { locale: string }) {
               <FlashDealCard 
                 key={product.id} 
                 product={product} 
-                locale={locale as 'de' | 'en' | 'fr'} 
                 index={index} 
                 t={t} 
               />
@@ -298,7 +297,7 @@ export function HomeContent({ locale }: { locale: string }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {products.slice(0, 8).map((product, index) => (
-              <ProductCard key={product.id} product={product} locale={locale as 'de' | 'en' | 'fr'} index={index} t={t} />
+              <ProductCard key={product.id} product={product} index={index} t={t} />
             ))}
           </div>
         </div>
@@ -382,7 +381,7 @@ export function HomeContent({ locale }: { locale: string }) {
                 <div className="relative aspect-video overflow-hidden">
                   <Image
                     src={post.image}
-                    alt={post.title[locale as 'de' | 'en' | 'fr']}
+                    alt={post.title.de}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -399,10 +398,10 @@ export function HomeContent({ locale }: { locale: string }) {
                     {post.readTime} · {post.date}
                   </div>
                   <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors">
-                    {post.title[locale as 'de' | 'en' | 'fr']}
+                    {post.title.de}
                   </h3>
                   <p className="text-gray-600 text-sm line-clamp-2 mb-3 sm:mb-4">
-                    {post.excerpt[locale as 'de' | 'en' | 'fr']}
+                    {post.excerpt.de}
                   </p>
                   <Link href={`/blog/${post.slug}`} className="text-[#4ECCA3] font-medium text-sm flex items-center gap-1 hover:gap-2 transition-all">
                     {t('blog.readMore')} <ChevronRight className="w-4 h-4" />
@@ -481,7 +480,7 @@ export function HomeContent({ locale }: { locale: string }) {
 }
 
 // Product Card
-function ProductCard({ product, locale, index, t }: { product: typeof products[0]; locale: 'de' | 'en' | 'fr'; index: number; t: any }) {
+function ProductCard({ product, index, t }: { product: typeof products[0]; index: number; t: any }) {
   const { addItem } = useCart()
   const [isInWishlist, setIsInWishlist] = useState(false)
   
@@ -525,7 +524,7 @@ function ProductCard({ product, locale, index, t }: { product: typeof products[0
       <div className="relative aspect-square overflow-hidden bg-gray-100">
         <Image
           src={product.images[0]}
-          alt={product.name[locale as 'de' | 'en' | 'fr']}
+          alt={product.name.de}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -581,14 +580,14 @@ function ProductCard({ product, locale, index, t }: { product: typeof products[0
         </div>
         
         <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors">
-          {product.name[locale as 'de' | 'en' | 'fr']}
+          {product.name.de}
         </h3>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-gray-900">{product.price} €</span>
+            <span className="text-lg font-bold text-[#4ECCA3]">{product.price} €</span>
             {product.oldPrice && (
-              <span className="text-sm text-gray-400 line-through">{product.oldPrice} €</span>
+              <span className="text-sm text-red-500 line-through decoration-black">{product.oldPrice} €</span>
             )}
           </div>
           <motion.button
@@ -640,7 +639,7 @@ function TechFeatureCard({ icon: Icon, title, description, color, index }: {
 }
 
 // Flash Deal Card with wishlist functionality
-function FlashDealCard({ product, locale, index, t }: { product: typeof flashDeals[0]; locale: 'de' | 'en' | 'fr'; index: number; t: any }) {
+function FlashDealCard({ product, index, t }: { product: typeof flashDeals[0]; index: number; t: any }) {
   const [isInWishlist, setIsInWishlist] = useState(false)
   
   useEffect(() => {
@@ -684,7 +683,7 @@ function FlashDealCard({ product, locale, index, t }: { product: typeof flashDea
       <div className="relative aspect-square">
         <Image
           src={product.images[0]}
-          alt={product.name[locale]}
+          alt={product.name.de}
           fill
           className="object-cover"
         />
@@ -705,10 +704,10 @@ function FlashDealCard({ product, locale, index, t }: { product: typeof flashDea
         </div>
       </div>
       <div className="p-4">
-        <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2">{product.name[locale]}</h3>
+        <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2">{product.name.de}</h3>
         <div className="flex items-center gap-2 mb-2">
           <span className="text-lg font-bold text-red-500">{product.price} €</span>
-          <span className="text-sm text-gray-400 line-through">{product.oldPrice} €</span>
+          <span className="text-sm text-gray-400 line-through decoration-black">{product.oldPrice} €</span>
         </div>
         <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
           <div className="bg-gradient-to-r from-orange-500 to-red-500 h-full rounded-full" style={{width: '75%'}} />
