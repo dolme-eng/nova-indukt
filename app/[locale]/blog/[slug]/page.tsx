@@ -6,6 +6,18 @@ import { blogPosts } from '@/lib/data/products'
 import { ArrowLeft, Clock, Calendar, User, Tag, Share2, Facebook, Twitter, Linkedin } from 'lucide-react'
 import { setRequestLocale } from 'next-intl/server'
 
+// Sanitize HTML content to prevent XSS attacks
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\*/g, '') // Remove asterisks used for bold markdown
+    .replace(/&lt;strong&gt;/g, '<strong>') // Restore allowed tags
+    .replace(/&lt;\/strong&gt;/g, '</strong>')
+}
+
 // Generate static params for all blog posts
 export function generateStaticParams() {
   return blogPosts.map((post) => ({
@@ -70,62 +82,6 @@ const blogContent: Record<string, Record<'de', string[]>> = {
       '- Extreme Temperaturschocks vermeiden',
       '## Fazit',
       'Die Investition in eine hochwertige Induktionspfanne lohnt sich. Achten Sie auf einen massiven, flachen Boden mit guter Magnetisierung und wählen Sie die Größe passend zu Ihren Bedürfnissen.'
-    ],
-    en: [
-      'Choosing the right pan for your induction cooktop is crucial for an optimal cooking experience. In this guide, we show you what to look for when buying.',
-      '## Materials: What\'s Best for Induction?',
-      'Not every material is equally suitable for induction hobs. The best options are:',
-      '- **Stainless steel with magnetic base**: The classic choice - durable, robust and perfect for induction.',
-      '- **Cast iron**: Excellent heat retention, ideal for frying and braising. Ensure a smooth bottom surface.',
-      '- **Multi-layer materials**: Combinations of aluminum core with stainless steel offer optimal heat distribution.',
-      '- **Enamel**: Easy to clean and maintain, but less robust than pure metal.',
-      '## Bottom Construction: The Heart of the Matter',
-      'The base is particularly important for induction pans. A multi-layer construction ensures:',
-      '- Even heat distribution across the entire surface',
-      '- No hot spots that burn food',
-      '- Energy efficiency through optimal magnetic field transfer',
-      '- Longer durability and shape retention',
-      '## Size and Shape: Practical Tips',
-      'The ideal pan depends on your cooking habits:',
-      '- **20-24 cm**: Perfect for eggs, pancakes and small portions',
-      '- **28 cm**: The universal size for most dishes',
-      '- **30+ cm**: Ideal for families and larger quantities',
-      '## Care and Longevity',
-      'With proper care, your pans will last for decades:',
-      '- Never scratch with sharp metal objects',
-      '- Dry thoroughly after washing',
-      '- Oil cast iron regularly',
-      '- Avoid extreme temperature shocks',
-      '## Conclusion',
-      'Investing in a high-quality induction pan is worth it. Look for a solid, flat base with good magnetization and choose the size according to your needs.'
-    ],
-    fr: [
-      'Le choix de la bonne poêle pour votre plaque à induction est crucial pour une expérience de cuisson optimale. Dans ce guide, nous vous montrons ce qu\'il faut regarder lors de l\'achat.',
-      '## Matériaux : Le meilleur pour l\'induction ?',
-      'Tous les matériaux ne conviennent pas également aux plaques à induction. Les meilleures options sont :',
-      '- **Inox avec fond magnétique** : Le choix classique - durable, robuste et parfait pour l\'induction.',
-      '- **Fonte** : Excellent maintien de la chaleur, idéal pour la friture et le braisage. Assurez-vous d\'une surface lisse en dessous.',
-      '- **Matériaux multicouches** : Les combinaisons de noyau en aluminium avec inox offrent une distribution optimale de la chaleur.',
-      '- **Émail** : Facile à nettoyer et entretenir, mais moins robuste que le métal pur.',
-      '## Structure du fond : Le cœur du sujet',
-      'Le fond est particulièrement important pour les poêles à induction. Une construction multicouche assure :',
-      '- Une distribution uniforme de la chaleur sur toute la surface',
-      '- Pas de points chauds qui brûlent les aliments',
-      '- L\'efficacité énergétique grâce à un transfert optimal du champ magnétique',
-      '- Une durabilité accrue et une conservation de la forme',
-      '## Taille et forme : Conseils pratiques',
-      'La poêle idéale dépend de vos habitudes de cuisine :',
-      '- **20-24 cm** : Parfait pour les œufs, crêpes et petites portions',
-      '- **28 cm** : La taille universelle pour la plupart des plats',
-      '- **30+ cm** : Idéal pour les familles et plus grandes quantités',
-      '## Entretien et longévité',
-      'Avec les bons soins, vos poêles dureront des décennies :',
-      '- Ne jamais rayer avec des objets métalliques pointus',
-      '- Bien sécher après le lavage',
-      '- Huiler régulièrement la fonte',
-      '- Éviter les chocs thermiques extrêmes',
-      '## Conclusion',
-      'Investir dans une poêle à induction de haute qualité en vaut la peine. Recherchez une base solide et plate avec une bonne magnétisation et choisissez la taille selon vos besoins.'
     ]
   },
   'induktion-vs-gas': {
@@ -163,76 +119,6 @@ const blogContent: Record<string, Record<'de', string[]>> = {
       '- Möglichkeit zur Nutzung von Ökostrom',
       '## Fazit',
       'Für die moderne, effiziente Küche ist Induktion die kluge Wahl. Sie ist schneller, sicherer, effizienter und umweltfreundlicher als Gas. Die höheren Anschaffungskosten amortisieren sich durch die Energieeinsparung.'
-    ],
-    en: [
-      'The choice between induction and gas is one of the most important decisions in kitchen planning. We\'ve taken a close look at both technologies.',
-      '## Energy Efficiency Comparison',
-      'Induction is clearly ahead here:',
-      '- **Induction**: approx. 90% efficiency - almost all energy goes directly into the pot',
-      '- **Gas**: only approx. 40-50% efficiency - much heat is lost to the environment',
-      'This means: With the same cooking performance, induction consumes significantly less energy.',
-      '## Cooking Speed',
-      'A practical test shows the differences:',
-      '- Boiling 2 liters of water on induction: approx. 4-5 minutes',
-      '- Boiling 2 liters of water on gas: approx. 8-10 minutes',
-      'The higher power density of induction makes the difference.',
-      '## Safety',
-      'Induction has clear advantages here:',
-      '- No open flame - no fire risk',
-      '- The cooktop itself only gets warm indirectly',
-      '- Automatic shut-off when the pot is empty',
-      '- No danger from gas leaks',
-      '## Cost Comparison',
-      'Running costs differ considerably:',
-      '| Cost Factor | Induction | Gas |',
-      '|-------------|-----------|-----|',
-      '| Purchase | Higher | Lower |',
-      '| Electricity/Gas per year | 150-200 € | 200-300 € |',
-      '| Maintenance | Minimal | Regular required |',
-      '| Lifespan | 15-20 years | 10-15 years |',
-      '## Environmental Impact',
-      'Induction also wins ecologically:',
-      '- No direct CO₂ emissions at the cooking location',
-      '- Higher efficiency = less energy consumption',
-      '- No dependence on fossil fuels',
-      '- Option to use green electricity',
-      '## Conclusion',
-      'For the modern, efficient kitchen, induction is the smart choice. It is faster, safer, more efficient and environmentally friendly than gas. The higher purchase costs pay for themselves through energy savings.'
-    ],
-    fr: [
-      'Le choix entre induction et gaz est l\'une des décisions les plus importantes dans la planification de la cuisine. Nous avons examiné de près les deux technologies.',
-      '## Comparaison de l\'efficacité énergétique',
-      'L\'induction est clairement en tête :',
-      '- **Induction** : env. 90% d\'efficacité - presque toute l\'énergie va directement dans la casserole',
-      '- **Gaz** : seulement env. 40-50% d\'efficacité - beaucoup de chaleur est perdue dans l\'environnement',
-      'Cela signifie : Avec les mêmes performances de cuisson, l\'induction consomme nettement moins d\'énergie.',
-      '## Vitesse de cuisson',
-      'Un test pratique montre les différences :',
-      '- Faire bouillir 2 litres d\'eau à induction : env. 4-5 minutes',
-      '- Faire bouillir 2 litres d\'eau au gaz : env. 8-10 minutes',
-      'La densité de puissance plus élevée de l\'induction fait la différence.',
-      '## Sécurité',
-      'L\'induction a des avantages clairs ici :',
-      '- Pas de flamme nue - pas de risque d\'incendie',
-      '- La plaque elle-même ne chauffe que de manière indirecte',
-      '- Arrêt automatique quand la casserole est vide',
-      '- Pas de danger de fuite de gaz',
-      '## Comparaison des coûts',
-      'Les coûts d\'exploitation diffèrent considérablement :',
-      '| Facteur de coût | Induction | Gaz |',
-      '|-----------------|-----------|-----|',
-      '| Achat | Plus élevé | Plus bas |',
-      '| Électricité/Gaz par an | 150-200 € | 200-300 € |',
-      '| Entretien | Minimal | Régulier requis |',
-      '| Durée de vie | 15-20 ans | 10-15 ans |',
-      '## Impact environnemental',
-      'L\'induction gagne aussi sur le plan écologique :',
-      '- Pas d\'émissions directes de CO₂ au lieu de cuisson',
-      '- Efficacité plus élevée = moins de consommation d\'énergie',
-      '- Pas de dépendance aux combustibles fossiles',
-      '- Possibilité d\'utiliser de l\'électricité verte',
-      '## Conclusion',
-      'Pour la cuisine moderne et efficace, l\'induction est le choix intelligent. Elle est plus rapide, plus sûre, plus efficace et plus respectueuse de l\'environnement que le gaz. Les coûts d\'achat plus élevés s\'amortissent grâce aux économies d\'énergie.'
     ]
   },
   'kochfeld-pflege': {
@@ -272,80 +158,6 @@ const blogContent: Record<string, Record<'de', string[]>> = {
       '- Schutzauflagen für empfindliche Bereiche nutzen',
       '## Fazit',
       'Die richtige Pflege ist einfach: Regelmäßiges Wischen mit dem richtigen Tuch, sofortige Fleckenentfernung und vereinzelte gründliche Reinigung. So bleibt Ihr Induktionskochfeld jahrelang wie neu!'
-    ],
-    en: [
-      'A clean induction cooktop is not only more visually appealing, but also more efficient and safer. We show you how to keep your cooktop like new.',
-      '## Daily Cleaning',
-      'After every cooking session, you should:',
-      '- Let the cooktop cool down (never wipe on a hot surface!)',
-      '- Wipe with a damp microfiber cloth',
-      '- Remove stains immediately before they burn in',
-      '- Polish the surface with a dry cloth',
-      '## Thorough Weekly Cleaning',
-      'Once a week, intensive care is worthwhile:',
-      '### 1. Use Special Cleaner',
-      'Induction cleaners remove grease deposits and streaks. Apply, let it work, wipe off.',
-      '### 2. Remove Limescale Stains',
-      'Vinegar water effectively removes limescale residues from water.',
-      '### 3. Clean the Sensors',
-      'Gently clean the touch areas with a soft brush.',
-      '## What You Should Never Do',
-      'These mistakes can damage your cooktop:',
-      '❌ **Sharp cleaners or abrasive agents** - Scratch the surface',
-      '❌ **Glass ceramic cleaner on plastic** - Discolors the frame',
-      '❌ **Water directly on the electronics** - Risk of short circuit',
-      '❌ **Metal sponges or steel wool** - Scratch everything',
-      '❌ **Pressure when wiping** - The surface is sensitive',
-      '## Stubborn Stains?',
-      'Here\'s how to remove even burnt-on residue:',
-      '1. **Cooktop Scraper**: Special glass ceramic scrapers remove burnt-on grease',
-      '2. **Soaking**: Place a damp cloth for 10 minutes to loosen dirt',
-      '3. **Special Paste**: Cleaning pastes work like a polish',
-      '## Long-term Protection',
-      'With these tips, your cooktop will stay beautiful for years:',
-      '- Always use suitable pots (flat bottom)',
-      '- Don\'t let spilled sugar masses cool down',
-      '- Regularly clean the ventilation slots',
-      '- Use protective covers for sensitive areas',
-      '## Conclusion',
-      'Proper care is simple: Regular wiping with the right cloth, immediate stain removal, and occasional thorough cleaning. This way, your induction cooktop will stay like new for years!'
-    ],
-    fr: [
-      'Une plaque à induction propre est non seulement plus esthétique, mais aussi plus efficace et plus sûre. Nous vous montrons comment garder votre plaque comme neuve.',
-      '## Nettoyage quotidien',
-      'Après chaque session de cuisson, vous devriez :',
-      '- Laisser la plaque refroidir (ne jamais essuyer sur une surface chaude !)',
-      '- Essuyer avec un chiffon microfibre humide',
-      '- Retirer les taches immédiatement avant qu\'elles ne brûlent',
-      '- Polir la surface avec un chiffon sec',
-      '## Nettoyage hebdomadaire en profondeur',
-      'Une fois par semaine, les soins intensifs valent la peine :',
-      '### 1. Utiliser un nettoyant spécial',
-      'Les nettoyants pour induction éliminent les dépôts de graisse et les traînées. Appliquer, laisser agir, essuyer.',
-      '### 2. Enlever les taches de calcaire',
-      'L\'eau vinaigrée élimine efficacement les résidus de calcaire de l\'eau.',
-      '### 3. Nettoyer les capteurs',
-      'Nettoyer délicatement les zones tactiles avec une brosse douce.',
-      '## Ce que vous ne devriez jamais faire',
-      'Ces erreurs peuvent endommager votre plaque :',
-      '❌ **Nettoyants agressifs ou abrasifs** - Rayent la surface',
-      '❌ **Nettoyant vitrocéramique sur plastique** - Décolore le cadre',
-      '❌ **Eau directement sur l\'électronique** - Risque de court-circuit',
-      '❌ **Éponges métalliques ou laine d\'acier** - Tout rayent',
-      '❌ **Pression en essuyant** - La surface est sensible',
-      '## Taches tenaces ?',
-      'Voici comment enlever même les résidus brûlés :',
-      '1. **Racloir pour plaque** : Les racloirs spéciaux vitrocéramique enlèvent la graisse brûlée',
-      '2. **Trempage** : Poser un chiffon humide pendant 10 minutes pour desserrer la saleté',
-      '3. **Pâte spéciale** : Les pâtes nettoyantes fonctionnent comme un polish',
-      '## Protection à long terme',
-      'Avec ces conseils, votre plaque restera belle pendant des années :',
-      '- Toujours utiliser des casseroles adaptées (fond plat)',
-      '- Ne pas laisser refroidir les masses de sucre renversées',
-      '- Nettoyer régulièrement les fentes de ventilation',
-      '- Utiliser des couvercles de protection pour les zones sensibles',
-      '## Conclusion',
-      'Les bons soins sont simples : essuyage régulier avec le bon chiffon, retrait immédiat des taches, et nettoyage en profondeur occasionnel. Ainsi, votre plaque à induction restera comme neuve pendant des années !'
     ]
   }
 }
@@ -367,7 +179,7 @@ function renderContent(content: string[]): JSX.Element {
           return (
             <ul key={index} className="list-disc list-inside ml-4 space-y-2 text-gray-700 mb-4">
               <li dangerouslySetInnerHTML={{ 
-                __html: paragraph.replace('- ', '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
+                __html: sanitizeHtml(paragraph.replace('- ', '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'))
               }} />
             </ul>
           )
@@ -377,7 +189,7 @@ function renderContent(content: string[]): JSX.Element {
             <div key={index} className="flex items-start gap-3 text-gray-700 mb-2">
               <span className="text-red-500 text-xl">❌</span>
               <span dangerouslySetInnerHTML={{ 
-                __html: paragraph.replace('❌ ', '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
+                __html: sanitizeHtml(paragraph.replace('❌ ', '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'))
               }} />
             </div>
           )
@@ -389,7 +201,7 @@ function renderContent(content: string[]): JSX.Element {
             <div key={index} className="flex items-start gap-3 text-gray-700 mb-3">
               <span className="flex-shrink-0 w-6 h-6 bg-[#4ECCA3] text-white rounded-full flex items-center justify-center text-sm font-bold">{num}</span>
               <span dangerouslySetInnerHTML={{ 
-                __html: text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
+                __html: sanitizeHtml(text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'))
               }} />
             </div>
           )
@@ -434,7 +246,7 @@ function renderContent(content: string[]): JSX.Element {
             key={index} 
             className="text-gray-700 leading-relaxed mb-4"
             dangerouslySetInnerHTML={{ 
-              __html: paragraph.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
+              __html: sanitizeHtml(paragraph.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'))
             }}
           />
         )

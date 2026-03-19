@@ -61,6 +61,10 @@
   .font-subheading {
     font-family: var(--font-satoshi), system-ui, sans-serif;
   }
+
+  .font-mono {
+    font-family: var(--font-jetbrains-mono), monospace;
+  }
 }
 
 /* German UX: Minimum touch target 44x44px */

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, getTranslations, unstable_setRequestLocale } from 'next-intl/server'
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import '../globals.css'
 import { Toaster } from 'sonner'
 import { Header } from '@/components/layout/header'
@@ -19,7 +19,8 @@ const inter = Inter({
   display: 'swap',
 })
 
-export async function generateMetadata({params: {locale}}: {params: {locale: string}}) {
+export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
+  const { locale } = await params
   const t = await getTranslations({locale, namespace: 'metadata'})
   
   return {
@@ -63,55 +64,47 @@ export function generateStaticParams() {
 
 export default async function LocaleLayout({
   children,
-  params: {locale}
+  params,
 }: {
   children: React.ReactNode
-  params: {locale: string}
+  params: Promise<{locale: string}>
 }) {
-  // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) notFound()
-
-  // Enable static rendering
-  unstable_setRequestLocale(locale)
-
+  const { locale } = await params
+  
   // Get messages for the current locale
   const messages = await getMessages()
 
   return (
-    <html lang={locale} className={`${inter.variable}`}>
-      <body className="font-sans antialiased min-h-screen bg-background text-foreground">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <a href="#main-content" className="skip-link">
-            Zum Hauptinhalt springen
-          </a>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">
-              <SmoothScrollProvider>
-                <PageTransition>
-                  {children}
-                </PageTransition>
-              </SmoothScrollProvider>
-            </main>
-            <Footer />
-          </div>
-          <Toaster 
-            position="bottom-right" 
-            toastOptions={{
-              style: {
-                background: '#fff',
-                border: '1px solid #e5e7eb',
-                borderRadius: '12px',
-                padding: '16px',
-              },
-            }}
-            richColors
-            closeButton
-          />
-          <CookieConsent />
-          <CustomCursor />
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <>
+      <a href="#main-content" className="skip-link">
+        Zum Hauptinhalt springen
+      </a>
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">
+          <SmoothScrollProvider>
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </SmoothScrollProvider>
+        </main>
+        <Footer />
+      </div>
+      <Toaster 
+        position="bottom-right" 
+        toastOptions={{
+          style: {
+            background: '#fff',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
+            padding: '16px',
+          },
+        }}
+        richColors
+        closeButton
+      />
+      <CookieConsent />
+      <CustomCursor />
+    </>
   )
 }

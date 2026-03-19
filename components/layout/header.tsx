@@ -6,14 +6,15 @@ import { useTranslations } from 'next-intl'
 import { Search, ShoppingCart, User, Heart, Menu, X, ChevronRight } from 'lucide-react'
 import { Link, usePathname } from '@/navigation'
 import { useCart } from '@/lib/store/cart'
+import { useWishlist } from '@/lib/store/wishlist'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function Header() {
   const pathname = usePathname()
   const t = useTranslations()
   const { totalItems } = useCart()
+  const { count: wishlistCount } = useWishlist()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [wishlistCount, setWishlistCount] = useState(0)
   const [scrolled, setScrolled] = useState(false)
 
   const navItems = [
@@ -26,11 +27,6 @@ export function Header() {
     const handleScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const saved = localStorage.getItem('nova-wishlist')
-    if (saved) setWishlistCount(JSON.parse(saved).length)
   }, [])
 
   useEffect(() => {
@@ -52,7 +48,7 @@ export function Header() {
         }`}
       >
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
+          <div className="flex items-center justify-between h-16 sm:h-20 lg:h-20">
             
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
@@ -108,7 +104,7 @@ export function Header() {
               >
                 <Heart className="w-5 h-5 sm:w-5 sm:h-5" />
                 {wishlistCount > 0 && (
-                  <span className="absolute top-1 right-1 w-4.5 h-4.5 sm:w-5 sm:h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center min-w-[18px]">
+                  <span className="absolute top-1 right-1 w-[18px] h-[18px] sm:w-5 sm:h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center min-w-[18px]">
                     {wishlistCount > 99 ? '99+' : wishlistCount}
                   </span>
                 )}
@@ -131,7 +127,7 @@ export function Header() {
               >
                 <ShoppingCart className="w-5 h-5 sm:w-5 sm:h-5" />
                 {totalItems > 0 && (
-                  <span className="absolute top-1 right-1 w-4.5 h-4.5 sm:w-5 sm:h-5 bg-[#4ECCA3] text-white text-[10px] font-bold rounded-full flex items-center justify-center min-w-[18px]">
+                  <span className="absolute top-1 right-1 w-[18px] h-[18px] sm:w-5 sm:h-5 bg-[#4ECCA3] text-white text-[10px] font-bold rounded-full flex items-center justify-center min-w-[18px]">
                     {totalItems > 99 ? '99+' : totalItems}
                   </span>
                 )}
@@ -247,7 +243,7 @@ export function Header() {
         )}
       </AnimatePresence>
 
-      <div className="h-16 sm:h-18 lg:h-20" />
+      <div className="h-16 sm:h-20" />
     </>
   )
 }

@@ -93,7 +93,9 @@
     "new": "Neu",
     "bestseller": "Bestseller",
     "premium": "Premium",
-    "search": "Produkte suchen...",
+    "search": {
+      "placeholder": "Produkte durchsuchen..."
+    },
     "noResults": "Keine Produkte gefunden",
     "tryDifferent": "Versuchen Sie es mit anderen Suchbegriffen",
     "reviews": "Rezensionen",
@@ -134,6 +136,24 @@
         "title": "Premium Qualität",
         "desc": "Made in Germany"
       }
+    },
+    "sort": {
+      "name": "Sortieren nach",
+      "newest": "Neueste zuerst",
+      "rating": "Beste Bewertung",
+      "priceAsc": "Preis: Aufsteigend",
+      "priceDesc": "Preis: Absteigend",
+      "relevance": "Relevanz",
+      "featured": "Empfohlen"
+    },
+    "filters": {
+      "title": "Filter",
+      "categories": "Kategorien",
+      "priceRange": "Preisbereich",
+      "reset": "Zurücksetzen",
+      "apply": "Anwenden",
+      "all": "Alle",
+      "clear": "Filter zurücksetzen"
     }
   },
   "product": {
@@ -382,6 +402,7 @@
   "cookies": {
     "title": "Wir verwenden Cookies",
     "description": "Wir nutzen Cookies für den Betrieb der Seite, Analyse und Marketing.",
+    "close": "Schließen",
     "learnMore": "Mehr erfahren",
     "acceptAll": "Alle akzeptieren",
     "acceptNecessary": "Nur notwendige",
@@ -633,5 +654,52 @@
     "noResults": "Keine Bewertungen mit diesem Filter gefunden.",
     "resetFilter": "Filter zurücksetzen",
     "loadMore": "Mehr Bewertungen laden"
+  },
+  "testimonials": {
+    "title": "Das sagen unsere Kunden",
+    "subtitle": "Kundenstimmen",
+    "description": "Entdecken Sie, warum Tausende von Kunden NOVA INDUKT vertrauen. Ihre Zufriedenheit ist unser größter Erfolg.",
+    "reviews": "Bewertungen",
+    "verified": "Verifizierter Kauf",
+    "previous": "Vorheriges",
+    "next": "Nächstes",
+    "goTo": "Gehe zu",
+    "addReview": "Bewertung schreiben",
+    "form": {
+      "title": "Ihre Bewertung",
+      "subtitle": "Teilen Sie Ihre Erfahrung mit uns",
+      "name": "Ihr Name",
+      "nameLabel": "Ihr Name",
+      "emailLabel": "E-Mail-Adresse",
+      "ratingLabel": "Ihre Bewertung",
+      "commentLabel": "Ihre Erfahrung",
+      "productLabel": "Produktname",
+      "productPlaceholder": "z.B. Premium Induktionspfanne",
+      "stars": "Sterne",
+      "characters": "Zeichen",
+      "submitting": "Wird gesendet...",
+      "successTitle": "Vielen Dank!",
+      "privacyNotice": "Ihre Daten werden vertraulich behandelt und nicht an Dritte weitergegeben.",
+      "namePlaceholder": "Max Mustermann",
+      "email": "E-Mail-Adresse",
+      "emailPlaceholder": "max@beispiel.de",
+      "rating": "Ihre Bewertung",
+      "comment": "Ihre Erfahrung",
+      "commentPlaceholder": "Teilen Sie Ihre Erfahrung mit dem Produkt...",
+      "productName": "Produktname (optional)",
+      "productNamePlaceholder": "z.B. Premium Induktionspfanne",
+      "submit": "Bewertung absenden",
+      "cancel": "Abbrechen",
+      "success": "Vielen Dank für Ihre Bewertung!",
+      "successMessage": "Ihre Bewertung wurde erfolgreich gespeichert und wird nach Prüfung veröffentlicht.",
+      "errors": {
+        "nameRequired": "Bitte geben Sie Ihren Namen ein",
+        "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein",
+        "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+        "commentRequired": "Bitte schreiben Sie einen Kommentar",
+        "commentMinLength": "Der Kommentar muss mindestens 10 Zeichen lang sein",
+        "ratingRequired": "Bitte geben Sie eine Bewertung ab"
+      }
+    }
   }
 }

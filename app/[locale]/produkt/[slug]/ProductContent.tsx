@@ -11,48 +11,10 @@ import {
   Award, Zap, Leaf, ZoomIn, ArrowLeft
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
+import { useWishlist } from '@/lib/store/wishlist'
 import { products, categories, Product } from '@/lib/data/products'
 import { ProductReviews } from '@/components/product-reviews'
 import { ImageLightbox } from '@/components/image-lightbox'
-
-interface WishlistItem {
-  id: string
-  name: string
-  price: number
-  image: string
-  slug: string
-}
-
-function useWishlist() {
-  const [items, setItems] = useState<WishlistItem[]>([])
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-    const saved = localStorage.getItem('nova-wishlist')
-    if (saved) setItems(JSON.parse(saved))
-  }, [])
-
-  useEffect(() => {
-    if (mounted) localStorage.setItem('nova-wishlist', JSON.stringify(items))
-  }, [items, mounted])
-
-  const addItem = (item: WishlistItem) => {
-    if (!items.find(i => i.id === item.id)) {
-      setItems([...items, item])
-      return true
-    }
-    return false
-  }
-
-  const removeItem = (id: string) => {
-    setItems(items.filter(i => i.id !== id))
-  }
-
-  const isInWishlist = (id: string) => items.some(i => i.id === id)
-
-  return { items, addItem, removeItem, isInWishlist, count: items.length, mounted }
-}
 
 interface ProductContentProps {
   product: Product
@@ -69,7 +31,7 @@ export function ProductContent({ product }: ProductContentProps) {
   const [wishlistToastMessage, setWishlistToastMessage] = useState('')
   const [showStickyBar, setShowStickyBar] = useState(false)
   const { addItem } = useCart()
-  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist()
+  const { isInWishlist, toggleItem } = useWishlist()
   const infoRef = useRef<HTMLDivElement>(null)
 
   const isWishlisted = isInWishlist(product.id)
@@ -87,24 +49,19 @@ export function ProductContent({ product }: ProductContentProps) {
   }, [])
 
   const handleWishlistToggle = () => {
-    if (isWishlisted) {
-      removeFromWishlist(product.id)
-      setWishlistToastMessage(t('wishlist.removed'))
-    } else {
-      addToWishlist({
-        id: product.id,
-        name: product.name.de,
-        price: product.price,
-        image: product.images[0],
-        slug: product.slug
-      })
-      setWishlistToastMessage(t('wishlist.added'))
-    }
+    const added = toggleItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug
+    })
+    setWishlistToastMessage(added ? t('wishlist.added') : t('wishlist.removed'))
     setShowWishlistToast(true)
     setTimeout(() => setShowWishlistToast(false), 2000)
   }
 
-  const getLocalizedName = (item: { name: { de: string; en: string; fr: string } }) => {
+  const getLocalizedName = (item: { name: { de: string } }) => {
     return item.name.de
   }
 

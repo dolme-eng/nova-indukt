@@ -12,9 +12,11 @@ import {
   Sparkles, CheckCircle
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
+import { useWishlist } from '@/lib/store/wishlist'
 import { products, categories, blogPosts } from '@/lib/data/products'
 import { TiltCard } from '@/components/animations'
 import { MagneticButton } from '@/components/magnetic-button'
+import { TestimonialsSection } from '@/components/testimonials-section'
 
 // Flash deals - deterministic discount based on product id to avoid hydration mismatch
 const flashDeals = products.slice(0, 4).map(p => ({...p, discount: ((p.id.charCodeAt(0) + p.id.charCodeAt(p.id.length - 1)) % 25) + 15}))
@@ -33,7 +35,7 @@ export function HomeContent() {
     return () => clearInterval(timer)
   }, [slides.length])
 
-  const getLocalizedName = (item: { name: { de: string; en: string; fr: string } }) => {
+  const getLocalizedName = (item: { name: { de: string } }) => {
     return item.name.de
   }
 
@@ -413,6 +415,9 @@ export function HomeContent() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+
       {/* Newsletter */}
       <section className="py-12 sm:py-16 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -640,35 +645,19 @@ function TechFeatureCard({ icon: Icon, title, description, color, index }: {
 
 // Flash Deal Card with wishlist functionality
 function FlashDealCard({ product, index, t }: { product: typeof flashDeals[0]; index: number; t: any }) {
-  const [isInWishlist, setIsInWishlist] = useState(false)
-  
-  useEffect(() => {
-    const saved = localStorage.getItem('nova-wishlist')
-    if (saved) {
-      const wishlist = JSON.parse(saved)
-      setIsInWishlist(wishlist.some((item: any) => item.productId === product.id))
-    }
-  }, [product.id])
+  const { isInWishlist, toggleItem } = useWishlist()
+  const inWishlist = isInWishlist(product.id)
   
   const toggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    const saved = localStorage.getItem('nova-wishlist')
-    let wishlist = saved ? JSON.parse(saved) : []
-    
-    if (isInWishlist) {
-      wishlist = wishlist.filter((item: any) => item.productId !== product.id)
-    } else {
-      wishlist.push({
-        productId: product.id,
-        addedAt: new Date().toISOString(),
-        notifyOnRestock: false
-      })
-    }
-    
-    localStorage.setItem('nova-wishlist', JSON.stringify(wishlist))
-    window.dispatchEvent(new StorageEvent('storage', { key: 'nova-wishlist' }))
-    setIsInWishlist(!isInWishlist)
+    toggleItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug
+    })
   }
   
   return (
@@ -696,19 +685,21 @@ function FlashDealCard({ product, index, t }: { product: typeof flashDeals[0]; i
           <button 
             onClick={toggleWishlist}
             className={`w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-colors ${
-              isInWishlist ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+              inWishlist ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >
-            <Heart className={`w-4 h-4 ${isInWishlist ? 'fill-white' : ''}`} />
+            <Heart className={`w-4 h-4 ${inWishlist ? 'fill-white' : ''}`} />
           </button>
         </div>
       </div>
-      <div className="p-4">
-        <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2">{product.name.de}</h3>
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-lg font-bold text-red-500">{product.price} €</span>
-          <span className="text-sm text-gray-400 line-through decoration-black">{product.oldPrice} €</span>
-        </div>
+        <div className="p-4">
+          <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2">{product.name.de}</h3>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg font-bold text-red-500">{product.price} €</span>
+            {product.oldPrice && (
+              <span className="text-sm text-gray-400 line-through decoration-black">{product.oldPrice} €</span>
+            )}
+          </div>
         <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
           <div className="bg-gradient-to-r from-orange-500 to-red-500 h-full rounded-full" style={{width: '75%'}} />
         </div>
