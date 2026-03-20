@@ -80,6 +80,7 @@
   "products": {
     "title": "Produkte",
     "products": "Produkte",
+    "product": "Produkt",
     "bestsellers": "Unsere Bestseller",
     "bestsellersSubtitle": "Handverlesene Produkte für die moderne Küche",
     "viewAll": "Alle Produkte ansehen",
@@ -97,6 +98,7 @@
       "placeholder": "Produkte durchsuchen..."
     },
     "noResults": "Keine Produkte gefunden",
+    "noResultsDesc": "Keine Produkte gefunden. Versuchen Sie es mit anderen Suchbegriffen oder Filtern.",
     "tryDifferent": "Versuchen Sie es mit anderen Suchbegriffen",
     "reviews": "Rezensionen",
     "viewProduct": "Zum Produkt",
@@ -240,7 +242,8 @@
     "title": "Werde Induktions-Experte",
     "subtitle": "Erhalte exklusive Tipps, Rezepte und Angebote direkt in dein Postfach.",
     "placeholder": "Deine E-Mail-Adresse",
-    "submit": "Anmelden"
+    "submit": "Anmelden",
+    "success": "Vielen Dank! Ihre Newsletter-Anmeldung ist bestätigt."
   },
   "cart": {
     "title": "Warenkorb",
@@ -262,7 +265,21 @@
     "remove": "Entfernen",
     "addToCart": "In den Warenkorb",
     "add": "Hinzugefügt",
-    "cartAdd": "Hinzugefügt"
+    "cartAdd": "Hinzugefügt",
+    "added": "Hinzugefügt",
+    "itemRemoved": "Aus dem Warenkorb entfernt",
+    "emptyDescription": "Entdecken Sie unsere Produkte und fügen Sie Ihre Favoriten hinzu.",
+    "freeShippingAchieved": "Kostenloser Versand aktiviert",
+    "freeShippingProgress": "Noch {amount} € bis zum kostenlosen Versand",
+    "freeShippingProgressShort": "Noch {amount} € bis zum kostenlosen Versand",
+    "quantity": "Menge",
+    "warranty": "{years} Jahre Garantie",
+    "nav": {
+      "home": "Startseite"
+    },
+    "products": {
+      "title": "Produkte"
+    }
   },
   "checkout": {
     "title": "Kasse",
@@ -307,10 +324,13 @@
       "items": "Artikel",
       "orderNumber": "Bestellnummer"
     },
+    "item": "Artikel",
+    "items": "Artikel",
     "success": {
       "title": "Vielen Dank für Ihre Bestellung!",
       "subtitle": "Ihre Bestellung wurde erfolgreich aufgegeben.",
-      "backHome": "Zurück zur Startseite"
+      "backHome": "Zurück zur Startseite",
+      "backProducts": "Weiter einkaufen"
     },
     "emptyCart": "Warenkorb ist leer",
     "emptyCartMessage": "Fügen Sie Artikel hinzu, um fortzufahren.",
@@ -366,7 +386,11 @@
     "noWishlist": "Ihre Wunschliste ist leer",
     "noWishlistHint": "Durchsuchen Sie unsere Produkte und fügen Sie Artikel hinzu.",
     "browseProducts": "Produkte entdecken",
-    "mobileMenu": "Menü"
+    "mobileMenu": "Menü",
+    "logout": "Abmelden",
+    "nav": {
+      "home": "Startseite"
+    }
   },
   "wishlist": {
     "title": "Wunschliste",
@@ -374,7 +398,10 @@
     "emptyHint": "Speichern Sie Ihre Lieblingsprodukte für später.",
     "browse": "Produkte entdecken",
     "remove": "Entfernen",
-    "addToCart": "In den Warenkorb"
+    "addToCart": "In den Warenkorb",
+    "item": "Produkt",
+    "items": "Produkte",
+    "removed": "Aus der Wunschliste entfernt"
   },
   "footer": {
     "tagline": "Premium-Küchenzubehör für maximale Performance.",
@@ -424,7 +451,11 @@
     "marketing": {
       "title": "Marketing-Cookies",
       "description": "Werden verwendet, um relevante Werbung anzuzeigen."
-    }
+    },
+    "enableAnalytics": "Analytics aktivieren",
+    "disableAnalytics": "Analytics deaktivieren",
+    "enableMarketing": "Marketing aktivieren",
+    "disableMarketing": "Marketing deaktivieren"
   },
   "language": "Sprache",
   "loading": "Laden...",
@@ -692,6 +723,11 @@
       "cancel": "Abbrechen",
       "success": "Vielen Dank für Ihre Bewertung!",
       "successMessage": "Ihre Bewertung wurde erfolgreich gespeichert und wird nach Prüfung veröffentlicht.",
+      "nameRequired": "Bitte geben Sie Ihren Namen ein",
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "commentRequired": "Bitte schreiben Sie einen Kommentar",
+      "commentMinLength": "Der Kommentar muss mindestens 10 Zeichen lang sein",
       "errors": {
         "nameRequired": "Bitte geben Sie Ihren Namen ein",
         "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein",

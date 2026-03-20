@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useTranslations } from 'next-intl'
 import { X, Star, Send, CheckCircle } from 'lucide-react'
 import { useTestimonials } from '@/lib/store/testimonials'
+import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface AddTestimonialFormProps {
   isOpen: boolean
@@ -12,7 +12,7 @@ interface AddTestimonialFormProps {
 }
 
 export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps) {
-  const t = useTranslations('testimonials')
+  const t = useDeTranslations('testimonials')
   const { addTestimonial } = useTestimonials()
   
   const [formData, setFormData] = useState({
@@ -26,7 +26,7 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  // Bloquer le scroll du body quand le modal est ouvert
+  // Scrollen des Bodys sperren, solange das Modal geöffnet ist
   useEffect(() => {
     if (!isOpen) return
     
@@ -45,7 +45,7 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
     }
   }, [isOpen])
 
-  // Empêcher la propagation du scroll vers la page
+  // Verhindert das Weiterreichen von Scroll-Events zur Seite
   const handleWheel = useCallback((e: React.WheelEvent) => {
     const target = e.currentTarget as HTMLElement
     const isScrollingUp = e.deltaY < 0
@@ -65,7 +65,7 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
     e.stopPropagation()
   }, [])
 
-  // Bloquer le scroll sur le backdrop
+  // Scrollen auf dem Backdrop blockieren
   const handleBackdropWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault()
   }, [])

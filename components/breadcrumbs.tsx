@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { ChevronRight, Home } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface BreadcrumbItem {
   label: string
@@ -16,7 +16,7 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
-  const t = useTranslations()
+  const t = useDeTranslations()
   return (
     <nav 
       aria-label="Breadcrumb" 

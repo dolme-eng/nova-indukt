@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Link } from '@/navigation'
-import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingCart, Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Product } from '@/lib/data/products'
+import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface QuickViewModalProps {
   product: Product | null
@@ -15,7 +15,7 @@ interface QuickViewModalProps {
 }
 
 export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps) {
-  const t = useTranslations()
+  const t = useDeTranslations()
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
 

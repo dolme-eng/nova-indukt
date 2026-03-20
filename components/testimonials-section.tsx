@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
 import { Star, Quote, User } from 'lucide-react'
 import { useTestimonials } from '@/lib/store/testimonials'
 import { formatDate } from '@/lib/utils'
 import { AddTestimonialForm } from './add-testimonial-form'
+import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 export function TestimonialsSection() {
-  const t = useTranslations('testimonials')
+  const t = useDeTranslations('testimonials')
   const { testimonials, averageRating, isHydrated } = useTestimonials()
   const [showForm, setShowForm] = useState(false)
 

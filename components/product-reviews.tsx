@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Star, ThumbsUp, User, CheckCircle, Flag,
   ChevronDown, Filter
 } from 'lucide-react'
+import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface Review {
   id: string
@@ -72,7 +72,7 @@ const generateMockReviews = (productId: string): Review[] => [
 ]
 
 export function ProductReviews({ productId, averageRating, totalReviews }: ProductReviewsProps) {
-  const t = useTranslations('reviews')
+  const t = useDeTranslations('reviews')
   const [reviews] = useState<Review[]>(generateMockReviews(productId))
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'helpful' | 'highest' | 'lowest'>('newest')
   const [filterRating, setFilterRating] = useState<number | null>(null)

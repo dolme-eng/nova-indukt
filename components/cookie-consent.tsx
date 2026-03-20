@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Cookie, Shield, Settings, Check } from 'lucide-react'
+import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface CookieConsent {
   necessary: boolean
@@ -14,7 +14,7 @@ interface CookieConsent {
 }
 
 export function CookieConsent() {
-  const t = useTranslations('cookies')
+  const t = useDeTranslations('cookies')
   const [isVisible, setIsVisible] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
   const [preferences, setPreferences] = useState<CookieConsent>({
