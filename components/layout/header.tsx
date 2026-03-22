@@ -151,7 +151,7 @@ export function Header() {
                 alt="NOVA INDUKT" 
                 width={180} 
                 height={54} 
-                className={`w-auto transition-all duration-500 ease-out ${scrolled ? 'h-8 sm:h-10' : 'h-10 sm:h-12'} group-hover:scale-105`} 
+                className={`w-auto transition-all duration-500 ease-out ${scrolled ? 'h-7 sm:h-10' : 'h-8 sm:h-12'} group-hover:scale-105`} 
                 priority 
               />
             </Link>
@@ -191,16 +191,16 @@ export function Header() {
             </nav>
 
             {/* Actions */}
-            <div className="flex items-center gap-2 relative z-10 bg-white/50 backdrop-blur-md rounded-2xl p-1.5 border border-gray-100">
+            <div className="flex items-center gap-0.5 sm:gap-2 relative z-10 bg-white/50 backdrop-blur-md rounded-2xl p-1 sm:p-1.5 border border-gray-100">
               <button 
                 onClick={() => setSearchOpen(true)} 
-                className="p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" 
+                className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" 
                 aria-label="Suchen"
               >
                 <Search className="w-5 h-5 transition-transform group-hover:scale-110" />
               </button>
               
-              <Link href="/wunschliste" className="p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Wunschliste">
+              <Link href="/wunschliste" className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Wunschliste">
                 <Heart className="w-5 h-5 transition-transform group-hover:scale-110" />
                 <AnimatePresence>
                   {wishlistCount > 0 && (
@@ -218,7 +218,7 @@ export function Header() {
                 <User className="w-5 h-5 transition-transform group-hover:scale-110" />
               </Link>
               
-              <button onClick={() => setCartDrawerOpen(true)} className="p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Warenkorb">
+              <button onClick={() => setCartDrawerOpen(true)} className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Warenkorb">
                 <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
                 <AnimatePresence>
                   {totalItems > 0 && (
@@ -234,7 +234,7 @@ export function Header() {
 
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-                className="lg:hidden p-2.5 md:p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all rounded-xl" 
+                className="lg:hidden p-2 sm:p-2.5 md:p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all rounded-xl" 
                 aria-label="Menü"
               >
                 <AnimatePresence mode="wait">
