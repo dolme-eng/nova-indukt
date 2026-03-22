@@ -11,6 +11,7 @@ import {
   ChevronRight, ShoppingCart, Heart, Star, Filter
 } from 'lucide-react'
 import { products, Product, categories } from '@/lib/data/products'
+import { useCart } from '@/lib/store/cart'
 
 export default function SearchContent() {
   const t = useDeTranslations()
@@ -96,7 +97,7 @@ export default function SearchContent() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <aside className={`lg:w-64 flex-shrink-0 ${showFilters ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-white rounded-2xl p-6 shadow-sm sticky top-24">
@@ -254,30 +255,38 @@ function ProductCard({
   viewMode: 'grid' | 'list'
   index: number
 }) {
+  const { addItem } = useCart()
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    addItem(product, 1)
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow border border-gray-100 ${
-        viewMode === 'list' ? 'flex gap-4' : ''
+        viewMode === 'list' ? 'flex flex-row' : 'flex flex-col'
       }`}
     >
-      <Link href={`/produkt/${product.slug}`} className={viewMode === 'list' ? 'flex gap-4 w-full' : ''}>
-        <div className={`relative bg-gray-100 ${viewMode === 'list' ? 'w-48 h-48 flex-shrink-0' : 'aspect-square'}`}>
+      <Link href={`/produkt/${product.slug}`} className={viewMode === 'list' ? 'flex flex-row w-full items-stretch' : 'block'}>
+        <div className={`relative bg-gray-50 flex-shrink-0 ${viewMode === 'list' ? 'w-2/5 sm:w-48' : 'aspect-square'}`}>
           <Image
             src={product.images[0]}
             alt={product.name.de}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-contain p-4 group-hover:scale-105 transition-transform duration-500 mix-blend-multiply"
           />
           {product.badges?.includes('premium') && (
-            <span className="absolute top-3 left-3 px-2 py-1 bg-[#4ECCA3] text-white text-xs font-bold rounded-full">
+            <span className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:py-1 bg-[#4ECCA3] text-white text-[9px] sm:text-xs font-bold rounded-md sm:rounded-full">
               Premium
             </span>
           )}
         </div>
-        <div className="p-4 flex-1">
+        <div className={`p-4 flex-1 flex flex-col ${viewMode === 'list' ? 'justify-center' : ''}`}>
           <div className="flex items-center gap-1 mb-2">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -287,30 +296,30 @@ function ProductCard({
             ))}
             <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
           </div>
-          <h3 className="font-medium text-gray-900 mb-2 group-hover:text-[#4ECCA3] transition-colors">
+          <h3 className="font-bold text-gray-900 text-[13px] sm:text-base mb-2 line-clamp-2 group-hover:text-nova-500 transition-colors leading-snug flex-1">
             {product.name.de}
           </h3>
-          <p className="text-gray-600 text-sm line-clamp-2 mb-3 hidden sm:block">
-            {product.shortDescription.de}
-          </p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-[#4ECCA3]">{product.price} €</span>
+          
+          <div className="mt-auto pt-3 sm:pt-4 relative border-t border-gray-50">
+            <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
+              <span className="text-lg sm:text-lg font-bold text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
               {product.oldPrice && (
-                <span className="text-sm text-red-500 line-through decoration-black">{product.oldPrice} €</span>
+                <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>
               )}
             </div>
-            <div className="flex items-center gap-2">
-              <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-[#4ECCA3] hover:text-white transition-colors">
-                <Heart className="w-4 h-4" />
-              </button>
-              <button className="w-8 h-8 rounded-full bg-[#4ECCA3] text-white flex items-center justify-center hover:bg-[#3BA88A] transition-colors">
-                <ShoppingCart className="w-4 h-4" />
-              </button>
-            </div>
+            <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-3 sm:mb-4 leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. Versand</p>
+            
+            <button
+              onClick={handleAddToCart}
+              className="w-full py-2.5 sm:py-3.5 bg-gray-50 text-gray-800 border border-gray-200 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm"
+            >
+              <ShoppingCart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+              <span className="hidden sm:inline">In den Warenkorb</span>
+            </button>
           </div>
         </div>
       </Link>
     </motion.div>
   )
 }
+

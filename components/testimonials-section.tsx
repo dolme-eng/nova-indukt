@@ -87,56 +87,65 @@ export function TestimonialsSection() {
             </motion.div>
           </div>
 
-          {/* Testimonials Grid - 3 to 4 cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.slice(0, 3).map((testimonial, index) => (
-              <motion.div
-                key={testimonial.id || index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl shadow-lg p-6 flex flex-col"
-              >
-                {/* Header with avatar and info */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-[#4ECCA3] to-[#3BA88A] rounded-full flex items-center justify-center flex-shrink-0">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 text-sm truncate">{testimonial.name}</p>
-                    {testimonial.productName && (
-                      <p className="text-xs text-[#4ECCA3] truncate">{testimonial.productName}</p>
+          {/* Animated Testimonials Marquee */}
+          <div className="relative overflow-hidden mt-16 py-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+            {/* Fade edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-32 bg-gradient-to-r from-[#F4FBF9] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-32 bg-gradient-to-l from-[#F4FBF9] to-transparent z-10 pointer-events-none" />
+            
+            <motion.div 
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ ease: "linear", duration: 40, repeat: Infinity }}
+              className="flex gap-6 w-max"
+            >
+              {/* Duplicate array for seamless infinite scroll */}
+              {[...testimonials, ...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
+                <div
+                  key={`${testimonial.id}-${index}`}
+                  className="w-[280px] sm:w-[380px] flex-shrink-0 bg-white rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-xl hover:shadow-[#4ECCA3]/10 hover:-translate-y-1 transition-all duration-300 p-6 sm:p-8 flex flex-col border border-gray-100"
+                >
+                  {/* Header with avatar and info flexed differently */}
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#4ECCA3] to-[#3BA88A] rounded-full flex items-center justify-center flex-shrink-0 shadow-inner">
+                      <span className="text-white font-bold text-lg">{testimonial.name.charAt(0)}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-900 text-base truncate tracking-tight">{testimonial.name}</p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        {renderStars(testimonial.rating)}
+                      </div>
+                    </div>
+                    {testimonial.isVerified && (
+                      <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0" title={t('verified')}>
+                        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
                     )}
                   </div>
-                </div>
 
-                {/* Rating */}
-                <div className="flex items-center gap-1 mb-3">
-                  {renderStars(testimonial.rating)}
-                </div>
+                  {/* Comment */}
+                  <blockquote className="text-[15px] sm:text-base text-gray-600 leading-relaxed flex-1 italic relative z-10">
+                    <span className="text-4xl text-[#4ECCA3] opacity-20 absolute -top-4 -left-2 -z-10 font-serif">"</span>
+                    {testimonial.comment}
+                  </blockquote>
 
-                {/* Comment */}
-                <blockquote className="text-sm text-gray-600 leading-relaxed flex-1 line-clamp-4">
-                  "{testimonial.comment}"
-                </blockquote>
-
-                {/* Footer */}
-                <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                  <p className="text-xs text-gray-400">
-                    {formatDate(testimonial.createdAt)}
-                  </p>
-                  {testimonial.isVerified && (
-                    <span className="inline-flex items-center gap-1 text-green-600 text-xs">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      {t('verified')}
-                    </span>
-                  )}
+                  {/* Footer */}
+                  <div className="mt-6 pt-5 border-t border-gray-100/60 flex items-center justify-between">
+                    {testimonial.productName ? (
+                      <p className="text-xs font-bold text-[#4ECCA3] truncate pr-4 max-w-[200px]">
+                        {testimonial.productName}
+                      </p>
+                    ) : (
+                      <span />
+                    )}
+                    <p className="text-xs font-semibold text-gray-400">
+                      {formatDate(testimonial.createdAt)}
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </motion.div>
           </div>
 
           {/* Add Review Button */}

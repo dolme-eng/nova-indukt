@@ -9,13 +9,15 @@ export function generateStaticParams() {
   }))
 }
 
-export default function ProductPage({ 
+export default async function ProductPage({ 
   params 
 }: { 
-  params: { slug: string } 
+  params: Promise<{ slug: string }> 
 }) {
-  // Find product by slug
-  const product = products.find(p => p.slug === params.slug)
+  const resolvedParams = await params
+  // Find product by slug safely handling URI encoding
+  const decodedSlug = decodeURIComponent(resolvedParams.slug)
+  const product = products.find(p => p.slug === resolvedParams.slug || p.slug === decodedSlug)
   
   if (!product) {
     notFound()

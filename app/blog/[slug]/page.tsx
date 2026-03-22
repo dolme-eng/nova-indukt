@@ -25,8 +25,9 @@ export function generateStaticParams() {
 }
 
 // Generate metadata for each blog post
-export async function generateMetadata({ params }: { params: { slug: string; locale: string } }): Promise<Metadata> {
-  const post = blogPosts.find(p => p.slug === params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string; locale: string }> }): Promise<Metadata> {
+  const resolvedParams = await params
+  const post = blogPosts.find(p => p.slug === resolvedParams.slug)
   
   if (!post) {
     return {
@@ -254,12 +255,13 @@ function renderContent(content: string[]): JSX.Element {
   )
 }
 
-export default function BlogPostPage({ 
+export default async function BlogPostPage({ 
   params 
 }: { 
-  params: { slug: string } 
+  params: Promise<{ slug: string }> 
 }) {
-  const post = blogPosts.find(p => p.slug === params.slug)
+  const resolvedParams = await params
+  const post = blogPosts.find(p => p.slug === resolvedParams.slug)
   
   if (!post) {
     notFound()

@@ -1,4 +1,4 @@
-﻿import type { Metadata, Viewport } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
@@ -39,9 +39,9 @@ export const metadata: Metadata = {
     description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität.",
   },
   icons: {
-    icon: "/fav.ico",
-    shortcut: "/fav.ico",
-    apple: "/fav.ico",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
 }
 
@@ -55,6 +55,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased min-h-screen bg-gray-50 text-gray-900">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "NOVA INDUKT",
+          "url": "https://nova-indukt.de",
+          "logo": "https://nova-indukt.de/logo0.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+49-30-123-456-789",
+            "contactType": "customer service",
+            "areaServed": "DE",
+            "availableLanguage": "German"
+          }
+        })}} />
         <a href="#main-content" className="skip-link">
           Zum Hauptinhalt springen
         </a>
@@ -88,3 +102,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
+

@@ -1,10 +1,12 @@
-﻿import { LucideIcon } from 'lucide-react'
+import { LucideIcon } from 'lucide-react'
+
+import { extendedCategoriesList, generateMassiveCatalog } from './extended-catalog'
 
 export interface Product {
   id: string
   slug: string
   name: { de: string }
-  category: 'kochen' | 'vorbereitung' | 'tischaccessoires' | 'zubehoer'
+  category: string
   price: number
   oldPrice?: number
   images: string[]
@@ -43,17 +45,17 @@ export interface BlogPost {
 }
 
 const IMG = {
-  kitchen1: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80',
-  kitchen2: 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=800&q=80',
-  kitchen3: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
-  kitchen4: 'https://images.unsplash.com/photo-1593618998160-e34014e67546?w=800&q=80',
-  kitchen5: 'https://images.unsplash.com/photo-1585736885360-3d6d33de3f5e?w=800&q=80',
-  kitchen6: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=800&q=80',
-  kitchen7: 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=800&q=80',
-  kitchen8: 'https://images.unsplash.com/photo-1577302628380-de91a7b7ac04?w=800&q=80',
+  kitchen1: '/images/products/pot-set-5.jpg',
+  kitchen2: '/images/products/pan-pro-28.jpg',
+  kitchen3: '/images/products/casserole-24.jpg',
+  kitchen4: '/images/products/wok-32.jpg',
+  kitchen5: '/images/products/grill-pan.jpg',
+  kitchen6: '/images/products/knife-set-6.jpg',
+  kitchen7: '/images/products/board-oak.jpg',
+  kitchen8: '/images/products/board-walnut.jpg',
 }
 
-export const products: Product[] = [
+const baseProducts: Product[] = [
   {
     id: 'nova-ps-500',
     slug: 'premium-topfset-5-teilig-induktion',
@@ -72,7 +74,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-do-450',
-    slug: 'gusseisen-bräter-emailliert-26cm',
+    slug: 'gusseisen-braeter-emailliert-26cm',
     name: { de: 'Gusseisen-Bräter emailliert – 26 cm, 5,2 Liter' },
     category: 'kochen',
     price: 480,
@@ -214,7 +216,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-rm-580',
-    slug: 'küchenmaschine-multifunktion-1400w',
+    slug: 'kuechenmaschine-multifunktion-1400w',
     name: { de: 'Küchenmaschine 1400 W – 12 Funktionen, 6,5 L Schüssel' },
     category: 'vorbereitung',
     price: 499,
@@ -262,7 +264,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-mx-240',
-    slug: 'induktions-wok-set-mit-zubehör',
+    slug: 'multifunktions-schaeler-3-in-1',
     name: { de: 'Induktions-Starterset Wok & Zubehör – 8-teilig' },
     category: 'zubehoer',
     price: 149,
@@ -278,7 +280,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-kf-165',
-    slug: 'kaffeemühle-elektrisch-einstellbar',
+    slug: 'kaffeemuehle-elektrisch-einstellbar',
     name: { de: 'Elektrische Kaffeemühle mit 18 Mahlgradstufen – Kegelmahlwerk' },
     category: 'zubehoer',
     price: 129,
@@ -294,7 +296,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-wg-320',
-    slug: 'digitale-küchenwaage-edelstahl',
+    slug: 'digitale-kuechenwaage-edelstahl',
     name: { de: 'Digitale Küchenwaage 5 kg – Edelstahl, 1-g-Genauigkeit' },
     category: 'zubehoer',
     price: 39,
@@ -356,7 +358,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-gs-410',
-    slug: 'gewürzständer-drehbar-24-gläser',
+    slug: 'gewuerzregal-mit-12-glaesern',
     name: { de: 'Drehbarer Gewürzständer 24 Gläser – Edelstahl, befüllt' },
     category: 'tischaccessoires',
     price: 69,
@@ -403,7 +405,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-mp-230',
-    slug: 'mörser-granit-18cm-premium',
+    slug: 'moerser-granit-18cm-premium',
     name: { de: 'Mörser & Stößel 18 cm Granit – 350 ml, Naturstein' },
     category: 'vorbereitung',
     price: 69,
@@ -418,7 +420,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-sc-310',
-    slug: 'salz-und-pfefferstreuer-set-design',
+    slug: 'salz-pfeffer-muehlen-set',
     name: { de: 'Design Salz- & Pfeffermühlen Set – Edelstahl-Keramikmahlwerk' },
     category: 'tischaccessoires',
     price: 59,
@@ -434,7 +436,7 @@ export const products: Product[] = [
   },
   {
     id: 'nova-kd-420',
-    slug: 'küchenhandschuhe-hitzeschutz-500grad',
+    slug: 'kuechenthermometer-digital',
     name: { de: 'Hitzeschutz-Küchenhandschuhe bis 500°C – 1 Paar' },
     category: 'zubehoer',
     price: 34,
@@ -512,32 +514,36 @@ export const products: Product[] = [
   },
 ]
 
-export const categories: Category[] = [
+export const products: Product[] = [...baseProducts, ...(generateMassiveCatalog() as Product[])]
+
+const baseCategories: Category[] = [
   {
     id: 'kochen',
     name: { de: 'Kochen & Braten' },
-    image: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&q=80',
+    image: '/images/category-pots.jpg',
     count: 12
   },
   {
     id: 'vorbereitung',
     name: { de: 'Vorbereitung' },
-    image: 'https://images.unsplash.com/photo-1593618998160-e34014e67546?w=600&q=80',
+    image: '/images/category-boards.jpg',
     count: 9
   },
   {
     id: 'tischaccessoires',
     name: { de: 'Tisch & Servier' },
-    image: 'https://images.unsplash.com/photo-1577302628380-de91a7b7ac04?w=600&q=80',
+    image: '/images/category-pans.jpg',
     count: 8
   },
   {
     id: 'zubehoer',
     name: { de: 'Küchenzubehör' },
-    image: 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=600&q=80',
+    image: '/images/category-accessories.jpg',
     count: 11
   }
 ]
+
+export const categories: Category[] = [...baseCategories, ...extendedCategoriesList]
 
 export const blogPosts: BlogPost[] = [
   {
@@ -545,7 +551,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'pfanne-kaufratgeber-induktion',
     title: { de: 'Die richtige Pfanne für Induktion: Der ultimative Kaufratgeber 2026' },
     excerpt: { de: 'Worauf Sie beim Kauf einer Induktionspfanne unbedingt achten sollten – Materialien, Bodenaufbau, Beschichtungen und Pflegehinweise im Überblick.' },
-    image: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80',
+    image: '/images/hero-kitchen.jpg',
     date: '15. März 2026',
     readTime: '8 Min. Lesezeit',
     category: 'Kaufberatung',
@@ -556,7 +562,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'induktion-vs-gas-energievergleich',
     title: { de: 'Induktion vs. Gas: Der große Energiekostenvergleich 2026' },
     excerpt: { de: 'Wie effizient ist Induktion wirklich im Vergleich zu Gas? Wir vergleichen Verbrauch, Kosten, Umweltauswirkungen und Kochqualität.' },
-    image: 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=800&q=80',
+    image: '/images/technology.jpg',
     date: '10. März 2026',
     readTime: '6 Min. Lesezeit',
     category: 'Technik & Energie',
@@ -567,7 +573,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'edelstahlpfannen-pflege',
     title: { de: 'Edelstahlpfannen richtig reinigen & pflegen – ohne Kratzer und Flecken' },
     excerpt: { de: 'Die besten Tipps für die tägliche und gründliche Reinigung Ihrer Edelstahlpfannen sowie typische Fehler, die Sie unbedingt vermeiden sollten.' },
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+    image: '/images/hero-kitchen.jpg',
     date: '5. März 2026',
     readTime: '5 Min. Lesezeit',
     category: 'Pflege & Tipps',
