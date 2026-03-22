@@ -458,26 +458,19 @@ export function ProductsContent() {
                                 </div>
 
                                 <div className="p-4 sm:p-8 flex-1 flex flex-col bg-white">
-                                  <div className="flex items-center gap-1.5 mb-2 sm:mb-3">
-                                    <div className="flex text-amber-400">
-                                      {[...Array(5)].map((_, i) => (<Star key={i} className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? 'fill-amber-400' : 'fill-gray-100 text-gray-100'}`} />))}
-                                    </div>
-                                    <span className="text-xs font-bold text-gray-400">({product.reviewCount} Bewertungen)</span>
+                                  <div className="mb-auto">
+                                    <h3 className="font-bold text-[#0C211E] text-base sm:text-2xl lg:text-3xl mb-2 sm:mb-4 group-hover:text-[#4ECCA3] transition-colors leading-tight line-clamp-2">
+                                      {product.name.de}
+                                    </h3>
                                   </div>
                                   
-                                  <h3 className="font-bold text-gray-900 text-sm sm:text-2xl mb-1.5 sm:mb-3 group-hover:text-[#4ECCA3] transition-colors leading-snug line-clamp-2">
-                                    {product.name.de}
-                                  </h3>
-                                  
-                                  <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-6 line-clamp-2 sm:max-w-2xl">{product.shortDescription.de}</p>
-                                  
-                                  <div className="mt-auto flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-6 pt-3 border-t border-gray-50">
+                                  <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 sm:pt-6 border-t border-gray-100/50">
                                     <div>
-                                      <div className="flex items-end gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
-                                        <span className="text-xl sm:text-3xl font-black text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
-                                        {product.oldPrice && <span className="text-xs sm:text-base font-semibold text-gray-400 line-through decoration-gray-300 pb-[1px] sm:pb-[3px] whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>}
+                                      <div className="flex items-end gap-2 mb-1">
+                                        <span className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
+                                        {product.oldPrice && <span className="text-xs sm:text-sm font-bold text-gray-400 line-through decoration-gray-300 pb-1 whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>}
                                       </div>
-                                      <p className="text-[9px] sm:text-[11px] text-gray-400 font-medium">inkl. MwSt.<br className="sm:hidden" /> zzgl. Versand</p>
+                                      <p className="text-[10px] text-gray-400 font-semibold tracking-wider uppercase">inkl. MwSt.</p>
                                     </div>
                                     
                                     <div className="flex items-center gap-2 sm:gap-3">

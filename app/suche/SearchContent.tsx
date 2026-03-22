@@ -287,31 +287,35 @@ function ProductCard({
           )}
         </div>
         <div className={`p-4 flex-1 flex flex-col ${viewMode === 'list' ? 'justify-center' : ''}`}>
-          <div className="flex items-center gap-1 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
-              />
-            ))}
-            <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
-          </div>
-          <h3 className="font-bold text-gray-900 text-[13px] sm:text-base mb-2 line-clamp-2 group-hover:text-nova-500 transition-colors leading-snug flex-1">
+          {viewMode === 'grid' && (
+            <div className="flex items-center gap-1 mb-2">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
+                />
+              ))}
+              <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
+            </div>
+          )}
+          <h3 className={`font-bold text-gray-900 ${viewMode === 'list' ? 'text-sm sm:text-xl leading-tight' : 'text-[13px] sm:text-base leading-snug'} mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors flex-1`}>
             {product.name.de}
           </h3>
           
           <div className="mt-auto pt-3 sm:pt-4 relative border-t border-gray-50">
-            <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
+            <div className={`flex items-end gap-1.5 sm:gap-2 mb-1 ${viewMode === 'list' ? 'sm:mb-2' : ''}`}>
               <span className="text-lg sm:text-lg font-bold text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
               {product.oldPrice && (
                 <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>
               )}
             </div>
-            <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-3 sm:mb-4 leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. Versand</p>
+            {viewMode === 'grid' && (
+              <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-3 sm:mb-4 leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. Versand</p>
+            )}
             
             <button
               onClick={handleAddToCart}
-              className="w-full py-2.5 sm:py-3.5 bg-gray-50 text-gray-800 border border-gray-200 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm"
+              className={`w-full py-2.5 sm:py-3.5 bg-gray-50 text-gray-800 border border-gray-200 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm ${viewMode === 'list' ? 'mt-3 sm:mt-1' : ''}`}
             >
               <ShoppingCart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
               <span className="hidden sm:inline">In den Warenkorb</span>
