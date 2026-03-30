@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Search, Home, ArrowRight, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import { products } from '@/lib/data/products'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 export default function NotFound() {
   const bestsellers = products.slice(0, 4)
@@ -82,7 +83,7 @@ export default function NotFound() {
                 </h4>
                 <div className="mt-auto pt-3 sm:pt-4 relative border-t border-gray-50">
                   <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
-                    <span className="text-lg sm:text-xl font-black text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
+                    <span className="text-base sm:text-lg font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
                   </div>
                   <Link href={`/produkt/${product.slug}`} className="mt-3 w-full py-2.5 sm:py-3.5 bg-gray-50 border border-gray-200 text-gray-800 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
                     <ArrowRight className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />

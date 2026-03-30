@@ -13,41 +13,35 @@ import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { motion, AnimatePresence } from 'framer-motion'
 import { categories as dataCategories, products } from '@/lib/data/products'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 const megaMenuDepartments = [
   {
-    title: 'Kochen & Vorbereiten',
+    title: 'Kochen & Braten',
     icon: <Flame className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Kochen & Braten', href: '/produkte?kategorie=kochen' },
-      { label: 'Premium Messer (Damast)', href: '/produkte?kategorie=messer_premium' },
-      { label: 'Schneiden & Vorbereiten', href: '/produkte?kategorie=vorbereitung' },
-      { label: 'Wok & Asiatisch', href: '/produkte?kategorie=wok' },
-      { label: 'Indoor Grill & Teppanyaki', href: '/produkte?kategorie=grillen' },
-      { label: 'Backen & Pâtisserie', href: '/produkte?kategorie=backen' },
+      { label: 'Alle Kochtöpfe & Pfannen', href: '/produkte?kategorie=kochen' },
+      { label: 'Gusseisen & Schmortöpfe', href: '/produkte?kategorie=kochen' },
+      { label: 'Schnellkochtöpfe', href: '/produkte?kategorie=kochen' },
     ]
   },
   {
-    title: 'Specialty & Tech',
-    icon: <Zap className="w-5 h-5 text-[#4ECCA3]" />,
+    title: 'Vorbereitung & Messer',
+    icon: <ChefHat className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Smart Kitchen', href: '/produkte?kategorie=smart_kitchen' },
-      { label: 'Elektrokleingeräte', href: '/produkte?kategorie=elektrokleingeraete' },
-      { label: 'Sous-Vide & Vakuum', href: '/produkte?kategorie=sous_vide' },
-      { label: 'Kaffee & Tee Bar', href: '/produkte?kategorie=kaffee_tee' },
-      { label: 'Wein & Bar', href: '/produkte?kategorie=weinzubehoer' },
-      { label: 'Fermentation', href: '/produkte?kategorie=fermentation' },
+      { label: 'Vorbereitung Gesamt', href: '/produkte?kategorie=vorbereitung' },
+      { label: 'Premium Kochmesser', href: '/produkte?kategorie=vorbereitung' },
+      { label: 'Küchenmaschinen & Mixer', href: '/produkte?kategorie=vorbereitung' },
     ]
   },
   {
-    title: 'Table & Lifestyle',
-    icon: <Leaf className="w-5 h-5 text-[#4ECCA3]" />,
+    title: 'Zubehör & Tisch',
+    icon: <Utensils className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Tisch & Servier', href: '/produkte?kategorie=tischaccessoires' },
       { label: 'Küchenzubehör', href: '/produkte?kategorie=zubehoer' },
-      { label: 'Eco & Nachhaltigkeit', href: '/produkte?kategorie=nachhaltigkeit' },
-      { label: 'Premium Aufbewahrung', href: '/produkte?kategorie=aufbewahrung' },
-      { label: 'Spezial-Pflege', href: '/produkte?kategorie=pflege' },
+      { label: 'Kaffee- & Espressomaschinen', href: '/produkte?kategorie=zubehoer' },
+      { label: 'Tisch & Servier', href: '/produkte?kategorie=tischaccessoires' },
+      { label: 'Gläser & Besteck', href: '/produkte?kategorie=tischaccessoires' },
     ]
   }
 ]
@@ -152,7 +146,8 @@ export function Header() {
                 width={180} 
                 height={54} 
                 className={`w-auto transition-all duration-500 ease-out ${scrolled ? 'h-7 sm:h-10' : 'h-8 sm:h-12'} group-hover:scale-105`} 
-                priority 
+                priority
+                fetchPriority="high"
               />
             </Link>
 
@@ -290,8 +285,8 @@ export function Header() {
                             {dept.title}
                           </h3>
                           <ul className="space-y-3.5">
-                            {dept.links.map(link => (
-                               <li key={link.href}>
+                            {dept.links.map((link, linkIdx) => (
+                               <li key={link.label}>
                                  <Link href={link.href} onClick={() => setMegaMenuOpen(false)} className="text-sm font-semibold text-gray-500 hover:text-[#4ECCA3] hover:translate-x-1.5 transition-all inline-block hover:bg-[#4ECCA3]/5 px-2 py-1 -ml-2 rounded-md">
                                    {link.label}
                                  </Link>
@@ -406,7 +401,7 @@ export function Header() {
                             <div className="p-4 flex flex-col flex-1 border-t border-gray-50">
                               <h3 className="font-bold text-gray-900 text-sm mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors">{product.name.de}</h3>
                               <div className="mt-auto pt-2 flex items-baseline gap-2">
-                                <span className="font-black text-[#0C211E]">{product.price.toFixed(2).replace('.', ',')} €</span>
+                                <span className="font-black text-[#0C211E] tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
                               </div>
                             </div>
                           </Link>
@@ -482,7 +477,7 @@ export function Header() {
                               <div className="flex justify-between gap-2">
                                 <div>
                                   <h4 className="font-bold text-[#0C211E] text-sm line-clamp-2 leading-snug"><Link href={`/produkt/${item.product.slug}`} onClick={() => setCartDrawerOpen(false)} className="hover:text-[#4ECCA3] transition-colors">{item.product.name.de}</Link></h4>
-                                  <p className="text-[#0C211E] font-black text-sm mt-1">{item.product.price.toFixed(2).replace('.', ',')} €</p>
+                                  <p className="text-[#0C211E] font-black text-sm mt-1 tabular-nums whitespace-nowrap">{formatPriceDe(item.product.price)}</p>
                                 </div>
                                 <button onClick={() => removeItem(item.product.id)} className="text-gray-400 hover:text-red-500 transition-colors p-1 self-start">
                                   <Trash2 className="w-4 h-4" />
@@ -533,7 +528,7 @@ export function Header() {
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between text-sm text-gray-500 font-medium">
                         <span>Zwischensumme</span>
-                        <span className="font-semibold text-gray-900">{totalPrice.toFixed(2).replace('.', ',')} €</span>
+                        <span className="font-semibold text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(totalPrice)}</span>
                       </div>
                       <div className="flex justify-between text-sm text-gray-500 font-medium">
                         <span>Versand</span>
@@ -541,7 +536,7 @@ export function Header() {
                       </div>
                       <div className="flex justify-between text-lg font-bold pt-4 border-t border-gray-200 mt-2">
                         <span>Gesamtsumme <span className="text-xs font-semibold text-gray-500 block uppercase tracking-wider mt-1">inkl. MwSt.</span></span>
-                        <span className="text-[#0C211E] text-2xl">{totalPrice.toFixed(2).replace('.', ',')} €</span>
+                        <span className="text-[#0C211E] text-xl sm:text-2xl tabular-nums whitespace-nowrap">{formatPriceDe(totalPrice)}</span>
                       </div>
                     </div>
                     
@@ -620,8 +615,8 @@ export function Header() {
                               <ChevronDown className="w-5 h-5 group-open:rotate-180 transition-transform text-gray-400" />
                             </summary>
                             <div className="pt-4 mt-4 border-t border-gray-100/60 flex flex-col gap-1.5 ml-2">
-                              {dept.links.map(link => (
-                                <Link key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="py-2.5 px-3 text-sm text-gray-500 font-semibold hover:bg-[#4ECCA3]/10 hover:text-[#4ECCA3] rounded-lg transition-colors">
+                              {dept.links.map((link, linkIdx) => (
+                                <Link key={link.label} href={link.href} onClick={() => setMobileMenuOpen(false)} className="py-2.5 px-3 text-sm text-gray-500 font-semibold hover:bg-[#4ECCA3]/10 hover:text-[#4ECCA3] rounded-lg transition-colors">
                                   {link.label}
                                 </Link>
                               ))}

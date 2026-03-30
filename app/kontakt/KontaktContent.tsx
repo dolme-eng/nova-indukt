@@ -169,12 +169,20 @@ export function KontaktContent() {
                     </div>
                     <h2 className="text-3xl font-bold text-[#0C211E] mb-4 font-heading">{t('messageSent')}</h2>
                     <p className="text-gray-500 text-lg font-medium max-w-sm mx-auto">{t('messageSentDescription')}</p>
-                    <button
-                      onClick={() => setIsSubmitted(false)}
-                      className="mt-10 px-8 py-3 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-100 transition-colors"
-                    >
-                      Weitere Nachricht senden
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+                      <button
+                        onClick={() => setIsSubmitted(false)}
+                        className="px-8 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                      >
+                        Weitere Nachricht
+                      </button>
+                      <Link
+                        href="/produkte"
+                        className="px-8 py-4 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] shadow-lg shadow-[#0C211E]/20 transition-all flex items-center justify-center gap-2"
+                      >
+                        Produkte entdecken <ChevronRight className="w-5 h-5" />
+                      </Link>
+                    </div>
                   </motion.div>
                 ) : (
                   <motion.form 

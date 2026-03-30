@@ -4,6 +4,8 @@ import { Award, Globe, Leaf, Target, Heart, ShieldCheck, BadgeCheck, Star, Troph
 import { motion } from 'framer-motion'
 // import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 
 export default function AboutContent() {
   // const t = useDeTranslations('about')
@@ -362,6 +364,38 @@ export default function AboutContent() {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-24 lg:py-32 bg-gray-50/50">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-gradient-to-br from-[#0C211E] to-[#17423C] rounded-[2.5rem] p-12 sm:p-16 text-center text-white relative overflow-hidden shadow-2xl"
+          >
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#4ECCA3]/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-heading relative z-10">Bereit für ein neues Kocherlebnis?</h2>
+            <p className="text-lg sm:text-xl text-[#9FE1CD] mb-10 max-w-2xl mx-auto font-medium relative z-10">
+              Entdecken Sie unser handverlesenes Sortiment an Premium-Induktionsgeschirr und meistern Sie jedes Gericht mit perfekter Temperaturkontrolle.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
+              <Link 
+                href="/produkte"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#4ECCA3] text-[#0C211E] font-bold rounded-xl hover:bg-white hover:text-[#0C211E] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+              >
+                Zum Shop <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link 
+                href="/technologie"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/20 text-white font-bold rounded-xl hover:border-white hover:bg-white/5 transition-all"
+              >
+                Mehr über unsere Technologie
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
 

@@ -9,6 +9,7 @@ import { products } from '@/lib/data/products'
 import { useCart } from '@/lib/store/cart'
 import { toast } from 'sonner'
 import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 interface WishlistItem {
   id: string
@@ -262,8 +263,8 @@ export default function WishlistContent() {
                       <span className="text-xs sm:text-sm text-gray-600">{product.rating}</span>
                       <span className="text-xs text-gray-400">({product.reviewCount})</span>
                     </div>
-                    <p className="text-base sm:text-lg font-semibold text-[#4ECCA3] mt-2">
-                      {product.price.toFixed(2)} €
+                    <p className="text-base sm:text-lg font-semibold text-[#4ECCA3] mt-2 tabular-nums whitespace-nowrap">
+                      {formatPriceDe(product.price)}
                     </p>
                     <button 
                       onClick={() => handleAddToCart(product)}

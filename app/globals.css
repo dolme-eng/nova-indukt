@@ -42,8 +42,9 @@
     line-height: 1.6;
   }
 
-  /* German UX: Optimal reading width (66-75 chars) */
-  p, article {
+  /* German UX: Optimal reading width (66-75 chars) — applied only to prose text, not layout wrappers */
+  .prose p,
+  .prose-text {
     max-width: 70ch;
   }
 }
@@ -67,15 +68,14 @@
   }
 }
 
-/* German UX: Minimum touch target 44x44px */
+/* German UX: Minimum touch target 44x44px — only on touch devices */
 @layer base {
-  button, 
-  a,
-  [role="button"],
-  input[type="checkbox"],
-  input[type="radio"],
-  select {
-    @apply min-h-[44px] min-w-[44px];
+  @media (pointer: coarse) {
+    button:not([data-compact]),
+    a:not([data-compact]),
+    [role="button"]:not([data-compact]) {
+      min-height: 44px;
+    }
   }
   
   /* Skip link for accessibility */

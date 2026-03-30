@@ -13,6 +13,7 @@ import {
 import { useAuth } from '@/lib/store/auth'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 const TABS = [
   { id: 'overview', labelKey: 'overview', icon: Home },
@@ -289,7 +290,7 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
             </div>
             <div className="p-3 sm:p-4">
               <h3 className="font-medium text-gray-900 line-clamp-1 mb-1 text-sm sm:text-base">{item.name.de}</h3>
-              <p className="text-base sm:text-lg font-bold text-[#4ECCA3]">{item.price.toFixed(2)} €</p>
+              <p className="text-base sm:text-lg font-bold text-[#4ECCA3] tabular-nums whitespace-nowrap">{formatPriceDe(item.price)}</p>
               <button onClick={() => onAddToCart(item)} className="w-full mt-2 sm:mt-3 py-2 sm:py-2.5 bg-[#4ECCA3] text-white text-xs sm:text-sm font-medium rounded-lg sm:rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2">
                 <Plus className="w-4 h-4" />
                 {tc('addToCart')}

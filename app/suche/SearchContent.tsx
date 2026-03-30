@@ -11,6 +11,7 @@ import {
   ChevronRight, ShoppingCart, Heart, Star, Filter
 } from 'lucide-react'
 import { products, Product, categories } from '@/lib/data/products'
+import { formatPriceDe } from '@/lib/utils/vat'
 import { useCart } from '@/lib/store/cart'
 
 export default function SearchContent() {
@@ -304,9 +305,9 @@ function ProductCard({
           
           <div className="mt-auto pt-3 sm:pt-4 relative border-t border-gray-50">
             <div className={`flex items-end gap-1.5 sm:gap-2 mb-1 ${viewMode === 'list' ? 'sm:mb-2' : ''}`}>
-              <span className="text-lg sm:text-lg font-bold text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
+              <span className="text-base sm:text-lg font-bold text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
               {product.oldPrice && (
-                <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>
+                <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>
               )}
             </div>
             {viewMode === 'grid' && (

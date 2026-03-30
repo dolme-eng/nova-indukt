@@ -12,6 +12,7 @@ import { useCart } from '@/lib/store/cart'
 import { useState, useEffect } from 'react'
 import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import { products } from '@/lib/data/products'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 export function CartContent() {
   const router = useRouter()
@@ -219,13 +220,13 @@ export function CartContent() {
                         </div>
                         
                         {/* Price Display */}
-                        <div className="flex items-baseline gap-2 mt-2 sm:mt-1">
-                          <span className="text-[#0C211E] font-black text-lg sm:text-2xl tracking-tight">
-                            {item.product.price.toFixed(2).replace('.', ',')} €
+                        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mt-2 sm:mt-1">
+                          <span className="text-[#0C211E] font-black text-lg sm:text-xl tracking-tight tabular-nums whitespace-nowrap">
+                            {formatPriceDe(item.product.price)}
                           </span>
                           {item.product.oldPrice && (
-                            <span className="text-sm font-semibold text-gray-400 line-through decoration-gray-300">
-                              {item.product.oldPrice.toFixed(2).replace('.', ',')} €
+                            <span className="text-sm font-semibold text-gray-400 line-through decoration-gray-300 tabular-nums whitespace-nowrap">
+                              {formatPriceDe(item.product.oldPrice)}
                             </span>
                           )}
                         </div>
@@ -255,8 +256,8 @@ export function CartContent() {
                           {/* Subtotal Desktop */}
                           <div className="hidden sm:block text-right">
                             <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-1">Summe</span>
-                            <span className="font-black text-[#0C211E] text-xl">
-                              {(item.product.price * item.quantity).toFixed(2).replace('.', ',')} €
+                            <span className="font-black text-[#0C211E] text-lg sm:text-xl tabular-nums whitespace-nowrap">
+                              {formatPriceDe(item.product.price * item.quantity)}
                             </span>
                           </div>
                           
@@ -297,7 +298,7 @@ export function CartContent() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-[#0C211E] line-clamp-2 leading-tight group-hover:text-[#4ECCA3] transition-colors">{item.name.de}</p>
-                          <p className="text-[#0C211E] font-black text-sm mt-1">{item.price.toFixed(2).replace('.', ',')} €</p>
+                          <p className="text-[#0C211E] font-black text-sm mt-1 tabular-nums whitespace-nowrap">{formatPriceDe(item.price)}</p>
                         </div>
                         <div className="w-8 h-8 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-[#0C211E] group-hover:bg-[#4ECCA3] group-hover:text-white group-hover:border-[#4ECCA3] transition-colors flex-shrink-0 mr-1">
                           <ArrowRight className="w-4 h-4" />
@@ -342,12 +343,12 @@ export function CartContent() {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center text-[15px] font-medium">
                     <span className="text-gray-500">{t('subtotal')}</span>
-                    <span className="text-gray-900">{subtotal.toFixed(2).replace('.', ',')} €</span>
+                    <span className="text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
                   </div>
                   <div className="flex justify-between items-center text-[15px] font-medium">
                     <span className="text-gray-500">{t('shipping')}</span>
                     <span className={shipping === 0 ? 'text-green-600 font-bold px-2 py-0.5 bg-green-50 rounded-md' : 'text-gray-900'}>
-                      {shipping === 0 ? t('freeShipping') : `${shipping.toFixed(2).replace('.', ',')} €`}
+                      {shipping === 0 ? t('freeShipping') : formatPriceDe(shipping)}
                     </span>
                   </div>
                 </div>
@@ -355,8 +356,8 @@ export function CartContent() {
                 <div className="border-t border-gray-100 py-6 my-2">
                   <div className="flex justify-between items-end mb-1">
                     <span className="font-bold text-[#0C211E] text-xl">{t('total')}</span>
-                    <span className="font-black text-3xl tracking-tight text-[#0C211E]">
-                      {total.toFixed(2).replace('.', ',')} €
+                    <span className="font-black text-2xl sm:text-3xl tracking-tight text-[#0C211E] tabular-nums whitespace-nowrap">
+                      {formatPriceDe(total)}
                     </span>
                   </div>
                   <p className="text-[11px] font-bold text-gray-400 flex justify-end items-center gap-1">
@@ -406,7 +407,7 @@ export function CartContent() {
           <div className="px-4 pb-4 flex items-center justify-between gap-4">
             <div>
               <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{t('total')}</p>
-              <p className="text-2xl font-black text-[#0C211E] tracking-tight">{total.toFixed(2).replace('.', ',')} €</p>
+              <p className="text-xl sm:text-2xl font-black text-[#0C211E] tracking-tight tabular-nums whitespace-nowrap">{formatPriceDe(total)}</p>
             </div>
             <motion.button 
               whileTap={{ scale: 0.96 }}

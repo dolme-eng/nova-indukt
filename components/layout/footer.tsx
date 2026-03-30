@@ -43,7 +43,7 @@ export function Footer() {
 
       {/* Features Bar - Ultra Premium */}
       <div className="relative border-b border-[#236456]/50 bg-black/20 backdrop-blur-sm z-10">
-        <div className="container mx-auto px-4 sm:px-6 py-10">
+        <div className="container mx-auto px-4 sm:px-6 py-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {features.map((feature, index) => (
               <div key={index} className="flex gap-5 group">
@@ -61,7 +61,7 @@ export function Footer() {
       </div>
 
       {/* Main Footer */}
-      <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 py-10 sm:py-14 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           
           {/* Brand & Contact Column */}
@@ -149,7 +149,7 @@ export function Footer() {
         </div>
 
         {/* Payment & Shipping */}
-        <div className="border-t border-[#236456]/50 mt-16 pt-12">
+        <div className="border-t border-[#236456]/50 mt-10 pt-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
               <p className="text-xs text-white uppercase tracking-widest mb-4 font-bold flex items-center gap-2">
@@ -175,7 +175,7 @@ export function Footer() {
         </div>
 
         {/* Trust Badges */}
-        <div className="border-t border-[#236456]/50 mt-10 pt-10">
+        <div className="border-t border-[#236456]/50 mt-6 pt-6">
           <div className="flex flex-wrap items-center justify-center gap-8 gap-y-4">
             {[
               { icon: <Lock className="w-4 h-4 text-[#4ECCA3]" />, label: 'SSL-Verschlüsselt' },

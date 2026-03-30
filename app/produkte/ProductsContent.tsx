@@ -10,11 +10,13 @@ import {
   SlidersHorizontal, X, ChevronDown, ArrowRight, Filter, ChevronRight as ChevronRightIcon
 } from 'lucide-react'
 import { products, categories } from '@/lib/data/products'
+import { formatPriceDe } from '@/lib/utils/vat'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { TiltCard } from '@/components/animations'
 
 const ITEMS_PER_PAGE = 12
+const PRICE_FILTER_MAX = 2500
 
 export function ProductsContent() {
   const t = useDeTranslations('products')
@@ -24,7 +26,7 @@ export function ProductsContent() {
   
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2500])
   const [sortBy, setSortBy] = useState('newest')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showFilters, setShowFilters] = useState(false)
@@ -68,8 +70,8 @@ export function ProductsContent() {
     addItem(product, 1)
   }
 
-  const clearFilters = () => { setSearchQuery(''); setSelectedCategory(null); setPriceRange([0, 1000]); setSortBy('newest') }
-  const activeFiltersCount = (searchQuery ? 1 : 0) + (selectedCategory ? 1 : 0) + (priceRange[0] > 0 || priceRange[1] < 1000 ? 1 : 0)
+  const clearFilters = () => { setSearchQuery(''); setSelectedCategory(null); setPriceRange([0, PRICE_FILTER_MAX]); setSortBy('newest') }
+  const activeFiltersCount = (searchQuery ? 1 : 0) + (selectedCategory ? 1 : 0) + (priceRange[0] > 0 || priceRange[1] < PRICE_FILTER_MAX ? 1 : 0)
 
   return (
     <div className="min-h-screen bg-gray-50/50 pb-10 sm:pb-16 selection:bg-[#4ECCA3]/30">
@@ -77,7 +79,7 @@ export function ProductsContent() {
       {/* Breadcrumbs */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-[72px] lg:top-[88px] z-[40]">
         <div className="container mx-auto px-4 sm:px-6 max-w-[1400px]">
-          <div className="flex items-center gap-2 py-4 text-xs sm:text-sm font-medium tracking-wide">
+          <div className="flex items-center gap-2 py-2.5 text-xs sm:text-sm font-medium tracking-wide">
             <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">{t('nav.home') || 'Startseite'}</Link>
             <ChevronRightIcon className="w-3.5 h-3.5 text-gray-300" />
             <Link href="/produkte" className={`transition-colors ${!selectedCategory ? 'text-[#0C211E] font-bold' : 'text-gray-400 hover:text-[#4ECCA3]'}`}>{t('title') || 'Produkte'}</Link>
@@ -93,12 +95,12 @@ export function ProductsContent() {
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 sm:px-6 mt-8 sm:mt-12">
-        <div className="max-w-[1400px] mx-auto">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-5 sm:mt-8">
+        <div className="max-w-[1400px] 2xl:max-w-[1600px] mx-auto">
           
           {/* Page Header */}
-          <div className="mb-10 sm:mb-14">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-heading tracking-tight">{t('title')}</h1>
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-2 font-heading tracking-tight">{t('title')}</h1>
             <div className="flex items-center gap-3 text-sm text-gray-500 font-medium">
               <span>{filteredProducts.length} {filteredProducts.length === 1 ? t('product') : t('products')}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
@@ -106,7 +108,7 @@ export function ProductsContent() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          <div className="flex flex-col lg:flex-row gap-5 lg:gap-8 xl:gap-10 2xl:gap-12">
             {/* Mobile Filter Toggle */}
             <button 
               onClick={() => setShowFilters(!showFilters)} 
@@ -117,17 +119,17 @@ export function ProductsContent() {
             </button>
 
             {/* Sidebar Filters - Desktop */}
-            <aside className="hidden lg:block w-72 flex-shrink-0">
-              <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 space-y-10 sticky top-[150px]">
+            <aside className="hidden lg:block w-72 xl:w-80 flex-shrink-0">
+              <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] xl:shadow-[0_12px_40px_rgb(0,0,0,0.06)] border border-gray-100 p-5 xl:p-6 space-y-6 sticky top-[150px]">
                 {/* Categories Filter */}
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-5 flex items-center gap-2 uppercase tracking-wider text-xs">
+                  <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2 uppercase tracking-wider text-xs">
                     <SlidersHorizontal className="w-4 h-4 text-[#4ECCA3]"/> {t('filters.categories')}
                   </h3>
                   <div className="space-y-1.5">
                     <button 
                       onClick={() => setSelectedCategory(null)} 
-                      className={`w-full text-left px-5 py-3.5 rounded-2xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${!selectedCategory ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
+                      className={`w-full text-left px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${!selectedCategory ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
                     >
                       {t('filters.all')} {!selectedCategory && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                     </button>
@@ -135,7 +137,7 @@ export function ProductsContent() {
                       <button 
                         key={cat.id} 
                         onClick={() => setSelectedCategory(cat.id)} 
-                        className={`w-full text-left px-5 py-3.5 rounded-2xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${selectedCategory === cat.id ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
+                        className={`w-full text-left px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${selectedCategory === cat.id ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
                       >
                         {cat.name.de} {selectedCategory === cat.id && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                       </button>
@@ -144,18 +146,18 @@ export function ProductsContent() {
                 </div>
 
                 {/* Price Filter */}
-                <div className="pt-8 border-t border-gray-100">
-                  <h3 className="font-bold text-gray-900 mb-6 uppercase tracking-wider text-xs">{t('filters.priceRange')}</h3>
+                <div className="pt-5 border-t border-gray-100">
+                  <h3 className="font-bold text-gray-900 mb-4 uppercase tracking-wider text-xs">{t('filters.priceRange')}</h3>
                   <div className="px-2">
                     <div className="relative h-2 bg-gray-100 rounded-full mb-6">
-                      <div className="absolute left-0 top-0 bottom-0 bg-[#4ECCA3] rounded-full" style={{ width: `${(priceRange[1] / 1000) * 100}%` }} />
+                      <div className="absolute left-0 top-0 bottom-0 bg-[#4ECCA3] rounded-full" style={{ width: `${(priceRange[1] / PRICE_FILTER_MAX) * 100}%` }} />
                       <input 
-                        type="range" min="0" max="1000" step="50"
+                        type="range" min="0" max={PRICE_FILTER_MAX} step="50"
                         value={priceRange[1]} 
                         onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])} 
                         className="absolute inset-0 w-full opacity-0 cursor-pointer" 
                       />
-                      <div className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#4ECCA3] rounded-full shadow-md pointer-events-none transition-all" style={{ left: `calc(${(priceRange[1] / 1000) * 100}% - 10px)` }} />
+                      <div className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#4ECCA3] rounded-full shadow-md pointer-events-none transition-all" style={{ left: `calc(${(priceRange[1] / PRICE_FILTER_MAX) * 100}% - 10px)` }} />
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="px-4 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700">{priceRange[0]} €</div>
@@ -232,14 +234,14 @@ export function ProductsContent() {
                         <h3 className="font-bold text-gray-900 mb-6 uppercase tracking-wider text-xs">{t('filters.priceRange')}</h3>
                         <div className="px-2">
                           <div className="relative h-2 bg-gray-100 rounded-full mb-6">
-                            <div className="absolute left-0 top-0 bottom-0 bg-[#4ECCA3] rounded-full" style={{ width: `${(priceRange[1] / 1000) * 100}%` }} />
+                            <div className="absolute left-0 top-0 bottom-0 bg-[#4ECCA3] rounded-full" style={{ width: `${(priceRange[1] / PRICE_FILTER_MAX) * 100}%` }} />
                             <input 
-                              type="range" min="0" max="1000" step="50"
+                              type="range" min="0" max={PRICE_FILTER_MAX} step="50"
                               value={priceRange[1]} 
                               onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])} 
                               className="absolute inset-0 w-full opacity-0 cursor-pointer" 
                             />
-                            <div className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-4 border-[#4ECCA3] rounded-full shadow-lg pointer-events-none transition-all" style={{ left: `calc(${(priceRange[1] / 1000) * 100}% - 12px)` }} />
+                            <div className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-4 border-[#4ECCA3] rounded-full shadow-lg pointer-events-none transition-all" style={{ left: `calc(${(priceRange[1] / PRICE_FILTER_MAX) * 100}% - 12px)` }} />
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="px-4 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700">{priceRange[0]} €</div>
@@ -273,7 +275,7 @@ export function ProductsContent() {
             <main className="flex-1">
               
               {/* Top Bar for View & Sort */}
-              <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-white p-4 mb-8 sticky top-24 z-30">
+              <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-white p-3 mb-5 sticky top-24 z-30">
                 <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                   <div className="relative w-full sm:max-w-md">
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -338,10 +340,10 @@ export function ProductsContent() {
                 </motion.div>
               ) : (
                 <>
-                  <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8' : 'space-y-6'}>
+                  <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 xl:gap-5' : 'space-y-4'}>
                     <AnimatePresence mode="popLayout">
                       {isLoading ? Array.from({length: viewMode === 'grid' ? 6 : 4}).map((_, i) => (
-                        <motion.div key={`skeleton-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`bg-white rounded-[2rem] border border-gray-100 shadow-sm flex ${viewMode === 'list' ? 'flex-col sm:flex-row h-full p-6 sm:p-8 gap-8' : 'flex-col h-[480px] p-6'}`}>
+                        <motion.div key={`skeleton-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`bg-white rounded-xl border border-gray-100 shadow-sm flex ${viewMode === 'list' ? 'flex-col sm:flex-row h-full p-4 sm:p-5 gap-5' : 'flex-col h-[400px] p-4'}`}>
                           <div className={`bg-gray-100 rounded-2xl animate-pulse ${viewMode === 'list' ? 'w-full sm:w-64 md:w-80 h-48 sm:h-full' : 'relative aspect-[4/3] w-full mb-6'}`} />
                           <div className="flex-1 flex flex-col bg-white">
                             <div className="w-20 h-4 bg-gray-100 rounded animate-pulse mb-4" />
@@ -358,17 +360,17 @@ export function ProductsContent() {
                           <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} key={product.id}>
                             <Link href={`/produkt/${product.slug}`} className="block group h-full">
                               <TiltCard 
-                                className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-500 border border-gray-100 flex flex-col h-full"
+                                className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-500 border border-gray-100 flex flex-col h-full"
                                 tiltAmount={3}
                                 glowColor="rgba(78, 204, 163, 0.1)"
                               >
-                                <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 p-6">
+                                <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 p-3">
                                   <div className="absolute inset-0 bg-white" />
                                   <Image
                                     src={product.images[0]}
                                     alt={product.name.de}
                                     fill
-                                    className={`object-contain p-8 transition-all duration-700 ease-out mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-110'}`}
+                                    className={`object-contain p-3 sm:p-4 transition-all duration-700 ease-out mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-110'}`}
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                   />
                                   {product.images[1] && (
@@ -380,7 +382,7 @@ export function ProductsContent() {
                                     />
                                   )}
                                   
-                                  <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+                                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1.5 z-10">
                                     {product.badges?.includes('premium') && <span className="px-3 py-1 bg-[#0C211E] text-white text-xs font-bold rounded-lg shadow-sm">Premium</span>}
                                     {product.badges?.includes('bestseller') && <span className="px-3 py-1 bg-[#4ECCA3] text-gray-900 text-xs font-bold rounded-lg shadow-sm">Bestseller</span>}
                                     {product.badges?.includes('new') && <span className="px-3 py-1 bg-amber-400 text-amber-950 text-xs font-bold rounded-lg shadow-sm">Neu</span>}
@@ -397,28 +399,28 @@ export function ProductsContent() {
                                   </div>
                                 </div>
 
-                                <div className="p-6 flex-1 flex flex-col bg-white">
-                                  <div className="flex items-center gap-1.5 mb-3">
+                                <div className="p-2.5 sm:p-3 flex-1 flex flex-col bg-white">
+                                  <div className="flex items-center gap-1.5 mb-1">
                                     <div className="flex text-amber-400">
                                       {[...Array(5)].map((_, i) => (<Star key={i} className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? 'fill-amber-400' : 'fill-gray-100 text-gray-100'}`} />))}
                                     </div>
                                     <span className="text-xs font-bold text-gray-400">({product.reviewCount})</span>
                                   </div>
                                   
-                                  <h3 className="font-bold text-gray-900 text-[13px] sm:text-lg mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors leading-snug flex-1">
+                                  <h3 className="font-bold text-gray-900 text-[13px] sm:text-sm mb-1 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors leading-snug flex-1">
                                     {product.name.de}
                                   </h3>
                                   
-                                  <div className="mt-3 pt-3 relative border-t border-gray-50">
-                                    <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
-                                      <span className="text-lg sm:text-2xl font-black text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
-                                      {product.oldPrice && <span className="text-[11px] sm:text-sm font-semibold text-gray-400 line-through decoration-gray-300 pb-[3px] whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>}
+                                  <div className="mt-2 pt-1.5 relative border-t border-gray-50">
+                                    <div className="flex items-end gap-1.5 sm:gap-2 mb-0.5">
+                                      <span className="text-sm sm:text-base font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
+                                      {product.oldPrice && <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>}
                                     </div>
-                                    <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-3 sm:mb-5 font-medium leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. <span className="underline decoration-dotted cursor-help hover:text-gray-500">Versand</span></p>
+                                    <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-1.5 sm:mb-2 font-medium leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. <span className="underline decoration-dotted cursor-help hover:text-gray-500">Versand</span></p>
                                     
                                     <button
                                       onClick={(e) => handleAddToCart(e, product)}
-                                      className="w-full py-2.5 sm:py-3.5 bg-gray-50 text-gray-800 border border-gray-200 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2"
+                                      className="w-full py-1.5 sm:py-2 bg-gray-50 text-gray-800 border border-gray-200 text-[13px] sm:text-sm font-bold rounded-lg sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2"
                                     >
                                       <ShoppingCart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                                       <span className="hidden sm:inline">In den Warenkorb</span>
@@ -467,8 +469,8 @@ export function ProductsContent() {
                                   <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 sm:pt-6 border-t border-gray-100/50">
                                     <div>
                                       <div className="flex items-end gap-2 mb-1">
-                                        <span className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
-                                        {product.oldPrice && <span className="text-xs sm:text-sm font-bold text-gray-400 line-through decoration-gray-300 pb-1 whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>}
+                                        <span className="text-xl sm:text-2xl font-black text-emerald-600 tracking-tight tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
+                                        {product.oldPrice && <span className="text-xs sm:text-sm font-bold text-gray-400 line-through decoration-gray-300 pb-1 tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>}
                                       </div>
                                       <p className="text-[10px] text-gray-400 font-semibold tracking-wider uppercase">inkl. MwSt.</p>
                                     </div>

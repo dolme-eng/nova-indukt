@@ -17,6 +17,7 @@ import { TiltCard } from '@/components/animations'
 import { MagneticButton } from '@/components/magnetic-button'
 import { TestimonialsSection } from '@/components/testimonials-section'
 import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 // Flash deals - deterministic discount based on product id
 const flashDeals = products.slice(0, 4).map(p => ({...p, discount: ((p.id.charCodeAt(0) + p.id.charCodeAt(p.id.length - 1)) % 25) + 15}))
@@ -84,9 +85,9 @@ export function HomeContent() {
   }
 
   const heroImages = [
-    '/images/hero-kitchen.jpg',
-    '/images/category-pots.jpg',
-    '/images/technology.jpg'
+    '/images/hero/Die-Zukunft-der-Induktion.webp',
+    '/images/hero/Professionelle-Topfsets.webp',
+    '/images/hero/Smarte-Küchentechnologie.webp'
   ]
 
   return (
@@ -122,7 +123,7 @@ export function HomeContent() {
               fill
               className="object-cover object-center"
               priority
-              loading="eager"
+              fetchPriority="high"
               sizes="100vw"
             />
             {/* Elegant gradient overlay */}
@@ -243,7 +244,7 @@ export function HomeContent() {
       </section>
 
       {/* Recommended space */}
-      <div className="h-12 sm:h-20"></div>
+      <div className="h-6 sm:h-12"></div>
 
       {/* Highlights Lateral Slider (Semi-Auto) */}
       <section className="py-4 pb-12 sm:py-8 bg-transparent overflow-hidden">
@@ -270,7 +271,7 @@ export function HomeContent() {
         <div className="relative">
           <div 
             ref={sliderContainerRef}
-            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 px-4 sm:px-6 pb-6 pt-2 scrollbar-hide items-stretch"
+            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-3 sm:gap-4 px-4 sm:px-6 pb-4 pt-2 scrollbar-hide items-stretch"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {sliderProducts.map((product, index) => (
@@ -285,13 +286,13 @@ export function HomeContent() {
       </section>
 
       {/* Categories Modern Grid */}
-      <section className="py-12 sm:py-20 bg-gray-50/50">
+      <section className="py-8 sm:py-14 bg-gray-50/50">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col sm:flex-row items-end justify-between mb-10 gap-4"
+            className="flex flex-col sm:flex-row items-end justify-between mb-6 gap-3"
           >
             <div>
               <span className="text-nova-500 font-semibold tracking-wider text-sm uppercase mb-2 block">{t('categories.tag')}</span>
@@ -305,7 +306,7 @@ export function HomeContent() {
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             {categories.map((category, index) => (
               <motion.div
                 key={category.id}
@@ -325,10 +326,7 @@ export function HomeContent() {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500" />
-                    <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                      <p className="text-nova-300 font-medium text-sm mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 flex items-center gap-1">
-                        {category.count} {t('products.title')}
-                      </p>
+                      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                       <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">{getLocalizedName(category)}</h3>
                       
                       <div className="flex items-center text-white/90 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
@@ -344,7 +342,7 @@ export function HomeContent() {
       </section>
 
       {/* Flash Deals with Gradient Background */}
-      <section className="py-16 sm:py-24 relative overflow-hidden">
+      <section className="py-10 sm:py-16 relative overflow-hidden">
         {/* Background elements */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F0] via-white to-[#F0FFF9]" />
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-red-100/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
@@ -355,7 +353,7 @@ export function HomeContent() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="flex flex-col md:flex-row items-center justify-between bg-white/60 backdrop-blur-xl border border-white/80 p-6 rounded-3xl shadow-lg mb-12 gap-6"
+            className="flex flex-col md:flex-row items-center justify-between bg-white/60 backdrop-blur-xl border border-white/80 p-4 sm:p-6 rounded-3xl shadow-lg mb-8 gap-4"
           >
             <div className="flex items-center gap-5">
               <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-red-500/20 shadow-xl">
@@ -386,7 +384,7 @@ export function HomeContent() {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {flashDeals.map((product, index) => (
               <FlashDealCard 
                 key={product.id} 
@@ -400,7 +398,7 @@ export function HomeContent() {
       </section>
 
       {/* Bestsellers Premium View */}
-      <section className="py-16 sm:py-24 bg-white relative">
+      <section className="py-10 sm:py-16 bg-white relative">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -419,7 +417,7 @@ export function HomeContent() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {products.slice(0, 8).map((product, index) => (
               <ProductCard key={product.id} product={product} index={index} t={t} />
             ))}
@@ -438,7 +436,7 @@ export function HomeContent() {
       </section>
 
       {/* Technology Features */}
-      <section className="py-20 sm:py-32 bg-gray-900 border-t border-gray-800 relative overflow-hidden">
+      <section className="py-12 sm:py-20 bg-gray-900 border-t border-gray-800 relative overflow-hidden">
         {/* Abstract shapes */}
         <div className="absolute inset-0 bg-[url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;)] opacity-[0.04] mix-blend-overlay"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-nova-500/10 rounded-full blur-[150px] pointer-events-none" />
@@ -489,7 +487,7 @@ export function HomeContent() {
       </section>
 
       {/* Blog Preview Section */}
-      <section className="py-20 sm:py-28 bg-gray-50">
+      <section className="py-12 sm:py-18 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -561,7 +559,7 @@ export function HomeContent() {
       <TestimonialsSection />
 
       {/* Modern Newsletter */}
-      <section className="py-20 sm:py-32 bg-white relative overflow-hidden">
+      <section className="py-12 sm:py-20 bg-white relative overflow-hidden">
         {/* Decorative background vectors */}
         <div className="absolute right-0 top-0 w-1/3 aspect-square bg-nova-50 rounded-bl-[100px] -z-10" />
         <div className="absolute left-0 bottom-0 w-1/4 aspect-square bg-gray-50 rounded-tr-[100px] -z-10" />
@@ -667,17 +665,17 @@ function ProductCard({ product, index, t }: { product: typeof products[0]; index
   return (
     <Link href={`/produkt/${product.slug}`} className="block group h-full">
       <TiltCard 
-        className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
+        className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
         tiltAmount={5}
         glowColor="rgba(78, 204, 163, 0.15)"
       >
-        <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-gray-50 p-4">
+        <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-gray-50 p-2 sm:p-3">
           <div className="absolute inset-0 bg-white" />
           <Image
             src={product.images[0]}
             alt={product.name.de}
             fill
-            className={`object-contain p-6 transition-all duration-700 mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-110'}`}
+            className={`object-contain p-3 sm:p-4 transition-all duration-700 mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-110'}`}
           />
           {product.images[1] && (
             <Image
@@ -689,7 +687,7 @@ function ProductCard({ product, index, t }: { product: typeof products[0]; index
           )}
           
           {/* Badges */}
-          <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+          <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1.5 z-10">
             {product.badges?.includes('premium') && (
               <span className="px-3 py-1 bg-nova-500 text-white text-xs font-bold rounded-lg shadow-sm border border-nova-400">
                 {t('badges.premium')}
@@ -720,8 +718,8 @@ function ProductCard({ product, index, t }: { product: typeof products[0]; index
           </div>
         </div>
 
-        <div className="p-6 flex-1 flex flex-col">
-          <div className="flex items-center gap-1.5 mb-3">
+        <div className="p-2.5 sm:p-3 flex-1 flex flex-col">
+          <div className="flex items-center gap-1.5 mb-1">
             <div className="flex text-amber-400">
               {[...Array(5)].map((_, i) => (
                 <Star
@@ -733,22 +731,22 @@ function ProductCard({ product, index, t }: { product: typeof products[0]; index
             <span className="text-xs font-semibold text-gray-400">({product.reviewCount})</span>
           </div>
           
-          <h3 className="font-bold text-gray-900 text-[13px] sm:text-base mb-2 line-clamp-2 group-hover:text-nova-500 transition-colors leading-snug flex-1">
+          <h3 className="font-bold text-gray-900 text-[13px] sm:text-sm mb-1 line-clamp-2 group-hover:text-nova-500 transition-colors leading-snug flex-1">
             {product.name.de}
           </h3>
           
-          <div className="mt-auto pt-3 sm:pt-4 relative border-t border-gray-50">
-            <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
-              <span className="text-lg sm:text-2xl font-black text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
+          <div className="mt-auto pt-1.5 sm:pt-2 relative border-t border-gray-50">
+            <div className="flex items-end gap-1.5 sm:gap-2 mb-0.5">
+              <span className="text-sm sm:text-base font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
               {product.oldPrice && (
-                <span className="text-[11px] sm:text-sm font-semibold text-gray-400 line-through decoration-gray-300 pb-[3px] whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>
+                <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>
               )}
             </div>
-            <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-3 sm:mb-5 font-medium leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. <span className="underline decoration-dotted cursor-help">Versand</span></p>
+            <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-1.5 sm:mb-2 font-medium leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. <span className="underline decoration-dotted cursor-help">Versand</span></p>
             
             <button
               onClick={handleAddToCart}
-              className="w-full py-2.5 sm:py-3.5 bg-gray-50 border border-gray-200 text-gray-800 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm"
+              className="w-full py-1.5 sm:py-2 bg-gray-50 border border-gray-200 text-gray-800 text-[13px] sm:text-sm font-bold rounded-lg sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm"
             >
               <ShoppingCart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
               <span className="hidden sm:inline">In den Warenkorb</span>
@@ -862,9 +860,9 @@ function FlashDealCard({ product, index, t }: { product: typeof flashDeals[0]; i
         
         <div className="mt-auto">
           <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
-            <span className="text-lg sm:text-2xl font-black text-emerald-600 whitespace-nowrap">{product.price.toFixed(2).replace('.', ',')} €</span>
+            <span className="text-base sm:text-xl font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
             {product.oldPrice && (
-              <span className="text-[11px] sm:text-sm font-semibold text-gray-400 line-through decoration-gray-300 pb-[3px] whitespace-nowrap">{product.oldPrice.toFixed(2).replace('.', ',')} €</span>
+              <span className="text-[11px] sm:text-sm font-semibold text-gray-400 line-through decoration-gray-300 pb-[3px] tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>
             )}
           </div>
           <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-4 leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. Versand</p>
