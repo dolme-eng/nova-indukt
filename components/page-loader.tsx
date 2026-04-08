@@ -30,7 +30,7 @@ export function PageLoader() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[9999] bg-[#0C211E] flex items-center justify-center"
+          className="fixed inset-0 z-[9999] bg-white flex items-center justify-center"
         >
           <motion.div
             animate={{ rotate: 360 }}
