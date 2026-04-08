@@ -170,14 +170,17 @@ export function HomeContent() {
       </motion.div>
 
       {/* Hero Carousel */}
-      <section className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] min-h-[550px] md:min-h-[650px] overflow-hidden group">
-        <AnimatePresence mode="wait">
+      <section className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] min-h-[550px] md:min-h-[650px] overflow-hidden group bg-gray-900">
+        {/* Fond de secours pour éviter le flash blanc */}
+        <div className="absolute inset-0 bg-gradient-to-br from-nova-900 via-gray-900 to-black" />
+        
+        <AnimatePresence mode="sync">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             className="absolute inset-0"
           >
             <Image
@@ -188,6 +191,8 @@ export function HomeContent() {
               priority
               fetchPriority="high"
               sizes="100vw"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect fill='%230C211E' width='1920' height='1080'/%3E%3C/svg%3E"
             />
             {/* Elegant gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
