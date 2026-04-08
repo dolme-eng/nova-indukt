@@ -8,6 +8,8 @@ import { CookieConsent } from "@/components/cookie-consent"
 import { PageTransition } from "@/components/page-transition"
 import { CustomCursor } from "@/components/custom-cursor"
 import { SmoothScrollProvider } from "@/components/smooth-scroll"
+import { PageLoader } from "@/components/page-loader"
+import { PreloadResources } from "./preload-resources"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -55,6 +57,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased min-h-screen bg-gray-50 text-gray-900">
+        {/* Précharger les ressources critiques */}
+        <PreloadResources />
+        
+        {/* Loader global avec animation prolongée */}
+        <PageLoader />
+        
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
