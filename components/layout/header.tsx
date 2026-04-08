@@ -130,9 +130,9 @@ export function Header() {
 
       {/* Main Header */}
       <header 
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${
           scrolled 
-            ? 'bg-white/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.03)] border-b border-white/20 py-2' 
+            ? 'bg-white/70 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border-b border-white/20 py-1.5' 
             : 'bg-white border-b border-gray-100 py-4'
         }`}
       >
@@ -153,28 +153,28 @@ export function Header() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center justify-center absolute inset-0 pointer-events-none">
-              <div className="flex items-center gap-2 pointer-events-auto bg-gray-50/50 rounded-2xl p-1.5 border border-gray-100/80 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 pointer-events-auto bg-gray-50/40 rounded-2xl p-1.5 border border-gray-100/50 backdrop-blur-md">
                 {navItems.map((item) => (
                   <div key={item.href} className="relative z-10">
                     {item.hasMega ? (
                       <button
                         onMouseEnter={() => setMegaMenuOpen(true)}
-                        className={`group flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                        className={`group flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-500 ease-[0.22,1,0.36,1] ${
                           isActive(item.href) || megaMenuOpen
-                            ? 'text-white bg-[#0C211E] shadow-md shadow-[#0C211E]/10' 
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
+                            ? 'text-white bg-[#0C211E] shadow-lg shadow-[#0C211E]/20 scale-[1.02]' 
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-sm hover:scale-[1.02]'
                         }`}
                       >
                         {item.label}
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${megaMenuOpen ? 'rotate-180 text-white' : 'text-gray-400 group-hover:text-gray-600'}`} />
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ease-[0.22,1,0.36,1] ${megaMenuOpen ? 'rotate-180 text-white' : 'text-gray-400 group-hover:text-gray-600'}`} />
                       </button>
                     ) : (
                       <Link 
                         href={item.href} 
-                        className={`block px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                        className={`block px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-500 ease-[0.22,1,0.36,1] ${
                           isActive(item.href) 
-                            ? 'text-white bg-[#0C211E] shadow-md shadow-[#0C211E]/10' 
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
+                            ? 'text-white bg-[#0C211E] shadow-lg shadow-[#0C211E]/20 scale-[1.02]' 
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-sm hover:scale-[1.02]'
                         }`}
                       >
                         {item.label}

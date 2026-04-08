@@ -61,6 +61,13 @@ export function TiltCard({
       }}
       whileHover={{ 
         boxShadow: `0 25px 50px -12px ${glowColor}`,
+        y: -8,
+        scale: 1.02
+      }}
+      transition={{
+        type: 'spring',
+        stiffness: 400,
+        damping: 20
       }}
       className={`${className}`}
     >

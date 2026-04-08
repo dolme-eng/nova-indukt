@@ -73,6 +73,28 @@ export function ProductsContent() {
   const clearFilters = () => { setSearchQuery(''); setSelectedCategory(null); setPriceRange([0, PRICE_FILTER_MAX]); setSortBy('newest') }
   const activeFiltersCount = (searchQuery ? 1 : 0) + (selectedCategory ? 1 : 0) + (priceRange[0] > 0 || priceRange[1] < PRICE_FILTER_MAX ? 1 : 0)
 
+  const gridVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05
+      }
+    }
+  }
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50/50 pb-10 sm:pb-16 selection:bg-[#4ECCA3]/30">
       
@@ -340,7 +362,13 @@ export function ProductsContent() {
                 </motion.div>
               ) : (
                 <>
-                  <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 xl:gap-5' : 'space-y-4'}>
+                  <motion.div 
+                    variants={gridVariants}
+                    initial="hidden"
+                    animate="visible"
+                    key={`${selectedCategory}-${sortBy}-${viewMode}`}
+                    className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 xl:gap-5' : 'space-y-4'}
+                  >
                     <AnimatePresence mode="popLayout">
                       {isLoading ? Array.from({length: viewMode === 'grid' ? 6 : 4}).map((_, i) => (
                         <motion.div key={`skeleton-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`bg-white rounded-xl border border-gray-100 shadow-sm flex ${viewMode === 'list' ? 'flex-col sm:flex-row h-full p-4 sm:p-5 gap-5' : 'flex-col h-[400px] p-4'}`}>
@@ -357,7 +385,7 @@ export function ProductsContent() {
                         </motion.div>
                       )) : paginatedProducts.map(product => (
                         viewMode === 'grid' ? (
-                          <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} key={product.id}>
+                          <motion.div variants={cardVariants} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} key={product.id}>
                             <Link href={`/produkt/${product.slug}`} className="block group h-full">
                               <TiltCard 
                                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-500 border border-gray-100 flex flex-col h-full"
@@ -432,7 +460,7 @@ export function ProductsContent() {
                           </motion.div>
                         ) : (
                           /* List View Item */
-                          <motion.div layout initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.3 }} key={product.id}>
+                          <motion.div variants={cardVariants} layout initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.3 }} key={product.id}>
                             <Link href={`/produkt/${product.slug}`} className="block group">
                               <div className="bg-white rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-row h-full">
                                 <div className="relative w-2/5 sm:w-64 md:w-80 bg-gray-50 p-3 sm:p-6 flex-shrink-0 flex flex-col justify-center">
@@ -498,7 +526,7 @@ export function ProductsContent() {
                         )
                       ))}
                     </AnimatePresence>
-                  </div>
+                  </motion.div>
 
                   {/* Load More Button */}
                   {displayedCount < filteredProducts.length && (

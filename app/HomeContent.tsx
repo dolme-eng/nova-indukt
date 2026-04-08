@@ -31,6 +31,15 @@ export function HomeContent() {
   const slides = ['slide1', 'slide2', 'slide3'] as const
   const sliderContainerRef = useRef<HTMLDivElement>(null)
   
+  const productCardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+    }
+  }
+
   const sliderProducts = useMemo(() => {
     const list: typeof products = [];
     const catGroups = new Map<string, number>();
@@ -84,6 +93,60 @@ export function HomeContent() {
     return item.name.de
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    }
+  }
+
+  const heroContentVariants = {
+    hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      filter: 'blur(0px)',
+      transition: { 
+        duration: 1, 
+        ease: [0.22, 1, 0.36, 1],
+        staggerChildren: 0.15,
+        delayChildren: 0.2
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      y: -20, 
+      filter: 'blur(10px)',
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+    }
+  }
+
+  const heroItemVariants = {
+    hidden: { opacity: 0, y: 20, filter: 'blur(5px)' },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      filter: 'blur(0px)',
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+    }
+  }
+
   const heroImages = [
     '/images/hero/Die-Zukunft-der-Induktion.webp',
     '/images/hero/Professionelle-Topfsets.webp',
@@ -111,10 +174,10 @@ export function HomeContent() {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }}
+            initial={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0"
           >
             <Image
@@ -127,8 +190,8 @@ export function HomeContent() {
               sizes="100vw"
             />
             {/* Elegant gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
           </motion.div>
         </AnimatePresence>
 
@@ -137,52 +200,59 @@ export function HomeContent() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
+                variants={heroContentVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
               >
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4 }}
+                  variants={heroItemVariants}
                   className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-2xl"
                 >
                   <span className="w-2 h-2 rounded-full bg-nova-400 animate-pulse" />
                   {t(`hero.${slides[currentSlide]}.tag`)}
                 </motion.div>
                 
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-heading leading-[1.1] tracking-tight drop-shadow-sm">
+                <motion.h1 
+                  variants={heroItemVariants}
+                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-heading leading-[1.1] tracking-tight drop-shadow-sm"
+                >
                   {t(`hero.${slides[currentSlide]}.title`)}
-                </h1>
+                </motion.h1>
                 
-                <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-xl font-light leading-relaxed drop-shadow-sm">
+                <motion.p 
+                  variants={heroItemVariants}
+                  className="text-lg sm:text-xl text-gray-200 mb-8 max-w-xl font-light leading-relaxed drop-shadow-sm"
+                >
                   {t(`hero.${slides[currentSlide]}.subtitle`)}
-                </p>
+                </motion.p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
+                <motion.div 
+                  variants={heroItemVariants}
+                  className="flex flex-col sm:flex-row gap-4 items-center sm:items-start"
+                >
                   <Link href="/produkte" className="w-full sm:w-auto">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full sm:w-auto px-8 py-4 bg-nova-400 hover:bg-nova-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all shadow-[0_8px_30px_rgb(78,204,163,0.3)] hover:shadow-[0_8px_30px_rgb(78,204,163,0.5)] group/btn"
-                    >
-                      {t(`hero.${slides[currentSlide]}.cta`)}
-                      <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                    </motion.button>
+                    <MagneticButton strength={0.2} className="w-full sm:w-auto">
+                      <button
+                        className="w-full sm:w-auto px-8 py-4 bg-nova-400 hover:bg-nova-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all shadow-[0_8px_30px_rgb(78,204,163,0.3)] hover:shadow-[0_8px_30px_rgb(78,204,163,0.5)] group/btn"
+                      >
+                        {t(`hero.${slides[currentSlide]}.cta`)}
+                        <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                      </button>
+                    </MagneticButton>
                   </Link>
                   
                   <Link href="/produkte" className="w-full sm:w-auto">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all"
-                    >
-                      <Eye className="w-5 h-5 opacity-70" />
-                      {t('hero.catalog')}
-                    </motion.button>
+                    <MagneticButton strength={0.15} className="w-full sm:w-auto">
+                      <button
+                        className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all"
+                      >
+                        <Eye className="w-5 h-5 opacity-70" />
+                        {t('hero.catalog')}
+                      </button>
+                    </MagneticButton>
                   </Link>
-                </div>
+                </motion.div>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -214,7 +284,13 @@ export function HomeContent() {
 
       {/* Trust Bar - Elevated overlapping to Hero */}
       <section className="relative z-20 -mt-10 sm:-mt-14 max-w-[1400px] mx-auto px-4 sm:px-6">
-        <div className="bg-white/80 backdrop-blur-xl border border-white shadow-xl rounded-2xl p-6 sm:p-8">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={containerVariants}
+          className="bg-white/80 backdrop-blur-xl border border-white shadow-xl rounded-2xl p-6 sm:p-8"
+        >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-x divide-gray-100/0 md:divide-gray-200">
             {[
               { icon: Truck, titleKey: 'trust.freeShipping', descKey: 'trust.freeShippingDesc' },
@@ -224,10 +300,7 @@ export function HomeContent() {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: index * 0.1 }}
+                variants={itemVariants}
                 className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:pl-8 first:pl-0"
               >
                 <div className="w-12 h-12 rounded-2xl bg-nova-50 flex items-center justify-center flex-shrink-0 text-nova-500 shadow-sm border border-nova-100">
@@ -240,7 +313,7 @@ export function HomeContent() {
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Recommended space */}
@@ -269,19 +342,33 @@ export function HomeContent() {
 
         {/* Swipeable & Auto-scroll track */}
         <div className="relative">
-          <div 
+          <motion.div 
             ref={sliderContainerRef}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.05
+                }
+              }
+            }}
             className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-3 sm:gap-4 px-4 sm:px-6 pb-4 pt-2 scrollbar-hide items-stretch"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {sliderProducts.map((product, index) => (
-              <div key={`highlights-${product.id}`} className="w-[260px] sm:w-[320px] flex-shrink-0 snap-center sm:snap-start h-auto group/product">
+              <motion.div 
+                key={`highlights-${product.id}`} 
+                variants={productCardVariants}
+                className="w-[260px] sm:w-[320px] flex-shrink-0 snap-center sm:snap-start h-auto group/product"
+              >
                 <ProductCard product={product} index={index} t={t} />
-              </div>
+              </motion.div>
             ))}
             {/* Safe zone at end */}
             <div className="w-2 sm:w-6 flex-shrink-0" />
-          </div>
+          </motion.div>
         </div>
       </section>
 

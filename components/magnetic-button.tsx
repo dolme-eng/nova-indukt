@@ -21,7 +21,7 @@ export function MagneticButton({
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   
-  const springConfig = { damping: 15, stiffness: 150 }
+  const springConfig = { damping: 20, stiffness: 350, mass: 0.5 }
   const springX = useSpring(x, springConfig)
   const springY = useSpring(y, springConfig)
 
@@ -52,6 +52,7 @@ export function MagneticButton({
       onMouseLeave={handleMouseLeave}
       style={{ x: springX, y: springY }}
       className={className}
+      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
       {children}
