@@ -1039,11 +1039,12 @@ const baseProducts: Product[] = [
   },
   // 68 — WMF Macao Wok 36cm
   {
-    id: 'wmf-ma-360', slug: 'wmf-macao-wok-36cm',
+    id: 'wmf-ma-360-roster', slug: 'wmf-macao-wok-36cm',
     name: { de: 'WMF Macao Wok 36 cm – Cromargan® mit Ablagerost' },
     category: 'kochen', price: 77.42, oldPrice: 79,
-    images: [p('wmf-macao-wok-36cm', '1.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan mit Ablagerost'),
-          p('wmf-macao-wok-36cm', '2.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan mit Ablagerost'),],
+    images: [p('wmf-macao-wok-36cm', '1.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl'),
+          p('wmf-macao-wok-36cm', '2.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl'),
+          p('wmf-macao-wok-36cm', '3.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl'),],
     rating: 4.7, reviewCount: 256, stock: 14, badges: [],
     description: { de: 'Fernöstliche Küche perfekt umgesetzt. Der WMF Macao Wok aus poliertem Cromargan® Edelstahl 18/10 bietet durch seine tiefe, halbrunde Form ideale Bedingungen für das typische Pfannenrühren. Der TransTherm®-Allherdboden sorgt für die notwendige hohe Hitze am Boden und eine sanfte Wärme an den Seitenwänden. Das Set enthält einen Ablagerost zum Warmhalten oder Dämpfen sowie einen Glasdeckel. Die beiden Seitengriffe ermöglichen eine sichere Handhabung und machen den Wok auch zur idealen Servierschale am Tisch.' },
     shortDescription: { de: 'Großer Edelstahl-Wok mit Ablagerost und Glasdeckel' },
@@ -1461,12 +1462,13 @@ const baseProducts: Product[] = [
   },
   // 98 — WMF Macao Wok 36cm
   {
-    id: 'wmf-ma-360', slug: 'wmf-macao-wok-36cm-cromargan',
+    id: 'wmf-ma-360-set', slug: 'wmf-macao-wok-36cm-cromargan',
     name: { de: 'WMF Macao Wok 36 cm – Cromargan® Edelstahl' },
     category: 'kochen', price: 77.42, oldPrice: 79,
     images: [
-      p('wmf-macao-set', 'wmf-macao-wok-36cm-set-1.webp', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl'),
-      p('wmf-macao-set', 'wmf-macao-wok-36cm-set-2.webp', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl')
+      p('wmf-macao-wok-36cm', '1.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl'),
+      p('wmf-macao-wok-36cm', '2.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl'),
+      p('wmf-macao-wok-36cm', '3.png', 'kochen', 'WMF Macao Wok 36cm - Cromargan Edelstahl')
     ],
     rating: 4.7, reviewCount: 312, stock: 14, badges: ['premium'],
     description: { de: 'Fernöstliche Kochkunst trifft auf deutsches Design. Der WMF Macao Wok aus poliertem Cromargan® Edelstahl 18/10 bietet durch seine tiefe, halbrunde Form ideale Bedingungen für das Pfannenrühren und Dämpfen. Der TransTherm®-Allherdboden sorgt für eine optimale Wärmeverteilung und -speicherung. Das umfangreiche Set enthält einen Glasdeckel zum Sichtkochen und einen praktischen Ablagerost zum Warmhalten von bereits garten Zutaten. Die ergonomischen Seitengriffe ermöglichen eine sichere Handhabung. Ein langlebiges Highlight für jede Küche.' },
