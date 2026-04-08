@@ -106,8 +106,8 @@ const baseProducts: Product[] = [
     name: { de: 'Le Creuset Signature Bräter – Gusseisen emailliert, 26 cm  5,3 L' },
     category: 'kochen', price: 212.66, oldPrice: 295,
     images: [
-      p('le-creuset-braeter-gusseisen-26cm', '41ViRiBaqqL._AC_.jpg', 'kochen', 'Le Creuset Signature Bräter – Gusseisen emailliert, 26 cm  5,3 L'),
-      p('le-creuset-braeter-gusseisen-26cm', '51exM+c+wNS._AC_SY300_SX300_QL70_ML2_.jpg', 'kochen', 'Le Creuset Signature Bräter – Gusseisen emailliert, 26 cm  5,3 L')
+      p('le-creuset-braeter-gusseisen-26cm', '41ViRiBaqqL._AC_.jpg', 'kochen', 'Le Creuset Signature Bräter – Gusseisen emailliert, 26 cm'),
+      p('le-creuset-braeter-gusseisen-26cm', '51exM+c+wNS._AC_SY300_SX300_QL70_ML2_.jpg', 'kochen', 'Le Creuset Signature Bräter – Gusseisen emailliert, 26 cm')
     ],
     rating: 4.9, reviewCount: 3821, stock: 8, badges: ['premium', 'bestseller'],
     description: { de: 'Das ikonische Original aus Frankreich für Gourmets und Profiköche. Der Le Creuset Signature Bräter aus massivem, emailliertem Gusseisen ist das ultimative Werkzeug für perfekte Schmorgerichte, Braten und sogar zum Backen von Brot. Die hochwertige, helle Emaillierung ist besonders langlebig, kratzfest und lässt sich mühelos reinigen. Dank der exzellenten Wärmespeicherung von Gusseisen bleibt das Gargut gleichmäßig heiß, während der dicht schließende Deckel die Feuchtigkeit im Topf hält – für unvergleichlich saftige Ergebnisse. Die großen Griffe ermöglichen eine sichere Handhabung auch mit Ofenhandschuhen. Geeignet für alle Herdarten, inklusive Induktion, sowie für den Backofen und Grill.' },
