@@ -49,14 +49,23 @@ export function ProductsContent() {
   const paginatedProducts = filteredProducts.slice(0, displayedCount)
 
   const [isLoading, setIsLoading] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
 
   useEffect(() => { setDisplayedCount(ITEMS_PER_PAGE) }, [searchQuery, selectedCategory, sortBy])
 
+  // Loading pour les changements de filtres (recherche, catégorie, prix, tri)
   useEffect(() => {
     setIsLoading(true)
-    const t = setTimeout(() => setIsLoading(false), 500)
+    const t = setTimeout(() => setIsLoading(false), 400)
     return () => clearTimeout(t)
-  }, [searchQuery, selectedCategory, priceRange, sortBy, displayedCount, viewMode])
+  }, [searchQuery, selectedCategory, priceRange, sortBy])
+
+  // Loading court pour le changement de vue (grid/list) - sans skeleton complet
+  useEffect(() => {
+    setIsLoading(true)
+    const t = setTimeout(() => setIsLoading(false), 200)
+    return () => clearTimeout(t)
+  }, [viewMode])
 
   const handleToggleWishlist = (e: React.MouseEvent, product: typeof products[0]) => {
     e.preventDefault()
@@ -532,11 +541,28 @@ export function ProductsContent() {
                   {displayedCount < filteredProducts.length && (
                     <div className="mt-16 flex items-center justify-center">
                       <button 
-                        onClick={() => setDisplayedCount(prev => prev + ITEMS_PER_PAGE)} 
-                        className="px-10 py-4 bg-white border-2 border-[#0C211E] text-[#0C211E] font-bold text-lg rounded-2xl hover:bg-[#0C211E] hover:text-white transition-colors flex items-center gap-3 group"
+                        onClick={() => {
+                          setIsLoadingMore(true)
+                          // Petit délai pour l'animation avant d'ajouter les produits
+                          setTimeout(() => {
+                            setDisplayedCount(prev => prev + ITEMS_PER_PAGE)
+                            setIsLoadingMore(false)
+                          }, 300)
+                        }} 
+                        disabled={isLoadingMore}
+                        className="px-10 py-4 bg-white border-2 border-[#0C211E] text-[#0C211E] font-bold text-lg rounded-2xl hover:bg-[#0C211E] hover:text-white transition-colors flex items-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
                       >
-                        Mehr laden
-                        <ArrowRight className="w-5 h-5 group-hover:translate-y-1 group-hover:translate-x-0 transition-transform rotate-90" />
+                        {isLoadingMore ? (
+                          <>
+                            <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                            Wird geladen...
+                          </>
+                        ) : (
+                          <>
+                            Mehr laden
+                            <ArrowRight className="w-5 h-5 group-hover:translate-y-1 group-hover:translate-x-0 transition-transform rotate-90" />
+                          </>
+                        )}
                       </button>
                     </div>
                   )}
