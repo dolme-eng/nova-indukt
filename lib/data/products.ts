@@ -1678,6 +1678,8 @@ const baseProducts: Product[] = [
 
 ];
 
+export const products: Product[] = baseProducts;
+
 const baseCategories: Category[] = [
   {
     id: 'kochen',

@@ -36,7 +36,7 @@ export function HomeContent() {
     visible: { 
       opacity: 1, 
       scale: 1,
-      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
     }
   }
 
@@ -111,7 +111,7 @@ export function HomeContent() {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.22, 1, 0.36, 1]
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
       }
     }
   }
@@ -124,7 +124,7 @@ export function HomeContent() {
       filter: 'blur(0px)',
       transition: { 
         duration: 1, 
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
         staggerChildren: 0.15,
         delayChildren: 0.2
       }
@@ -133,7 +133,7 @@ export function HomeContent() {
       opacity: 0, 
       y: -20, 
       filter: 'blur(10px)',
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
     }
   }
 
@@ -143,7 +143,7 @@ export function HomeContent() {
       opacity: 1, 
       y: 0, 
       filter: 'blur(0px)',
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
     }
   }
 
@@ -177,7 +177,7 @@ export function HomeContent() {
             initial={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             className="absolute inset-0"
           >
             <Image
