@@ -61,25 +61,18 @@ export interface BlogPost {
 }
 
 const p = (folder: string, file: string, category?: string, productName?: string) => {
-  // If we have a category and product name, try to find the real image in Products folder
-  if (category && productName) {
-    const categoryMap: Record<string, string> = {
-      'kochen': 'Kochen & Braten',
-      'vorbereitung': 'Vorbereitung',
-      'zubehoer': 'Küchenzubehör',
-      'tischaccessoires': 'Tisch & Servier'
-    }
-    const realCategory = categoryMap[category]
-    if (realCategory) {
-      const safeProductName = productName
-        .replace(/\s\/\s/g, '  ')
-        .replace(/[<>:"/\\|?*]/g, ' ')
-        .trim()
-      // In a real environment we would check if file exists, but here we'll assume 
-      // if we're calling with these params, we want to try the real path first.
-      // The user has added real images to these folders.
-      return `/images/products/Products/${realCategory}/${safeProductName}/${file}`
-    }
+  // If we have a product name, use it directly as the folder name (matching the actual folder structure)
+  if (productName) {
+    const safeProductName = productName
+      .replace(/\s\/\s/g, '  ')
+      .replace(/[<>:"/\\|?*]/g, ' ')
+      .trim()
+    return `/images/products/${safeProductName}/${file}`
+  }
+
+  // Fallback using the folder parameter
+  if (folder) {
+    return `/images/products/${folder}/${file}`
   }
 
   // Fallback if images don't exist yet - using Unsplash for missing assets
