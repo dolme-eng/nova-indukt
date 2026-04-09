@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Package, Heart, MapPin, CreditCard, Settings, User, LogOut, 
@@ -13,19 +12,19 @@ import {
 import { useAuth } from '@/lib/store/auth'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
+import { products } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 const TABS = [
-  { id: 'overview', labelKey: 'overview', icon: Home },
-  { id: 'orders', labelKey: 'orders', icon: Package },
-  { id: 'wishlist', labelKey: 'wishlist', icon: Heart },
-  { id: 'addresses', labelKey: 'addresses', icon: MapPin },
-  { id: 'payment', labelKey: 'payment', icon: CreditCard },
-  { id: 'settings', labelKey: 'settings', icon: Settings },
+  { id: 'overview', label: 'Übersicht', icon: Home },
+  { id: 'orders', label: 'Bestellungen', icon: Package },
+  { id: 'wishlist', label: 'Wunschliste', icon: Heart },
+  { id: 'addresses', label: 'Adressen', icon: MapPin },
+  { id: 'payment', label: 'Zahlungsmethoden', icon: CreditCard },
+  { id: 'settings', label: 'Einstellungen', icon: Settings },
 ]
 
 export default function AccountPageClient() {
-  const t = useDeTranslations('account')
   const router = useRouter()
   const { user, isAuthenticated, logout } = useAuth()
   const { items: wishlistItems, removeItem, count: wishlistCount } = useWishlist()
@@ -47,20 +46,11 @@ export default function AccountPageClient() {
   }
 
   const handleAddToCart = (item: WishlistItem) => {
-    addToCart({ 
-      id: item.id, 
-      name: item.name, 
-      price: item.price, 
-      images: [item.image], 
-      slug: item.slug,
-      category: 'zubehoer',
-      rating: 5,
-      reviewCount: 0,
-      shortDescription: { de: '' },
-      description: { de: '' },
-      specs: { material: '', dimensions: '', weight: '', dishwasher: false, induction: false },
-      stock: 1
-    }, 1)
+    // Retrieve full product data from catalog
+    const fullProduct = products.find(p => p.id === item.id)
+    if (fullProduct) {
+      addToCart(fullProduct, 1)
+    }
   }
 
   if (!mounted || !isAuthenticated) {
@@ -97,9 +87,9 @@ export default function AccountPageClient() {
       <nav className="hidden lg:block bg-white border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-2 py-3 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">{t('nav.home')}</Link>
+            <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">Startseite</Link>
             <ChevronRight className="w-4 h-4 text-gray-400" />
-            <span className="text-gray-900 font-medium">{t('title')}</span>
+            <span className="text-gray-900 font-medium">Mein Konto</span>
           </div>
         </div>
       </nav>
@@ -110,7 +100,7 @@ export default function AccountPageClient() {
             <Link href="/" className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </Link>
-            <h1 className="text-lg font-bold text-gray-900">{t('title')}</h1>
+            <h1 className="text-lg font-bold text-gray-900">Mein Konto</h1>
           </div>
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 -mr-2 hover:bg-gray-100 rounded-full transition-colors">
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -128,7 +118,7 @@ export default function AccountPageClient() {
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left ${activeTab === tab.id ? 'bg-[#4ECCA3]/10 text-[#4ECCA3]' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     <tab.icon className="w-5 h-5" />
-                    <span className="font-medium">{t(tab.labelKey)}</span>
+                    <span className="font-medium">{tab.label}</span>
                     {tab.id === 'wishlist' && wishlistCount > 0 && (
                       <span className="ml-auto bg-[#4ECCA3] text-white text-xs px-2 py-0.5 rounded-full">{wishlistCount}</span>
                     )}
@@ -137,7 +127,7 @@ export default function AccountPageClient() {
                 <div className="pt-4 mt-4 border-t">
                   <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-red-600 rounded-xl hover:bg-red-50">
                     <LogOut className="w-5 h-5" />
-                    <span className="font-medium">{t('logout')}</span>
+                    <span className="font-medium">Abmelden</span>
                   </button>
                 </div>
               </nav>
@@ -171,7 +161,7 @@ export default function AccountPageClient() {
                       className={`w-full flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-xl text-left text-sm lg:text-base transition-colors ${activeTab === tab.id ? 'bg-[#4ECCA3]/10 text-[#4ECCA3] font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
                     >
                       <tab.icon className="w-4 h-4 lg:w-5 lg:h-5" />
-                      <span>{t(tab.labelKey)}</span>
+                      <span>{tab.label}</span>
                       {tab.id === 'wishlist' && wishlistCount > 0 && (
                         <span className="ml-auto bg-[#4ECCA3] text-white text-xs px-2 py-0.5 rounded-full">{wishlistCount}</span>
                       )}
@@ -182,7 +172,7 @@ export default function AccountPageClient() {
                 <div className="p-3 lg:p-4 border-t">
                   <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 text-red-600 rounded-xl hover:bg-red-50 transition-colors text-sm lg:text-base">
                     <LogOut className="w-4 h-4 lg:w-5 lg:h-5" />
-                    <span className="font-medium">{t('logout')}</span>
+                    <span className="font-medium">Abmelden</span>
                   </button>
                 </div>
               </div>
@@ -198,18 +188,17 @@ export default function AccountPageClient() {
 
 // Tab Components
 function OverviewTab({ user, wishlistCount, setActiveTab }: any) {
-  const t = useDeTranslations('account')
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">{t('welcome')}, {user?.name?.split(' ')[0]}!</h2>
-        <p className="text-gray-600 text-sm sm:text-base">{t('overview')}</p>
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">Willkommen, {user?.name?.split(' ')[0]}!</h2>
+        <p className="text-gray-600 text-sm sm:text-base">Hier hast Du einen Überblick über Deine Aktivitäten.</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard icon={ShoppingBag} label={t('orders')} value="0" color="bg-blue-500" onClick={() => setActiveTab('orders')} />
-        <StatCard icon={Heart} label={t('wishlist')} value={wishlistCount.toString()} color="bg-pink-500" onClick={() => setActiveTab('wishlist')} />
-        <StatCard icon={MapPin} label={t('addresses')} value="0" color="bg-green-500" onClick={() => setActiveTab('addresses')} />
+        <StatCard icon={ShoppingBag} label="Bestellungen" value="0" color="bg-blue-500" onClick={() => setActiveTab('orders')} />
+        <StatCard icon={Heart} label="Wunschliste" value={wishlistCount.toString()} color="bg-pink-500" onClick={() => setActiveTab('wishlist')} />
+        <StatCard icon={MapPin} label="Adressen" value="0" color="bg-green-500" onClick={() => setActiveTab('addresses')} />
         <StatCard icon={Bell} label="News" value="0" color="bg-orange-500" />
       </div>
 
@@ -217,11 +206,11 @@ function OverviewTab({ user, wishlistCount, setActiveTab }: any) {
         <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Package className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
         </div>
-        <h3 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">{t('noOrders')}</h3>
-        <p className="text-gray-600 mb-4 text-sm sm:text-base">{t('overview')}</p>
+        <h3 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">Keine Bestellungen</h3>
+        <p className="text-gray-600 mb-4 text-sm sm:text-base">Du hast bisher noch keine Bestellungen getätigt.</p>
         <Link href="/produkte" className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
           <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
-          {t('browseProducts')}
+          Produkte durchstöbern
         </Link>
       </div>
     </div>
@@ -241,32 +230,28 @@ function StatCard({ icon: Icon, label, value, color, onClick }: any) {
 }
 
 function OrdersTab() {
-  const t = useDeTranslations('account')
   return (
     <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
       <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <Package className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
       </div>
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{t('noOrders')}</h2>
-      <p className="text-gray-600 text-sm sm:text-base">{t('overview')}</p>
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Keine Bestellungen</h2>
+      <p className="text-gray-600 text-sm sm:text-base">Du hast bisher noch keine Bestellungen getätigt.</p>
     </div>
   )
 }
 
 function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], onRemove: (id: string) => void, onAddToCart: (item: WishlistItem) => void }) {
-  const t = useDeTranslations('account')
-  const tw = useDeTranslations('wishlist')
-  const tc = useDeTranslations('cart')
   if (items.length === 0) {
     return (
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
         <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Heart className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
         </div>
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{t('noWishlist')}</h2>
-        <p className="text-gray-600 mb-4 text-sm sm:text-base">{t('noWishlistHint')}</p>
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Wunschliste ist leer</h2>
+        <p className="text-gray-600 mb-4 text-sm sm:text-base">Füge Produkte hinzu, die Dir gefallen, um sie später einfacher wiederzufinden.</p>
         <Link href="/produkte" className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
-          {t('browseProducts')}
+          Produkte durchstöbern
         </Link>
       </div>
     )
@@ -275,8 +260,8 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
   return (
     <div className="space-y-3 sm:space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900">{t('wishlist')}</h2>
-        <span className="text-sm text-gray-600">{items.length} {items.length === 1 ? tw('item') : tw('items')}</span>
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900">Wunschliste</h2>
+        <span className="text-sm text-gray-600">{items.length} {items.length === 1 ? 'Artikel' : 'Artikel'}</span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -293,7 +278,7 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
               <p className="text-base sm:text-lg font-bold text-[#4ECCA3] tabular-nums whitespace-nowrap">{formatPriceDe(item.price)}</p>
               <button onClick={() => onAddToCart(item)} className="w-full mt-2 sm:mt-3 py-2 sm:py-2.5 bg-[#4ECCA3] text-white text-xs sm:text-sm font-medium rounded-lg sm:rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2">
                 <Plus className="w-4 h-4" />
-                {tc('addToCart')}
+                In den Warenkorb
               </button>
             </div>
           </div>
@@ -304,44 +289,41 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
 }
 
 function AddressesTab() {
-  const t = useDeTranslations('account')
   return (
     <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
       <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <MapPin className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
       </div>
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{t('addresses')}</h2>
-      <p className="text-gray-600 mb-4 text-sm sm:text-base">{t('noWishlistHint')}</p>
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Adressen</h2>
+      <p className="text-gray-600 mb-4 text-sm sm:text-base">Füge Adressen hinzu, um den Bestellvorgang zu beschleunigen.</p>
       <button className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
         <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-        {t('addresses')}
+        Adresse hinzufügen
       </button>
     </div>
   )
 }
 
 function PaymentTab() {
-  const t = useDeTranslations('account')
   return (
     <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
       <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <CreditCard className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
       </div>
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{t('payment')}</h2>
-      <p className="text-gray-600 mb-4 text-sm sm:text-base">{t('noWishlistHint')}</p>
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Zahlungsmethoden</h2>
+      <p className="text-gray-600 mb-4 text-sm sm:text-base">Hinterlege Deine bevorzugten Zahlungsmethoden.</p>
       <button className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
         <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-        {t('payment')}
+        Zahlungsmethode hinzufügen
       </button>
     </div>
   )
 }
 
 function SettingsTab({ user }: { user: any }) {
-  const t = useDeTranslations('account')
   return (
     <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-6 border border-gray-100">
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900">{t('settings')}</h2>
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900">Einstellungen</h2>
       
       <div className="space-y-3 sm:space-y-4">
         <div className="p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">

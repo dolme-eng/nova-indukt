@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Note: Fonts are loaded via next/font in layout.tsx for optimal performance */
+/* Hinweis: Schriftarten werden über next/font in layout.tsx für optimale Leistung geladen */
 
 @layer base {
   :root {
@@ -32,7 +32,7 @@
     @apply border-border;
   }
 
-  /* German UX: WCAG 2.1 AA - Focus visible */
+  /* Barrierefreiheit: WCAG 2.1 AA - Fokus sichtbar */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-[#4ECCA3] ring-2 ring-[#4ECCA3] ring-offset-2;
   }
@@ -42,7 +42,7 @@
     line-height: 1.6;
   }
 
-  /* German UX: Optimal reading width (66-75 chars) — applied only to prose text, not layout wrappers */
+  /* Lesbarkeit: Optimale Lesebreite (66-75 Zeichen) — nur für Fließtext, nicht Layout-Wrapper */
   .prose p,
   .prose-text {
     max-width: 70ch;
@@ -60,7 +60,7 @@
   }
 
   .font-subheading {
-    font-family: var(--font-satoshi), system-ui, sans-serif;
+    font-family: var(--font-sora), system-ui, sans-serif;
   }
 
   .font-mono {
@@ -68,7 +68,7 @@
   }
 }
 
-/* German UX: Minimum touch target 44x44px — only on touch devices */
+/* Touch-Optimierung: Minimales Touch-Ziel 44x44px — nur auf Touch-Geräten */
 @layer base {
   @media (pointer: coarse) {
     button:not([data-compact]),
@@ -78,7 +78,7 @@
     }
   }
   
-  /* Skip link for accessibility */
+  /* Skip-Link für Barrierefreiheit */
   .skip-link {
     @apply absolute -top-10 left-4 z-[9999] bg-[#4ECCA3] text-white px-4 py-2 rounded-lg font-medium transition-all;
   }
@@ -88,7 +88,7 @@
   }
 }
 
-/* Reduced motion preference */
+/* Reduzierte Bewegungseinstellung */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { Link } from '@/navigation'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import {
@@ -21,13 +20,23 @@ import { DEFAULT_DE_VAT_PERCENT, formatDeEuro, formatPriceDe, grossFromNet, netF
 
 const SHELL = 'w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-14'
 
+// Escape HTML special characters to prevent XSS in JSON-LD
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
 function buildProductJsonLd(product: Product) {
   const o: Record<string, unknown> = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
-    name: product.name.de,
+    name: escapeHtml(product.name.de),
     image: product.images,
-    description: product.shortDescription.de,
+    description: escapeHtml(product.shortDescription.de),
     sku: product.supplierSku || product.id,
     offers: {
       '@type': 'Offer',
@@ -44,7 +53,7 @@ function buildProductJsonLd(product: Product) {
       reviewCount: product.reviewCount,
     },
   }
-  if (product.brand) o.brand = { '@type': 'Brand', name: product.brand }
+  if (product.brand) o.brand = { '@type': 'Brand', name: escapeHtml(product.brand) }
   const ean = product.ean?.replace(/\s/g, '')
   if (ean && /^\d{8,14}$/.test(ean)) o.gtin13 = ean
   if (product.supplierSku) o.mpn = product.supplierSku
@@ -64,7 +73,6 @@ interface ProductContentProps {
 }
 
 export function ProductContent({ product }: ProductContentProps) {
-  const t = useDeTranslations('product')
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -99,7 +107,7 @@ export function ProductContent({ product }: ProductContentProps) {
       slug: product.slug,
     })
     setWishlistToastMessage(
-      added ? t('wishlist.added') || 'Zur Wunschliste hinzugefügt' : t('wishlist.removed') || 'Von Wunschliste entfernt',
+      added ? 'Zur Wunschliste hinzugefügt' : 'Von Wunschliste entfernt',
     )
     setShowWishlistToast(true)
     setTimeout(() => setShowWishlistToast(false), 2000)
@@ -183,15 +191,15 @@ export function ProductContent({ product }: ProductContentProps) {
               className="inline-flex items-center gap-1.5 rounded-full border border-gray-100 bg-gray-50 px-3 py-1.5 text-gray-600 transition-colors hover:text-[#0C211E] lg:hidden"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
-              {t('back') || 'Zurück'}
+              Zurück
             </Link>
             <div className="hidden min-w-0 flex-1 items-center gap-2 lg:flex">
               <Link href="/" className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]">
-                {t('nav.home') || 'Startseite'}
+                Startseite
               </Link>
               <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
               <Link href="/produkte" className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]">
-                {t('products.title') || 'Produkte'}
+                Produkte
               </Link>
               {category && (
                 <>
@@ -358,12 +366,12 @@ export function ProductContent({ product }: ProductContentProps) {
                 {product.stock > 0 ? (
                   <>
                     <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-                    Sofort lieferbar ({t('inStock', { count: product.stock })})
+                    Sofort lieferbar ({product.stock} auf Lager)
                   </>
                 ) : (
                   <>
                     <span className="h-2 w-2 rounded-full bg-red-500" />
-                    {t('outOfStock') || 'Nicht vorrätig'}
+                    Nicht vorrätig
                   </>
                 )}
               </div>
@@ -403,7 +411,7 @@ export function ProductContent({ product }: ProductContentProps) {
                   className="flex h-14 flex-1 items-center justify-center gap-2 rounded-2xl bg-[#0C211E] font-bold text-white shadow-lg shadow-[#0C211E]/15 transition-colors hover:bg-[#17423C] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  {t('addToCart') || 'In den Warenkorb'}
+                  In den Warenkorb
                 </motion.button>
                 <button
                   type="button"
@@ -564,10 +572,10 @@ export function ProductContent({ product }: ProductContentProps) {
                     <p className="mb-10 max-w-4xl text-base leading-relaxed text-gray-600 xl:text-lg">{product.description.de}</p>
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                       {[
-                        { icon: Zap, title: t('features.smartHeat.title') || 'SmartHeat', desc: t('features.smartHeat.desc') || '' },
-                        { icon: Leaf, title: t('features.ecoPower.title') || 'Eco', desc: t('features.ecoPower.desc') || '' },
-                        { icon: Shield, title: t('features.safetyGuard.title') || 'Sicherheit', desc: t('features.safetyGuard.desc') || '' },
-                        { icon: Award, title: t('features.premium.title') || 'Qualität', desc: t('features.premium.desc') || '' },
+                        { icon: Zap, title: 'SmartHeat™', desc: 'Präzise Temperaturkontrolle' },
+                        { icon: Leaf, title: 'EcoPower™', desc: 'Energieeffizientes Kochen' },
+                        { icon: Shield, title: 'SafetyGuard™', desc: 'Maximale Sicherheit' },
+                        { icon: Award, title: 'Premium Qualität', desc: 'Langlebigkeit garantiert' },
                       ].map((f) => (
                         <div key={f.title} className="flex gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 p-4">
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0C211E]">
@@ -587,17 +595,17 @@ export function ProductContent({ product }: ProductContentProps) {
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:gap-4">
                       {[
                         ...supplierCards,
-                        { icon: Layers, label: t('specs.material') || 'Material', value: product.specs.material },
-                        { icon: Maximize, label: t('specs.dimensions') || 'Abmessungen', value: product.specs.dimensions },
-                        { icon: Scale, label: t('specs.weight') || 'Gewicht', value: product.specs.weight },
+                        { icon: Layers, label: 'Material', value: product.specs.material },
+                        { icon: Maximize, label: 'Abmessungen', value: product.specs.dimensions },
+                        { icon: Scale, label: 'Gewicht', value: product.specs.weight },
                         {
                           icon: Droplets,
-                          label: t('specs.dishwasher') || 'Spülmaschine',
+                          label: 'Spülmaschine',
                           value: product.specs.dishwasher ? 'Geeignet' : 'Handwäsche',
                         },
                         {
                           icon: Zap,
-                          label: t('specs.induction') || 'Induktion',
+                          label: 'Induktion',
                           value: product.specs.induction ? 'Ja' : 'Nein',
                         },
                         { icon: ShieldCheck, label: 'Garantie', value: '2 Jahre' },

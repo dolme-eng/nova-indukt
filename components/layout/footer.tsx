@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Facebook, Instagram, Youtube, CreditCard, Truck, ShieldCheck, RotateCcw, Mail, MapPin, Phone, Clock, ArrowRight, Lock, Flag, Star, CheckCircle, Leaf, Shield } from 'lucide-react'
+import { Facebook, Instagram, Youtube, CreditCard, Truck, ShieldCheck, RotateCcw, Mail, MapPin, Phone, Clock, ArrowRight, ChevronRight, Lock, Flag, Star, CheckCircle, Leaf, Shield } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -11,8 +11,6 @@ export function Footer() {
     company: [
       { label: 'Über uns', href: '/uber-uns' },
       { label: 'Blog', href: '/blog' },
-      { label: 'Karriere', href: '/karriere' },
-      { label: 'Presse', href: '/presse' },
     ],
     support: [
       { label: 'Kontakt', href: '/kontakt' },
@@ -204,8 +202,4 @@ export function Footer() {
       </div>
     </footer>
   )
-}
-
-function ChevronRight({ className }: { className?: string }) {
-  return <ArrowRight className={className} />
 }

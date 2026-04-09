@@ -4,13 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle, Chrome } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 export function LoginContent() {
   const router = useRouter()
-  const t = useDeTranslations('auth.login')
   const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -32,8 +30,24 @@ export function LoginContent() {
         router.push('/mein-konto')
       }, 1000)
     } else {
-      setError(t('error'))
+      setError('E-Mail oder Passwort ist falsch.')
     }
+    
+    setLoading(false)
+  }
+
+  const handleGoogleSignIn = async () => {
+    setError('')
+    setLoading(true)
+    
+    // Simulate Google Sign In
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // Demo mode: auto-login with Google
+    setSuccess(true)
+    setTimeout(() => {
+      router.push('/mein-konto')
+    }, 1000)
     
     setLoading(false)
   }
@@ -46,7 +60,7 @@ export function LoginContent() {
           <Link href="/" className="text-2xl font-bold text-gray-900">
             NOVA INDUKT
           </Link>
-          <p className="mt-2 text-gray-600">{t('subtitle')}</p>
+          <p className="mt-2 text-gray-600">Melde Dich an, um Deine Bestellungen zu verwalten.</p>
         </div>
 
         {/* Login Form */}
@@ -55,7 +69,27 @@ export function LoginContent() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-lg p-8"
         >
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('title')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Anmelden</h1>
+
+          {/* Google Sign In Button */}
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full py-3 bg-white border-2 border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-colors flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed mb-4"
+          >
+            <Chrome className="w-5 h-5 text-blue-500" />
+            Mit Google anmelden
+          </button>
+
+          {/* Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Oder mit E-Mail</span>
+            </div>
+          </div>
 
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
@@ -67,7 +101,7 @@ export function LoginContent() {
           {success && (
             <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-600 text-sm">
               <CheckCircle className="w-4 h-4" />
-              {t('success')}
+              Erfolgreich angemeldet!
             </div>
           )}
 
@@ -75,7 +109,7 @@ export function LoginContent() {
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('email')}
+                E-Mail-Adresse
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -93,7 +127,7 @@ export function LoginContent() {
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('password')}
+                Passwort
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -126,7 +160,7 @@ export function LoginContent() {
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  {t('submit')} <ArrowRight className="w-4 h-4" />
+                  Anmelden <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
@@ -135,12 +169,12 @@ export function LoginContent() {
           {/* Links */}
           <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
             <p className="text-center text-sm text-gray-600">
-              {t('noAccount')}{' '}
+              Noch kein Konto?{' '}
               <Link 
                 href="/registrieren"
                 className="text-[#4ECCA3] font-medium hover:underline"
               >
-                {t('register')}
+                Jetzt registrieren
               </Link>
             </p>
             

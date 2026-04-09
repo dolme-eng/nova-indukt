@@ -5,7 +5,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import { 
   Search, X, SlidersHorizontal, Grid3X3, List,
   ChevronRight, ShoppingCart, Heart, Star, Filter
@@ -15,7 +14,6 @@ import { formatPriceDe } from '@/lib/utils/vat'
 import { useCart } from '@/lib/store/cart'
 
 export default function SearchContent() {
-  const t = useDeTranslations()
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') || ''
   
@@ -74,7 +72,7 @@ export default function SearchContent() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t('products.search.placeholder')}
+                placeholder="Produkte suchen..."
                 className="w-full pl-12 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] transition-colors"
               />
               {searchQuery && (
@@ -91,7 +89,7 @@ export default function SearchContent() {
               className="lg:hidden flex items-center gap-2 px-4 py-3 bg-gray-100 rounded-xl"
             >
               <Filter className="w-5 h-5" />
-              <span>{t('filter')}</span>
+              <span>Filter</span>
             </button>
           </div>
         </div>
@@ -105,7 +103,7 @@ export default function SearchContent() {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-semibold text-gray-900 flex items-center gap-2">
                   <SlidersHorizontal className="w-5 h-5" />
-                  {t('filter')}
+                  Filter
                 </h2>
                 <button
                   onClick={() => {
@@ -114,13 +112,13 @@ export default function SearchContent() {
                   }}
                   className="text-sm text-[#4ECCA3] hover:underline"
                 >
-                  {t('reset')}
+                  Zurücksetzen
                 </button>
               </div>
 
               {/* Categories */}
               <div className="mb-6">
-                <h3 className="font-medium text-gray-900 mb-3">{t('categories.title')}</h3>
+                <h3 className="font-medium text-gray-900 mb-3">Kategorien</h3>
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -131,7 +129,7 @@ export default function SearchContent() {
                       onChange={(e) => setSelectedCategory(e.target.value)}
                       className="w-4 h-4 text-[#4ECCA3]"
                     />
-                    <span className="text-gray-600">{t('categories.all')}</span>
+                    <span className="text-gray-600">Alle</span>
                   </label>
                   {categories.map((cat) => (
                     <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
@@ -151,7 +149,7 @@ export default function SearchContent() {
 
               {/* Price Range */}
               <div>
-                <h3 className="font-medium text-gray-900 mb-3">{t('priceRange')}</h3>
+                <h3 className="font-medium text-gray-900 mb-3">Preisbereich</h3>
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
                     <input
@@ -187,7 +185,7 @@ export default function SearchContent() {
             {/* Sort & View Options */}
             <div className="flex items-center justify-between mb-6">
               <p className="text-gray-600">
-                {filteredProducts.length} {filteredProducts.length === 1 ? t('results.single') : t('results.multiple')}
+                {filteredProducts.length} {filteredProducts.length === 1 ? 'Ergebnis' : 'Ergebnisse'}
                 {searchQuery && ` für "${searchQuery}"`}
               </p>
               <div className="flex items-center gap-4">
@@ -196,10 +194,10 @@ export default function SearchContent() {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#4ECCA3]"
                 >
-                  <option value="relevance">{t('sort.relevance')}</option>
-                  <option value="price-asc">{t('sort.priceAsc')}</option>
-                  <option value="price-desc">{t('sort.priceDesc')}</option>
-                  <option value="rating">{t('sort.rating')}</option>
+                  <option value="relevance">Relevanz</option>
+                  <option value="price-asc">Preis: Aufsteigend</option>
+                  <option value="price-desc">Preis: Absteigend</option>
+                  <option value="rating">Beste Bewertungen</option>
                 </select>
                 <div className="hidden sm:flex items-center gap-1 bg-white rounded-xl p-1 border border-gray-200">
                   <button
@@ -235,8 +233,8 @@ export default function SearchContent() {
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Search className="w-8 h-8 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('noResults.title')}</h3>
-                <p className="text-gray-600">{t('noResults.description')}</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Keine Ergebnisse gefunden</h3>
+                <p className="text-gray-600">Versuche es mit anderen Filtern oder einem anderen Suchbegriff.</p>
               </div>
             )}
           </div>

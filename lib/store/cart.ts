@@ -9,12 +9,14 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[]
+  isHydrated: boolean
   
   // Actions
   addItem: (product: Product, quantity?: number) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
   clearCart: () => void
+  setHydrated: () => void
   
   // Computed
   totalItems: () => number
@@ -25,6 +27,7 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isHydrated: false,
       
       addItem: (product, quantity = 1) => {
         const { items } = get()
@@ -70,6 +73,10 @@ export const useCartStore = create<CartState>()(
         set({ items: [] })
       },
       
+      setHydrated: () => {
+        set({ isHydrated: true })
+      },
+      
       totalItems: () => {
         return get().items.reduce((total, item) => total + item.quantity, 0)
       },
@@ -83,25 +90,19 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'nova-cart-storage',
-      skipHydration: true
+      onRehydrateStorage: (state) => {
+        return () => state?.setHydrated()
+      }
     }
   )
 )
 
-// Hook pour accéder au panier (avec hydration côté client)
-import { useEffect, useState } from 'react'
-
+// Hook pour accéder au panier
 export function useCart() {
   const store = useCartStore()
-  const [isHydrated, setIsHydrated] = useState(false)
-  
-  useEffect(() => {
-    setIsHydrated(true)
-  }, [])
   
   return {
     ...store,
-    isHydrated,
     totalItems: store.totalItems(),
     totalPrice: store.totalPrice()
   }

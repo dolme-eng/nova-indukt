@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { blogPosts } from '@/lib/data/products'
 import { ArrowLeft, Clock, Calendar, User, Tag, Share2, Facebook, Twitter, Linkedin } from 'lucide-react'
 

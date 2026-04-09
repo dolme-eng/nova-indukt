@@ -12,69 +12,90 @@ interface User {
 interface AuthState {
   user: User | null
   isAuthenticated: boolean
+  isHydrated: boolean
   login: (email: string, password: string) => Promise<boolean>
   register: (name: string, email: string, password: string) => Promise<boolean>
   logout: () => void
+  setHydrated: () => void
 }
 
-// Mock users database (in real app, this would be backend)
-const mockUsers: { email: string; password: string; user: User }[] = [
-  {
-    email: 'demo@nova.de',
-    password: 'demo123',
-    user: { id: '1', name: 'Max Mustermann', email: 'demo@nova.de' }
-  }
-]
+// Demo authentication - for production, connect to real backend API
+// Backend endpoints needed:
+// POST /api/auth/login
+// POST /api/auth/register
+// POST /api/auth/logout
 
 export const useAuth = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
       isAuthenticated: false,
+      isHydrated: false,
 
       login: async (email: string, password: string) => {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500))
-        
-        const found = mockUsers.find(u => u.email === email && u.password === password)
-        
-        if (found) {
-          set({ user: found.user, isAuthenticated: true })
-          return true
+        try {
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 800))
+          
+          // Demo mode: accept demo@nova.de / demo123 or any email with password >= 6 chars
+          if ((email === 'demo@nova.de' && password === 'demo123') || 
+              (email.includes('@') && password.length >= 6)) {
+            set({
+              user: {
+                id: 'demo-user-' + Date.now(),
+                name: email.split('@')[0],
+                email: email
+              },
+              isAuthenticated: true
+            })
+            return true
+          }
+          
+          return false
+        } catch (error) {
+          console.error('Login error:', error)
+          return false
         }
-        
-        return false
       },
 
       register: async (name: string, email: string, password: string) => {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500))
-        
-        // Check if email already exists
-        if (mockUsers.find(u => u.email === email)) {
+        try {
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          
+          // Demo mode: auto-login after registration
+          if (email.includes('@') && password.length >= 6 && name.length >= 2) {
+            set({
+              user: {
+                id: 'user-' + Date.now(),
+                name: name,
+                email: email
+              },
+              isAuthenticated: true
+            })
+            return true
+          }
+          
+          return false
+        } catch (error) {
+          console.error('Registration error:', error)
           return false
         }
-        
-        // Create new user
-        const newUser = {
-          id: Math.random().toString(36).substr(2, 9),
-          name,
-          email
-        }
-        
-        mockUsers.push({ email, password, user: newUser })
-        set({ user: newUser, isAuthenticated: true })
-        
-        return true
       },
 
       logout: () => {
         set({ user: null, isAuthenticated: false })
+      },
+
+      setHydrated: () => {
+        set({ isHydrated: true })
       }
     }),
     {
       name: 'nova-auth',
-      skipHydration: true
+      onRehydrateStorage: (state) => {
+        return () => state?.setHydrated()
+      }
     }
   )
 )

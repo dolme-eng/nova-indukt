@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Space_Grotesk } from "next/font/google"
+import { Inter, Space_Grotesk, Sora, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
 import { Header } from "@/components/layout/header"
@@ -20,6 +20,18 @@ const inter = Inter({
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
+  display: "swap",
+})
+
+const sora = Sora({
+  subsets: ["latin"],
+  variable: "--font-sora",
+  display: "swap",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 })
 
@@ -55,12 +67,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${sora.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased min-h-screen bg-gray-50 text-gray-900">
-        {/* Précharger les ressources critiques */}
+        {/* Kritische Ressourcen vorladen */}
         <PreloadResources />
         
-        {/* Loader global avec animation prolongée */}
+        {/* Globaler Loader mit verlängerter Animation */}
         <PageLoader />
         
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

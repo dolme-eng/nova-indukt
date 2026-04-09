@@ -2,9 +2,8 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import { 
   Search, Star, Heart, Grid3X3, LayoutList, ShoppingCart, Check,
   SlidersHorizontal, X, ChevronDown, ArrowRight, Filter, ChevronRight as ChevronRightIcon
@@ -19,8 +18,6 @@ const ITEMS_PER_PAGE = 12
 const PRICE_FILTER_MAX = 2500
 
 export function ProductsContent() {
-  const t = useDeTranslations('products')
-  const tc = useDeTranslations('cart')
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   
@@ -111,9 +108,9 @@ export function ProductsContent() {
       <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-[72px] lg:top-[88px] z-[40]">
         <div className="container mx-auto px-4 sm:px-6 max-w-[1400px]">
           <div className="flex items-center gap-2 py-2.5 text-xs sm:text-sm font-medium tracking-wide">
-            <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">{t('nav.home') || 'Startseite'}</Link>
+            <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">Startseite</Link>
             <ChevronRightIcon className="w-3.5 h-3.5 text-gray-300" />
-            <Link href="/produkte" className={`transition-colors ${!selectedCategory ? 'text-[#0C211E] font-bold' : 'text-gray-400 hover:text-[#4ECCA3]'}`}>{t('title') || 'Produkte'}</Link>
+            <Link href="/produkte" className={`transition-colors ${!selectedCategory ? 'text-[#0C211E] font-bold' : 'text-gray-400 hover:text-[#4ECCA3]'}`}>Produkte</Link>
             {selectedCategory && (
               <>
                 <ChevronRightIcon className="w-3.5 h-3.5 text-gray-300" />
@@ -131,9 +128,9 @@ export function ProductsContent() {
           
           {/* Page Header */}
           <div className="mb-6 sm:mb-8">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-2 font-heading tracking-tight">{t('title')}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-2 font-heading tracking-tight">Produkte</h1>
             <div className="flex items-center gap-3 text-sm text-gray-500 font-medium">
-              <span>{filteredProducts.length} {filteredProducts.length === 1 ? t('product') : t('products')}</span>
+              <span>{filteredProducts.length} {filteredProducts.length === 1 ? 'Produkt' : 'Produkte'}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
               <span>Kostenloser Versand ab 500 €</span>
             </div>
@@ -155,14 +152,14 @@ export function ProductsContent() {
                 {/* Categories Filter */}
                 <div>
                   <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2 uppercase tracking-wider text-xs">
-                    <SlidersHorizontal className="w-4 h-4 text-[#4ECCA3]"/> {t('filters.categories')}
+                    <SlidersHorizontal className="w-4 h-4 text-[#4ECCA3]"/> Kategorien
                   </h3>
                   <div className="space-y-1.5">
                     <button 
                       onClick={() => setSelectedCategory(null)} 
                       className={`w-full text-left px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${!selectedCategory ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
                     >
-                      {t('filters.all')} {!selectedCategory && <Check className="w-4 h-4 text-[#4ECCA3]" />}
+                      Alle {!selectedCategory && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                     </button>
                     {categories.map(cat => (
                       <button 
@@ -178,7 +175,7 @@ export function ProductsContent() {
 
                 {/* Price Filter */}
                 <div className="pt-5 border-t border-gray-100">
-                  <h3 className="font-bold text-gray-900 mb-4 uppercase tracking-wider text-xs">{t('filters.priceRange')}</h3>
+                  <h3 className="font-bold text-gray-900 mb-4 uppercase tracking-wider text-xs">Preisbereich</h3>
                   <div className="px-2">
                     <div className="relative h-2 bg-gray-100 rounded-full mb-6">
                       <div className="absolute left-0 top-0 bottom-0 bg-[#4ECCA3] rounded-full" style={{ width: `${(priceRange[1] / PRICE_FILTER_MAX) * 100}%` }} />
@@ -201,7 +198,7 @@ export function ProductsContent() {
                 {activeFiltersCount > 0 && (
                   <div className="pt-6">
                     <button onClick={clearFilters} className="w-full py-4 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-2xl transition-colors font-bold flex items-center justify-center gap-2 border border-red-100">
-                      <X className="w-4 h-4" /> {t('filters.clear')}
+                      <X className="w-4 h-4" /> Filter zurücksetzen
                     </button>
                   </div>
                 )}
@@ -239,14 +236,14 @@ export function ProductsContent() {
                       {/* Categories Filter */}
                       <div>
                         <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 uppercase tracking-wider text-xs">
-                          <SlidersHorizontal className="w-4 h-4 text-[#4ECCA3]"/> {t('filters.categories')}
+                          <SlidersHorizontal className="w-4 h-4 text-[#4ECCA3]"/> Kategorien
                         </h3>
                         <div className="space-y-1.5">
                           <button 
                             onClick={() => setSelectedCategory(null)} 
                             className={`w-full text-left px-5 py-3.5 rounded-2xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${!selectedCategory ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
                           >
-                            {t('filters.all')} {!selectedCategory && <Check className="w-4 h-4 text-[#4ECCA3]" />}
+                            Alle {!selectedCategory && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                           </button>
                           {categories.map(cat => (
                             <button 
@@ -262,7 +259,7 @@ export function ProductsContent() {
 
                       {/* Price Filter */}
                       <div className="pt-2">
-                        <h3 className="font-bold text-gray-900 mb-6 uppercase tracking-wider text-xs">{t('filters.priceRange')}</h3>
+                        <h3 className="font-bold text-gray-900 mb-6 uppercase tracking-wider text-xs">Preisbereich</h3>
                         <div className="px-2">
                           <div className="relative h-2 bg-gray-100 rounded-full mb-6">
                             <div className="absolute left-0 top-0 bottom-0 bg-[#4ECCA3] rounded-full" style={{ width: `${(priceRange[1] / PRICE_FILTER_MAX) * 100}%` }} />
@@ -285,7 +282,7 @@ export function ProductsContent() {
                       {activeFiltersCount > 0 && (
                         <div className="pt-2">
                           <button onClick={clearFilters} className="w-full py-4 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-2xl transition-colors font-bold flex items-center justify-center gap-2 border border-red-100">
-                            <X className="w-4 h-4" /> {t('filters.clear')}
+                            <X className="w-4 h-4" /> Filter zurücksetzen
                           </button>
                         </div>
                       )}
@@ -314,7 +311,7 @@ export function ProductsContent() {
                       type="text" 
                       value={searchQuery} 
                       onChange={(e) => setSearchQuery(e.target.value)} 
-                      placeholder={t('search.placeholder')} 
+                      placeholder="Produkte suchen..." 
                       className="w-full pl-14 pr-12 py-3.5 bg-gray-50 rounded-2xl border border-transparent focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400" 
                     />
                     {searchQuery && (
@@ -331,10 +328,10 @@ export function ProductsContent() {
                         onChange={(e) => setSortBy(e.target.value)} 
                         className="w-full sm:w-[200px] appearance-none pl-5 pr-10 py-3.5 rounded-2xl border border-gray-100 bg-gray-50 focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none cursor-pointer font-bold text-sm text-gray-700 transition-all"
                       >
-                        <option value="newest">{t('sort.newest')}</option>
-                        <option value="price-asc">{t('sort.priceAsc')}</option>
-                        <option value="price-desc">{t('sort.priceDesc')}</option>
-                        <option value="name">{t('sort.name')}</option>
+                        <option value="newest">Neueste</option>
+                        <option value="price-asc">Preis: Aufsteigend</option>
+                        <option value="price-desc">Preis: Absteigend</option>
+                        <option value="name">Name</option>
                       </select>
                       <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
@@ -363,10 +360,10 @@ export function ProductsContent() {
                   <div className="w-24 h-24 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 transform rotate-3">
                     <Search className="w-10 h-10 text-gray-400" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3 font-heading">{t('noResults')}</h3>
-                  <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg">{t('noResultsDesc')}</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3 font-heading">Keine Ergebnisse gefunden</h3>
+                  <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg">Versuche es mit anderen Filtern oder einem anderen Suchbegriff.</p>
                   <button onClick={clearFilters} className="px-8 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors shadow-lg shadow-[#0C211E]/20">
-                    {t('filters.clear')}
+                    Filter zurücksetzen
                   </button>
                 </motion.div>
               ) : (

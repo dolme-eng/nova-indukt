@@ -4,13 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, User, XCircle } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, User, XCircle, Chrome } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 export function RegisterContent() {
   const router = useRouter()
-  const t = useDeTranslations('auth.register')
   const { register } = useAuth()
   const [formData, setFormData] = useState({
     name: '',
@@ -30,17 +28,17 @@ export function RegisterContent() {
     setError('')
 
     if (formData.password !== formData.confirmPassword) {
-      setError(t('passwordMismatch'))
+      setError('Passwörter stimmen nicht überein.')
       return
     }
 
     if (formData.password.length < 6) {
-      setError(t('error'))
+      setError('Passwort muss mindestens 6 Zeichen lang sein.')
       return
     }
 
     if (!formData.acceptTerms) {
-      setError(t('error'))
+      setError('Bitte akzeptieren Sie die Datenschutzbestimmungen.')
       return
     }
 
@@ -54,8 +52,24 @@ export function RegisterContent() {
         router.push('/mein-konto')
       }, 1000)
     } else {
-      setError(t('error'))
+      setError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.')
     }
+    
+    setLoading(false)
+  }
+
+  const handleGoogleSignUp = async () => {
+    setError('')
+    setLoading(true)
+    
+    // Simulate Google Sign Up
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // Demo mode: auto-register and login with Google
+    setSuccess(true)
+    setTimeout(() => {
+      router.push('/mein-konto')
+    }, 1000)
     
     setLoading(false)
   }
@@ -68,7 +82,7 @@ export function RegisterContent() {
           <Link href="/" className="text-2xl font-bold text-gray-900">
             NOVA INDUKT
           </Link>
-          <p className="mt-2 text-gray-600">{t('subtitle')}</p>
+          <p className="mt-2 text-gray-600">Erstelle ein Konto für ein besseres Einkaufserlebnis.</p>
         </div>
 
         {/* Register Form */}
@@ -77,7 +91,27 @@ export function RegisterContent() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-lg p-8"
         >
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('title')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Registrieren</h1>
+
+          {/* Google Sign Up Button */}
+          <button
+            onClick={handleGoogleSignUp}
+            disabled={loading}
+            className="w-full py-3 bg-white border-2 border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-colors flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed mb-4"
+          >
+            <Chrome className="w-5 h-5 text-blue-500" />
+            Mit Google registrieren
+          </button>
+
+          {/* Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Oder mit E-Mail</span>
+            </div>
+          </div>
 
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
@@ -89,7 +123,7 @@ export function RegisterContent() {
           {success && (
             <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-600 text-sm">
               <CheckCircle className="w-4 h-4" />
-              {t('success')}
+              Konto erfolgreich erstellt!
             </div>
           )}
 
@@ -97,7 +131,7 @@ export function RegisterContent() {
             {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('name')}
+                Name
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -115,7 +149,7 @@ export function RegisterContent() {
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('email')}
+                E-Mail-Adresse
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -133,7 +167,7 @@ export function RegisterContent() {
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('password')}
+                Passwort
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -159,7 +193,7 @@ export function RegisterContent() {
             {/* Confirm Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('confirmPassword')}
+                Passwort bestätigen
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -184,7 +218,7 @@ export function RegisterContent() {
                 className="mt-1 w-4 h-4 text-[#4ECCA3] border-gray-300 rounded focus:ring-[#4ECCA3]"
               />
               <label htmlFor="terms" className="text-sm text-gray-600">
-                {t('gdpr')}
+                Ich akzeptiere die Datenschutzbestimmungen und AGB.
               </label>
             </div>
 
@@ -198,7 +232,7 @@ export function RegisterContent() {
                 className="mt-1 w-4 h-4 text-[#4ECCA3] border-gray-300 rounded focus:ring-[#4ECCA3]"
               />
               <label htmlFor="newsletter" className="text-sm text-gray-600">
-                {t('newsletter')}
+                Ich möchte den Newsletter abonnieren.
               </label>
             </div>
 
@@ -212,7 +246,7 @@ export function RegisterContent() {
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  {t('submit')} <ArrowRight className="w-4 h-4" />
+                  Registrieren <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
@@ -221,12 +255,12 @@ export function RegisterContent() {
           {/* Links */}
           <div className="mt-6 pt-6 border-t border-gray-100">
             <p className="text-center text-sm text-gray-600">
-              {t('hasAccount')}{' '}
+              Bereits ein Konto?{' '}
               <Link 
                 href="/anmelden"
                 className="text-[#4ECCA3] font-medium hover:underline"
               >
-                {t('login')}
+                Anmelden
               </Link>
             </p>
           </div>

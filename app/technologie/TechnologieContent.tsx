@@ -6,7 +6,7 @@ import {
   Zap, Leaf, Shield, Gauge, Cpu, Thermometer, Wind, 
   Award, CheckCircle, ArrowRight, Sparkles, Battery
 } from 'lucide-react'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 
 export default function TechnologieContent() {
   const features = [

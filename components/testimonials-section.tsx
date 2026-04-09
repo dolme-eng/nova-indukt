@@ -6,11 +6,10 @@ import { Star, Quote, User } from 'lucide-react'
 import { useTestimonials } from '@/lib/store/testimonials'
 import { formatDate } from '@/lib/utils'
 import { AddTestimonialForm } from './add-testimonial-form'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 export function TestimonialsSection() {
-  const t = useDeTranslations('testimonials')
-  const { testimonials, averageRating, isHydrated } = useTestimonials()
+  const { testimonials, getAverageRating, isHydrated } = useTestimonials()
+  const averageRating = getAverageRating()
   const [showForm, setShowForm] = useState(false)
 
   if (!isHydrated) {
@@ -47,7 +46,7 @@ export function TestimonialsSection() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-[#4ECCA3]/10 rounded-full mb-4"
             >
               <Quote className="w-4 h-4 text-[#4ECCA3]" />
-              <span className="text-sm font-medium text-[#4ECCA3]">{t('subtitle')}</span>
+              <span className="text-sm font-medium text-[#4ECCA3]">Kundenstimmen</span>
             </motion.div>
             
             <motion.h2
@@ -57,7 +56,7 @@ export function TestimonialsSection() {
               transition={{ delay: 0.1 }}
               className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             >
-              {t('title')}
+              Das sagen unsere Kunden
             </motion.h2>
             
             <motion.p
@@ -67,7 +66,7 @@ export function TestimonialsSection() {
               transition={{ delay: 0.2 }}
               className="text-lg text-gray-600 max-w-2xl mx-auto mb-6"
             >
-              {t('description')}
+              Überzeugen Sie sich von der Qualität unserer Produkte durch die Erfahrungen unserer zufriedenen Kunden.
             </motion.p>
 
             {/* Rating Summary */}
@@ -83,7 +82,7 @@ export function TestimonialsSection() {
               </div>
               <span className="font-bold text-gray-900">{averageRating.toFixed(1)}</span>
               <span className="text-gray-500">•</span>
-              <span className="text-gray-600">{testimonials.length} {t('reviews')}</span>
+              <span className="text-gray-600">{testimonials.length} Bewertungen</span>
             </motion.div>
           </div>
 
@@ -116,7 +115,7 @@ export function TestimonialsSection() {
                       </div>
                     </div>
                     {testimonial.isVerified && (
-                      <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0" title={t('verified')}>
+                      <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0" title="Verifizierter Kauf">
                         <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
@@ -155,7 +154,7 @@ export function TestimonialsSection() {
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#4ECCA3] text-white rounded-xl font-semibold hover:bg-[#3BA88A] transition-colors shadow-lg hover:shadow-xl"
             >
               <Star className="w-5 h-5" />
-              {t('addReview')}
+              Bewertung schreiben
             </button>
           </div>
         </div>

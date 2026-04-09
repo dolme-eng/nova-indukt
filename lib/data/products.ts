@@ -1670,6 +1670,55 @@ const baseProducts: Product[] = [
     specs: { material: 'Cromargan® 18/10 Edelstahl, Silikon', dimensions: '24 cm Ø passend', weight: '0,4 kg', dishwasher: true, induction: false },
     brand: 'WMF', ean: '4000530702312', supplierSku: 'WMF-17-6051-6040', vatRatePercent: 19, priceIncludesVat: true,
   },
+  // 113 — Berndes Vario Click Induction Pfanne 20cm abnehmbarer Stiel
+  {
+    id: 'be-vc-200-stiel', slug: 'berndes-vario-click-induction-pfanne-20cm-abnehmbarer-stiel',
+    name: { de: 'Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel' },
+    category: 'kochen', price: 45.90, oldPrice: 49,
+    images: [
+      p('Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel', '1.png', 'kochen', 'Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel'),
+      p('Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel', '2.png', 'kochen', 'Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel'),
+      p('Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel', '3.png', 'kochen', 'Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel'),
+      p('Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel', '4.png', 'kochen', 'Berndes Vario Click Induction Pfanne 20 cm – abnehmbarer Stiel'),
+    ],
+    rating: 4.6, reviewCount: 428, stock: 22, badges: [],
+    description: { de: 'Die kompakte Version der beliebten Vario Click Serie. Diese 20 cm Pfanne bietet die gleiche hochwertige Verarbeitung und den patentierten abnehmbaren Stiel wie ihre größeren Schwestern. Ideal für kleine Portionen, Einzelpersonen oder zum Erhitzen von Saucen. Die 3-lagige Teflon™ Radiance Antihaftbeschichtung sorgt für perfekte Ergebnisse, während der abnehmbare Griff maximale Flexibilität beim Kochen und Aufbewahren bietet. Der ca. 6 mm starke Premium-Induktionsboden garantiert schnelle, gleichmäßige Wärmeverteilung.' },
+    shortDescription: { de: 'Kompakte Vario Click Pfanne mit patentiertem abnehmbarem Stiel' },
+    specs: { material: 'Aluminiumguss, Teflon Radiance', dimensions: '20 cm Ø', weight: '0,9 kg', dishwasher: true, induction: true },
+    brand: 'Berndes', ean: '4006189074260', supplierSku: 'BE-074026', vatRatePercent: 19, priceIncludesVat: true,
+  },
+  // 114 — Berndes Vario Click Induction Pfanne 20cm Aluguss
+  {
+    id: 'be-vc-200-alu', slug: 'berndes-vario-click-induction-pfanne-20cm-aluguss',
+    name: { de: 'Berndes Vario Click Induction Pfanne 20 cm – Aluguss' },
+    category: 'kochen', price: 42.90, oldPrice: 45,
+    images: [
+      p('Berndes Vario Click Induction Pfanne 20 cm – Aluguss', '1.png', 'kochen', 'Berndes Vario Click Induction Pfanne 20 cm – Aluguss'),
+      p('Berndes Vario Click Induction Pfanne 20 cm – Aluguss', '2.png', 'kochen', 'Berndes Vario Click Induction Pfanne 20 cm – Aluguss'),
+      p('Berndes Vario Click Induction Pfanne 20 cm – Aluguss', '3.png', 'kochen', 'Berndes Vario Click Induction Pfanne 20 cm – Aluguss'),
+    ],
+    rating: 4.5, reviewCount: 312, stock: 18, badges: [],
+    description: { de: 'Perfekte Ergänzung für die kleine Küche. Diese 20 cm Aluguss-Pfanne aus der Vario Click Reihe bietet maximale Vielseitigkeit durch den abnehmbaren Griff. Ideal für Singles, Studenten oder als zusätzliche Pfanne für Saucen und kleine Beilagen. Der massive Aluguss-Körper mit 6 mm starkem Induktionsboden speichert die Wärme hervorragend und sorgt für gleichmäßige Bratergebnisse. Die hochwertige Antihaftbeschichtung ist PFOA-frei und besonders langlebig.' },
+    shortDescription: { de: 'Kompakte Aluguss-Pfanne mit abnehmbarem Griff für maximale Flexibilität' },
+    specs: { material: 'Aluminiumguss, Antihaftbeschichtung', dimensions: '20 cm Ø', weight: '0,85 kg', dishwasher: true, induction: true },
+    brand: 'Berndes', ean: '4006189074277', supplierSku: 'BE-074027', vatRatePercent: 19, priceIncludesVat: true,
+  },
+  // 115 — WMF Grillpfanne 27x27cm Cromargan
+  {
+    id: 'wmf-grill-27-alt', slug: 'wmf-grillpfanne-27x27cm-cromargan',
+    name: { de: 'WMF Grillpfanne 27 x 27 cm – Cromargan®' },
+    category: 'kochen', price: 54.90, oldPrice: 59,
+    images: [
+      p('WMF Grillpfanne 27x27cm - Cromargan', '1.png', 'kochen', 'WMF Grillpfanne 27 x 27 cm – Cromargan'),
+      p('WMF Grillpfanne 27x27cm - Cromargan', '2.png', 'kochen', 'WMF Grillpfanne 27 x 27 cm – Cromargan'),
+      p('WMF Grillpfanne 27x27cm - Cromargan', '3.png', 'kochen', 'WMF Grillpfanne 27 x 27 cm – Cromargan'),
+    ],
+    rating: 4.7, reviewCount: 756, stock: 14, badges: ['bestseller'],
+    description: { de: 'Die klassische WMF Grillpfanne in quadratischer Form. Aus hochwertigem Cromargan® Edelstahl 18/10 gefertigt, bietet sie eine extra große Bratfläche für perfekte Grillergebnisse. Die markanten Grillrippen am Pfannenboden lassen überschüssiges Fett ablaufen und verleihen Fleisch, Fisch und Gemüse das charakteristische Grillmuster. Der massive TransTherm®-Allherdboden sorgt für eine exzellente Wärmeverteilung und -speicherung. Backofenfest bis 200°C und für alle Herdarten inklusive Induktion geeignet.' },
+    shortDescription: { de: 'Klassische Cromargan® Grillpfanne mit markanten Grillrippen' },
+    specs: { material: 'Cromargan® 18/10 Edelstahl', dimensions: '27 x 27 cm', weight: '1,6 kg', dishwasher: true, induction: true },
+    brand: 'WMF', ean: '4000530593149', supplierSku: 'WMF-07-9257-6041', vatRatePercent: 19, priceIncludesVat: true,
+  },
 
 ];
 

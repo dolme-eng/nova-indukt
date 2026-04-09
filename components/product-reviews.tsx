@@ -6,7 +6,6 @@ import {
   Star, ThumbsUp, User, CheckCircle, Flag,
   ChevronDown, Filter
 } from 'lucide-react'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface Review {
   id: string
@@ -72,7 +71,6 @@ const generateMockReviews = (productId: string): Review[] => [
 ]
 
 export function ProductReviews({ productId, averageRating, totalReviews }: ProductReviewsProps) {
-  const t = useDeTranslations('reviews')
   const [reviews] = useState<Review[]>(generateMockReviews(productId))
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'helpful' | 'highest' | 'lowest'>('newest')
   const [filterRating, setFilterRating] = useState<number | null>(null)
@@ -108,7 +106,7 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
 
   return (
     <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-900 mb-8">{t('title')}</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-8">Kundenbewertungen</h2>
 
       {/* Rating Overview */}
       <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -128,7 +126,7 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
                 />
               ))}
             </div>
-            <p className="text-sm text-gray-500">{t('basedOn', { count: totalReviews })}</p>
+            <p className="text-sm text-gray-500">Basierend auf {totalReviews} Bewertungen</p>
           </div>
 
           {/* Rating Distribution */}
@@ -159,10 +157,10 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
 
         {/* Write Review CTA */}
         <div className="bg-gray-50 rounded-xl p-6 flex flex-col justify-center">
-          <h3 className="font-semibold text-gray-900 mb-2">{t('writeReview.title')}</h3>
-          <p className="text-gray-600 text-sm mb-4">{t('writeReview.description')}</p>
+          <h3 className="font-semibold text-gray-900 mb-2">Eigene Bewertung schreiben</h3>
+          <p className="text-gray-600 text-sm mb-4">Teilen Sie Ihre Erfahrungen mit diesem Produkt mit anderen Kunden.</p>
           <button className="px-6 py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors">
-            {t('writeReview.button')}
+            Bewertung schreiben
           </button>
         </div>
       </div>
@@ -171,18 +169,18 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
       <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-gray-100">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-gray-500" />
-          <span className="text-sm text-gray-500">{t('sortBy')}</span>
+          <span className="text-sm text-gray-500">Sortieren nach:</span>
         </div>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
           className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#4ECCA3]"
         >
-          <option value="newest">{t('sort.newest')}</option>
-          <option value="oldest">{t('sort.oldest')}</option>
-          <option value="helpful">{t('sort.helpful')}</option>
-          <option value="highest">{t('sort.highest')}</option>
-          <option value="lowest">{t('sort.lowest')}</option>
+          <option value="newest">Neueste zuerst</option>
+          <option value="oldest">Älteste zuerst</option>
+          <option value="helpful">Hilfreichste</option>
+          <option value="highest">Beste Bewertung</option>
+          <option value="lowest">Niedrigste Bewertung</option>
         </select>
 
         {filterRating !== null && (
@@ -190,7 +188,7 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
             onClick={() => setFilterRating(null)}
             className="px-3 py-1 bg-amber-100 text-amber-700 text-sm rounded-full flex items-center gap-1"
           >
-            {filterRating} {t('stars')}
+            {filterRating} Sterne
             <span className="text-amber-500">×</span>
           </button>
         )}
@@ -220,7 +218,7 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
                       {review.verified && (
                         <span className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                           <CheckCircle className="w-3 h-3" />
-                          {t('verifiedPurchase')}
+                          Verifizierter Kauf
                         </span>
                       )}
                     </div>
@@ -251,10 +249,10 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
                 </p>
                 {review.content.length > 200 && (
                   <button
-                    onClick={() => setExpandedReview(expandedReview === review.id ? null : review.id)}
+                    onClick={() => setExpandedReview(review.id === review.id ? null : review.id)}
                     className="text-[#4ECCA3] text-sm font-medium mt-2 hover:underline"
                   >
-                    {expandedReview === review.id ? t('showLess') : t('readMore')}
+                    {expandedReview === review.id ? 'Weniger anzeigen' : 'Weiterlesen'}
                   </button>
                 )}
               </div>
@@ -270,11 +268,11 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
                   }`}
                 >
                   <ThumbsUp className={`w-4 h-4 ${helpfulReviews.includes(review.id) ? 'fill-current' : ''}`} />
-                  {t('helpful')} ({review.helpful + (helpfulReviews.includes(review.id) ? 1 : 0)})
+                  Hilfreich ({review.helpful + (helpfulReviews.includes(review.id) ? 1 : 0)})
                 </button>
                 <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
                   <Flag className="w-4 h-4" />
-                  {t('report')}
+                  Melden
                 </button>
               </div>
             </motion.div>
@@ -283,12 +281,12 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
 
         {filteredReviews.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-gray-500">{t('noResults')}</p>
+            <p className="text-gray-500">Keine Bewertungen gefunden.</p>
             <button
               onClick={() => setFilterRating(null)}
               className="text-[#4ECCA3] font-medium mt-2 hover:underline"
             >
-              {t('resetFilter')}
+              Filter zurücksetzen
             </button>
           </div>
         )}
@@ -298,7 +296,7 @@ export function ProductReviews({ productId, averageRating, totalReviews }: Produ
       {filteredReviews.length > 0 && (
         <div className="text-center mt-8">
           <button className="px-6 py-3 border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors">
-            {t('loadMore')}
+            Mehr laden
           </button>
         </div>
       )}

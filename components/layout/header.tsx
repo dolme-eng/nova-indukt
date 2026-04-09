@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
+import { useAuth } from '@/lib/store/auth'
 import { motion, AnimatePresence } from 'framer-motion'
 import { categories as dataCategories, products } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
@@ -48,8 +49,9 @@ const megaMenuDepartments = [
 
 export function Header() {
   const pathname = usePathname()
-  const { totalItems, items, removeItem, updateQuantity, totalPrice } = useCart()
-  const { count: wishlistCount } = useWishlist()
+  const { totalItems, items, removeItem, updateQuantity, totalPrice, isHydrated: isCartHydrated } = useCart()
+  const { count: wishlistCount, mounted: isWishlistMounted } = useWishlist()
+  const { isHydrated: isAuthHydrated } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
@@ -198,7 +200,7 @@ export function Header() {
               <Link href="/wunschliste" className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Wunschliste">
                 <Heart className="w-5 h-5 transition-transform group-hover:scale-110" />
                 <AnimatePresence>
-                  {wishlistCount > 0 && (
+                  {isWishlistMounted && wishlistCount > 0 && (
                     <motion.span 
                       initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
                       className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-black tracking-tighter rounded-full flex items-center justify-center shadow-sm shadow-red-500/20 border-2 border-white"
@@ -216,7 +218,7 @@ export function Header() {
               <button onClick={() => setCartDrawerOpen(true)} className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Warenkorb">
                 <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
                 <AnimatePresence>
-                  {totalItems > 0 && (
+                  {isCartHydrated && totalItems > 0 && (
                     <motion.span 
                       initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
                       className="absolute -top-1 -right-1 w-5 h-5 bg-[#4ECCA3] text-gray-900 text-[10px] font-black tracking-tighter rounded-full flex items-center justify-center shadow-sm shadow-[#4ECCA3]/40 border-2 border-white"

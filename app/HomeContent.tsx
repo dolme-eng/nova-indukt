@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react'
 import Image from 'next/image'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ArrowRight, Truck, RotateCcw, Shield, Headphones, 
@@ -16,14 +16,12 @@ import { products, categories, blogPosts } from '@/lib/data/products'
 import { TiltCard } from '@/components/animations'
 import { MagneticButton } from '@/components/magnetic-button'
 import { TestimonialsSection } from '@/components/testimonials-section'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 // Flash deals - deterministic discount based on product id
 const flashDeals = products.slice(0, 4).map(p => ({...p, discount: ((p.id.charCodeAt(0) + p.id.charCodeAt(p.id.length - 1)) % 25) + 15}))
 
 export function HomeContent() {
-  const t = useDeTranslations()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [email, setEmail] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -164,7 +162,7 @@ export function HomeContent() {
         <div className="absolute inset-0 bg-[url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;)] opacity-[0.15] mix-blend-overlay"></div>
         <span className="inline-flex items-center gap-3 relative z-10">
           <Sparkles className="w-4 h-4 text-nova-400" />
-          <span>{t('trust.shipping')} <span className="text-nova-600 px-2">•</span> {t('trust.returns')} <span className="text-nova-600 px-2">•</span> {t('trust.warranty')}</span>
+          <span>Kostenlose Lieferung ab 500€ <span className="text-nova-600 px-2">•</span> 30 Tage Rückgabe <span className="text-nova-600 px-2">•</span> 2 Jahre Garantie</span>
           <Sparkles className="w-4 h-4 text-nova-400" />
         </span>
       </motion.div>
@@ -185,7 +183,7 @@ export function HomeContent() {
           >
             <Image
               src={heroImages[currentSlide]}
-              alt={t(`hero.${slides[currentSlide]}.title`)}
+              alt="Die Zukunft der Induktion"
               fill
               className="object-cover object-center"
               priority
@@ -215,21 +213,21 @@ export function HomeContent() {
                   className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-2xl"
                 >
                   <span className="w-2 h-2 rounded-full bg-nova-400 animate-pulse" />
-                  {t(`hero.${slides[currentSlide]}.tag`)}
+                  Neuheiten 2026
                 </motion.div>
                 
                 <motion.h1 
                   variants={heroItemVariants}
                   className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-heading leading-[1.1] tracking-tight drop-shadow-sm"
                 >
-                  {t(`hero.${slides[currentSlide]}.title`)}
+                  Die Zukunft der Induktion
                 </motion.h1>
                 
                 <motion.p 
                   variants={heroItemVariants}
                   className="text-lg sm:text-xl text-gray-200 mb-8 max-w-xl font-light leading-relaxed drop-shadow-sm"
                 >
-                  {t(`hero.${slides[currentSlide]}.subtitle`)}
+                  Premium-Küchenzubehör für maximale Performance
                 </motion.p>
                 
                 <motion.div 
@@ -241,7 +239,7 @@ export function HomeContent() {
                       <div
                         className="w-full sm:w-auto px-8 py-4 bg-nova-400 hover:bg-nova-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all shadow-[0_8px_30px_rgb(78,204,163,0.3)] hover:shadow-[0_8px_30px_rgb(78,204,163,0.5)] group/btn"
                       >
-                        {t(`hero.${slides[currentSlide]}.cta`)}
+                        Jetzt entdecken
                         <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                       </div>
                     </MagneticButton>
@@ -253,7 +251,7 @@ export function HomeContent() {
                         className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all"
                       >
                         <Eye className="w-5 h-5 opacity-70" />
-                        {t('hero.catalog')}
+                        Katalog
                       </div>
                     </MagneticButton>
                   </Link>
@@ -298,10 +296,10 @@ export function HomeContent() {
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-x divide-gray-100/0 md:divide-gray-200">
             {[
-              { icon: Truck, titleKey: 'trust.freeShipping', descKey: 'trust.freeShippingDesc' },
-              { icon: RotateCcw, titleKey: 'trust.returns', descKey: 'trust.returnsDesc' },
-              { icon: Shield, titleKey: 'trust.warranty', descKey: 'trust.warrantyDesc' },
-              { icon: Headphones, titleKey: 'trust.support', descKey: 'trust.supportDesc' },
+              { icon: Truck, title: 'Kostenlose Lieferung', desc: 'Ab 500€' },
+              { icon: RotateCcw, title: '30 Tage Rückgabe', desc: 'Kostenlos' },
+              { icon: Shield, title: '2 Jahre Garantie', desc: 'Auf alles' },
+              { icon: Headphones, title: 'Premium Support', desc: 'Mo-Fr' },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -312,8 +310,8 @@ export function HomeContent() {
                   <item.icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 text-sm">{t(item.titleKey)}</h3>
-                  <p className="text-gray-500 text-xs mt-1 leading-relaxed">{t(item.descKey)}</p>
+                  <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
+                  <p className="text-gray-500 text-xs mt-1 leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -368,7 +366,7 @@ export function HomeContent() {
                 variants={productCardVariants}
                 className="w-[260px] sm:w-[320px] flex-shrink-0 snap-center sm:snap-start h-auto group/product"
               >
-                <ProductCard product={product} index={index} t={t} />
+                <ProductCard product={product} index={index} />
               </motion.div>
             ))}
             {/* Safe zone at end */}
@@ -387,11 +385,11 @@ export function HomeContent() {
             className="flex flex-col sm:flex-row items-end justify-between mb-6 gap-3"
           >
             <div>
-              <span className="text-nova-500 font-semibold tracking-wider text-sm uppercase mb-2 block">{t('categories.tag')}</span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-heading">{t('categories.popular')}</h2>
+              <span className="text-nova-500 font-semibold tracking-wider text-sm uppercase mb-2 block">Unsere Kategorien</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-heading">Beliebte Kategorien</h2>
             </div>
             <Link href="/produkte" className="group text-gray-600 hover:text-nova-500 font-medium flex items-center gap-2 transition-colors pb-1 border-b-2 border-transparent hover:border-nova-500">
-              {t('categories.viewAll')} 
+              Alle ansehen 
               <span className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:bg-nova-50 transition-colors">
                 <ArrowRight className="w-4 h-4 ml-0.5" />
               </span>
@@ -453,9 +451,9 @@ export function HomeContent() {
               </div>
               <div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-heading flex items-center gap-2">
-                  {t('deals.title')} <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-lg uppercase tracking-wider">Nur Heute</span>
+                  Flash Deals <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-lg uppercase tracking-wider">Nur Heute</span>
                 </h2>
-                <p className="text-gray-500 text-sm mt-1">{t('deals.subtitle')}</p>
+                <p className="text-gray-500 text-sm mt-1">Nur für kurze Zeit</p>
               </div>
             </div>
             
@@ -482,7 +480,6 @@ export function HomeContent() {
                 key={product.id} 
                 product={product} 
                 index={index} 
-                t={t} 
               />
             ))}
           </div>
@@ -502,16 +499,16 @@ export function HomeContent() {
               <Award className="w-6 h-6 text-nova-500" />
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 font-heading mb-4 tracking-tight">
-              {t('bestsellers.title')}
+              Bestseller
             </h2>
             <p className="text-gray-500 text-lg leading-relaxed">
-              {t('bestsellers.subtitle')}
+              Unsere meistverkauften Produkte
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {products.slice(0, 8).map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} t={t} />
+              <ProductCard key={product.id} product={product} index={index} />
             ))}
           </div>
 
@@ -542,35 +539,35 @@ export function HomeContent() {
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-nova-400 text-sm font-semibold rounded-full mb-6 tracking-wide">
               <Sparkles className="w-4 h-4" />
-              {t('tech.tag')}
+              Unsere Technologie
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 font-heading leading-tight">
-              {t('tech.title')}
+              Innovation trifft Handwerk
             </h2>
             <p className="text-gray-400 text-lg">
-              {t('tech.subtitle')}
+              Entdecke Technologien, die dein Kochen revolutionieren
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             <TechFeatureCard
               icon={Zap}
-              title={t('tech.smartHeat')}
-              description={t('tech.smartHeatDesc')}
+              title="SmartHeat™ Technologie"
+              description="Präzise Temperaturkontrolle"
               color="bg-amber-500 text-amber-500 border-amber-500/20"
               index={0}
             />
             <TechFeatureCard
               icon={Leaf}
-              title={t('tech.ecoPower')}
-              description={t('tech.ecoPowerDesc')}
+              title="EcoPower™ System"
+              description="Energieeffizient"
               color="bg-nova-500 text-nova-500 border-nova-500/20"
               index={1}
             />
             <TechFeatureCard
               icon={Shield}
-              title={t('tech.safety')}
-              description={t('tech.safetyDesc')}
+              title="SafetyGuard™"
+              description="Maximale Sicherheit"
               color="bg-blue-500 text-blue-500 border-blue-500/20"
               index={2}
             />
@@ -589,10 +586,10 @@ export function HomeContent() {
           >
             <div>
               <span className="text-nova-600 font-semibold tracking-wider text-sm uppercase mb-2 block">Journal</span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-heading tracking-tight">{t('blog.title')}</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-heading tracking-tight">Expertenwissen</h2>
             </div>
             <Link href="/blog" className="px-6 py-3 bg-white border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center gap-2 shadow-sm">
-              {t('blog.viewAll')} <ArrowRight className="w-4 h-4" />
+              Alle Artikel <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
 
@@ -637,7 +634,7 @@ export function HomeContent() {
                       {post.excerpt.de}
                     </p>
                     <div className="text-nova-600 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all mt-auto border-t border-gray-100 pt-5">
-                      {t('blog.readMore')} <ArrowRight className="w-4 h-4" />
+                      Weiterlesen <ArrowRight className="w-4 h-4" />
                     </div>
                   </div>
                 </Link>
@@ -671,7 +668,7 @@ export function HomeContent() {
                 <Sparkles className="w-8 h-8 text-nova-400" />
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 font-heading leading-tight">
-                {t('newsletter.title')}
+                Werde Induktions-Experte
               </h2>
               <p className="text-gray-300 mb-10 text-lg sm:text-xl font-light">
                 Erhalten Sie 10% Rabatt auf Ihre erste Bestellung plus exklusive Angebote und Rezepte.
@@ -684,7 +681,7 @@ export function HomeContent() {
                   className="bg-nova-500/20 border border-nova-500/30 text-nova-300 font-medium py-4 px-6 rounded-2xl inline-flex items-center gap-3 text-lg"
                 >
                   <CheckCircle className="w-6 h-6" />
-                  {t('newsletter.success') || 'Vielen Dank für Ihre Anmeldung!'}
+                  Vielen Dank! Ihre Newsletter-Anmeldung ist bestätigt.
                 </motion.div>
               ) : (
                 <form 
@@ -703,7 +700,7 @@ export function HomeContent() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={t('newsletter.placeholder')}
+                      placeholder="Ihre E-Mail-Adresse"
                       required
                       className="w-full px-6 py-4 sm:py-5 bg-white/5 border border-white/20 rounded-2xl text-white placeholder:text-gray-400 focus:outline-none focus:border-nova-400 focus:bg-white/10 transition-all font-medium backdrop-blur-sm"
                     />
@@ -730,7 +727,7 @@ export function HomeContent() {
 }
 
 // Polished Product Card
-function ProductCard({ product, index, t }: { product: typeof products[0]; index: number; t: any }) {
+function ProductCard({ product, index }: { product: typeof products[0]; index: number }) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   
@@ -782,17 +779,17 @@ function ProductCard({ product, index, t }: { product: typeof products[0]; index
           <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1.5 z-10">
             {product.badges?.includes('premium') && (
               <span className="px-3 py-1 bg-nova-500 text-white text-xs font-bold rounded-lg shadow-sm border border-nova-400">
-                {t('badges.premium')}
+                Premium
               </span>
             )}
             {product.badges?.includes('bestseller') && (
               <span className="px-3 py-1 bg-gray-900 text-white text-xs font-bold rounded-lg shadow-sm">
-                {t('badges.bestseller')}
+                Bestseller
               </span>
             )}
             {product.badges?.includes('new') && (
               <span className="px-3 py-1 bg-amber-400 text-amber-950 text-xs font-bold rounded-lg shadow-sm">
-                {t('badges.new')}
+                Neu
               </span>
             )}
           </div>
@@ -885,7 +882,7 @@ function TechFeatureCard({ icon: Icon, title, description, color, index }: {
 }
 
 // Flash Deal Card redefined
-function FlashDealCard({ product, index, t }: { product: typeof flashDeals[0]; index: number; t: any }) {
+function FlashDealCard({ product, index }: { product: typeof flashDeals[0]; index: number }) {
   const { isInWishlist, toggleItem } = useWishlist()
   const { addItem } = useCart()
   const inWishlist = isInWishlist(product.id)

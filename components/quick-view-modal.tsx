@@ -1,12 +1,9 @@
-'use client'
-
 import { useState } from 'react'
 import Image from 'next/image'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingCart, Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Product } from '@/lib/data/products'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface QuickViewModalProps {
   product: Product | null
@@ -15,19 +12,10 @@ interface QuickViewModalProps {
 }
 
 export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps) {
-  const t = useDeTranslations()
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
 
   if (!product) return null
-
-  const getLocalizedName = () => {
-    return product.name.de
-  }
-
-  const getLocalizedDescription = () => {
-    return product.shortDescription.de
-  }
 
   return (
     <AnimatePresence>
@@ -51,7 +39,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="font-semibold text-gray-900 line-clamp-1">{getLocalizedName()}</h2>
+              <h2 className="font-semibold text-gray-900 line-clamp-1">{product.name.de}</h2>
               <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
                 <X className="w-5 h-5" />
               </button>
@@ -65,7 +53,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                   <div className="relative aspect-square bg-gray-100 rounded-xl overflow-hidden">
                     <Image
                       src={product.images[selectedImage]}
-                      alt={getLocalizedName()}
+                      alt={product.name.de}
                       fill
                       className="object-cover"
                     />
@@ -115,8 +103,8 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                       ))}
                       <span className="text-sm text-gray-500">({product.reviewCount})</span>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">{getLocalizedName()}</h1>
-                    <p className="text-gray-600">{getLocalizedDescription()}</p>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-2">{product.name.de}</h1>
+                    <p className="text-gray-600">{product.shortDescription.de}</p>
                   </div>
 
                   <div className="flex items-baseline gap-3">
@@ -128,7 +116,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
 
                   {/* Quantity */}
                   <div className="flex items-center gap-4">
-                    <span className="text-sm font-medium text-gray-700">{t('cart.quantity')}:</span>
+                    <span className="text-sm font-medium text-gray-700">Menge:</span>
                     <div className="flex items-center border border-gray-200 rounded-lg">
                       <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -150,7 +138,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                   <div className="flex gap-3">
                     <button className="flex-1 py-3 bg-[#4ECCA3] text-white font-semibold rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2">
                       <ShoppingCart className="w-5 h-5" />
-                      {t('cart.addToCart')}
+                      In den Warenkorb
                     </button>
                     <button className="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50">
                       <Heart className="w-5 h-5" />
@@ -162,7 +150,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                     onClick={onClose}
                     className="block text-center text-[#4ECCA3] hover:underline"
                   >
-                    {t('products.viewProduct')} →
+                    Produkt ansehen →
                   </Link>
                 </div>
               </div>

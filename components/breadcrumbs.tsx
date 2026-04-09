@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { ChevronRight, Home } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface BreadcrumbItem {
   label: string
@@ -16,7 +15,6 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
-  const t = useDeTranslations()
   return (
     <nav 
       aria-label="Breadcrumb" 
@@ -31,10 +29,10 @@ export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
           <Link 
             href="/" 
             className="flex items-center gap-1 text-gray-500 hover:text-[#4ECCA3] transition-colors"
-            aria-label={t('nav.home')}
+            aria-label="Startseite"
           >
             <Home className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('nav.home')}</span>
+            <span className="hidden sm:inline">Startseite</span>
           </Link>
         </motion.li>
         

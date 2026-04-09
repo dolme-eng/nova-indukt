@@ -1,38 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   MapPin, Phone, Mail, Clock, Send, CheckCircle, ChevronRight, ArrowLeft
 } from 'lucide-react'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 export function KontaktContent() {
-  // const t = useDeTranslations('contact')
-  
-  // Safe hardcoded translations for Kontakt
-  const t = (key: string) => {
-    const dict: Record<string, string> = {
-      'nav.home': 'Startseite',
-      'title': 'Kontaktieren Sie uns',
-      'subtitle': 'Haben Sie Fragen zu unseren Produkten oder wünschen eine Beratung? Unser Team ist für Sie da.',
-      'address': 'Besuchen Sie uns',
-      'phone': 'Rufen Sie uns an',
-      'email': 'Schreiben Sie uns',
-      'hours': 'Öffnungszeiten',
-      'form.name': 'Ihr Name',
-      'form.email': 'Ihre E-Mail-Adresse',
-      'form.subject': 'Betreff',
-      'form.message': 'Ihre Nachricht',
-      'form.send': 'Nachricht absenden',
-      'form.sending': 'Wird gesendet...',
-      'messageSent': 'Vielen Dank für Ihre Nachricht!',
-      'messageSentDescription': 'Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.'
-    }
-    return dict[key] || key
-  }
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -45,30 +20,46 @@ export function KontaktContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    
+    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1500))
+    
+    // Store message locally for demo purposes
+    const messageData = {
+      ...formData,
+      id: 'msg-' + Date.now(),
+      createdAt: new Date().toISOString(),
+      status: 'received'
+    }
+    
+    // Save to localStorage for demo admin view
+    const existingMessages = JSON.parse(localStorage.getItem('nova-contact-messages') || '[]')
+    localStorage.setItem('nova-contact-messages', JSON.stringify([messageData, ...existingMessages]))
+    
     setIsSubmitting(false)
     setIsSubmitted(true)
+    setFormData({ name: '', email: '', subject: '', message: '' })
   }
 
   const contactInfo = [
     {
       icon: MapPin,
-      title: t('address'),
+      title: 'Besuchen Sie uns',
       content: 'Nova Indukt GmbH\nIndustriestraße 123\n12345 Berlin, Deutschland'
     },
     {
       icon: Phone,
-      title: t('phone'),
+      title: 'Rufen Sie uns an',
       content: '+49 (0) 30 12345678'
     },
     {
       icon: Mail,
-      title: t('email'),
+      title: 'Schreiben Sie uns',
       content: 'support@nova-indukt.de'
     },
     {
       icon: Clock,
-      title: t('hours'),
+      title: 'Öffnungszeiten',
       content: 'Mo-Fr: 09:00 - 18:00 Uhr\nSa: 10:00 - 14:00 Uhr'
     }
   ]
@@ -88,12 +79,12 @@ export function KontaktContent() {
           <div className="flex items-center gap-2 py-4 text-xs sm:text-sm font-medium tracking-wide">
             <Link href="/" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 transition-colors lg:hidden bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
               <ArrowLeft className="w-4 h-4" />
-              <span>{t('nav.home')}</span>
+              <span>Startseite</span>
             </Link>
             <div className="hidden lg:flex items-center gap-2.5">
-              <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">{t('nav.home')}</Link>
+              <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">Startseite</Link>
               <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
-              <span className="text-[#0C211E] font-bold tracking-tight">{t('title')}</span>
+              <span className="text-[#0C211E] font-bold tracking-tight">Kontaktieren Sie uns</span>
             </div>
           </div>
         </div>
@@ -107,7 +98,7 @@ export function KontaktContent() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0C211E] mb-6 font-heading tracking-tight"
           >
-            {t('title')}
+            Kontaktieren Sie uns
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -115,7 +106,7 @@ export function KontaktContent() {
             transition={{ delay: 0.1 }}
             className="text-lg sm:text-xl text-gray-500 max-w-2xl font-medium leading-relaxed"
           >
-            {t('subtitle')}
+            Haben Sie Fragen zu unseren Produkten oder wünschen eine Beratung? Unser Team ist für Sie da.
           </motion.p>
         </div>
         
@@ -167,8 +158,8 @@ export function KontaktContent() {
                     <div className="w-24 h-24 bg-green-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 transform -rotate-6">
                       <CheckCircle className="w-12 h-12 text-green-500" />
                     </div>
-                    <h2 className="text-3xl font-bold text-[#0C211E] mb-4 font-heading">{t('messageSent')}</h2>
-                    <p className="text-gray-500 text-lg font-medium max-w-sm mx-auto">{t('messageSentDescription')}</p>
+                    <h2 className="text-3xl font-bold text-[#0C211E] mb-4 font-heading">Vielen Dank für Ihre Nachricht!</h2>
+                    <p className="text-gray-500 text-lg font-medium max-w-sm mx-auto">Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
                       <button
                         onClick={() => setIsSubmitted(false)}
@@ -193,7 +184,7 @@ export function KontaktContent() {
                   >
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700 ml-1">{t('form.name')} *</label>
+                        <label className="text-sm font-bold text-gray-700 ml-1">Ihr Name *</label>
                         <input
                           type="text" required value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -201,7 +192,7 @@ export function KontaktContent() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700 ml-1">{t('form.email')} *</label>
+                        <label className="text-sm font-bold text-gray-700 ml-1">Ihre E-Mail-Adresse *</label>
                         <input
                           type="email" required value={formData.email}
                           onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -210,7 +201,7 @@ export function KontaktContent() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700 ml-1">{t('form.subject')} *</label>
+                      <label className="text-sm font-bold text-gray-700 ml-1">Betreff *</label>
                       <input
                         type="text" required value={formData.subject}
                         onChange={(e) => setFormData({...formData, subject: e.target.value})}
@@ -218,7 +209,7 @@ export function KontaktContent() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700 ml-1">{t('form.message')} *</label>
+                      <label className="text-sm font-bold text-gray-700 ml-1">Ihre Nachricht *</label>
                       <textarea
                         required value={formData.message}
                         onChange={(e) => setFormData({...formData, message: e.target.value})}
@@ -237,12 +228,12 @@ export function KontaktContent() {
                         {isSubmitting ? (
                           <div className="flex items-center gap-3">
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            <span>{t('form.sending')}</span>
+                            <span>Wird gesendet...</span>
                           </div>
                         ) : (
                           <>
                             <Send className="w-5 h-5" /> 
-                            <span>{t('form.send')}</span>
+                            <span>Nachricht absenden</span>
                           </>
                         )}
                       </motion.button>

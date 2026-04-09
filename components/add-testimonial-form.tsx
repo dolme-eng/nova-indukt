@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Star, Send, CheckCircle } from 'lucide-react'
 import { useTestimonials } from '@/lib/store/testimonials'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 
 interface AddTestimonialFormProps {
   isOpen: boolean
@@ -12,7 +11,6 @@ interface AddTestimonialFormProps {
 }
 
 export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps) {
-  const t = useDeTranslations('testimonials')
   const { addTestimonial } = useTestimonials()
   
   const [formData, setFormData] = useState({
@@ -78,17 +76,17 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
     const newErrors: Record<string, string> = {}
     
     if (!formData.name.trim()) {
-      newErrors.name = t('form.nameRequired')
+      newErrors.name = 'Bitte geben Sie Ihren Namen ein.'
     }
     if (!formData.email.trim()) {
-      newErrors.email = t('form.emailRequired')
+      newErrors.email = 'Bitte geben Sie Ihre E-Mail-Adresse ein.'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = t('form.emailInvalid')
+      newErrors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'
     }
     if (!formData.comment.trim()) {
-      newErrors.comment = t('form.commentRequired')
+      newErrors.comment = 'Bitte geben Sie einen Kommentar ein.'
     } else if (formData.comment.length < 10) {
-      newErrors.comment = t('form.commentMinLength')
+      newErrors.comment = 'Ihr Kommentar muss mindestens 10 Zeichen lang sein.'
     }
     
     setErrors(newErrors)
@@ -150,7 +148,7 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
           </button>
         ))}
         <span className="ml-2 text-sm text-gray-600">
-          {formData.rating}/5 {t('form.stars')}
+          {formData.rating}/5 Sterne
         </span>
       </div>
     )
@@ -182,8 +180,8 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
               {/* Header - fixe */}
               <div className="flex-shrink-0 flex items-center justify-between p-6 border-b">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{t('form.title')}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{t('form.subtitle')}</p>
+                  <h3 className="text-xl font-bold text-gray-900">Bewertung schreiben</h3>
+                  <p className="text-sm text-gray-500 mt-1">Teilen Sie Ihre Erfahrungen mit uns.</p>
                 </div>
                 <button
                   onClick={handleClose}
@@ -210,15 +208,15 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
                     >
                       <CheckCircle className="w-10 h-10 text-green-600" />
                     </motion.div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('form.successTitle')}</h3>
-                    <p className="text-gray-600">{t('form.successMessage')}</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Vielen Dank!</h3>
+                    <p className="text-gray-600">Ihre Bewertung wurde erfolgreich übermittelt und wird nach Prüfung veröffentlicht.</p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Rating */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {t('form.ratingLabel')} *
+                        Ihre Bewertung *
                       </label>
                       {renderStarInput()}
                     </div>
@@ -226,13 +224,13 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
                     {/* Name */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {t('form.nameLabel')} *
+                        Ihr Name *
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder={t('form.namePlaceholder')}
+                        placeholder="Z.B. Max Mustermann"
                         className={`w-full px-3 py-2 rounded-xl border focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 outline-none transition-all ${
                           errors.name ? 'border-red-500' : 'border-gray-200'
                         }`}
@@ -246,13 +244,13 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
                     {/* Email */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {t('form.emailLabel')} *
+                        Ihre E-Mail-Adresse *
                       </label>
                       <input
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder={t('form.emailPlaceholder')}
+                        placeholder="ihre@email.de"
                         className={`w-full px-3 py-2 rounded-xl border focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 outline-none transition-all ${
                           errors.email ? 'border-red-500' : 'border-gray-200'
                         }`}
@@ -266,13 +264,13 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
                     {/* Product Name */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {t('form.productLabel')}
+                        Produktname (optional)
                       </label>
                       <input
                         type="text"
                         value={formData.productName}
                         onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
-                        placeholder={t('form.productPlaceholder')}
+                        placeholder="Welches Produkt haben Sie gekauft?"
                         className="w-full px-3 py-2 rounded-xl border border-gray-200 focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 outline-none transition-all"
                         disabled={isSubmitting}
                       />
@@ -281,12 +279,12 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
                     {/* Comment */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {t('form.commentLabel')} *
+                        Ihr Kommentar *
                       </label>
                       <textarea
                         value={formData.comment}
                         onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-                        placeholder={t('form.commentPlaceholder')}
+                        placeholder="Was gefällt Ihnen besonders gut?"
                         rows={3}
                         className={`w-full px-3 py-2 rounded-xl border focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 outline-none transition-all resize-none ${
                           errors.comment ? 'border-red-500' : 'border-gray-200'
@@ -297,7 +295,7 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
                         <p className="mt-1 text-sm text-red-500">{errors.comment}</p>
                       )}
                       <p className="mt-1 text-sm text-gray-500 text-right">
-                        {formData.comment.length} {t('form.characters')}
+                        {formData.comment.length} Zeichen
                       </p>
                     </div>
 
@@ -310,18 +308,18 @@ export function AddTestimonialForm({ isOpen, onClose }: AddTestimonialFormProps)
                       {isSubmitting ? (
                         <>
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          {t('form.submitting')}
+                          Wird gesendet...
                         </>
                       ) : (
                         <>
                           <Send className="w-5 h-5" />
-                          {t('form.submit')}
+                          Bewertung absenden
                         </>
                       )}
                     </button>
 
                     <p className="text-xs text-gray-500 text-center pb-4">
-                      {t('form.privacyNotice')}
+                      Ihre Daten werden nur zur Verifizierung der Bewertung verwendet.
                     </p>
                   </form>
                 )}

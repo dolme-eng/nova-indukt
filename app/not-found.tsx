@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Search, Home, ArrowRight, Sparkles } from 'lucide-react'
 import Image from 'next/image'

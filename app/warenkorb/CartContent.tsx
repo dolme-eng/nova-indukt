@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Trash2, Plus, Minus, ShoppingCart, ArrowRight, Truck, Shield, Package, 
@@ -10,13 +10,11 @@ import {
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useState, useEffect } from 'react'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import { products } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 export function CartContent() {
   const router = useRouter()
-  // const t = useDeTranslations('cart')
   const { items, totalItems, totalPrice, updateQuantity, removeItem, isHydrated } = useCart()
   const [removingItem, setRemovingItem] = useState<string | null>(null)
   const [showSuccessToast, setShowSuccessToast] = useState(false)
@@ -26,33 +24,6 @@ export function CartContent() {
   const total = subtotal + shipping
   const freeShippingRemaining = Math.max(0, 500 - subtotal)
   const isFreeShipping = shipping === 0
-
-  // Hardcoded temporary translations to ensure it always renders properly without missing keys
-  const t = (key: string, vars?: any) => {
-    const dict: Record<string, string> = {
-      'title': 'Dein Warenkorb',
-      'titleWithCount': `Dein Warenkorb (${vars?.count})`,
-      'empty': 'Dein Warenkorb ist leer',
-      'emptyDescription': 'Entdecke unsere Premium-Produkte und füge Deine Favoriten hinzu.',
-      'continue': 'Weiter einkaufen',
-      'remove': 'Entfernen',
-      'summary': 'Zusammenfassung',
-      'freeShippingProgress': `Noch ${vars?.amount}€ bis zum kostenlosen Versand`,
-      'freeShippingProgressShort': `Noch ${vars?.amount}€`,
-      'freeShippingAchieved': 'Kostenloser Versand erreicht!',
-      'subtotal': 'Zwischensumme',
-      'shipping': 'Versand',
-      'freeShipping': 'Kostenlos',
-      'total': 'Gesamtsumme',
-      'vat': 'Inkl. 19% MwSt.',
-      'checkout': 'Zur Kasse',
-      'securePayment': 'Sichere Bezahlung',
-      'deliveryTime': 'Lieferung: 1-3 Werktage',
-      'warranty': `2 Jahre Nova Garantie`,
-      'itemRemoved': 'Artikel aus dem Warenkorb entfernt'
-    }
-    return dict[key] || key
-  }
 
   // Show loading state while hydrating
   if (!isHydrated) {
@@ -88,8 +59,7 @@ export function CartContent() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 pb-32 lg:pb-16 selection:bg-[#4ECCA3]/30">
-      
-      {/* Success Toast */}
+            {/* Success Toast */}
       <AnimatePresence>
         {showSuccessToast && (
           <motion.div
@@ -101,7 +71,7 @@ export function CartContent() {
             <div className="w-6 h-6 rounded-full bg-[#4ECCA3]/20 flex items-center justify-center">
               <CheckCircle className="w-4 h-4 text-[#4ECCA3]" />
             </div>
-            {t('itemRemoved')}
+            Artikel aus dem Warenkorb entfernt
           </motion.div>
         )}
       </AnimatePresence>
@@ -112,14 +82,14 @@ export function CartContent() {
           <div className="flex items-center gap-2 py-4 text-xs sm:text-sm font-medium tracking-wide">
             <Link href="/produkte" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 transition-colors lg:hidden bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
               <ArrowLeft className="w-4 h-4" />
-              <span>{t('continue')}</span>
+              <span>Weiter einkaufen</span>
             </Link>
             <div className="hidden lg:flex items-center gap-2.5">
-              <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">{t('nav.home') || 'Startseite'}</Link>
+              <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">Startseite</Link>
               <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
-              <Link href="/produkte" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">{t('products.title') || 'Produkte'}</Link>
+              <Link href="/produkte" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">Produkte</Link>
               <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
-              <span className="text-[#0C211E] font-bold">{t('title')}</span>
+              <span className="text-[#0C211E] font-bold">Dein Warenkorb</span>
             </div>
           </div>
         </div>
@@ -128,7 +98,7 @@ export function CartContent() {
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
         <div className="flex items-center justify-between mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0C211E] font-heading tracking-tight">
-            {items.length > 0 ? t('titleWithCount', { count: totalItems }) : t('title')}
+            {items.length > 0 ? `Dein Warenkorb (${totalItems})` : 'Dein Warenkorb'}
           </h1>
           
           {items.length > 0 && (
@@ -137,7 +107,7 @@ export function CartContent() {
               className="hidden lg:flex items-center gap-2 text-gray-500 hover:text-[#0C211E] transition-colors font-bold group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              {t('continue')}
+              Weiter einkaufen
             </Link>
           )}
         </div>
@@ -151,16 +121,16 @@ export function CartContent() {
             <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 transform -rotate-6">
               <ShoppingCart className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0C211E] mb-4 font-heading">{t('empty')}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0C211E] mb-4 font-heading">Dein Warenkorb ist leer</h2>
             <p className="text-gray-500 mb-10 text-base sm:text-lg max-w-md mx-auto font-medium">
-              {t('emptyDescription')}
+              Entdecke unsere Premium-Produkte und füge Deine Favoriten hinzu.
             </p>
             <Link 
               href="/produkte" 
               className="inline-flex items-center gap-3 px-8 py-4 bg-[#0C211E] text-white rounded-2xl hover:bg-[#17423C] transition-all duration-300 font-bold text-lg shadow-xl shadow-[#0C211E]/20 hover:-translate-y-1"
             >
               <Package className="w-5 h-5" />
-              {t('continue')}
+              Weiter einkaufen
             </Link>
           </motion.div>
         ) : (
@@ -213,7 +183,7 @@ export function CartContent() {
                           <button 
                             onClick={() => handleRemoveItem(item.product.id)}
                             className="hidden sm:flex p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                            title={t('remove')}
+                            title="Entfernen"
                           >
                             <Trash2 className="w-5 h-5" />
                           </button>
@@ -265,7 +235,7 @@ export function CartContent() {
                           <button 
                             onClick={() => handleRemoveItem(item.product.id)}
                             className="sm:hidden p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors bg-white border border-gray-100"
-                            title={t('remove')}
+                            title="Entfernen"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -279,7 +249,7 @@ export function CartContent() {
               
               {/* Trust Badges under cart */}
               <div className="bg-white rounded-2xl p-6 border border-gray-100 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4 text-sm font-bold text-gray-500 mb-8">
-                <div className="flex items-center gap-2"><Lock className="w-5 h-5 text-gray-400"/> SSL - Veschlüsselt</div>
+                <div className="flex items-center gap-2"><Lock className="w-5 h-5 text-gray-400"/> SSL - Verschlüsselt</div>
                 <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-gray-200"/>
                 <div className="flex items-center gap-2"><Truck className="w-5 h-5 text-gray-400"/> DHL & DPD Express</div>
                 <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-gray-200"/>
@@ -315,7 +285,7 @@ export function CartContent() {
             <div className="hidden lg:block lg:w-[420px] flex-shrink-0">
               <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_40px_rgb(0,0,0,0.06)] border border-gray-100 sticky top-32">
                 <h2 className="font-bold text-[#0C211E] mb-6 text-2xl font-heading flex items-center gap-3">
-                  {t('summary')}
+                  Zusammenfassung
                 </h2>
                 
                 {/* Free Shipping Progress */}
@@ -323,7 +293,7 @@ export function CartContent() {
                   <div className="flex items-center justify-between mb-3 text-sm font-bold">
                     <span className="text-green-700 flex items-center gap-2">
                        {isFreeShipping ? <CheckCircle className="w-4 h-4"/> : <Truck className="w-4 h-4"/>}
-                       {isFreeShipping ? t('freeShippingAchieved') : t('freeShippingProgress', { amount: freeShippingRemaining.toFixed(2).replace('.', ',') })}
+                       {isFreeShipping ? 'Kostenloser Versand erreicht!' : `Noch ${freeShippingRemaining.toFixed(2).replace('.', ',')}€ bis zum kostenlosen Versand`}
                     </span>
                   </div>
                   <div className="w-full bg-green-200/50 rounded-full h-2.5 overflow-hidden">
@@ -342,26 +312,26 @@ export function CartContent() {
                 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center text-[15px] font-medium">
-                    <span className="text-gray-500">{t('subtotal')}</span>
+                    <span className="text-gray-500">Zwischensumme</span>
                     <span className="text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
                   </div>
                   <div className="flex justify-between items-center text-[15px] font-medium">
-                    <span className="text-gray-500">{t('shipping')}</span>
+                    <span className="text-gray-500">Versand</span>
                     <span className={shipping === 0 ? 'text-green-600 font-bold px-2 py-0.5 bg-green-50 rounded-md' : 'text-gray-900'}>
-                      {shipping === 0 ? t('freeShipping') : formatPriceDe(shipping)}
+                      {shipping === 0 ? 'Kostenlos' : formatPriceDe(shipping)}
                     </span>
                   </div>
                 </div>
 
                 <div className="border-t border-gray-100 py-6 my-2">
                   <div className="flex justify-between items-end mb-1">
-                    <span className="font-bold text-[#0C211E] text-xl">{t('total')}</span>
+                    <span className="font-bold text-[#0C211E] text-xl">Gesamtsumme</span>
                     <span className="font-black text-2xl sm:text-3xl tracking-tight text-[#0C211E] tabular-nums whitespace-nowrap">
                       {formatPriceDe(total)}
                     </span>
                   </div>
                   <p className="text-[11px] font-bold text-gray-400 flex justify-end items-center gap-1">
-                    {t('vat')}
+                    Inkl. 19% MwSt.
                   </p>
                 </div>
 
@@ -371,7 +341,7 @@ export function CartContent() {
                   onClick={() => router.push('/kasse')}
                   className="w-full py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 text-lg shadow-xl shadow-[#0C211E]/20"
                 >
-                  <Lock className="w-4 h-4 opacity-70" /> {t('checkout')}
+                  <Lock className="w-4 h-4 opacity-70" /> Zur Kasse
                 </motion.button>
                 
                 {/* Payments accepted icon placeholder */}
@@ -400,13 +370,13 @@ export function CartContent() {
           <div className="px-4 mb-2">
             <div className={`flex items-center justify-center gap-2 text-xs font-bold py-1.5 px-3 rounded-md ${isFreeShipping ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'}`}>
               {isFreeShipping ? <CheckCircle className="w-3.5 h-3.5" /> : <Truck className="w-3.5 h-3.5" />}
-              <span>{isFreeShipping ? t('freeShippingAchieved') : t('freeShippingProgressShort', { amount: freeShippingRemaining.toFixed(2).replace('.', ',') })}</span>
+              <span>{isFreeShipping ? 'Kostenloser Versand erreicht!' : `Noch ${freeShippingRemaining.toFixed(2).replace('.', ',')}€`}</span>
             </div>
           </div>
           
           <div className="px-4 pb-4 flex items-center justify-between gap-4">
             <div>
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{t('total')}</p>
+              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Gesamtsumme</p>
               <p className="text-xl sm:text-2xl font-black text-[#0C211E] tracking-tight tabular-nums whitespace-nowrap">{formatPriceDe(total)}</p>
             </div>
             <motion.button 
@@ -414,7 +384,7 @@ export function CartContent() {
               onClick={() => router.push('/kasse')}
               className="flex-[1.5] max-w-xs py-3.5 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-2 text-base shadow-xl shadow-[#0C211E]/20"
             >
-              <Lock className="w-4 h-4 opacity-70" /> {t('checkout')}
+              <Lock className="w-4 h-4 opacity-70" /> Zur Kasse
             </motion.button>
           </div>
         </motion.div>

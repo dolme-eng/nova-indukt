@@ -2,9 +2,8 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Link } from '@/navigation'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { useDeTranslations } from '@/lib/i18n/useDeTranslations'
 import { 
   Search, Clock, ChevronRight, ArrowLeft, Tag,
   Calendar, User
@@ -13,7 +12,6 @@ import { blogPosts } from '@/lib/data/products'
 
 
 function BlogContent() {
-  const t = useDeTranslations('blog')
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredPosts = blogPosts.filter(post => {
@@ -35,12 +33,12 @@ function BlogContent() {
           <div className="flex items-center gap-2 py-3 text-sm">
             <Link href="/" className="flex items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors lg:hidden">
               <ArrowLeft className="w-4 h-4" />
-              <span>{t('nav.home')}</span>
+              <span>Startseite</span>
             </Link>
             <div className="hidden lg:flex items-center gap-2">
-              <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">{t('nav.home')}</Link>
+              <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">Startseite</Link>
               <ChevronRight className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-900 font-medium">{t('title')}</span>
+              <span className="text-gray-900 font-medium">Magazin</span>
             </div>
           </div>
         </div>
@@ -55,13 +53,13 @@ function BlogContent() {
               className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-[#4ECCA3] transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4" />
-              {t('backToHome') || 'Zurück zur Startseite'}
+              Zurück zur Startseite
             </Link>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              {t('title')}
+              Nova Magazin
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
-              {t('subtitle')}
+              Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.
             </p>
           </div>
         </div>
@@ -77,7 +75,7 @@ function BlogContent() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t('searchPlaceholder') || 'Artikel durchsuchen...'}
+                placeholder="Artikel durchsuchen..."
                 className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 text-sm sm:text-base"
               />
             </div>
@@ -93,7 +91,7 @@ function BlogContent() {
                   : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >
-              {t('allCategories') || 'Alle Kategorien'}
+              Alle Kategorien
             </button>
             {categories.map((category) => (
               <button
@@ -160,7 +158,7 @@ function BlogContent() {
                           {post.author}
                         </span>
                         <span className="flex items-center gap-1 text-[#4ECCA3] font-medium text-xs sm:text-sm">
-                          {t('readMore')}
+                          Weiterlesen
                           <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </span>
                       </div>
@@ -175,10 +173,10 @@ function BlogContent() {
                 <Search className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
               </div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                {t('noResults') || 'Keine Artikel gefunden'}
+                Keine Artikel gefunden
               </h3>
               <p className="text-gray-600 text-sm sm:text-base">
-                {t('tryDifferent') || 'Versuchen Sie andere Suchbegriffe'}
+                Versuchen Sie andere Suchbegriffe
               </p>
             </div>
           )}
