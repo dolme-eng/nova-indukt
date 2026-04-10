@@ -1719,6 +1719,70 @@ const baseProducts: Product[] = [
     specs: { material: 'Cromargan® 18/10 Edelstahl', dimensions: '27 x 27 cm', weight: '1,6 kg', dishwasher: true, induction: true },
     brand: 'WMF', ean: '4000530593149', supplierSku: 'WMF-07-9257-6041', vatRatePercent: 19, priceIncludesVat: true,
   },
+  // 116 — Fissler Original-Profi Collection Bratpfanne 28cm
+  {
+    id: 'fi-op-280', slug: 'fissler-original-profi-bratpfanne-28cm',
+    name: { de: 'Fissler Original-Profi Collection Bratpfanne 28 cm – Induktion' },
+    category: 'kochen', price: 118.92, oldPrice: 145,
+    images: [
+      p('fissler-original-profi-pfanne-28cm', '1.png', 'kochen', 'Fissler Original-Profi Collection Bratpfanne 28 cm'),
+      p('fissler-original-profi-pfanne-28cm', '2.png', 'kochen', 'Fissler Original-Profi Collection Bratpfanne 28 cm'),
+      p('fissler-original-profi-pfanne-28cm', '3.png', 'kochen', 'Fissler Original-Profi Collection Bratpfanne 28 cm'),
+    ],
+    rating: 4.8, reviewCount: 892, stock: 16, badges: ['premium'],
+    description: { de: 'Die Original-Profi Collection von Fissler ist die erste Wahl für alle, die professionelles Kochen zu Hause schätzen. Diese 28 cm Bratpfanne aus der Serie vereint deutsche Ingenieurskunst mit höchster Qualität. Der ca. 9 mm starke CookStar® Allherdboden mit Aluminiumkern speichert die Wärme hervorragend und verteilt sie gleichmäßig für perfekte Bratergebnisse. Die Novogrill®-Oberfläche mit charakteristischen Rillen ermöglicht fettarmes Braten mit typischem Grillmuster. Die geschmiedete Aufhängeöse und der ergonomische Griff aus Edelstahl machen diese Pfanne zum dauerhaften Begleiter in der Küche. Backofenfest bis 230°C.' },
+    shortDescription: { de: 'Premium Bratpfanne mit CookStar® Boden und Novogrill® Oberfläche' },
+    specs: { material: '18/10 Edelstahl, Aluminiumkern', dimensions: '28 cm Ø', weight: '1,8 kg', dishwasher: true, induction: true },
+    brand: 'Fissler', ean: '4009209354286', supplierSku: 'FI-084-118-28-100', vatRatePercent: 19, priceIncludesVat: true,
+  },
+  // 117 — Rösle Silicone Küchenhelfer Set 5-teilig
+  {
+    id: 'ro-sk-500', slug: 'roesle-silicone-kuechenhelfer-set-5-teilig',
+    name: { de: 'Rösle Silicone Küchenhelfer Set 5-teilig – Hochwertiger Edelstahl' },
+    category: 'zubehoer', price: 52.43, oldPrice: 69,
+    images: [
+      p('roesle-silicone-set-5tlg', '1.png', 'zubehoer', 'Rösle Silicone Küchenhelfer Set 5-teilig'),
+      p('roesle-silicone-set-5tlg', '2.png', 'zubehoer', 'Rösle Silicone Küchenhelfer Set 5-teilig'),
+      p('roesle-silicone-set-5tlg', '3.png', 'zubehoer', 'Rösle Silicone Küchenhelfer Set 5-teilig'),
+    ],
+    rating: 4.6, reviewCount: 567, stock: 28, badges: ['new'],
+    description: { de: 'Das praktische 5-teilige Küchenhelfer-Set von Rösle bietet alles, was für die tägliche Küchenarbeit benötigt wird. Die Werkzeuge vereinen hochwertigen 18/10 Edelstahl mit hitzebeständigem Silicone (bis 220°C), das besonders schonend für beschichtete Pfannen und Töpfe ist. Das Set umfasst: Schaumlöffel, Schöpflöffel, Wokwender, Pfannenwender und Schneebesen. Die ergonomischen Griffe liegen perfekt in der Hand und die integrierte Aufhängeöse ermöglicht platzsparende Aufbewahrung. Spülmaschinengeeignet und äußerst langlebig.' },
+    shortDescription: { de: 'Edelstahl-Silicone Set – hitzebeständig bis 220°C, spülmaschinengeeignet' },
+    specs: { material: 'Edelstahl 18/10, Silicone', dimensions: '28–32 cm', weight: '0,7 kg', dishwasher: true, induction: false },
+    brand: 'Rösle', ean: '4004293012847', supplierSku: 'RO-12847', vatRatePercent: 19, priceIncludesVat: true,
+  },
+  // 118 — Global G-2 Kochmesser 20cm
+  {
+    id: 'gl-g2-200', slug: 'global-g2-kochmesser-20cm-cromova',
+    name: { de: 'Global G-2 Kochmesser 20 cm – Cromova 18 Edelstahl' },
+    category: 'vorbereitung', price: 97.74, oldPrice: 129,
+    images: [
+      p('global-g2-kochmesser-20cm', '1.png', 'vorbereitung', 'Global G-2 Kochmesser 20 cm'),
+      p('global-g2-kochmesser-20cm', '2.png', 'vorbereitung', 'Global G-2 Kochmesser 20 cm'),
+      p('global-g2-kochmesser-20cm', '3.png', 'vorbereitung', 'Global G-2 Kochmesser 20 cm'),
+    ],
+    rating: 4.9, reviewCount: 1847, stock: 21, badges: ['premium', 'bestseller'],
+    description: { de: 'Das legendäre G-2 Kochmesser von Global ist das meistverkaufte Modell der japanischen Marke. Gefertigt aus dem speziellen Cromova 18 Edelstahl, bietet es eine außergewöhnliche Schnitthaltigkeit und Korrosionsbeständigkeit. Das einzigartige Design mit dem sandgestrahlten Griff, der nahtlos in die Klinge übergeht, sorgt für perfekte Balance und ergonomische Handhabung. Die Klinge ist mit 20 cm Länge vielseitig einsetzbar – ideal für Fleisch, Fisch und Gemüse. Der dünne Schliff ermöglicht präzises Schneiden ohne Anhaften. Ein echter Klassiker, der in keiner professionellen Küche fehlen darf.' },
+    shortDescription: { de: 'Japanisches Design-Ikon – Cromova 18 Stahl, perfekte Balance' },
+    specs: { material: 'Cromova 18 Edelstahl, 56-58 HRC', dimensions: '20 cm Klinge, 38 cm Gesamt', weight: '180 g', dishwasher: false, induction: false },
+    brand: 'Global', ean: '4943691811282', supplierSku: 'GL-G-2', vatRatePercent: 19, priceIncludesVat: true,
+  },
+  // 119 — Silit Stielkasserolle 16cm Silargan
+  {
+    id: 'si-sk-160', slug: 'silit-stielkasserolle-16cm-silargan',
+    name: { de: 'Silit Stielkasserolle 16 cm – Silargan® Made in Germany' },
+    category: 'kochen', price: 68.89, oldPrice: 85,
+    images: [
+      p('silit-stielkasserolle-16cm', '1.png', 'kochen', 'Silit Stielkasserolle 16 cm Silargan'),
+      p('silit-stielkasserolle-16cm', '2.png', 'kochen', 'Silit Stielkasserolle 16 cm Silargan'),
+      p('silit-stielkasserolle-16cm', '3.png', 'kochen', 'Silit Stielkasserolle 16 cm Silargan'),
+    ],
+    rating: 4.7, reviewCount: 743, stock: 19, badges: ['new'],
+    description: { de: 'Die kompakte Stielkasserolle von Silit mit 1,5 L Fassungsvermögen ist ideal für kleine Mengen, Saucen oder Milchgerichte. Gefertigt aus dem innovativen Silargan®, einem Verbundmaterial aus Stahlkern und keramisch verstärkter Glasur, bietet sie extrem kratzfeste und unverwüstliche Eigenschaften. Die integrierte Skala erleichtert das Abmessen, während der breite Schüttrand tropffreies Ausgießen ermöglicht. Der abnehmbare Edelstahlgriff mit Flammenschutz bleibt beim Kochen kühl und ist spülmaschinengeeignet. Der FerroTherm® Boden ist für alle Herdarten inklusive Induktion optimiert. Made in Germany.' },
+    shortDescription: { de: 'Kompakte Silargan® Kasserolle – kratzfest, spülmaschinengeeignet' },
+    specs: { material: 'Silargan® (keramisch verstärkt), Edelstahlgriff', dimensions: '16 cm Ø, 1,5 L', weight: '0,9 kg', dishwasher: true, induction: true },
+    brand: 'Silit', ean: '4004633279011', supplierSku: 'SI-0079.6033.01', vatRatePercent: 19, priceIncludesVat: true,
+  },
 
 ];
 
