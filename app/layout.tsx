@@ -10,6 +10,8 @@ import { CustomCursor } from "@/components/custom-cursor"
 import { SmoothScrollProvider } from "@/components/smooth-scroll"
 import { PageLoader } from "@/components/page-loader"
 import { PreloadResources } from "./preload-resources"
+import { Providers } from "@/components/providers"
+import { AuthSync } from "@/components/auth-sync"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -37,25 +39,63 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "NOVA INDUKT | Premium Induktions-Kochgeschirr",
+    default: "NOVA INDUKT | Premium Induktions-Kochgeschirr aus Deutschland",
     template: "%s | NOVA INDUKT"
   },
-  description: "Entdecken Sie erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche.",
-  keywords: ["Induktion", "Kochgeschirr", "Pfannen", "Töpfe", "Premium", "Deutschland", "Küche", "Induktionskochfeld"],
+  description: "Entdecken Sie erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche. Premium Pfannen, Töpfe und mehr.",
+  keywords: ["Induktion", "Kochgeschirr", "Pfannen", "Töpfe", "Premium", "Deutschland", "Küche", "Induktionskochfeld", "Edelstahl", "Antihaft", "SmartHeat"],
   authors: [{ name: "NOVA INDUKT" }],
   creator: "NOVA INDUKT",
+  publisher: "NOVA INDUKT",
   metadataBase: new URL("https://nova-indukt.de"),
+  alternates: {
+    canonical: "/",
+    languages: {
+      'de-DE': '/',
+    },
+  },
   openGraph: {
     type: "website",
     locale: "de_DE",
+    url: "https://nova-indukt.de",
     siteName: "NOVA INDUKT",
     title: "NOVA INDUKT | Premium Induktions-Kochgeschirr",
+    description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "NOVA INDUKT - Premium Induktions-Kochgeschirr",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@novaindukt",
+    creator: "@novaindukt",
+    title: "NOVA INDUKT | Premium Induktions-Kochgeschirr",
     description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität.",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
 }
 
@@ -92,17 +132,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-link">
           Zum Hauptinhalt springen
         </a>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">
-            <SmoothScrollProvider>
-              <PageTransition>
-                {children}
-              </PageTransition>
-            </SmoothScrollProvider>
-          </main>
-          <Footer />
-        </div>
+        <Providers>
+          <AuthSync />
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">
+              <SmoothScrollProvider>
+                <PageTransition>
+                  {children}
+                </PageTransition>
+              </SmoothScrollProvider>
+            </main>
+            <Footer />
+          </div>
+        </Providers>
         <Toaster 
           position="bottom-right" 
           toastOptions={{

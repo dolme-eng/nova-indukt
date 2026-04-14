@@ -10,11 +10,16 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
   },
-  // Optimisations de performance
+  // Turbopack config (empty to use defaults, resolves webpack conflict)
+  turbopack: {},
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
   },
   compress: true,
   poweredByHeader: false,

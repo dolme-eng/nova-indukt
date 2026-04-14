@@ -149,6 +149,7 @@ model Product {
   orderItems    OrderItem[]
   reviews       Review[]
   wishlistItems WishlistItem[]
+  cartItems     CartItem[]
 
   @@index([categoryId])
   @@index([slug])

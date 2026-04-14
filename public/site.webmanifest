@@ -1,0 +1,21 @@
+{
+  "name": "NOVA INDUKT - Premium Induktions-Kochgeschirr",
+  "short_name": "NOVA INDUKT",
+  "description": "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4ECCA3",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "de-DE",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "home", "kitchen"]
+}

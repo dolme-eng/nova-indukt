@@ -93,6 +93,8 @@ export default function CheckoutContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   
+  const [orderNumber, setOrderNumber] = useState<string>('')
+
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -106,33 +108,44 @@ export default function CheckoutContent() {
     
     setIsProcessing(true)
     
-    // Simulate payment process
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // Generate order number
-    const orderNumber = 'NOV-' + Date.now().toString(36).toUpperCase()
-    
-    // Store order locally for demo
-    const orderData = {
-      orderNumber,
-      items,
-      shippingData,
-      paymentMethod,
-      contactEmail: paymentMethod === 'email' ? contactEmail : null,
-      total: subtotal + shipping,
-      subtotal,
-      shipping,
-      status: 'pending_payment',
-      createdAt: new Date().toISOString()
+    try {
+      // Create order via API
+      const orderData = {
+        items: items.map(item => ({
+          id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+          name: item.name
+        })),
+        shippingData,
+        paymentMethod,
+        subtotal,
+        shipping,
+        total
+      }
+      
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to create order')
+      }
+      
+      const data = await response.json()
+      setOrderNumber(data.orderNumber)
+      
+      setIsProcessing(false)
+      setOrderComplete(true)
+      clearCart()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (error) {
+      console.error('Checkout error:', error)
+      alert('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.')
+      setIsProcessing(false)
     }
-    
-    const existingOrders = JSON.parse(localStorage.getItem('nova-orders') || '[]')
-    localStorage.setItem('nova-orders', JSON.stringify([orderData, ...existingOrders]))
-    
-    setIsProcessing(false)
-    setOrderComplete(true)
-    clearCart()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   
   const steps = [
@@ -163,7 +176,7 @@ export default function CheckoutContent() {
               <div className="flex items-center justify-between border-b border-gray-200/60 pb-4 mb-4">
                 <span className="text-gray-500 font-medium">Bestellnummer</span>
                 <span className="font-mono font-bold text-[#0C211E] bg-white px-3 py-1 rounded-lg border border-gray-200 shadow-sm">
-                  NOV-{Date.now().toString(36).toUpperCase()}
+                  {orderNumber}
                 </span>
               </div>
               

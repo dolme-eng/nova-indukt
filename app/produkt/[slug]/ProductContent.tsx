@@ -98,8 +98,8 @@ export function ProductContent({ product }: ProductContentProps) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleWishlistToggle = () => {
-    const added = toggleItem({
+  const handleWishlistToggle = async () => {
+    const added = await toggleItem({
       id: product.id,
       name: product.name,
       price: product.price,
@@ -626,8 +626,8 @@ export function ProductContent({ product }: ProductContentProps) {
                   <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
                     <ProductReviews
                       productId={product.id}
-                      averageRating={product.rating}
-                      totalReviews={product.reviewCount}
+                      initialRating={product.rating}
+                      initialCount={product.reviewCount}
                     />
                   </motion.div>
                 )}
@@ -689,7 +689,7 @@ export function ProductContent({ product }: ProductContentProps) {
               id: 'reviews',
               label: `Bewertungen (${product.reviewCount})`,
               content: (
-                <ProductReviews productId={product.id} averageRating={product.rating} totalReviews={product.reviewCount} />
+                <ProductReviews productId={product.id} initialRating={product.rating} initialCount={product.reviewCount} />
               ),
             },
           ].map((section) => (

@@ -7,8 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Package, Heart, MapPin, CreditCard, Settings, User, LogOut, 
   ChevronRight, ShoppingBag, Bell, Menu, X, Trash2, Plus,
-  Home, ArrowLeft
+  Home, ArrowLeft, Pencil, Loader2
 } from 'lucide-react'
+import { AddressForm } from '@/components/address-form'
 import { useAuth } from '@/lib/store/auth'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
@@ -33,8 +34,38 @@ export default function AccountPageClient() {
   const [activeTab, setActiveTab] = useState('overview')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [ordersCount, setOrdersCount] = useState(0)
+  const [addressesCount, setAddressesCount] = useState(0)
 
   useEffect(() => { setMounted(true) }, [])
+
+  useEffect(() => {
+    // Fetch counts for overview
+    async function fetchCounts() {
+      try {
+        const [ordersRes, addressesRes] = await Promise.all([
+          fetch('/api/orders'),
+          fetch('/api/addresses')
+        ])
+        
+        if (ordersRes.ok) {
+          const orders = await ordersRes.json()
+          setOrdersCount(orders.length)
+        }
+        
+        if (addressesRes.ok) {
+          const addresses = await addressesRes.json()
+          setAddressesCount(addresses.length)
+        }
+      } catch (error) {
+        console.error('Error fetching counts:', error)
+      }
+    }
+    
+    if (isAuthenticated) {
+      fetchCounts()
+    }
+  }, [isAuthenticated])
 
   useEffect(() => {
     if (mounted && !isAuthenticated) router.push('/anmelden')
@@ -72,13 +103,13 @@ export default function AccountPageClient() {
 
   const renderTab = () => {
     switch (activeTab) {
-      case 'overview': return <OverviewTab user={user} wishlistCount={wishlistCount} setActiveTab={setActiveTab} />
+      case 'overview': return <OverviewTab user={user} wishlistCount={wishlistCount} ordersCount={ordersCount} addressesCount={addressesCount} setActiveTab={setActiveTab} />
       case 'orders': return <OrdersTab />
       case 'wishlist': return <WishlistTab items={wishlistItems} onRemove={removeItem} onAddToCart={handleAddToCart} />
       case 'addresses': return <AddressesTab />
       case 'payment': return <PaymentTab />
       case 'settings': return <SettingsTab user={user} />
-      default: return <OverviewTab user={user} wishlistCount={wishlistCount} setActiveTab={setActiveTab} />
+      default: return <OverviewTab user={user} wishlistCount={wishlistCount} ordersCount={ordersCount} addressesCount={addressesCount} setActiveTab={setActiveTab} />
     }
   }
 
@@ -187,7 +218,7 @@ export default function AccountPageClient() {
 }
 
 // Tab Components
-function OverviewTab({ user, wishlistCount, setActiveTab }: any) {
+function OverviewTab({ user, wishlistCount, setActiveTab, ordersCount = 0, addressesCount = 0 }: any) {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
@@ -196,9 +227,9 @@ function OverviewTab({ user, wishlistCount, setActiveTab }: any) {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard icon={ShoppingBag} label="Bestellungen" value="0" color="bg-blue-500" onClick={() => setActiveTab('orders')} />
+        <StatCard icon={ShoppingBag} label="Bestellungen" value={ordersCount.toString()} color="bg-blue-500" onClick={() => setActiveTab('orders')} />
         <StatCard icon={Heart} label="Wunschliste" value={wishlistCount.toString()} color="bg-pink-500" onClick={() => setActiveTab('wishlist')} />
-        <StatCard icon={MapPin} label="Adressen" value="0" color="bg-green-500" onClick={() => setActiveTab('addresses')} />
+        <StatCard icon={MapPin} label="Adressen" value={addressesCount.toString()} color="bg-green-500" onClick={() => setActiveTab('addresses')} />
         <StatCard icon={Bell} label="News" value="0" color="bg-orange-500" />
       </div>
 
@@ -229,19 +260,153 @@ function StatCard({ icon: Icon, label, value, color, onClick }: any) {
   )
 }
 
+interface Order {
+  id: string
+  orderNumber: string
+  status: string
+  total: number
+  items: Array<{
+    id: string
+    quantity: number
+    price: number
+    product: {
+      id: string
+      nameDe: string
+      images: Array<{ url: string }>
+      slug: string
+    }
+  }>
+  createdAt: string
+}
+
 function OrdersTab() {
-  return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
-      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <Package className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const response = await fetch('/api/orders')
+        if (!response.ok) {
+          throw new Error('Failed to fetch orders')
+        }
+        const data = await response.json()
+        setOrders(data)
+      } catch (err) {
+        setError('Bestellungen konnten nicht geladen werden')
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchOrders()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+        <div className="w-8 h-8 border-2 border-[#4ECCA3]/30 border-t-[#4ECCA3] rounded-full animate-spin mx-auto" />
+        <p className="mt-4 text-gray-600">Bestellungen werden geladen...</p>
       </div>
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Keine Bestellungen</h2>
-      <p className="text-gray-600 text-sm sm:text-base">Du hast bisher noch keine Bestellungen getätigt.</p>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Package className="w-8 h-8 sm:w-10 sm:h-10 text-red-400" />
+        </div>
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Fehler</h2>
+        <p className="text-gray-600 text-sm sm:text-base">{error}</p>
+      </div>
+    )
+  }
+
+  if (orders.length === 0) {
+    return (
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Package className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+        </div>
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Keine Bestellungen</h2>
+        <p className="text-gray-600 text-sm sm:text-base">Du hast bisher noch keine Bestellungen getätigt.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-3 sm:space-y-4">
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900">Meine Bestellungen</h2>
+      
+      {orders.map(order => (
+        <div key={order.id} className="bg-white rounded-xl sm:rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+              <div>
+                <p className="text-xs sm:text-sm text-gray-500">Bestellnummer</p>
+                <p className="font-mono font-medium text-[#0C211E]">{order.orderNumber}</p>
+              </div>
+              <div className="flex items-center gap-3 sm:gap-6">
+                <div>
+                  <p className="text-xs sm:text-sm text-gray-500">Datum</p>
+                  <p className="text-sm text-gray-900">
+                    {new Date(order.createdAt).toLocaleDateString('de-DE')}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs sm:text-sm text-gray-500">Gesamt</p>
+                  <p className="text-base sm:text-lg font-bold text-[#4ECCA3]">{formatPriceDe(order.total)}</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 sm:mt-4">
+              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+              }`}>
+                {order.status === 'pending' ? 'Ausstehend' :
+                 order.status === 'processing' ? 'In Bearbeitung' :
+                 order.status === 'completed' ? 'Abgeschlossen' :
+                 order.status === 'cancelled' ? 'Storniert' : order.status}
+              </span>
+            </div>
+          </div>
+          
+          <div className="p-4 sm:p-6 bg-gray-50/50">
+            <p className="text-xs sm:text-sm font-medium text-gray-700 mb-3">
+              {order.items.length} {order.items.length === 1 ? 'Artikel' : 'Artikel'}
+            </p>
+            <div className="space-y-3">
+              {order.items.slice(0, 3).map(item => (
+                <div key={item.id} className="flex items-center gap-3 sm:gap-4">
+                  <img
+                    src={item.product.images[0]?.url || '/placeholder.png'}
+                    alt={item.product.nameDe}
+                    className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg bg-white"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 text-sm truncate">{item.product.nameDe}</p>
+                    <p className="text-xs text-gray-500">Menge: {item.quantity}</p>
+                  </div>
+                  <p className="text-sm font-medium text-gray-900">{formatPriceDe(item.price * item.quantity)}</p>
+                </div>
+              ))}
+              {order.items.length > 3 && (
+                <p className="text-sm text-gray-500 pl-14">+ {order.items.length - 3} weitere Artikel</p>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
 
-function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], onRemove: (id: string) => void, onAddToCart: (item: WishlistItem) => void }) {
+function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], onRemove: (id: string) => Promise<void>, onAddToCart: (item: WishlistItem) => void }) {
   if (items.length === 0) {
     return (
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
@@ -269,7 +434,7 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
           <div key={item.id} className="bg-white rounded-xl sm:rounded-2xl shadow-sm overflow-hidden group border border-gray-100">
             <div className="relative aspect-[4/3] bg-gray-100">
               <img src={item.image} alt={item.name.de} className="w-full h-full object-cover" />
-              <button onClick={() => onRemove(item.id)} className="absolute top-2 right-2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-red-50">
+              <button onClick={async () => await onRemove(item.id)} className="absolute top-2 right-2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-red-50">
                 <Trash2 className="w-4 h-4 text-red-500" />
               </button>
             </div>
@@ -289,17 +454,200 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
 }
 
 function AddressesTab() {
-  return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
-      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <MapPin className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+  const [addresses, setAddresses] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [editingAddress, setEditingAddress] = useState<any>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchAddresses()
+  }, [])
+
+  const fetchAddresses = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/addresses')
+      if (!response.ok) throw new Error('Failed to fetch addresses')
+      const data = await response.json()
+      setAddresses(data)
+    } catch (err) {
+      setError('Adressen konnten nicht geladen werden')
+      console.error(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSubmit = async (formData: any) => {
+    setIsSubmitting(true)
+    setError(null)
+    
+    try {
+      const url = editingAddress 
+        ? `/api/addresses?id=${editingAddress.id}` 
+        : '/api/addresses'
+      const method = editingAddress ? 'PUT' : 'POST'
+      
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      
+      if (!response.ok) {
+        const err = await response.json()
+        throw new Error(err.error || 'Failed to save address')
+      }
+      
+      await fetchAddresses()
+      setShowForm(false)
+      setEditingAddress(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Möchten Sie diese Adresse wirklich löschen?')) return
+    
+    try {
+      const response = await fetch(`/api/addresses?id=${id}`, {
+        method: 'DELETE',
+      })
+      
+      if (!response.ok) throw new Error('Failed to delete address')
+      
+      await fetchAddresses()
+    } catch (err) {
+      setError('Adresse konnte nicht gelöscht werden')
+    }
+  }
+
+  const handleEdit = (address: any) => {
+    setEditingAddress(address)
+    setShowForm(true)
+  }
+
+  const handleAdd = () => {
+    setEditingAddress(null)
+    setShowForm(true)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+        </div>
       </div>
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Adressen</h2>
-      <p className="text-gray-600 mb-4 text-sm sm:text-base">Füge Adressen hinzu, um den Bestellvorgang zu beschleunigen.</p>
-      <button className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
-        <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-        Adresse hinzufügen
-      </button>
+    )
+  }
+
+  return (
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Adressen</h2>
+          <p className="text-sm text-gray-500">Verwalte Deine Liefer- und Rechnungsadressen</p>
+        </div>
+        <button 
+          onClick={handleAdd}
+          className="px-4 py-2 bg-[#4ECCA3] text-white text-sm font-medium rounded-lg sm:rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          <span className="hidden sm:inline">Neue Adresse</span>
+        </button>
+      </div>
+
+      {error && (
+        <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">{error}</div>
+      )}
+
+      {addresses.length === 0 ? (
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <MapPin className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Keine Adressen</h3>
+          <p className="text-gray-600 mb-4 text-sm sm:text-base">Füge Adressen hinzu, um den Bestellvorgang zu beschleunigen.</p>
+          <button 
+            onClick={handleAdd}
+            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base"
+          >
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+            Adresse hinzufügen
+          </button>
+        </div>
+      ) : (
+        <div className="grid gap-3 sm:gap-4">
+          {addresses.map((address) => (
+            <div 
+              key={address.id} 
+              className={`bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6 border ${
+                address.isDefaultShipping || address.isDefaultBilling 
+                  ? 'border-[#4ECCA3]/30' 
+                  : 'border-gray-100'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-gray-900 truncate">{address.name}</h3>
+                    {address.isDefaultShipping && (
+                      <span className="shrink-0 px-2 py-0.5 bg-[#4ECCA3]/10 text-[#0C211E] text-xs font-medium rounded-full">
+                        Lieferung
+                      </span>
+                    )}
+                    {address.isDefaultBilling && (
+                      <span className="shrink-0 px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
+                        Rechnung
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-600 text-sm">{address.street}</p>
+                  {address.street2 && <p className="text-gray-600 text-sm">{address.street2}</p>}
+                  <p className="text-gray-600 text-sm">{address.postalCode} {address.city}</p>
+                  {address.state && <p className="text-gray-500 text-xs">{address.state}</p>}
+                  {address.phone && <p className="text-gray-500 text-xs mt-1">{address.phone}</p>}
+                </div>
+                <div className="flex flex-col gap-2 shrink-0">
+                  <button
+                    onClick={() => handleEdit(address)}
+                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                    title="Bearbeiten"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(address.id)}
+                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Löschen"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showForm && (
+        <AddressForm 
+          address={editingAddress}
+          onSubmit={handleSubmit}
+          onCancel={() => {
+            setShowForm(false)
+            setEditingAddress(null)
+            setError(null)
+          }}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </div>
   )
 }

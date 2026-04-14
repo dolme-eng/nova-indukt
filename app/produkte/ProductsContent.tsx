@@ -64,10 +64,10 @@ export function ProductsContent() {
     return () => clearTimeout(t)
   }, [viewMode])
 
-  const handleToggleWishlist = (e: React.MouseEvent, product: typeof products[0]) => {
+  const handleToggleWishlist = async (e: React.MouseEvent, product: typeof products[0]) => {
     e.preventDefault()
     e.stopPropagation()
-    toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug })
+    await toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug })
   }
 
   const handleAddToCart = (e: React.MouseEvent, product: typeof products[0]) => {

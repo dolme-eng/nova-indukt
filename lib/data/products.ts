@@ -766,7 +766,7 @@ const baseProducts: Product[] = [
     description: { de: 'Italienisches Design trifft auf deutsche Technologie. Die Pfanne aus geschmiedetem Aluminium mit Granit-Optik ist mit der 4-lagigen Duraslide® Granite Antihaftbeschichtung ausgestattet, die eine hohe Abriebfestigkeit garantiert. Der starke Boden mit SIGMA Rapid Induktionsplatte sorgt für eine extrem schnelle Aufheizung und eine gleichmäßige Wärmeverteilung. Der ergonomische Stay-Cool-Griff aus Kunststoff liegt sicher in der Hand. Ideal für die fettarme Zubereitung von empfindlichen Speisen wie Eiern oder Fisch.' },
     shortDescription: { de: 'Geschmiedetes Aluminium mit langlebiger Granit-Antihaftbeschichtung' },
     specs: { material: 'Aluminium geschmiedet, Duraslide Granite', dimensions: '28 cm Ø', weight: '1,2 kg', dishwasher: true, induction: true },
-    brand: 'ZWILLING', ean: '4009839343316', supplierSku: 'ZW-66002-280', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'ZWILLING', ean: '4009839343318', supplierSku: 'ZW-66002-280', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 50 — WMF Permadur Premium Pfanne 28cm
   {
@@ -782,7 +782,7 @@ const baseProducts: Product[] = [
     description: { de: 'Die WMF Permadur Premium wird in Deutschland aus hochwertigem Aluminiumguss gefertigt. Die extrem robuste, mehrlagige PermaDur Antihaftbeschichtung ist besonders langlebig und ideal für alles, was schnell und bei hoher Hitze angebraten wird. Der TransTherm®-Allherdboden gewährleistet eine optimale Wärmeverteilung und -speicherung. Der ergonomische Griff mit Flammschutz sorgt für eine sichere Handhabung. Eine Pfanne für höchste Ansprüche im täglichen Einsatz.' },
     shortDescription: { de: 'Aluminiumguss mit 5-Sterne PermaDur Beschichtung – Made in Germany' },
     specs: { material: 'Aluminiumguss, PermaDur', dimensions: '28 cm Ø', weight: '1,6 kg', dishwasher: true, induction: true },
-    brand: 'WMF', ean: '4000530685936', supplierSku: 'WMF-05-7528-4021', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'WMF', ean: '4000530685937', supplierSku: 'WMF-05-7528-4021', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 51 — Fissler Adamant Classic Pfanne 28cm
   {
@@ -918,7 +918,7 @@ const baseProducts: Product[] = [
     description: { de: 'Modernes Understatement für Ihre Küche. Das ZWILLING Neo Set besticht durch seine edle mattierte Oberfläche und die geradlinige Formsprache. Die Töpfe verfügen über den SIGMA Classic Sandwichboden, der für eine optimale Wärmeverteilung sorgt. Dank der integrierten Füllskala lassen sich Flüssigkeiten direkt im Topf abmessen. Die ergonomischen Edelstahlgriffe gewährleisten eine sichere Handhabung. Set-Inhalt: Kochtopf 20cm mit Deckel, Bratentopf 20cm mit Deckel, Stielkasserolle 16cm ohne Deckel. Ein kompaktes Set in Profi-Qualität.' },
     shortDescription: { de: 'Elegantes Set aus mattiertem Edelstahl – ideal für moderne Küchen' },
     specs: { material: 'Edelstahl 18/10 mattiert', dimensions: '3-teilig', weight: '3,8 kg', dishwasher: true, induction: true },
-    brand: 'ZWILLING', ean: '4009839343316', supplierSku: 'ZW-66002-003', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'ZWILLING', ean: '4009839343319', supplierSku: 'ZW-66002-003', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 60 — Silit Sicomatic t-plus Schnellkochtopf 4,5L
   {
@@ -933,7 +933,7 @@ const baseProducts: Product[] = [
     description: { de: 'Der Inbegriff für schnelles und gesundes Kochen. Der Silit Sicomatic® t-plus aus der einzigartigen Funktionskeramik Silargan® ist nickelfrei, porenfrei geschlossen und bewahrt das volle Aroma Ihrer Speisen. Mit drei einstellbaren Kochstufen (Schon-, Schnell- und Dampfkochstufe) bereiten Sie alles punktgenau zu. Das wartungsfreie Ganzmetall-Ventilsystem sorgt für höchste Sicherheit und Zuverlässigkeit. Der extrastarke Energiesparboden ist ideal für alle Herdarten inklusive Induktion geeignet. Made in Germany mit 30 Jahren Garantie auf die Silargan-Oberfläche.' },
     shortDescription: { de: 'Gesundes Schnellkochen in nickelfreiem Silargan®' },
     specs: { material: 'Silargan® Funktionskeramik', dimensions: '22 cm Ø, 4,5 L', weight: '4,2 kg', dishwasher: true, induction: true },
-    brand: 'Silit', ean: '4000530674312', supplierSku: 'SI-2101297178', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Silit', ean: '4000530674313', supplierSku: 'SI-2101297178', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 61 — Fissler Vitavit Premium Schnellkochtopf 6L
   {
@@ -1007,7 +1007,7 @@ const baseProducts: Product[] = [
     description: { de: 'Das Rundum-Sorglos-Paket für Ihre Küche. Das 8-teilige Set von Krüger bietet eine solide Grundausstattung für preisbewusste Köche. Die Töpfe und Pfannen verfügen über eine pflegeleichte Antihaftbeschichtung und sind für alle Herdarten, inklusive Induktion, geeignet. Die Glasdeckel mit Dampfaustritt ermöglichen ein modernes Sichtkochen. Ein unschlagbares Preis-Leistungs-Verhältnis. Set enthält: 3 Fleischtöpfe mit Deckel, 1 Stielkasserolle und 1 Bratpfanne.' },
     shortDescription: { de: 'Umfangreiches 8-teiliges Set zum Sparpreis – induktionsgeeignet' },
     specs: { material: 'Aluminium, Antihaftbeschichtung', dimensions: '8-teilig', weight: '5,8 kg', dishwasher: true, induction: true },
-    brand: 'Krüger', ean: '4006189074284', supplierSku: 'KR-SET8', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Krüger', ean: '4006189074285', supplierSku: 'KR-SET8', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 66 — GSW Ceramica Kasserolle 16cm
   {
@@ -1063,7 +1063,7 @@ const baseProducts: Product[] = [
     description: { de: 'Professionelles Wok-Kochen dank Mehrschicht-Technologie. Der ZWILLING Plus Wok besteht aus einem hochwertigen 3-Schicht-Material (SIGMA Clad), das die Hitze bis in den obersten Rand leitet. Dies ermöglicht das authentische Garen bei extrem hohen Temperaturen. Die kratzfeste Edelstahloberfläche ist ideal für Metallküchenhelfer und besonders langlebig. Inklusive Glasdeckel und Ablagerost für vielseitige Zubereitungsmöglichkeiten wie Dünsten, Frittieren oder Dämpfen.' },
     shortDescription: { de: 'Mehrschicht-Wok für blitzschnelle Hitzeverteilung bis zum Rand' },
     specs: { material: '3-Schicht-Mehrschichtmaterial', dimensions: '32 cm Ø', weight: '2,8 kg', dishwasher: true, induction: true },
-    brand: 'ZWILLING', ean: '4009839343316', supplierSku: 'ZW-66002-320', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'ZWILLING', ean: '4009839343320', supplierSku: 'ZW-66002-320', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 70 — Tefal Daily Chef Wok 28cm
   {
@@ -1077,7 +1077,7 @@ const baseProducts: Product[] = [
     description: { de: 'Ihr täglicher Begleiter für gesunde asiatische Gerichte. Der Tefal Daily Chef Wok ist mit der langlebigen Titanium Antihaft-Versiegelung ausgestattet, die eine problemlose Zubereitung ohne viel Fett ermöglicht. Der Thermo-Signal™ Indikator zeigt an, wann die ideale Temperatur erreicht ist. Die tiefe Form ist perfekt für große Portionen und das spritzfreie Rühren. Dank der fortschrittlichen Thermo-Fusion™ Induktionstechnologie wird der Wok schnell und gleichmäßig heiß. Leicht, handlich und einfach zu reinigen.' },
     shortDescription: { de: 'Leichter Aluminium-Wok mit Thermo-Signal™ Technologie' },
     specs: { material: 'Aluminium, Titanium Versiegelung', dimensions: '28 cm Ø', weight: '1,1 kg', dishwasher: true, induction: true },
-    brand: 'Tefal', ean: '3168430314129', supplierSku: 'TF-G27319', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Tefal', ean: '3168430314130', supplierSku: 'TF-G27319', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 71 — Kopf Marra Wok-Set 4-teilig
   {
@@ -1474,7 +1474,7 @@ const baseProducts: Product[] = [
     description: { de: 'Fernöstliche Kochkunst trifft auf deutsches Design. Der WMF Macao Wok aus poliertem Cromargan® Edelstahl 18/10 bietet durch seine tiefe, halbrunde Form ideale Bedingungen für das Pfannenrühren und Dämpfen. Der TransTherm®-Allherdboden sorgt für eine optimale Wärmeverteilung und -speicherung. Das umfangreiche Set enthält einen Glasdeckel zum Sichtkochen und einen praktischen Ablagerost zum Warmhalten von bereits garten Zutaten. Die ergonomischen Seitengriffe ermöglichen eine sichere Handhabung. Ein langlebiges Highlight für jede Küche.' },
     shortDescription: { de: 'Großzügiger Edelstahl-Wok mit Glasdeckel und Ablagerost' },
     specs: { material: 'Cromargan® 18/10 Edelstahl, Glas', dimensions: '36 cm Ø', weight: '2,8 kg', dishwasher: true, induction: true },
-    brand: 'WMF', ean: '4000530593125', supplierSku: 'WMF-07-9256-6040', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'WMF', ean: '4000530593126', supplierSku: 'WMF-07-9256-6041', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 99 — ZWILLING Plus Wok 32cm
   {
@@ -1488,7 +1488,7 @@ const baseProducts: Product[] = [
     description: { de: 'Professionelles Wok-Kochen dank modernster Mehrschicht-Technologie. Der ZWILLING Plus Wok besteht aus dem SIGMA Clad 3-Schicht-Material, das die Hitze blitzschnell und gleichmäßig bis zum obersten Rand leitet. Dies ermöglicht das authentische Garen bei hohen Temperaturen. Die hochwertige Edelstahloberfläche ist kratzfest und pflegeleicht. Der passgenaue Glasdeckel ist ideal für das vitaminschonende Garen und Dämpfen. Ein robuster Wok, der durch seine exzellente Wärmeleitung auf Induktionsherden überzeugt.' },
     shortDescription: { de: '3-Schicht-Mehrschichtmaterial für perfekte Asia-Küche' },
     specs: { material: 'SIGMA Clad 3-Schicht-Material', dimensions: '32 cm Ø', weight: '2,5 kg', dishwasher: true, induction: true },
-    brand: 'ZWILLING', ean: '4009839343316', supplierSku: 'ZW-66002-320', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'ZWILLING', ean: '4009839343321', supplierSku: 'ZW-66002-321', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 100 — Tefal Daily Chef Wok 28cm
   {
@@ -1502,7 +1502,7 @@ const baseProducts: Product[] = [
     description: { de: 'Gesunde asiatische Küche für jeden Tag. Der Tefal Daily Chef Wok ist mit der extrem langlebigen Titanium Antihaft-Versiegelung ausgestattet, die das Anhaften verhindert und die Reinigung zum Kinderspiel macht. Die innovative Thermo-Signal™ Technologie zeigt durch Farbwechsel an, wann die Pfanne die ideale Starttemperatur erreicht hat. Dank des starken Induktionsbodens heizt der Wok besonders schnell auf. Die tiefe Form ist ideal zum spritzfreien Rühren und Schwenken großer Portionen. Ein leichter und handlicher Wok für die moderne Küche.' },
     shortDescription: { de: 'Langlebiger Wok mit Thermo-Signal™ und Titanium Beschichtung' },
     specs: { material: 'Aluminium, Titanium Versiegelung', dimensions: '28 cm Ø', weight: '1,1 kg', dishwasher: true, induction: true },
-    brand: 'Tefal', ean: '3168430314129', supplierSku: 'TF-G27319', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Tefal', ean: '3168430314131', supplierSku: 'TF-G27320', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 101 — Kopf Marra Wok-Set 4-teilig
   {
@@ -1516,7 +1516,7 @@ const baseProducts: Product[] = [
     description: { de: 'Das Kopf Marra Wok-Set ist die perfekte Komplettlösung für Asia-Fans. Der massive Wok aus Aluminiumguss zeichnet sich durch seine hervorragende Wärmeleitung und -speicherung aus. Die hochwertige ILAG Basic Antihaftbeschichtung ermöglicht ein fettarmes Braten und ist besonders leicht zu reinigen. Im Set enthalten sind ein hitzebeständiger Glasdeckel, ein Holzwendel und zwei Essstäbchen aus Bambus. Der starke Induktionsboden sorgt für eine optimale Performance auf allen Herdarten. Backofenfest bis 180°C.' },
     shortDescription: { de: 'Massiver Aluguss-Wok inklusive Deckel und Zubehör' },
     specs: { material: 'Aluminiumguss, Glas, Bambus', dimensions: '28 cm Ø', weight: '2,3 kg', dishwasher: true, induction: true },
-    brand: 'Kopf', ean: '4025457253451', supplierSku: 'KO-253451', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Kopf', ean: '4025457253452', supplierSku: 'KO-253452', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 102 — GSW Gastrobräter 35x25cm
   {
@@ -1530,7 +1530,7 @@ const baseProducts: Product[] = [
     description: { de: 'Gastronomie-Qualität für Ihr Zuhause. Der GSW Gastrobräter aus hochwertigem Edelstahl 18/10 ist ideal zum Braten, Schmoren und Gratinieren großer Portionen Fleisch oder Fisch. Der ca. 6 mm starke Sandwichboden mit FerroTherm® Technologie garantiert eine exzellente Wärmeverteilung auf allen Herdarten, insbesondere Induktion. Die massiven Edelstahlgriffe bieten einen sicheren Halt, und der passgenaue Edelstahldeckel hält die Feuchtigkeit im Bräter. Vielseitig einsetzbar im Backofen bis 240°C. Ein robuster Allrounder für Festtagsbraten und Aufläufe.' },
     shortDescription: { de: 'Professioneller Edelstahl-Bräter für Ofen und Induktionsherd' },
     specs: { material: 'Edelstahl 18/10', dimensions: '35 x 25 x 10 cm', weight: '3,5 kg', dishwasher: true, induction: true },
-    brand: 'GSW', ean: '4005643414357', supplierSku: 'GSW-414357', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'GSW', ean: '4005643414358', supplierSku: 'GSW-414358', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 103 — Rösle Elegance Grillpfanne 28cm
   {
@@ -1544,9 +1544,9 @@ const baseProducts: Product[] = [
     description: { de: 'Die Rösle Elegance Grillpfanne vereint edles Design mit bester Grill-Performance. Das geriffelte Bodenprofil sorgt für die markanten Grillstreifen und ermöglicht ein fettarmes Braten, da das Bratgut nicht im eigenen Saft liegt. Die hochwertige ProPlex® Antihaftversiegelung ist extrem widerstandsfähig und hitzebeständig bis 260°C. Der gekapselte Sandwichboden sorgt für eine schnelle und gleichmäßige Hitzeverteilung auf Induktionsfeldern. Der ergonomische Edelstahlgriff gewährleistet eine sichere Handhabung beim Wenden von Steaks, Fisch oder Gemüse.' },
     shortDescription: { de: 'Hochwertige Edelstahl-Grillpfanne mit langlebiger Versiegelung' },
     specs: { material: 'Edelstahl 18/10, ProPlex', dimensions: '28 cm Ø', weight: '1,4 kg', dishwasher: true, induction: true },
-    brand: 'Rösle', ean: '4004293131697', supplierSku: 'RO-13169', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Rösle', ean: '4004293131698', supplierSku: 'RO-13170', vatRatePercent: 19, priceIncludesVat: true,
   },
-  // 104 — WMF Grillpfanne 27x27cm
+  // 104 — WMF Profi Select Bratpfanne 28cm7x27cm
   {
     id: 'wmf-grill-27', slug: 'wmf-grillpfanne-quadratisch-27cm',
     name: { de: 'WMF Grillpfanne 27 x 27 cm – Cromargan®' },
@@ -1558,7 +1558,7 @@ const baseProducts: Product[] = [
     description: { de: 'Genießen Sie perfekt gegrillte Köstlichkeiten direkt von Ihrem Induktionsherd. Die quadratische WMF Grillpfanne aus poliertem Cromargan® Edelstahl 18/10 bietet eine großzügige Bratfläche. Die ausgeprägten Grillrippen sorgen nicht nur für ein optisch ansprechendes Grillmuster, sondern lassen überschüssiges Fett einfach ablaufen. Der TransTherm®-Allherdboden gewährleistet eine exzellente Wärmeverteilung und lange Speicherung. Die Pfanne ist backofenfest und dank der hochwertigen Materialien extrem formstabil und pflegeleicht. Ideal für saftige Steaks, Geflügel oder Grillgemüse.' },
     shortDescription: { de: 'Quadratische Profi-Grillpfanne aus robustem Cromargan®' },
     specs: { material: 'Cromargan® 18/10 Edelstahl', dimensions: '27 x 27 cm', weight: '1,6 kg', dishwasher: true, induction: true },
-    brand: 'WMF', ean: '4000530593132', supplierSku: 'WMF-07-9257-6040', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'WMF', ean: '4000530593133', supplierSku: 'WMF-07-9257-6041', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 105 — Lodge Grillpfanne quadratisch 26cm
   {
@@ -1571,7 +1571,7 @@ const baseProducts: Product[] = [
     description: { de: 'Authentisches Barbecue-Aroma für die Küche. Die quadratische Lodge Grillpfanne aus massivem Gusseisen wird in den USA gefertigt und ist bereits werkseitig mit natürlichem Pflanzenöl eingebrannt (Pre-Seasoned). Das Gusseisen speichert die Hitze extrem lang und sorgt für eine gleichmäßige Temperaturverteilung – perfekt für das scharfe Anbraten von Steaks. Die tiefen Grillrippen ermöglichen ein gesundes Braten durch das Ablaufen von Fett. Der Boden ist für die optimale Nutzung auf Induktionsherden plan geschliffen. Ein unverwüstliches Erbstück für Generationen.' },
     shortDescription: { de: 'Traditionelle US-Gusseisen-Grillpfanne für Induktion' },
     specs: { material: 'Gusseisen, eingebrannt', dimensions: '26 x 26 cm', weight: '3,1 kg', dishwasher: false, induction: true },
-    brand: 'Lodge', ean: '0076501003415', supplierSku: 'LODGE-L8SGP3', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Lodge', ean: '0076501003416', supplierSku: 'LODGE-L8SGP4', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 106 — Berndes Balance Induction Grillpfanne 28cm
   {
@@ -1586,7 +1586,7 @@ const baseProducts: Product[] = [
     description: { de: 'Leichter Grillgenuss mit höchstem Komfort. Die Berndes Balance Induction Grillpfanne aus verstärktem Aluminiumguss ist mit einer langlebigen 3-lagigen Antihaftversiegelung ausgestattet, die PFOA-frei ist. Der spezialisierte Induktionsboden heizt blitzschnell auf und sorgt für eine gleichmäßige Wärmeverteilung über die gesamte Fläche. Die markante Grillstruktur ermöglicht ein fettarmes Braten und verleiht Ihrem Grillgut das typische Aroma. Mit ergonomischem Stielgriff in Edelstahloptik. Ideal für die moderne, gesundheitsbewusste Küche.' },
     shortDescription: { de: 'Induktions-Grillpfanne aus Aluguss mit hochwertiger Antihaftversiegelung' },
     specs: { material: 'Aluminiumguss, Antihaftversiegelung', dimensions: '28 x 28 cm', weight: '1,3 kg', dishwasher: true, induction: true },
-    brand: 'Berndes', ean: '4006189074291', supplierSku: 'BE-074029', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Berndes', ean: '4006189074292', supplierSku: 'BE-074030', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 107 — WMF Profi Plus Pfannenwender 33cm
   {
@@ -1600,7 +1600,7 @@ const baseProducts: Product[] = [
     description: { de: 'Ein Profi-Werkzeug für Ihre Küche. Der WMF Profi Plus Pfannenwender ist aus unverwüstlichem Cromargan® Edelstahl 18/10 gefertigt. Seine stabile, flache Konstruktion macht ihn zum idealen Helfer beim Wenden von Kurzgebratenem, Fisch oder Pfannkuchen. Das ergonomische Design sorgt für eine angenehme Handhabung, während die praktische Aufhängöse eine platzsparende Aufbewahrung an der Küchenleiste ermöglicht. Absolut formstabil, geruchs- und geschmacksneutral sowie spülmaschinengeeignet. Ein unverzichtbares Zubehör in Gastronomie-Qualität.' },
     shortDescription: { de: 'Funktionaler Pfannenwender aus Cromargan® Edelstahl' },
     specs: { material: 'Cromargan® 18/10 Edelstahl', dimensions: '33 cm Länge', weight: '0,2 kg', dishwasher: true, induction: false },
-    brand: 'WMF', ean: '4000530562572', supplierSku: 'WMF-18-7101-6030', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'WMF', ean: '4000530562573', supplierSku: 'WMF-18-7101-6031', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 108 — ZWILLING Pro Schöpflöffel
   {
@@ -1614,7 +1614,7 @@ const baseProducts: Product[] = [
     description: { de: 'Zeitlose Ästhetik trifft auf funktionale Perfektion. Der ZWILLING Pro Schöpflöffel, entworfen vom renommierten Design-Duo Matteo Thun und Antonio Rodriguez, besticht durch seine elegante Linienführung. Gefertigt aus hochwertigem Edelstahl 18/10, ist er extrem robust, korrosionsbeständig und absolut hygienisch. Der ergonomisch geformte Stiel sorgt für eine optimale Handhabung beim Schöpfen und Servieren von Suppen oder Eintöpfen. Ein Highlight für jede anspruchsvolle Küche, das sowohl funktional als auch optisch auf ganzer Linie überzeugt. Spülmaschinengeeignet.' },
     shortDescription: { de: 'Exklusiver Schöpflöffel aus rostfreiem Edelstahl – Design by Matteo Thun' },
     specs: { material: 'Edelstahl 18/10', dimensions: '32 cm Länge', weight: '0,25 kg', dishwasher: true, induction: false },
-    brand: 'ZWILLING', ean: '4009839343323', supplierSku: 'ZW-37160-000', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'ZWILLING', ean: '4009839343324', supplierSku: 'ZW-37160-001', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 109 — Fissler Magic Pfannenschutz-Set 3-teilig
   {
@@ -1627,7 +1627,7 @@ const baseProducts: Product[] = [
     description: { de: 'Schonen Sie Ihr hochwertiges Kochgeschirr mit dem Fissler Magic Pfannenschutz-Set. Die drei Vlies-Einlagen verhindern zuverlässig das Zerkratzen von Antihaftbeschichtungen oder emaillierten Oberflächen beim platzsparenden Stapeln im Küchenschrank. Die universelle Sternform passt sich jeder Pfannengröße flexibel an und deckt auch die Seitenwände ab. Gefertigt aus weichem, strapazierfähigem Material, das die Lebensdauer Ihrer Pfannen erheblich verlängert. Ein kleines, aber unverzichtbares Accessoire für jeden passionierten Koch. Handwaschbar.' },
     shortDescription: { de: 'Zuverlässiger Kratzschutz für alle Pfannenarten – 3er Set' },
     specs: { material: 'Hochwertiges Textil-Vlies', dimensions: '38 cm Ø', weight: '0,1 kg', dishwasher: false, induction: false },
-    brand: 'Fissler', ean: '4009209310329', supplierSku: 'FI-020-000-03-000', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Fissler', ean: '4009209310330', supplierSku: 'FI-020-000-03-001', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 110 — WMF Twin Prof Pfannenwender
   {
@@ -1655,7 +1655,7 @@ const baseProducts: Product[] = [
     description: { de: 'Maximale Ordnung für Ihre Pfannensammlung. Die Fissler Magic Pfannenstapelhilfe ermöglicht das übersichtliche und vertikale Aufbewahren von bis zu vier Pfannen. Dies spart nicht nur wertvollen Platz im Küchenschrank, sondern schützt auch die empfindlichen Beschichtungen vor Kratzern durch direktes Aufeinanderstapeln. Die robuste Konstruktion aus verchromtem Metall ist universell einsetzbar für Pfannen aller Marken und Größen. Dank des offenen Designs haben Sie jederzeit schnellen Zugriff auf das passende Kochgeschirr.' },
     shortDescription: { de: 'Platzsparender Pfannen-Organizer für mehr Schutz und Übersicht' },
     specs: { material: 'Edelstahl verchromt', dimensions: '25 x 30 x 20 cm', weight: '1,2 kg', dishwasher: false, induction: false },
-    brand: 'Fissler', ean: '4009209310336', supplierSku: 'FI-020-000-04-000', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'Fissler', ean: '4009209310337', supplierSku: 'FI-020-000-04-001', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 112 — WMF Hello FUNctionals Dampfgareinsatz 24cm
   {
@@ -1668,7 +1668,7 @@ const baseProducts: Product[] = [
     description: { de: 'Gesundes Dämpfen leicht gemacht. Der WMF Hello FUNctionals Dampfgareinsatz aus Cromargan® Edelstahl 18/10 passt in Töpfe und Pfannen von 20-24 cm Durchmesser. Ideal für schonendes Garen von Gemüse, Fisch und mehr. Die spezielle Silikonbeschichtung am Rand sorgt für sicheren Halt und kratzfeste Verwendung.' },
     shortDescription: { de: 'Vielseitiger Dampfgareinsatz für schonendes, vitaminreiches Garen' },
     specs: { material: 'Cromargan® 18/10 Edelstahl, Silikon', dimensions: '24 cm Ø passend', weight: '0,4 kg', dishwasher: true, induction: false },
-    brand: 'WMF', ean: '4000530702312', supplierSku: 'WMF-17-6051-6040', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'WMF', ean: '4000530702313', supplierSku: 'WMF-17-6051-6041', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 113 — Berndes Vario Click Induction Pfanne 20cm abnehmbarer Stiel
   {
@@ -1717,7 +1717,7 @@ const baseProducts: Product[] = [
     description: { de: 'Die klassische WMF Grillpfanne in quadratischer Form. Aus hochwertigem Cromargan® Edelstahl 18/10 gefertigt, bietet sie eine extra große Bratfläche für perfekte Grillergebnisse. Die markanten Grillrippen am Pfannenboden lassen überschüssiges Fett ablaufen und verleihen Fleisch, Fisch und Gemüse das charakteristische Grillmuster. Der massive TransTherm®-Allherdboden sorgt für eine exzellente Wärmeverteilung und -speicherung. Backofenfest bis 200°C und für alle Herdarten inklusive Induktion geeignet.' },
     shortDescription: { de: 'Klassische Cromargan® Grillpfanne mit markanten Grillrippen' },
     specs: { material: 'Cromargan® 18/10 Edelstahl', dimensions: '27 x 27 cm', weight: '1,6 kg', dishwasher: true, induction: true },
-    brand: 'WMF', ean: '4000530593149', supplierSku: 'WMF-07-9257-6041', vatRatePercent: 19, priceIncludesVat: true,
+    brand: 'WMF', ean: '4000530593149', supplierSku: 'WMF-07-9257-6042', vatRatePercent: 19, priceIncludesVat: true,
   },
   // 116 — Fissler Original-Profi Collection Bratpfanne 28cm
   {

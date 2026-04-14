@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
-  MapPin, Phone, Mail, Clock, Send, CheckCircle, ChevronRight, ArrowLeft
+  MapPin, Phone, Mail, Clock, Send, CheckCircle, ChevronRight, ArrowLeft, AlertCircle
 } from 'lucide-react'
 
 export function KontaktContent() {
@@ -16,29 +16,33 @@ export function KontaktContent() {
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError(null)
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // Store message locally for demo purposes
-    const messageData = {
-      ...formData,
-      id: 'msg-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      status: 'received'
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Ein Fehler ist aufgetreten')
+      }
+      
+      setIsSubmitted(true)
+      setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
+    } finally {
+      setIsSubmitting(false)
     }
-    
-    // Save to localStorage for demo admin view
-    const existingMessages = JSON.parse(localStorage.getItem('nova-contact-messages') || '[]')
-    localStorage.setItem('nova-contact-messages', JSON.stringify([messageData, ...existingMessages]))
-    
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    setFormData({ name: '', email: '', subject: '', message: '' })
   }
 
   const contactInfo = [
@@ -217,6 +221,12 @@ export function KontaktContent() {
                         className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E] resize-none"
                       />
                     </div>
+                    {error && (
+                      <div className="flex items-center gap-2 text-red-600 bg-red-50 px-4 py-3 rounded-xl">
+                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                        <span className="text-sm font-medium">{error}</span>
+                      </div>
+                    )}
                     <div className="pt-4">
                       <motion.button
                         whileHover={{ scale: 1.01 }}

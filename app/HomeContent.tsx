@@ -685,12 +685,31 @@ export function HomeContent() {
                 </motion.div>
               ) : (
                 <form 
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault()
-                    if (email && email.includes('@')) {
-                      setNewsletterStatus('success')
-                      setEmail('')
-                      setTimeout(() => setNewsletterStatus('idle'), 5000)
+                    if (!email || !email.includes('@')) return
+                    
+                    try {
+                      const response = await fetch('/api/newsletter/subscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, source: 'homepage' })
+                      })
+                      
+                      if (response.ok) {
+                        setNewsletterStatus('success')
+                        setEmail('')
+                        setTimeout(() => setNewsletterStatus('idle'), 5000)
+                      } else {
+                        const data = await response.json()
+                        console.error('Newsletter error:', data.error)
+                        setNewsletterStatus('error')
+                        setTimeout(() => setNewsletterStatus('idle'), 3000)
+                      }
+                    } catch (err) {
+                      console.error('Newsletter submission failed:', err)
+                      setNewsletterStatus('error')
+                      setTimeout(() => setNewsletterStatus('idle'), 3000)
                     }
                   }}
                   className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto"
@@ -739,10 +758,10 @@ function ProductCard({ product, index }: { product: typeof products[0]; index: n
     addItem(product, 1)
   }
   
-  const handleToggleWishlist = (e: React.MouseEvent) => {
+  const handleToggleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toggleItem({
+    await toggleItem({
       id: product.id,
       name: product.name,
       price: product.price,

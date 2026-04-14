@@ -39,8 +39,8 @@ export default function WishlistContent() {
     setDisplayItems(display)
   }, [wishlistItems])
 
-  const handleRemoveItem = (productId: string) => {
-    removeItem(productId)
+  const handleRemoveItem = async (productId: string) => {
+    await removeItem(productId)
     toast.success('Artikel von der Wunschliste entfernt')
   }
 
