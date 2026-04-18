@@ -782,11 +782,13 @@ UPSTASH_REDIS_REST_TOKEN="..."
 - [x] Vitest setup
 
 ### 🚧 En Cours / À Compléter
-- [ ] Migration 115 produits CSV → DB
-- [ ] Upload batch images vers Cloudinary
-- [ ] Intégration Stripe (payment intents, webhooks)
-- [ ] Checkout complet avec paiement
-- [ ] Gestion adresses utilisateur (UI)
+- [x] Migration 115 produits CSV → DB
+- [x] Upload batch images vers Cloudinary
+- [x] Intégration Stripe (payment intents, webhooks)
+- [x] Intégration PayPal (create-order, capture-order)
+- [x] Checkout complet avec paiement (Stripe + PayPal + Email)
+- [x] Confirmation email après paiement
+- [x] Gestion adresses utilisateur (UI)
 - [ ] Historique commandes (page compte)
 - [ ] Reviews produits (modération)
 - [ ] Newsletter fonctionnelle

@@ -4,11 +4,13 @@ import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { 
   Search, Star, Heart, Grid3X3, LayoutList, ShoppingCart, Check,
-  SlidersHorizontal, X, ChevronDown, ArrowRight, Filter, ChevronRight as ChevronRightIcon
+  SlidersHorizontal, X, ChevronDown, ArrowRight, Filter, ChevronRight as ChevronRightIcon,
+  Loader2
 } from 'lucide-react'
-import { products, categories } from '@/lib/data/products'
+import { Product, Category } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
@@ -17,45 +19,82 @@ import { TiltCard } from '@/components/animations'
 const ITEMS_PER_PAGE = 12
 const PRICE_FILTER_MAX = 2500
 
-export function ProductsContent() {
+export interface ProductsContentProps {
+  initialProducts: Product[]
+  initialCategories: Category[]
+  activeCategory?: string
+  initialSearch?: string
+  initialPriceRange?: [number, number]
+  initialSort?: string
+}
+
+export function ProductsContent({ 
+  initialProducts, 
+  initialCategories,
+  activeCategory,
+  initialSearch = '',
+  initialPriceRange = [0, 2500],
+  initialSort = 'newest'
+}: ProductsContentProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2500])
-  const [sortBy, setSortBy] = useState('newest')
+  const [searchQuery, setSearchQuery] = useState(initialSearch)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(activeCategory || null)
+  const [priceRange, setPriceRange] = useState<[number, number]>(initialPriceRange)
+  const [sortBy, setSortBy] = useState(initialSort)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showFilters, setShowFilters] = useState(false)
   const [displayedCount, setDisplayedCount] = useState(ITEMS_PER_PAGE)
+  const [isSyncing, setIsSyncing] = useState(false)
 
-  const filteredProducts = useMemo(() => {
-    let result = products
-    if (searchQuery) result = result.filter(p => p.name.de.toLowerCase().includes(searchQuery.toLowerCase()))
-    if (selectedCategory) result = result.filter(p => p.category === selectedCategory)
-    result = result.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1])
-    switch(sortBy) {
-      case 'price-asc': result = [...result].sort((a, b) => a.price - b.price); break
-      case 'price-desc': result = [...result].sort((a, b) => b.price - a.price); break
-      case 'name': result = [...result].sort((a, b) => a.name.de.localeCompare(b.name.de)); break
-      default: result = [...result].sort((a, b) => (b.badges?.includes('new') ? 1 : 0) - (a.badges?.includes('new') ? 1 : 0))
+  // Synchronisation des filtres avec l'URL
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    
+    if (selectedCategory) params.set('kategorie', selectedCategory)
+    else params.delete('kategorie')
+    
+    if (searchQuery) params.set('suche', searchQuery)
+    else params.delete('suche')
+    
+    if (priceRange[0] > 0) params.set('minPrice', priceRange[0].toString())
+    else params.delete('minPrice')
+    
+    if (priceRange[1] < PRICE_FILTER_MAX) params.set('maxPrice', priceRange[1].toString())
+    else params.delete('maxPrice')
+    
+    if (sortBy !== 'newest') params.set('sort', sortBy)
+    else params.delete('sort')
+
+    const newQuery = params.toString()
+    const currentQuery = searchParams.toString()
+
+    if (newQuery !== currentQuery) {
+      setIsSyncing(true)
+      router.push(`${pathname}${newQuery ? `?${newQuery}` : ''}`, { scroll: false })
     }
-    return result
-  }, [searchQuery, selectedCategory, priceRange, sortBy])
+  }, [selectedCategory, searchQuery, priceRange, sortBy, pathname, router, searchParams])
+
+  // Désactiver l'état de chargement une fois que les props changent
+  useEffect(() => {
+    setIsSyncing(false)
+    setIsLoading(false)
+  }, [initialProducts])
+
+  const filteredProducts = initialProducts // Déjà filtré côté serveur
 
   const paginatedProducts = filteredProducts.slice(0, displayedCount)
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
 
-  useEffect(() => { setDisplayedCount(ITEMS_PER_PAGE) }, [searchQuery, selectedCategory, sortBy])
-
-  // Loading pour les changements de filtres (recherche, catégorie, prix, tri)
   useEffect(() => {
-    setIsLoading(true)
-    const t = setTimeout(() => setIsLoading(false), 400)
-    return () => clearTimeout(t)
-  }, [searchQuery, selectedCategory, priceRange, sortBy])
+    setDisplayedCount(ITEMS_PER_PAGE)
+  }, [initialProducts])
 
   // Loading court pour le changement de vue (grid/list) - sans skeleton complet
   useEffect(() => {
@@ -70,10 +109,17 @@ export function ProductsContent() {
     await toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug })
   }
 
-  const handleAddToCart = (e: React.MouseEvent, product: typeof products[0]) => {
+  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem(product, 1)
+    addItem({
+      id: product.id,
+      name: product.name.de,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug,
+      quantity: 1
+    })
   }
 
   const clearFilters = () => { setSearchQuery(''); setSelectedCategory(null); setPriceRange([0, PRICE_FILTER_MAX]); setSortBy('newest') }
@@ -115,7 +161,7 @@ export function ProductsContent() {
               <>
                 <ChevronRightIcon className="w-3.5 h-3.5 text-gray-300" />
                 <span className="text-[#0C211E] font-bold truncate max-w-[200px]">
-                  {categories.find(c => c.id === selectedCategory)?.name.de}
+                  {initialCategories.find(c => c.slug === selectedCategory)?.name.de}
                 </span>
               </>
             )}
@@ -161,13 +207,17 @@ export function ProductsContent() {
                     >
                       Alle {!selectedCategory && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                     </button>
-                    {categories.map(cat => (
+                    {initialCategories.map(cat => (
                       <button 
                         key={cat.id} 
-                        onClick={() => setSelectedCategory(cat.id)} 
-                        className={`w-full text-left px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${selectedCategory === cat.id ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
+                        onClick={() => setSelectedCategory(cat.slug)} 
+                        className={`w-full text-left px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${selectedCategory === cat.slug ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
                       >
-                        {cat.name.de} {selectedCategory === cat.id && <Check className="w-4 h-4 text-[#4ECCA3]" />}
+                        <span className="flex items-center gap-2">
+                          {cat.name.de}
+                          <span className="text-[10px] opacity-60 font-normal">({cat.count})</span>
+                        </span>
+                        {selectedCategory === cat.slug && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                       </button>
                     ))}
                   </div>
@@ -245,13 +295,17 @@ export function ProductsContent() {
                           >
                             Alle {!selectedCategory && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                           </button>
-                          {categories.map(cat => (
+                          {initialCategories.map(cat => (
                             <button 
                               key={cat.id} 
-                              onClick={() => setSelectedCategory(cat.id)} 
-                              className={`w-full text-left px-5 py-3.5 rounded-2xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${selectedCategory === cat.id ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
+                              onClick={() => setSelectedCategory(cat.slug)} 
+                              className={`w-full text-left px-5 py-3.5 rounded-2xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${selectedCategory === cat.slug ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
                             >
-                              {cat.name.de} {selectedCategory === cat.id && <Check className="w-4 h-4 text-[#4ECCA3]" />}
+                              <span className="flex items-center gap-2">
+                                {cat.name.de}
+                                <span className="text-[10px] opacity-60 font-normal">({cat.count})</span>
+                              </span>
+                              {selectedCategory === cat.slug && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                             </button>
                           ))}
                         </div>
@@ -314,10 +368,16 @@ export function ProductsContent() {
                       placeholder="Produkte suchen..." 
                       className="w-full pl-14 pr-12 py-3.5 bg-gray-50 rounded-2xl border border-transparent focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400" 
                     />
-                    {searchQuery && (
-                      <button onClick={() => setSearchQuery('')} className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors">
-                        <X className="w-3.5 h-3.5 text-gray-600" />
-                      </button>
+                    {(searchQuery || isSyncing) && (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
+                        {isSyncing ? (
+                          <Loader2 className="w-4 h-4 text-[#4ECCA3] animate-spin" />
+                        ) : (
+                          <button onClick={() => setSearchQuery('')} className="p-1.5 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors">
+                            <X className="w-3.5 h-3.5 text-gray-600" />
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                   

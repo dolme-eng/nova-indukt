@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { toast } from 'sonner'
 import { 
   ChevronRight, Check, CreditCard, Truck, 
   AlertCircle, Lock, ArrowLeft, ChevronDown,
@@ -14,8 +15,106 @@ import { useAuth } from '@/lib/store/auth'
 import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
 
+// Stripe imports
+import { loadStripe } from '@stripe/stripe-js'
+import {
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js'
+
+// PayPal import
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
+
 const SHIPPING_COST = 9.99
 const FREE_SHIPPING_THRESHOLD = 500
+
+// Initialize Stripe
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
+
+// Stripe Payment Form Component
+function StripePaymentForm({ 
+  clientSecret, 
+  onSuccess, 
+  onError, 
+  isProcessing,
+  setIsProcessing 
+}: { 
+  clientSecret: string
+  onSuccess: () => void
+  onError: (error: string) => void
+  isProcessing: boolean
+  setIsProcessing: (value: boolean) => void
+}) {
+  const stripe = useStripe()
+  const elements = useElements()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!stripe || !elements) {
+      onError('Stripe ist noch nicht geladen')
+      return
+    }
+
+    setIsProcessing(true)
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/kasse?stripe=success`,
+      },
+      redirect: 'if_required',
+    })
+
+    if (error) {
+      onError(error.message || 'Zahlung fehlgeschlagen')
+      setIsProcessing(false)
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      onSuccess()
+    } else {
+      setIsProcessing(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="p-6 bg-gray-50 rounded-2xl border border-gray-200">
+        <PaymentElement 
+          options={{
+            layout: 'tabs',
+            defaultValues: {
+              billingDetails: {
+                country: 'DE',
+              }
+            }
+          }}
+        />
+      </div>
+      
+      <button
+        type="submit"
+        disabled={!stripe || isProcessing}
+        className="w-full py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
+      >
+        {isProcessing ? (
+          <>
+            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Zahlung wird verarbeitet...
+          </>
+        ) : (
+          <>
+            <Lock className="w-4 h-4" />
+            Jetzt bezahlen
+          </>
+        )}
+      </button>
+    </form>
+  )
+}
 
 export default function CheckoutContent() {
   const router = useRouter()
@@ -44,15 +143,84 @@ export default function CheckoutContent() {
     country: 'Deutschland'
   })
   
-  const [paymentMethod, setPaymentMethod] = useState('paypal')
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal' | 'email'>('stripe')
   const [contactEmail, setContactEmail] = useState('')
   
-  if (!isHydrated) return null // Hide until cart hydrated to prevent flashing
+  // Stripe state
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [orderId, setOrderId] = useState<string | null>(null)
+  const [orderNumber, setOrderNumber] = useState<string>('')
+
+  if (!isHydrated) return null
 
   const subtotal = totalPrice
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST
   const total = subtotal + shipping
-  
+
+  // Create order and get Stripe client secret
+  const createOrder = useCallback(async () => {
+    try {
+      const orderData = {
+        items: items.map(item => ({
+          id: item.product.id,
+          quantity: item.quantity,
+          price: item.product.price,
+          name: item.product.name.de,
+          slug: item.product.slug,
+        })),
+        shippingData,
+        paymentMethod: 'STRIPE',
+        subtotal,
+        shipping,
+        total
+      }
+      
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to create order')
+      }
+      
+      const data = await response.json()
+      setOrderId(data.id)
+      setOrderNumber(data.orderNumber)
+      
+      // Create Stripe Payment Intent
+      if (paymentMethod === 'stripe') {
+        const stripeResponse = await fetch('/api/stripe/payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: total,
+            orderId: data.id,
+          })
+        })
+        
+        if (!stripeResponse.ok) {
+          throw new Error('Failed to create payment intent')
+        }
+        
+        const stripeData = await stripeResponse.json()
+        setClientSecret(stripeData.clientSecret)
+      }
+      
+      return data
+    } catch (error) {
+      console.error('Error creating order:', error)
+      throw error
+    }
+  }, [items, shippingData, subtotal, shipping, total, paymentMethod])
+
+  useEffect(() => {
+    if (step === 2 && paymentMethod === 'stripe' && !clientSecret && items.length > 0) {
+      createOrder()
+    }
+  }, [step, paymentMethod, clientSecret, items.length, createOrder])
+
   if (items.length === 0 && !orderComplete) {
     return (
       <div className="min-h-screen bg-gray-50/50">
@@ -86,39 +254,83 @@ export default function CheckoutContent() {
       </div>
     )
   }
-  
+
   const handleShippingSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setStep(2)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  
-  const [orderNumber, setOrderNumber] = useState<string>('')
 
-  const handlePaymentSubmit = async (e: React.FormEvent) => {
+  // Handle Stripe payment success
+  const handleStripeSuccess = () => {
+    setOrderComplete(true)
+    clearCart()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Handle Stripe payment error
+  const handleStripeError = (error: string) => {
+    toast.error(error || 'Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+    setIsProcessing(false)
+  }
+
+  // Handle PayPal success
+  const handlePayPalSuccess = async (details: any) => {
+    setIsProcessing(true)
+    try {
+      // Create order first if not exists
+      let currentOrderId = orderId
+      if (!currentOrderId) {
+        const orderData = await createOrder()
+        currentOrderId = orderData.id
+      }
+
+      // Capture PayPal order
+      const response = await fetch('/api/paypal/capture-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paypalOrderId: details.id,
+          orderId: currentOrderId,
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('PayPal capture failed')
+      }
+
+      setOrderComplete(true)
+      clearCart()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (error) {
+      console.error('PayPal error:', error)
+      toast.error('PayPal-Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+      setIsProcessing(false)
+    }
+  }
+
+  // Handle email payment (create order only)
+  const handleEmailPayment = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Validation for email contact method
-    if (paymentMethod === 'email') {
-      if (!contactEmail || !contactEmail.includes('@')) {
-        alert('Bitte geben Sie eine gültige E-Mail-Adresse ein')
-        return
-      }
+    if (!contactEmail || !contactEmail.includes('@')) {
+      toast.error('Bitte geben Sie eine gültige E-Mail-Adresse ein')
+      return
     }
-    
+
     setIsProcessing(true)
-    
+
     try {
-      // Create order via API
       const orderData = {
         items: items.map(item => ({
-          id: item.id,
+          id: item.product.id,
           quantity: item.quantity,
-          price: item.price,
-          name: item.name
+          price: item.product.price,
+          name: item.product.name.de,
+          slug: item.product.slug,
         })),
-        shippingData,
-        paymentMethod,
+        shippingData: { ...shippingData, email: contactEmail },
+        paymentMethod: 'BANK_TRANSFER',
         subtotal,
         shipping,
         total
@@ -147,13 +359,13 @@ export default function CheckoutContent() {
       setIsProcessing(false)
     }
   }
-  
+
   const steps = [
     { id: 1, label: 'Versand', icon: Truck },
     { id: 2, label: 'Zahlung', icon: CreditCard },
     { id: 3, label: 'Bestätigung', icon: Check }
   ]
-  
+
   if (orderComplete) {
     return (
       <div className="min-h-screen bg-gray-50/50 pb-20 selection:bg-[#4ECCA3]/30">
@@ -170,7 +382,12 @@ export default function CheckoutContent() {
             </div>
             
             <h1 className="text-3xl sm:text-4xl font-bold text-[#0C211E] mb-4 font-heading">Vielen Dank für Ihre Bestellung!</h1>
-            <p className="text-gray-500 mb-8 text-lg">Wir haben eine Bestätigung an Ihre E-Mail gesendet.</p>
+            <p className="text-gray-500 mb-8 text-lg">
+              {paymentMethod === 'email' 
+                ? 'Wir haben Ihre Bestellung erhalten und senden Ihnen in Kürze die Zahlungsinformationen per E-Mail.'
+                : 'Ihre Zahlung wurde erfolgreich verarbeitet. Wir haben eine Bestätigung an Ihre E-Mail gesendet.'
+              }
+            </p>
             
             <div className="bg-gray-50/80 rounded-[2rem] p-6 sm:p-8 mb-10 text-left border border-gray-100">
               <div className="flex items-center justify-between border-b border-gray-200/60 pb-4 mb-4">
@@ -191,7 +408,7 @@ export default function CheckoutContent() {
                   <span>Zahlungsmethode</span>
                   <div className="flex items-center gap-2 font-medium">
                     <CreditCard className="w-4 h-4"/>
-                    {paymentMethod === 'card' ? 'Kreditkarte' : paymentMethod === 'paypal' ? 'PayPal' : 'Sofort'}
+                    {paymentMethod === 'stripe' ? 'Kreditkarte (Stripe)' : paymentMethod === 'paypal' ? 'PayPal' : 'E-Mail-Bestätigung'}
                   </div>
                 </div>
                 <div className="flex items-start justify-between text-gray-500 pt-2 border-t border-gray-200/60">
@@ -230,16 +447,14 @@ export default function CheckoutContent() {
   return (
     <div className="min-h-screen bg-gray-50/50 pb-32 lg:pb-16 selection:bg-[#4ECCA3]/30">
       
-      {/* Navbar Minimalist for Checkout */}
+      {/* Navbar */}
       <nav className="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30 shadow-[0_4px_20px_rgb(0,0,0,0.02)]">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           <div className="flex items-center justify-between py-4">
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-medium tracking-wide">
-              <Link href="/warenkorb" className="flex items-center gap-1.5 text-gray-500 hover:text-[#0C211E] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 group">
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                <span className="hidden sm:block">Zurück zum Warenkorb</span>
-              </Link>
-            </div>
+            <Link href="/warenkorb" className="flex items-center gap-1.5 text-gray-500 hover:text-[#0C211E] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 group">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span className="hidden sm:block">Zurück zum Warenkorb</span>
+            </Link>
             <div className="flex items-center gap-2 text-[#0C211E] font-black font-heading tracking-wider">
                NOVA <span className="font-light text-gray-400">|</span> KASSE
             </div>
@@ -252,7 +467,7 @@ export default function CheckoutContent() {
 
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
         
-        {/* Progress Tracker */}
+        {/* Progress */}
         <div className="mb-10 lg:mb-14">
           <div className="flex items-center justify-center max-w-3xl mx-auto">
             {steps.map((s, index) => {
@@ -415,98 +630,244 @@ export default function CheckoutContent() {
                     <h2 className="text-2xl font-bold text-[#0C211E] font-heading">Zahlungsmethode</h2>
                   </div>
                   
-                  <form onSubmit={handlePaymentSubmit} className="space-y-6">
+                  <div className="space-y-6">
+                    {/* Payment Method Selection */}
                     <div className="space-y-3">
-                      
-                      {/* Payment Method Cards - Only PayPal and Email */}
-                      {[
-                        { id: 'paypal', icon: Shield, title: 'PayPal', desc: 'Sichere Zahlung über PayPal' },
-                        { id: 'email', icon: Mail, title: 'E-Mail-Bestätigung', desc: 'Wir kontaktieren Sie für die Zahlung' },
-                      ].map((pm) => (
-                        <label key={pm.id} className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
-                          paymentMethod === pm.id ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
+                      <label 
+                        className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
+                          paymentMethod === 'stripe' ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="stripe"
+                          checked={paymentMethod === 'stripe'}
+                          onChange={() => setPaymentMethod('stripe')}
+                          className="sr-only"
+                        />
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                          paymentMethod === 'stripe' ? 'border-[#0C211E]' : 'border-gray-300'
                         }`}>
-                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                            paymentMethod === pm.id ? 'border-[#0C211E]' : 'border-gray-300'
-                          }`}>
-                            {paymentMethod === pm.id && <div className="w-3 h-3 rounded-full bg-[#0C211E]" />}
+                          {paymentMethod === 'stripe' && <div className="w-3 h-3 rounded-full bg-[#0C211E]" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <CreditCard className="w-5 h-5 text-[#0C211E]" />
+                            <span className="font-bold text-[#0C211E] text-base">Kreditkarte</span>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <pm.icon className="w-5 h-5 text-[#0C211E]" />
-                              <span className="font-bold text-[#0C211E] text-base">{pm.title}</span>
-                            </div>
-                            <p className="text-sm font-medium text-gray-500 mt-0.5">{pm.desc}</p>
+                          <p className="text-sm font-medium text-gray-500 mt-0.5">Sichere Zahlung mit Stripe (Visa, Mastercard, Amex)</p>
+                        </div>
+                      </label>
+
+                      <label 
+                        className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
+                          paymentMethod === 'paypal' ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="paypal"
+                          checked={paymentMethod === 'paypal'}
+                          onChange={() => setPaymentMethod('paypal')}
+                          className="sr-only"
+                        />
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                          paymentMethod === 'paypal' ? 'border-[#0C211E]' : 'border-gray-300'
+                        }`}>
+                          {paymentMethod === 'paypal' && <div className="w-3 h-3 rounded-full bg-[#0C211E]" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Shield className="w-5 h-5 text-[#0C211E]" />
+                            <span className="font-bold text-[#0C211E] text-base">PayPal</span>
                           </div>
-                        </label>
-                      ))}
+                          <p className="text-sm font-medium text-gray-500 mt-0.5">Schnelle und sichere Zahlung über PayPal</p>
+                        </div>
+                      </label>
+
+                      <label 
+                        className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
+                          paymentMethod === 'email' ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="email"
+                          checked={paymentMethod === 'email'}
+                          onChange={() => setPaymentMethod('email')}
+                          className="sr-only"
+                        />
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                          paymentMethod === 'email' ? 'border-[#0C211E]' : 'border-gray-300'
+                        }`}>
+                          {paymentMethod === 'email' && <div className="w-3 h-3 rounded-full bg-[#0C211E]" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-5 h-5 text-[#0C211E]" />
+                            <span className="font-bold text-[#0C211E] text-base">Überweisung / E-Mail</span>
+                          </div>
+                          <p className="text-sm font-medium text-gray-500 mt-0.5">Wir senden Ihnen die Zahlungsinformationen per E-Mail</p>
+                        </div>
+                      </label>
                     </div>
                     
-                    {/* Email Contact Form Expand */}
-                    <AnimatePresence>
-                      {paymentMethod === 'email' && (
-                        <motion.div 
-                          initial={{ opacity: 0, height: 0 }} 
-                          animate={{ opacity: 1, height: 'auto' }} 
+                    {/* Payment Form Based on Selection */}
+                    <AnimatePresence mode="wait">
+                      {paymentMethod === 'stripe' && (
+                        <motion.div
+                          key="stripe"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
                           className="overflow-hidden"
                         >
-                          <div className="p-6 bg-[#0C211E] rounded-2xl space-y-5">
-                            <div className="space-y-3">
-                              <label className="text-xs font-bold text-[#4ECCA3] uppercase tracking-wider">E-Mail für Zahlungsbestätigung</label>
-                              <p className="text-sm text-white/70 leading-relaxed">
-                                Ein Mitarbeiter wird Sie unter dieser E-Mail kontaktieren, um die Zahlung abzuwickeln. Sie erhalten alle notwendigen Zahlungsinformationen.
-                              </p>
-                              <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                  type="email" required
-                                  value={contactEmail}
-                                  onChange={(e) => setContactEmail(e.target.value)}
-                                  className="w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:bg-white/15 focus:border-[#4ECCA3] outline-none transition-all text-white placeholder-white/30"
-                                  placeholder="ihre@email.de"
-                                />
+                          {clientSecret ? (
+                            <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                              <StripePaymentForm 
+                                clientSecret={clientSecret}
+                                onSuccess={handleStripeSuccess}
+                                onError={handleStripeError}
+                                isProcessing={isProcessing}
+                                setIsProcessing={setIsProcessing}
+                              />
+                            </Elements>
+                          ) : (
+                            <div className="p-6 bg-gray-50 rounded-2xl flex items-center justify-center">
+                              <div className="w-6 h-6 border-2 border-[#0C211E]/30 border-t-[#0C211E] rounded-full animate-spin" />
+                              <span className="ml-3 text-sm font-medium text-gray-600">Zahlungsformular wird geladen...</span>
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+
+                      {paymentMethod === 'paypal' && (
+                        <motion.div
+                          key="paypal"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <PayPalScriptProvider options={{ 
+                            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test',
+                            currency: 'EUR',
+                            intent: 'capture'
+                          }}>
+                            <PayPalButtons
+                              style={{ layout: 'vertical', shape: 'rect', label: 'paypal' }}
+                              disabled={isProcessing}
+                              createOrder={async () => {
+                                const response = await fetch('/api/paypal/create-order', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ amount: total })
+                                })
+                                const orderData = await response.json()
+                                return orderData.orderId
+                              }}
+                              onApprove={async (data, actions) => {
+                                setIsProcessing(true)
+                                await handlePayPalSuccess({ id: data.orderID })
+                              }}
+                              onError={(err) => {
+                                console.error('PayPal error:', err)
+                                alert('PayPal-Fehler: ' + err)
+                                setIsProcessing(false)
+                              }}
+                            />
+                          </PayPalScriptProvider>
+                          {isProcessing && (
+                            <div className="mt-4 flex items-center justify-center">
+                              <div className="w-5 h-5 border-2 border-[#0C211E]/30 border-t-[#0C211E] rounded-full animate-spin" />
+                              <span className="ml-2 text-sm font-medium text-gray-600">PayPal-Zahlung wird verarbeitet...</span>
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+
+                      {paymentMethod === 'email' && (
+                        <motion.div
+                          key="email"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <form onSubmit={handleEmailPayment} className="space-y-6">
+                            <div className="p-6 bg-[#0C211E] rounded-2xl space-y-5">
+                              <div className="space-y-3">
+                                <label className="text-xs font-bold text-[#4ECCA3] uppercase tracking-wider">E-Mail für Rechnung</label>
+                                <p className="text-sm text-white/70 leading-relaxed">
+                                  Wir senden Ihnen eine Rechnung per E-Mail mit allen Zahlungsinformationen (Banküberweisung).
+                                </p>
+                                <div className="relative">
+                                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                  <input
+                                    type="email" required
+                                    value={contactEmail || shippingData.email}
+                                    onChange={(e) => setContactEmail(e.target.value)}
+                                    className="w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:bg-white/15 focus:border-[#4ECCA3] outline-none transition-all text-white placeholder-white/30"
+                                    placeholder="ihre@email.de"
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
+                            
+                            <div className="flex flex-col sm:flex-row gap-4">
+                              <button
+                                type="button"
+                                onClick={() => setStep(1)}
+                                className="sm:w-1/3 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-100 transition-colors"
+                              >
+                                Zurück
+                              </button>
+                              <motion.button
+                                whileHover={{ scale: 1.01 }}
+                                whileTap={{ scale: 0.99 }}
+                                type="submit"
+                                disabled={isProcessing}
+                                className="sm:w-2/3 flex-1 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
+                              >
+                                {isProcessing ? (
+                                  <>
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Wird verarbeitet...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Mail className="w-4 h-4" />
+                                    Bestellung aufgeben {formatPriceDe(total)}
+                                  </>
+                                )}
+                              </motion.button>
+                            </div>
+                          </form>
                         </motion.div>
                       )}
                     </AnimatePresence>
                     
+                    {/* Back button for Stripe/PayPal */}
+                    {(paymentMethod === 'stripe' || paymentMethod === 'paypal') && (
+                      <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
+                        <button
+                          type="button"
+                          onClick={() => setStep(1)}
+                          className="text-[#0C211E] hover:underline"
+                        >
+                          ← Zurück zum Versand
+                        </button>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
                       <Lock className="w-4 h-4 text-[#4ECCA3]" />
-                      <span>Ihre Zahlungsdaten werden sicher verschlüsselt.</span>
+                      <span>Ihre Zahlungsdaten werden sicher verschlüsselt (SSL/TLS).</span>
                     </div>
-                    
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                      <button
-                        type="button"
-                        onClick={() => setStep(1)}
-                        className="sm:w-1/3 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-100 transition-colors"
-                      >
-                        Zurück zum Versand
-                      </button>
-                      <motion.button
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.99 }}
-                        type="submit"
-                        disabled={isProcessing}
-                        className="sm:w-2/3 flex-1 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
-                      >
-                        {isProcessing ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            Verarbeite Zahlung...
-                          </>
-                        ) : (
-                          <>
-                            <Lock className="w-4 h-4" />
-                            Zahlungspflichtig bestellen {formatPriceDe(total)}
-                          </>
-                        )}
-                      </motion.button>
-                    </div>
-                  </form>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -580,7 +941,7 @@ export default function CheckoutContent() {
         </div>
       </div>
 
-      {/* Mobile Sticky Summary Button */}
+      {/* Mobile Sticky Summary */}
       {items.length > 0 && !orderComplete && (
         <motion.div 
           initial={{ y: 100 }}
@@ -650,7 +1011,6 @@ export default function CheckoutContent() {
             ) : (
               <motion.button 
                 whileTap={{ scale: 0.95 }}
-                onClick={() => document.querySelector('form')?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))}
                 disabled={isProcessing}
                 className="flex-1 max-w-xs py-3.5 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] transition-colors disabled:opacity-50 shadow-xl shadow-[#0C211E]/20"
               >

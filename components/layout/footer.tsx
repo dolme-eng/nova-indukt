@@ -11,6 +11,8 @@ export function Footer() {
     company: [
       { label: 'Über uns', href: '/uber-uns' },
       { label: 'Blog', href: '/blog' },
+      { label: 'Technologie', href: '/technologie' },
+      { label: 'Karriere', href: '/karriere' },
     ],
     support: [
       { label: 'Kontakt', href: '/kontakt' },
@@ -30,7 +32,7 @@ export function Footer() {
     { icon: Truck, title: 'Kostenfreier Versand', desc: 'Ab 500 € innerhalb Deutschlands' },
     { icon: ShieldCheck, title: 'Sichere Zahlung', desc: 'SSL-Verschlüsselung & Käuferschutz' },
     { icon: RotateCcw, title: '30 Tage Rückgaberecht', desc: 'Stressfreier Rückversand' },
-    { icon: CreditCard, title: 'Flexible Zahlung', desc: 'Klarna, PayPal, Kreditkarte, uvm.' },
+    { icon: CreditCard, title: 'Flexible Zahlung', desc: 'PayPal, Kreditkarte, Klarna, Sofort' },
   ]
 
   return (
@@ -68,36 +70,32 @@ export function Footer() {
               <Image src="/logo0.png" alt="Nova Indukt" width={160} height={48} className="h-12 w-auto brightness-0 invert opacity-90 hover:opacity-100 transition-opacity" style={{ width: 'auto', height: 'auto' }} />
             </Link>
             <p className="text-[#9FE1CD] text-base mb-8 leading-relaxed font-medium pe-4">
-              Premium-Küchenzubehör für Induktion – entwickelt in Deutschland für maximale Performance und höchste Langlebigkeit in Ihrer Küche.
+              Premium-Küchenzubehör & Elektrogeräte für Induktion – entwickelt in Deutschland für maximale Performance und höchste Langlebigkeit in Ihrer Küche.
             </p>
             
             <div className="space-y-4 mb-8">
-              <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 text-[#9FE1CD] hover:text-[#4ECCA3] transition-colors group">
-                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0 group-hover:bg-[#236456] transition-colors">
+              <div className="flex items-start gap-4 text-[#9FE1CD]">
+                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
-                <div className="pt-2 text-sm font-medium">Musterstraße 42, 10115 Berlin,<br/>Deutschland</div>
-              </a>
-              <a href="tel:+4930123456789" className="flex items-center gap-4 text-[#9FE1CD] hover:text-[#4ECCA3] transition-colors group">
-                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0 group-hover:bg-[#236456] transition-colors">
+                <div className="pt-2 text-sm font-medium">Adresse: <span className="text-[#6FD2B4]">[Noch nicht hinterlegt]</span></div>
+              </div>
+              <div className="flex items-center gap-4 text-[#9FE1CD]">
+                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0">
                   <Phone className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-medium">+49 (0) 30 123 456 789</span>
-              </a>
-              <a href="mailto:info@nova-indukt.de" className="flex items-center gap-4 text-[#9FE1CD] hover:text-[#4ECCA3] transition-colors group">
+                <span className="text-sm font-medium">Tel: <span className="text-[#6FD2B4]">[Noch nicht hinterlegt]</span></span>
+              </div>
+              <a href="mailto:kontakt@nova-indukt.de" className="flex items-center gap-4 text-[#9FE1CD] hover:text-[#4ECCA3] transition-colors group">
                 <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0 group-hover:bg-[#236456] transition-colors">
                   <Mail className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-medium">info@nova-indukt.de</span>
+                <span className="text-sm font-medium">kontakt@nova-indukt.de</span>
               </a>
             </div>
 
             <div className="flex gap-4">
-              {[Facebook, Instagram, Youtube].map((Icon, index) => (
-                <a key={index} href="#" className="w-12 h-12 bg-[#17423C] rounded-xl flex items-center justify-center text-[#9FE1CD] hover:bg-[#4ECCA3] hover:text-white transition-all duration-300 hover:-translate-y-1" title="Demnächst verfügbar">
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
+              <span className="text-sm text-[#6FD2B4]">Social Media: <span className="italic">[Noch nicht verfügbar]</span></span>
             </div>
           </div>
 
@@ -177,11 +175,10 @@ export function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-8 gap-y-4">
             {[
               { icon: <Lock className="w-4 h-4 text-[#4ECCA3]" />, label: 'SSL-Verschlüsselt' },
-              { icon: <Flag className="w-4 h-4 text-[#4ECCA3]" />, label: 'Made in Germany' },
-              { icon: <Star className="w-4 h-4 text-[#4ECCA3]" />, label: 'Trusted Shops' },
-              { icon: <CheckCircle className="w-4 h-4 text-[#4ECCA3]" />, label: 'TÜV Geprüft' },
-              { icon: <Leaf className="w-4 h-4 text-[#4ECCA3]" />, label: 'Klimaneutral' },
-              { icon: <Shield className="w-4 h-4 text-[#4ECCA3]" />, label: 'Käuferschutz' },
+              { icon: <Flag className="w-4 h-4 text-[#4ECCA3]" />, label: 'Premium Qualität' },
+              { icon: <CheckCircle className="w-4 h-4 text-[#4ECCA3]" />, label: '2 Jahre Garantie' },
+              { icon: <Leaf className="w-4 h-4 text-[#4ECCA3]" />, label: 'Energieeffizient' },
+              { icon: <Shield className="w-4 h-4 text-[#4ECCA3]" />, label: 'Sichere Zahlung' },
             ].map((badge) => (
               <div key={badge.label} className="flex items-center gap-2.5 text-sm font-bold text-[#9FE1CD]">
                 <span className="bg-white/5 w-8 h-8 rounded-full flex items-center justify-center border border-white/5 shadow-inner">{badge.icon}</span>

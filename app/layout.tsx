@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import { Inter, Space_Grotesk, Sora, JetBrains_Mono } from "next/font/google"
+import { Geist } from 'next/font/google'
+import { PromotionBanner } from '@/components/promotion-banner'
 import "./globals.css"
 import { Toaster } from "sonner"
 import { Header } from "@/components/layout/header"
@@ -134,6 +136,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <Providers>
           <AuthSync />
+          <PromotionBanner />
           <div className="flex min-h-screen flex-col">
             <Header />
             <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">

@@ -10,10 +10,14 @@ import {
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useState, useEffect } from 'react'
-import { products } from '@/lib/data/products'
+import { Product } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 
-export function CartContent() {
+export interface CartContentProps {
+  recommendedProducts?: Product[]
+}
+
+export function CartContent({ recommendedProducts = [] }: CartContentProps) {
   const router = useRouter()
   const { items, totalItems, totalPrice, updateQuantity, removeItem, isHydrated } = useCart()
   const [removingItem, setRemovingItem] = useState<string | null>(null)
@@ -257,11 +261,11 @@ export function CartContent() {
               </div>
 
               {/* Cross-Selling / Recommended */}
-              {items.length > 0 && (
+              {items.length > 0 && recommendedProducts.length > 0 && (
                 <div className="mt-8 mb-4">
                   <h3 className="text-lg font-bold text-[#0C211E] mb-4 font-heading">Passend dazu</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {products.filter(p => !items.find(i => i.product.id === p.id)).slice(0, 2).map((item) => (
+                    {recommendedProducts.filter(p => !items.find(i => i.product.id === p.id)).slice(0, 2).map((item) => (
                       <Link href={`/produkt/${item.slug}`} key={item.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden flex items-center p-3 gap-3 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-lg hover:border-[#4ECCA3]/40 transition-all group">
                         <div className="w-16 h-16 bg-gray-50 rounded-xl relative flex-shrink-0">
                           <Image src={item.images[0]} alt={item.name.de} fill className="object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="64px" />

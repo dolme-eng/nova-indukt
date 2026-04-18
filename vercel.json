@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/promotions/check",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/review-requests",
+      "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/cron/stock-check",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}

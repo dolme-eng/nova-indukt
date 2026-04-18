@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { sendContactNotificationEmail } from '@/lib/email/send'
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 5 // 5 messages per hour per IP
@@ -53,10 +54,22 @@ export async function POST(request: NextRequest) {
         status: "NEW",
       },
     })
-    
-    // TODO: Send email notification to admin (Resend)
-    // This will be implemented when Resend is configured
-    
+
+    // Send admin notification email (non-blocking)
+    try {
+      await sendContactNotificationEmail(
+        name,
+        email,
+        subject,
+        message,
+        contactMessage.id,
+        contactMessage.createdAt
+      )
+    } catch (emailError) {
+      console.error("Failed to send contact notification email:", emailError)
+      // Continue - message is still saved even if email fails
+    }
+
     return NextResponse.json(
       { 
         success: true, 
@@ -74,17 +87,10 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Get all contact messages (for future admin use)
+// Get all contact messages - ADMIN ONLY (désactivé temporairement)
 export async function GET(request: NextRequest) {
-  try {
-    // TODO: Add admin authentication check when admin panel is built
-    // For now, return empty array to prevent unauthorized access
-    return NextResponse.json([])
-  } catch (error) {
-    console.error("Error fetching contact messages:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch messages" },
-      { status: 500 }
-    )
-  }
+  return NextResponse.json(
+    { error: "Admin access required" },
+    { status: 403 }
+  )
 }

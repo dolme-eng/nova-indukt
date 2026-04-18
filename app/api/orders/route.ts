@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
 import { sendOrderConfirmationForOrder } from "@/lib/email/send"
+import { VAT_RATE_PERCENT } from "@/lib/constants/vat"
 
 // Get user's orders
 export async function GET(request: NextRequest) {
@@ -81,56 +82,95 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Generate order number
+    // 1. Check stocks and price consistency
+    for (const item of items) {
+      const dbProduct = await prisma.product.findUnique({
+        where: { id: item.id }
+      })
+
+      if (!dbProduct) {
+        return NextResponse.json(
+          { error: `Produkt ${item.name} nicht gefunden` },
+          { status: 404 }
+        )
+      }
+
+      if (dbProduct.stock < item.quantity) {
+        return NextResponse.json(
+          { error: `Nicht genügend Lagerbestand für ${item.name}` },
+          { status: 400 }
+        )
+      }
+    }
+
+    // 2. Generate order number
     const orderNumber = `NOV-${Date.now().toString(36).toUpperCase()}`
     
-    // Create order
-    const order = await prisma.order.create({
-      data: {
-        orderNumber,
-        userId: session?.user?.id || null,
-        customerEmail: shippingData.email,
-        customerName: `${shippingData.firstName} ${shippingData.lastName}`,
-        customerPhone: shippingData.phone,
-        shippingAddress: {
-          firstName: shippingData.firstName,
-          lastName: shippingData.lastName,
-          street: shippingData.address,
-          zip: shippingData.zipCode,
-          city: shippingData.city,
-          country: shippingData.country,
+    // 3. Create order in a transaction to include stock update
+    const order = await prisma.$transaction(async (tx) => {
+      // Create the order
+      const newOrder = await tx.order.create({
+        data: {
+          orderNumber,
+          userId: session?.user?.id || null,
+          customerEmail: shippingData.email,
+          customerName: `${shippingData.firstName} ${shippingData.lastName}`,
+          customerPhone: shippingData.phone,
+          shippingAddress: {
+            firstName: shippingData.firstName,
+            lastName: shippingData.lastName,
+            street: shippingData.address,
+            zip: shippingData.zipCode,
+            city: shippingData.city,
+            country: shippingData.country,
+          },
+          paymentMethod: paymentMethod.toUpperCase(),
+          status: "PENDING",
+          paymentStatus: "PENDING",
+          subtotal,
+          shippingCost: shipping,
+          vatAmount: (Number(subtotal) * VAT_RATE_PERCENT) / 100, // Ajout du montant TVA
+          total,
+          items: {
+            create: items.map((item: any) => ({
+              productId: item.id,
+              quantity: item.quantity,
+              unitPrice: item.price,
+              productName: item.name,
+              productSlug: item.slug || '',
+              vatRate: VAT_RATE_PERCENT,
+            }))
+          }
         },
-        paymentMethod: paymentMethod.toUpperCase(),
-        status: "PENDING",
-        paymentStatus: "PENDING",
-        subtotal,
-        shippingCost: shipping,
-        total,
-        items: {
-          create: items.map((item: any) => ({
-            productId: item.id,
-            quantity: item.quantity,
-            unitPrice: item.price,
-            productName: item.name,
-            productSlug: item.slug || '',
-            vatRate: 19,
-          }))
-        }
-      },
-      include: {
-        items: {
-          include: {
-            product: {
-              include: {
-                images: true
+        include: {
+          items: {
+            include: {
+              product: {
+                include: {
+                  images: true
+                }
               }
             }
           }
         }
+      })
+
+      // Update stocks
+      for (const item of items) {
+        await tx.product.update({
+          where: { id: item.id },
+          data: {
+            stock: {
+              decrement: item.quantity
+            }
+          }
+        })
       }
+
+      return newOrder
     })
     
-    // Clear user's cart if logged in
+    // 4. Clear user's cart if logged in
     if (session?.user?.id) {
       await prisma.cartItem.deleteMany({
         where: {

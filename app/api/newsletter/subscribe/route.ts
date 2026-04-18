@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { sendNewsletterConfirmationEmail } from "@/lib/email/send"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 10 // 10 subscriptions per hour per IP
@@ -85,14 +86,20 @@ export async function POST(request: NextRequest) {
         isActive: true,
       }
     })
-    
-    // TODO: Send confirmation email (Resend)
-    
+
+    // Send confirmation email (non-blocking)
+    try {
+      await sendNewsletterConfirmationEmail(email, firstName)
+    } catch (emailError) {
+      console.error("Failed to send newsletter confirmation email:", emailError)
+      // Continue - subscription is still created even if email fails
+    }
+
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         message: "Erfolgreich zum Newsletter angemeldet",
-        id: subscriber.id 
+        id: subscriber.id
       },
       { status: 201 }
     )

@@ -1,0 +1,76 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import PromotionForm from '../../_components/promotion-form'
+
+interface Promotion {
+  id: string
+  name: string
+  description: string | null
+  discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
+  discountValue: number
+  isGlobal: boolean
+  productIds: string[]
+  categoryIds: string[]
+  startDate: string
+  endDate: string
+  minOrderAmount: number | null
+  maxDiscount: number | null
+  usageLimit: number | null
+  badge: string | null
+  bannerText: string | null
+  highlightColor: string | null
+  isActive: boolean
+}
+
+export default function EditPromotionPage() {
+  const params = useParams()
+  const [promotion, setPromotion] = useState<Promotion | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchPromotion()
+  }, [])
+
+  const fetchPromotion = async () => {
+    try {
+      const response = await fetch(`/api/admin/promotions/${params.id}`)
+      if (response.ok) {
+        const data = await response.json()
+        setPromotion(data)
+      }
+    } catch (error) {
+      console.error('Error fetching promotion:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#4ECCA3]"></div>
+      </div>
+    )
+  }
+
+  if (!promotion) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-400">Promotion non trouvée</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-white">Modifier la promotion</h1>
+        <p className="text-gray-400 mt-1">Modifiez les paramètres de {promotion.name}</p>
+      </div>
+      
+      <PromotionForm promotion={promotion} />
+    </div>
+  )
+}

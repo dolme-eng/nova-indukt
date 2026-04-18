@@ -7,13 +7,13 @@ import { usePathname } from 'next/navigation'
 import { 
   Search, ShoppingCart, User, Heart, Menu, X, ChevronRight, 
   Phone, ChevronDown, Flame, Sparkles, Tag, Truck, ArrowRight, Shield,
-  ChefHat, Utensils, UtensilsCrossed, Trash2, Plus, Minus, Lock, Check, Zap, Leaf
+  ChefHat, Utensils, UtensilsCrossed, Trash2, Plus, Minus, Lock, Check, Zap, Leaf,
+  Loader2, Home
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { useAuth } from '@/lib/store/auth'
 import { motion, AnimatePresence } from 'framer-motion'
-import { categories as dataCategories, products } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 const megaMenuDepartments = [
@@ -21,28 +21,36 @@ const megaMenuDepartments = [
     title: 'Kochen & Braten',
     icon: <Flame className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Alle Kochtöpfe & Pfannen', href: '/produkte?kategorie=kochen' },
-      { label: 'Gusseisen & Schmortöpfe', href: '/produkte?kategorie=kochen' },
-      { label: 'Schnellkochtöpfe', href: '/produkte?kategorie=kochen' },
+      { label: 'Alle Produkte', href: '/produkte?kategorie=kochen-braten' },
+      { label: 'Topfsets', href: '/produkte?kategorie=kochen-braten' },
+      { label: 'Bratpfannen', href: '/produkte?kategorie=kochen-braten' },
+      { label: 'Gusseisen & Bräter', href: '/produkte?kategorie=kochen-braten' },
     ]
   },
   {
-    title: 'Vorbereitung & Messer',
+    title: 'Messer & Vorbereitung',
     icon: <ChefHat className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Vorbereitung Gesamt', href: '/produkte?kategorie=vorbereitung' },
-      { label: 'Premium Kochmesser', href: '/produkte?kategorie=vorbereitung' },
-      { label: 'Küchenmaschinen & Mixer', href: '/produkte?kategorie=vorbereitung' },
+      { label: 'Alle Messer', href: '/produkte?kategorie=messer-vorbereitung' },
+      { label: 'Damastmesser', href: '/produkte?kategorie=messer-vorbereitung' },
+      { label: 'Schneidebretter', href: '/produkte?kategorie=messer-vorbereitung' },
     ]
   },
   {
-    title: 'Zubehör & Tisch',
+    title: 'Backen & Patisserie',
+    icon: <UtensilsCrossed className="w-5 h-5 text-[#4ECCA3]" />,
+    links: [
+      { label: 'Alle Backartikel', href: '/produkte?kategorie=backen-patisserie' },
+      { label: 'Backformen', href: '/produkte?kategorie=backen-patisserie' },
+      { label: 'Pizza & Brot', href: '/produkte?kategorie=backen-patisserie' },
+    ]
+  },
+  {
+    title: 'Tisch & Servieren',
     icon: <Utensils className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Küchenzubehör', href: '/produkte?kategorie=zubehoer' },
-      { label: 'Kaffee- & Espressomaschinen', href: '/produkte?kategorie=zubehoer' },
-      { label: 'Tisch & Servier', href: '/produkte?kategorie=tischaccessoires' },
-      { label: 'Gläser & Besteck', href: '/produkte?kategorie=tischaccessoires' },
+      { label: 'Alles für den Tisch', href: '/produkte?kategorie=tisch-servieren' },
+      { label: 'Besteck & Gläser', href: '/produkte?kategorie=tisch-servieren' },
     ]
   }
 ]
@@ -61,9 +69,31 @@ export function Header() {
   const megaRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
-  const searchResults = searchQuery.trim().length > 0 
-    ? products.filter(p => p.name.de.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 4)
-    : []
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.trim().length >= 2) {
+        setIsSearching(true)
+        try {
+          const response = await fetch(`/api/products/search?q=${encodeURIComponent(searchQuery)}`)
+          if (response.ok) {
+            const data = await response.json()
+            setSearchResults(data)
+          }
+        } catch (error) {
+          console.error("Search error:", error)
+        } finally {
+          setIsSearching(false)
+        }
+      } else {
+        setSearchResults([])
+      }
+    }, 300)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchQuery])
 
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
@@ -141,7 +171,7 @@ export function Header() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between relative" ref={megaRef}>
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0 group relative z-10">
+            <Link href="/" className="flex-shrink-0 group relative z-10 bg-white rounded-lg p-1 shadow-sm">
               <Image 
                 src="/logo0.png" 
                 alt="NOVA INDUKT" 
@@ -304,15 +334,6 @@ export function Header() {
                       <div className="bg-[#0C211E] rounded-3xl p-6 relative overflow-hidden group h-full flex flex-col justify-end min-h-[200px]">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
                         
-                        {dataCategories[0] && (
-                          <Image 
-                            src={dataCategories[0].image} 
-                            alt="Featured" 
-                            fill 
-                            className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 mix-blend-luminosity" 
-                          />
-                        )}
-                        
                         <div className="relative z-20">
                           <span className="inline-block px-3 py-1 bg-[#4ECCA3]/20 backdrop-blur-md rounded-lg text-[#4ECCA3] text-xs font-bold mb-3 border border-[#4ECCA3]/30 uppercase tracking-wider">
                             Neu Eingetroffen
@@ -366,11 +387,16 @@ export function Header() {
                     placeholder="Wonach suchen Sie? (z.B. Pfanne, Messer)..."
                     className="w-full bg-gray-50/50 hover:bg-gray-50 text-gray-900 placeholder:text-gray-400 px-14 py-5 rounded-2xl text-xl md:text-2xl font-bold font-heading outline-none border border-transparent focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 transition-all"
                   />
-                  {searchQuery && (
-                    <button onClick={() => setSearchQuery('')} className="absolute right-4 p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-200 rounded-full transition-colors">
-                      <X className="w-5 h-5" />
-                    </button>
-                  )}
+                  <div className="absolute right-4 flex items-center gap-2">
+                    {isSearching && (
+                      <Loader2 className="w-5 h-5 text-[#4ECCA3] animate-spin" />
+                    )}
+                    {searchQuery && (
+                      <button onClick={() => setSearchQuery('')} className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-200 rounded-full transition-colors">
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <button onClick={() => setSearchOpen(false)} className="ml-4 p-3 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-900 transition-all">
                   <span className="sr-only">Schließen</span>
@@ -395,7 +421,7 @@ export function Header() {
                     <div>
                       <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Produkte ({searchResults.length})</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {searchResults.map((product) => (
+                        {searchResults.map((product: any) => (
                           <Link href={`/produkt/${product.slug}`} key={product.id} onClick={() => setSearchOpen(false)} className="group bg-white rounded-2xl border border-gray-100 hover:border-[#4ECCA3] shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col">
                             <div className="aspect-square relative bg-gray-50 p-4">
                               <Image src={product.images[0]} alt={product.name.de} fill className="object-contain p-6 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" />

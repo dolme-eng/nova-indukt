@@ -12,22 +12,32 @@ import {
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
-import { products, categories, blogPosts } from '@/lib/data/products'
+import { Product, Category, BlogPost } from '@/lib/data/products'
 import { TiltCard } from '@/components/animations'
 import { MagneticButton } from '@/components/magnetic-button'
 import { TestimonialsSection } from '@/components/testimonials-section'
 import { formatPriceDe } from '@/lib/utils/vat'
 
-// Flash deals - deterministic discount based on product id
-const flashDeals = products.slice(0, 4).map(p => ({...p, discount: ((p.id.charCodeAt(0) + p.id.charCodeAt(p.id.length - 1)) % 25) + 15}))
+interface HomeContentProps {
+  initialProducts: Product[]
+  initialCategories: Category[]
+  initialBlogPosts: BlogPost[]
+}
 
-export function HomeContent() {
+export function HomeContent({ initialProducts, initialCategories, initialBlogPosts }: HomeContentProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [email, setEmail] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [timeLeft, setTimeLeft] = useState({ hours: 5, minutes: 42, seconds: 18 })
   const slides = ['slide1', 'slide2', 'slide3'] as const
   const sliderContainerRef = useRef<HTMLDivElement>(null)
+
+  // Flash deals - deterministic discount based on product id
+  const flashDeals = useMemo(() => 
+    initialProducts.slice(0, 4).map(p => ({
+      ...p, 
+      discount: ((p.id.charCodeAt(0) + p.id.charCodeAt(p.id.length - 1)) % 25) + 15
+    })), [initialProducts])
   
   const productCardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -39,9 +49,9 @@ export function HomeContent() {
   }
 
   const sliderProducts = useMemo(() => {
-    const list: typeof products = [];
+    const list: Product[] = [];
     const catGroups = new Map<string, number>();
-    for (const p of products) {
+    for (const p of initialProducts) {
       if (!catGroups.has(p.category)) catGroups.set(p.category, 0);
       const count = catGroups.get(p.category)!;
       if (count < 2) {
@@ -51,7 +61,7 @@ export function HomeContent() {
       if (list.length >= 16) break;
     }
     return list;
-  }, []);
+  }, [initialProducts]);
 
   useEffect(() => {
     const autoScroll = setInterval(() => {
@@ -397,7 +407,7 @@ export function HomeContent() {
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-            {categories.map((category, index) => (
+            {initialCategories.map((category, index) => (
               <motion.div
                 key={category.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -507,7 +517,7 @@ export function HomeContent() {
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {products.slice(0, 8).map((product, index) => (
+            {initialProducts.slice(0, 8).map((product, index) => (
               <ProductCard key={product.id} product={product} index={index} />
             ))}
           </div>
@@ -554,21 +564,21 @@ export function HomeContent() {
               icon={Zap}
               title="SmartHeat™ Technologie"
               description="Präzise Temperaturkontrolle"
-              color="bg-amber-500 text-amber-500 border-amber-500/20"
+              color="bg-nova-400 text-nova-400 border-nova-400/20"
               index={0}
             />
             <TechFeatureCard
               icon={Leaf}
               title="EcoPower™ System"
               description="Energieeffizient"
-              color="bg-nova-500 text-nova-500 border-nova-500/20"
+              color="bg-success text-success border-success/20"
               index={1}
             />
             <TechFeatureCard
               icon={Shield}
               title="SafetyGuard™"
               description="Maximale Sicherheit"
-              color="bg-blue-500 text-blue-500 border-blue-500/20"
+              color="bg-destructive text-destructive border-destructive/20"
               index={2}
             />
           </div>
@@ -594,7 +604,7 @@ export function HomeContent() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
+            {initialBlogPosts.map((post, index) => (
               <motion.article
                 key={post.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -886,7 +896,7 @@ function TechFeatureCard({ icon: Icon, title, description, color, index }: {
         <div className={`absolute top-0 right-0 w-32 h-32 opacity-10 blur-3xl rounded-full ${color.split(' ')[0]}`} />
         
         <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-gray-900 border ${color}`}>
-          <Icon className="w-8 h-8 opacity-90" />
+          <Icon className="w-8 h-8 text-white" />
         </div>
         
         <h3 className="text-xl font-bold text-white mb-3 tracking-wide">{title}</h3>

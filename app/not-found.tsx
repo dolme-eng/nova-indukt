@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Search, Home, ArrowRight, Sparkles } from 'lucide-react'
 import Image from 'next/image'
-import { products } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 export default function NotFound() {
-  const bestsellers = products.slice(0, 4)
+  // Simuler des bestsellers vides ou statiques temporaires car products n'existe plus
+  const bestsellers: any[] = []
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center pt-24 pb-24 px-4 sm:px-6">

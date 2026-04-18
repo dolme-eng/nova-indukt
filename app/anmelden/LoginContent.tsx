@@ -126,9 +126,17 @@ export function LoginContent() {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Passwort
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Passwort
+                </label>
+                <Link 
+                  href="/passwort-vergessen"
+                  className="text-sm text-[#4ECCA3] hover:text-[#3BA88A] hover:underline"
+                >
+                  Passwort vergessen?
+                </Link>
+              </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input

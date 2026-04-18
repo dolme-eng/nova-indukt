@@ -9,11 +9,16 @@ import {
   Search, X, SlidersHorizontal, Grid3X3, List,
   ChevronRight, ShoppingCart, Heart, Star, Filter
 } from 'lucide-react'
-import { products, Product, categories } from '@/lib/data/products'
+import { Product, Category } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 import { useCart } from '@/lib/store/cart'
 
-export default function SearchContent() {
+export interface SearchContentProps {
+  initialProducts: Product[]
+  initialCategories: Category[]
+}
+
+export default function SearchContent({ initialProducts, initialCategories }: SearchContentProps) {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') || ''
   
@@ -26,7 +31,7 @@ export default function SearchContent() {
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
-    let result = products.filter(product => {
+    let result = initialProducts.filter(product => {
       const matchesSearch = searchQuery === '' || 
         product.name.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.description.de.toLowerCase().includes(searchQuery.toLowerCase())
@@ -131,7 +136,7 @@ export default function SearchContent() {
                     />
                     <span className="text-gray-600">Alle</span>
                   </label>
-                  {categories.map((cat) => (
+                  {initialCategories.map((cat) => (
                     <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
@@ -259,7 +264,14 @@ function ProductCard({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem(product, 1)
+    addItem({
+      id: product.id,
+      name: product.name.de,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug,
+      quantity: 1
+    })
   }
 
   return (

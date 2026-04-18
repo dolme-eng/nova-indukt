@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
-import { products, categories, Product } from '@/lib/data/products'
+import { Product } from '@/lib/data/products'
 import { ProductReviews } from '@/components/product-reviews'
 import { ImageLightbox } from '@/components/image-lightbox'
 import { DEFAULT_DE_VAT_PERCENT, formatDeEuro, formatPriceDe, grossFromNet, netFromGross } from '@/lib/utils/vat'
@@ -113,8 +113,6 @@ export function ProductContent({ product }: ProductContentProps) {
     setTimeout(() => setShowWishlistToast(false), 2000)
   }
 
-  const category = categories.find((c) => c.id === product.category)
-  const relatedProducts = products.filter((p) => p.category === product?.category && p.id !== product?.id).slice(0, 4)
   const vatPct = product.vatRatePercent ?? DEFAULT_DE_VAT_PERCENT
   const priceIncludesVat = product.priceIncludesVat !== false
   const supplierCards = supplierSpecCards(product)
@@ -201,17 +199,6 @@ export function ProductContent({ product }: ProductContentProps) {
               <Link href="/produkte" className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]">
                 Produkte
               </Link>
-              {category && (
-                <>
-                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
-                  <Link
-                    href={`/produkte?kategorie=${category.id}`}
-                    className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]"
-                  >
-                    {category.name.de}
-                  </Link>
-                </>
-              )}
               <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
               <span className="min-w-0 truncate font-bold text-[#0C211E]">{product.name.de}</span>
             </div>
@@ -286,14 +273,6 @@ export function ProductContent({ product }: ProductContentProps) {
           <div ref={infoRef} className="relative flex min-w-0 flex-col gap-4 lg:sticky lg:top-28 lg:self-start xl:top-32">
             <header className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                {category && (
-                  <Link
-                    href={`/produkte?kategorie=${category.id}`}
-                    className="text-xs font-bold uppercase tracking-wider text-[#4ECCA3] transition-colors hover:text-[#0C211E] sm:text-sm"
-                  >
-                    {category.name.de}
-                  </Link>
-                )}
                 <div className="flex items-center gap-1.5 rounded-lg border border-gray-100 bg-white px-2.5 py-1 text-sm shadow-sm">
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                   <span className="font-bold text-gray-900">{product.rating}</span>
@@ -439,42 +418,6 @@ export function ProductContent({ product }: ProductContentProps) {
                   PayPal
                 </button>
               </div>
-
-              {relatedProducts.length > 0 && (
-                <div className="mt-6 rounded-2xl border-2 border-[#4ECCA3]/25 bg-gradient-to-br from-[#4ECCA3]/12 to-transparent p-4 sm:p-5">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-bold text-[#0C211E]">
-                    <Sparkles className="h-4 w-4 text-[#4ECCA3]" />
-                    Häufig zusammen gekauft
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-white">
-                      <Image
-                        src={relatedProducts[0].images[0]}
-                        alt={relatedProducts[0].name.de}
-                        fill
-                        className="object-contain p-1.5 mix-blend-multiply"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="line-clamp-2 text-xs font-bold text-gray-800">{relatedProducts[0].name.de}</p>
-                      <p className="mt-1 text-sm font-black tabular-nums text-[#0C211E]">
-                        <span className="text-[#4ECCA3]">+</span>{' '}
-                        <span className="whitespace-nowrap">{formatPriceDe(relatedProducts[0].price)}</span>
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      addItem(product, quantity)
-                      addItem(relatedProducts[0], 1)
-                    }}
-                    className="mt-4 w-full rounded-xl border-2 border-[#0C211E] py-3 text-sm font-bold text-[#0C211E] transition-colors hover:bg-[#0C211E] hover:text-[#4ECCA3]"
-                  >
-                    Beides in den Warenkorb
-                  </button>
-                </div>
-              )}
             </div>
 
             {/* Bandeau service — pleine largeur de la colonne */}
