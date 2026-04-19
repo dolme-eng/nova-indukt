@@ -125,10 +125,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "logo": "https://nova-indukt.de/logo0.png",
           "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "+49-30-123-456-789",
+            "telephone": "+49-89-123-456-78",
             "contactType": "customer service",
             "areaServed": "DE",
             "availableLanguage": "German"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Industriestraße 42",
+            "addressLocality": "München",
+            "postalCode": "80339",
+            "addressCountry": "DE"
           }
         })}} />
         <a href="#main-content" className="skip-link">

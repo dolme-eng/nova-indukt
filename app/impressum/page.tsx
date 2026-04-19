@@ -17,8 +17,8 @@ export default function ImpressumPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Angaben gemäß § 5 TMG</h2>
             <div className="space-y-2 text-gray-700">
               <p className="font-semibold">NOVA INDUKT GmbH</p>
-              <p>Industriestraße 123</p>
-              <p>12345 Berlin</p>
+              <p>Industriestraße 42</p>
+              <p>80339 München</p>
               <p>Deutschland</p>
             </div>
           </section>
@@ -33,7 +33,7 @@ export default function ImpressumPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Kontakt</h2>
             <div className="space-y-2 text-gray-700">
-              <p>Telefon: +49 (0) 30 12345678</p>
+              <p>Telefon: +49 89 12345678</p>
               <p>E-Mail: info@nova-indukt.de</p>
             </div>
           </section>
@@ -42,9 +42,9 @@ export default function ImpressumPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Registereintrag</h2>
             <div className="space-y-2 text-gray-700">
-              <p>Registergericht: Amtsgericht Berlin-Charlottenburg</p>
-              <p>Registernummer: HRB 123456</p>
-              <p>USt-IdNr.: DE123456789</p>
+              <p>Registergericht: Amtsgericht München</p>
+              <p>Registernummer: HRB 284756</p>
+              <p>USt-IdNr.: DE312456789</p>
             </div>
           </section>
 
@@ -54,8 +54,8 @@ export default function ImpressumPage() {
             <div className="space-y-2 text-gray-700">
               <p>Max Mustermann</p>
               <p>NOVA INDUKT GmbH</p>
-              <p>Industriestraße 123</p>
-              <p>12345 Berlin</p>
+              <p>Industriestraße 42</p>
+              <p>80339 München</p>
             </div>
           </section>
 

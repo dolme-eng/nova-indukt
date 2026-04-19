@@ -74,24 +74,24 @@ export function Footer() {
             </p>
             
             <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-4 text-[#9FE1CD]">
-                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-4 h-4" />
+              <div className="flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#4ECCA3] group-hover:text-gray-900 transition-all duration-300">
+                  <Phone className="w-5 h-5" />
                 </div>
-                <div className="pt-2 text-sm font-medium">Adresse: <span className="text-[#6FD2B4]">[Noch nicht hinterlegt]</span></div>
+                <a href="tel:+498912345678" className="text-gray-600 hover:text-[#4ECCA3] transition-colors">+49 89 12345678</a>
               </div>
-              <div className="flex items-center gap-4 text-[#9FE1CD]">
-                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-4 h-4" />
+              <div className="flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#4ECCA3] group-hover:text-gray-900 transition-all duration-300">
+                  <Mail className="w-5 h-5" />
                 </div>
-                <span className="text-sm font-medium">Tel: <span className="text-[#6FD2B4]">[Noch nicht hinterlegt]</span></span>
+                <a href="mailto:info@nova-indukt.de" className="text-gray-600 hover:text-[#4ECCA3] transition-colors">info@nova-indukt.de</a>
               </div>
-              <a href="mailto:kontakt@nova-indukt.de" className="flex items-center gap-4 text-[#9FE1CD] hover:text-[#4ECCA3] transition-colors group">
-                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center flex-shrink-0 group-hover:bg-[#236456] transition-colors">
-                  <Mail className="w-4 h-4" />
+              <div className="flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#4ECCA3] group-hover:text-gray-900 transition-all duration-300">
+                  <MapPin className="w-5 h-5" />
                 </div>
-                <span className="text-sm font-medium">kontakt@nova-indukt.de</span>
-              </a>
+                <span className="text-gray-600">Industriestraße 42, 80339 München</span>
+              </div>
             </div>
 
             <div className="flex gap-4">
@@ -152,7 +152,7 @@ export function Footer() {
                 <CreditCard className="w-4 h-4 text-[#4ECCA3]" /> Sichere Zahlungsarten
               </p>
               <div className="flex flex-wrap items-center gap-3">
-                {['Visa', 'Mastercard', 'PayPal', 'Klarna', 'Apple Pay', 'Google Pay', 'Sofort', 'Rechnung'].map(m => (
+                {['Visa', 'Mastercard', 'PayPal', 'Apple Pay', 'Google Pay', 'Vorkasse'].map(m => (
                   <span key={m} className="px-4 py-2 bg-[#17423C] rounded-lg text-xs font-bold text-white border border-[#236456]/50 hover:border-[#4ECCA3]/50 transition-colors cursor-default">{m}</span>
                 ))}
               </div>
