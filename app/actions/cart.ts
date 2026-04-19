@@ -183,9 +183,9 @@ export async function getCartItems() {
     if (cart.type === "db") {
       return cart.cart.items.map(item => ({
         id: item.product.id,
-        name: item.product.name,
+        name: item.product.nameDe,
         price: Number(item.product.price),
-        image: item.product.images[0]?.url || "",
+        image: (item.product as any).images?.[0]?.url || "",
         slug: item.product.slug,
         quantity: item.quantity
       }))
@@ -205,7 +205,7 @@ export async function getCartItems() {
           id: product?.id || item.product.id,
           name: product?.nameDe || "Produkt",
           price: Number(product?.price || 0),
-          image: product?.images[0]?.url || "",
+          image: product?.images?.[0]?.url || "",
           slug: product?.slug || "",
           quantity: item.quantity
         }
