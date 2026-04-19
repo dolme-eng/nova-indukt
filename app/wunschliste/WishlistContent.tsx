@@ -5,16 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Heart, ShoppingCart, Trash2, Check, Package, ChevronRight, ArrowLeft } from 'lucide-react'
-import { products, Product } from '@/lib/data/products'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
 import { toast } from 'sonner'
 import { formatPriceDe } from '@/lib/utils/vat'
-
-// Extended interface for display purposes (combines WishlistItem with Product data)
-interface DisplayWishlistItem extends WishlistItem {
-  product: Product
-}
 
 export default function WishlistContent() {
   const [addedToCart, setAddedToCart] = useState<string[]>([])
@@ -22,36 +16,31 @@ export default function WishlistContent() {
   const { addItem } = useCart()
   const { items: wishlistItems, removeItem, mounted } = useWishlist()
 
-  // Build display items by looking up full product data
-  const [displayItems, setDisplayItems] = useState<DisplayWishlistItem[]>([])
-
   useEffect(() => {
     setIsHydrated(mounted)
   }, [mounted])
-
-  useEffect(() => {
-    const display: DisplayWishlistItem[] = wishlistItems
-      .map(item => {
-        const product = products.find(p => p.id === item.id)
-        return product ? { ...item, product } : null
-      })
-      .filter((item): item is DisplayWishlistItem => item !== null && item.product !== undefined)
-    setDisplayItems(display)
-  }, [wishlistItems])
 
   const handleRemoveItem = async (productId: string) => {
     await removeItem(productId)
     toast.success('Artikel von der Wunschliste entfernt')
   }
 
-  const handleAddToCart = (item: DisplayWishlistItem) => {
-    if (item.product) {
-      addItem(item.product, 1)
-      setAddedToCart(prev => [...prev, item.id])
-      setTimeout(() => {
-        setAddedToCart(prev => prev.filter(id => id !== item.id))
-      }, 2000)
-    }
+  const handleAddToCart = (item: WishlistItem) => {
+    addItem({
+      id: item.id,
+      nameDe: item.name.de,
+      price: item.price,
+      images: [{ url: item.image }],
+      slug: item.slug || item.id,
+      stock: 10,
+      isActive: true,
+      categoryId: ''
+    } as any, 1)
+    
+    setAddedToCart(prev => [...prev, item.id])
+    setTimeout(() => {
+      setAddedToCart(prev => prev.filter(id => id !== item.id))
+    }, 2000)
   }
 
   if (!isHydrated) {
@@ -106,14 +95,14 @@ export default function WishlistContent() {
       <div className="container mx-auto px-4 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Wunschliste</h1>
-          {displayItems.length > 0 && (
+          {wishlistItems.length > 0 && (
             <span className="text-sm text-gray-500">
-              {displayItems.length} {displayItems.length === 1 ? 'Artikel' : 'Artikel'}
+              {wishlistItems.length} {wishlistItems.length === 1 ? 'Artikel' : 'Artikel'}
             </span>
           )}
         </div>
         
-        {displayItems.length === 0 ? (
+        {wishlistItems.length === 0 ? (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -135,9 +124,7 @@ export default function WishlistContent() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             <AnimatePresence>
-              {displayItems.map((item, index) => {
-                const product = item.product
-                if (!product) return null
+              {wishlistItems.map((item, index) => {
                 return (
                   <motion.div 
                     key={item.id}
@@ -164,18 +151,15 @@ export default function WishlistContent() {
                       </button>
                     </div>
                     <div className="p-3 sm:p-4">
-                      <Link href={`/produkt/${item.slug}`} className="block">
+                      <Link href={`/produkt/${item.slug || item.id}`} className="block">
                         <h3 className="font-medium text-gray-900 line-clamp-1 hover:text-[#4ECCA3] transition-colors text-sm sm:text-base">
                           {item.name.de}
                         </h3>
                       </Link>
-                      <p className="text-xs sm:text-sm text-gray-500 line-clamp-1 mt-1">
-                        {product.shortDescription.de}
-                      </p>
                       <div className="flex items-center gap-1 mt-2">
                         <span className="text-xs sm:text-sm text-amber-500">★</span>
-                        <span className="text-xs sm:text-sm text-gray-600">{product.rating}</span>
-                        <span className="text-xs text-gray-400">({product.reviewCount})</span>
+                        <span className="text-xs sm:text-sm text-gray-600">5.0</span>
+                        <span className="text-xs text-gray-400">(Exzellent)</span>
                       </div>
                       <p className="text-base sm:text-lg font-semibold text-[#4ECCA3] mt-2 tabular-nums whitespace-nowrap">
                         {formatPriceDe(item.price)}
