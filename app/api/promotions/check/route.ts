@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkAndCreateRandomPromotion, cleanupExpiredPromotions } from '@/lib/promotions/random-promotions'
 
-/**
- * API Route: Check and create random promotions
- * Should be called by a cron job (e.g., Vercel Cron, GitHub Actions)
- * 
- * Cron: 0 9 * * * (Every day at 9 AM)
- * Or: */30 * * * * (Every 30 minutes for more frequent checks)
- */
+// API Route: Check and create random promotions
+// Should be called by a cron job (e.g., Vercel Cron, GitHub Actions)
+// 
+// Cron: 0 9 * * * (Every day at 9 AM)
+// Or: Every 30 minutes (30 * * * *) for more frequent checks
 export async function GET(request: NextRequest) {
   try {
     // Optional: Verify cron secret for security
