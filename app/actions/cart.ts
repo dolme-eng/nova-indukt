@@ -82,12 +82,27 @@ export async function addToCart(productId: string, quantity: number = 1) {
       const cookieStore = await cookies()
       const items = cart.items
       
-      const existingIndex = items.findIndex(item => item.productId === productId)
+      const existingIndex = items.findIndex(item => item.product.id === productId)
       
       if (existingIndex >= 0) {
         items[existingIndex].quantity += quantity
       } else {
-        items.push({ productId, quantity })
+        // We need to fetch the product to add it to the cookie cart
+        const product = await prisma.product.findUnique({
+          where: { id: productId },
+          include: { images: true }
+        })
+        
+        if (product) {
+          items.push({ 
+            product: {
+              ...product,
+              price: Number(product.price),
+              oldPrice: product.oldPrice ? Number(product.oldPrice) : undefined
+            } as any, 
+            quantity 
+          })
+        }
       }
       
       cookieStore.set(CART_COOKIE, JSON.stringify(items), {
@@ -131,9 +146,9 @@ export async function updateCartItem(productId: string, quantity: number) {
       let items = cart.items
       
       if (quantity <= 0) {
-        items = items.filter(item => item.productId !== productId)
+        items = items.filter(item => item.product.id !== productId)
       } else {
-        const index = items.findIndex(item => item.productId === productId)
+        const index = items.findIndex(item => item.product.id === productId)
         if (index >= 0) {
           items[index].quantity = quantity
         }
@@ -177,7 +192,7 @@ export async function getCartItems() {
     } else {
       // For cookie cart, fetch product details
       const items = cart.items
-      const productIds = items.map(item => item.productId)
+      const productIds = items.map(item => item.product.id)
       
       const products = await prisma.product.findMany({
         where: { id: { in: productIds } },
@@ -185,9 +200,9 @@ export async function getCartItems() {
       })
       
       return items.map(item => {
-        const product = products.find(p => p.id === item.productId)
+        const product = products.find(p => p.id === item.product.id)
         return {
-          id: product?.id || item.productId,
+          id: product?.id || item.product.id,
           name: product?.nameDe || "Produkt",
           price: Number(product?.price || 0),
           image: product?.images[0]?.url || "",
@@ -255,7 +270,7 @@ export async function mergeGuestCartOnLogin() {
     // Merge items
     for (const guestItem of guestItems) {
       const existingItem = cart.items.find(
-        item => item.productId === guestItem.productId
+        item => item.productId === guestItem.product.id
       )
       
       if (existingItem) {
@@ -267,7 +282,7 @@ export async function mergeGuestCartOnLogin() {
         await prisma.cartItem.create({
           data: {
             cartId: cart.id,
-            productId: guestItem.productId,
+            productId: guestItem.product.id,
             quantity: guestItem.quantity
           }
         })
