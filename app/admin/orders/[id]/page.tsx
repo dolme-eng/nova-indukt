@@ -18,7 +18,8 @@ import {
   ChevronRight,
   ShieldCheck,
   Calendar,
-  DollarSign
+  DollarSign,
+  Plus
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { format } from "date-fns"
