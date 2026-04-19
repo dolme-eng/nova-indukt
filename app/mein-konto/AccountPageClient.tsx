@@ -13,7 +13,6 @@ import { AddressForm } from '@/components/address-form'
 import { useAuth } from '@/lib/store/auth'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
-import { products } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 const TABS = [
@@ -77,11 +76,20 @@ export default function AccountPageClient() {
   }
 
   const handleAddToCart = (item: WishlistItem) => {
-    // Retrieve full product data from catalog
-    const fullProduct = products.find(p => p.id === item.id)
-    if (fullProduct) {
-      addToCart(fullProduct, 1)
-    }
+    // We already have the item data in the WishlistItem object
+    // which includes id, name, price, image, etc.
+    // We need to transform it slightly to match the expected Product type if necessary,
+    // but typically useCart's addItem handles the item structure.
+    addToCart({
+      id: item.id,
+      nameDe: item.name.de,
+      price: item.price,
+      images: [{ url: item.image }],
+      slug: item.id, // Fallback if slug not in wishlist item
+      stock: 10, // Default stock for wishlist items
+      isActive: true,
+      categoryId: ''
+    } as any, 1)
   }
 
   if (!mounted || !isAuthenticated) {
