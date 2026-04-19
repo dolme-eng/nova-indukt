@@ -1,10 +1,16 @@
 import { MetadataRoute } from 'next'
-import { products, categories, blogPosts } from '@/lib/data/products'
+import { blogPosts } from '@/lib/data/products'
 import { prisma } from '@/lib/prisma'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // 1. Fetch products and categories from Prisma (Production source)
+  const [dbProducts, dbCategories] = await Promise.all([
+    prisma.product.findMany({ where: { isActive: true }, select: { slug: true } }),
+    prisma.category.findMany({ where: { isActive: true }, select: { slug: true } })
+  ])
+
   // Static routes
   const staticRoutes = [
     {
@@ -18,12 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/kategorien`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
     },
     {
       url: `${BASE_URL}/blog`,
@@ -74,12 +74,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     {
-      url: `${BASE_URL}/registrieren`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
       url: `${BASE_URL}/karriere`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
@@ -87,26 +81,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // Product routes from static data
-  const productRoutes = products.map((product) => ({
+  // Product routes from DB
+  const productRoutes = dbProducts.map((product) => ({
     url: `${BASE_URL}/produkt/${product.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }))
 
-  // Category routes
-  const categoryRoutes = categories.map((category) => ({
-    url: `${BASE_URL}/kategorie/${category.id}`,
+  // Category routes from DB
+  const categoryRoutes = dbCategories.map((category) => ({
+    url: `${BASE_URL}/kategorie/${category.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }))
 
-  // Blog post routes
+  // Blog post routes (still using static data for now, or could be moved to DB too)
   const blogRoutes = blogPosts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
-    lastModified: new Date(post.date.split('.').reverse().join('-')),
+    lastModified: new Date(post.date),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
