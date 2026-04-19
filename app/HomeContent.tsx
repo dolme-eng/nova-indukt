@@ -8,7 +8,7 @@ import {
   ArrowRight, Truck, RotateCcw, Shield, Headphones, 
   Zap, Leaf, Award, ChevronRight, Star,
   ShoppingCart, Heart, Eye, Flame, Clock, ChevronLeft,
-  Sparkles, CheckCircle, BadgePercent
+  Sparkles, CheckCircle, BadgePercent, LucideIcon
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
@@ -756,7 +756,7 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
 }
 
 // Polished Product Card
-function ProductCard({ product, index }: { product: typeof products[0]; index: number }) {
+function ProductCard({ product, index }: { product: Product; index: number }) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   
@@ -878,7 +878,7 @@ function ProductCard({ product, index }: { product: typeof products[0]; index: n
 
 // Elevated Tech Feature Card
 function TechFeatureCard({ icon: Icon, title, description, color, index }: { 
-  icon: typeof Zap; 
+  icon: LucideIcon; 
   title: string; 
   description: string; 
   color: string;
@@ -911,7 +911,7 @@ function TechFeatureCard({ icon: Icon, title, description, color, index }: {
 }
 
 // Flash Deal Card redefined
-function FlashDealCard({ product, index }: { product: typeof flashDeals[0]; index: number }) {
+function FlashDealCard({ product, index }: { product: Product & { discount: number }; index: number }) {
   const { isInWishlist, toggleItem } = useWishlist()
   const { addItem } = useCart()
   const inWishlist = isInWishlist(product.id)
