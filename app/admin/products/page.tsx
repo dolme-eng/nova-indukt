@@ -14,6 +14,7 @@ import {
   XCircle
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+export const dynamic = 'force-dynamic'
 import Image from "next/image"
 
 async function getProducts() {

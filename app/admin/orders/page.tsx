@@ -18,6 +18,7 @@ import {
   Box
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+export const dynamic = 'force-dynamic'
 import { format } from "date-fns"
 import { de } from "date-fns/locale"
 import { OrderStatus, PaymentStatus } from "@prisma/client"
