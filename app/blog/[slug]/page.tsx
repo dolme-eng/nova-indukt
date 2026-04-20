@@ -205,115 +205,49 @@ export default async function BlogPostPage({
         {/* Content */}
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Blog
-            </Link>
-            
-            <div className="relative aspect-[21/9] rounded-2xl overflow-hidden mb-8">
-              {post.image && (
-                <Image
-                  src={post.image}
-                  alt={post.titleDe}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <span className="px-3 py-1 bg-[#4ECCA3] text-white text-sm font-bold rounded-full mb-3 inline-block">
-                  {post.category}
-                </span>
-                <h1 className="text-2xl md:text-3xl font-bold text-white">{post.titleDe}</h1>
+            <div className="bg-white rounded-2xl shadow-sm p-8 md:p-12">
+              <div className="prose prose-lg max-w-none">
+                {renderContent(post.contentDe)}
               </div>
             </div>
 
-            {/* Meta */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-8">
-              <span className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                {new Date(post.publishedAt || post.createdAt).toLocaleDateString('de-DE', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />
-                {post.readTime}
-              </span>
-              <span className="flex items-center gap-1">
-                <User className="w-4 h-4" />
-                {post.author}
-              </span>
-            </div>
-
-            {/* Share */}
-            <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-200">
-              <span className="text-sm text-gray-500">Teilen:</span>
-              <button className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
-                <Facebook className="w-4 h-4" />
-              </button>
-              <button className="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center hover:bg-sky-600 transition-colors">
-                <Twitter className="w-4 h-4" />
-              </button>
-              <button className="w-8 h-8 bg-blue-700 text-white rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
-                <Linkedin className="w-4 h-4" />
-              </button>
-              <button className="w-8 h-8 bg-gray-200 text-gray-600 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors">
-                <Share2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-sm p-8 md:p-12">
-            <div className="prose prose-lg max-w-none">
-              {renderContent(post.contentDe)}
-            </div>
-          </div>
-
-          {/* Related Posts */}
-          {relatedPosts.length > 0 && (
-            <div className="mt-12">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
-                Verwandte Artikel
-              </h2>
-              <div className="grid md:grid-cols-2 gap-6">
-                {relatedPosts.map((relatedPost) => (
-                  <Link 
-                    key={relatedPost.id} 
-                    href={`/blog/${relatedPost.slug}`}
-                    className="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                  >
-                    <div className="relative aspect-video">
-                      {relatedPost.image && (
-                        <Image
-                          src={relatedPost.image}
-                          alt={relatedPost.titleDe}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <span className="text-xs text-[#4ECCA3] font-medium">{relatedPost.category}</span>
-                      <h3 className="font-semibold text-gray-900 mt-1 group-hover:text-[#4ECCA3] transition-colors">
-                        {relatedPost.titleDe}
-                      </h3>
-                    </div>
-                  </Link>
-                ))}
+            {/* Related Posts */}
+            {relatedPosts.length > 0 && (
+              <div className="mt-12">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">
+                  Verwandte Artikel
+                </h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {relatedPosts.map((relatedPost) => (
+                    <Link 
+                      key={relatedPost.id} 
+                      href={`/blog/${relatedPost.slug}`}
+                      className="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                    >
+                      <div className="relative aspect-video">
+                        {relatedPost.image && (
+                          <Image
+                            src={relatedPost.image}
+                            alt={relatedPost.titleDe}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <span className="text-xs text-[#4ECCA3] font-medium">{relatedPost.category}</span>
+                        <h3 className="font-semibold text-gray-900 mt-1 group-hover:text-[#4ECCA3] transition-colors">
+                          {relatedPost.titleDe}
+                        </h3>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </>
   )
 }
