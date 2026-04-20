@@ -38,6 +38,8 @@ export async function POST(request: NextRequest) {
       data: {
         name: data.name,
         description: data.description,
+        code: data.code,
+        isCoupon: data.isCoupon || false,
         discountType: data.discountType,
         discountValue: data.discountValue,
         isGlobal: data.isGlobal,

@@ -32,6 +32,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${title} | Blog | NOVA INDUKT`,
     description,
+    alternates: {
+      canonical: `/blog/${resolvedParams.slug}`,
+    },
     openGraph: {
       title,
       description,
@@ -99,15 +102,109 @@ export default async function BlogPostPage({
     orderBy: { publishedAt: 'desc' }
   })
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.titleDe,
+    "image": post.image ? [post.image] : [],
+    "datePublished": post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+    "dateModified": post.updatedAt.toISOString(),
+    "author": [{
+      "@type": "Person",
+      "name": post.author
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "NOVA INDUKT",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nova-indukt.de/favicon.svg"
+      }
+    },
+    "description": post.excerptDe
+  }
+
   return (
-    <article className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <div className="bg-white">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <article className="min-h-screen bg-gray-50">
+        {/* Hero */}
+        <div className="bg-white">
+          <div className="container mx-auto px-4 py-8">
+            <div className="max-w-4xl mx-auto">
+              <Link 
+                href="/blog" 
+                className="inline-flex items-center gap-2 text-gray-500 hover:text-[#4ECCA3] transition-colors mb-6"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Blog
+              </Link>
+              
+              <div className="relative aspect-[21/9] rounded-2xl overflow-hidden mb-8">
+                {post.image && (
+                  <Image
+                    src={post.image}
+                    alt={post.titleDe}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <span className="px-3 py-1 bg-[#4ECCA3] text-white text-sm font-bold rounded-full mb-3 inline-block">
+                    {post.category}
+                  </span>
+                  <h1 className="text-2xl md:text-3xl font-bold text-white">{post.titleDe}</h1>
+                </div>
+              </div>
+
+              {/* Meta */}
+              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-8">
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  {new Date(post.publishedAt || post.createdAt).toLocaleDateString('de-DE', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  {post.readTime}
+                </span>
+                <span className="flex items-center gap-1">
+                  <User className="w-4 h-4" />
+                  {post.author}
+                </span>
+              </div>
+
+              {/* Share */}
+              <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-200">
+                <span className="text-sm text-gray-500">Teilen:</span>
+                <button className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                  <Facebook className="w-4 h-4" />
+                </button>
+                <button className="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center hover:bg-sky-600 transition-colors">
+                  <Twitter className="w-4 h-4" />
+                </button>
+                <button className="w-8 h-8 bg-blue-700 text-white rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
+                  <Linkedin className="w-4 h-4" />
+                </button>
+                <button className="w-8 h-8 bg-gray-200 text-gray-600 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors">
+                  <Share2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-            <Link 
-              href="/blog" 
-              className="inline-flex items-center gap-2 text-gray-500 hover:text-[#4ECCA3] transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4" />
               Blog

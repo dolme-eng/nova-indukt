@@ -148,6 +148,11 @@ export default function CheckoutContent() {
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal' | 'email'>('stripe')
   const [contactEmail, setContactEmail] = useState('')
   
+  // Promo code state
+  const [promoCode, setPromoCode] = useState('')
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false)
+  const [appliedPromo, setAppliedPromo] = useState<any>(null)
+  
   // Stripe state
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [orderId, setOrderId] = useState<string | null>(null)
@@ -157,7 +162,40 @@ export default function CheckoutContent() {
 
   const subtotal = totalPrice
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST
-  const total = subtotal + shipping
+  const discountAmount = appliedPromo ? appliedPromo.discountAmount : 0
+  const total = Math.max(0, subtotal + shipping - discountAmount)
+
+  const handleApplyPromo = async () => {
+    if (!promoCode) return
+    
+    setIsApplyingPromo(true)
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: promoCode, amount: subtotal })
+      })
+      
+      const data = await response.json()
+      
+      if (response.ok) {
+        setAppliedPromo(data)
+        toast.success(`Code "${data.code}" angewendet: -${formatPriceDe(data.discountAmount)}`)
+      } else {
+        toast.error(data.error || 'Code konnte nicht angewendet werden')
+      }
+    } catch (error) {
+      toast.error('Fehler bei der Validierung des Codes')
+    } finally {
+      setIsApplyingPromo(false)
+    }
+  }
+
+  const removePromo = () => {
+    setAppliedPromo(null)
+    setPromoCode('')
+    toast.success('Gutscheincode entfernt')
+  }
 
   // Create order and get Stripe client secret
   const createOrder = useCallback(async (currentPaymentMethod: string) => {
@@ -908,6 +946,39 @@ export default function CheckoutContent() {
               </div>
               
               <div className="border-t border-gray-100 pt-6 space-y-3">
+                {/* Promo Code Input */}
+                {!appliedPromo ? (
+                  <div className="flex gap-2 mb-4">
+                    <input
+                      type="text"
+                      placeholder="Gutscheincode"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                      className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-[#4ECCA3] outline-none transition-all uppercase font-mono"
+                    />
+                    <button
+                      onClick={handleApplyPromo}
+                      disabled={isApplyingPromo || !promoCode}
+                      className="px-4 py-2 bg-[#0C211E] text-white text-sm font-bold rounded-xl hover:bg-[#17423C] disabled:opacity-50 transition-all font-heading"
+                    >
+                      {isApplyingPromo ? '...' : 'OK'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl border border-green-100 mb-4">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-bold text-green-600 uppercase tracking-wider">Angewendet</span>
+                      <span className="text-sm font-bold text-green-700 font-mono">{appliedPromo.code}</span>
+                    </div>
+                    <button 
+                      onClick={removePromo}
+                      className="text-green-700 hover:text-green-900 text-xs font-bold"
+                    >
+                      Entfernen
+                    </button>
+                  </div>
+                )}
+
                 <div className="flex justify-between text-[15px] font-medium">
                   <span className="text-gray-500">Zwischensumme</span>
                   <span className="font-bold text-[#0C211E] tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
@@ -919,6 +990,13 @@ export default function CheckoutContent() {
                   </span>
                 </div>
                 
+                {appliedPromo && (
+                  <div className="flex justify-between text-[15px] font-medium text-green-600">
+                    <span>Rabatt ({appliedPromo.code})</span>
+                    <span className="font-bold tabular-nums whitespace-nowrap">-{formatPriceDe(appliedPromo.discountAmount)}</span>
+                  </div>
+                )}
+               
                 <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between items-end">
                   <span className="font-bold text-xl text-[#0C211E]">Gesamtsumme</span>
                   <span className="font-black text-2xl sm:text-3xl tracking-tight text-[#0C211E] tabular-nums whitespace-nowrap">{formatPriceDe(total)}</span>

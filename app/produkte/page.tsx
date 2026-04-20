@@ -3,10 +3,38 @@ import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Product, Category } from '@/lib/data/products'
 
-export const metadata: Metadata = {
-  title: 'Unsere Produkte | NOVA INDUKT',
-  description: 'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
-  keywords: ['Produkte', 'Kochgeschirr', 'Pfannen', 'Töpfe', 'Induktion', 'Küche', 'Online-Shop'],
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ kategorie?: string; suche?: string }>
+}): Promise<Metadata> {
+  const params = await searchParams
+  const categorySlug = params.kategorie
+  const search = params.suche
+
+  if (categorySlug) {
+    const category = await prisma.category.findUnique({
+      where: { slug: categorySlug }
+    })
+    if (category) {
+      return {
+        title: `${category.nameDe} | Premium Induktions-Kochgeschirr`,
+        description: `Entdecken Sie unsere Auswahl an ${category.nameDe}. Premium-Qualität von NOVA INDUKT für höchste Ansprüche.`,
+      }
+    }
+  }
+
+  if (search) {
+    return {
+      title: `Suche: "${search}" | NOVA INDUKT`,
+      description: `Suchergebnisse für "${search}" im NOVA INDUKT Shop. Finden Sie das perfekte Induktions-Kochgeschirr.`,
+    }
+  }
+
+  return {
+    title: 'Unsere Produkte | Premium Induktions-Kochgeschirr',
+    description: 'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
+  }
 }
 
 export default async function ProductsPage({

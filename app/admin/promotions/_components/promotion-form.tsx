@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Save, X, Percent, Euro, Tag, Calendar, Package, Folder } from 'lucide-react'
+import { Save, X, Percent, Euro, Tag, Calendar, Package, Folder, Ticket } from 'lucide-react'
 
 interface Category {
   id: string
@@ -17,25 +17,7 @@ interface Product {
 }
 
 interface PromotionFormProps {
-  promotion?: {
-    id: string
-    name: string
-    description: string | null
-    discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
-    discountValue: number
-    isGlobal: boolean
-    productIds: string[]
-    categoryIds: string[]
-    startDate: string
-    endDate: string
-    minOrderAmount: number | null
-    maxDiscount: number | null
-    usageLimit: number | null
-    badge: string | null
-    bannerText: string | null
-    highlightColor: string | null
-    isActive: boolean
-  }
+  promotion?: any
 }
 
 export default function PromotionForm({ promotion }: PromotionFormProps) {
@@ -47,6 +29,8 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
   const [formData, setFormData] = useState({
     name: promotion?.name || '',
     description: promotion?.description || '',
+    code: promotion?.code || '',
+    isCoupon: promotion?.isCoupon || false,
     discountType: promotion?.discountType || 'PERCENTAGE',
     discountValue: promotion?.discountValue.toString() || '10',
     isGlobal: promotion?.isGlobal || false,
@@ -111,6 +95,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          code: formData.isCoupon ? formData.code.toUpperCase() : null,
           discountValue: Number(formData.discountValue),
           minOrderAmount: formData.minOrderAmount ? Number(formData.minOrderAmount) : null,
           maxDiscount: formData.maxDiscount ? Number(formData.maxDiscount) : null,
@@ -122,11 +107,11 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
         router.push('/admin/promotions')
       } else {
         const error = await response.json()
-        alert(error.error || 'Une erreur est survenue')
+        alert(error.error || 'Ein Fehler ist aufgetreten')
       }
     } catch (error) {
       console.error('Error saving promotion:', error)
-      alert('Erreur lors de la sauvegarde')
+      alert('Fehler beim Speichern')
     } finally {
       setLoading(false)
     }
@@ -136,27 +121,79 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Info */}
       <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4">Informations générales</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Allgemeine Informationen</h2>
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Nom de la promotion</label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="Ex: Flash Deal -20%"
-            />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-400 mb-1">Name der Aktion</label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+                className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+                placeholder="z.B. Flash Deal -20%"
+              />
+            </div>
+            <div className="w-full md:w-1/3">
+               <label className="block text-sm font-medium text-gray-400 mb-1">Typ</label>
+               <div className="flex gap-2">
+                 <button
+                   type="button"
+                   onClick={() => setFormData({ ...formData, isCoupon: false })}
+                   className={`flex-1 px-4 py-2 rounded-lg border transition-all text-sm font-bold ${
+                     !formData.isCoupon
+                       ? 'bg-[#4ECCA3]/20 border-[#4ECCA3] text-[#4ECCA3]'
+                       : 'bg-[#1A1A1A] border-white/10 text-gray-400'
+                   }`}
+                 >
+                   Automatisch
+                 </button>
+                 <button
+                   type="button"
+                   onClick={() => setFormData({ ...formData, isCoupon: true })}
+                   className={`flex-1 px-4 py-2 rounded-lg border transition-all text-sm font-bold ${
+                     formData.isCoupon
+                       ? 'bg-[#4ECCA3]/20 border-[#4ECCA3] text-[#4ECCA3]'
+                       : 'bg-[#1A1A1A] border-white/10 text-gray-400'
+                   }`}
+                 >
+                   Gutschein
+                 </button>
+               </div>
+            </div>
           </div>
+
+          {formData.isCoupon && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl"
+            >
+              <label className="block text-sm font-medium text-purple-400 mb-1 flex items-center gap-2">
+                <Ticket className="w-4 h-4" />
+                Gutscheincode
+              </label>
+              <input
+                type="text"
+                value={formData.code}
+                onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                required={formData.isCoupon}
+                className="w-full px-4 py-2 bg-[#1A1A1A] border border-purple-500/30 rounded-lg text-white focus:outline-none focus:border-purple-500 font-mono uppercase tracking-widest"
+                placeholder="Z.B. SOMMER20"
+              />
+              <p className="text-xs text-gray-500 mt-2">Kunden müssen diesen Code im Warenkorb/Checkout eingeben.</p>
+            </motion.div>
+          )}
+
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Description</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Beschreibung</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows={3}
+              rows={2}
               className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="Description de la promotion..."
+              placeholder="Beschreibung der Aktion..."
             />
           </div>
         </div>
@@ -164,10 +201,10 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
 
       {/* Discount Settings */}
       <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4">Paramètres de réduction</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Rabatteinstellungen</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Type de réduction</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Rabattart</label>
             <div className="flex gap-2">
               <button
                 type="button"
@@ -179,7 +216,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
                 }`}
               >
                 <Percent className="w-4 h-4" />
-                Pourcentage
+                Prozentsatz
               </button>
               <button
                 type="button"
@@ -191,13 +228,13 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
                 }`}
               >
                 <Euro className="w-4 h-4" />
-                Montant fixe
+                Fester Betrag
               </button>
             </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">
-              Valeur {formData.discountType === 'PERCENTAGE' ? '(%)' : '(€)'}
+              Wert {formData.discountType === 'PERCENTAGE' ? '(%)' : '(€)'}
             </label>
             <input
               type="number"
@@ -210,25 +247,25 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Montant minimum de commande (€)</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Mindestbestellwert (€)</label>
             <input
               type="number"
               value={formData.minOrderAmount}
               onChange={(e) => setFormData({ ...formData, minOrderAmount: e.target.value })}
               min="0"
               className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="Optionnel"
+              placeholder="Optional"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Remise maximale (€)</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Maximaler Rabatt (€)</label>
             <input
               type="number"
               value={formData.maxDiscount}
               onChange={(e) => setFormData({ ...formData, maxDiscount: e.target.value })}
               min="0"
               className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="Optionnel"
+              placeholder="Optional"
             />
           </div>
         </div>
@@ -236,7 +273,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
 
       {/* Scope */}
       <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4">Portée de la promotion</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Geltungsbereich</h2>
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <input
@@ -246,7 +283,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
               onChange={(e) => setFormData({ ...formData, isGlobal: e.target.checked })}
               className="w-4 h-4 rounded border-white/10 bg-[#1A1A1A] text-[#4ECCA3] focus:ring-[#4ECCA3]"
             />
-            <label htmlFor="isGlobal" className="text-white">Appliquer à tous les produits (promotion globale)</label>
+            <label htmlFor="isGlobal" className="text-white">Auf alle Produkte anwenden (globale Aktion)</label>
           </div>
 
           {!formData.isGlobal && (
@@ -254,7 +291,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
               <div>
                 <label className="text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
                   <Folder className="w-4 h-4" />
-                  Catégories concernées
+                  Betroffene Kategorien
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto p-2 bg-[#1A1A1A] rounded-lg border border-white/10">
                   {categories.map((category) => (
@@ -280,7 +317,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
               <div>
                 <label className="text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
                   <Package className="w-4 h-4" />
-                  Produits spécifiques
+                  Spezifische Produkte
                 </label>
                 <select
                   multiple
@@ -297,7 +334,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
                     </option>
                   ))}
                 </select>
-                <p className="text-xs text-gray-500 mt-1">Maintenez Ctrl/Cmd pour sélectionner plusieurs produits</p>
+                <p className="text-xs text-gray-500 mt-1">Halten Sie Strg/Cmd gedrückt, um mehrere Produkte auszuwählen</p>
               </div>
             </>
           )}
@@ -308,11 +345,11 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
       <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
         <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Calendar className="w-5 h-5" />
-          Durée de la promotion
+          Dauer der Aktion
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Date de début</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Startdatum</label>
             <input
               type="date"
               value={formData.startDate}
@@ -322,7 +359,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Date de fin</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Enddatum</label>
             <input
               type="date"
               value={formData.endDate}
@@ -332,14 +369,14 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Limite d'utilisation</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Nutzungsgrenze</label>
             <input
               type="number"
               value={formData.usageLimit}
               onChange={(e) => setFormData({ ...formData, usageLimit: e.target.value })}
               min="0"
               className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="Illimité"
+              placeholder="Unbegrenzt"
             />
           </div>
           <div className="flex items-center gap-3">
@@ -350,7 +387,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
               className="w-4 h-4 rounded border-white/10 bg-[#1A1A1A] text-[#4ECCA3] focus:ring-[#4ECCA3]"
             />
-            <label htmlFor="isActive" className="text-white">Promotion active</label>
+            <label htmlFor="isActive" className="text-white">Aktion aktiv</label>
           </div>
         </div>
       </div>
@@ -359,21 +396,21 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
       <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
         <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Tag className="w-5 h-5" />
-          Affichage
+          Anzeige
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Badge (court)</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Badge (kurz)</label>
             <input
               type="text"
               value={formData.badge}
               onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
               className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="Ex: -20%, FLASH, PROMO"
+              placeholder="z.B. -20%, FLASH, PROMO"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Couleur d'accent</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Akzentfarbe</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -390,13 +427,13 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-400 mb-1">Texte de bannière</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Banner-Text</label>
             <input
               type="text"
               value={formData.bannerText}
               onChange={(e) => setFormData({ ...formData, bannerText: e.target.value })}
               className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="Ex: ⚡ Flash Deal - Quantités limitées!"
+              placeholder="z.B. ⚡ Flash Deal - Begrenzte Stückzahl!"
             />
           </div>
         </div>
@@ -410,7 +447,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
           className="flex items-center gap-2 px-6 py-3 text-gray-400 hover:text-white transition-all"
         >
           <X className="w-4 h-4" />
-          Annuler
+          Abbrechen
         </button>
         <button
           type="submit"
@@ -418,7 +455,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
           className="flex items-center gap-2 px-6 py-3 bg-[#4ECCA3] text-[#1A1A1A] rounded-lg hover:bg-[#3DBB92] transition-all disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
-          {loading ? 'Sauvegarde...' : (promotion ? 'Mettre à jour' : 'Créer la promotion')}
+          {loading ? 'Speichern...' : (promotion ? 'Aktualisieren' : 'Aktion erstellen')}
         </button>
       </div>
     </form>

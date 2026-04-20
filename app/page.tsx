@@ -60,11 +60,33 @@ export default async function Page() {
     count: 0
   }))
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://nova-indukt.de",
+    "name": "NOVA INDUKT",
+    "description": "Premium Induktions-Kochgeschirr aus Deutschland",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://nova-indukt.de/suche?suche={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+
   return (
-    <HomeContent 
-      initialProducts={formattedProducts} 
-      initialCategories={formattedCategories}
-      initialBlogPosts={blogPosts}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <HomeContent 
+        initialProducts={formattedProducts} 
+        initialCategories={formattedCategories}
+        initialBlogPosts={blogPosts}
+      />
+    </>
   )
 }

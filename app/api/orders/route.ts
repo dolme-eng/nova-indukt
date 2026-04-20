@@ -72,6 +72,8 @@ export async function POST(request: NextRequest) {
       paymentMethod,
       subtotal,
       shipping,
+      discountAmount,
+      appliedPromoCode,
       total
     } = body
     
@@ -129,6 +131,8 @@ export async function POST(request: NextRequest) {
           paymentStatus: "PENDING",
           subtotal,
           shippingCost: shipping,
+          discountAmount: discountAmount || 0,
+          appliedPromoCode: appliedPromoCode || null,
           vatAmount: (Number(subtotal) * VAT_RATE_PERCENT) / 100, // Ajout du montant TVA
           total,
           items: {
@@ -162,6 +166,18 @@ export async function POST(request: NextRequest) {
           data: {
             stock: {
               decrement: item.quantity
+            }
+          }
+        })
+      }
+
+      // Increment promo usage if applicable
+      if (appliedPromoCode) {
+        await tx.promotion.update({
+          where: { code: appliedPromoCode },
+          data: {
+            usageCount: {
+              increment: 1
             }
           }
         })
