@@ -16,6 +16,27 @@ interface Product {
   price: number
 }
 
+interface PromotionFormData {
+  name: string
+  description: string
+  code: string
+  isCoupon: boolean
+  discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
+  discountValue: string
+  isGlobal: boolean
+  productIds: string[]
+  categoryIds: string[]
+  startDate: string
+  endDate: string
+  minOrderAmount: string | number
+  maxDiscount: string | number
+  usageLimit: string | number
+  badge: string
+  bannerText: string
+  highlightColor: string
+  isActive: boolean
+}
+
 interface PromotionFormProps {
   promotion?: any
 }
@@ -26,7 +47,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
   const [categories, setCategories] = useState<Category[]>([])
   const [products, setProducts] = useState<Product[]>([])
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PromotionFormData>({
     name: promotion?.name || '',
     description: promotion?.description || '',
     code: promotion?.code || '',
@@ -303,7 +324,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
                           if (e.target.checked) {
                             setFormData({ ...formData, categoryIds: [...formData.categoryIds, category.id] })
                           } else {
-                            setFormData({ ...formData, categoryIds: formData.categoryIds.filter(id => id !== category.id) })
+                            setFormData({ ...formData, categoryIds: formData.categoryIds.filter((id: string) => id !== category.id) })
                           }
                         }}
                         className="w-4 h-4 rounded border-white/10 bg-[#2A2A2A] text-[#4ECCA3]"
