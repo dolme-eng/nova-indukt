@@ -70,9 +70,10 @@ function supplierSpecCards(product: Product): { icon: LucideIcon; label: string;
 
 interface ProductContentProps {
   product: Product
+  relatedProducts: Product[]
 }
 
-export function ProductContent({ product }: ProductContentProps) {
+export function ProductContent({ product, relatedProducts }: ProductContentProps) {
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -158,7 +159,7 @@ export function ProductContent({ product }: ProductContentProps) {
             <div className={`${SHELL} flex flex-row items-center gap-3 py-3 sm:py-3.5`}>
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <div className="relative hidden h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-gray-50 sm:block">
-                  <Image src={product.images[0]} alt={product.name.de} fill className="object-cover p-0.5 mix-blend-multiply" />
+                  <Image src={product.images[0]} alt={product.name.de} fill className="object-cover p-0.5 mix-blend-multiply" sizes="44px" />
                 </div>
                 <div className="min-w-0">
                   <p className="font-bold tabular-nums text-[#0C211E] text-sm sm:text-base whitespace-nowrap">{formatPriceDe(product.price)}</p>
@@ -407,13 +408,15 @@ export function ProductContent({ product }: ProductContentProps) {
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-black text-sm font-bold text-white"
+                  onClick={() => { addItem(product, quantity); window.location.href = '/kasse' }}
+                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-black text-sm font-bold text-white hover:bg-gray-900 transition-colors"
                 >
                   <span className="text-lg leading-none"></span> Pay
                 </button>
                 <button
                   type="button"
-                  className="flex h-11 items-center justify-center rounded-xl bg-[#FFC439] text-sm font-bold italic text-[#003087]"
+                  onClick={() => { addItem(product, quantity); window.location.href = '/kasse' }}
+                  className="flex h-11 items-center justify-center rounded-xl bg-[#FFC439] text-sm font-bold italic text-[#003087] hover:bg-[#F4BB33] transition-colors"
                 >
                   PayPal
                 </button>

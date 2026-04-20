@@ -596,7 +596,7 @@ function AddressesTab() {
             <div 
               key={address.id} 
               className={`bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6 border ${
-                address.isDefaultShipping || address.isDefaultBilling 
+                address.isDefault 
                   ? 'border-[#4ECCA3]/30' 
                   : 'border-gray-100'
               }`}
@@ -604,21 +604,16 @@ function AddressesTab() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-gray-900 truncate">{address.name}</h3>
-                    {address.isDefaultShipping && (
+                    <h3 className="font-semibold text-gray-900 truncate">{address.firstName} {address.lastName}</h3>
+                    {address.isDefault && (
                       <span className="shrink-0 px-2 py-0.5 bg-[#4ECCA3]/10 text-[#0C211E] text-xs font-medium rounded-full">
-                        Lieferung
-                      </span>
-                    )}
-                    {address.isDefaultBilling && (
-                      <span className="shrink-0 px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
-                        Rechnung
+                        Standardadresse
                       </span>
                     )}
                   </div>
                   <p className="text-gray-600 text-sm">{address.street}</p>
                   {address.street2 && <p className="text-gray-600 text-sm">{address.street2}</p>}
-                  <p className="text-gray-600 text-sm">{address.postalCode} {address.city}</p>
+                  <p className="text-gray-600 text-sm">{address.zipCode} {address.city}</p>
                   {address.state && <p className="text-gray-500 text-xs">{address.state}</p>}
                   {address.phone && <p className="text-gray-500 text-xs mt-1">{address.phone}</p>}
                 </div>

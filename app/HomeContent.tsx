@@ -17,6 +17,8 @@ import { TiltCard } from '@/components/animations'
 import { MagneticButton } from '@/components/magnetic-button'
 import { TestimonialsSection } from '@/components/testimonials-section'
 import { formatPriceDe } from '@/lib/utils/vat'
+import { TechnologySection } from '@/components/home/technology-section'
+import { BlogPreview } from '@/components/home/blog-preview'
 
 interface HomeContentProps {
   initialProducts: Product[]
@@ -77,16 +79,23 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
     return () => clearInterval(autoScroll);
   }, []);
 
-  // Flash deals countdown
+  // Flash deals countdown (to next midnight)
   useEffect(() => {
-    const countdown = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 }
-        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 }
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 }
-        return { hours: 23, minutes: 59, seconds: 59 } // Loop back
+    const updateCountdown = () => {
+      const now = new Date()
+      const endOfDay = new Date(now)
+      endOfDay.setHours(23, 59, 59, 999)
+      const diff = endOfDay.getTime() - now.getTime()
+      
+      setTimeLeft({
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / 1000 / 60) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
       })
-    }, 1000)
+    }
+    
+    updateCountdown()
+    const countdown = setInterval(updateCountdown, 1000)
     return () => clearInterval(countdown)
   }, [])
 
@@ -271,28 +280,6 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
           </div>
         </div>
 
-        {/* Simplified Slide Navigation */}
-        <div className="absolute bottom-10 inset-x-0 z-20 flex justify-center items-center gap-2.5">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`relative overflow-hidden h-1 rounded-full transition-all duration-500 ease-out cursor-pointer ${
-                index === currentSlide ? 'w-8 bg-white/20' : 'w-2 bg-white/50 hover:bg-white/80'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            >
-              {index === currentSlide && (
-                <motion.div 
-                  initial={{ x: '-100%' }}
-                  animate={{ x: '0%' }}
-                  transition={{ duration: 6, ease: 'linear' }}
-                  className="absolute inset-0 bg-[#4ECCA3] rounded-full"
-                />
-              )}
-            </button>
-          ))}
-        </div>
       </section>
 
       {/* Trust Bar - Elevated overlapping to Hero */}
@@ -535,124 +522,10 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
       </section>
 
       {/* Technology Features */}
-      <section className="py-12 sm:py-20 bg-gray-900 border-t border-gray-800 relative overflow-hidden">
-        {/* Abstract shapes */}
-        <div className="absolute inset-0 bg-[url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;)] opacity-[0.04] mix-blend-overlay"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-nova-500/10 rounded-full blur-[150px] pointer-events-none" />
-        
-        <div className="container mx-auto px-4 sm:px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16 sm:mb-20 max-w-3xl mx-auto"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-nova-400 text-sm font-semibold rounded-full mb-6 tracking-wide">
-              <Sparkles className="w-4 h-4" />
-              Unsere Technologie
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 font-heading leading-tight">
-              Innovation trifft Handwerk
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Entdecke Technologien, die dein Kochen revolutionieren
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
-            <TechFeatureCard
-              icon={Zap}
-              title="SmartHeat™ Technologie"
-              description="Präzise Temperaturkontrolle"
-              color="bg-nova-400 text-nova-400 border-nova-400/20"
-              index={0}
-            />
-            <TechFeatureCard
-              icon={Leaf}
-              title="EcoPower™ System"
-              description="Energieeffizient"
-              color="bg-success text-success border-success/20"
-              index={1}
-            />
-            <TechFeatureCard
-              icon={Shield}
-              title="SafetyGuard™"
-              description="Maximale Sicherheit"
-              color="bg-destructive text-destructive border-destructive/20"
-              index={2}
-            />
-          </div>
-        </div>
-      </section>
+      <TechnologySection />
 
       {/* Blog Preview Section */}
-      <section className="py-12 sm:py-18 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-col sm:flex-row items-end justify-between mb-12 gap-4"
-          >
-            <div>
-              <span className="text-nova-600 font-semibold tracking-wider text-sm uppercase mb-2 block">Journal</span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-heading tracking-tight">Expertenwissen</h2>
-            </div>
-            <Link href="/blog" className="px-6 py-3 bg-white border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center gap-2 shadow-sm">
-              Alle Artikel <ArrowRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {initialBlogPosts.map((post, index) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
-              >
-                <Link href={`/blog/${post.slug}`} className="block flex-1">
-                  <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
-                    <Image
-                      src={post.image}
-                      alt={post.title.de}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-bold rounded-lg shadow-sm">
-                        {post.category}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6 sm:p-8 flex-1 flex flex-col">
-                    <div className="flex items-center gap-3 text-xs font-semibold text-gray-500 mb-4 uppercase tracking-wider">
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5" />
-                        {post.readTime}
-                      </span>
-                      <span className="w-1 h-1 rounded-full bg-gray-300" />
-                      <span>{post.date}</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 leading-snug group-hover:text-nova-500 transition-colors">
-                      {post.title.de}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
-                      {post.excerpt.de}
-                    </p>
-                    <div className="text-nova-600 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all mt-auto border-t border-gray-100 pt-5">
-                      Weiterlesen <ArrowRight className="w-4 h-4" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <BlogPreview initialBlogPosts={initialBlogPosts} />
 
       {/* Testimonials Section */}
       <TestimonialsSection />
@@ -794,6 +667,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             alt={product.name.de}
             fill
             className={`object-contain p-3 sm:p-4 transition-all duration-700 mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-110'}`}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           {product.images[1] && (
             <Image
@@ -801,6 +675,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
               alt={`${product.name.de} Lifestyle`}
               fill
               className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-0"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           )}
           
@@ -876,39 +751,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   )
 }
 
-// Elevated Tech Feature Card
-function TechFeatureCard({ icon: Icon, title, description, color, index }: { 
-  icon: LucideIcon; 
-  title: string; 
-  description: string; 
-  color: string;
-  index: number;
-}) {
-  return (
-    <Link href="/technologie" className="block h-full group">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: index * 0.15 }}
-        className="bg-gray-800/50 backdrop-blur-md rounded-[2rem] p-8 border border-gray-700/50 hover:bg-gray-800 transition-colors h-full flex flex-col relative overflow-hidden"
-      >
-        <div className={`absolute top-0 right-0 w-32 h-32 opacity-10 blur-3xl rounded-full ${color.split(' ')[0]}`} />
-        
-        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-gray-900 border ${color}`}>
-          <Icon className="w-8 h-8 text-white" />
-        </div>
-        
-        <h3 className="text-xl font-bold text-white mb-3 tracking-wide">{title}</h3>
-        <p className="text-gray-400 text-sm leading-relaxed flex-1">{description}</p>
-        
-        <div className="mt-8 pt-6 border-t border-gray-700/50 flex items-center text-white/70 font-medium text-sm group-hover:text-white transition-colors">
-          Technologie ansehen <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-        </div>
-      </motion.div>
-    </Link>
-  )
-}
 
 // Flash Deal Card redefined
 function FlashDealCard({ product, index }: { product: Product & { discount: number }; index: number }) {
@@ -949,6 +791,7 @@ function FlashDealCard({ product, index }: { product: Product & { discount: numb
           alt={product.name.de}
           fill
           className="object-contain p-8 group-hover:scale-110 transition-transform duration-700 mix-blend-multiply"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         
         {/* Discount Badge */}

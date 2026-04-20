@@ -97,7 +97,7 @@ describe('Cart Server Actions', () => {
         user: mockUser,
       } as any)
 
-      vi.mocked(prisma.cart.findUnique).mockResolvedValue(null)
+      vi.mocked(prisma.cart.findUnique).mockResolvedValue(null as any)
       vi.mocked(prisma.cart.create).mockResolvedValue({
         id: 'cart-new',
         userId: 'user-123',
@@ -120,7 +120,7 @@ describe('Cart Server Actions', () => {
     })
 
     it('should add item to cookie cart for guest user', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const mockCookieStore = {
         get: vi.fn().mockReturnValue(null),
@@ -191,7 +191,7 @@ describe('Cart Server Actions', () => {
     })
 
     it('should update quantity in cookie cart for guest', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const existingCart = [{ productId: 'prod-123', quantity: 2 }]
       const mockCookieStore = {
@@ -211,7 +211,7 @@ describe('Cart Server Actions', () => {
     })
 
     it('should remove item from cookie when quantity is 0', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const existingCart = [
         { productId: 'prod-123', quantity: 2 },
@@ -267,7 +267,7 @@ describe('Cart Server Actions', () => {
     })
 
     it('should return items from cookie cart for guest', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const cookieCart = [{ productId: 'prod-123', quantity: 2 }]
       const mockCookieStore = {
@@ -285,7 +285,7 @@ describe('Cart Server Actions', () => {
     })
 
     it('should return empty array for empty cookie cart', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const mockCookieStore = {
         get: vi.fn().mockReturnValue(null),
@@ -330,7 +330,7 @@ describe('Cart Server Actions', () => {
     })
 
     it('should clear cookie cart for guest', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const mockCookieStore = {
         get: vi.fn().mockReturnValue({ value: '[]' }),
@@ -413,7 +413,7 @@ describe('Cart Server Actions', () => {
       }
       vi.mocked(cookies).mockReturnValue(mockCookieStore as any)
 
-      vi.mocked(prisma.cart.findUnique).mockResolvedValue(null)
+      vi.mocked(prisma.cart.findUnique).mockResolvedValue(null as any)
       vi.mocked(prisma.cart.create).mockResolvedValue({
         id: 'cart-new',
         userId: 'user-123',
@@ -430,7 +430,7 @@ describe('Cart Server Actions', () => {
     })
 
     it('should do nothing if no session', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       await mergeGuestCartOnLogin()
 

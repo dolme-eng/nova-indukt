@@ -1,15 +1,24 @@
 import { v2 as cloudinary } from 'cloudinary'
 
-if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-  throw new Error('Cloudinary environment variables are not defined')
-}
+// Lazy initialization flag
+let _isConfigured = false
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
-})
+function ensureConfigured() {
+  if (_isConfigured) return
+  
+  if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    throw new Error('Cloudinary environment variables are not defined')
+  }
+
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true,
+  })
+  
+  _isConfigured = true
+}
 
 export { cloudinary }
 
@@ -28,9 +37,14 @@ export async function uploadImage(
   folder: string = 'nova-indukt/products',
   options: Record<string, any> = {}
 ): Promise<UploadResult> {
+  ensureConfigured()
+  const fileToUpload = Buffer.isBuffer(file) 
+    ? `data:image/png;base64,${file.toString('base64')}` 
+    : file;
+
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
-      file,
+      fileToUpload,
       {
         folder,
         resource_type: 'image',
@@ -64,6 +78,7 @@ export async function uploadImage(
 }
 
 export async function deleteImage(publicId: string): Promise<void> {
+  ensureConfigured()
   return new Promise((resolve, reject) => {
     cloudinary.uploader.destroy(publicId, (error, result) => {
       if (error) {
@@ -81,6 +96,7 @@ export function getOptimizedUrl(
   height?: number,
   crop: string = 'fill'
 ): string {
+  ensureConfigured()
   const options: string[] = [
     'f_auto', // Auto format
     'q_auto', // Auto quality
@@ -97,6 +113,7 @@ export function getOptimizedUrl(
 }
 
 export function getPlaceholderUrl(publicId: string): string {
+  ensureConfigured()
   return cloudinary.url(publicId, {
     transformation: [
       { width: 50, crop: 'scale' },

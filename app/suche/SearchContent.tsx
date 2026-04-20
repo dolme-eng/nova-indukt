@@ -264,14 +264,7 @@ function ProductCard({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem({
-      id: product.id,
-      name: product.name.de,
-      price: product.price,
-      image: product.images[0],
-      slug: product.slug,
-      quantity: 1
-    })
+    addItem(product, 1)
   }
 
   return (

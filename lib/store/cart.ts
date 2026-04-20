@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Product } from '@/lib/data/products'
+import { addToCart, updateCartItem as updateServerCartItem, removeFromCart as removeFromServerCart, clearCart as clearServerCart } from '@/app/actions/cart'
 
 export interface CartItem {
   product: Product
@@ -46,12 +47,18 @@ export const useCartStore = create<CartState>()(
           // Add new item
           set({ items: [...items, { product, quantity }] })
         }
+        
+        // Sync with server (background)
+        addToCart(product.id, quantity).catch(err => console.error("Failed to sync cart item addition:", err))
       },
       
       removeItem: (productId) => {
         set({
           items: get().items.filter(item => item.product.id !== productId)
         })
+        
+        // Sync with server (background)
+        removeFromServerCart(productId).catch(err => console.error("Failed to sync cart item removal:", err))
       },
       
       updateQuantity: (productId, quantity) => {
@@ -67,10 +74,16 @@ export const useCartStore = create<CartState>()(
               : item
           )
         })
+        
+        // Sync with server (background)
+        updateServerCartItem(productId, quantity).catch(err => console.error("Failed to sync cart item update:", err))
       },
       
       clearCart: () => {
         set({ items: [] })
+        
+        // Sync with server (background)
+        clearServerCart().catch(err => console.error("Failed to sync cart clearing:", err))
       },
       
       setHydrated: () => {

@@ -26,6 +26,13 @@ interface Stats {
   reviews: { pending: number }
   promotions: { active: number; total: number; usage: number }
   newsletter: { subscribers: number }
+  recentOrdersList: {
+    orderNumber: string
+    customerName: string
+    status: string
+    total: number
+    createdAt: string
+  }[]
 }
 
 export default function AdminDashboard() {
@@ -69,37 +76,37 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Tableau de bord</h1>
-        <p className="text-slate-500">Bienvenue dans votre espace d'administration NOVA INDUKT.</p>
+        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+        <p className="text-slate-500">Willkommen in Ihrem NOVA INDUKT Administrationsbereich.</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard 
-          title="Chiffre d'affaires" 
+          title="Umsatz" 
           value={formatCurrency(stats?.orders.revenue || 0)} 
-          change={`${stats?.orders.recent || 0} ce mois`} 
+          change={`${stats?.orders.recent || 0} diesen Monat`} 
           isPositive={true} 
           icon={<TrendingUp className="text-emerald-600" size={24} />} 
         />
         <StatCard 
-          title="Commandes" 
+          title="Bestellungen" 
           value={(stats?.orders.total || 0).toString()} 
-          change={`${stats?.orders.recent || 0} ce mois`} 
+          change={`${stats?.orders.recent || 0} diesen Monat`} 
           isPositive={true} 
           icon={<ShoppingCart className="text-blue-600" size={24} />} 
         />
         <StatCard 
-          title="Clients" 
+          title="Kunden" 
           value={(stats?.customers.total || 0).toString()} 
-          change={`+${stats?.customers.new || 0} ce mois`} 
+          change={`+${stats?.customers.new || 0} diesen Monat`} 
           isPositive={true} 
           icon={<Users className="text-violet-600" size={24} />} 
         />
         <StatCard 
-          title="Produits Actifs" 
+          title="Aktive Produkte" 
           value={(stats?.products.active || 0).toString()} 
-          change="en ligne" 
+          change="online" 
           isPositive={true} 
           icon={<Package className="text-orange-600" size={24} />} 
         />
@@ -109,27 +116,27 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Link href="/admin/promotions">
           <StatCard 
-            title="Promotions Actives" 
+            title="Aktive Aktionen" 
             value={(stats?.promotions.active || 0).toString()} 
-            change={`${stats?.promotions.total || 0} total`} 
+            change={`${stats?.promotions.total || 0} gesamt`} 
             isPositive={true} 
             icon={<Tag className="text-pink-600" size={24} />} 
           />
         </Link>
         <Link href="/admin/newsletter">
           <StatCard 
-            title="Abonnés Newsletter" 
+            title="Newsletter-Abonnenten" 
             value={(stats?.newsletter.subscribers || 0).toString()} 
-            change="actifs" 
+            change="aktiv" 
             isPositive={true} 
             icon={<Mail className="text-cyan-600" size={24} />} 
           />
         </Link>
         <Link href="/admin/reviews">
           <StatCard 
-            title="Avis en Attente" 
+            title="Ausstehende Bewertungen" 
             value={(stats?.reviews.pending || 0).toString()} 
-            change="à modérer" 
+            change="zu moderieren" 
             isPositive={stats?.reviews.pending === 0} 
             icon={<Star className="text-yellow-600" size={24} />} 
           />
@@ -140,94 +147,100 @@ export default function AdminDashboard() {
         {/* Recent Orders */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-slate-900">Commandes Récentes</h2>
+            <h2 className="text-lg font-bold text-slate-900">Neue Bestellungen</h2>
             <Link href="/admin/orders" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
-              Voir tout <ChevronRight size={14} />
+              Alle ansehen <ChevronRight size={14} />
             </Link>
           </div>
           <div className="overflow-x-auto">
+            {!stats?.recentOrdersList ? (
+                <div className="p-8 text-center text-slate-500">Laden...</div>
+            ) : stats.recentOrdersList.length === 0 ? (
+                <div className="p-8 text-center text-slate-500">Keine Bestellungen vorhanden.</div>
+            ) : (
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold">
-                  <th className="px-6 py-4">Commande</th>
-                  <th className="px-6 py-4">Client</th>
+                  <th className="px-6 py-4">Bestellung</th>
+                  <th className="px-6 py-4">Kunde</th>
                   <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Montant</th>
-                  <th className="px-6 py-4">Date</th>
+                  <th className="px-6 py-4">Betrag</th>
+                  <th className="px-6 py-4">Datum</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                <OrderRow 
-                  id="#NO-2024-001" 
-                  customer="Jean Dupont" 
-                  status="Payé" 
-                  statusColor="bg-emerald-100 text-emerald-700"
-                  amount="189.00 €" 
-                  date="Il y a 2h" 
-                />
-                <OrderRow 
-                  id="#NO-2024-002" 
-                  customer="Marie Leroy" 
-                  status="En attente" 
-                  statusColor="bg-amber-100 text-amber-700"
-                  amount="540.50 €" 
-                  date="Il y a 5h" 
-                />
-                <OrderRow 
-                  id="#NO-2024-003" 
-                  customer="Thomas Müller" 
-                  status="Expédié" 
-                  statusColor="bg-blue-100 text-blue-700"
-                  amount="89.90 €" 
-                  date="Hier" 
-                />
-                <OrderRow 
-                  id="#NO-2024-004" 
-                  customer="Sophie Petit" 
-                  status="Payé" 
-                  statusColor="bg-emerald-100 text-emerald-700"
-                  amount="210.00 €" 
-                  date="Hier" 
-                />
+                {stats.recentOrdersList.map(order => {
+                  const getStatusTranslation = (status: string) => {
+                    const map: Record<string, string> = {
+                      PENDING: "Ausstehend", PROCESSING: "In Bearbeitung", SHIPPED: "Versendet",
+                      DELIVERED: "Zugestellt", CANCELLED: "Storniert", REFUNDED: "Erstattet"
+                    }
+                    return map[status] || status
+                  }
+                  const getStatusColor = (status: string) => {
+                    switch (status) {
+                      case 'PENDING': return 'bg-amber-100 text-amber-700'
+                      case 'PROCESSING': return 'bg-blue-100 text-blue-700'
+                      case 'SHIPPED': return 'bg-indigo-100 text-indigo-700'
+                      case 'DELIVERED': return 'bg-emerald-100 text-emerald-700'
+                      case 'CANCELLED': 
+                      case 'REFUNDED': return 'bg-red-100 text-red-700'
+                      default: return 'bg-slate-100 text-slate-700'
+                    }
+                  }
+                  
+                  return (
+                    <OrderRow 
+                      key={order.orderNumber}
+                      id={order.orderNumber} 
+                      customer={order.customerName} 
+                      status={getStatusTranslation(order.status)} 
+                      statusColor={getStatusColor(order.status)}
+                      amount={formatCurrency(order.total)} 
+                      date={new Date(order.createdAt).toLocaleDateString('de-DE')} 
+                    />
+                  )
+                })}
               </tbody>
             </table>
+            )}
           </div>
         </div>
 
         {/* Activity Feed */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-200">
-            <h2 className="text-lg font-bold text-slate-900">Activités Récentes</h2>
+            <h2 className="text-lg font-bold text-slate-900">Letzte Aktivitäten</h2>
           </div>
           <div className="p-6 space-y-6">
             <ActivityItem 
               icon={<CreditCard className="text-emerald-500" size={18} />}
-              title="Paiement reçu"
-              description="Commande #NO-2024-001 confirmée"
+              title="Zahlung erhalten"
+              description="Bestellung #NO-2024-001 bestätigt"
               time="2 min"
             />
             <ActivityItem 
               icon={<User className="text-blue-500" size={18} />}
-              title="Nouvel utilisateur"
-              description="Jean Martin s'est inscrit"
+              title="Neuer Benutzer"
+              description="Jean Martin hat sich registriert"
               time="15 min"
             />
             <ActivityItem 
               icon={<Package className="text-orange-500" size={18} />}
-              title="Stock bas"
+              title="Niedriger Lagerbestand"
               description="Induct-Pro Max (SKU: IP-001)"
               time="1h"
             />
             <ActivityItem 
               icon={<Clock className="text-slate-500" size={18} />}
-              title="Nouvel avis"
-              description="5 étoiles sur Induct-Pro"
+              title="Neue Bewertung"
+              description="5 Sterne für Induct-Pro"
               time="3h"
             />
           </div>
           <div className="p-4 bg-slate-50 border-t border-slate-200 text-center">
             <button className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-              Charger plus
+              Mehr laden
             </button>
           </div>
         </div>

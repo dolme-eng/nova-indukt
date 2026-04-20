@@ -14,7 +14,7 @@ describe('Orders API', () => {
   beforeEach(() => {
     vi.resetAllMocks()
     // Reset auth mock to default authenticated user
-    getServerSession.mockResolvedValue({
+    vi.mocked(getServerSession).mockResolvedValue({
       user: { id: 'user-123', email: 'test@example.com', name: 'Test User' },
     } as any)
   })
@@ -87,7 +87,7 @@ describe('Orders API', () => {
     })
 
     it('should return 401 when not authenticated', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const request = new Request('http://localhost:3000/api/orders')
       const response = await ordersHandler(request as any)
@@ -179,7 +179,7 @@ describe('Orders API', () => {
     })
 
     it('should create order for guest user (no session)', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
       vi.mocked(prisma.order.create).mockResolvedValue({
         ...mockOrder,
         userId: null,
@@ -275,7 +275,7 @@ describe('Orders API', () => {
     })
 
     it('should return 401 when not authenticated', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const request = new Request('http://localhost:3000/api/orders/order-123')
       const params = Promise.resolve({ id: 'order-123' })
@@ -291,7 +291,7 @@ describe('Orders API', () => {
         user: { id: 'user-123' },
       } as any)
 
-      vi.mocked(prisma.order.findUnique).mockResolvedValue(null)
+      vi.mocked(prisma.order.findUnique).mockResolvedValue(null as any)
 
       const request = new Request('http://localhost:3000/api/orders/non-existent')
       const params = Promise.resolve({ id: 'non-existent' })

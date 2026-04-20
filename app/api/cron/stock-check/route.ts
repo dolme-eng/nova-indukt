@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
     const result = await checkStockAndAlert()
     
     return NextResponse.json({
-      success: true,
       ...result,
+      success: true,
       timestamp: new Date().toISOString(),
     })
   } catch (error) {

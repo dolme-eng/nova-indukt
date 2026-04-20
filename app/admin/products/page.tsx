@@ -37,15 +37,15 @@ export default async function AdminProductsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Produits</h1>
-          <p className="text-slate-500 text-sm">Gérez votre catalogue de produits ({products.length} articles)</p>
+          <h1 className="text-2xl font-bold text-slate-900">Produkte</h1>
+          <p className="text-slate-500 text-sm">Verwalten Sie Ihren Produktkatalog ({products.length} Artikel)</p>
         </div>
         <Link 
           href="/admin/products/new" 
           className="inline-flex items-center justify-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
         >
           <Plus size={18} />
-          Ajouter un produit
+          Produkt hinzufügen
         </Link>
       </div>
 
@@ -55,18 +55,18 @@ export default async function AdminProductsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
-            placeholder="Rechercher un produit (Nom, SKU, EAN...)" 
+            placeholder="Produkt suchen (Name, SKU, EAN...)" 
             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
           />
         </div>
         <div className="flex gap-2">
           <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
             <Filter size={18} />
-            Catégorie
+            Kategorie
           </button>
           <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
             <ArrowUpDown size={18} />
-            Trier par
+            Sortieren nach
           </button>
         </div>
       </div>
@@ -77,12 +77,12 @@ export default async function AdminProductsPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold border-b border-slate-200">
-                <th className="px-6 py-4">Produit</th>
-                <th className="px-6 py-4">Catégorie</th>
-                <th className="px-6 py-4">Prix</th>
-                <th className="px-6 py-4">Stock</th>
+                <th className="px-6 py-4">Produkt</th>
+                <th className="px-6 py-4">Kategorie</th>
+                <th className="px-6 py-4">Preis</th>
+                <th className="px-6 py-4">Lagerbestand</th>
                 <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-4 text-right">Aktionen</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -128,10 +128,10 @@ export default async function AdminProductsPage() {
                       <span className={`text-sm font-medium ${
                         product.stock <= product.stockAlertAt ? "text-red-600 font-bold" : "text-slate-700"
                       }`}>
-                        {product.stock} en stock
+                        {product.stock} auf Lager
                       </span>
                       {product.stock <= product.stockAlertAt && (
-                        <span className="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded font-bold uppercase tracking-tight">Alerte</span>
+                        <span className="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded font-bold uppercase tracking-tight">Vorsicht</span>
                       )}
                     </div>
                   </td>
@@ -139,12 +139,12 @@ export default async function AdminProductsPage() {
                     {product.isActive ? (
                       <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                         <CheckCircle2 size={12} />
-                        Actif
+                        Aktiv
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200">
                         <XCircle size={12} />
-                        Inactif
+                        Inaktiv
                       </span>
                     )}
                   </td>
@@ -154,20 +154,20 @@ export default async function AdminProductsPage() {
                         href={`/produkt/${product.slug}`} 
                         target="_blank"
                         className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-all"
-                        title="Voir sur le site"
+                        title="Auf der Website ansehen"
                       >
                         <Eye size={18} />
                       </Link>
                       <Link 
                         href={`/admin/products/${product.id}`}
                         className="p-2 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-all"
-                        title="Modifier"
+                        title="Bearbeiten"
                       >
                         <Edit size={18} />
                       </Link>
                       <button 
                         className="p-2 text-slate-400 hover:text-red-600 hover:bg-slate-100 rounded-lg transition-all"
-                        title="Supprimer"
+                        title="Löschen"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -178,7 +178,7 @@ export default async function AdminProductsPage() {
               {products.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
-                    Aucun produit trouvé dans le catalogue.
+                    Keine Produkte im Katalog gefunden.
                   </td>
                 </tr>
               )}

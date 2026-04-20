@@ -2,7 +2,10 @@
 // Migrates products from lib/data/products.ts to PostgreSQL database
 
 import { PrismaClient, Prisma } from '@prisma/client'
-import { products, categories } from '../lib/data/products'
+import * as productData from '../lib/data/products'
+
+const products = (productData as any).products || []
+const categories = (productData as any).categories || []
 
 const prisma = new PrismaClient()
 
@@ -54,7 +57,7 @@ async function main() {
       }
 
       // Prepare images
-      const images: Prisma.ProductImageCreateWithoutProductInput[] = product.images.map((url, index) => ({
+      const images: Prisma.ProductImageCreateWithoutProductInput[] = product.images.map((url: string, index: number) => ({
         url,
         alt: `${product.name.de} - Image ${index + 1}`,
         sortOrder: index,

@@ -21,6 +21,17 @@ export async function GET() {
       where: { status: { not: 'CANCELLED' } },
       _sum: { total: true }
     })
+    const recentOrdersList = await prisma.order.findMany({
+      take: 4,
+      orderBy: { createdAt: 'desc' },
+      select: {
+        orderNumber: true,
+        customerName: true,
+        status: true,
+        total: true,
+        createdAt: true
+      }
+    })
 
     // Clients
     const totalCustomers = await prisma.user.count({
@@ -40,7 +51,7 @@ export async function GET() {
 
     // Avis
     const pendingReviews = await prisma.review.count({
-      where: { isApproved: false }
+      where: { isPublished: false }
     })
 
     // Promotions
@@ -84,7 +95,8 @@ export async function GET() {
       },
       newsletter: {
         subscribers: newsletterSubscribers
-      }
+      },
+      recentOrdersList
     })
   } catch (error) {
     console.error('Error fetching stats:', error)

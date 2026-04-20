@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface WishlistItem {
   id: string
@@ -10,8 +12,6 @@ export interface WishlistItem {
   image: string
   slug: string
 }
-
-const STORAGE_KEY = 'nova-wishlist'
 
 interface ApiWishlistItem {
   id: string
@@ -25,53 +25,49 @@ interface ApiWishlistItem {
   addedAt: string
 }
 
+interface WishlistStore {
+  items: WishlistItem[]
+  setItems: (items: WishlistItem[]) => void
+  addItemState: (item: WishlistItem) => void
+  removeItemState: (id: string) => void
+  clearState: () => void
+}
+
+const useWishlistStore = create<WishlistStore>()(
+  persist(
+    (set) => ({
+      items: [],
+      setItems: (items) => set({ items }),
+      addItemState: (item) => set((state) => {
+        if (state.items.find((i) => i.id === item.id)) return state
+        return { items: [...state.items, item] }
+      }),
+      removeItemState: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+      clearState: () => set({ items: [] }),
+    }),
+    {
+      name: 'nova-wishlist',
+    }
+  )
+)
+
 export function useWishlist() {
-  const [items, setItems] = useState<WishlistItem[]>([])
   const [mounted, setMounted] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
-  const { data: session, status } = useSession()
+  
+  const { items, setItems, addItemState, removeItemState, clearState } = useWishlistStore()
+  const { status } = useSession()
   const isAuthenticated = status === 'authenticated'
 
-  // Load wishlist on mount
+  // Sync on login & hydration
   useEffect(() => {
     setMounted(true)
     
     if (isAuthenticated) {
-      // Load from API when authenticated
+      syncOnLogin()
       fetchWishlistFromApi()
-    } else {
-      // Load from localStorage for guests
-      const saved = localStorage.getItem(STORAGE_KEY)
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          if (Array.isArray(parsed)) {
-            const migrated = parsed.filter((item: any) => {
-              return item && typeof item === 'object' && item.id && item.name && item.price
-            })
-            setItems(migrated)
-          }
-        } catch {
-          setItems([])
-        }
-      }
     }
   }, [isAuthenticated])
-
-  // Sync localStorage when items change (only for guests)
-  useEffect(() => {
-    if (mounted && !isAuthenticated) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-      window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }))
-    }
-  }, [items, mounted, isAuthenticated])
-
-  // Sync wishlist on login
-  useEffect(() => {
-    if (isAuthenticated && mounted) {
-      syncOnLogin()
-    }
-  }, [isAuthenticated, mounted])
 
   const fetchWishlistFromApi = async () => {
     try {
@@ -92,18 +88,15 @@ export function useWishlist() {
   }
 
   const syncOnLogin = async () => {
-    const localItems = localStorage.getItem(STORAGE_KEY)
-    if (!localItems) return
+    if (items.length === 0) return
 
     try {
       setIsSyncing(true)
-      const parsed = JSON.parse(localItems)
-      if (!Array.isArray(parsed) || parsed.length === 0) return
 
       const response = await fetch('/api/wishlist/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ localItems: parsed }),
+        body: JSON.stringify({ localItems: items }),
       })
 
       if (response.ok) {
@@ -117,8 +110,6 @@ export function useWishlist() {
             slug: item.slug,
           })))
         }
-        // Clear localStorage after successful sync
-        localStorage.removeItem(STORAGE_KEY)
       }
     } catch (error) {
       console.error('Error syncing wishlist:', error)
@@ -154,24 +145,19 @@ export function useWishlist() {
   }
 
   const addItem = useCallback(async (item: WishlistItem) => {
-    setItems((prev) => {
-      if (prev.find((i) => i.id === item.id)) return prev
-      return [...prev, item]
-    })
-
+    addItemState(item)
     if (isAuthenticated) {
       await addItemToApi(item)
     }
     return true
-  }, [isAuthenticated])
+  }, [isAuthenticated, addItemState])
 
   const removeItem = useCallback(async (id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id))
-
+    removeItemState(id)
     if (isAuthenticated) {
       await removeItemFromApi(id)
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, removeItemState])
 
   const isInWishlist = useCallback((id: string) => {
     return items.some((i) => i.id === id)
@@ -188,18 +174,15 @@ export function useWishlist() {
   }, [addItem, removeItem, isInWishlist])
 
   const clearWishlist = useCallback(async () => {
-    setItems([])
-    
+    clearState()
     if (isAuthenticated) {
       try {
         await fetch('/api/wishlist', { method: 'DELETE' })
       } catch (error) {
         console.error('Error clearing wishlist:', error)
       }
-    } else {
-      localStorage.removeItem(STORAGE_KEY)
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, clearState])
 
   return {
     items,

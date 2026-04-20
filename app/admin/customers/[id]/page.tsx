@@ -201,7 +201,9 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
               {customer.addresses.map((address) => (
                 <div key={address.id} className="space-y-2 relative pb-4 last:pb-0 last:border-0 border-b border-slate-100">
                   {address.isDefault && (
-                    <span className="absolute top-0 right-0 text-[8px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase tracking-widest border border-primary/20">Défaut</span>
+                    <span className="absolute top-0 right-0 text-[8px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase tracking-widest border border-primary/20">
+                      Par défaut
+                    </span>
                   )}
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">{address.type}</span>
                   <p className="text-sm text-slate-600 leading-relaxed italic">

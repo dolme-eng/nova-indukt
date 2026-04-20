@@ -113,8 +113,8 @@ export async function applyBestPromotion(
   const { discountedPrice, discountAmount } = calculateDiscountedPrice(
     price,
     bestPromotion.discountType,
-    bestPromotion.discountValue,
-    bestPromotion.maxDiscount
+    Number(bestPromotion.discountValue),
+    bestPromotion.maxDiscount ? Number(bestPromotion.maxDiscount) : null
   )
 
   const discountPercentage = Math.round((discountAmount / price) * 100)
@@ -128,7 +128,7 @@ export async function applyBestPromotion(
       id: bestPromotion.id,
       name: bestPromotion.name,
       discountType: bestPromotion.discountType,
-      discountValue: bestPromotion.discountValue,
+      discountValue: Number(bestPromotion.discountValue),
       badge: bestPromotion.badge,
       bannerText: bestPromotion.bannerText,
       highlightColor: bestPromotion.highlightColor
@@ -169,8 +169,8 @@ export async function applyPromotionsToProducts(
     const { discountedPrice, discountAmount } = calculateDiscountedPrice(
       product.price,
       bestPromotion.discountType,
-      bestPromotion.discountValue,
-      bestPromotion.maxDiscount
+      Number(bestPromotion.discountValue),
+      bestPromotion.maxDiscount ? Number(bestPromotion.maxDiscount) : null
     )
 
     results.set(product.id, {
@@ -182,7 +182,7 @@ export async function applyPromotionsToProducts(
         id: bestPromotion.id,
         name: bestPromotion.name,
         discountType: bestPromotion.discountType,
-        discountValue: bestPromotion.discountValue,
+        discountValue: Number(bestPromotion.discountValue),
         badge: bestPromotion.badge,
         bannerText: bestPromotion.bannerText,
         highlightColor: bestPromotion.highlightColor

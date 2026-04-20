@@ -12,7 +12,6 @@ const reviewSchema = z.object({
   rating: z.number().min(1).max(5),
   title: z.string().min(3).max(100),
   content: z.string().min(10).max(2000),
-  wouldRecommend: z.boolean().optional(),
 })
 
 // GET - Fetch reviews for a product
@@ -20,7 +19,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')
-    const status = searchParams.get('status') || 'approved'
+    const published = searchParams.get('published') !== 'false'
     const limit = parseInt(searchParams.get('limit') || '10')
     const page = parseInt(searchParams.get('page') || '1')
     
@@ -37,7 +36,7 @@ export async function GET(request: NextRequest) {
       prisma.review.findMany({
         where: {
           productId,
-          status: status as any,
+          isPublished: published,
         },
         include: {
           user: {
@@ -54,14 +53,14 @@ export async function GET(request: NextRequest) {
       prisma.review.count({
         where: {
           productId,
-          status: status as any,
+          isPublished: published,
         },
       }),
       prisma.review.groupBy({
         by: ['rating'],
         where: {
           productId,
-          status: 'approved',
+          isPublished: true,
         },
         _count: {
           rating: true,
@@ -73,7 +72,7 @@ export async function GET(request: NextRequest) {
     const allApprovedReviews = await prisma.review.findMany({
       where: {
         productId,
-        status: 'approved',
+        isPublished: true,
       },
       select: { rating: true },
     })
@@ -94,16 +93,14 @@ export async function GET(request: NextRequest) {
         rating: r.rating,
         title: r.title,
         content: r.content,
-        wouldRecommend: r.wouldRecommend,
-        verified: r.verifiedPurchase,
-        helpful: r.helpfulVotes,
+        verified: r.isVerified,
+        status: r.isPublished ? 'approved' : 'pending',
         createdAt: r.createdAt,
-        user: {
+        user: r.user ? {
           id: r.user.id,
           name: r.user.name,
-          // Anonymous for privacy
           displayName: r.user.name ? r.user.name.charAt(0) + '****' : 'Kunde',
-        },
+        } : null,
       })),
       pagination: {
         page,
@@ -163,7 +160,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const { productId, rating, title, content, wouldRecommend } = result.data
+    const { productId, rating, title, content } = result.data
     
     // Check if product exists
     const product = await prisma.product.findUnique({
@@ -178,12 +175,10 @@ export async function POST(request: NextRequest) {
     }
     
     // Check if user already reviewed this product
-    const existingReview = await prisma.review.findUnique({
+    const existingReview = await prisma.review.findFirst({
       where: {
-        userId_productId: {
-          userId: session.user.id,
-          productId,
-        },
+        userId: session.user.id,
+        productId,
       },
     })
     
@@ -201,7 +196,7 @@ export async function POST(request: NextRequest) {
         order: {
           userId: session.user.id,
           status: {
-            in: ['completed', 'delivered'],
+            in: ['DELIVERED', 'SHIPPED', 'PROCESSING'],
           },
         },
       },
@@ -215,9 +210,8 @@ export async function POST(request: NextRequest) {
         rating,
         title,
         content,
-        wouldRecommend: wouldRecommend ?? null,
-        verifiedPurchase: !!hasPurchased,
-        status: 'pending', // Requires admin approval
+        isVerified: !!hasPurchased,
+        isPublished: false,
       },
       include: {
         user: {
@@ -229,11 +223,11 @@ export async function POST(request: NextRequest) {
       },
     })
     
-    // Update product rating (average of approved reviews)
+    // Update product rating if needed
     const approvedReviews = await prisma.review.findMany({
       where: {
         productId,
-        status: 'approved',
+        isPublished: true,
       },
       select: { rating: true },
     })
@@ -241,7 +235,7 @@ export async function POST(request: NextRequest) {
     const newAverage = approvedReviews.length > 0
       ? approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length
       : rating
-    
+      
     await prisma.product.update({
       where: { id: productId },
       data: {
@@ -259,8 +253,8 @@ export async function POST(request: NextRequest) {
           rating: review.rating,
           title: review.title,
           content: review.content,
-          verified: review.verifiedPurchase,
-          status: review.status,
+          verified: review.isVerified,
+          status: review.isPublished ? 'approved' : 'pending',
           createdAt: review.createdAt,
         },
       },
@@ -275,43 +269,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PUT - Mark review as helpful
+// PUT has been replaced with a toggle in admin route
 export async function PUT(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url)
-    const reviewId = searchParams.get('id')
-    const action = searchParams.get('action') // 'helpful' or 'report'
-    
-    if (!reviewId || !action) {
-      return NextResponse.json(
-        { error: "Review ID and action are required" },
-        { status: 400 }
-      )
-    }
-    
-    if (action === 'helpful') {
-      await prisma.review.update({
-        where: { id: reviewId },
-        data: { helpfulVotes: { increment: 1 } },
-      })
-      
-      return NextResponse.json({ success: true, message: "Marked as helpful" })
-    }
-    
-    if (action === 'report') {
-      // In a real app, you might want to store reports in a separate table
-      return NextResponse.json({ success: true, message: "Review reported" })
-    }
-    
-    return NextResponse.json(
-      { error: "Invalid action" },
-      { status: 400 }
-    )
-  } catch (error) {
-    console.error("Error updating review:", error)
-    return NextResponse.json(
-      { error: "Failed to update review" },
-      { status: 500 }
-    )
-  }
+  return NextResponse.json({ error: "Not Implemented" }, { status: 400 })
 }

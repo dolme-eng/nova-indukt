@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import { signIn } from "next-auth/react"
 
 // WebCrypto API based hash function (Edge Runtime compatible)
 async function sha256(message: string): Promise<string> {

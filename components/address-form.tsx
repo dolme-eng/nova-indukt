@@ -6,16 +6,16 @@ import { X, MapPin, Check, Loader2 } from 'lucide-react'
 
 interface Address {
   id?: string
-  name: string
+  firstName: string
+  lastName: string
+  company?: string | null
   street: string
   street2?: string | null
-  postalCode: string
+  zipCode: string
   city: string
-  state?: string | null
   country: string
   phone?: string | null
-  isDefaultShipping: boolean
-  isDefaultBilling: boolean
+  isDefault: boolean
 }
 
 interface AddressFormProps {
@@ -25,46 +25,28 @@ interface AddressFormProps {
   isSubmitting: boolean
 }
 
-const germanStates = [
-  'Baden-Württemberg',
-  'Bayern',
-  'Berlin',
-  'Brandenburg',
-  'Bremen',
-  'Hamburg',
-  'Hessen',
-  'Mecklenburg-Vorpommern',
-  'Niedersachsen',
-  'Nordrhein-Westfalen',
-  'Rheinland-Pfalz',
-  'Saarland',
-  'Sachsen',
-  'Sachsen-Anhalt',
-  'Schleswig-Holstein',
-  'Thüringen'
-]
-
 export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: AddressFormProps) {
   const [formData, setFormData] = useState<Address>({
-    name: address?.name || '',
+    firstName: address?.firstName || '',
+    lastName: address?.lastName || '',
+    company: address?.company || '',
     street: address?.street || '',
     street2: address?.street2 || '',
-    postalCode: address?.postalCode || '',
+    zipCode: address?.zipCode || '',
     city: address?.city || '',
-    state: address?.state || '',
     country: address?.country || 'DE',
     phone: address?.phone || '',
-    isDefaultShipping: address?.isDefaultShipping || false,
-    isDefaultBilling: address?.isDefaultBilling || false,
+    isDefault: address?.isDefault || false,
   })
   const [errors, setErrors] = useState<Partial<Record<keyof Address, string>>>({})
 
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof Address, string>> = {}
     
-    if (!formData.name.trim()) newErrors.name = 'Name ist erforderlich'
+    if (!formData.firstName.trim()) newErrors.firstName = 'Vorname ist erforderlich'
+    if (!formData.lastName.trim()) newErrors.lastName = 'Nachname ist erforderlich'
     if (!formData.street.trim()) newErrors.street = 'Straße ist erforderlich'
-    if (!formData.postalCode.trim()) newErrors.postalCode = 'PLZ ist erforderlich'
+    if (!formData.zipCode.trim()) newErrors.zipCode = 'PLZ ist erforderlich'
     if (!formData.city.trim()) newErrors.city = 'Stadt ist erforderlich'
     
     setErrors(newErrors)
@@ -111,21 +93,52 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto max-h-[60vh]">
-          {/* Name */}
+          {/* First & Last Name */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Vorname *
+              </label>
+              <input
+                type="text"
+                value={formData.firstName}
+                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
+                  errors.firstName ? 'border-red-300' : 'border-gray-200'
+                }`}
+                placeholder="z.B. Max"
+              />
+              {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nachname *
+              </label>
+              <input
+                type="text"
+                value={formData.lastName}
+                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
+                  errors.lastName ? 'border-red-300' : 'border-gray-200'
+                }`}
+                placeholder="z.B. Mustermann"
+              />
+              {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
+            </div>
+          </div>
+
+          {/* Company */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Ansprechpartner / Firma *
+              Firma (optional)
             </label>
             <input
               type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
-                errors.name ? 'border-red-300' : 'border-gray-200'
-              }`}
-              placeholder="z.B. Max Mustermann"
+              value={formData.company || ''}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all border-gray-200`}
+              placeholder="z.B. Muster GmbH"
             />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
 
           {/* Street */}
@@ -159,7 +172,7 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
             />
           </div>
 
-          {/* Postal Code & City */}
+          {/* Zip Code & City */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -167,14 +180,14 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
               </label>
               <input
                 type="text"
-                value={formData.postalCode}
-                onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                value={formData.zipCode}
+                onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
                 className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
-                  errors.postalCode ? 'border-red-300' : 'border-gray-200'
+                  errors.zipCode ? 'border-red-300' : 'border-gray-200'
                 }`}
                 placeholder="12345"
               />
-              {errors.postalCode && <p className="text-red-500 text-xs mt-1">{errors.postalCode}</p>}
+              {errors.zipCode && <p className="text-red-500 text-xs mt-1">{errors.zipCode}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -191,23 +204,6 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
               />
               {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
             </div>
-          </div>
-
-          {/* State */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Bundesland
-            </label>
-            <select
-              value={formData.state || ''}
-              onChange={(e) => setFormData({ ...formData, state: e.target.value || null })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all bg-white"
-            >
-              <option value="">Bitte wählen</option>
-              {germanStates.map(state => (
-                <option key={state} value={state}>{state}</option>
-              ))}
-            </select>
           </div>
 
           {/* Country */}
@@ -247,41 +243,21 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
           <div className="space-y-3 pt-2 border-t border-gray-100">
             <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
               <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                formData.isDefaultShipping 
+                formData.isDefault 
                   ? 'bg-[#4ECCA3] border-[#4ECCA3]' 
                   : 'border-gray-300'
               }`}>
-                {formData.isDefaultShipping && <Check className="w-3 h-3 text-white" />}
+                {formData.isDefault && <Check className="w-3 h-3 text-white" />}
               </div>
               <input
                 type="checkbox"
-                checked={formData.isDefaultShipping}
-                onChange={(e) => setFormData({ ...formData, isDefaultShipping: e.target.checked })}
+                checked={formData.isDefault}
+                onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
                 className="sr-only"
               />
               <div>
-                <p className="font-medium text-gray-900">Standard-Lieferadresse</p>
+                <p className="font-medium text-gray-900">Standardadresse</p>
                 <p className="text-xs text-gray-500">Wird automatisch bei Bestellungen ausgewählt</p>
-              </div>
-            </label>
-
-            <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
-              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                formData.isDefaultBilling 
-                  ? 'bg-[#4ECCA3] border-[#4ECCA3]' 
-                  : 'border-gray-300'
-              }`}>
-                {formData.isDefaultBilling && <Check className="w-3 h-3 text-white" />}
-              </div>
-              <input
-                type="checkbox"
-                checked={formData.isDefaultBilling}
-                onChange={(e) => setFormData({ ...formData, isDefaultBilling: e.target.checked })}
-                className="sr-only"
-              />
-              <div>
-                <p className="font-medium text-gray-900">Standard-Rechnungsadresse</p>
-                <p className="text-xs text-gray-500">Wird automatisch für Rechnungen verwendet</p>
               </div>
             </label>
           </div>

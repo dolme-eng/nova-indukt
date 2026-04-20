@@ -132,9 +132,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           },
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "Industriestraße 42",
-            "addressLocality": "München",
-            "postalCode": "80339",
+            "streetAddress": "Musterstraße 42",
+            "addressLocality": "Berlin",
+            "postalCode": "10115",
             "addressCountry": "DE"
           }
         })}} />

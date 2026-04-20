@@ -12,13 +12,14 @@ export const metadata: Metadata = {
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: { kategorie?: string; suche?: string; minPrice?: string; maxPrice?: string; sort?: string }
+  searchParams: Promise<{ kategorie?: string; suche?: string; minPrice?: string; maxPrice?: string; sort?: string }>
 }) {
-  const categorySlug = searchParams.kategorie
-  const search = searchParams.suche
-  const minPrice = searchParams.minPrice ? Number(searchParams.minPrice) : undefined
-  const maxPrice = searchParams.maxPrice ? Number(searchParams.maxPrice) : undefined
-  const sort = searchParams.sort || 'newest'
+  const params = await searchParams
+  const categorySlug = params.kategorie
+  const search = params.suche
+  const minPrice = params.minPrice ? Number(params.minPrice) : undefined
+  const maxPrice = params.maxPrice ? Number(params.maxPrice) : undefined
+  const sort = params.sort || 'newest'
 
   const [products, categories] = await Promise.all([
     prisma.product.findMany({

@@ -61,7 +61,7 @@ vi.mock('next/cache', () => ({
 }))
 
 // Mock Prisma - Create mock object first
-const mockPrisma = {
+const mockPrisma: any = {
   user: {
     findUnique: vi.fn(),
     findMany: vi.fn(),
@@ -96,7 +96,7 @@ const mockPrisma = {
   orderItem: {
     createMany: vi.fn(),
   },
-  $transaction: vi.fn((callback) => callback(mockPrisma)),
+  $transaction: vi.fn((callback) => callback(mockPrisma as any)),
 }
 
 vi.mock('@/lib/prisma', () => ({

@@ -88,7 +88,9 @@ function StripePaymentForm({
             layout: 'tabs',
             defaultValues: {
               billingDetails: {
-                country: 'DE',
+                address: {
+                  country: 'DE',
+                }
               }
             }
           }}
@@ -158,7 +160,7 @@ export default function CheckoutContent() {
   const total = subtotal + shipping
 
   // Create order and get Stripe client secret
-  const createOrder = useCallback(async () => {
+  const createOrder = useCallback(async (currentPaymentMethod: string) => {
     try {
       const orderData = {
         items: items.map(item => ({
@@ -169,7 +171,7 @@ export default function CheckoutContent() {
           slug: item.product.slug,
         })),
         shippingData,
-        paymentMethod: 'STRIPE',
+        paymentMethod: currentPaymentMethod.toUpperCase(),
         subtotal,
         shipping,
         total
@@ -217,7 +219,7 @@ export default function CheckoutContent() {
 
   useEffect(() => {
     if (step === 2 && paymentMethod === 'stripe' && !clientSecret && items.length > 0) {
-      createOrder()
+      createOrder('STRIPE')
     }
   }, [step, paymentMethod, clientSecret, items.length, createOrder])
 
@@ -281,7 +283,7 @@ export default function CheckoutContent() {
       // Create order first if not exists
       let currentOrderId = orderId
       if (!currentOrderId) {
-        const orderData = await createOrder()
+        const orderData = await createOrder('PAYPAL')
         currentOrderId = orderData.id
       }
 

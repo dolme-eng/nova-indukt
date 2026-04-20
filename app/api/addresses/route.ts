@@ -4,16 +4,16 @@ import { auth } from "@/lib/auth"
 import { z } from "zod"
 
 const addressSchema = z.object({
-  name: z.string().min(2).max(100),
+  firstName: z.string().min(2).max(100),
+  lastName: z.string().min(2).max(100),
+  company: z.string().max(100).optional().nullable(),
   street: z.string().min(3).max(200),
   street2: z.string().max(200).optional().nullable(),
-  postalCode: z.string().min(3).max(20),
+  zipCode: z.string().min(3).max(20),
   city: z.string().min(2).max(100),
-  state: z.string().max(100).optional().nullable(),
   country: z.string().default("DE"),
   phone: z.string().max(50).optional().nullable(),
-  isDefaultShipping: z.boolean().default(false),
-  isDefaultBilling: z.boolean().default(false),
+  isDefault: z.boolean().default(false),
   type: z.enum(["SHIPPING", "BILLING", "BOTH"]).default("SHIPPING"),
 })
 
@@ -34,8 +34,7 @@ export async function GET() {
     const addresses = await prisma.address.findMany({
       where: { userId: session.user.id },
       orderBy: [
-        { isDefaultShipping: 'desc' },
-        { isDefaultBilling: 'desc' },
+        { isDefault: 'desc' },
         { createdAt: 'desc' },
       ],
     })
@@ -74,37 +73,27 @@ export async function POST(request: NextRequest) {
     
     const data = result.data
     
-    // If setting as default, unset other defaults
-    if (data.isDefaultShipping || data.isDefaultBilling) {
-      await prisma.$transaction([
-        ...(data.isDefaultShipping ? [
-          prisma.address.updateMany({
-            where: { userId: session.user.id, isDefaultShipping: true },
-            data: { isDefaultShipping: false },
-          })
-        ] : []),
-        ...(data.isDefaultBilling ? [
-          prisma.address.updateMany({
-            where: { userId: session.user.id, isDefaultBilling: true },
-            data: { isDefaultBilling: false },
-          })
-        ] : []),
-      ])
-    }
-    
     // First address becomes default automatically
     const existingCount = await prisma.address.count({
       where: { userId: session.user.id }
     })
     
     const isFirstAddress = existingCount === 0
+    const shouldBeDefault = data.isDefault || isFirstAddress
+
+    // If setting as default, unset other defaults
+    if (shouldBeDefault && !isFirstAddress) {
+      await prisma.address.updateMany({
+        where: { userId: session.user.id, isDefault: true },
+        data: { isDefault: false },
+      })
+    }
     
     const address = await prisma.address.create({
       data: {
         ...data,
         userId: session.user.id,
-        isDefaultShipping: data.isDefaultShipping || isFirstAddress,
-        isDefaultBilling: data.isDefaultBilling || isFirstAddress,
+        isDefault: shouldBeDefault,
       },
     })
     
@@ -165,29 +154,15 @@ export async function PUT(request: NextRequest) {
     const data = result.data
     
     // If setting as default, unset other defaults
-    if (data.isDefaultShipping || data.isDefaultBilling) {
-      await prisma.$transaction([
-        ...(data.isDefaultShipping ? [
-          prisma.address.updateMany({
-            where: { 
-              userId: session.user.id, 
-              isDefaultShipping: true,
-              id: { not: addressId }
-            },
-            data: { isDefaultShipping: false },
-          })
-        ] : []),
-        ...(data.isDefaultBilling ? [
-          prisma.address.updateMany({
-            where: { 
-              userId: session.user.id, 
-              isDefaultBilling: true,
-              id: { not: addressId }
-            },
-            data: { isDefaultBilling: false },
-          })
-        ] : []),
-      ])
+    if (data.isDefault) {
+      await prisma.address.updateMany({
+        where: { 
+          userId: session.user.id, 
+          isDefault: true,
+          id: { not: addressId }
+        },
+        data: { isDefault: false },
+      })
     }
     
     const address = await prisma.address.update({
@@ -244,7 +219,7 @@ export async function DELETE(request: NextRequest) {
     })
     
     // If this was a default, set another as default if any remain
-    if (existingAddress.isDefaultShipping || existingAddress.isDefaultBilling) {
+    if (existingAddress.isDefault) {
       const remaining = await prisma.address.findFirst({
         where: { userId: session.user.id },
         orderBy: { createdAt: 'asc' }
@@ -254,8 +229,7 @@ export async function DELETE(request: NextRequest) {
         await prisma.address.update({
           where: { id: remaining.id },
           data: {
-            isDefaultShipping: existingAddress.isDefaultShipping ? true : remaining.isDefaultShipping,
-            isDefaultBilling: existingAddress.isDefaultBilling ? true : remaining.isDefaultBilling,
+            isDefault: true,
           }
         })
       }

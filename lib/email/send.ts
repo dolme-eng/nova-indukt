@@ -56,7 +56,14 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
         shipping: params.shipping,
         tax: params.tax,
         total: params.total,
-        shippingAddress: params.shippingAddress,
+        shippingAddress: {
+          name: params.shippingAddress.name,
+          street: params.shippingAddress.street,
+          street2: params.shippingAddress.street2 || '',
+          postalCode: params.shippingAddress.postalCode,
+          city: params.shippingAddress.city,
+          country: params.shippingAddress.country,
+        },
         estimatedDelivery: params.estimatedDelivery,
       })
     )
@@ -194,11 +201,14 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
       include: {
         items: {
           include: {
-            product: true,
+            product: {
+              include: {
+                images: true
+              }
+            },
           },
         },
         user: true,
-        shippingAddress: true,
       },
     })
 
@@ -206,11 +216,14 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
       throw new Error('Order or user email not found')
     }
 
+    const typedOrder = order as any
+    const shippingAddr = order.shippingAddress as any
+
     // Calculate subtotal (without tax)
-    const subtotal = order.subtotal || order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-    const shipping = order.shippingCost || 0
-    const tax = order.tax || subtotal * VAT_RATE
-    const total = order.total || subtotal + shipping + tax
+    const subtotal = Number(order.subtotal) || typedOrder.items.reduce((sum: number, item: any) => sum + (Number(item.unitPrice) * item.quantity), 0)
+    const shipping = Number(order.shippingCost) || 0
+    const tax = subtotal * VAT_RATE
+    const total = Number(order.total) || subtotal + shipping
 
     // Calculate estimated delivery (2-3 business days)
     const deliveryDate = new Date()
@@ -222,15 +235,15 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
     })
 
     const result = await sendOrderConfirmation({
-      to: order.user.email,
-      customerName: order.user.name || 'Kunde',
+      to: typedOrder.user.email,
+      customerName: typedOrder.user.name || 'Kunde',
       orderNumber: order.orderNumber,
-      items: order.items.map(item => ({
+      items: typedOrder.items.map((item: any) => ({
         id: item.id,
         name: item.product.nameDe,
         nameDe: item.product.nameDe,
         quantity: item.quantity,
-        price: item.price,
+        price: Number(item.unitPrice),
         image: item.product.images?.[0]?.url,
       })),
       subtotal,
@@ -238,13 +251,12 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
       tax,
       total,
       shippingAddress: {
-        name: order.shippingAddress?.name || order.user.name || '',
-        street: order.shippingAddress?.street || '',
-        street2: order.shippingAddress?.street2,
-        postalCode: order.shippingAddress?.postalCode || '',
-        city: order.shippingAddress?.city || '',
-        state: order.shippingAddress?.state,
-        country: order.shippingAddress?.country || 'DE',
+        name: shippingAddr?.name || typedOrder.user.name || '',
+        street: shippingAddr?.street || '',
+        street2: shippingAddr?.street2 || '',
+        postalCode: shippingAddr?.postalCode || '',
+        city: shippingAddr?.city || '',
+        country: shippingAddr?.country || 'DE',
       },
       estimatedDelivery,
     })

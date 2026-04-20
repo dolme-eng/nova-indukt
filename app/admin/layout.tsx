@@ -37,22 +37,22 @@ export default function AdminLayout({
 
         <nav className="flex-1 px-4 py-4 space-y-1">
           <AdminNavLink href="/admin" icon={<LayoutDashboard size={20} />} label="Dashboard" />
-          <AdminNavLink href="/admin/orders" icon={<ShoppingCart size={20} />} label="Commandes" />
-          <AdminNavLink href="/admin/products" icon={<Package size={20} />} label="Produits" />
+          <AdminNavLink href="/admin/orders" icon={<ShoppingCart size={20} />} label="Bestellungen" />
+          <AdminNavLink href="/admin/products" icon={<Package size={20} />} label="Produkte" />
           <AdminNavLink href="/admin/blog" icon={<BookOpen size={20} />} label="Blog / Magazin" />
-          <AdminNavLink href="/admin/customers" icon={<Users size={20} />} label="Clients" />
+          <AdminNavLink href="/admin/customers" icon={<Users size={20} />} label="Kunden" />
           
           <div className="pt-4 pb-2 px-2">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Marketing</p>
           </div>
-          <AdminNavLink href="/admin/promotions" icon={<Tag size={20} />} label="Promotions" />
-          <AdminNavLink href="/admin/reviews" icon={<MessageSquare size={20} />} label="Avis" />
+          <AdminNavLink href="/admin/promotions" icon={<Tag size={20} />} label="Aktionen" />
+          <AdminNavLink href="/admin/reviews" icon={<MessageSquare size={20} />} label="Bewertungen" />
           <AdminNavLink href="/admin/newsletter" icon={<Mail size={20} />} label="Newsletter" />
           
           <div className="pt-4 pb-2 px-2">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Paramètres</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Einstellungen</p>
           </div>
-          <AdminNavLink href="/admin/settings" icon={<Settings size={20} />} label="Configuration" />
+          <AdminNavLink href="/admin/settings" icon={<Settings size={20} />} label="Konfiguration" />
         </nav>
 
         <div className="p-4 border-t border-slate-200">
@@ -61,7 +61,7 @@ export default function AdminLayout({
             className="flex items-center gap-3 px-3 py-2 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           >
             <LogOut size={20} />
-            <span className="font-medium">Déconnexion</span>
+            <span className="font-medium">Abmelden</span>
           </Link>
         </div>
       </aside>
@@ -78,7 +78,7 @@ export default function AdminLayout({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input 
                 type="text" 
-                placeholder="Rechercher..." 
+                placeholder="Suchen..." 
                 className="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full text-sm focus:ring-2 focus:ring-primary w-64 transition-all"
               />
             </div>
@@ -93,7 +93,7 @@ export default function AdminLayout({
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-semibold text-slate-900 leading-none">Admin</p>
-                <p className="text-xs text-slate-500 mt-1">Administrateur</p>
+                <p className="text-xs text-slate-500 mt-1">Administrator</p>
               </div>
               <div className="h-10 w-10 bg-slate-200 rounded-full flex items-center justify-center text-slate-600 font-bold border-2 border-white shadow-sm">
                 A

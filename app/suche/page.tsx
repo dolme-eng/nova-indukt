@@ -55,6 +55,7 @@ export default async function SuchePage() {
 
   const formattedCategories: Category[] = categories.map(c => ({
     id: c.id,
+    slug: c.slug,
     name: { de: c.nameDe },
     image: c.image || '',
     count: 0

@@ -28,8 +28,8 @@ export default async function AdminReviewsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Avis Clients</h1>
-        <p className="text-slate-500 text-sm">Modérez et gérez les témoignages sur vos produits ({reviews.length} avis)</p>
+        <h1 className="text-2xl font-bold text-slate-900">Kundenbewertungen</h1>
+        <p className="text-slate-500 text-sm">Moderieren und verwalten Sie Kundenmeinungen zu Ihren Produkten ({reviews.length} Bewertungen)</p>
       </div>
       <ReviewsList initialReviews={reviews} />
     </div>

@@ -49,6 +49,7 @@ export function PromotionBanner() {
     if (!promotion) return
 
     function updateTimer() {
+      if (!promotion) return
       const end = new Date(promotion.endDate).getTime()
       const now = new Date().getTime()
       const diff = end - now

@@ -25,8 +25,8 @@ export async function GET() {
           en: cat.nameEn
         },
         description: {
-          de: cat.descriptionDe,
-          en: cat.descriptionEn
+          de: cat.description,
+          en: cat.description
         },
         image: cat.image,
         productCount: cat._count.products

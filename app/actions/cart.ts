@@ -21,7 +21,11 @@ async function getCart() {
       include: {
         items: {
           include: {
-            product: true
+            product: {
+              include: {
+                images: true
+              }
+            }
           }
         }
       }
@@ -35,7 +39,11 @@ async function getCart() {
         include: {
           items: {
             include: {
-              product: true
+              product: {
+                include: {
+                  images: true
+                }
+              }
             }
           }
         }
@@ -185,7 +193,7 @@ export async function getCartItems() {
         id: item.product.id,
         name: item.product.nameDe,
         price: Number(item.product.price),
-        image: (item.product as any).images?.[0]?.url || "",
+        image: item.product.images?.[0]?.url || "",
         slug: item.product.slug,
         quantity: item.quantity
       }))

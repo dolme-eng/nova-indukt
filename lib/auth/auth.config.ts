@@ -1,6 +1,7 @@
 import { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
+import { compare } from "bcrypt-ts"
 
 // WebCrypto API based hash function (Edge Runtime compatible)
 async function sha256(message: string): Promise<string> {
@@ -37,8 +38,11 @@ async function verifyPassword(password: string, hashedPassword: string): Promise
       }
       return result === 0
     }
+    // Legacy bcrypt format
+    if (hashedPassword.startsWith('$2')) {
+      return await compare(password, hashedPassword)
+    }
     
-    // Legacy bcrypt format - passwords need to be reset
     return false
   } catch {
     return false

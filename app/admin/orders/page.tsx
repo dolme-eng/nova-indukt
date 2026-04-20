@@ -19,7 +19,7 @@ import {
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { format } from "date-fns"
-import { fr } from "date-fns/locale"
+import { de } from "date-fns/locale"
 import { OrderStatus, PaymentStatus } from "@prisma/client"
 
 async function getOrders() {
@@ -32,21 +32,21 @@ async function getOrders() {
 }
 
 const statusMap: Record<OrderStatus, { label: string, color: string, icon: React.ReactNode }> = {
-  PENDING: { label: "En attente", color: "bg-amber-100 text-amber-700 border-amber-200", icon: <Clock size={12} /> },
-  PROCESSING: { label: "Préparation", color: "bg-blue-100 text-blue-700 border-blue-200", icon: <RefreshCcw size={12} /> },
-  SHIPPED: { label: "Expédiée", color: "bg-purple-100 text-purple-700 border-purple-200", icon: <Truck size={12} /> },
-  DELIVERED: { label: "Livrée", color: "bg-emerald-100 text-emerald-700 border-emerald-200", icon: <CheckCircle2 size={12} /> },
-  CANCELLED: { label: "Annulée", color: "bg-slate-100 text-slate-700 border-slate-200", icon: <XCircle size={12} /> },
-  REFUNDED: { label: "Remboursée", color: "bg-red-100 text-red-700 border-red-200", icon: <AlertCircle size={12} /> }
+  PENDING: { label: "Ausstehend", color: "bg-amber-100 text-amber-700 border-amber-200", icon: <Clock size={12} /> },
+  PROCESSING: { label: "Bearbeitung", color: "bg-blue-100 text-blue-700 border-blue-200", icon: <RefreshCcw size={12} /> },
+  SHIPPED: { label: "Versandt", color: "bg-purple-100 text-purple-700 border-purple-200", icon: <Truck size={12} /> },
+  DELIVERED: { label: "Zugestellt", color: "bg-emerald-100 text-emerald-700 border-emerald-200", icon: <CheckCircle2 size={12} /> },
+  CANCELLED: { label: "Storniert", color: "bg-slate-100 text-slate-700 border-slate-200", icon: <XCircle size={12} /> },
+  REFUNDED: { label: "Erstattet", color: "bg-red-100 text-red-700 border-red-200", icon: <AlertCircle size={12} /> }
 }
 
 const paymentMap: Record<PaymentStatus, { label: string, color: string }> = {
-  PENDING: { label: "Non payé", color: "bg-slate-100 text-slate-600" },
-  AUTHORIZED: { label: "Autorisé", color: "bg-blue-50 text-blue-600" },
-  PAID: { label: "Payé", color: "bg-emerald-50 text-emerald-600" },
-  FAILED: { label: "Échec", color: "bg-red-50 text-red-600" },
-  REFUNDED: { label: "Remboursé", color: "bg-red-50 text-red-600" },
-  PARTIALLY_REFUNDED: { label: "Partiellement", color: "bg-orange-50 text-orange-600" }
+  PENDING: { label: "Nicht bezahlt", color: "bg-slate-100 text-slate-600" },
+  AUTHORIZED: { label: "Autorisiert", color: "bg-blue-50 text-blue-600" },
+  PAID: { label: "Bezahlt", color: "bg-emerald-50 text-emerald-600" },
+  FAILED: { label: "Fehlgeschlagen", color: "bg-red-50 text-red-600" },
+  REFUNDED: { label: "Erstattet", color: "bg-red-50 text-red-600" },
+  PARTIALLY_REFUNDED: { label: "Teilweise", color: "bg-orange-50 text-orange-600" }
 }
 
 export default async function AdminOrdersPage() {
@@ -57,12 +57,12 @@ export default async function AdminOrdersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Commandes</h1>
-          <p className="text-slate-500 text-sm">Gérez et suivez les ventes ({orders.length} commandes)</p>
+          <h1 className="text-2xl font-bold text-slate-900">Bestellungen</h1>
+          <p className="text-slate-500 text-sm">Verwalten und verfolgen Sie die Verkäufe ({orders.length} Bestellungen)</p>
         </div>
         <button className="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg font-semibold hover:bg-slate-50 transition-colors shadow-sm text-sm">
           <Download size={18} />
-          Exporter CSV
+          CSV Exportieren
         </button>
       </div>
 
@@ -72,14 +72,14 @@ export default async function AdminOrdersPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
-            placeholder="Rechercher (Client, n° de commande, email...)" 
+            placeholder="Suchen (Kunde, Bestellnummer, E-Mail...)" 
             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none transition-all"
           />
         </div>
         <div className="flex gap-2">
           <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
             <Filter size={18} />
-            Statut
+            Status
           </button>
           <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
             <Calendar size={18} />
@@ -94,13 +94,13 @@ export default async function AdminOrdersPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-widest font-bold border-b border-slate-200">
-                <th className="px-6 py-4">Commande</th>
-                <th className="px-6 py-4">Client</th>
-                <th className="px-6 py-4">Date</th>
-                <th className="px-6 py-4">Paiement</th>
-                <th className="px-6 py-4">Statut</th>
-                <th className="px-6 py-4">Total</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-4">Bestellung</th>
+                <th className="px-6 py-4">Kunde</th>
+                <th className="px-6 py-4">Datum</th>
+                <th className="px-6 py-4">Zahlung</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Gesamt</th>
+                <th className="px-6 py-4 text-right">Aktionen</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -121,7 +121,7 @@ export default async function AdminOrdersPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">
-                    {format(new Date(order.createdAt), "dd MMM yyyy, HH:mm", { locale: fr })}
+                    {format(new Date(order.createdAt), "dd MMM yyyy, HH:mm", { locale: de })}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-col gap-1">
@@ -164,7 +164,7 @@ export default async function AdminOrdersPage() {
                   <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center gap-2">
                       <Box size={48} className="text-slate-200" />
-                      <p>Aucune commande enregistrée pour le moment.</p>
+                      <p>Derzeit sind keine Bestellungen registriert.</p>
                     </div>
                   </td>
                 </tr>

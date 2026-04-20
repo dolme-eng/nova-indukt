@@ -2,8 +2,10 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ShoppingCart, Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ShoppingCart, Heart, Star, ChevronLeft, ChevronRight, Check } from 'lucide-react'
 import { Product } from '@/lib/data/products'
+import { useCart } from '@/lib/store/cart'
+import { toast } from 'sonner'
 
 interface QuickViewModalProps {
   product: Product | null
@@ -14,6 +16,8 @@ interface QuickViewModalProps {
 export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps) {
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
+  const { addItem } = useCart()
+  const [isAdded, setIsAdded] = useState(false)
 
   if (!product) return null
 
@@ -136,12 +140,31 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
 
                   {/* Actions */}
                   <div className="flex gap-3">
-                    <button className="flex-1 py-3 bg-[#4ECCA3] text-white font-semibold rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2">
-                      <ShoppingCart className="w-5 h-5" />
-                      In den Warenkorb
+                    <button 
+                      onClick={() => {
+                        addItem(product, quantity)
+                        setIsAdded(true)
+                        toast.success(`${product.name.de} wurde zum Warenkorb hinzugefügt`)
+                        setTimeout(() => setIsAdded(false), 2000)
+                      }}
+                      className={`flex-1 py-3 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 ${
+                        isAdded ? 'bg-green-500 text-white' : 'bg-[#4ECCA3] text-white hover:bg-[#3BA88A]'
+                      }`}
+                    >
+                      {isAdded ? (
+                        <>
+                          <Check className="w-5 h-5" />
+                          Hinzugefügt
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart className="w-5 h-5" />
+                          In den Warenkorb
+                        </>
+                      )}
                     </button>
-                    <button className="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50">
-                      <Heart className="w-5 h-5" />
+                    <button className="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 group">
+                      <Heart className="w-5 h-5 text-gray-400 group-hover:text-red-500 group-hover:fill-red-500 transition-colors" />
                     </button>
                   </div>
 

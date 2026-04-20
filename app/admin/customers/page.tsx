@@ -18,7 +18,7 @@ import {
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { format } from "date-fns"
-import { fr } from "date-fns/locale"
+import { de } from "date-fns/locale"
 
 async function getCustomers() {
   return await prisma.user.findMany({
@@ -46,13 +46,13 @@ export default async function AdminCustomersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Clients</h1>
-          <p className="text-slate-500 text-sm">Gérez votre base de clients et analysez leur activité ({customers.length} utilisateurs)</p>
+          <h1 className="text-2xl font-bold text-slate-900">Kunden</h1>
+          <p className="text-slate-500 text-sm">Verwalten Sie Ihren Kundenstamm und analysieren Sie deren Aktivitäten ({customers.length} Benutzer)</p>
         </div>
         <div className="flex gap-2">
           <button className="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg font-semibold hover:bg-slate-50 transition-colors shadow-sm text-sm">
             <Download size={18} />
-            Exporter CSV
+            CSV Exportieren
           </button>
         </div>
       </div>
@@ -63,18 +63,18 @@ export default async function AdminCustomersPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
-            placeholder="Rechercher par nom, email..." 
+            placeholder="Suchen nach Name, E-Mail..." 
             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none transition-all"
           />
         </div>
         <div className="flex gap-2">
           <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
             <Filter size={18} />
-            Rôle
+            Rolle
           </button>
           <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
             <ArrowUpDown size={18} />
-            Dépenses
+            Ausgaben
           </button>
         </div>
       </div>
@@ -85,13 +85,13 @@ export default async function AdminCustomersPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-widest font-bold border-b border-slate-200">
-                <th className="px-6 py-4">Client</th>
-                <th className="px-6 py-4">Status Email</th>
-                <th className="px-6 py-4">Rôle</th>
-                <th className="px-6 py-4">Inscrit le</th>
-                <th className="px-6 py-4 text-center">Commandes</th>
-                <th className="px-6 py-4">Total Dépensé</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-4">Kunde</th>
+                <th className="px-6 py-4">E-Mail Status</th>
+                <th className="px-6 py-4">Rolle</th>
+                <th className="px-6 py-4">Registriert am</th>
+                <th className="px-6 py-4 text-center">Bestellungen</th>
+                <th className="px-6 py-4">Gesamtausgaben</th>
+                <th className="px-6 py-4 text-right">Aktionen</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -110,7 +110,7 @@ export default async function AdminCustomersPage() {
                           )}
                         </div>
                         <div className="flex flex-col min-w-0">
-                          <span className="font-bold text-slate-900 truncate">{customer.name || "Utilisateur Sans Nom"}</span>
+                          <span className="font-bold text-slate-900 truncate">{customer.name || "Namenloser Benutzer"}</span>
                           <span className="text-xs text-slate-500 truncate flex items-center gap-1">
                             <Mail size={12} />
                             {customer.email}
@@ -122,12 +122,12 @@ export default async function AdminCustomersPage() {
                       {customer.emailVerified ? (
                         <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 uppercase tracking-tighter">
                           <MailCheck size={12} />
-                          Vérifié
+                          Verifiziert
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200 uppercase tracking-tighter">
                           <MailX size={12} />
-                          Non vérifié
+                          Nicht verifiziert
                         </span>
                       )}
                     </td>
@@ -135,32 +135,32 @@ export default async function AdminCustomersPage() {
                       {customer.role === "ADMIN" ? (
                         <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100 uppercase tracking-tighter">
                           <ShieldCheck size={12} />
-                          Administrateur
+                          Administrator
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100 uppercase tracking-tighter">
                           <UserCheck size={12} />
-                          Client
+                          Kunde
                         </span>
                       )}
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-600">
                       <div className="flex items-center gap-1.5">
                         <Calendar size={14} className="text-slate-400" />
-                        {format(new Date(customer.createdAt), "dd MMM yyyy", { locale: fr })}
+                        {format(new Date(customer.createdAt), "dd MMM yyyy", { locale: de })}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
                       <div className="flex flex-col items-center">
                         <span className="text-sm font-bold text-slate-900">{customer._count.orders}</span>
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Achats</span>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Käufe</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
                         <span className="text-sm font-bold text-emerald-600">{totalSpent.toFixed(2)} €</span>
                         {customer._count.orders > 0 && (
-                          <span className="text-[10px] text-slate-400 font-bold">Moy. {(totalSpent / customer._count.orders).toFixed(2)} €</span>
+                          <span className="text-[10px] text-slate-400 font-bold">Durchschn. {(totalSpent / customer._count.orders).toFixed(2)} €</span>
                         )}
                       </div>
                     </td>
@@ -169,7 +169,7 @@ export default async function AdminCustomersPage() {
                         <Link 
                           href={`/admin/customers/${customer.id}`}
                           className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-all"
-                          title="Fiche client"
+                          title="Kundenakte"
                         >
                           <ChevronRight size={18} />
                         </Link>
@@ -184,7 +184,7 @@ export default async function AdminCustomersPage() {
               {customers.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
-                    Aucun client inscrit pour le moment.
+                    Derzeit sind keine Kunden registriert.
                   </td>
                 </tr>
               )}

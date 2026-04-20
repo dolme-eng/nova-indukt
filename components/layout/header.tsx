@@ -15,6 +15,7 @@ import { useWishlist } from '@/lib/store/wishlist'
 import { useAuth } from '@/lib/store/auth'
 import { motion, AnimatePresence } from 'framer-motion'
 import { formatPriceDe } from '@/lib/utils/vat'
+import type { Product } from '@/lib/data/products'
 
 const megaMenuDepartments = [
   {
@@ -69,7 +70,7 @@ export function Header() {
   const megaRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
-  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchResults, setSearchResults] = useState<{id: string, nameDe: string, slug: string, price: number, images: {url: string}[]}[]>([])
   const [isSearching, setIsSearching] = useState(false)
 
   useEffect(() => {
@@ -421,13 +422,13 @@ export function Header() {
                     <div>
                       <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Produkte ({searchResults.length})</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {searchResults.map((product: any) => (
+                        {searchResults.map((product) => (
                           <Link href={`/produkt/${product.slug}`} key={product.id} onClick={() => setSearchOpen(false)} className="group bg-white rounded-2xl border border-gray-100 hover:border-[#4ECCA3] shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col">
                             <div className="aspect-square relative bg-gray-50 p-4">
-                              <Image src={product.images[0]} alt={product.name.de} fill className="object-contain p-6 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" />
+                              <Image src={product.images[0].url} alt={product.nameDe} fill className="object-contain p-6 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="(max-width: 640px) 100vw, 256px" />
                             </div>
                             <div className="p-4 flex flex-col flex-1 border-t border-gray-50">
-                              <h3 className="font-bold text-gray-900 text-sm mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors">{product.name.de}</h3>
+                              <h3 className="font-bold text-gray-900 text-sm mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors">{product.nameDe}</h3>
                               <div className="mt-auto pt-2 flex items-baseline gap-2">
                                 <span className="font-black text-[#0C211E] tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
                               </div>
@@ -532,7 +533,7 @@ export function Header() {
                         {totalPrice < 500 ? (
                           <div className="bg-[#4ECCA3]/10 border border-[#4ECCA3]/20 rounded-2xl p-4">
                             <p className="text-sm font-bold text-[#0C211E] mb-3 flex items-center gap-2">
-                              <Truck className="w-4 h-4 text-[#4ECCA3]" /> Nur noch {(500 - totalPrice).toFixed(2).replace('.', ',')} € bis zum <span className="text-[#4ECCA3]">Gratisversand</span>!
+                              <Truck className="w-4 h-4 text-[#4ECCA3]" /> Nur noch {formatPriceDe(500 - totalPrice)} bis zum <span className="text-[#4ECCA3]">Gratisversand</span>!
                             </p>
                             <div className="h-2.5 bg-white rounded-full overflow-hidden border border-gray-50">
                               <motion.div initial={{ width: 0 }} animate={{ width: `${(totalPrice / 500) * 100}%` }} transition={{ duration: 0.5, ease: 'easeOut' }} className="h-full bg-[#4ECCA3]" />

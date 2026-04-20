@@ -103,23 +103,22 @@ export function ProductsContent({
     return () => clearTimeout(t)
   }, [viewMode])
 
-  const handleToggleWishlist = async (e: React.MouseEvent, product: typeof products[0]) => {
+  const handleToggleWishlist = async (e: React.MouseEvent, product: Product) => {
     e.preventDefault()
     e.stopPropagation()
-    await toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug })
+    await toggleItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug
+    })
   }
 
   const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem({
-      id: product.id,
-      name: product.name.de,
-      price: product.price,
-      image: product.images[0],
-      slug: product.slug,
-      quantity: 1
-    })
+    addItem(product, 1)
   }
 
   const clearFilters = () => { setSearchQuery(''); setSelectedCategory(null); setPriceRange([0, PRICE_FILTER_MAX]); setSortBy('newest') }
@@ -473,6 +472,7 @@ export function ProductsContent({
                                       alt={`${product.name.de} Lifestyle`}
                                       fill
                                       className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-0"
+                                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     />
                                   )}
                                   
@@ -537,6 +537,7 @@ export function ProductsContent({
                                       alt={product.name.de}
                                       fill
                                       className={`object-contain p-2 sm:p-4 transition-all duration-700 mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-105'}`}
+                                      sizes="(max-width: 640px) 100vw, 320px"
                                     />
                                     {product.images[1] && (
                                       <Image
@@ -544,6 +545,7 @@ export function ProductsContent({
                                         alt={`${product.name.de} Lifestyle`}
                                         fill
                                         className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-0"
+                                        sizes="(max-width: 640px) 100vw, 320px"
                                       />
                                     )}
                                   </div>

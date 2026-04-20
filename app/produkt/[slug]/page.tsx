@@ -50,5 +50,39 @@ export default async function ProductPage({
     supplierSku: product.supplierSku || undefined
   }
 
-  return <ProductContent product={formattedProduct} />
+  // Fetch related products from same category
+  const relatedDb = await prisma.product.findMany({
+    where: {
+      categoryId: product.categoryId,
+      id: { not: product.id },
+      isActive: true
+    },
+    include: { images: true },
+    take: 4
+  })
+
+  const relatedProducts: Product[] = relatedDb.map(p => ({
+    id: p.id,
+    slug: p.slug,
+    name: { de: p.nameDe },
+    category: p.categoryId,
+    price: Number(p.price),
+    oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
+    images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map(img => img.url),
+    rating: p.rating,
+    reviewCount: p.reviewCount,
+    stock: p.stock,
+    badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
+    description: { de: p.descriptionDe || '' },
+    shortDescription: { de: p.shortDescription || '' },
+    specs: {
+      material: p.material || '',
+      dimensions: p.dimensions || '',
+      weight: p.weightKg?.toString() || '',
+      dishwasher: p.dishwasherSafe || false,
+      induction: p.inductionSafe || false,
+    },
+  }))
+
+  return <ProductContent product={formattedProduct} relatedProducts={relatedProducts} />
 }

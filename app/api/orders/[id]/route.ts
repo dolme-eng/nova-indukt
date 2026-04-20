@@ -51,10 +51,10 @@ export async function GET(
       ...order,
       total: Number(order.total),
       subtotal: Number(order.subtotal),
-      shipping: Number(order.shipping),
+      shippingCost: Number(order.shippingCost),
       items: order.items.map(item => ({
         ...item,
-        price: Number(item.price),
+        unitPrice: Number(item.unitPrice),
         product: {
           ...item.product,
           price: Number(item.product.price)
