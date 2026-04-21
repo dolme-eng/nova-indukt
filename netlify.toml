@@ -9,15 +9,3 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# API routes handling
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/nextjs/:splat"
-  status = 200
-
-# Fallback for Next.js pages
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/nextjs"
-  status = 200
