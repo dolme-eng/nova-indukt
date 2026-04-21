@@ -214,7 +214,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
               animate={{ opacity: 1, height: 'auto' }}
               className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl"
             >
-              <label className="block text-sm font-medium text-purple-400 mb-1 flex items-center gap-2">
+              <label className="text-sm font-medium text-purple-400 mb-1 flex items-center gap-2">
                 <Ticket className="w-4 h-4" />
                 Gutscheincode
               </label>
