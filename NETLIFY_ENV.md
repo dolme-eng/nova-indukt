@@ -11,8 +11,8 @@ DATABASE_URL=postgresql://neondb_owner:npg_Hksl9PheA8JB@ep-lively-meadow-alasjsf
 # Génère une clé avec : node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 AUTH_SECRET=REPLACE_WITH_64_CHAR_KEY
 NEXTAUTH_SECRET=REPLACE_WITH_SAME_64_CHAR_KEY
-NEXTAUTH_URL=https://nova-indukt-shop.netlify.app
-NEXT_PUBLIC_SITE_URL=https://nova-indukt-shop.netlify.app
+NEXTAUTH_URL=https://novaindukt.netlify.app
+NEXT_PUBLIC_SITE_URL=https://novaindukt.netlify.app
 ```
 
 ## 🟡 RECOMMANDÉES (Pour toutes les fonctionnalités)

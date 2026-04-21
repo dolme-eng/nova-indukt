@@ -24,7 +24,7 @@ netlify init
 Choisis :
 - ✅ "Create & configure a new site"
 - Ton équipe (ton compte)
-- Nom du site : `nova-indukt-shop` (ou ce que tu veux)
+- Nom du site : `novaindukt` (ou ce que tu veux)
 
 ## ÉTAPE 4 : Configurer les variables d'environnement
 
@@ -56,7 +56,7 @@ netlify deploy --prod
 ## ÉTAPE 6 : Vérifier le déploiement
 
 1. Attends la fin du build (~3-5 minutes)
-2. Va sur l'URL affichée (ex: `https://nova-indukt-shop.netlify.app`)
+2. Va sur l'URL affichée : `https://novaindukt.netlify.app`
 3. Teste :
    - La page d'accueil charge
    - Les produits s'affichent
