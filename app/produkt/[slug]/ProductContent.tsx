@@ -663,7 +663,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
 
         {/* Produits associés */}
         {relatedProducts.length > 0 && (
-          <section className="mt-12 border-t border-gray-200 pt-10 lg:mt-16 lg:pt-14">
+          <section className="mt-12 border-t border-gray-200 pt-10 pb-24 lg:mt-16 lg:pt-14 lg:pb-32">
             <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">Passend dazu</h2>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
               {relatedProducts.map((item, index) => (
