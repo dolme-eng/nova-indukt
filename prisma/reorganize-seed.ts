@@ -96,8 +96,8 @@ async function main() {
       inductionSafe: true,
       brand: 'NOVA Pro',
       images: [
-        'https://images.unsplash.com/photo-1584990344321-27682ad0f994?fm=jpg&q=80&w=900',
-        'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?fm=jpg&q=80&w=900'
+        '/images/products/Premium-Topfset-5-teilig/premium-topfset1.jpg',
+        '/images/products/Premium-Topfset-5-teilig/premium-topfset2.jpg'
       ]
     },
     {

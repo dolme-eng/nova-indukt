@@ -13,13 +13,13 @@ const panFolder = 'Induktions-Bratpfanne 28 cm – Keramikbeschichtung'
 const panBase = 'Induktions-Bratpfanne 28 cm – Keramikbeschichtung'
 const dampfFolder = 'Edelstahl-Dampfgarer 24 cm – 3 Einsätze'
 const dampfBase = 'Edelstahl-Dampfgarer 24 cm – 3 Einsätze'
-const topfFolder = 'Premium Induktions-Topfset 5-teilig – Edelstahl 1810'
-const topfBase = 'Premium Induktions-Topfset 5-teilig – Edelstahl 1810'
+const topfFolder = 'Premium-Topfset-5-teilig'
+const topfBase = 'premium-topfset'
 
 export const novaLocalImages = {
   premiumTopfset5: [
-    localProductImg('images', 'products', KB, topfFolder, `${topfBase}.png`),
-    localProductImg('images', 'products', KB, topfFolder, `${topfBase}.png`),
+    localProductImg('images', 'products', topfFolder, `${topfBase}1.jpg`),
+    localProductImg('images', 'products', topfFolder, `${topfBase}2.jpg`),
   ],
   bratpfanne28: [
     localProductImg('images', 'products', KB, panFolder, `${panBase}1.png`),
