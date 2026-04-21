@@ -214,7 +214,6 @@ export function ProductsContent({
                       >
                         <span className="flex items-center gap-2">
                           {cat.name.de}
-                          <span className="text-[10px] opacity-60 font-normal">({cat.count})</span>
                         </span>
                         {selectedCategory === cat.slug && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                       </button>
@@ -302,7 +301,6 @@ export function ProductsContent({
                             >
                               <span className="flex items-center gap-2">
                                 {cat.name.de}
-                                <span className="text-[10px] opacity-60 font-normal">({cat.count})</span>
                               </span>
                               {selectedCategory === cat.slug && <Check className="w-4 h-4 text-[#4ECCA3]" />}
                             </button>
