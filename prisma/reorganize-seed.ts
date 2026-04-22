@@ -214,6 +214,46 @@ async function main() {
       images: [
         'https://images.unsplash.com/photo-1591261730799-ee4e6c2d16d7?fm=jpg&q=80&w=900'
       ]
+    },
+    // Messer Premium - Global
+    {
+      slug: 'global-g-2-kochmesser-20cm',
+      nameDe: 'Global G-2 Kochmesser 20 cm',
+      price: 189.00,
+      oldPrice: 229.00,
+      categorySlug: 'messer-vorbereitung',
+      descriptionDe: 'Das legendäre Global G-2 Kochmesser mit 20 cm Klinge. Aus einem Stück Chrom-Molybdän-Vanadium-Stahl geschmiedet. Der ikonische Griff mit Kullenschliff sorgt für perfekte Balance und ergonomisches Halten.',
+      shortDescription: 'Das legendäre japanische Kochmesser mit 20 cm Klinge.',
+      stock: 15,
+      badges: ['premium', 'bestseller'],
+      material: 'Chrom-Molybdän-Vanadium-Stahl',
+      dimensions: '20 cm Klinge',
+      dishwasherSafe: false,
+      inductionSafe: false,
+      brand: 'Global',
+      images: [
+        '/images/products/Global G-2 Kochmesser 20 cm/global-g2-1.jpg'
+      ]
+    },
+    // Rösle Küchenhelfer
+    {
+      slug: 'roesle-silicone-kuechenhelfer-set-5-teilig',
+      nameDe: 'Rösle Silicone Küchenhelfer Set 5-teilig',
+      price: 79.90,
+      oldPrice: 99.90,
+      categorySlug: 'kuechenhelfer-zubehoer',
+      descriptionDe: 'Premium Küchenhelfer von Rösle aus hochwertigem Silikon. Hitzebeständig bis 230°C, lebensmittelecht und spülmaschinengeeignet. Das 5-teilige Set enthält alle wichtigen Utensilien für den täglichen Gebrauch.',
+      shortDescription: 'Premium Silikon-Küchenhelfer Set von Rösle.',
+      stock: 30,
+      badges: ['premium', 'new'],
+      material: 'Silikon, Edelstahlkern',
+      dimensions: 'Diverse Längen',
+      dishwasherSafe: true,
+      inductionSafe: false,
+      brand: 'Rösle',
+      images: [
+        '/images/products/Rösle Silicone Küchenhelfer Set 5-teilig/roesle-set-1.jpg'
+      ]
     }
   ]
 
