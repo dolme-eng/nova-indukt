@@ -69,6 +69,7 @@ export const config = {
     "/anmelden",
     "/registrieren",
     "/api/orders/:path*",
+    "/api/auth/:path*",
     "/admin/:path*",
     "/api/admin/:path*"
   ]

@@ -68,24 +68,28 @@ function categoryOffset(categoryId: string): number {
   return h
 }
 
+// Les 13 catégories harmonisées basées sur les images existantes
+export const categorySlugs = [
+  'kochen-braten',
+  'vorbereitung',
+  'kuechenzubehoer',
+  'tisch-servier',
+  'spezial',
+  'sets',
+  'herde',
+  'kuehlschraenke',
+  'geschirrspueler',
+  'kuechenmaschinen',
+  'waschmaschinen',
+  'trockner',
+  'staubsauger',
+] as const
+
+export type CategorySlug = typeof categorySlugs[number]
+
 export const stockImagesByCategory: Record<string, string[]> = (() => {
-  const keys = [
-    'kochen',
-    'vorbereitung',
-    'zubehoer',
-    'tischaccessoires',
-    'sous_vide',
-    'kaffee_tee',
-    'weinzubehoer',
-    'grillen',
-    'messer_premium',
-    'backen',
-    'wok',
-    'aufbewahrung',
-    'pflege',
-  ]
   const out: Record<string, string[]> = {}
-  for (const k of keys) {
+  for (const k of categorySlugs) {
     const off = categoryOffset(k)
     out[k] = [0, 1, 2, 3].map((j) => u(STOCK_POOL[(off + j) % STOCK_POOL.length]))
   }

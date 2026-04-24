@@ -75,22 +75,22 @@ export function Footer() {
             
             <div className="space-y-4 mb-8">
               <div className="flex items-center gap-3 group">
-                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#4ECCA3] group-hover:text-gray-900 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center text-[#9FE1CD] group-hover:bg-[#4ECCA3] group-hover:text-[#0C211E] transition-all duration-300">
                   <Phone className="w-5 h-5" />
                 </div>
-                <a href="tel:+498912345678" className="text-gray-600 hover:text-[#4ECCA3] transition-colors">+49 89 12345678</a>
+                <a href="tel:+498912345678" className="text-[#9FE1CD] hover:text-[#4ECCA3] transition-colors">+49 89 12345678</a>
               </div>
               <div className="flex items-center gap-3 group">
-                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#4ECCA3] group-hover:text-gray-900 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center text-[#9FE1CD] group-hover:bg-[#4ECCA3] group-hover:text-[#0C211E] transition-all duration-300">
                   <Mail className="w-5 h-5" />
                 </div>
-                <a href="mailto:info@nova-indukt.de" className="text-gray-600 hover:text-[#4ECCA3] transition-colors">info@nova-indukt.de</a>
+                <a href="mailto:info@nova-indukt.de" className="text-[#9FE1CD] hover:text-[#4ECCA3] transition-colors">info@nova-indukt.de</a>
               </div>
               <div className="flex items-center gap-3 group">
-                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#4ECCA3] group-hover:text-gray-900 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-[#17423C] flex items-center justify-center text-[#9FE1CD] group-hover:bg-[#4ECCA3] group-hover:text-[#0C211E] transition-all duration-300">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <span className="text-gray-600">Musterstraße 42, 10115 Berlin</span>
+                <span className="text-[#9FE1CD]">Musterstraße 42, 10115 Berlin</span>
               </div>
             </div>
 

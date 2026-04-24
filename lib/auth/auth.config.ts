@@ -1,52 +1,27 @@
 import { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
-import { compare } from "bcrypt-ts"
+import { compare, hash } from "bcrypt-ts"
+import { Role } from "@prisma/client"
 
-// WebCrypto API based hash function (Edge Runtime compatible)
-async function sha256(message: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(message)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-}
-
-// Verify password - supports both legacy bcrypt and new salt:hash format
+// Verify password - supports both legacy bcrypt and new bcrypt-ts format
 async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
   try {
-    // Check if it's the new salt:hash format
-    if (hashedPassword.includes(':')) {
-      const [salt, storedHash] = hashedPassword.split(':')
-      
-      if (!salt || !storedHash) {
-        return false
-      }
-      
-      // Compute hash with the same salt using WebCrypto
-      const computedHash = await sha256(password + salt)
-      
-      // Timing-safe comparison
-      if (computedHash.length !== storedHash.length) {
-        return false
-      }
-      
-      // Constant-time comparison
-      let result = 0
-      for (let i = 0; i < computedHash.length; i++) {
-        result |= computedHash.charCodeAt(i) ^ storedHash.charCodeAt(i)
-      }
-      return result === 0
-    }
-    // Legacy bcrypt format
+    // Legacy bcrypt format (starts with $2a$, $2b$, $2y$)
     if (hashedPassword.startsWith('$2')) {
       return await compare(password, hashedPassword)
     }
     
+    // Unsupported format
     return false
   } catch {
     return false
   }
+}
+
+// Hash password using bcrypt-ts (Edge Runtime compatible)
+export async function hashPassword(password: string): Promise<string> {
+  return await hash(password, 12) // 12 rounds = bon équilibre sécurité/performance
 }
 
 export const authConfig: NextAuthConfig = {
@@ -109,7 +84,7 @@ export const authConfig: NextAuthConfig = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string
-        session.user.role = token.role as string
+        session.user.role = token.role as Role
       }
       return session
     }

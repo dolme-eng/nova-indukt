@@ -32,26 +32,26 @@ const megaMenuDepartments = [
     title: 'Messer & Vorbereitung',
     icon: <ChefHat className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Alle Messer', href: '/produkte?kategorie=messer-vorbereitung' },
-      { label: 'Damastmesser', href: '/produkte?kategorie=messer-vorbereitung' },
-      { label: 'Schneidebretter', href: '/produkte?kategorie=messer-vorbereitung' },
+      { label: 'Alle Messer', href: '/produkte?kategorie=vorbereitung' },
+      { label: 'Damastmesser', href: '/produkte?kategorie=vorbereitung' },
+      { label: 'Schneidebretter', href: '/produkte?kategorie=vorbereitung' },
     ]
   },
   {
     title: 'Backen & Patisserie',
     icon: <UtensilsCrossed className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Alle Backartikel', href: '/produkte?kategorie=backen-patisserie' },
-      { label: 'Backformen', href: '/produkte?kategorie=backen-patisserie' },
-      { label: 'Pizza & Brot', href: '/produkte?kategorie=backen-patisserie' },
+      { label: 'Alle Backartikel', href: '/produkte?kategorie=kochen-braten' },
+      { label: 'Backformen', href: '/produkte?kategorie=kochen-braten' },
+      { label: 'Pizza & Brot', href: '/produkte?kategorie=kochen-braten' },
     ]
   },
   {
     title: 'Tisch & Servieren',
     icon: <Utensils className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Alles für den Tisch', href: '/produkte?kategorie=tisch-servieren' },
-      { label: 'Besteck & Gläser', href: '/produkte?kategorie=tisch-servieren' },
+      { label: 'Alles für den Tisch', href: '/produkte?kategorie=tisch-servier' },
+      { label: 'Besteck & Gläser', href: '/produkte?kategorie=tisch-servier' },
     ]
   }
 ]
@@ -74,16 +74,21 @@ export function Header() {
   const [isSearching, setIsSearching] = useState(false)
 
   useEffect(() => {
+    const controller = new AbortController()
     const delayDebounceFn = setTimeout(async () => {
       if (searchQuery.trim().length >= 2) {
         setIsSearching(true)
         try {
-          const response = await fetch(`/api/products/search?q=${encodeURIComponent(searchQuery)}`)
+          const response = await fetch(
+            `/api/products/search?q=${encodeURIComponent(searchQuery)}`,
+            { signal: controller.signal }
+          )
           if (response.ok) {
             const data = await response.json()
             setSearchResults(data)
           }
         } catch (error) {
+          if (error instanceof Error && error.name === 'AbortError') return
           console.error("Search error:", error)
         } finally {
           setIsSearching(false)
@@ -93,7 +98,10 @@ export function Header() {
       }
     }, 300)
 
-    return () => clearTimeout(delayDebounceFn)
+    return () => {
+      clearTimeout(delayDebounceFn)
+      controller.abort()
+    }
   }, [searchQuery])
 
   useEffect(() => {
@@ -333,7 +341,14 @@ export function Header() {
                     {/* Right side: Featured Promo */}
                     <div className="col-span-3 pl-10 border-l border-gray-100">
                       <div className="bg-[#0C211E] rounded-3xl p-6 relative overflow-hidden group h-full flex flex-col justify-end min-h-[200px]">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
+                        <Image
+                          src="/images/Die Premium/Die Premium.jpeg"
+                          alt="Die Premium Serie"
+                          fill
+                          className="object-cover opacity-60 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
+                          sizes="(max-width: 768px) 100vw, 300px"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
                         
                         <div className="relative z-20">
                           <span className="inline-block px-3 py-1 bg-[#4ECCA3]/20 backdrop-blur-md rounded-lg text-[#4ECCA3] text-xs font-bold mb-3 border border-[#4ECCA3]/30 uppercase tracking-wider">

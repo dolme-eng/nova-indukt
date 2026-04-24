@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next"
 import { Inter, Space_Grotesk, Sora, JetBrains_Mono } from "next/font/google"
-import { Geist } from 'next/font/google'
 import { PromotionBanner } from '@/components/promotion-banner'
 import "./globals.css"
 import { Toaster } from "sonner"

@@ -30,11 +30,11 @@ describe('Categories API', () => {
     },
     {
       id: 'cat-3',
-      nameDe: 'Zubehör',
-      nameEn: 'Accessories',
-      slug: 'zubehoer',
-      descriptionDe: 'Praktisches Zubehör',
-      descriptionEn: 'Practical accessories',
+      nameDe: 'Küchenzubehör',
+      nameEn: 'Kitchen Accessories',
+      slug: 'kuechenzubehoer',
+      descriptionDe: 'Praktisches Küchenzubehör',
+      descriptionEn: 'Practical kitchen accessories',
       image: '/cat3.jpg',
       _count: { products: 30 },
     },
@@ -49,7 +49,7 @@ describe('Categories API', () => {
 
       expect(response.status).toBe(200)
       expect(data).toHaveLength(3)
-      expect(data[0].slug).toBe('kochfelder')
+      expect(data[2].slug).toBe('kuechenzubehoer')
       expect(data[0].productCount).toBe(25)
       expect(data[0].name.de).toBe('Kochfelder')
       expect(data[0].name.en).toBe('Cooktops')

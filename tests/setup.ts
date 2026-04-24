@@ -96,7 +96,16 @@ const mockPrisma: any = {
   orderItem: {
     createMany: vi.fn(),
   },
-  $transaction: vi.fn((callback) => callback(mockPrisma as any)),
+  $transaction: vi.fn((arg) => {
+    // Prisma 5+ supports both array and callback signatures
+    if (Array.isArray(arg)) {
+      return Promise.all(arg)
+    }
+    if (typeof arg === 'function') {
+      return arg(mockPrisma)
+    }
+    return Promise.resolve()
+  }),
 }
 
 vi.mock('@/lib/prisma', () => ({

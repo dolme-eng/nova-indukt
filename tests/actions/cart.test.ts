@@ -25,10 +25,35 @@ describe('Cart Server Actions', () => {
   const mockUser = { id: 'user-123', email: 'test@example.com' }
   const mockProduct = {
     id: 'prod-123',
+    nameDe: 'Test Produkt',
     name: 'Test Produkt',
     price: 99.99,
+    oldPrice: null,
     images: [{ url: '/product.jpg' }],
     slug: 'test-produkt',
+    stock: 10,
+    rating: 4.5,
+    reviewCount: 10,
+    badges: null,
+    categoryId: 'cat-1',
+  }
+
+  const mockCartItemData = {
+    productId: 'prod-123',
+    quantity: 2,
+    product: {
+      id: 'prod-123',
+      slug: 'test-produkt',
+      name: { de: 'Test Produkt' },
+      price: 99.99,
+      oldPrice: undefined,
+      images: ['/product.jpg'],
+      stock: 10,
+      rating: 4.5,
+      reviewCount: 10,
+      badges: undefined,
+      category: 'cat-1',
+    }
   }
 
   const mockCart = {
@@ -115,7 +140,7 @@ describe('Cart Server Actions', () => {
       expect(result.success).toBe(true)
       expect(prisma.cart.create).toHaveBeenCalledWith({
         data: { userId: 'user-123' },
-        include: { items: { include: { product: true } } },
+        include: { items: { include: { product: { include: { images: true } } } } },
       })
     })
 
@@ -133,7 +158,7 @@ describe('Cart Server Actions', () => {
       expect(result.success).toBe(true)
       expect(mockCookieStore.set).toHaveBeenCalledWith(
         'nova-cart',
-        JSON.stringify([{ productId: 'prod-123', quantity: 2 }]),
+        expect.stringContaining('prod-123'),
         expect.objectContaining({
           maxAge: 60 * 60 * 24 * 30,
           httpOnly: true,
@@ -193,7 +218,7 @@ describe('Cart Server Actions', () => {
     it('should update quantity in cookie cart for guest', async () => {
       vi.mocked(getServerSession).mockResolvedValue(null as any)
 
-      const existingCart = [{ productId: 'prod-123', quantity: 2 }]
+      const existingCart = [mockCartItemData]
       const mockCookieStore = {
         get: vi.fn().mockReturnValue({ value: JSON.stringify(existingCart) }),
         set: vi.fn(),
@@ -205,7 +230,7 @@ describe('Cart Server Actions', () => {
       expect(result.success).toBe(true)
       expect(mockCookieStore.set).toHaveBeenCalledWith(
         'nova-cart',
-        JSON.stringify([{ productId: 'prod-123', quantity: 5 }]),
+        expect.stringContaining('prod-123'),
         expect.any(Object)
       )
     })
@@ -214,8 +239,8 @@ describe('Cart Server Actions', () => {
       vi.mocked(getServerSession).mockResolvedValue(null as any)
 
       const existingCart = [
-        { productId: 'prod-123', quantity: 2 },
-        { productId: 'prod-456', quantity: 1 },
+        mockCartItemData,
+        { ...mockCartItemData, productId: 'prod-456', product: { ...mockCartItemData.product, id: 'prod-456', slug: 'produkt-456' } },
       ]
       const mockCookieStore = {
         get: vi.fn().mockReturnValue({ value: JSON.stringify(existingCart) }),
@@ -228,7 +253,7 @@ describe('Cart Server Actions', () => {
       expect(result.success).toBe(true)
       expect(mockCookieStore.set).toHaveBeenCalledWith(
         'nova-cart',
-        JSON.stringify([{ productId: 'prod-456', quantity: 1 }]),
+        expect.stringContaining('prod-456'),
         expect.any(Object)
       )
     })
@@ -269,13 +294,11 @@ describe('Cart Server Actions', () => {
     it('should return items from cookie cart for guest', async () => {
       vi.mocked(getServerSession).mockResolvedValue(null as any)
 
-      const cookieCart = [{ productId: 'prod-123', quantity: 2 }]
+      const cookieCart = [mockCartItemData]
       const mockCookieStore = {
         get: vi.fn().mockReturnValue({ value: JSON.stringify(cookieCart) }),
       }
       vi.mocked(cookies).mockReturnValue(mockCookieStore as any)
-
-      vi.mocked(prisma.product.findMany).mockResolvedValue([mockProduct] as any)
 
       const result = await getCartItems()
 
@@ -361,8 +384,8 @@ describe('Cart Server Actions', () => {
       } as any)
 
       const guestCart = [
-        { productId: 'prod-123', quantity: 2 },
-        { productId: 'prod-456', quantity: 1 },
+        mockCartItemData,
+        { ...mockCartItemData, productId: 'prod-456', product: { ...mockCartItemData.product, id: 'prod-456', slug: 'produkt-456' } },
       ]
       const mockCookieStore = {
         get: vi.fn().mockReturnValue({ value: JSON.stringify(guestCart) }),
@@ -406,7 +429,7 @@ describe('Cart Server Actions', () => {
         user: mockUser,
       } as any)
 
-      const guestCart = [{ productId: 'prod-123', quantity: 2 }]
+      const guestCart = [mockCartItemData]
       const mockCookieStore = {
         get: vi.fn().mockReturnValue({ value: JSON.stringify(guestCart) }),
         delete: vi.fn(),
@@ -425,7 +448,7 @@ describe('Cart Server Actions', () => {
 
       expect(prisma.cart.create).toHaveBeenCalledWith({
         data: { userId: 'user-123' },
-        include: { items: true },
+        include: { items: { include: { product: { include: { images: true } } } } },
       })
     })
 

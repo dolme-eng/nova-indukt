@@ -4,7 +4,25 @@ import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { cookies } from "next/headers"
-import { CartItem } from "@/lib/store/cart"
+
+// Type pour les éléments du panier en cookie
+interface CartItemData {
+  productId: string
+  quantity: number
+  product: {
+    id: string
+    slug: string
+    name: { de: string }
+    price: number
+    oldPrice?: number
+    images: string[]
+    stock: number
+    rating: number
+    reviewCount: number
+    badges?: ('premium' | 'bestseller' | 'new')[]
+    category: string
+  }
+}
 
 const CART_COOKIE = "nova-cart"
 const CART_COOKIE_MAX_AGE = 60 * 60 * 24 * 30 // 30 days
@@ -54,7 +72,7 @@ async function getCart() {
   } else {
     // Guest user - use cookie cart
     const cartCookie = cookieStore.get(CART_COOKIE)
-    const items: CartItem[] = cartCookie ? JSON.parse(cartCookie.value) : []
+    const items: CartItemData[] = cartCookie ? JSON.parse(cartCookie.value) : []
     
     return { type: "cookie" as const, items }
   }
@@ -88,7 +106,7 @@ export async function addToCart(productId: string, quantity: number = 1) {
     } else {
       // Cookie cart for guests
       const cookieStore = await cookies()
-      const items = cart.items
+      const items: CartItemData[] = cart.items as CartItemData[]
       
       const existingIndex = items.findIndex(item => item.product.id === productId)
       
@@ -102,14 +120,20 @@ export async function addToCart(productId: string, quantity: number = 1) {
         })
         
         if (product) {
-          items.push({ 
-            product: {
-              ...product,
-              price: Number(product.price),
-              oldPrice: product.oldPrice ? Number(product.oldPrice) : undefined
-            } as any, 
-            quantity 
-          })
+          const cartProduct: CartItemData['product'] = {
+            id: product.id,
+            slug: product.slug,
+            name: { de: product.nameDe },
+            price: Number(product.price),
+            oldPrice: product.oldPrice ? Number(product.oldPrice) : undefined,
+            images: product.images.map(img => img.url),
+            stock: product.stock,
+            rating: product.rating,
+            reviewCount: product.reviewCount,
+            badges: product.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
+            category: product.categoryId
+          }
+          items.push({ productId: product.id, product: cartProduct, quantity })
         }
       }
       
@@ -259,7 +283,7 @@ export async function mergeGuestCartOnLogin() {
     
     if (!cartCookie) return
     
-    const guestItems: CartItem[] = JSON.parse(cartCookie.value)
+    const guestItems: CartItemData[] = JSON.parse(cartCookie.value)
     if (guestItems.length === 0) return
     
     // Get or create user cart
