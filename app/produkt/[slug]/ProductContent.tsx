@@ -145,7 +145,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
   ]
 
   return (
-    <article className="min-h-screen bg-[#f6f7f6] pb-24 lg:pb-14" itemScope itemType="https://schema.org/Product">
+    <article data-testid="product-detail" className="min-h-screen bg-[#f6f7f6] pb-24 lg:pb-14" itemScope itemType="https://schema.org/Product">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(product)) }} />
 
       <AnimatePresence>
@@ -167,6 +167,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 </div>
               </div>
               <motion.button
+                data-testid="add-to-cart-button"
                 whileTap={{ scale: 0.97 }}
                 onClick={() => addItem(product, 1)}
                 className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0C211E] px-4 text-sm font-bold text-white shadow-md sm:px-8"
@@ -213,6 +214,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
           {/* Galerie */}
           <div className="flex min-w-0 flex-col gap-4 sm:flex-row-reverse sm:gap-5 lg:gap-6">
             <motion.div
+              data-testid="product-main-image"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               className="relative aspect-square w-full min-h-0 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm sm:aspect-auto sm:h-[min(56vh,480px)] sm:min-h-[360px] lg:h-[min(72vh,680px)] lg:min-h-[460px] xl:rounded-3xl cursor-zoom-in group"
@@ -258,6 +260,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   <button
                     key={index}
                     type="button"
+                    data-testid="product-thumbnail"
                     onClick={() => setSelectedImage(index)}
                     className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 bg-white transition-colors sm:h-20 sm:w-full md:h-[4.5rem] ${
                       selectedImage === index ? 'border-[#4ECCA3] ring-2 ring-[#4ECCA3]/20' : 'border-gray-100 hover:border-gray-300'
@@ -280,7 +283,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   <span className="text-xs text-gray-400">({product.reviewCount})</span>
                 </div>
               </div>
-              <h1 className="font-heading text-2xl font-bold leading-tight tracking-tight text-[#0C211E] sm:text-3xl lg:text-[1.85rem] xl:text-4xl 2xl:text-[2.5rem]">
+              <h1 data-testid="product-name" className="font-heading text-2xl font-bold leading-tight tracking-tight text-[#0C211E] sm:text-3xl lg:text-[1.85rem] xl:text-4xl 2xl:text-[2.5rem]">
                 {product.name.de}
               </h1>
               <p className="text-base leading-relaxed text-gray-600 lg:text-lg">{product.shortDescription.de}</p>
@@ -384,6 +387,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   </button>
                 </div>
                 <motion.button
+                  data-testid="add-to-cart-button"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   onClick={() => addItem(product, quantity)}
@@ -492,6 +496,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 <button
                   key={tab.id}
                   type="button"
+                  data-testid={tab.id === 'reviews' ? 'reviews-tab' : undefined}
                   onClick={() => setActiveTab(tab.id)}
                   className={`relative py-4 text-sm font-bold transition-colors sm:text-base ${
                     activeTab === tab.id ? 'text-[#0C211E]' : 'text-gray-400 hover:text-gray-600'
@@ -642,6 +647,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
             <div key={section.id} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
               <button
                 type="button"
+                data-testid={section.id === 'reviews' ? 'reviews-accordion' : undefined}
                 onClick={() => setExpandedAccordion(expandedAccordion === section.id ? null : section.id)}
                 className="flex w-full items-center justify-between p-4 text-left sm:p-5"
               >

@@ -82,13 +82,9 @@ export default async function ProductsPage({
     }),
     prisma.category.findMany({
       where: { isActive: true },
-      include: {
-        _count: {
-          select: { products: { where: { isActive: true } } }
-        }
-      },
+      include: { _count: { select: { products: true } } },
       orderBy: { sortOrder: 'asc' }
-    })
+    }).then(cats => cats.filter(c => c._count.products > 0))
   ])
 
   // Transformer les données pour correspondre à l'interface attendue par ProductsContent

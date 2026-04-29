@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
+export const dynamic = 'force-dynamic'
 import BlogPostForm from "../../_components/blog-post-form"
 
 export default async function EditBlogPostPage({

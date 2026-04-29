@@ -32,28 +32,39 @@ const megaMenuDepartments = [
     title: 'Messer & Vorbereitung',
     icon: <ChefHat className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Alle Messer', href: '/produkte?kategorie=vorbereitung' },
-      { label: 'Damastmesser', href: '/produkte?kategorie=vorbereitung' },
-      { label: 'Schneidebretter', href: '/produkte?kategorie=vorbereitung' },
+      { label: 'Alle Messer', href: '/produkte?kategorie=messer-vorbereitung' },
+      { label: 'Damastmesser', href: '/produkte?kategorie=messer-vorbereitung' },
+      { label: 'Schneidebretter', href: '/produkte?kategorie=messer-vorbereitung' },
     ]
   },
   {
-    title: 'Backen & Patisserie',
-    icon: <UtensilsCrossed className="w-5 h-5 text-[#4ECCA3]" />,
+    title: 'Küchenhelfer & Zubehör',
+    icon: <Sparkles className="w-5 h-5 text-[#4ECCA3]" />,
     links: [
-      { label: 'Alle Backartikel', href: '/produkte?kategorie=kochen-braten' },
-      { label: 'Backformen', href: '/produkte?kategorie=kochen-braten' },
-      { label: 'Pizza & Brot', href: '/produkte?kategorie=kochen-braten' },
+      { label: 'Alle Küchenhelfer', href: '/produkte?kategorie=kuechenhelfer-zubehoer' },
+      { label: 'Küchengeräte', href: '/produkte?kategorie=kuechenhelfer-zubehoer' },
+      { label: 'Praktisches Zubehör', href: '/produkte?kategorie=kuechenhelfer-zubehoer' },
     ]
   },
-  {
-    title: 'Tisch & Servieren',
-    icon: <Utensils className="w-5 h-5 text-[#4ECCA3]" />,
-    links: [
-      { label: 'Alles für den Tisch', href: '/produkte?kategorie=tisch-servier' },
-      { label: 'Besteck & Gläser', href: '/produkte?kategorie=tisch-servier' },
-    ]
-  }
+  // NOTE: Backen & Patisserie et Tisch & Servieren sont masqués car 0 produits
+  // À réactiver quand des produits seront ajoutés
+  // {
+  //   title: 'Backen & Patisserie',
+  //   icon: <UtensilsCrossed className="w-5 h-5 text-[#4ECCA3]" />,
+  //   links: [
+  //     { label: 'Alle Backartikel', href: '/produkte?kategorie=backen-patisserie' },
+  //     { label: 'Backformen', href: '/produkte?kategorie=backen-patisserie' },
+  //     { label: 'Pizza & Brot', href: '/produkte?kategorie=backen-patisserie' },
+  //   ]
+  // },
+  // {
+  //   title: 'Tisch & Servieren',
+  //   icon: <Utensils className="w-5 h-5 text-[#4ECCA3]" />,
+  //   links: [
+  //     { label: 'Alles für den Tisch', href: '/produkte?kategorie=tisch-servieren' },
+  //     { label: 'Besteck & Gläser', href: '/produkte?kategorie=tisch-servieren' },
+  //   ]
+  // }
 ]
 
 export function Header() {
@@ -171,6 +182,7 @@ export function Header() {
 
       {/* Main Header */}
       <header 
+        data-testid="site-header"
         className={`sticky top-0 left-0 right-0 z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${
           scrolled 
             ? 'bg-white/70 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border-b border-white/20 py-1.5' 
@@ -180,7 +192,7 @@ export function Header() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between relative" ref={megaRef}>
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0 group relative z-10 bg-white rounded-lg p-1 shadow-sm">
+            <Link href="/" data-testid="site-logo" className="flex-shrink-0 group relative z-10 bg-white rounded-lg p-1 shadow-sm">
               <Image 
                 src="/logo0.png" 
                 alt="NOVA INDUKT" 
@@ -193,33 +205,44 @@ export function Header() {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center justify-center absolute inset-0 pointer-events-none">
-              <div className="flex items-center gap-1.5 pointer-events-auto bg-gray-50/40 rounded-2xl p-1.5 border border-gray-100/50 backdrop-blur-md">
+            <nav 
+              data-testid="main-navigation"
+              className="hidden lg:flex items-center justify-center absolute inset-0 pointer-events-none"
+            >
+              <div className="flex items-center gap-1.5 pointer-events-auto">
                 {navItems.map((item) => (
                   <div key={item.href} className="relative z-10">
                     {item.hasMega ? (
                       <button
                         onMouseEnter={() => setMegaMenuOpen(true)}
-                        className={`group flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-500 ease-[0.22,1,0.36,1] ${
+                        className={`group flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold transition-all duration-500 ease-[0.22,1,0.36,1] ${
                           isActive(item.href) || megaMenuOpen
-                            ? 'text-white bg-[#0C211E] shadow-lg shadow-[#0C211E]/20 scale-[1.02]' 
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-sm hover:scale-[1.02]'
+                            ? 'text-[#0C211E]' 
+                            : 'text-gray-600 hover:text-gray-900'
                         }`}
                       >
                         {item.label}
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ease-[0.22,1,0.36,1] ${megaMenuOpen ? 'rotate-180 text-white' : 'text-gray-400 group-hover:text-gray-600'}`} />
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ease-[0.22,1,0.36,1] ${megaMenuOpen ? 'rotate-180 text-[#0C211E]' : 'text-gray-400 group-hover:text-gray-600'}`} />
                       </button>
                     ) : (
                       <Link 
                         href={item.href} 
-                        className={`block px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-500 ease-[0.22,1,0.36,1] ${
+                        className={`block px-5 py-2.5 text-sm font-bold transition-all duration-500 ease-[0.22,1,0.36,1] ${
                           isActive(item.href) 
-                            ? 'text-white bg-[#0C211E] shadow-lg shadow-[#0C211E]/20 scale-[1.02]' 
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-sm hover:scale-[1.02]'
+                            ? 'text-[#0C211E]' 
+                            : 'text-gray-600 hover:text-gray-900'
                         }`}
                       >
                         {item.label}
                       </Link>
+                    )}
+                    {/* Indicateur de ligne pour l'élément actif */}
+                    {isActive(item.href) && (
+                      <motion.div 
+                        layoutId="nav-underline"
+                        className="absolute bottom-0 left-5 right-5 h-0.5 bg-[#4ECCA3]"
+                        transition={{ duration: 0.3 }}
+                      />
                     )}
                   </div>
                 ))}
@@ -230,36 +253,24 @@ export function Header() {
             <div className="flex items-center gap-0.5 sm:gap-2 relative z-10 bg-white/50 backdrop-blur-md rounded-2xl p-1 sm:p-1.5 border border-gray-100">
               <button 
                 onClick={() => setSearchOpen(true)} 
+                data-testid="search-button"
                 className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" 
                 aria-label="Suchen"
               >
                 <Search className="w-5 h-5 transition-transform group-hover:scale-110" />
               </button>
               
-              <Link href="/wunschliste" className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Wunschliste">
-                <Heart className="w-5 h-5 transition-transform group-hover:scale-110" />
-                <AnimatePresence>
-                  {isWishlistMounted && wishlistCount > 0 && (
-                    <motion.span 
-                      initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-black tracking-tighter rounded-full flex items-center justify-center shadow-sm shadow-red-500/20 border-2 border-white"
-                    >
-                      {wishlistCount > 99 ? '99+' : wishlistCount}
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </Link>
-              
               <Link href="/mein-konto" className="hidden md:flex p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl group" aria-label="Mein Konto">
                 <User className="w-5 h-5 transition-transform group-hover:scale-110" />
               </Link>
               
-              <button onClick={() => setCartDrawerOpen(true)} className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Warenkorb">
+              <button onClick={() => setCartDrawerOpen(true)} data-testid="cart-button" className="p-2 sm:p-2.5 md:p-3 text-gray-400 hover:text-[#0C211E] hover:bg-gray-100 transition-all rounded-xl relative group" aria-label="Warenkorb">
                 <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
                 <AnimatePresence>
                   {isCartHydrated && totalItems > 0 && (
                     <motion.span 
                       initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
+                      data-testid="cart-count"
                       className="absolute -top-1 -right-1 w-5 h-5 bg-[#4ECCA3] text-gray-900 text-[10px] font-black tracking-tighter rounded-full flex items-center justify-center shadow-sm shadow-[#4ECCA3]/40 border-2 border-white"
                     >
                       {totalItems > 99 ? '99+' : totalItems}
@@ -270,6 +281,7 @@ export function Header() {
 
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+                data-testid="mobile-menu-button"
                 className="lg:hidden p-2 sm:p-2.5 md:p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all rounded-xl" 
                 aria-label="Menü"
               >
@@ -302,6 +314,7 @@ export function Header() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
+                data-testid="mega-menu-dropdown"
                 className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-2xl border-t border-gray-100 shadow-[0_20px_40px_rgba(0,0,0,0.08)] z-50 origin-top overflow-hidden"
                 onMouseEnter={() => setMegaMenuOpen(true)} 
                 onMouseLeave={() => setMegaMenuOpen(false)}
@@ -315,6 +328,7 @@ export function Header() {
                       {megaMenuDepartments.map((dept, idx) => (
                         <motion.div 
                           key={dept.title}
+                          data-testid="mega-menu-category"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.05 * idx }}
@@ -328,7 +342,7 @@ export function Header() {
                           <ul className="space-y-3.5">
                             {dept.links.map((link, linkIdx) => (
                                <li key={link.label}>
-                                 <Link href={link.href} onClick={() => setMegaMenuOpen(false)} className="text-sm font-semibold text-gray-500 hover:text-[#4ECCA3] hover:translate-x-1.5 transition-all inline-block hover:bg-[#4ECCA3]/5 px-2 py-1 -ml-2 rounded-md">
+                                 <Link href={link.href} data-testid="mega-menu-subcategory" onClick={() => setMegaMenuOpen(false)} className="text-sm font-semibold text-gray-500 hover:text-[#4ECCA3] hover:translate-x-1.5 transition-all inline-block hover:bg-[#4ECCA3]/5 px-2 py-1 -ml-2 rounded-md">
                                    {link.label}
                                  </Link>
                                </li>
@@ -396,6 +410,7 @@ export function Header() {
                 <div className="flex-1 max-w-4xl mx-auto relative flex items-center">
                   <Search className="w-6 h-6 text-gray-400 absolute left-4" />
                   <input
+                    data-testid="search-input"
                     ref={searchInputRef}
                     type="text"
                     value={searchQuery}
@@ -434,11 +449,17 @@ export function Header() {
                       ))}
                     </div>
                   ) : searchResults.length > 0 ? (
-                    <div>
+                    <div data-testid="search-suggestions">
                       <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Produkte ({searchResults.length})</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {searchResults.map((product) => (
-                          <Link href={`/produkt/${product.slug}`} key={product.id} onClick={() => setSearchOpen(false)} className="group bg-white rounded-2xl border border-gray-100 hover:border-[#4ECCA3] shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col">
+                          <Link 
+                            href={`/produkt/${product.slug}`} 
+                            key={product.id} 
+                            data-testid="search-suggestion-item"
+                            onClick={() => setSearchOpen(false)} 
+                            className="group bg-white rounded-2xl border border-gray-100 hover:border-[#4ECCA3] shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col"
+                          >
                             <div className="aspect-square relative bg-gray-50 p-4">
                               <Image src={product.images[0].url} alt={product.nameDe} fill className="object-contain p-6 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="(max-width: 640px) 100vw, 256px" />
                             </div>
@@ -482,6 +503,7 @@ export function Header() {
                 className="fixed inset-0 z-[110] bg-black/40 backdrop-blur-sm"
               />
               <motion.div
+                data-testid="cart-drawer"
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
@@ -513,7 +535,7 @@ export function Header() {
                     <div className="space-y-6">
                       <AnimatePresence>
                         {items.map((item) => (
-                          <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.2 }} key={item.product.id} className="flex gap-4 bg-white">
+                          <motion.div data-testid="cart-item" layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.2 }} key={item.product.id} className="flex gap-4 bg-white">
                             <Link href={`/produkt/${item.product.slug}`} onClick={() => setCartDrawerOpen(false)} className="w-24 h-24 bg-gray-50 rounded-2xl relative flex-shrink-0 border border-gray-50 hover:border-[#4ECCA3] transition-colors group p-2">
                               <Image src={item.product.images[0]} alt={item.product.name.de} fill className="object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform" />
                             </Link>
@@ -521,7 +543,7 @@ export function Header() {
                               <div className="flex justify-between gap-2">
                                 <div>
                                   <h4 className="font-bold text-[#0C211E] text-sm line-clamp-2 leading-snug"><Link href={`/produkt/${item.product.slug}`} onClick={() => setCartDrawerOpen(false)} className="hover:text-[#4ECCA3] transition-colors">{item.product.name.de}</Link></h4>
-                                  <p className="text-[#0C211E] font-black text-sm mt-1 tabular-nums whitespace-nowrap">{formatPriceDe(item.product.price)}</p>
+                                  <p data-testid="cart-item-price" className="text-[#0C211E] font-black text-sm mt-1 tabular-nums whitespace-nowrap">{formatPriceDe(item.product.price)}</p>
                                 </div>
                                 <button onClick={() => removeItem(item.product.id)} className="text-gray-400 hover:text-red-500 transition-colors p-1 self-start">
                                   <Trash2 className="w-4 h-4" />
@@ -532,7 +554,13 @@ export function Header() {
                                   <button onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))} className="w-7 h-7 flex items-center justify-center text-gray-500 hover:bg-white rounded-lg shadow-sm transition-colors">
                                     <Minus className="w-3 h-3" />
                                   </button>
-                                  <span className="w-8 text-center text-sm font-bold text-gray-900">{item.quantity}</span>
+                                  <input
+                                    data-testid="cart-quantity-input"
+                                    type="text"
+                                    readOnly
+                                    value={item.quantity}
+                                    className="w-8 text-center bg-transparent text-sm font-bold text-gray-900 outline-none"
+                                  />
                                   <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} disabled={item.quantity >= item.product.stock} className="w-7 h-7 flex items-center justify-center text-gray-500 hover:bg-white rounded-lg shadow-sm transition-colors disabled:opacity-50">
                                     <Plus className="w-3 h-3" />
                                   </button>
@@ -572,7 +600,7 @@ export function Header() {
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between text-sm text-gray-500 font-medium">
                         <span>Zwischensumme</span>
-                        <span className="font-semibold text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(totalPrice)}</span>
+                        <span data-testid="cart-subtotal" className="font-semibold text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(totalPrice)}</span>
                       </div>
                       <div className="flex justify-between text-sm text-gray-500 font-medium">
                         <span>Versand</span>
@@ -585,7 +613,12 @@ export function Header() {
                     </div>
                     
                     <div className="flex flex-col gap-3">
-                      <Link href="/kasse" onClick={() => setCartDrawerOpen(false)} className="w-full py-4 text-center bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] shadow-xl shadow-[#0C211E]/20 transition-all flex items-center justify-center gap-2">
+                      <Link 
+                        href="/kasse" 
+                        data-testid="checkout-button"
+                        onClick={() => setCartDrawerOpen(false)} 
+                        className="w-full py-4 text-center bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] shadow-xl shadow-[#0C211E]/20 transition-all flex items-center justify-center gap-2"
+                      >
                         <Lock className="w-4 h-4 text-[#4ECCA3]" /> Sicher zur Kasse
                       </Link>
                       <Link href="/warenkorb" onClick={() => setCartDrawerOpen(false)} className="w-full py-4 text-center bg-white border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-50 hover:border-gray-300 transition-colors">
@@ -622,11 +655,12 @@ export function Header() {
               animate={{ x: 0 }} 
               exit={{ x: '100%' }} 
               transition={{ type: 'spring', damping: 28, stiffness: 200 }}
+              data-testid="mobile-menu"
               className="absolute top-0 right-0 bottom-0 w-[90%] max-w-sm bg-white shadow-[auto] flex flex-col rounded-l-3xl overflow-hidden"
             >
               <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-gray-50/50 text-black">
                 <Image src="/logo0.png" alt="NOVA INDUKT" width={140} height={42} className="h-9 w-auto" />
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2.5 text-gray-400 hover:text-gray-900 bg-white shadow-sm border border-gray-100 rounded-full hover:bg-gray-50 transition-all">
+                <button onClick={() => setMobileMenuOpen(false)} data-testid="mobile-menu-close-button" className="p-2.5 text-gray-400 hover:text-gray-900 bg-white shadow-sm border border-gray-100 rounded-full hover:bg-gray-50 transition-all">
                   <X className="w-5 h-5" />
                 </button>
               </div>

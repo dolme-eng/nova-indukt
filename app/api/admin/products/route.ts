@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { createProductSchema } from "@/lib/validations/product"
+import type { ProductImageInput } from "@/lib/validations/product"
 
 export async function POST(req: Request) {
   try {
@@ -10,6 +12,20 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json()
+    
+    // Validation Zod du body
+    const validationResult = createProductSchema.safeParse(body)
+    
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { 
+          error: 'Validation failed', 
+          details: validationResult.error.flatten().fieldErrors 
+        },
+        { status: 400 }
+      )
+    }
+    
     const {
       nameDe,
       nameEn,
@@ -33,11 +49,7 @@ export async function POST(req: Request) {
       dishwasherSafe,
       inductionSafe,
       images
-    } = body
-
-    if (!nameDe || !slug || !price || !categoryId) {
-      return new NextResponse("Missing required fields", { status: 400 })
-    }
+    } = validationResult.data
 
     const product = await prisma.product.create({
       data: {
@@ -53,7 +65,7 @@ export async function POST(req: Request) {
         oldPrice,
         costPrice,
         stock,
-        stockAlertAt,
+        stockAlertAt: stockAlertAt ?? undefined,
         categoryId,
         isActive,
         weightKg,
@@ -64,7 +76,7 @@ export async function POST(req: Request) {
         inductionSafe,
         images: {
           createMany: {
-            data: images.map((img: any, index: number) => ({
+            data: images.map((img: ProductImageInput, index: number) => ({
               url: img.url,
               alt: img.alt || nameDe,
               sortOrder: index,

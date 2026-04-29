@@ -62,7 +62,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 pb-32 lg:pb-16 selection:bg-[#4ECCA3]/30">
+    <div data-testid="cart-page" className="min-h-screen bg-gray-50/50 pb-20 selection:bg-[#4ECCA3]/30">
             {/* Success Toast */}
       <AnimatePresence>
         {showSuccessToast && (
@@ -93,7 +93,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
               <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
               <Link href="/produkte" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">Produkte</Link>
               <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
-              <span className="text-[#0C211E] font-bold">Dein Warenkorb</span>
+              <span className="text-[#0C211E] font-bold">Ihr Warenkorb</span>
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
         <div className="flex items-center justify-between mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0C211E] font-heading tracking-tight">
-            {items.length > 0 ? `Dein Warenkorb (${totalItems})` : 'Dein Warenkorb'}
+            {items.length > 0 ? `Ihr Warenkorb (${totalItems})` : 'Ihr Warenkorb'}
           </h1>
           
           {items.length > 0 && (
@@ -118,14 +118,15 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
         
         {items.length === 0 ? (
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-[2.5rem] p-12 sm:p-20 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50"
+            data-testid="empty-cart"
+            initial={{ opacity: 0, scale: 0.9 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            className="max-w-2xl mx-auto text-center py-20 px-6 bg-white rounded-[3rem] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-gray-100"
           >
             <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 transform -rotate-6">
               <ShoppingCart className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0C211E] mb-4 font-heading">Dein Warenkorb ist leer</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0C211E] mb-4 font-heading">Ihr Warenkorb ist leer</h2>
             <p className="text-gray-500 mb-10 text-base sm:text-lg max-w-md mx-auto font-medium">
               Entdecke unsere Premium-Produkte und füge Deine Favoriten hinzu.
             </p>
@@ -146,6 +147,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
               <div className="bg-white rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/50 overflow-hidden divide-y divide-gray-100">
                 {items.map((item, index) => (
                   <motion.div 
+                    data-testid="cart-item"
                     key={item.product.id}
                     initial={{ opacity: 0 }}
                     animate={{ 
@@ -185,6 +187,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                           
                           {/* Remove Button - Desktop */}
                           <button 
+                            data-testid="remove-cart-item"
                             onClick={() => handleRemoveItem(item.product.id)}
                             className="hidden sm:flex p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                             title="Entfernen"
@@ -193,32 +196,40 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                           </button>
                         </div>
                         
-                        {/* Price Display */}
-                        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mt-2 sm:mt-1">
-                          <span className="text-[#0C211E] font-black text-lg sm:text-xl tracking-tight tabular-nums whitespace-nowrap">
-                            {formatPriceDe(item.product.price)}
-                          </span>
-                          {item.product.oldPrice && (
-                            <span className="text-sm font-semibold text-gray-400 line-through decoration-gray-300 tabular-nums whitespace-nowrap">
-                              {formatPriceDe(item.product.oldPrice)}
+                          {/* Price Display */}
+                          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mt-2 sm:mt-1">
+                            <span data-testid="cart-item-price" className="text-[#0C211E] font-black text-lg sm:text-xl tracking-tight tabular-nums whitespace-nowrap">
+                              {formatPriceDe(item.product.price)}
                             </span>
-                          )}
-                        </div>
+                            {item.product.oldPrice && (
+                              <span className="text-sm font-semibold text-gray-400 line-through decoration-gray-300 tabular-nums whitespace-nowrap">
+                                {formatPriceDe(item.product.oldPrice)}
+                              </span>
+                            )}
+                          </div>
 
                         {/* Controls & Total Row */}
                         <div className="flex items-center justify-between mt-auto pt-4 border-t sm:border-t-0 sm:pt-0 border-gray-50">
                           
                           {/* Quantity selector */}
-                          <div className="flex items-center border border-gray-200 rounded-xl bg-white shadow-sm overflow-hidden h-10 sm:h-12 w-28 sm:w-32">
+                          <div data-testid="cart-quantity-selector" className="flex items-center border border-gray-200 rounded-xl bg-white shadow-sm overflow-hidden h-10 sm:h-12 w-28 sm:w-32">
                             <button 
+                              data-testid="quantity-decrease"
                               onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
                               disabled={item.quantity <= 1}
                               className="w-10 h-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:hover:bg-transparent text-gray-600"
                             >
                               <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </button>
-                            <span className="flex-1 text-center font-bold text-sm sm:text-base text-[#0C211E]">{item.quantity}</span>
+                            <input
+                              data-testid="cart-quantity-input"
+                              type="text"
+                              readOnly
+                              value={item.quantity}
+                              className="flex-1 w-full text-center bg-transparent font-bold text-sm sm:text-base text-[#0C211E] outline-none"
+                            />
                             <button 
+                              data-testid="quantity-increase"
                               onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
                               disabled={item.quantity >= item.product.stock}
                               className="w-10 h-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:hover:bg-transparent text-gray-600"
@@ -227,16 +238,17 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                             </button>
                           </div>
                           
-                          {/* Subtotal Desktop */}
+                          {/* Price Desktop */}
                           <div className="hidden sm:block text-right">
-                            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-1">Summe</span>
-                            <span className="font-black text-[#0C211E] text-lg sm:text-xl tabular-nums whitespace-nowrap">
+                            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-1">Preis</span>
+                            <span data-testid="cart-item-total" className="font-bold text-[#0C211E] tabular-nums whitespace-nowrap">
                               {formatPriceDe(item.product.price * item.quantity)}
                             </span>
                           </div>
                           
                           {/* Remove Button - Mobile */}
                           <button 
+                            data-testid="remove-cart-item-mobile"
                             onClick={() => handleRemoveItem(item.product.id)}
                             className="sm:hidden p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors bg-white border border-gray-100"
                             title="Entfernen"
@@ -271,8 +283,13 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                           <Image src={item.images[0]} alt={item.name.de} fill className="object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="64px" />
                         </div>
                         <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2">
+                                    <span data-testid="cart-item-price" className="font-black text-[#0C211E] tabular-nums text-sm">{formatPriceDe(item.price)}</span>
+                                    {item.oldPrice && (
+                                      <span className="text-[10px] text-gray-400 line-through tabular-nums decoration-red-200/50">{formatPriceDe(item.oldPrice)}</span>
+                                    )}
+                                  </div>
                           <p className="text-sm font-bold text-[#0C211E] line-clamp-2 leading-tight group-hover:text-[#4ECCA3] transition-colors">{item.name.de}</p>
-                          <p className="text-[#0C211E] font-black text-sm mt-1 tabular-nums whitespace-nowrap">{formatPriceDe(item.price)}</p>
                         </div>
                         <div className="w-8 h-8 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-[#0C211E] group-hover:bg-[#4ECCA3] group-hover:text-white group-hover:border-[#4ECCA3] transition-colors flex-shrink-0 mr-1">
                           <ArrowRight className="w-4 h-4" />
@@ -317,7 +334,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center text-[15px] font-medium">
                     <span className="text-gray-500">Zwischensumme</span>
-                    <span className="text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
+                    <span data-testid="cart-subtotal" className="text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
                   </div>
                   <div className="flex justify-between items-center text-[15px] font-medium">
                     <span className="text-gray-500">Versand</span>

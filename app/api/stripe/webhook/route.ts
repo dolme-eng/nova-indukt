@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
+import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { prisma } from "@/lib/prisma"
 import { sendPaymentConfirmationEmail } from "@/lib/email/send"
+import { logError, logInfo } from "@/lib/logger"
+import type { Order } from "@prisma/client"
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 
@@ -18,19 +21,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    let event
+    let event: Stripe.Event
 
     try {
       event = stripe.webhooks.constructEvent(payload, signature, endpointSecret)
-    } catch (err: any) {
-      console.error(`Webhook signature verification failed: ${err.message}`)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+      logError('Webhook signature verification failed', err)
       return NextResponse.json(
         { error: "Invalid signature" },
         { status: 400 }
       )
     }
 
-    console.log(`Processing webhook event: ${event.type}`)
+    logInfo('Processing webhook event', { eventType: event.type })
 
     // Handle the event
     switch (event.type) {
@@ -53,12 +57,12 @@ export async function POST(request: NextRequest) {
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`)
+        logInfo('Unhandled webhook event type', { eventType: event.type })
     }
 
     return NextResponse.json({ received: true })
   } catch (error) {
-    console.error("Error processing webhook:", error)
+    logError('Error processing webhook', error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -66,7 +70,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handlePaymentSuccess(paymentIntent: any) {
+async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
   const orderId = paymentIntent.metadata?.orderId
   
   if (!orderId) {
@@ -93,14 +97,14 @@ async function handlePaymentSuccess(paymentIntent: any) {
       },
     })
 
-    console.log(`Order ${order.orderNumber} marked as PAID`)
+    logInfo('Order marked as PAID', { orderNumber: order.orderNumber, orderId: order.id })
 
     // Send payment confirmation email
     try {
       await sendPaymentConfirmationEmail(order)
-      console.log(`Payment confirmation email sent for order ${order.orderNumber}`)
+      logInfo('Payment confirmation email sent', { orderNumber: order.orderNumber })
     } catch (emailError) {
-      console.error("Failed to send payment confirmation email:", emailError)
+      logError('Failed to send payment confirmation email', emailError, { orderNumber: order.orderNumber })
       // Don't throw - order is already marked as paid
     }
 
@@ -113,15 +117,15 @@ async function handlePaymentSuccess(paymentIntent: any) {
           },
         },
       })
-      console.log(`Cart cleared for user ${order.userId}`)
+      logInfo('Cart cleared for user', { userId: order.userId })
     }
   } catch (error) {
-    console.error("Error handling payment success:", error)
+    logError('Error handling payment success', error, { orderId })
     throw error
   }
 }
 
-async function handlePaymentFailure(paymentIntent: any) {
+async function handlePaymentFailure(paymentIntent: Stripe.PaymentIntent) {
   const orderId = paymentIntent.metadata?.orderId
   
   if (!orderId) return
@@ -135,13 +139,13 @@ async function handlePaymentFailure(paymentIntent: any) {
       },
     })
 
-    console.log(`Order ${orderId} marked as PAYMENT_FAILED`)
+    logInfo('Order marked as PAYMENT_FAILED', { orderId })
   } catch (error) {
-    console.error("Error handling payment failure:", error)
+    logError('Error handling payment failure', error, { orderId })
   }
 }
 
-async function handleRefund(charge: any) {
+async function handleRefund(charge: Stripe.Charge) {
   const paymentIntentId = charge.payment_intent
   
   if (!paymentIntentId) return
@@ -149,11 +153,11 @@ async function handleRefund(charge: any) {
   try {
     // Find order by payment intent
     const order = await prisma.order.findFirst({
-      where: { paymentIntentId },
+      where: { paymentIntentId: paymentIntentId as string },
     })
 
     if (!order) {
-      console.error(`No order found for payment intent ${paymentIntentId}`)
+      logError('No order found for payment intent', null, { paymentIntentId })
       return
     }
 
@@ -168,8 +172,8 @@ async function handleRefund(charge: any) {
       },
     })
 
-    console.log(`Order ${order.orderNumber} marked as ${isFullyRefunded ? "REFUNDED" : "PARTIALLY_REFUNDED"}`)
+    logInfo('Order refund processed', { orderNumber: order.orderNumber, isFullyRefunded })
   } catch (error) {
-    console.error("Error handling refund:", error)
+    logError('Error handling refund', error, { paymentIntentId })
   }
 }

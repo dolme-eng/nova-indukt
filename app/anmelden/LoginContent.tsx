@@ -43,7 +43,7 @@ export function LoginContent() {
     // Simulate Google Sign In
     await new Promise(resolve => setTimeout(resolve, 1000))
     
-    // Demo mode: auto-login with Google
+    // Simulate successful Google authentication flow
     setSuccess(true)
     setTimeout(() => {
       router.push('/mein-konto')
@@ -65,6 +65,7 @@ export function LoginContent() {
 
         {/* Login Form */}
         <motion.div
+          data-testid="login-form"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-lg p-8"
@@ -92,7 +93,7 @@ export function LoginContent() {
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
+            <div data-testid="error-message" className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
               <XCircle className="w-4 h-4" />
               {error}
             </div>
@@ -114,6 +115,7 @@ export function LoginContent() {
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  data-testid="login-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -140,6 +142,7 @@ export function LoginContent() {
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  data-testid="login-password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -160,6 +163,7 @@ export function LoginContent() {
 
             {/* Submit Button */}
             <button
+              data-testid="login-submit"
               type="submit"
               disabled={loading || success}
               className="w-full py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -187,7 +191,7 @@ export function LoginContent() {
             </p>
             
             <p className="text-center text-xs text-gray-400">
-              Demo: demo@nova.de / demo123
+              Sichere SSL-Verbindung
             </p>
           </div>
         </motion.div>

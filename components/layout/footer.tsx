@@ -36,7 +36,7 @@ export function Footer() {
   ]
 
   return (
-    <footer className="bg-[#0C211E] text-white overflow-hidden relative border-t border-[#17423C]">
+    <footer data-testid="site-footer" className="bg-[#0C211E] text-white overflow-hidden relative border-t border-[#17423C]">
       {/* Abstract Background Elements */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#4ECCA3]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-[#17423C]/50 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
@@ -109,7 +109,7 @@ export function Footer() {
           </div>
 
           {/* Links Columns */}
-          <div className="lg:col-span-2 lg:col-start-6">
+          <div data-testid="footer-links" className="lg:col-span-2 lg:col-start-6">
             <h3 className="font-bold text-white mb-6 text-sm uppercase tracking-widest">Unternehmen</h3>
             <ul className="space-y-4">
               {footerLinks.company.map((link) => (

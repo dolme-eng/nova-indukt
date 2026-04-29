@@ -65,9 +65,9 @@ export async function POST(request: NextRequest) {
         contactMessage.id,
         contactMessage.createdAt
       )
-    } catch (emailError) {
-      console.error("Failed to send contact notification email:", emailError)
+    } catch {
       // Continue - message is still saved even if email fails
+      // Email errors should be logged by the email service
     }
 
     return NextResponse.json(
@@ -79,9 +79,9 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error("Error saving contact message:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { error: "Failed to send message" },
+      { error: "Failed to send message", message: errorMessage },
       { status: 500 }
     )
   }

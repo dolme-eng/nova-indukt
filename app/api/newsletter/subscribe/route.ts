@@ -5,7 +5,7 @@ import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendNewsletterConfirmationEmail } from "@/lib/email/send"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
-const RATE_LIMIT_MAX = 10 // 10 subscriptions per hour per IP
+const RATE_LIMIT_MAX = 3 // 3 subscriptions per hour per IP
 
 const subscribeSchema = z.object({
   email: z.string().email("Ungültige E-Mail-Adresse"),

@@ -1,6 +1,7 @@
 import React from "react"
 import ReviewsList from "./_components/reviews-list"
 import { prisma } from "@/lib/prisma"
+export const dynamic = 'force-dynamic'
 
 export default async function AdminReviewsPage() {
   const reviews = await prisma.review.findMany({

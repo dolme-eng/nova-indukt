@@ -27,7 +27,7 @@ export default function Error({
         </h1>
         
         <p className="text-gray-500 mb-8 leading-relaxed">
-          Es gab ein Problem beim Laden dieser Seite. Bitte versuchen Sie es erneut ou kehren Sie zur Startseite zurück.
+          Es gab ein Problem beim Laden dieser Seite. Bitte versuchen Sie es erneut oder kehren Sie zur Startseite zurück.
         </p>
         
         <div className="flex flex-col gap-3">

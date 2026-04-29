@@ -17,8 +17,8 @@ const nextConfig = {
       },
     ],
   },
-  // Turbopack config (empty to use defaults, resolves webpack conflict)
-  turbopack: {},
+  // Turbopack désactivé temporairement pour éviter les problèmes avec pino
+  // turbopack: {},
   experimental: {
     optimizeCss: false,
   },

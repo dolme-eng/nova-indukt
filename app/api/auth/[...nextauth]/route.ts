@@ -3,5 +3,5 @@ import { authConfig } from "@/lib/auth/auth.config"
 
 const { handlers, auth } = NextAuth(authConfig)
 
-export { handlers as default, auth }
+// Next.js App Router requires named exports for each HTTP method
 export const { GET, POST } = handlers

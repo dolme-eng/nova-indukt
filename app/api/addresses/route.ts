@@ -41,9 +41,9 @@ export async function GET() {
     
     return NextResponse.json(addresses)
   } catch (error) {
-    console.error("Error fetching addresses:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { error: "Failed to fetch addresses" },
+      { error: "Failed to fetch addresses", message: errorMessage },
       { status: 500 }
     )
   }
@@ -99,9 +99,9 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(address, { status: 201 })
   } catch (error) {
-    console.error("Error creating address:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { error: "Failed to create address" },
+      { error: "Failed to create address", message: errorMessage },
       { status: 500 }
     )
   }
@@ -172,9 +172,9 @@ export async function PUT(request: NextRequest) {
     
     return NextResponse.json(address)
   } catch (error) {
-    console.error("Error updating address:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { error: "Failed to update address" },
+      { error: "Failed to update address", message: errorMessage },
       { status: 500 }
     )
   }
@@ -237,9 +237,9 @@ export async function DELETE(request: NextRequest) {
     
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error deleting address:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { error: "Failed to delete address" },
+      { error: "Failed to delete address", message: errorMessage },
       { status: 500 }
     )
   }

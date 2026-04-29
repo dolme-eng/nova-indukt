@@ -44,8 +44,8 @@ export function useCloudinaryUrl(
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
     
     if (!cloudName) {
-      // Fallback if env var not available client-side
-      return `https://res.cloudinary.com/demo/image/upload/${transformations.join(',')}/${publicId}`
+      // Cloudinary not configured - return null to use local fallback
+      return null
     }
 
     return `https://res.cloudinary.com/${cloudName}/image/upload/${transformations.join(',')}/${publicId}`

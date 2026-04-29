@@ -65,7 +65,7 @@ export function RegisterContent() {
     // Simulate Google Sign Up
     await new Promise(resolve => setTimeout(resolve, 1000))
     
-    // Demo mode: auto-register and login with Google
+    // Simulate successful Google registration flow
     setSuccess(true)
     setTimeout(() => {
       router.push('/mein-konto')
@@ -87,6 +87,7 @@ export function RegisterContent() {
 
         {/* Register Form */}
         <motion.div
+          data-testid="register-form"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-lg p-8"
@@ -114,7 +115,7 @@ export function RegisterContent() {
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
+            <div data-testid="error-message" className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
               <XCircle className="w-4 h-4" />
               {error}
             </div>
@@ -136,6 +137,7 @@ export function RegisterContent() {
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  data-testid="register-name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -154,6 +156,7 @@ export function RegisterContent() {
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  data-testid="register-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -172,6 +175,7 @@ export function RegisterContent() {
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  data-testid="register-password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -198,6 +202,7 @@ export function RegisterContent() {
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  data-testid="register-confirm-password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
@@ -238,6 +243,7 @@ export function RegisterContent() {
 
             {/* Submit Button */}
             <button
+              data-testid="register-submit"
               type="submit"
               disabled={loading || success}
               className="w-full py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"

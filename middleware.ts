@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
   // Check if route is auth route
   const isAuthRoute = authRoutes.some(route => pathname === route)
   
-  if (isProtected || isAuthRoute || isAdminRoute) {
+    if (isProtected || isAuthRoute || isAdminRoute) {
     const session = await auth()
     
     // Redirect to login if accessing protected route without auth
@@ -57,6 +57,12 @@ export async function middleware(request: NextRequest) {
     if (isAuthRoute && session?.user) {
       return NextResponse.redirect(new URL("/mein-konto", request.url))
     }
+  }
+  
+  // Rate limiting pour les routes critiques (API)
+  if (pathname.startsWith("/api/contact") || pathname.startsWith("/api/newsletter")) {
+    // Cette partie est normalement gérée dans les routes API directement 
+    // mais on peut ajouter une logique globale ici si besoin.
   }
   
   return NextResponse.next()

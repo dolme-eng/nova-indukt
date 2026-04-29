@@ -166,7 +166,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   }
 
   return (
-    <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+    <div data-testid="reviews-section" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
       <h2 className="text-2xl font-bold text-gray-900 mb-8">Kundenbewertungen</h2>
 
       {/* Rating Overview */}

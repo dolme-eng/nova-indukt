@@ -147,7 +147,7 @@ export function ProductsContent({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 pb-10 sm:pb-16 selection:bg-[#4ECCA3]/30">
+    <div data-testid="category-page" className="min-h-screen bg-gray-50/50 pb-10 sm:pb-16 selection:bg-[#4ECCA3]/30">
       
       {/* Breadcrumbs */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-[72px] lg:top-[88px] z-[40]">
@@ -201,6 +201,7 @@ export function ProductsContent({
                   </h3>
                   <div className="space-y-1.5">
                     <button 
+                      data-testid="category-filter-alle"
                       onClick={() => setSelectedCategory(null)} 
                       className={`w-full text-left px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${!selectedCategory ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
                     >
@@ -208,6 +209,7 @@ export function ProductsContent({
                     </button>
                     {initialCategories.map(cat => (
                       <button 
+                        data-testid="category-filter-item"
                         key={cat.id} 
                         onClick={() => setSelectedCategory(cat.slug)} 
                         className={`w-full text-left px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center justify-between font-semibold text-sm ${selectedCategory === cat.slug ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'hover:bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200'}`}
@@ -235,10 +237,34 @@ export function ProductsContent({
                       />
                       <div className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#4ECCA3] rounded-full shadow-md pointer-events-none transition-all" style={{ left: `calc(${(priceRange[1] / PRICE_FILTER_MAX) * 100}% - 10px)` }} />
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div className="px-4 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700">{priceRange[0]} €</div>
+                    <div className="flex items-center justify-between gap-2">
+                      <input 
+                        data-testid="price-filter-min"
+                        type="number" 
+                        min="0" 
+                        max={PRICE_FILTER_MAX} 
+                        value={priceRange[0]} 
+                        onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
+                        className="w-20 px-2 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 text-center"
+                      />
                       <span className="text-gray-400">-</span>
-                      <div className="px-4 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700">{priceRange[1]} €</div>
+                      <input 
+                        data-testid="price-filter-max"
+                        type="number" 
+                        min="0" 
+                        max={PRICE_FILTER_MAX} 
+                        value={priceRange[1]} 
+                        onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || PRICE_FILTER_MAX])}
+                        className="w-20 px-2 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 text-center"
+                      />
+                      <span className="text-gray-400">€</span>
+                      <button 
+                        data-testid="apply-filters"
+                        onClick={() => setShowFilters(false)}
+                        className="ml-2 px-3 py-2 bg-[#0C211E] text-white text-xs font-bold rounded-lg hover:bg-[#17423C] transition-colors"
+                      >
+                        OK
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -322,10 +348,27 @@ export function ProductsContent({
                             />
                             <div className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-4 border-[#4ECCA3] rounded-full shadow-lg pointer-events-none transition-all" style={{ left: `calc(${(priceRange[1] / PRICE_FILTER_MAX) * 100}% - 12px)` }} />
                           </div>
-                          <div className="flex items-center justify-between">
-                            <div className="px-4 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700">{priceRange[0]} €</div>
+                          <div className="flex items-center justify-between gap-2">
+                            <input 
+                              data-testid="price-filter-min"
+                              type="number" 
+                              min="0" 
+                              max={PRICE_FILTER_MAX} 
+                              value={priceRange[0]} 
+                              onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
+                              className="w-20 px-2 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 text-center"
+                            />
                             <span className="text-gray-400">-</span>
-                            <div className="px-4 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700">{priceRange[1]} €</div>
+                            <input 
+                              data-testid="price-filter-max"
+                              type="number" 
+                              min="0" 
+                              max={PRICE_FILTER_MAX} 
+                              value={priceRange[1]} 
+                              onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || PRICE_FILTER_MAX])}
+                              className="w-20 px-2 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 text-center"
+                            />
+                            <span className="text-gray-400">€</span>
                           </div>
                         </div>
                       </div>
@@ -381,6 +424,7 @@ export function ProductsContent({
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <div className="relative flex-1 sm:flex-none">
                       <select 
+                        data-testid="sort-select"
                         value={sortBy} 
                         onChange={(e) => setSortBy(e.target.value)} 
                         className="w-full sm:w-[200px] appearance-none pl-5 pr-10 py-3.5 rounded-2xl border border-gray-100 bg-gray-50 focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none cursor-pointer font-bold text-sm text-gray-700 transition-all"
@@ -395,12 +439,14 @@ export function ProductsContent({
                     
                     <div className="flex bg-gray-50 rounded-xl p-1.5 border border-gray-100 flex-shrink-0">
                       <button 
+                        data-testid="grid-view-button"
                         onClick={() => setViewMode('grid')} 
                         className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white text-[#4ECCA3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                       >
                         <Grid3X3 className="w-5 h-5" />
                       </button>
                       <button 
+                        data-testid="list-view-button"
                         onClick={() => setViewMode('list')} 
                         className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white text-[#4ECCA3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                       >
@@ -426,6 +472,7 @@ export function ProductsContent({
               ) : (
                 <>
                   <motion.div 
+                    data-testid="product-grid"
                     variants={gridVariants}
                     initial="hidden"
                     animate="visible"
@@ -448,7 +495,7 @@ export function ProductsContent({
                         </motion.div>
                       )) : paginatedProducts.map(product => (
                         viewMode === 'grid' ? (
-                          <motion.div variants={cardVariants} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} key={product.id}>
+                          <motion.div data-testid="product-card" variants={cardVariants} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} key={product.id}>
                             <Link href={`/produkt/${product.slug}`} className="block group h-full">
                               <TiltCard 
                                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-500 border border-gray-100 flex flex-col h-full"
@@ -499,18 +546,19 @@ export function ProductsContent({
                                     <span className="text-xs font-bold text-gray-400">({product.reviewCount})</span>
                                   </div>
                                   
-                                  <h3 className="font-bold text-gray-900 text-[13px] sm:text-sm mb-1 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors leading-snug flex-1">
+                                  <h3 data-testid="product-name" className="font-bold text-gray-900 text-[13px] sm:text-sm mb-1 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors leading-snug flex-1">
                                     {product.name.de}
                                   </h3>
                                   
                                   <div className="mt-2 pt-1.5 relative border-t border-gray-50">
                                     <div className="flex items-end gap-1.5 sm:gap-2 mb-0.5">
-                                      <span className="text-sm sm:text-base font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
+                                      <span data-testid="product-price" className="text-sm sm:text-base font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
                                       {product.oldPrice && <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>}
                                     </div>
                                     <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-1.5 sm:mb-2 font-medium leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. <span className="underline decoration-dotted cursor-help hover:text-gray-500">Versand</span></p>
                                     
                                     <button
+                                      data-testid="add-to-cart-button"
                                       onClick={(e) => handleAddToCart(e, product)}
                                       className="w-full py-1.5 sm:py-2 bg-gray-50 text-gray-800 border border-gray-200 text-[13px] sm:text-sm font-bold rounded-lg sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2"
                                     >
@@ -524,7 +572,7 @@ export function ProductsContent({
                           </motion.div>
                         ) : (
                           /* List View Item */
-                          <motion.div variants={cardVariants} layout initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.3 }} key={product.id}>
+                          <motion.div data-testid="product-card" variants={cardVariants} layout initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.3 }} key={product.id}>
                             <Link href={`/produkt/${product.slug}`} className="block group">
                               <div className="bg-white rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-row h-full">
                                 <div className="relative w-2/5 sm:w-64 md:w-80 bg-gray-50 p-3 sm:p-6 flex-shrink-0 flex flex-col justify-center">
@@ -577,6 +625,7 @@ export function ProductsContent({
                                         <Heart className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-[#4ECCA3]'}`} />
                                       </button>
                                       <button
+                                        data-testid="add-to-cart-button"
                                         onClick={(e) => handleAddToCart(e, product)}
                                         className="flex-1 sm:flex-initial px-4 sm:px-6 h-9 sm:h-12 bg-gray-50 sm:bg-[#0C211E] text-gray-800 sm:text-white border border-gray-200 sm:border-transparent font-bold text-[13px] sm:text-sm rounded-lg sm:rounded-xl hover:bg-gray-100 sm:hover:bg-[#17423C] transition-colors flex items-center justify-center gap-2 shadow-sm"
                                       >

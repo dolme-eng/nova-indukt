@@ -17,9 +17,13 @@ export function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig)
 
   useEffect(() => {
-    // Only show custom cursor on desktop
-    const isMobile = window.matchMedia('(pointer: coarse)').matches
-    if (isMobile) return
+    // Only show custom cursor on desktop with mouse
+    const isTouch = window.matchMedia('(pointer: coarse)').matches
+    const isMobile = window.innerWidth < 1024
+    if (isTouch || isMobile) {
+      setIsVisible(false)
+      return
+    }
 
     setIsVisible(true)
 

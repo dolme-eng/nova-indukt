@@ -4,6 +4,9 @@ import { prisma } from "@/lib/prisma"
 export async function GET() {
   try {
     const categories = await prisma.category.findMany({
+      where: {
+        isActive: true,
+      },
       include: {
         _count: {
           select: {
@@ -12,12 +15,15 @@ export async function GET() {
         }
       },
       orderBy: {
-        nameDe: "asc"
+        sortOrder: "asc"
       }
     })
     
+    // Ne retourner que les catégories avec des produits
+    const categoriesWithProducts = categories.filter(cat => cat._count.products > 0)
+    
     return NextResponse.json(
-      categories.map(cat => ({
+      categoriesWithProducts.map(cat => ({
         id: cat.id,
         slug: cat.slug,
         name: {

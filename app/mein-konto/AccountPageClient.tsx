@@ -14,6 +14,7 @@ import { useAuth } from '@/lib/store/auth'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
 import { formatPriceDe } from '@/lib/utils/vat'
+import { Product } from '@/lib/data/products'
 
 const TABS = [
   { id: 'overview', label: 'Übersicht', icon: Home },
@@ -76,20 +77,16 @@ export default function AccountPageClient() {
   }
 
   const handleAddToCart = (item: WishlistItem) => {
-    // We already have the item data in the WishlistItem object
-    // which includes id, name, price, image, etc.
-    // We need to transform it slightly to match the expected Product type if necessary,
-    // but typically useCart's addItem handles the item structure.
+    // Transform wishlist item to cart product format
     addToCart({
       id: item.id,
-      nameDe: item.name.de,
+      name: { de: item.name.de },
       price: item.price,
-      images: [{ url: item.image }],
-      slug: item.id, // Fallback if slug not in wishlist item
-      stock: 10, // Default stock for wishlist items
-      isActive: true,
-      categoryId: ''
-    } as any, 1)
+      images: [item.image],
+      slug: item.slug || item.id,
+      stock: 10,
+      category: ''
+    } as Product, 1)
   }
 
   if (!mounted || !isAuthenticated) {

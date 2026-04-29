@@ -1,5 +1,5 @@
 /**
- * Script de migration des 13 catégories harmonisées
+ * Script de seed des 5 catégories NOVA INDUKT
  * Exécuter avec: npx tsx prisma/seed-categories.ts
  */
 
@@ -7,130 +7,64 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-// Les 13 catégories harmonisées avec leurs images
+// Les 5 catégories principales
 const categories = [
   {
     slug: 'kochen-braten',
     nameDe: 'Kochen & Braten',
     nameEn: 'Cooking & Frying',
-    descriptionDe: 'Premium Töpfe, Pfannen und Kochgeschirr für Induktion',
+    descriptionDe: 'Premium Töpfe, Pfannen, Bräter und Kochgeschirr für Induktion',
     image: '/images/Kategorien/kochen-braten.webp',
     sortOrder: 1,
   },
   {
-    slug: 'vorbereitung',
-    nameDe: 'Vorbereitung',
-    nameEn: 'Preparation',
-    descriptionDe: 'Schneidebretter, Messer und Küchenhelfer für die Zubereitung',
+    slug: 'messer-vorbereitung',
+    nameDe: 'Messer & Vorbereitung',
+    nameEn: 'Knives & Preparation',
+    descriptionDe: 'Präzisionsmesser, Schneidebretter und Werkzeuge für die perfekte Zubereitung',
     image: '/images/Kategorien/vorbereitung.webp',
     sortOrder: 2,
   },
   {
-    slug: 'kuechenzubehoer',
-    nameDe: 'Küchenzubehör',
-    nameEn: 'Kitchen Accessories',
-    descriptionDe: 'Praktisches Zubehör für die moderne Küche',
+    slug: 'kuechenhelfer-zubehoer',
+    nameDe: 'Küchenhelfer & Zubehör',
+    nameEn: 'Kitchen Helpers & Accessories',
+    descriptionDe: 'Nützliche Helfer, Küchengeräte und praktisches Zubehör für die Küche',
     image: '/images/Kategorien/kuechenzubehoer.webp',
     sortOrder: 3,
-  },
-  {
-    slug: 'tisch-servier',
-    nameDe: 'Tisch & Servier',
-    nameEn: 'Table & Serving',
-    descriptionDe: 'Elegantes Geschirr und Servieraccessoires',
-    image: '/images/Kategorien/tisch-servier.webp',
-    sortOrder: 4,
-  },
-  {
-    slug: 'spezial',
-    nameDe: 'Spezial',
-    nameEn: 'Special',
-    descriptionDe: 'Besondere Produkte und Spezialartikel',
-    image: '/images/Kategorien/spezial.jpg',
-    sortOrder: 5,
-  },
-  {
-    slug: 'sets',
-    nameDe: 'Sets',
-    nameEn: 'Sets',
-    descriptionDe: 'Vorteilhafte Produktsets und Kombinationen',
-    image: '/images/Kategorien/sets.jpg',
-    sortOrder: 6,
-  },
-  {
-    slug: 'herde',
-    nameDe: 'Herde',
-    nameEn: 'Stoves & Ovens',
-    descriptionDe: 'Hochwertige Herde und Kochfelder',
-    image: '/images/Kategorien/herde.jpg',
-    sortOrder: 7,
-  },
-  {
-    slug: 'kuehlschraenke',
-    nameDe: 'Kühlschränke',
-    nameEn: 'Refrigerators',
-    descriptionDe: 'Kühl- und Gefriergeräte für die Küche',
-    image: '/images/Kategorien/kuehlschraenke.jpg',
-    sortOrder: 8,
-  },
-  {
-    slug: 'geschirrspueler',
-    nameDe: 'Geschirrspüler',
-    nameEn: 'Dishwashers',
-    descriptionDe: 'Effiziente Geschirrspülmaschinen',
-    image: '/images/Kategorien/geschirrspueler.jpg',
-    sortOrder: 9,
-  },
-  {
-    slug: 'kuechenmaschinen',
-    nameDe: 'Küchenmaschinen',
-    nameEn: 'Kitchen Machines',
-    descriptionDe: 'Küchenmaschinen und Food Processor',
-    image: '/images/Kategorien/kuechenmaschinen.jpg',
-    sortOrder: 10,
-  },
-  {
-    slug: 'waschmaschinen',
-    nameDe: 'Waschmaschinen',
-    nameEn: 'Washing Machines',
-    descriptionDe: 'Hochwertige Waschmaschinen',
-    image: '/images/Kategorien/waschmaschinen.jpg',
-    sortOrder: 11,
-  },
-  {
-    slug: 'trockner',
-    nameDe: 'Trockner',
-    nameEn: 'Dryers',
-    descriptionDe: 'Wäschetrockner für effizientes Trocknen',
-    image: '/images/Kategorien/trockner.jpg',
-    sortOrder: 12,
-  },
-  {
-    slug: 'staubsauger',
-    nameDe: 'Staubsauger',
-    nameEn: 'Vacuum Cleaners',
-    descriptionDe: 'Leistungsstarke Staubsauger',
-    image: '/images/Kategorien/staubsauger.jpg',
-    sortOrder: 13,
   },
 ]
 
 async function main() {
-  console.log('🌱 Migration des 13 catégories...')
+  console.log('🌱 Migration vers 5 catégories NOVA INDUKT...')
   console.log('')
 
   // Récupérer les anciennes catégories pour mapping
   const oldCategories = await prisma.category.findMany()
   console.log(`📊 ${oldCategories.length} catégories existantes trouvées`)
 
-  // Mapping des anciennes catégories vers les nouvelles
+  // Mapping des anciennes catégories vers les 5 nouvelles catégories
   const categoryMapping: Record<string, string> = {
     'kochen': 'kochen-braten',
-    'zubehoer': 'kuechenzubehoer',
-    'vorbereitung': 'vorbereitung',
-    'tischaccessoires': 'tisch-servier',
-    'spezial': 'spezial',
-    'sets': 'sets',
+    'kochen-braten': 'kochen-braten',
+    'zubehoer': 'kuechenhelfer-zubehoer',
+    'kuechenzubehoer': 'kuechenhelfer-zubehoer',
+    'vorbereitung': 'messer-vorbereitung',
+    'messer-vorbereitung': 'messer-vorbereitung',
+    'tischaccessoires': 'tisch-servieren',
+    'tisch-servier': 'tisch-servieren',
+    'tisch-servieren': 'tisch-servieren',
+    'spezial': 'kuechenhelfer-zubehoer',
+    'sets': 'kochen-braten',
+    'herde': 'kochen-braten',
+    'kuehlschraenke': 'kuechenhelfer-zubehoer',
+    'geschirrspueler': 'kuechenhelfer-zubehoer',
+    'kuechenmaschinen': 'backen-patisserie',
+    'waschmaschinen': 'kuechenhelfer-zubehoer',
+    'trockner': 'kuechenhelfer-zubehoer',
+    'staubsauger': 'kuechenhelfer-zubehoer',
+    'backen': 'backen-patisserie',
+    'backen-patisserie': 'backen-patisserie',
   }
 
   // Mettre à jour les produits avec les nouvelles catégories
@@ -215,7 +149,9 @@ async function main() {
   console.log('')
   console.log('🗑️  Désactivation des anciennes catégories obsolètes...')
   
-  const obsoleteSlugs = ['zubehoer', 'tischaccessoires', 'kochen']
+  const obsoleteSlugs = ['zubehoer', 'tischaccessoires', 'kochen', 'vorbereitung', 'kuechenzubehoer', 
+    'tisch-servier', 'spezial', 'sets', 'herde', 'kuehlschraenke', 'geschirrspueler', 
+    'kuechenmaschinen', 'waschmaschinen', 'trockner', 'staubsauger']
   for (const slug of obsoleteSlugs) {
     const cat = await prisma.category.findUnique({ where: { slug } })
     if (cat) {

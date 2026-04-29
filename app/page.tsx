@@ -2,6 +2,8 @@ import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Product, Category, blogPosts } from '@/lib/data/products'
+import { categoriesConfig } from '@/lib/data/categories'
+import { logError } from '@/lib/logger'
 import { HomeContent } from './HomeContent'
 
 export const metadata: Metadata = {
@@ -16,15 +18,34 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-  const [products, categories] = await Promise.all([
-    prisma.product.findMany({
-      where: { isActive: true },
-      include: { images: true }
-    }),
-    prisma.category.findMany({
-      where: { isActive: true }
-    })
-  ])
+  let products: any[] = []
+  let categories: Category[] = []
+
+  try {
+    const [dbProducts, dbCategories] = await Promise.all([
+      prisma.product.findMany({
+        where: { isActive: true },
+        include: { images: true }
+      }),
+      prisma.category.findMany({
+        where: { isActive: true },
+        include: { _count: { select: { products: true } } }
+      }).then(cats => cats.filter(c => c._count.products > 0))
+    ])
+    products = dbProducts
+    categories = dbCategories as Category[]
+  } catch (err) {
+    logError('Database connection failed, using static fallback', err)
+    // Fallback: utilise les catégories statiques
+    categories = categoriesConfig.map(c => ({
+      id: c.id,
+      slug: c.slug,
+      nameDe: c.nameDe,
+      image: c.image,
+      _count: { products: 0 }
+    })) as any[]
+    products = []
+  }
 
   const formattedProducts: Product[] = products.map(p => ({
     id: p.id,
@@ -57,7 +78,7 @@ export default async function Page() {
     slug: c.slug,
     name: { de: c.nameDe },
     image: c.image || '',
-    count: 0
+    count: (c as any)._count?.products || 0
   }))
 
   const structuredData = {

@@ -1,4 +1,3 @@
-import React from "react"
 import Link from "next/link"
 import { 
   ArrowLeft, 
@@ -22,6 +21,7 @@ import {
   Plus
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+export const dynamic = 'force-dynamic'
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 import { notFound } from "next/navigation"

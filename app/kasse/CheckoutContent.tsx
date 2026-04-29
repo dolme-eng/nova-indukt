@@ -485,7 +485,7 @@ export default function CheckoutContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 pb-32 lg:pb-16 selection:bg-[#4ECCA3]/30">
+    <div data-testid="checkout-page" className="min-h-screen bg-gray-50/50 pb-32 lg:pb-16 selection:bg-[#4ECCA3]/30">
       
       {/* Navbar */}
       <nav className="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30 shadow-[0_4px_20px_rgb(0,0,0,0.02)]">
@@ -562,6 +562,7 @@ export default function CheckoutContent() {
                       <div className="space-y-1">
                         <label className="text-sm font-bold text-gray-700 ml-1">Vorname *</label>
                         <input
+                          data-testid="shipping-firstName"
                           type="text" required value={shippingData.firstName}
                           onChange={(e) => setShippingData({...shippingData, firstName: e.target.value})}
                           className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
@@ -570,6 +571,7 @@ export default function CheckoutContent() {
                       <div className="space-y-1">
                         <label className="text-sm font-bold text-gray-700 ml-1">Nachname *</label>
                         <input
+                          data-testid="shipping-lastName"
                           type="text" required value={shippingData.lastName}
                           onChange={(e) => setShippingData({...shippingData, lastName: e.target.value})}
                           className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
@@ -581,6 +583,7 @@ export default function CheckoutContent() {
                       <div className="space-y-1">
                         <label className="text-sm font-bold text-gray-700 ml-1">E-Mail *</label>
                         <input
+                          data-testid="shipping-email"
                           type="email" required value={shippingData.email}
                           onChange={(e) => setShippingData({...shippingData, email: e.target.value})}
                           className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
@@ -589,6 +592,7 @@ export default function CheckoutContent() {
                       <div className="space-y-1">
                         <label className="text-sm font-bold text-gray-700 ml-1">Telefon (optional)</label>
                         <input
+                          data-testid="shipping-phone"
                           type="tel" value={shippingData.phone}
                           onChange={(e) => setShippingData({...shippingData, phone: e.target.value})}
                           className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
@@ -600,6 +604,7 @@ export default function CheckoutContent() {
                     <div className="space-y-1">
                       <label className="text-sm font-bold text-gray-700 ml-1">Straße und Hausnummer *</label>
                       <input
+                        data-testid="shipping-address"
                         type="text" required value={shippingData.address}
                         onChange={(e) => setShippingData({...shippingData, address: e.target.value})}
                         className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
@@ -610,6 +615,7 @@ export default function CheckoutContent() {
                       <div className="col-span-1 space-y-1">
                         <label className="text-sm font-bold text-gray-700 ml-1">PLZ *</label>
                         <input
+                          data-testid="shipping-zip"
                           type="text" required value={shippingData.zipCode}
                           onChange={(e) => setShippingData({...shippingData, zipCode: e.target.value})}
                           className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
@@ -618,6 +624,7 @@ export default function CheckoutContent() {
                       <div className="col-span-2 space-y-1">
                         <label className="text-sm font-bold text-gray-700 ml-1">Stadt *</label>
                         <input
+                          data-testid="shipping-city"
                           type="text" required value={shippingData.city}
                           onChange={(e) => setShippingData({...shippingData, city: e.target.value})}
                           className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
@@ -643,6 +650,7 @@ export default function CheckoutContent() {
                     
                     <div className="pt-6">
                       <motion.button
+                        data-testid="continue-to-payment"
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
                         type="submit"
@@ -657,6 +665,7 @@ export default function CheckoutContent() {
               
               {step === 2 && (
                 <motion.div 
+                  data-testid="payment-section"
                   key="step2"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -679,6 +688,7 @@ export default function CheckoutContent() {
                         }`}
                       >
                         <input
+                          data-testid="payment-stripe"
                           type="radio"
                           name="paymentMethod"
                           value="stripe"
@@ -950,6 +960,7 @@ export default function CheckoutContent() {
                 {!appliedPromo ? (
                   <div className="flex gap-2 mb-4">
                     <input
+                      data-testid="coupon-input"
                       type="text"
                       placeholder="Gutscheincode"
                       value={promoCode}
@@ -957,6 +968,7 @@ export default function CheckoutContent() {
                       className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-[#4ECCA3] outline-none transition-all uppercase font-mono"
                     />
                     <button
+                      data-testid="apply-coupon"
                       onClick={handleApplyPromo}
                       disabled={isApplyingPromo || !promoCode}
                       className="px-4 py-2 bg-[#0C211E] text-white text-sm font-bold rounded-xl hover:bg-[#17423C] disabled:opacity-50 transition-all font-heading"

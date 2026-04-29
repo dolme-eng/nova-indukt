@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
 import { sendOrderConfirmationForOrder } from "@/lib/email/send"
 import { VAT_RATE_PERCENT } from "@/lib/constants/vat"
+import { createOrderSchema, type OrderItemInput } from "@/lib/validations/order"
+import { Prisma } from "@prisma/client"
 
 // Get user's orders
 export async function GET(request: NextRequest) {
@@ -136,7 +138,7 @@ export async function POST(request: NextRequest) {
           vatAmount: (Number(subtotal) * VAT_RATE_PERCENT) / 100, // Ajout du montant TVA
           total,
           items: {
-            create: items.map((item: any) => ({
+            create: items.map((item: OrderItemInput) => ({
               productId: item.id,
               quantity: item.quantity,
               unitPrice: item.price,
