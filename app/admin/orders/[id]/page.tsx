@@ -3,21 +3,13 @@ import {
   ArrowLeft, 
   Package, 
   Truck, 
-  CheckCircle2, 
-  Clock, 
-  AlertCircle, 
-  XCircle, 
-  RefreshCcw,
   CreditCard,
   User,
   MapPin,
   Mail,
   Phone,
   Printer,
-  ChevronRight,
   ShieldCheck,
-  Calendar,
-  DollarSign,
   Plus
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
@@ -26,6 +18,7 @@ import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 import { notFound } from "next/navigation"
 import Image from "next/image"
+import { ShippingActions } from "./ShippingActions"
 
 async function getOrder(id: string) {
   const order = await prisma.order.findUnique({
@@ -103,6 +96,8 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Column - Order Items */}
         <div className="lg:col-span-2 space-y-6">
+          <ShippingActions orderId={order.id} currentStatus={order.status as any} trackingNumber={order.trackingNumber} />
+
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
               <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">

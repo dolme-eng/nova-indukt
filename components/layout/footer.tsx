@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Facebook, Instagram, Youtube, CreditCard, Truck, ShieldCheck, RotateCcw, Mail, MapPin, Phone, Clock, ArrowRight, ChevronRight, Lock, Flag, Star, CheckCircle, Leaf, Shield } from 'lucide-react'
+import { CreditCard, Truck, ShieldCheck, RotateCcw, Mail, MapPin, Phone, ChevronRight, Lock, Flag, CheckCircle, Leaf, Shield } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -32,7 +32,7 @@ export function Footer() {
     { icon: Truck, title: 'Kostenfreier Versand', desc: 'Ab 500 € innerhalb Deutschlands' },
     { icon: ShieldCheck, title: 'Sichere Zahlung', desc: 'SSL-Verschlüsselung & Käuferschutz' },
     { icon: RotateCcw, title: '30 Tage Rückgaberecht', desc: 'Stressfreier Rückversand' },
-    { icon: CreditCard, title: 'Flexible Zahlung', desc: 'PayPal, Kreditkarte, Klarna, Sofort' },
+    { icon: CreditCard, title: 'Flexible Zahlung', desc: 'PayPal oder Zahlung per E-Mail' },
   ]
 
   return (
@@ -161,7 +161,7 @@ export function Footer() {
                 <CreditCard className="w-4 h-4 text-[#4ECCA3]" /> Sichere Zahlungsarten
               </p>
               <div className="flex flex-wrap items-center gap-3">
-                {['Visa', 'Mastercard', 'PayPal', 'Apple Pay', 'Google Pay', 'Vorkasse'].map(m => (
+                {['PayPal', 'E-Mail', 'Banküberweisung'].map(m => (
                   <span key={m} className="px-4 py-2 bg-[#17423C] rounded-lg text-xs font-bold text-white border border-[#236456]/50 hover:border-[#4ECCA3]/50 transition-colors cursor-default">{m}</span>
                 ))}
               </div>

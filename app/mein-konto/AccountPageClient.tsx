@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
@@ -388,11 +389,14 @@ function OrdersTab() {
             <div className="space-y-3">
               {order.items.slice(0, 3).map(item => (
                 <div key={item.id} className="flex items-center gap-3 sm:gap-4">
-                  <img
-                    src={item.product.images[0]?.url || '/placeholder.png'}
-                    alt={item.product.nameDe}
-                    className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg bg-white"
-                  />
+                  <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg bg-white overflow-hidden">
+                    <Image
+                      src={item.product.images[0]?.url || '/placeholder.png'}
+                      alt={item.product.nameDe}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm truncate">{item.product.nameDe}</p>
                     <p className="text-xs text-gray-500">Menge: {item.quantity}</p>
@@ -438,7 +442,7 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
         {items.map(item => (
           <div key={item.id} className="bg-white rounded-xl sm:rounded-2xl shadow-sm overflow-hidden group border border-gray-100">
             <div className="relative aspect-[4/3] bg-gray-100">
-              <img src={item.image} alt={item.name.de} className="w-full h-full object-cover" />
+              <Image src={item.image} alt={item.name.de} fill className="object-cover" />
               <button onClick={async () => await onRemove(item.id)} className="absolute top-2 right-2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-red-50">
                 <Trash2 className="w-4 h-4 text-red-500" />
               </button>

@@ -1,10 +1,12 @@
-import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Product, Category, blogPosts } from '@/lib/data/products'
 import { categoriesConfig } from '@/lib/data/categories'
 import { logError } from '@/lib/logger'
+import { getActivePromotions } from '@/lib/promotions'
 import { HomeContent } from './HomeContent'
+
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Premium Induktions-Kochgeschirr | NOVA INDUKT',
@@ -19,21 +21,26 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   let products: any[] = []
-  let categories: Category[] = []
+  // Raw categories shape differs between DB and static config; we normalize later.
+  let categories: any[] = []
+  let activePromotions: Awaited<ReturnType<typeof getActivePromotions>> = []
 
   try {
-    const [dbProducts, dbCategories] = await Promise.all([
+    const [dbProducts, dbCategories, dbPromotions] = await Promise.all([
       prisma.product.findMany({
         where: { isActive: true },
-        include: { images: true }
+        include: { images: true },
+        orderBy: { createdAt: 'desc' },
       }),
       prisma.category.findMany({
         where: { isActive: true },
         include: { _count: { select: { products: true } } }
-      }).then(cats => cats.filter(c => c._count.products > 0))
+      }).then(cats => cats.filter(c => c._count.products > 0)),
+      getActivePromotions(),
     ])
     products = dbProducts
-    categories = dbCategories as Category[]
+    categories = dbCategories
+    activePromotions = dbPromotions
   } catch (err) {
     logError('Database connection failed, using static fallback', err)
     // Fallback: utilise les catégories statiques
@@ -43,18 +50,22 @@ export default async function Page() {
       nameDe: c.nameDe,
       image: c.image,
       _count: { products: 0 }
-    })) as any[]
+    }))
     products = []
   }
 
-  const formattedProducts: Product[] = products.map(p => ({
+  const formattedProducts: Product[] = products
+    .filter((p) => Array.isArray(p.images) && p.images.length > 0)
+    .map(p => ({
     id: p.id,
     slug: p.slug,
     name: { de: p.nameDe },
     category: p.categoryId,
     price: Number(p.price),
     oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
-    images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map(img => img.url),
+    images: (p.images as Array<{ sortOrder: number; url: string }>)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((img) => img.url),
     rating: p.rating,
     reviewCount: p.reviewCount,
     stock: p.stock,
@@ -107,6 +118,7 @@ export default async function Page() {
         initialProducts={formattedProducts} 
         initialCategories={formattedCategories}
         initialBlogPosts={blogPosts}
+        activePromotions={activePromotions}
       />
     </>
   )

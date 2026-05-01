@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { FAQContent } from './FAQContent'
+import { getFaqItems } from '@/lib/content/static'
 
 export const metadata: Metadata = {
   title: 'FAQ - Häufig gestellte Fragen | NOVA INDUKT',
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   keywords: ['FAQ', 'Hilfe', 'Fragen', 'Antworten', 'Support', 'NOVA INDUKT'],
 }
 
-export default function FAQPage() {
-  return <FAQContent />
+export default async function FAQPage() {
+  const dbItems = await getFaqItems()
+  return <FAQContent items={dbItems.map(i => ({ id: i.id, question: i.question, answer: i.answer, category: i.category }))} />
 }

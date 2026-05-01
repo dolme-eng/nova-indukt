@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { 
   Plus, 
@@ -44,8 +43,6 @@ export default function PromotionsPage() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filter, setFilter] = useState<'all' | 'active' | 'inactive' | 'auto'>('all')
-  const router = useRouter()
-
   useEffect(() => {
     fetchPromotions()
   }, [])

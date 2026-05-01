@@ -153,7 +153,7 @@ model Order {
   appliedPromoCode String?
   vatAmount       Decimal       @db.Decimal(10, 2)
   total           Decimal       @db.Decimal(10, 2)
-  paymentMethod   PaymentMethod @default(STRIPE)
+  paymentMethod   PaymentMethod @default(PAYPAL)
   paymentStatus   PaymentStatus @default(PENDING)
   paymentIntentId String?
   paidAt          DateTime?
@@ -363,6 +363,56 @@ model CartItem {
   @@unique([cartId, productId])
   @@index([cartId])
   @@index([productId])
+}
+
+model AppConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StaticPageContent {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model FaqItem {
+  id        String   @id @default(cuid())
+  category  String   @default("support")
+  question  String
+  answer    String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  publicId  String   @unique
+  url       String
+  width     Int?
+  height    Int?
+  bytes     Int?
+  format    String?
+  folder    String?
+  uploadedByUserId String?
+  createdAt DateTime @default(now())
+
+  @@index([folder])
+  @@index([createdAt])
 }
 
 enum Role {

@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Get all contact messages - ADMIN ONLY (désactivé temporairement)
-export async function GET(request: NextRequest) {
+export async function GET() {
   return NextResponse.json(
     { error: "Admin access required" },
     { status: 403 }

@@ -57,21 +57,24 @@ export function calculateDiscountedPrice(
  */
 export async function getActivePromotions() {
   const now = new Date()
-  
-  return await prisma.promotion.findMany({
+
+  // Prisma ne supporte pas la comparaison inter-colonnes dans un `where` standard.
+  // On récupère toutes les promos actives par date, puis on filtre le quota côté JS.
+  const promotions = await prisma.promotion.findMany({
     where: {
       isActive: true,
       startDate: { lte: now },
       endDate: { gte: now },
-      OR: [
-        { usageLimit: null },
-        { usageCount: { lt: prisma.promotion.fields.usageLimit } }
-      ]
     },
     orderBy: {
       discountValue: 'desc' // Prioritize bigger discounts
     }
   })
+
+  // Exclure les promotions dont le quota d'utilisation est atteint
+  return promotions.filter(
+    p => p.usageLimit === null || p.usageCount < p.usageLimit
+  )
 }
 
 /**

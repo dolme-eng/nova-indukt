@@ -5,11 +5,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
-  Trash2, Plus, Minus, ShoppingCart, ArrowRight, Truck, Shield, Package, 
-  ChevronRight, ArrowLeft, Lock, Clock, CheckCircle, Info, RotateCcw
+  Trash2, Plus, Minus, ShoppingCart, ArrowRight, Truck, Package, 
+  ChevronRight, ArrowLeft, Lock, CheckCircle, RotateCcw
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Product } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
 
@@ -18,6 +18,7 @@ export interface CartContentProps {
 }
 
 export function CartContent({ recommendedProducts = [] }: CartContentProps) {
+  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
   const router = useRouter()
   const { items, totalItems, totalPrice, updateQuantity, removeItem, isHydrated } = useCart()
   const [removingItem, setRemovingItem] = useState<string | null>(null)
@@ -145,7 +146,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
             <div className="flex-1 space-y-4 sm:space-y-6">
               
               <div className="bg-white rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/50 overflow-hidden divide-y divide-gray-100">
-                {items.map((item, index) => (
+                {items.map((item) => (
                   <motion.div 
                     data-testid="cart-item"
                     key={item.product.id}
@@ -169,6 +170,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                           src={item.product.images[0]} 
                           alt={item.product.name.de} 
                           fill 
+                          unoptimized={isLocalProductImage(item.product.images[0])}
                           className="object-contain p-2 hover:scale-110 transition-transform duration-500 mix-blend-multiply" 
                           sizes="(max-width: 640px) 96px, 128px"
                         />
@@ -280,7 +282,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                     {recommendedProducts.filter(p => !items.find(i => i.product.id === p.id)).slice(0, 2).map((item) => (
                       <Link href={`/produkt/${item.slug}`} key={item.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden flex items-center p-3 gap-3 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-lg hover:border-[#4ECCA3]/40 transition-all group">
                         <div className="w-16 h-16 bg-gray-50 rounded-xl relative flex-shrink-0">
-                          <Image src={item.images[0]} alt={item.name.de} fill className="object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="64px" />
+                          <Image src={item.images[0]} alt={item.name.de} fill unoptimized={isLocalProductImage(item.images[0])} className="object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="64px" />
                         </div>
                         <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2">

@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { 
   Search, X, SlidersHorizontal, Grid3X3, List,
-  ChevronRight, ShoppingCart, Heart, Star, Filter
+  ShoppingCart, Star, Filter
 } from 'lucide-react'
 import { Product, Category } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
@@ -60,10 +60,6 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
 
     return result
   }, [searchQuery, selectedCategory, priceRange, sortBy])
-
-  const getLocalizedName = (item: { name: { de: string; en: string; fr: string } }) => {
-    return item.name.de
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">

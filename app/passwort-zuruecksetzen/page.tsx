@@ -72,7 +72,7 @@ function ResetPasswordContent() {
           setIsValidToken(false)
         }
       }
-    } catch (error) {
+    } catch {
       toast.error('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
     } finally {
       setIsLoading(false)

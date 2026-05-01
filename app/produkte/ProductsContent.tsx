@@ -43,6 +43,7 @@ export function ProductsContent({
   const { isInWishlist, toggleItem } = useWishlist()
   
   const [searchQuery, setSearchQuery] = useState(initialSearch)
+  const debouncedSearchQuery = useDebouncedValue(searchQuery, 300)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(activeCategory || null)
   const [priceRange, setPriceRange] = useState<[number, number]>(initialPriceRange)
   const [sortBy, setSortBy] = useState(initialSort)
@@ -58,7 +59,7 @@ export function ProductsContent({
     if (selectedCategory) params.set('kategorie', selectedCategory)
     else params.delete('kategorie')
     
-    if (searchQuery) params.set('suche', searchQuery)
+    if (debouncedSearchQuery) params.set('suche', debouncedSearchQuery)
     else params.delete('suche')
     
     if (priceRange[0] > 0) params.set('minPrice', priceRange[0].toString())
@@ -77,7 +78,7 @@ export function ProductsContent({
       setIsSyncing(true)
       router.push(`${pathname}${newQuery ? `?${newQuery}` : ''}`, { scroll: false })
     }
-  }, [selectedCategory, searchQuery, priceRange, sortBy, pathname, router, searchParams])
+  }, [selectedCategory, debouncedSearchQuery, priceRange, sortBy, pathname, router, searchParams])
 
   // Désactiver l'état de chargement une fois que les props changent
   useEffect(() => {
@@ -87,7 +88,10 @@ export function ProductsContent({
 
   const filteredProducts = initialProducts // Déjà filtré côté serveur
 
-  const paginatedProducts = filteredProducts.slice(0, displayedCount)
+  const paginatedProducts = useMemo(
+    () => filteredProducts.slice(0, displayedCount),
+    [filteredProducts, displayedCount]
+  )
 
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
@@ -122,7 +126,10 @@ export function ProductsContent({
   }
 
   const clearFilters = () => { setSearchQuery(''); setSelectedCategory(null); setPriceRange([0, PRICE_FILTER_MAX]); setSortBy('newest') }
-  const activeFiltersCount = (searchQuery ? 1 : 0) + (selectedCategory ? 1 : 0) + (priceRange[0] > 0 || priceRange[1] < PRICE_FILTER_MAX ? 1 : 0)
+  const activeFiltersCount = useMemo(
+    () => (searchQuery ? 1 : 0) + (selectedCategory ? 1 : 0) + (priceRange[0] > 0 || priceRange[1] < PRICE_FILTER_MAX ? 1 : 0),
+    [searchQuery, selectedCategory, priceRange]
+  )
 
   const gridVariants = {
     hidden: { opacity: 0 },
@@ -680,4 +687,15 @@ export function ProductsContent({
       </div>
     </div>
   )
+}
+
+function useDebouncedValue<T>(value: T, delayMs: number): T {
+  const [debounced, setDebounced] = useState(value)
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delayMs)
+    return () => clearTimeout(t)
+  }, [value, delayMs])
+
+  return debounced
 }

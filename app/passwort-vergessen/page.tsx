@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
       } else {
         toast.error(data.error || 'Ein Fehler ist aufgetreten')
       }
-    } catch (error) {
+    } catch {
       toast.error('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
     } finally {
       setIsLoading(false)

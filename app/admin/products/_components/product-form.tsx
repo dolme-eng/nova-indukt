@@ -5,14 +5,12 @@ import { useRouter } from "next/navigation"
 import { 
   ArrowLeft, 
   Save, 
-  Trash2, 
   Plus, 
   Image as ImageIcon,
   Check,
   Languages,
   BadgePercent,
   Box,
-  Layout,
   Settings,
   X
 } from "lucide-react"
@@ -82,7 +80,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
       toast.success(initialData ? "Produit mis à jour" : "Produit créé")
       router.push("/admin/products")
       router.refresh()
-    } catch (error) {
+    } catch {
       toast.error("Erreur lors de la sauvegarde")
     } finally {
       setIsLoading(false)

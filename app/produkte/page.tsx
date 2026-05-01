@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Product, Category } from '@/lib/data/products'
 
+export const revalidate = 120
+
 export async function generateMetadata({
   searchParams,
 }: {

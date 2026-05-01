@@ -1,6 +1,6 @@
 'use client'
 
-import { Award, Globe, Leaf, Target, Heart, ShieldCheck, BadgeCheck, Star, Trophy, Medal, Recycle, Zap, Play } from 'lucide-react'
+import { Award, Leaf, Target, Heart, ShieldCheck, Star, Medal, Recycle, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'

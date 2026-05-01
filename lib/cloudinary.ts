@@ -80,7 +80,7 @@ export async function uploadImage(
 export async function deleteImage(publicId: string): Promise<void> {
   ensureConfigured()
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.destroy(publicId, (error, result) => {
+    cloudinary.uploader.destroy(publicId, (error) => {
       if (error) {
         reject(error)
       } else {

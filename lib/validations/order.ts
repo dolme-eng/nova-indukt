@@ -25,7 +25,7 @@ export const shippingDataSchema = z.object({
 export const createOrderSchema = z.object({
   items: z.array(orderItemSchema).min(1, 'At least one item is required'),
   shippingData: shippingDataSchema,
-  paymentMethod: z.enum(['STRIPE', 'PAYPAL', 'INVOICE']),
+  paymentMethod: z.enum(['PAYPAL', 'BANK_TRANSFER']),
   subtotal: z.number().positive('Subtotal must be positive'),
   shipping: z.number().nonnegative('Shipping cannot be negative'),
   discountAmount: z.number().nonnegative().optional().default(0),

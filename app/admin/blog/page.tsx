@@ -4,18 +4,16 @@ import Link from "next/link"
 import { 
   Plus, 
   Search, 
-  MoreHorizontal, 
   Edit, 
-  Trash2, 
   Eye, 
   FileText,
   Calendar,
-  User,
   CheckCircle2,
   XCircle
 } from "lucide-react"
 import { format } from "date-fns"
 import { de } from "date-fns/locale"
+import { DeleteBlogButton } from './_components/delete-blog-button'
 
 export default async function AdminBlogPage() {
   const posts = await prisma.blogPost.findMany({
@@ -139,12 +137,7 @@ export default async function AdminBlogPage() {
                       >
                         <Edit size={18} />
                       </Link>
-                      <button 
-                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                        title="Supprimer"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      <DeleteBlogButton postId={post.id} postTitle={post.titleDe} />
                     </div>
                   </td>
                 </tr>

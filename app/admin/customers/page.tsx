@@ -2,10 +2,8 @@ import React from "react"
 import Link from "next/link"
 import { 
   Search, 
-  User, 
   Mail, 
   Calendar, 
-  ShoppingBag, 
   ChevronRight, 
   MoreVertical,
   ShieldCheck,

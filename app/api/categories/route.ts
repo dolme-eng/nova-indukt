@@ -7,7 +7,13 @@ export async function GET() {
       where: {
         isActive: true,
       },
-      include: {
+      select: {
+        id: true,
+        slug: true,
+        nameDe: true,
+        nameEn: true,
+        description: true,
+        image: true,
         _count: {
           select: {
             products: true
@@ -22,7 +28,7 @@ export async function GET() {
     // Ne retourner que les catégories avec des produits
     const categoriesWithProducts = categories.filter(cat => cat._count.products > 0)
     
-    return NextResponse.json(
+    const response = NextResponse.json(
       categoriesWithProducts.map(cat => ({
         id: cat.id,
         slug: cat.slug,
@@ -38,6 +44,8 @@ export async function GET() {
         productCount: cat._count.products
       }))
     )
+    response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=900")
+    return response
   } catch (error) {
     console.error("Error fetching categories:", error)
     return NextResponse.json(

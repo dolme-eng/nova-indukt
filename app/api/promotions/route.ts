@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { createPromotionSchema, getPromotionsQuerySchema } from '@/lib/validations/promotion'
+import { createPromotionSchema } from '@/lib/validations/promotion'
 import { Prisma } from '@prisma/client'
 
 /**
@@ -13,7 +13,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')
     const categoryId = searchParams.get('categoryId')
-    const includeExpired = searchParams.get('includeExpired') === 'true'
+    const includeExpiredRequested = searchParams.get('includeExpired') === 'true'
+    let includeExpired = false
+    if (includeExpiredRequested) {
+      const session = await auth()
+      includeExpired = Boolean(session?.user && session.user.role === 'ADMIN')
+    }
     
     const now = new Date()
     
@@ -44,7 +49,12 @@ export async function GET(request: NextRequest) {
       ],
     })
     
-    return NextResponse.json(promotions)
+    const response = NextResponse.json(promotions)
+    response.headers.set(
+      "Cache-Control",
+      includeExpired ? "no-store" : "public, s-maxage=60, stale-while-revalidate=300"
+    )
+    return response
   } catch (error) {
     console.error('Error fetching promotions:', error)
     return NextResponse.json(

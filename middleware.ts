@@ -1,82 +1,37 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-import { auth } from "@/lib/auth"
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth'
 
-// Protected routes that require authentication
-const protectedRoutes = [
-  "/mein-konto",
-  "/kasse",
-  "/api/orders",
-  "/admin"
-]
+/**
+ * Middleware de protection des routes admin.
+ * Vérifie côté serveur (Edge) que l'utilisateur est ADMIN avant d'accéder à /admin/*.
+ * Redirige vers /anmelden si non authentifié, vers / si rôle insuffisant.
+ */
+export default auth((req: NextRequest & { auth: any }) => {
+  const { pathname } = req.nextUrl
 
-// Admin specific routes
-const adminRoutes = [
-  "/admin",
-  "/api/admin"
-]
+  // Protection des routes admin
+  if (pathname.startsWith('/admin')) {
+    const session = req.auth
 
-// Auth routes that redirect to account if already logged in
-const authRoutes = [
-  "/anmelden",
-  "/registrieren"
-]
-
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  
-  // Check if route is protected
-  const isProtected = protectedRoutes.some(route => 
-    pathname === route || pathname.startsWith(`${route}/`)
-  )
-  
-  // Check if route is admin specific
-  const isAdminRoute = adminRoutes.some(route => 
-    pathname === route || pathname.startsWith(`${route}/`)
-  )
-  
-  // Check if route is auth route
-  const isAuthRoute = authRoutes.some(route => pathname === route)
-  
-    if (isProtected || isAuthRoute || isAdminRoute) {
-    const session = await auth()
-    
-    // Redirect to login if accessing protected route without auth
-    if ((isProtected || isAdminRoute) && !session?.user) {
-      const loginUrl = new URL("/anmelden", request.url)
-      loginUrl.searchParams.set("redirect", pathname)
+    // Non authentifié → redirection vers login
+    if (!session?.user) {
+      const loginUrl = new URL('/anmelden', req.url)
+      loginUrl.searchParams.set('redirect', pathname)
       return NextResponse.redirect(loginUrl)
     }
 
-    // Check admin role
-    if (isAdminRoute && session?.user?.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/", request.url))
-    }
-    
-    // Redirect to account if accessing auth route while logged in
-    if (isAuthRoute && session?.user) {
-      return NextResponse.redirect(new URL("/mein-konto", request.url))
+    // Authentifié mais pas ADMIN → redirection vers accueil
+    if (session.user.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/', req.url))
     }
   }
-  
-  // Rate limiting pour les routes critiques (API)
-  if (pathname.startsWith("/api/contact") || pathname.startsWith("/api/newsletter")) {
-    // Cette partie est normalement gérée dans les routes API directement 
-    // mais on peut ajouter une logique globale ici si besoin.
-  }
-  
+
   return NextResponse.next()
-}
+})
 
 export const config = {
-  matcher: [
-    "/mein-konto/:path*",
-    "/kasse/:path*",
-    "/anmelden",
-    "/registrieren",
-    "/api/orders/:path*",
-    "/api/auth/:path*",
-    "/admin/:path*",
-    "/api/admin/:path*"
-  ]
+  // Appliquer le middleware sur toutes les routes admin
+  // Exclure les fichiers statiques et _next
+  matcher: ['/admin/:path*'],
 }

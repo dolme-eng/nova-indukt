@@ -9,7 +9,7 @@ import {
   Star, Heart, Share2, Truck, Shield, RotateCcw, ChevronRight, ChevronDown,
   Minus, Plus, ShoppingCart, Check,
   Award, Zap, Leaf, ZoomIn, ArrowLeft, ShieldCheck, Lock,
-  Sparkles, Layers, Maximize, Scale, Droplets, Barcode, Building2, Hash, Info,
+  Layers, Maximize, Scale, Droplets, Barcode, Building2, Hash, Info,
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
@@ -74,6 +74,7 @@ interface ProductContentProps {
 }
 
 export function ProductContent({ product, relatedProducts }: ProductContentProps) {
+  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -159,7 +160,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
             <div className={`${SHELL} flex flex-row items-center gap-3 py-3 sm:py-3.5`}>
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <div className="relative hidden h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-gray-50 sm:block">
-                  <Image src={product.images[0]} alt={product.name.de} fill className="object-cover p-0.5 mix-blend-multiply" sizes="44px" />
+                  <Image src={product.images[0]} alt={product.name.de} fill unoptimized={isLocalProductImage(product.images[0])} className="object-cover p-0.5 mix-blend-multiply" sizes="44px" />
                 </div>
                 <div className="min-w-0">
                   <p className="font-bold tabular-nums text-[#0C211E] text-sm sm:text-base whitespace-nowrap">{formatPriceDe(product.price)}</p>
@@ -230,6 +231,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 alt={product.name.de}
                 fill
                 priority
+                unoptimized={isLocalProductImage(product.images[selectedImage])}
                 className="object-contain p-4 sm:p-6 lg:p-8 mix-blend-multiply transition-transform duration-200 ease-out group-hover:scale-[2.2] origin-[var(--x,50%)_var(--y,50%)]"
                 sizes="(max-width: 1023px) 100vw, 50vw"
               />
@@ -266,7 +268,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                       selectedImage === index ? 'border-[#4ECCA3] ring-2 ring-[#4ECCA3]/20' : 'border-gray-100 hover:border-gray-300'
                     }`}
                   >
-                    <Image src={img} alt={`${product.name.de} ${index + 1}`} fill className="object-contain p-2 mix-blend-multiply" sizes="80px" />
+                    <Image src={img} alt={`${product.name.de} ${index + 1}`} fill unoptimized={isLocalProductImage(img)} className="object-contain p-2 mix-blend-multiply" sizes="80px" />
                   </button>
                 ))}
               </div>
@@ -687,6 +689,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                           src={item.images[0]}
                           alt={item.name.de}
                           fill
+                          unoptimized={isLocalProductImage(item.images[0])}
                           className="object-contain p-3 mix-blend-multiply transition-transform group-hover:scale-105"
                           sizes="(max-width: 640px) 45vw, 22vw"
                         />

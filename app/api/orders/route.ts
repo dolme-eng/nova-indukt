@@ -4,11 +4,10 @@ import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
 import { sendOrderConfirmationForOrder } from "@/lib/email/send"
 import { VAT_RATE_PERCENT } from "@/lib/constants/vat"
-import { createOrderSchema, type OrderItemInput } from "@/lib/validations/order"
-import { Prisma } from "@prisma/client"
+import type { OrderItemInput } from "@/lib/validations/order"
 
 // Get user's orders
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await auth()
     

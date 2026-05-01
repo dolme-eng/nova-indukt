@@ -30,10 +30,10 @@ async function getPayPalAccessToken(): Promise<string> {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
+    await auth()
     const body = await request.json()
     
-    const { amount, orderId, items = [] } = body
+    const { amount, orderId } = body
     
     if (!amount || amount <= 0) {
       return NextResponse.json(

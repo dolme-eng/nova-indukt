@@ -1,11 +1,25 @@
 import type { Metadata } from 'next'
+import { getStaticPageContent } from '@/lib/content/static'
 
 export const metadata: Metadata = {
   title: 'AGB - Allgemeine Geschäftsbedingungen | NOVA INDUKT',
   description: 'Allgemeine Geschäftsbedingungen der NOVA INDUKT GmbH',
 }
 
-export default function AGBPage() {
+export default async function AGBPage() {
+  const db = await getStaticPageContent('agb')
+  if (db) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">{db.title}</h1>
+          <div className="bg-white rounded-2xl p-8 shadow-sm">
+            <div className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{db.content}</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4 max-w-4xl">
@@ -72,15 +86,11 @@ export default function AGBPage() {
                 (2) Die folgenden Zahlungsarten sind verfügbar:
               </p>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Kreditkarte (Visa, Mastercard, American Express)</li>
                 <li>PayPal</li>
-                <li>Sofortüberweisung / Klarna</li>
-                <li>Apple Pay</li>
-                <li>Google Pay</li>
-                <li>Kauf auf Rechnung (für Bestandskunden nach Prüfung)</li>
+                <li>Zahlung per E-Mail mit Banküberweisung</li>
               </ul>
               <p>
-                (3) Bei Zahlung per Kreditkarte erfolgt die Belastung des Kontos mit Vertragsschluss.
+                (3) Bei Zahlung per PayPal erfolgt die Belastung des Kontos mit Abschluss des Bezahlvorgangs.
               </p>
               <p>
                 (4) Der Kunde verpflichtet sich, die angegebenen Kontodaten korrekt und vollständig anzugeben.

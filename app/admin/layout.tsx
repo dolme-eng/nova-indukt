@@ -14,7 +14,6 @@ import {
   Menu,
   Tag,
   Mail,
-  Megaphone,
   BookOpen
 } from "lucide-react"
 

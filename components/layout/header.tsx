@@ -7,15 +7,12 @@ import { usePathname } from 'next/navigation'
 import { 
   Search, ShoppingCart, User, Heart, Menu, X, ChevronRight, 
   Phone, ChevronDown, Flame, Sparkles, Tag, Truck, ArrowRight, Shield,
-  ChefHat, Utensils, UtensilsCrossed, Trash2, Plus, Minus, Lock, Check, Zap, Leaf,
-  Loader2, Home
+  ChefHat, Trash2, Plus, Minus, Lock, Check,
+  Loader2
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
-import { useWishlist } from '@/lib/store/wishlist'
-import { useAuth } from '@/lib/store/auth'
 import { motion, AnimatePresence } from 'framer-motion'
 import { formatPriceDe } from '@/lib/utils/vat'
-import type { Product } from '@/lib/data/products'
 
 const megaMenuDepartments = [
   {
@@ -68,10 +65,9 @@ const megaMenuDepartments = [
 ]
 
 export function Header() {
+  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
   const pathname = usePathname()
   const { totalItems, items, removeItem, updateQuantity, totalPrice, isHydrated: isCartHydrated } = useCart()
-  const { count: wishlistCount, mounted: isWishlistMounted } = useWishlist()
-  const { isHydrated: isAuthHydrated } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
@@ -340,7 +336,7 @@ export function Header() {
                             {dept.title}
                           </h3>
                           <ul className="space-y-3.5">
-                            {dept.links.map((link, linkIdx) => (
+                            {dept.links.map((link) => (
                                <li key={link.label}>
                                  <Link href={link.href} data-testid="mega-menu-subcategory" onClick={() => setMegaMenuOpen(false)} className="text-sm font-semibold text-gray-500 hover:text-[#4ECCA3] hover:translate-x-1.5 transition-all inline-block hover:bg-[#4ECCA3]/5 px-2 py-1 -ml-2 rounded-md">
                                    {link.label}
@@ -461,7 +457,7 @@ export function Header() {
                             className="group bg-white rounded-2xl border border-gray-100 hover:border-[#4ECCA3] shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col"
                           >
                             <div className="aspect-square relative bg-gray-50 p-4">
-                              <Image src={product.images[0].url} alt={product.nameDe} fill className="object-contain p-6 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="(max-width: 640px) 100vw, 256px" />
+                              <Image src={product.images[0].url} alt={product.nameDe} fill unoptimized={isLocalProductImage(product.images[0].url)} className="object-contain p-6 mix-blend-multiply group-hover:scale-110 transition-transform duration-500" sizes="(max-width: 640px) 100vw, 256px" />
                             </div>
                             <div className="p-4 flex flex-col flex-1 border-t border-gray-50">
                               <h3 className="font-bold text-gray-900 text-sm mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors">{product.nameDe}</h3>
@@ -537,7 +533,7 @@ export function Header() {
                         {items.map((item) => (
                           <motion.div data-testid="cart-item" layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.2 }} key={item.product.id} className="flex gap-4 bg-white">
                             <Link href={`/produkt/${item.product.slug}`} onClick={() => setCartDrawerOpen(false)} className="w-24 h-24 bg-gray-50 rounded-2xl relative flex-shrink-0 border border-gray-50 hover:border-[#4ECCA3] transition-colors group p-2">
-                              <Image src={item.product.images[0]} alt={item.product.name.de} fill className="object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform" />
+                              <Image src={item.product.images[0]} alt={item.product.name.de} fill unoptimized={isLocalProductImage(item.product.images[0])} className="object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform" />
                             </Link>
                             <div className="flex-1 flex flex-col justify-between py-1">
                               <div className="flex justify-between gap-2">
@@ -626,7 +622,7 @@ export function Header() {
                       </Link>
                       
                       <div className="flex justify-center gap-4 mt-4 opacity-60">
-                         {/* Icons for trusting like PayPal / Apple Pay abstract visual representation */}
+                         {/* Trust indicators for payment and delivery */}
                          <div className="text-xs font-bold text-gray-400 flex items-center gap-1.5"><Shield className="w-3.5 h-3.5"/> ssl-secure</div>
                          <div className="text-xs font-bold text-gray-400 flex items-center gap-1.5"><Truck className="w-3.5 h-3.5"/> express</div>
                       </div>
@@ -693,7 +689,7 @@ export function Header() {
                               <ChevronDown className="w-5 h-5 group-open:rotate-180 transition-transform text-gray-400" />
                             </summary>
                             <div className="pt-4 mt-4 border-t border-gray-100/60 flex flex-col gap-1.5 ml-2">
-                              {dept.links.map((link, linkIdx) => (
+                              {dept.links.map((link) => (
                                 <Link key={link.label} href={link.href} onClick={() => setMobileMenuOpen(false)} className="py-2.5 px-3 text-sm text-gray-500 font-semibold hover:bg-[#4ECCA3]/10 hover:text-[#4ECCA3] rounded-lg transition-colors">
                                   {link.label}
                                 </Link>

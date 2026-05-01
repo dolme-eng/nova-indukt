@@ -16,7 +16,7 @@ interface FAQItem {
   category: string
 }
 
-export function FAQContent() {
+export function FAQContent(props: { items?: Array<{ id: string; question: string; answer: string; category: string }> }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [openItems, setOpenItems] = useState<string[]>(['shipping-1'])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -30,7 +30,7 @@ export function FAQContent() {
     { id: 'support', label: 'Support', icon: MessageCircle },
   ]
 
-  const faqItems: FAQItem[] = [
+  const fallbackItems: FAQItem[] = [
     {
       id: 'shipping-1',
       question: 'Wie lange dauert der Versand?',
@@ -41,7 +41,7 @@ export function FAQContent() {
     {
       id: 'payment-1',
       question: 'Welche Zahlungsmethoden werden akzeptiert?',
-      answer: 'Wir akzeptieren Kreditkarten (Visa, Mastercard, Amex), PayPal, Klarna und Sofortüberweisung.',
+      answer: 'Wir akzeptieren PayPal sowie Zahlung per E-Mail/Bankueberweisung. Die Zahlungsinformationen erhalten Sie nach der Bestellung per E-Mail.',
       icon: CreditCard,
       category: 'payment'
     },
@@ -74,6 +74,25 @@ export function FAQContent() {
       category: 'support'
     }
   ]
+
+  const iconByCategory: Record<string, typeof HelpCircle> = {
+    shipping: Truck,
+    payment: CreditCard,
+    returns: RotateCcw,
+    product: Package,
+    warranty: Shield,
+    support: MessageCircle,
+  }
+
+  const faqItems: FAQItem[] = (props.items && props.items.length > 0)
+    ? props.items.map((i) => ({
+        id: i.id,
+        question: i.question,
+        answer: i.answer,
+        category: i.category || 'support',
+        icon: iconByCategory[i.category] || HelpCircle,
+      }))
+    : fallbackItems
 
   const toggleItem = (id: string) => {
     setOpenItems(prev => 

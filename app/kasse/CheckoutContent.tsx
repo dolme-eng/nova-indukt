@@ -15,119 +15,24 @@ import { useAuth } from '@/lib/store/auth'
 import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
 
-// Stripe imports
-import { loadStripe } from '@stripe/stripe-js'
-import {
-  Elements,
-  PaymentElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js'
-
 // PayPal import
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 
 const SHIPPING_COST = 9.99
 const FREE_SHIPPING_THRESHOLD = 500
 
-// Initialize Stripe
-const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
-  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-  : null
-
-// Stripe Payment Form Component
-function StripePaymentForm({ 
-  clientSecret, 
-  onSuccess, 
-  onError, 
-  isProcessing,
-  setIsProcessing 
-}: { 
-  clientSecret: string
-  onSuccess: () => void
-  onError: (error: string) => void
-  isProcessing: boolean
-  setIsProcessing: (value: boolean) => void
-}) {
-  const stripe = useStripe()
-  const elements = useElements()
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!stripe || !elements) {
-      onError('Stripe ist noch nicht geladen')
-      return
-    }
-
-    setIsProcessing(true)
-
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/kasse?stripe=success`,
-      },
-      redirect: 'if_required',
-    })
-
-    if (error) {
-      onError(error.message || 'Zahlung fehlgeschlagen')
-      setIsProcessing(false)
-    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      onSuccess()
-    } else {
-      setIsProcessing(false)
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="p-6 bg-gray-50 rounded-2xl border border-gray-200">
-        <PaymentElement 
-          options={{
-            layout: 'tabs',
-            defaultValues: {
-              billingDetails: {
-                address: {
-                  country: 'DE',
-                }
-              }
-            }
-          }}
-        />
-      </div>
-      
-      <button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        className="w-full py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
-      >
-        {isProcessing ? (
-          <>
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Zahlung wird verarbeitet...
-          </>
-        ) : (
-          <>
-            <Lock className="w-4 h-4" />
-            Jetzt bezahlen
-          </>
-        )}
-      </button>
-    </form>
-  )
-}
-
 export default function CheckoutContent() {
+  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
   const router = useRouter()
   const { items, totalPrice, clearCart, isHydrated } = useCart()
   const { user, isAuthenticated } = useAuth()
   const mounted = useRef(false)
 
+  // Guests are allowed — no forced redirect.
+  // We track mount only to avoid SSR mismatches.
   useEffect(() => {
     mounted.current = true
-    if (mounted.current && !isAuthenticated) router.push('/anmelden?redirect=/kasse')
-  }, [isAuthenticated, router])
+  }, [])
 
   const [step, setStep] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -135,9 +40,9 @@ export default function CheckoutContent() {
   const [showMobileSummary, setShowMobileSummary] = useState(false)
   
   const [shippingData, setShippingData] = useState({
-    firstName: user?.name?.split(' ')[0] || '',
-    lastName: user?.name?.split(' ')[1] || '',
-    email: user?.email || '',
+    firstName: user?.name?.split(' ')[0] ?? '',
+    lastName: user?.name?.split(' ').slice(1).join(' ') ?? '',
+    email: user?.email ?? '',
     phone: '',
     address: '',
     zipCode: '',
@@ -145,7 +50,7 @@ export default function CheckoutContent() {
     country: 'Deutschland'
   })
   
-  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal' | 'email'>('stripe')
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'email'>('paypal')
   const [contactEmail, setContactEmail] = useState('')
   
   // Promo code state
@@ -153,8 +58,6 @@ export default function CheckoutContent() {
   const [isApplyingPromo, setIsApplyingPromo] = useState(false)
   const [appliedPromo, setAppliedPromo] = useState<any>(null)
   
-  // Stripe state
-  const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [orderId, setOrderId] = useState<string | null>(null)
   const [orderNumber, setOrderNumber] = useState<string>('')
 
@@ -184,7 +87,7 @@ export default function CheckoutContent() {
       } else {
         toast.error(data.error || 'Code konnte nicht angewendet werden')
       }
-    } catch (error) {
+    } catch {
       toast.error('Fehler bei der Validierung des Codes')
     } finally {
       setIsApplyingPromo(false)
@@ -197,7 +100,7 @@ export default function CheckoutContent() {
     toast.success('Gutscheincode entfernt')
   }
 
-  // Create order and get Stripe client secret
+  // Create order
   const createOrder = useCallback(async (currentPaymentMethod: string) => {
     try {
       const orderData = {
@@ -229,37 +132,12 @@ export default function CheckoutContent() {
       setOrderId(data.id)
       setOrderNumber(data.orderNumber)
       
-      // Create Stripe Payment Intent
-      if (paymentMethod === 'stripe') {
-        const stripeResponse = await fetch('/api/stripe/payment-intent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: total,
-            orderId: data.id,
-          })
-        })
-        
-        if (!stripeResponse.ok) {
-          throw new Error('Failed to create payment intent')
-        }
-        
-        const stripeData = await stripeResponse.json()
-        setClientSecret(stripeData.clientSecret)
-      }
-      
       return data
     } catch (error) {
       console.error('Error creating order:', error)
       throw error
     }
-  }, [items, shippingData, subtotal, shipping, total, paymentMethod])
-
-  useEffect(() => {
-    if (step === 2 && paymentMethod === 'stripe' && !clientSecret && items.length > 0) {
-      createOrder('STRIPE')
-    }
-  }, [step, paymentMethod, clientSecret, items.length, createOrder])
+  }, [items, shippingData, subtotal, shipping, total])
 
   if (items.length === 0 && !orderComplete) {
     return (
@@ -299,19 +177,6 @@ export default function CheckoutContent() {
     e.preventDefault()
     setStep(2)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  // Handle Stripe payment success
-  const handleStripeSuccess = () => {
-    setOrderComplete(true)
-    clearCart()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  // Handle Stripe payment error
-  const handleStripeError = (error: string) => {
-    toast.error(error || 'Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut.')
-    setIsProcessing(false)
   }
 
   // Handle PayPal success
@@ -448,7 +313,7 @@ export default function CheckoutContent() {
                   <span>Zahlungsmethode</span>
                   <div className="flex items-center gap-2 font-medium">
                     <CreditCard className="w-4 h-4"/>
-                    {paymentMethod === 'stripe' ? 'Kreditkarte (Stripe)' : paymentMethod === 'paypal' ? 'PayPal' : 'E-Mail-Bestätigung'}
+                    {paymentMethod === 'paypal' ? 'PayPal' : 'E-Mail-Bestätigung'}
                   </div>
                 </div>
                 <div className="flex items-start justify-between text-gray-500 pt-2 border-t border-gray-200/60">
@@ -557,6 +422,22 @@ export default function CheckoutContent() {
                     <h2 className="text-2xl font-bold text-[#0C211E] font-heading">Versandadresse</h2>
                   </div>
                   
+                  {/* Guest login prompt — optional, non-blocking */}
+                  {!isAuthenticated && (
+                    <div className="mb-6 p-4 rounded-2xl bg-[#4ECCA3]/10 border border-[#4ECCA3]/30 flex items-start gap-3">
+                      <Shield className="w-5 h-5 text-[#4ECCA3] mt-0.5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-[#0C211E]">Haben Sie bereits ein Konto?</p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          <Link href={`/anmelden?redirect=/kasse`} className="text-[#4ECCA3] font-bold hover:underline">
+                            Jetzt anmelden
+                          </Link>
+                          {' '}um Ihre Bestellung zu verfolgen. Oder fahren Sie als Gast fort.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
                   <form onSubmit={handleShippingSubmit} className="space-y-5">
                     <div className="grid sm:grid-cols-2 gap-5">
                       <div className="space-y-1">
@@ -684,34 +565,6 @@ export default function CheckoutContent() {
                     <div className="space-y-3">
                       <label 
                         className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
-                          paymentMethod === 'stripe' ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
-                        }`}
-                      >
-                        <input
-                          data-testid="payment-stripe"
-                          type="radio"
-                          name="paymentMethod"
-                          value="stripe"
-                          checked={paymentMethod === 'stripe'}
-                          onChange={() => setPaymentMethod('stripe')}
-                          className="sr-only"
-                        />
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                          paymentMethod === 'stripe' ? 'border-[#0C211E]' : 'border-gray-300'
-                        }`}>
-                          {paymentMethod === 'stripe' && <div className="w-3 h-3 rounded-full bg-[#0C211E]" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <CreditCard className="w-5 h-5 text-[#0C211E]" />
-                            <span className="font-bold text-[#0C211E] text-base">Kreditkarte</span>
-                          </div>
-                          <p className="text-sm font-medium text-gray-500 mt-0.5">Sichere Zahlung mit Stripe (Visa, Mastercard, Amex)</p>
-                        </div>
-                      </label>
-
-                      <label 
-                        className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
                           paymentMethod === 'paypal' ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
                         }`}
                       >
@@ -767,33 +620,6 @@ export default function CheckoutContent() {
                     
                     {/* Payment Form Based on Selection */}
                     <AnimatePresence mode="wait">
-                      {paymentMethod === 'stripe' && (
-                        <motion.div
-                          key="stripe"
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden"
-                        >
-                          {clientSecret ? (
-                            <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
-                              <StripePaymentForm 
-                                clientSecret={clientSecret}
-                                onSuccess={handleStripeSuccess}
-                                onError={handleStripeError}
-                                isProcessing={isProcessing}
-                                setIsProcessing={setIsProcessing}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="p-6 bg-gray-50 rounded-2xl flex items-center justify-center">
-                              <div className="w-6 h-6 border-2 border-[#0C211E]/30 border-t-[#0C211E] rounded-full animate-spin" />
-                              <span className="ml-3 text-sm font-medium text-gray-600">Zahlungsformular wird geladen...</span>
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-
                       {paymentMethod === 'paypal' && (
                         <motion.div
                           key="paypal"
@@ -819,7 +645,7 @@ export default function CheckoutContent() {
                                 const orderData = await response.json()
                                 return orderData.orderId
                               }}
-                              onApprove={async (data, actions) => {
+                              onApprove={async (data) => {
                                 setIsProcessing(true)
                                 await handlePayPalSuccess({ id: data.orderID })
                               }}
@@ -900,8 +726,8 @@ export default function CheckoutContent() {
                       )}
                     </AnimatePresence>
                     
-                    {/* Back button for Stripe/PayPal */}
-                    {(paymentMethod === 'stripe' || paymentMethod === 'paypal') && (
+                    {/* Back button */}
+                    {paymentMethod === 'paypal' && (
                       <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
                         <button
                           type="button"
@@ -936,6 +762,7 @@ export default function CheckoutContent() {
                         src={item.product.images[0]}
                         alt={item.product.name.de}
                         fill
+                        unoptimized={isLocalProductImage(item.product.images[0])}
                         className="object-contain p-2 mix-blend-multiply"
                         sizes="80px"
                       />

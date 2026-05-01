@@ -66,8 +66,8 @@ export async function DELETE(
     const session = await auth()
     const { id } = await params
     
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     await prisma.blogPost.delete({

@@ -8,8 +8,6 @@ import {
   Calendar, 
   ShoppingBag, 
   CreditCard, 
-  ShieldCheck, 
-  UserCheck, 
   Clock, 
   ChevronRight,
   TrendingUp,

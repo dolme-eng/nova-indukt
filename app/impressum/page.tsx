@@ -1,11 +1,25 @@
 import type { Metadata } from 'next'
+import { getStaticPageContent } from '@/lib/content/static'
 
 export const metadata: Metadata = {
   title: 'Impressum | NOVA INDUKT',
   description: 'Impressum und gesetzliche Anbieterkennzeichnung von NOVA INDUKT GmbH',
 }
 
-export default function ImpressumPage() {
+export default async function ImpressumPage() {
+  const db = await getStaticPageContent('impressum')
+  if (db) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">{db.title}</h1>
+          <div className="bg-white rounded-2xl p-8 shadow-sm">
+            <div className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{db.content}</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4 max-w-4xl">

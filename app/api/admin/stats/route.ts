@@ -12,67 +12,71 @@ export async function GET() {
     const now = new Date()
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
 
-    // Commandes
-    const totalOrders = await prisma.order.count()
-    const recentOrders = await prisma.order.count({
-      where: { createdAt: { gte: thirtyDaysAgo } }
-    })
-    const ordersRevenue = await prisma.order.aggregate({
-      where: { status: { not: 'CANCELLED' } },
-      _sum: { total: true }
-    })
-    const recentOrdersList = await prisma.order.findMany({
-      take: 4,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        orderNumber: true,
-        customerName: true,
-        status: true,
-        total: true,
-        createdAt: true
-      }
-    })
+    const [
+      totalOrders,
+      recentOrders,
+      ordersRevenue,
+      recentOrdersList,
+      totalCustomers,
+      newCustomers,
+      totalProducts,
+      pendingReviews,
+      activePromotions,
+      totalPromotions,
+      promotionUsage,
+      newsletterSubscribers,
+    ] = await Promise.all([
+      prisma.order.count(),
+      prisma.order.count({
+        where: { createdAt: { gte: thirtyDaysAgo } }
+      }),
+      prisma.order.aggregate({
+        where: { status: { not: 'CANCELLED' } },
+        _sum: { total: true }
+      }),
+      prisma.order.findMany({
+        take: 4,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          orderNumber: true,
+          customerName: true,
+          status: true,
+          total: true,
+          createdAt: true
+        }
+      }),
+      prisma.user.count({
+        where: { role: 'USER' }
+      }),
+      prisma.user.count({
+        where: {
+          role: 'USER',
+          createdAt: { gte: thirtyDaysAgo }
+        }
+      }),
+      prisma.product.count({
+        where: { isActive: true }
+      }),
+      prisma.review.count({
+        where: { isPublished: false }
+      }),
+      prisma.promotion.count({
+        where: {
+          isActive: true,
+          startDate: { lte: now },
+          endDate: { gte: now }
+        }
+      }),
+      prisma.promotion.count(),
+      prisma.promotion.aggregate({
+        _sum: { usageCount: true }
+      }),
+      prisma.newsletterSubscriber.count({
+        where: { isActive: true }
+      }),
+    ])
 
-    // Clients
-    const totalCustomers = await prisma.user.count({
-      where: { role: 'USER' }
-    })
-    const newCustomers = await prisma.user.count({
-      where: { 
-        role: 'USER',
-        createdAt: { gte: thirtyDaysAgo }
-      }
-    })
-
-    // Produits
-    const totalProducts = await prisma.product.count({
-      where: { isActive: true }
-    })
-
-    // Avis
-    const pendingReviews = await prisma.review.count({
-      where: { isPublished: false }
-    })
-
-    // Promotions
-    const activePromotions = await prisma.promotion.count({
-      where: {
-        isActive: true,
-        startDate: { lte: now },
-        endDate: { gte: now }
-      }
-    })
-    const totalPromotions = await prisma.promotion.count()
-    const promotionUsage = await prisma.promotion.aggregate({
-      _sum: { usageCount: true }
-    })
-
-    // Newsletter
-    const newsletterSubscribers = await prisma.newsletterSubscriber.count({
-      where: { isActive: true }
-    })
-
-    return NextResponse.json({
+    const response = NextResponse.json({
       orders: {
         total: totalOrders,
         recent: recentOrders,
@@ -98,6 +102,8 @@ export async function GET() {
       },
       recentOrdersList
     })
+    response.headers.set("Cache-Control", "no-store")
+    return response
   } catch (error) {
     console.error('Error fetching stats:', error)
     return NextResponse.json(

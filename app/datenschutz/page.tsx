@@ -1,11 +1,25 @@
 import type { Metadata } from 'next'
+import { getStaticPageContent } from '@/lib/content/static'
 
 export const metadata: Metadata = {
   title: 'Datenschutzerklärung | NOVA INDUKT',
   description: 'Datenschutzerklärung der NOVA INDUKT GmbH gemäß DSGVO',
 }
 
-export default function DatenschutzPage() {
+export default async function DatenschutzPage() {
+  const db = await getStaticPageContent('datenschutz')
+  if (db) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">{db.title}</h1>
+          <div className="bg-white rounded-2xl p-8 shadow-sm">
+            <div className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{db.content}</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4 max-w-4xl">
@@ -118,7 +132,7 @@ export default function DatenschutzPage() {
               </p>
               <ul className="list-disc list-inside ml-4 space-y-1">
                 <li>Versanddienstleister (DHL, DPD, UPS) zur Zustellung der Ware</li>
-                <li>Zahlungsdienstleister (PayPal, Klarna, Stripe) zur Abwicklung von Zahlungen</li>
+                <li>Zahlungsdienstleister (PayPal) zur Abwicklung von Zahlungen</li>
                 <li>Webhosting-Provider (zur technischen Bereitstellung der Website)</li>
                 <li>IT-Dienstleister (zur Wartung unserer Systeme)</li>
               </ul>

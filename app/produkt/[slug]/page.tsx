@@ -1,8 +1,21 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { Product } from '@/lib/data/products'
 import { ProductContent } from './ProductContent'
+
+export const revalidate = 120
+
+const getProductBySlug = cache(async (slug: string) => {
+  return prisma.product.findUnique({
+    where: { slug },
+    include: {
+      images: true,
+      category: true,
+    },
+  })
+})
 
 export async function generateMetadata({ 
   params 
@@ -12,10 +25,7 @@ export async function generateMetadata({
   const resolvedParams = await params
   const decodedSlug = decodeURIComponent(resolvedParams.slug)
   
-  const product = await prisma.product.findUnique({
-    where: { slug: decodedSlug },
-    include: { images: true }
-  })
+  const product = await getProductBySlug(decodedSlug)
   
   if (!product) return {}
 
@@ -53,13 +63,7 @@ export default async function ProductPage({
   const resolvedParams = await params
   const decodedSlug = decodeURIComponent(resolvedParams.slug)
   
-  const product = await prisma.product.findUnique({
-    where: { slug: decodedSlug },
-    include: { 
-      images: true,
-      category: true
-    }
-  })
+  const product = await getProductBySlug(decodedSlug)
   
   if (!product || !product.isActive) {
     notFound()

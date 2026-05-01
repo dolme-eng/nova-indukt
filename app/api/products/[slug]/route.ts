@@ -35,7 +35,7 @@ export async function GET(
       )
     }
     
-    return NextResponse.json({
+    const response = NextResponse.json({
       ...product,
       price: Number(product.price),
       oldPrice: product.oldPrice ? Number(product.oldPrice) : null,
@@ -45,6 +45,8 @@ export async function GET(
         rating: Number(review.rating)
       }))
     })
+    response.headers.set("Cache-Control", "public, s-maxage=120, stale-while-revalidate=600")
+    return response
   } catch (error) {
     console.error("Error fetching product:", error)
     return NextResponse.json(

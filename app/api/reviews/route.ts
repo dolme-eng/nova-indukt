@@ -270,6 +270,6 @@ export async function POST(request: NextRequest) {
 }
 
 // PUT has been replaced with a toggle in admin route
-export async function PUT(request: NextRequest) {
+export async function PUT() {
   return NextResponse.json({ error: "Not Implemented" }, { status: 400 })
 }

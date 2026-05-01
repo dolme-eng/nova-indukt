@@ -1,45 +1,110 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
+import type { TargetAndTransition, VariantLabels, ViewportOptions } from 'framer-motion'
 import { 
   ArrowRight, Truck, RotateCcw, Shield, Headphones, 
-  Zap, Leaf, Award, ChevronRight, Star,
-  ShoppingCart, Heart, Eye, Flame, Clock, ChevronLeft,
-  Sparkles, CheckCircle, BadgePercent, LucideIcon
+  Award, ChevronRight, Star,
+  ShoppingCart, Heart, Eye, Flame, ChevronLeft,
+  Sparkles, CheckCircle, BadgePercent
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { Product, Category, BlogPost } from '@/lib/data/products'
 import { TiltCard } from '@/components/animations'
 import { MagneticButton } from '@/components/magnetic-button'
-import { TestimonialsSection } from '@/components/testimonials-section'
 import { formatPriceDe } from '@/lib/utils/vat'
-import { TechnologySection } from '@/components/home/technology-section'
-import { BlogPreview } from '@/components/home/blog-preview'
+import type { AppliedPromotion } from '@/lib/promotions'
+
+const TechnologySection = dynamic(
+  () => import('@/components/home/technology-section').then((m) => m.TechnologySection),
+  {
+    loading: () => <div className="h-[520px] bg-gray-900" />,
+  }
+)
+
+const BlogPreview = dynamic(
+  () => import('@/components/home/blog-preview').then((m) => m.BlogPreview),
+  {
+    loading: () => <div className="h-[420px] bg-gray-50" />,
+  }
+)
+
+const TestimonialsSection = dynamic(
+  () => import('@/components/testimonials-section').then((m) => m.TestimonialsSection),
+  {
+    loading: () => <div className="h-[420px] bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10" />,
+  }
+)
 
 interface HomeContentProps {
   initialProducts: Product[]
   initialCategories: Category[]
   initialBlogPosts: BlogPost[]
+  activePromotions?: {
+    id: string
+    name: string
+    discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
+    discountValue: any
+    productIds: string[]
+    categoryIds: string[]
+    isGlobal: boolean
+    badge: string | null
+    bannerText: string | null
+    highlightColor: string | null
+  }[]
 }
 
-export function HomeContent({ initialProducts, initialCategories, initialBlogPosts }: HomeContentProps) {
+export function HomeContent({ initialProducts, initialCategories, initialBlogPosts, activePromotions = [] }: HomeContentProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [email, setEmail] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [timeLeft, setTimeLeft] = useState({ hours: 5, minutes: 42, seconds: 18 })
   const slides = ['slide1', 'slide2', 'slide3'] as const
   const sliderContainerRef = useRef<HTMLDivElement>(null)
 
-  // Flash deals - deterministic discount based on product id
-  const flashDeals = useMemo(() => 
-    initialProducts.slice(0, 4).map(p => ({
-      ...p, 
-      discount: ((p.id.charCodeAt(0) + p.id.charCodeAt(p.id.length - 1)) % 25) + 15
-    })), [initialProducts])
+  // Flash deals — uses real DB promotions when available, falls back to oldPrice discount
+  const flashDeals = useMemo(() => {
+    const candidates = initialProducts.slice(0, 8)
+
+    // Map each product to its best applicable promotion
+    const withPromo = candidates.map(p => {
+      // Find applicable promotions for this product
+      const applicable = activePromotions.filter(promo => {
+        if (promo.isGlobal) return true
+        if (promo.productIds.includes(p.id)) return true
+        if (promo.categoryIds.includes(p.category)) return true
+        return false
+      })
+
+      if (applicable.length > 0) {
+        const best = applicable[0]
+        const value = Number(best.discountValue)
+        const discount = best.discountType === 'PERCENTAGE'
+          ? Math.round(value)
+          : Math.round((value / p.price) * 100)
+        return { ...p, discount, promoName: best.name, promoBadge: best.badge }
+      }
+
+      // Fallback: use oldPrice if available
+      if (p.oldPrice && p.oldPrice > p.price) {
+        const discount = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)
+        return { ...p, discount, promoName: null, promoBadge: null }
+      }
+
+      return null
+    }).filter((p): p is NonNullable<typeof p> => p !== null)
+
+    // If no deals found, take first 4 products with a nominal display
+    if (withPromo.length === 0) {
+      return initialProducts.slice(0, 4).map(p => ({ ...p, discount: 0, promoName: null, promoBadge: null }))
+    }
+
+    return withPromo.slice(0, 4)
+  }, [initialProducts, activePromotions])
   
   const productCardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -78,26 +143,6 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
     }, 4500);
     return () => clearInterval(autoScroll);
   }, []);
-
-  // Flash deals countdown (to next midnight)
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date()
-      const endOfDay = new Date(now)
-      endOfDay.setHours(23, 59, 59, 999)
-      const diff = endOfDay.getTime() - now.getTime()
-      
-      setTimeLeft({
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / 1000 / 60) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      })
-    }
-    
-    updateCountdown()
-    const countdown = setInterval(updateCountdown, 1000)
-    return () => clearInterval(countdown)
-  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -205,8 +250,9 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
               alt="Die Zukunft der Induktion"
               fill
               className="object-cover object-center"
-              priority
-              fetchPriority="high"
+              priority={currentSlide === 0}
+              fetchPriority={currentSlide === 0 ? 'high' : 'auto'}
+              loading={currentSlide === 0 ? 'eager' : 'lazy'}
               sizes="100vw"
               placeholder="blur"
               blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect fill='%230C211E' width='1920' height='1080'/%3E%3C/svg%3E"
@@ -403,7 +449,7 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
                 transition={{ delay: index * 0.1 }}
                 className="group h-full"
               >
-                <Link href={`/produkte?kategorie=${category.id}`} className="block h-full cursor-pointer">
+                <Link href={`/produkte?kategorie=${category.slug}`} className="block h-full cursor-pointer">
                   <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-md group-hover:shadow-2xl transition-all duration-500 border border-gray-100">
                     <Image
                       src={category.image}
@@ -436,40 +482,11 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-nova-100/40 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
         
         <div className="container relative z-10 mx-auto px-4 sm:px-6">
-          <motion.div
+          <FlashDealsHeader
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="flex flex-col md:flex-row items-center justify-between bg-white/60 backdrop-blur-xl border border-white/80 p-4 sm:p-6 rounded-3xl shadow-lg mb-8 gap-4"
-          >
-            <div className="flex items-center gap-5">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-red-500/20 shadow-xl">
-                <Flame className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-heading flex items-center gap-2">
-                  Flash Deals <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-lg uppercase tracking-wider">Nur Heute</span>
-                </h2>
-                <p className="text-gray-500 text-sm mt-1">Nur für kurze Zeit</p>
-              </div>
-            </div>
-            
-            {/* Functional Countdown */}
-            <div className="flex gap-3 text-center shrink-0">
-              {[ 
-                { l: 'Stunden', v: timeLeft.hours.toString().padStart(2, '0') }, 
-                { l: 'Minuten', v: timeLeft.minutes.toString().padStart(2, '0') }, 
-                { l: 'Sekunden', v: timeLeft.seconds.toString().padStart(2, '0') } 
-              ].map((time, i) => (
-                <div key={i} className="flex flex-col w-[60px]">
-                  <span className="w-14 h-14 mx-auto bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-xl font-bold text-gray-900 font-mono">
-                    {time.v}
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] uppercase text-gray-500 font-semibold mt-2">{time.l}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {flashDeals.map((product, index) => (
@@ -487,8 +504,8 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
       <section className="py-10 sm:py-16 bg-white relative">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="text-center max-w-2xl mx-auto mb-16"
           >
@@ -629,9 +646,10 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
 }
 
 // Polished Product Card
-function ProductCard({ product, index }: { product: Product; index: number }) {
+const ProductCard = memo(function ProductCard({ product }: { product: Product; index: number }) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
+  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
   
   const inWishlist = isInWishlist(product.id)
   
@@ -666,6 +684,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             src={product.images[0]}
             alt={product.name.de}
             fill
+            unoptimized={isLocalProductImage(product.images[0])}
             className={`object-contain p-3 sm:p-4 transition-all duration-700 mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-110'}`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
@@ -674,6 +693,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
               src={product.images[1]}
               alt={`${product.name.de} Lifestyle`}
               fill
+              unoptimized={isLocalProductImage(product.images[1])}
               className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-0"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
@@ -749,14 +769,15 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
       </TiltCard>
     </Link>
   )
-}
+})
 
 
 // Flash Deal Card redefined
-function FlashDealCard({ product, index }: { product: Product & { discount: number }; index: number }) {
+const FlashDealCard = memo(function FlashDealCard({ product, index }: { product: Product & { discount: number }; index: number }) {
   const { isInWishlist, toggleItem } = useWishlist()
   const { addItem } = useCart()
   const inWishlist = isInWishlist(product.id)
+  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
   
   const handleToggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -790,17 +811,20 @@ function FlashDealCard({ product, index }: { product: Product & { discount: numb
           src={product.images[0]}
           alt={product.name.de}
           fill
+          unoptimized={isLocalProductImage(product.images[0])}
           className="object-contain p-8 group-hover:scale-110 transition-transform duration-700 mix-blend-multiply"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         
         {/* Discount Badge */}
-        <div className="absolute top-4 left-4">
-          <span className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-black rounded-lg shadow-lg shadow-red-500/30 flex items-center gap-1">
-            <BadgePercent className="w-3.5 h-3.5" />
-            -{product.discount}%
-          </span>
-        </div>
+        {product.discount > 0 && (
+          <div className="absolute top-4 left-4">
+            <span className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-black rounded-lg shadow-lg shadow-red-500/30 flex items-center gap-1">
+              <BadgePercent className="w-3.5 h-3.5" />
+              {product.promoBadge ?? `-${product.discount}%`}
+            </span>
+          </div>
+        )}
 
         <div className="absolute top-4 right-4 z-10">
           <button 
@@ -853,6 +877,66 @@ function FlashDealCard({ product, index }: { product: Product & { discount: numb
             <span className="hidden sm:inline">In den Warenkorb</span>
           </button>
         </div>
+      </div>
+    </motion.div>
+  )
+})
+
+function FlashDealsHeader(props: {
+  initial: boolean | TargetAndTransition | VariantLabels
+  whileInView: TargetAndTransition | VariantLabels
+  viewport: ViewportOptions
+}) {
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 })
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date()
+      const endOfDay = new Date(now)
+      endOfDay.setHours(23, 59, 59, 999)
+      const diff = Math.max(0, endOfDay.getTime() - now.getTime())
+      setTimeLeft({
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / 1000 / 60) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      })
+    }
+    updateCountdown()
+    const countdown = setInterval(updateCountdown, 1000)
+    return () => clearInterval(countdown)
+  }, [])
+
+  return (
+    <motion.div
+      initial={props.initial}
+      whileInView={props.whileInView}
+      viewport={props.viewport}
+      className="flex flex-col md:flex-row items-center justify-between bg-white/60 backdrop-blur-xl border border-white/80 p-4 sm:p-6 rounded-3xl shadow-lg mb-8 gap-4"
+    >
+      <div className="flex items-center gap-5">
+        <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-red-500/20 shadow-xl">
+          <Flame className="w-8 h-8 text-white" />
+        </div>
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-heading flex items-center gap-2">
+            Flash Deals <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-lg uppercase tracking-wider">Nur Heute</span>
+          </h2>
+          <p className="text-gray-500 text-sm mt-1">Nur für kurze Zeit</p>
+        </div>
+      </div>
+      <div className="flex gap-3 text-center shrink-0">
+        {[
+          { l: 'Stunden', v: timeLeft.hours.toString().padStart(2, '0') },
+          { l: 'Minuten', v: timeLeft.minutes.toString().padStart(2, '0') },
+          { l: 'Sekunden', v: timeLeft.seconds.toString().padStart(2, '0') }
+        ].map((time, i) => (
+          <div key={i} className="flex flex-col w-[60px]">
+            <span className="w-14 h-14 mx-auto bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-xl font-bold text-gray-900 font-mono">
+              {time.v}
+            </span>
+            <span className="text-[9px] sm:text-[10px] uppercase text-gray-500 font-semibold mt-2">{time.l}</span>
+          </div>
+        ))}
       </div>
     </motion.div>
   )
