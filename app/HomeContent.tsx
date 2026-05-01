@@ -772,8 +772,7 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
 })
 
 
-// Flash Deal Card redefined
-const FlashDealCard = memo(function FlashDealCard({ product, index }: { product: Product & { discount: number }; index: number }) {
+const FlashDealCard = memo(function FlashDealCard({ product, index }: { product: Product & { discount: number; promoName: string | null; promoBadge: string | null }; index: number }) {
   const { isInWishlist, toggleItem } = useWishlist()
   const { addItem } = useCart()
   const inWishlist = isInWishlist(product.id)

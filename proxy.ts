@@ -5,7 +5,6 @@ import { auth } from "@/lib/auth"
 // Protected routes that require authentication
 const protectedRoutes = [
   "/mein-konto",
-  "/kasse",
   "/api/orders",
   "/admin",
 ]
@@ -59,7 +58,6 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/mein-konto/:path*",
-    "/kasse/:path*",
     "/anmelden",
     "/registrieren",
     "/api/orders/:path*",
