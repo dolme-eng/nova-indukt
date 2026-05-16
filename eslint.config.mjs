@@ -12,7 +12,7 @@ export default defineConfig([
       "react/no-unescaped-entities": "off",
       "react-hooks/immutability": "off",
       "react-hooks/purity": "off",
-      "react-hooks/rules-of-hooks": "off",
+      "react-hooks/rules-of-hooks": "error",
       "react-hooks/set-state-in-effect": "off",
       "prefer-const": "off",
     },

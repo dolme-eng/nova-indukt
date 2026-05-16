@@ -211,12 +211,60 @@ export async function incrementPromotionUsage(promotionId: string): Promise<void
 }
 
 /**
- * Vérifie si une promotion est applicable à un panier
+ * Valide un coupon de réduction
  */
-export function isPromotionApplicableToCart(
-  promotion: { minOrderAmount: number | null },
+export async function validateCoupon(
+  code: string,
   cartTotal: number
-): boolean {
-  if (!promotion.minOrderAmount) return true
-  return cartTotal >= promotion.minOrderAmount
+): Promise<{ 
+  isValid: boolean; 
+  discountAmount: number; 
+  error?: string; 
+  promotionId?: string;
+  name?: string;
+}> {
+  const now = new Date()
+  
+  const promotion = await prisma.promotion.findFirst({
+    where: {
+      code: { equals: code, mode: 'insensitive' },
+      isActive: true,
+      isCoupon: true,
+      startDate: { lte: now },
+      endDate: { gte: now },
+    }
+  })
+
+  if (!promotion) {
+    return { isValid: false, discountAmount: 0, error: 'Ungültiger oder abgelaufener Gutscheincode' }
+  }
+
+  // Check usage limit
+  if (promotion.usageLimit !== null && promotion.usageCount >= promotion.usageLimit) {
+    return { isValid: false, discountAmount: 0, error: 'Dieser Gutschein wurde bereits zu oft verwendet' }
+  }
+
+  // Check min order amount
+  if (promotion.minOrderAmount && cartTotal < Number(promotion.minOrderAmount)) {
+    return { 
+      isValid: false, 
+      discountAmount: 0, 
+      error: `Mindestbestellwert für diesen Gutschein ist ${Number(promotion.minOrderAmount).toFixed(2)} €` 
+    }
+  }
+
+  // Calculate discount
+  const { discountAmount } = calculateDiscountedPrice(
+    cartTotal,
+    promotion.discountType,
+    Number(promotion.discountValue),
+    promotion.maxDiscount ? Number(promotion.maxDiscount) : null
+  )
+
+  return {
+    isValid: true,
+    discountAmount,
+    promotionId: promotion.id,
+    name: promotion.name
+  }
 }

@@ -49,6 +49,7 @@ export async function POST(request: Request) {
       discountType: promo.discountType,
       discountValue: Number(promo.discountValue),
       discountAmount: discount,
+      promotionId: promo.id,
       name: promo.name
     })
 

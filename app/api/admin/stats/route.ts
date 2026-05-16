@@ -25,6 +25,7 @@ export async function GET() {
       totalPromotions,
       promotionUsage,
       newsletterSubscribers,
+      recentActivity,
     ] = await Promise.all([
       prisma.order.count(),
       prisma.order.count({
@@ -57,8 +58,13 @@ export async function GET() {
       prisma.product.count({
         where: { isActive: true }
       }),
+      // "En attente" = non publié ET créé dans les 90 derniers jours
+      // Exclut les anciens avis rejetés/ignorés déjà traités
       prisma.review.count({
-        where: { isPublished: false }
+        where: {
+          isPublished: false,
+          createdAt: { gte: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000) }
+        }
       }),
       prisma.promotion.count({
         where: {
@@ -74,6 +80,17 @@ export async function GET() {
       prisma.newsletterSubscriber.count({
         where: { isActive: true }
       }),
+      prisma.auditLog.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          action: true,
+          entityType: true,
+          entityId: true,
+          createdAt: true
+        }
+      })
     ])
 
     const response = NextResponse.json({
@@ -100,7 +117,8 @@ export async function GET() {
       newsletter: {
         subscribers: newsletterSubscribers
       },
-      recentOrdersList
+      recentOrdersList,
+      recentActivity
     })
     response.headers.set("Cache-Control", "no-store")
     return response

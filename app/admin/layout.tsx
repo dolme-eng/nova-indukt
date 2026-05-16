@@ -1,4 +1,6 @@
 import React from "react"
+import { redirect } from "next/navigation"
+import { auth } from "@/lib/auth"
 import Link from "next/link"
 import { 
   LayoutDashboard, 
@@ -17,50 +19,60 @@ import {
   BookOpen
 } from "lucide-react"
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await auth()
+  if (!session?.user || session.user.role !== "ADMIN") {
+    redirect("/anmelden?redirect=/admin")
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-nova-50/50 flex selection:bg-nova-400/30">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col sticky top-0 h-screen">
-        <div className="p-6">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900">
-            <span className="bg-primary text-white p-1 rounded">NI</span>
-            NOVA INDUKT
+      <aside className="w-64 bg-nova-900 border-r border-white/5 hidden md:flex flex-col sticky top-0 h-screen shadow-2xl z-20">
+        <div className="p-8">
+          <Link href="/" className="flex items-center gap-3 font-black text-2xl tracking-tighter text-white font-heading">
+            <span className="bg-nova-400 text-nova-900 px-2 py-0.5 rounded-lg shadow-lg shadow-nova-400/20">NI</span>
+            NOVA
           </Link>
-          <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest font-semibold">Admin Panel</p>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="h-1 w-8 bg-nova-400 rounded-full" />
+            <p className="text-[10px] text-nova-300/60 uppercase tracking-[0.2em] font-black">Admin Panel</p>
+          </div>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-1">
+        <nav className="flex-1 px-4 py-4 space-y-1.5 overflow-y-auto scrollbar-hide">
           <AdminNavLink href="/admin" icon={<LayoutDashboard size={20} />} label="Dashboard" />
           <AdminNavLink href="/admin/orders" icon={<ShoppingCart size={20} />} label="Bestellungen" />
           <AdminNavLink href="/admin/products" icon={<Package size={20} />} label="Produkte" />
           <AdminNavLink href="/admin/blog" icon={<BookOpen size={20} />} label="Blog / Magazin" />
           <AdminNavLink href="/admin/customers" icon={<Users size={20} />} label="Kunden" />
           
-          <div className="pt-4 pb-2 px-2">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Marketing</p>
+          <div className="pt-6 pb-2 px-3">
+            <p className="text-[10px] font-black text-nova-300/40 uppercase tracking-[0.15em]">Marketing</p>
           </div>
           <AdminNavLink href="/admin/promotions" icon={<Tag size={20} />} label="Aktionen" />
           <AdminNavLink href="/admin/reviews" icon={<MessageSquare size={20} />} label="Bewertungen" />
           <AdminNavLink href="/admin/newsletter" icon={<Mail size={20} />} label="Newsletter" />
           
-          <div className="pt-4 pb-2 px-2">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Einstellungen</p>
+          <div className="pt-6 pb-2 px-3">
+            <p className="text-[10px] font-black text-nova-300/40 uppercase tracking-[0.15em]">System</p>
           </div>
           <AdminNavLink href="/admin/settings" icon={<Settings size={20} />} label="Konfiguration" />
         </nav>
 
-        <div className="p-4 border-t border-slate-200">
+        <div className="p-4 border-t border-white/5">
           <Link 
             href="/api/auth/signout" 
-            className="flex items-center gap-3 px-3 py-2 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="flex items-center gap-3 px-4 py-3 text-nova-300/70 hover:text-white hover:bg-white/5 rounded-xl transition-all group"
           >
-            <LogOut size={20} />
-            <span className="font-medium">Abmelden</span>
+            <div className="p-2 bg-white/5 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
+              <LogOut size={18} />
+            </div>
+            <span className="font-bold text-sm">Abmelden</span>
           </Link>
         </div>
       </aside>
@@ -68,33 +80,33 @@ export default function AdminLayout({
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="h-16 bg-white border-bottom border-slate-200 flex items-center justify-between px-4 md:px-8 sticky top-0 z-10 shadow-sm">
-          <div className="flex items-center gap-4">
-            <button className="md:hidden text-slate-600">
+        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-nova-100 flex items-center justify-between px-8 sticky top-0 z-10">
+          <div className="flex items-center gap-6">
+            <button className="md:hidden text-nova-900 p-2 hover:bg-nova-50 rounded-lg transition-colors">
               <Menu size={24} />
             </button>
-            <div className="relative hidden sm:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <div className="relative hidden lg:block">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-nova-400" size={18} />
               <input 
                 type="text" 
-                placeholder="Suchen..." 
-                className="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full text-sm focus:ring-2 focus:ring-primary w-64 transition-all"
+                placeholder="Global search..." 
+                className="pl-12 pr-6 py-2.5 bg-nova-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-nova-400 w-80 transition-all font-medium placeholder:text-nova-300"
               />
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="relative p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+          <div className="flex items-center gap-6">
+            <button className="relative p-2.5 text-nova-600 hover:bg-nova-50 rounded-xl transition-all">
               <Bell size={20} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
-            <div className="h-8 w-px bg-slate-200 mx-2"></div>
-            <div className="flex items-center gap-3">
+            <div className="h-8 w-px bg-nova-100 mx-2"></div>
+            <div className="flex items-center gap-4 group cursor-pointer">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold text-slate-900 leading-none">Admin</p>
-                <p className="text-xs text-slate-500 mt-1">Administrator</p>
+                <p className="text-sm font-black text-nova-900 leading-none">Admin User</p>
+                <p className="text-[10px] text-nova-400 mt-1 font-black uppercase tracking-wider">Super Administrator</p>
               </div>
-              <div className="h-10 w-10 bg-slate-200 rounded-full flex items-center justify-center text-slate-600 font-bold border-2 border-white shadow-sm">
+              <div className="h-11 w-11 bg-nova-900 rounded-2xl flex items-center justify-center text-nova-400 font-black border-2 border-nova-100 shadow-lg group-hover:scale-105 transition-transform">
                 A
               </div>
             </div>
@@ -114,13 +126,13 @@ function AdminNavLink({ href, icon, label }: { href: string, icon: React.ReactNo
   return (
     <Link 
       href={href}
-      className="flex items-center justify-between px-3 py-2 text-slate-600 hover:text-primary hover:bg-slate-50 rounded-lg transition-all group"
+      className="flex items-center justify-between px-4 py-2.5 text-nova-300/70 hover:text-white hover:bg-white/5 rounded-xl transition-all group"
     >
       <div className="flex items-center gap-3">
-        <span className="text-slate-400 group-hover:text-primary transition-colors">{icon}</span>
-        <span className="font-medium">{label}</span>
+        <span className="text-nova-300/40 group-hover:text-nova-400 transition-colors">{icon}</span>
+        <span className="font-bold text-sm tracking-wide">{label}</span>
       </div>
-      <ChevronRight size={14} className="text-slate-300 group-hover:translate-x-1 transition-transform" />
+      <ChevronRight size={14} className="text-nova-300/20 group-hover:text-nova-400 group-hover:translate-x-1 transition-all" />
     </Link>
   )
 }

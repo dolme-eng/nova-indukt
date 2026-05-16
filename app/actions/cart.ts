@@ -215,7 +215,7 @@ export async function getCartItems() {
     if (cart.type === "db") {
       return cart.cart.items.map(item => ({
         id: item.product.id,
-        name: item.product.nameDe,
+        name: { de: item.product.nameDe },
         price: Number(item.product.price),
         image: item.product.images?.[0]?.url || "",
         slug: item.product.slug,
@@ -235,7 +235,7 @@ export async function getCartItems() {
         const product = products.find(p => p.id === item.product.id)
         return {
           id: product?.id || item.product.id,
-          name: product?.nameDe || "Produkt",
+          name: { de: product?.nameDe || "Produkt" },
           price: Number(product?.price || 0),
           image: product?.images?.[0]?.url || "",
           slug: product?.slug || "",

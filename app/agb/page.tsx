@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { getStaticPageContent } from '@/lib/content/static'
+import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants/shop'
+import { formatPriceDe } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'AGB - Allgemeine Geschäftsbedingungen | NOVA INDUKT',
@@ -109,7 +111,7 @@ export default async function AGBPage() {
                 (2) Die Versandkosten betragen:
               </p>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Deutschland: 5,90 € (ab 500 € Warenwert versandkostenfrei)</li>
+                <li>Deutschland: {formatPriceDe(SHIPPING_COST)} (ab {formatPriceDe(FREE_SHIPPING_THRESHOLD)} Warenwert versandkostenfrei)</li>
                 <li>EU-Länder: 14,90 €</li>
               </ul>
               <p>

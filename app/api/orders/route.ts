@@ -3,8 +3,11 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
 import { sendOrderConfirmationForOrder } from "@/lib/email/send"
-import { VAT_RATE_PERCENT } from "@/lib/constants/vat"
-import type { OrderItemInput } from "@/lib/validations/order"
+import { VAT_RATE_PERCENT, vatFromGross } from "@/lib/utils/vat"
+import { createOrderSchema, type OrderItemInput } from "@/lib/validations/order"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { calculateShipping } from "@/lib/constants/shop"
+import { applyBestPromotion, validateCoupon, incrementPromotionUsage } from "@/lib/promotions"
 
 // Get user's orders
 export async function GET() {
@@ -64,54 +67,124 @@ export async function GET() {
 // Create new order
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 5 orders per minute per IP
+    const ip = getIP(request)
+    const rl = rateLimit(createRateLimitKey(ip, 'orders'), { windowMs: 60_000, maxRequests: 5 })
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Zu viele Anfragen. Bitte warten Sie einen Moment.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)),
+            'X-RateLimit-Limit': String(rl.limit),
+            'X-RateLimit-Remaining': '0',
+          },
+        }
+      )
+    }
+
     const session = await auth()
     const body = await request.json()
-    
+
+    // ── Validation Zod ──────────────────────────────────────────────────────
+    const parsed = createOrderSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          error: 'Ungültige Bestelldaten',
+          details: parsed.error.flatten().fieldErrors,
+        },
+        { status: 400 }
+      )
+    }
+
     const {
       items,
       shippingData,
       paymentMethod,
-      subtotal,
-      shipping,
       discountAmount,
       appliedPromoCode,
-      total
-    } = body
-    
+    } = parsed.data
+    // ────────────────────────────────────────────────────────────────────────
+
     if (!items || items.length === 0) {
       return NextResponse.json(
         { error: "Cart is empty" },
         { status: 400 }
       )
     }
-    
-    // 1. Check stocks and price consistency
-    for (const item of items) {
-      const dbProduct = await prisma.product.findUnique({
-        where: { id: item.id }
-      })
 
+    // ── C7 FIX: Verify product prices from database ─────────────────────────
+    const productIds = items.map(item => item.id)
+    const dbProducts = await prisma.product.findMany({
+      where: { id: { in: productIds } },
+      select: { id: true, price: true, nameDe: true, stock: true, isActive: true, categoryId: true }
+    })
+
+    const dbProductMap = new Map(dbProducts.map(p => [p.id, p]))
+    const serverItems: Array<OrderItemInput & { dbPrice: number }> = []
+
+    for (const item of items) {
+      const dbProduct = dbProductMap.get(item.id)
       if (!dbProduct) {
         return NextResponse.json(
           { error: `Produkt ${item.name} nicht gefunden` },
           { status: 404 }
         )
       }
-
-      if (dbProduct.stock < item.quantity) {
+      if (!dbProduct.isActive) {
         return NextResponse.json(
-          { error: `Nicht genügend Lagerbestand für ${item.name}` },
+          { error: `Produkt ${item.name} ist nicht mehr verfügbar` },
           { status: 400 }
         )
       }
+      
+      // APPLY PROMOTIONS ON SERVER
+      const { discountedPrice } = await applyBestPromotion(
+        dbProduct.id,
+        dbProduct.categoryId,
+        Number(dbProduct.price)
+      )
+
+      serverItems.push({
+        ...item,
+        dbPrice: discountedPrice
+      })
     }
+
+    // Recalculate subtotal, shipping and total from DB prices (server-side truth)
+    const serverSubtotal = serverItems.reduce((sum, item) => {
+      return sum + item.dbPrice * item.quantity
+    }, 0)
+    
+    const serverShipping = calculateShipping(serverSubtotal)
+    
+    // VERIFY COUPON ON SERVER
+    let serverDiscountAmount = 0
+    let verifiedPromotionId: string | undefined
+
+    if (appliedPromoCode) {
+      const couponResult = await validateCoupon(appliedPromoCode, serverSubtotal)
+      if (!couponResult.isValid) {
+        return NextResponse.json(
+          { error: couponResult.error || "Gutschein ungültig" },
+          { status: 400 }
+        )
+      }
+      serverDiscountAmount = couponResult.discountAmount
+      verifiedPromotionId = couponResult.promotionId
+    }
+
+    const serverTotal = Math.max(0, serverSubtotal + serverShipping - serverDiscountAmount)
+    // ────────────────────────────────────────────────────────────────────────
 
     // 2. Generate order number
     const orderNumber = `NOV-${Date.now().toString(36).toUpperCase()}`
     
     // 3. Create order in a transaction to include stock update
     const order = await prisma.$transaction(async (tx) => {
-      // Create the order
+      // Create the order — using server-calculated totals
       const newOrder = await tx.order.create({
         data: {
           orderNumber,
@@ -122,29 +195,32 @@ export async function POST(request: NextRequest) {
           shippingAddress: {
             firstName: shippingData.firstName,
             lastName: shippingData.lastName,
+            name: `${shippingData.firstName} ${shippingData.lastName}`,
             street: shippingData.address,
-            zip: shippingData.zipCode,
+            postalCode: shippingData.zipCode,
             city: shippingData.city,
             country: shippingData.country,
           },
-          paymentMethod: paymentMethod.toUpperCase(),
+          paymentMethod: paymentMethod.toUpperCase() as import('@prisma/client').PaymentMethod,
           status: "PENDING",
           paymentStatus: "PENDING",
-          subtotal,
-          shippingCost: shipping,
-          discountAmount: discountAmount || 0,
-          appliedPromoCode: appliedPromoCode || null,
-          vatAmount: (Number(subtotal) * VAT_RATE_PERCENT) / 100, // Ajout du montant TVA
-          total,
+          subtotal: serverSubtotal,
+          shippingCost: serverShipping,
+          discountAmount: serverDiscountAmount,
+          appliedPromoCode: serverDiscountAmount > 0 ? appliedPromoCode : null,
+          vatAmount: vatFromGross(serverSubtotal + serverShipping, VAT_RATE_PERCENT),
+          total: serverTotal,
           items: {
-            create: items.map((item: OrderItemInput) => ({
-              productId: item.id,
-              quantity: item.quantity,
-              unitPrice: item.price,
-              productName: item.name,
-              productSlug: item.slug || '',
-              vatRate: VAT_RATE_PERCENT,
-            }))
+            create: serverItems.map((item) => {
+              return {
+                productId: item.id,
+                quantity: item.quantity,
+                unitPrice: item.dbPrice, // C7 FIX: Use discounted DB price
+                productName: item.name,
+                productSlug: item.slug || '',
+                vatRate: VAT_RATE_PERCENT,
+              }
+            })
           }
         },
         include: {
@@ -160,22 +236,21 @@ export async function POST(request: NextRequest) {
         }
       })
 
-      // Update stocks
+      // Update stocks — atomic check inside transaction to prevent race conditions
       for (const item of items) {
-        await tx.product.update({
-          where: { id: item.id },
-          data: {
-            stock: {
-              decrement: item.quantity
-            }
-          }
+        const updated = await tx.product.updateMany({
+          where: { id: item.id, stock: { gte: item.quantity } },
+          data: { stock: { decrement: item.quantity } },
         })
+        if (updated.count === 0) {
+          throw new Error(`STOCK_INSUFFICIENT:${item.name}`)
+        }
       }
 
       // Increment promo usage if applicable
-      if (appliedPromoCode) {
+      if (verifiedPromotionId) {
         await tx.promotion.update({
-          where: { code: appliedPromoCode },
+          where: { id: verifiedPromotionId },
           data: {
             usageCount: {
               increment: 1
@@ -198,16 +273,19 @@ export async function POST(request: NextRequest) {
       })
     }
     
-    // Send order confirmation email
-    // This is non-blocking - we don't want to fail the order if email fails
-    try {
-      await sendOrderConfirmationForOrder(order.id)
-    } catch (emailError) {
-      console.error("Failed to send order confirmation email:", emailError)
-      // Continue - order is still created even if email fails
+    // Send order confirmation email only for BANK_TRANSFER
+    // For PAYPAL, the webhook (PAYMENT.CAPTURE.COMPLETED) handles the confirmation
+    // to avoid sending a duplicate email to the customer.
+    if (paymentMethod.toUpperCase() === "BANK_TRANSFER") {
+      try {
+        await sendOrderConfirmationForOrder(order.id)
+      } catch (emailError) {
+        console.error("Failed to send order confirmation email:", emailError)
+        // Continue - order is still created even if email fails
+      }
     }
     
-    revalidatePath("/mein-konto/orders")
+    revalidatePath("/mein-konto")
     
     return NextResponse.json({
       ...order,
@@ -217,6 +295,13 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error creating order:", error)
+    if (error instanceof Error && error.message.startsWith("STOCK_INSUFFICIENT:")) {
+      const productName = error.message.replace("STOCK_INSUFFICIENT:", "")
+      return NextResponse.json(
+        { error: `Nicht genügend Lagerbestand für ${productName}` },
+        { status: 400 }
+      )
+    }
     return NextResponse.json(
       { error: "Failed to create order" },
       { status: 500 }

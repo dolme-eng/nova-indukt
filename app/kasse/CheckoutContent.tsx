@@ -1,14 +1,13 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { 
-  ChevronRight, Check, CreditCard, Truck, 
+  ChevronRight, Check, Truck, 
   AlertCircle, Lock, ArrowLeft, ChevronDown,
-  Package, Shield, MapPin, CheckCircle, Mail
+  Package, Shield, MapPin, Mail, ShieldCheck
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useAuth } from '@/lib/store/auth'
@@ -18,12 +17,20 @@ import { formatPriceDe } from '@/lib/utils/vat'
 // PayPal import
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 
-const SHIPPING_COST = 9.99
-const FREE_SHIPPING_THRESHOLD = 500
+import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD, calculateShipping } from '@/lib/constants/shop'
+
+// Type du code promo validé retourné par /api/coupons/validate
+interface AppliedPromo {
+  code: string
+  discountAmount: number
+  discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
+  discountValue: number
+  promotionId: string
+}
 
 export default function CheckoutContent() {
   const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
-  const router = useRouter()
+
   const { items, totalPrice, clearCart, isHydrated } = useCart()
   const { user, isAuthenticated } = useAuth()
   const mounted = useRef(false)
@@ -56,17 +63,61 @@ export default function CheckoutContent() {
   // Promo code state
   const [promoCode, setPromoCode] = useState('')
   const [isApplyingPromo, setIsApplyingPromo] = useState(false)
-  const [appliedPromo, setAppliedPromo] = useState<any>(null)
+  const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>(null)
   
   const [orderId, setOrderId] = useState<string | null>(null)
   const [orderNumber, setOrderNumber] = useState<string>('')
+  const subtotal = totalPrice
+  const shipping = calculateShipping(subtotal)
+  const discountAmount = appliedPromo ? appliedPromo.discountAmount : 0
+  const total = Math.max(0, subtotal + shipping - discountAmount)
 
   if (!isHydrated) return null
 
-  const subtotal = totalPrice
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST
-  const discountAmount = appliedPromo ? appliedPromo.discountAmount : 0
-  const total = Math.max(0, subtotal + shipping - discountAmount)
+  const createOrder = useCallback(async (currentPaymentMethod: string, overrideEmail?: string) => {
+    try {
+      const orderData = {
+        items: items.map(item => ({
+          id: item.product.id,
+          quantity: item.quantity,
+          price: item.product.price,
+          name: item.product.name.de,
+          slug: item.product.slug,
+        })),
+        shippingData: {
+          ...shippingData,
+          email: overrideEmail || shippingData.email,
+          country: normalizeCountry(shippingData.country),
+        },
+        paymentMethod: currentPaymentMethod.toUpperCase(),
+        subtotal,
+        shipping,
+        discountAmount,
+        appliedPromoCode: appliedPromo?.code ?? null,
+        total
+      }
+      
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Fehler beim Erstellen der Bestellung')
+      }
+      
+      const order = await response.json()
+      setOrderId(order.id)
+      setOrderNumber(order.orderNumber)
+      return order
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Fehler beim Erstellen der Bestellung'
+      toast.error(msg)
+      return null
+    }
+  }, [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total])
 
   const handleApplyPromo = async () => {
     if (!promoCode) return
@@ -100,44 +151,16 @@ export default function CheckoutContent() {
     toast.success('Gutscheincode entfernt')
   }
 
-  // Create order
-  const createOrder = useCallback(async (currentPaymentMethod: string) => {
-    try {
-      const orderData = {
-        items: items.map(item => ({
-          id: item.product.id,
-          quantity: item.quantity,
-          price: item.product.price,
-          name: item.product.name.de,
-          slug: item.product.slug,
-        })),
-        shippingData,
-        paymentMethod: currentPaymentMethod.toUpperCase(),
-        subtotal,
-        shipping,
-        total
-      }
-      
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      })
-      
-      if (!response.ok) {
-        throw new Error('Failed to create order')
-      }
-      
-      const data = await response.json()
-      setOrderId(data.id)
-      setOrderNumber(data.orderNumber)
-      
-      return data
-    } catch (error) {
-      console.error('Error creating order:', error)
-      throw error
+  // Normalise le nom de pays (texte long → code ISO 2 lettres)
+  const normalizeCountry = (country: string): string => {
+    const map: Record<string, string> = {
+      Deutschland: 'DE', Österreich: 'AT', Schweiz: 'CH',
+      Germany: 'DE', Austria: 'AT', Switzerland: 'CH',
     }
-  }, [items, shippingData, subtotal, shipping, total])
+    return map[country] ?? country.slice(0, 2).toUpperCase()
+  }
+
+
 
   if (items.length === 0 && !orderComplete) {
     return (
@@ -180,14 +203,12 @@ export default function CheckoutContent() {
   }
 
   // Handle PayPal success
-  const handlePayPalSuccess = async (details: any) => {
+  const handlePayPalSuccess = async (details: Record<string, unknown>) => {
     setIsProcessing(true)
     try {
-      // Create order first if not exists
       let currentOrderId = orderId
       if (!currentOrderId) {
-        const orderData = await createOrder('PAYPAL')
-        currentOrderId = orderData.id
+         throw new Error('No local order ID found. Order must be created before capturing.')
       }
 
       // Capture PayPal order
@@ -226,48 +247,22 @@ export default function CheckoutContent() {
     setIsProcessing(true)
 
     try {
-      const orderData = {
-        items: items.map(item => ({
-          id: item.product.id,
-          quantity: item.quantity,
-          price: item.product.price,
-          name: item.product.name.de,
-          slug: item.product.slug,
-        })),
-        shippingData: { ...shippingData, email: contactEmail },
-        paymentMethod: 'BANK_TRANSFER',
-        subtotal,
-        shipping,
-        total
+      const order = await createOrder('BANK_TRANSFER', contactEmail)
+      if (order) {
+        setOrderComplete(true)
+        clearCart()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }
-      
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      })
-      
-      if (!response.ok) {
-        throw new Error('Failed to create order')
-      }
-      
-      const data = await response.json()
-      setOrderNumber(data.orderNumber)
-      
-      setIsProcessing(false)
-      setOrderComplete(true)
-      clearCart()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (error) {
-      console.error('Checkout error:', error)
-      alert('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.')
+      console.error('Email payment error:', error)
+    } finally {
       setIsProcessing(false)
     }
   }
 
   const steps = [
     { id: 1, label: 'Versand', icon: Truck },
-    { id: 2, label: 'Zahlung', icon: CreditCard },
+    { id: 2, label: 'Zahlung', icon: ShieldCheck },
     { id: 3, label: 'Bestätigung', icon: Check }
   ]
 
@@ -312,7 +307,7 @@ export default function CheckoutContent() {
                 <div className="flex items-center justify-between text-gray-500">
                   <span>Zahlungsmethode</span>
                   <div className="flex items-center gap-2 font-medium">
-                    <CreditCard className="w-4 h-4"/>
+                    <ShieldCheck className="w-4 h-4"/>
                     {paymentMethod === 'paypal' ? 'PayPal' : 'E-Mail-Bestätigung'}
                   </div>
                 </div>
@@ -355,16 +350,16 @@ export default function CheckoutContent() {
       {/* Navbar */}
       <nav className="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30 shadow-[0_4px_20px_rgb(0,0,0,0.02)]">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
-          <div className="flex items-center justify-between py-4">
-            <Link href="/warenkorb" className="flex items-center gap-1.5 text-gray-500 hover:text-[#0C211E] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 group">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="hidden sm:block">Zurück zum Warenkorb</span>
+          <div className="flex items-center justify-between py-2.5">
+            <Link href="/warenkorb" className="flex items-center gap-1 text-gray-400 hover:text-[#0C211E] transition-colors bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100 group text-[10px] font-black uppercase tracking-tighter">
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:block">Warenkorb</span>
             </Link>
-            <div className="flex items-center gap-2 text-[#0C211E] font-black font-heading tracking-wider">
-               NOVA <span className="font-light text-gray-400">|</span> KASSE
+            <div className="flex items-center gap-2 text-[#0C211E] font-black font-heading tracking-widest text-xs uppercase">
+               NOVA <span className="font-light text-gray-300">|</span> KASSE
             </div>
-            <div className="flex items-center gap-2 text-xs font-bold text-gray-500">
-               <Lock className="w-4 h-4 text-[#4ECCA3]"/> <span className="hidden sm:block">SSL-Sicher</span>
+            <div className="flex items-center gap-1.5 text-[9px] font-black text-gray-400 uppercase tracking-widest">
+               <ShieldCheck className="w-3 h-3 text-nova-500"/> SSL
             </div>
           </div>
         </div>
@@ -373,8 +368,8 @@ export default function CheckoutContent() {
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
         
         {/* Progress */}
-        <div className="mb-10 lg:mb-14">
-          <div className="flex items-center justify-center max-w-3xl mx-auto">
+        <div className="mb-8 lg:mb-10">
+          <div className="flex items-center justify-center max-w-2xl mx-auto">
             {steps.map((s, index) => {
               const Icon = s.icon
               const isActive = step === s.id
@@ -383,18 +378,18 @@ export default function CheckoutContent() {
               return (
                 <div key={s.id} className="flex items-center flex-1 last:flex-none">
                   <div className="flex flex-col items-center relative z-10">
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 shadow-sm ${
-                      isActive ? 'bg-[#0C211E] text-white scale-110 shadow-xl shadow-[#0C211E]/20' : 
-                      isCompleted ? 'bg-[#4ECCA3] text-[#0C211E] shadow-lg shadow-[#4ECCA3]/20' : 'bg-white text-gray-400 border border-gray-100'
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold transition-all duration-300 ${
+                      isActive ? 'bg-[#0C211E] text-white scale-110 shadow-lg shadow-[#0C211E]/10' : 
+                      isCompleted ? 'bg-nova-500 text-[#0C211E]' : 'bg-white text-gray-300 border border-gray-100'
                     }`}>
-                      {isCompleted ? <Check className="w-5 h-5 sm:w-6 sm:h-6 stroke-[3]" /> : <Icon className="w-5 h-5 sm:w-6 sm:h-6" />}
+                      {isCompleted ? <Check className="w-4 h-4 stroke-[3]" /> : <Icon className="w-4 h-4" />}
                     </div>
-                    <span className={`text-xs sm:text-sm mt-3 font-bold transition-colors absolute top-full whitespace-nowrap pt-1 ${isActive ? 'text-[#0C211E]' : isCompleted ? 'text-gray-900' : 'text-gray-400'}`}>
+                    <span className={`text-[9px] sm:text-[10px] mt-2 font-black uppercase tracking-tighter transition-colors absolute top-full whitespace-nowrap pt-0.5 ${isActive ? 'text-[#0C211E]' : isCompleted ? 'text-gray-900' : 'text-gray-400'}`}>
                       {s.label}
                     </span>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className={`flex-1 h-1.5 mx-2 rounded-full transition-colors duration-500 ${isCompleted ? 'bg-[#4ECCA3]' : 'bg-gray-200'}`} />
+                    <div className={`flex-1 h-0.5 mx-2 rounded-full transition-colors duration-500 ${isCompleted ? 'bg-nova-500' : 'bg-gray-100'}`} />
                   )}
                 </div>
               )
@@ -413,13 +408,13 @@ export default function CheckoutContent() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-6 sm:p-10"
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-8"
                 >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-[#0C211E] rounded-xl flex items-center justify-center shadow-lg shadow-[#0C211E]/10">
-                      <MapPin className="w-6 h-6 text-[#4ECCA3]" />
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#0C211E] rounded-lg flex items-center justify-center shadow-lg shadow-[#0C211E]/10">
+                      <MapPin className="w-5 h-5 text-nova-400" />
                     </div>
-                    <h2 className="text-2xl font-bold text-[#0C211E] font-heading">Versandadresse</h2>
+                    <h2 className="text-xl font-black text-[#0C211E] font-heading uppercase tracking-tight">Versandadresse</h2>
                   </div>
                   
                   {/* Guest login prompt — optional, non-blocking */}
@@ -555,7 +550,7 @@ export default function CheckoutContent() {
                 >
                   <div className="flex items-center gap-4 mb-8">
                     <div className="w-12 h-12 bg-[#0C211E] rounded-xl flex items-center justify-center shadow-lg shadow-[#0C211E]/10">
-                      <CreditCard className="w-6 h-6 text-[#4ECCA3]" />
+                      <ShieldCheck className="w-6 h-6 text-[#4ECCA3]" />
                     </div>
                     <h2 className="text-2xl font-bold text-[#0C211E] font-heading">Zahlungsmethode</h2>
                   </div>
@@ -631,19 +626,41 @@ export default function CheckoutContent() {
                           <PayPalScriptProvider options={{ 
                             clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test',
                             currency: 'EUR',
-                            intent: 'capture'
+                            intent: 'capture',
+                            'disabled-funding': 'card,sepa,giropay,sofort,mybank,p24'
                           }}>
                             <PayPalButtons
                               style={{ layout: 'vertical', shape: 'rect', label: 'paypal' }}
                               disabled={isProcessing}
                               createOrder={async () => {
-                                const response = await fetch('/api/paypal/create-order', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({ amount: total })
-                                })
-                                const orderData = await response.json()
-                                return orderData.orderId
+                                try {
+                                  let currentOrderId = orderId
+                                  if (!currentOrderId) {
+                                    const dbOrder = await createOrder('PAYPAL')
+                                    if (!dbOrder?.id) {
+                                      throw new Error('Bestellung konnte nicht erstellt werden. Bitte versuchen Sie es erneut.')
+                                    }
+                                    currentOrderId = dbOrder.id
+                                  }
+                                  const response = await fetch('/api/paypal/create-order', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ amount: total, orderId: currentOrderId })
+                                  })
+                                  if (!response.ok) {
+                                    const errData = await response.json().catch(() => ({}))
+                                    throw new Error(errData.error || 'PayPal-Bestellung konnte nicht erstellt werden.')
+                                  }
+                                  const orderData = await response.json()
+                                  if (!orderData.orderId) {
+                                    throw new Error('Ungültige PayPal-Antwort. Bitte versuchen Sie es erneut.')
+                                  }
+                                  return orderData.orderId
+                                } catch (err) {
+                                  const msg = err instanceof Error ? err.message : 'Unbekannter Fehler bei der Bestellerstellung.'
+                                  toast.error(msg)
+                                  throw err // re-throw so PayPal SDK shows its own error state
+                                }
                               }}
                               onApprove={async (data) => {
                                 setIsProcessing(true)
@@ -651,7 +668,7 @@ export default function CheckoutContent() {
                               }}
                               onError={(err) => {
                                 console.error('PayPal error:', err)
-                                alert('PayPal-Fehler: ' + err)
+                                toast.error('PayPal-Fehler aufgetreten. Bitte versuchen Sie es erneut oder wählen Sie eine andere Zahlungsmethode.')
                                 setIsProcessing(false)
                               }}
                             />

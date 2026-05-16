@@ -10,9 +10,9 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1280px", // Reduced from 1400px for tighter feel
       },
     },
     extend: {
@@ -77,9 +77,20 @@ module.exports = {
         error: "#E17055",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "0.75rem",
+        md: "0.5rem",
+        sm: "0.25rem",
+      },
+      fontSize: {
+        '3xs': ['9px', '1.2'],
+        '2xs': ['10px', '1.2'],
+        'xs': ['11px', '1.3'],
+        'sm': ['12px', '1.4'],
+        'base': ['13px', '1.5'],
+        'lg': ['14px', '1.5'],
+        'xl': ['15px', '1.4'],
+        '2xl': ['16px', '1.3'],
+        '3xl': ['18px', '1.2'],
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

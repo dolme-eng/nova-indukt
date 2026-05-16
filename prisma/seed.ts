@@ -2,10 +2,18 @@
 // Migrates products from lib/data/products.ts to PostgreSQL database
 
 import { PrismaClient, Prisma } from '@prisma/client'
-import * as productData from '../lib/data/products'
+import { categoriesConfig } from '../lib/data/categories'
 
-const products = (productData as any).products || []
-const categories = (productData as any).categories || []
+// Les produits ne sont plus en données statiques — ils sont gérés via l'admin panel.
+// Le seed ne crée que les catégories de base.
+const products: any[] = []
+const categories = categoriesConfig.map(c => ({
+  id: c.slug,
+  name: { de: c.nameDe },
+  image: c.image,
+  description: c.descriptionDe,
+  sortOrder: c.sortOrder,
+}))
 
 const prisma = new PrismaClient()
 
@@ -30,7 +38,6 @@ async function main() {
       create: {
         slug: cat.id,
         nameDe: cat.name.de,
-        nameEn: cat.name.de, // Fallback to German
         image: cat.image,
         sortOrder: 0,
         isActive: true,
@@ -94,9 +101,7 @@ async function main() {
           supplierSku: product.supplierSku,
           ean: product.ean,
           nameDe: product.name.de,
-          nameEn: product.name.de,
           descriptionDe: product.description.de,
-          descriptionEn: product.description.de,
           shortDescription: product.shortDescription.de,
           price: new Prisma.Decimal(product.price),
           oldPrice: product.oldPrice ? new Prisma.Decimal(product.oldPrice) : null,

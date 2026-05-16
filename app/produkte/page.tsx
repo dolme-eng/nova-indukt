@@ -1,7 +1,7 @@
 import { ProductsContent } from './ProductsContent'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
-import { Product, Category } from '@/lib/data/products'
+import { Product, Category, mapDbProductToUi, mapDbCategoryToUi } from '@/lib/data/products'
 
 export const revalidate = 120
 
@@ -90,36 +90,9 @@ export default async function ProductsPage({
   ])
 
   // Transformer les données pour correspondre à l'interface attendue par ProductsContent
-  const formattedProducts: Product[] = products.map(p => ({
-    id: p.id,
-    slug: p.slug,
-    name: { de: p.nameDe },
-    category: p.categoryId,
-    price: Number(p.price),
-    oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
-    images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map(img => img.url),
-    rating: p.rating,
-    reviewCount: p.reviewCount,
-    stock: p.stock,
-    badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
-    description: { de: p.descriptionDe || '' },
-    shortDescription: { de: p.shortDescription || '' },
-    specs: {
-      material: p.material || '',
-      dimensions: p.dimensions || '',
-      weight: p.weightKg?.toString() || '',
-      dishwasher: p.dishwasherSafe || false,
-      induction: p.inductionSafe || false,
-    }
-  }))
+  const formattedProducts: Product[] = products.map(mapDbProductToUi)
 
-  const formattedCategories: Category[] = categories.map(c => ({
-    id: c.id,
-    slug: c.slug,
-    name: { de: c.nameDe },
-    image: c.image || '',
-    count: c._count.products
-  }))
+  const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
 
   return <ProductsContent 
     initialProducts={formattedProducts} 

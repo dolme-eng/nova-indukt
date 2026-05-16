@@ -17,6 +17,25 @@ export async function PATCH(req: Request) {
         where: { id },
         data: { isPublished }
       })
+
+      // Recalculate product reviewCount and rating after toggle
+      const publishedReviews = await prisma.review.findMany({
+        where: { productId: review.productId, isPublished: true },
+        select: { rating: true }
+      })
+
+      const avgRating = publishedReviews.length > 0
+        ? publishedReviews.reduce((sum, r) => sum + r.rating, 0) / publishedReviews.length
+        : 0
+
+      await prisma.product.update({
+        where: { id: review.productId },
+        data: {
+          reviewCount: publishedReviews.length,
+          rating: Math.round(avgRating * 10) / 10
+        }
+      })
+
       return NextResponse.json(review)
     }
 

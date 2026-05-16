@@ -12,7 +12,6 @@ const categories = [
   {
     slug: 'kochen-braten',
     nameDe: 'Kochen & Braten',
-    nameEn: 'Cooking & Frying',
     descriptionDe: 'Premium Töpfe, Pfannen, Bräter und Kochgeschirr für Induktion',
     image: '/images/Kategorien/kochen-braten.webp',
     sortOrder: 1,
@@ -20,7 +19,6 @@ const categories = [
   {
     slug: 'messer-vorbereitung',
     nameDe: 'Messer & Vorbereitung',
-    nameEn: 'Knives & Preparation',
     descriptionDe: 'Präzisionsmesser, Schneidebretter und Werkzeuge für die perfekte Zubereitung',
     image: '/images/Kategorien/vorbereitung.webp',
     sortOrder: 2,
@@ -28,7 +26,6 @@ const categories = [
   {
     slug: 'kuechenhelfer-zubehoer',
     nameDe: 'Küchenhelfer & Zubehör',
-    nameEn: 'Kitchen Helpers & Accessories',
     descriptionDe: 'Nützliche Helfer, Küchengeräte und praktisches Zubehör für die Küche',
     image: '/images/Kategorien/kuechenzubehoer.webp',
     sortOrder: 3,
@@ -84,7 +81,6 @@ async function main() {
             data: {
               slug: newCat.slug,
               nameDe: newCat.nameDe,
-              nameEn: newCat.nameEn,
               description: newCat.descriptionDe,
               image: newCat.image,
               sortOrder: newCat.sortOrder,
@@ -120,7 +116,6 @@ async function main() {
         data: {
           slug: cat.slug,
           nameDe: cat.nameDe,
-          nameEn: cat.nameEn,
           description: cat.descriptionDe,
           image: cat.image,
           sortOrder: cat.sortOrder,
@@ -134,7 +129,6 @@ async function main() {
         where: { slug: cat.slug },
         data: {
           nameDe: cat.nameDe,
-          nameEn: cat.nameEn,
           description: cat.descriptionDe,
           image: cat.image,
           sortOrder: cat.sortOrder,

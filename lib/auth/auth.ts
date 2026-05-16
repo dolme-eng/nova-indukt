@@ -2,9 +2,9 @@ import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import { prisma } from "@/lib/prisma"
 
-const { auth } = NextAuth(authConfig)
+const { handlers, auth } = NextAuth(authConfig)
 
-export { auth }
+export { handlers, auth }
 
 // Alias for backward compatibility in tests
 export { auth as getServerSession }

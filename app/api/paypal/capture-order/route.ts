@@ -1,32 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendPaymentConfirmationEmail } from "@/lib/email/send"
-
-const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID
-const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET
-const PAYPAL_API_URL = process.env.NODE_ENV === "production" 
-  ? "https://api-m.paypal.com" 
-  : "https://api-m.sandbox.paypal.com"
-
-async function getPayPalAccessToken(): Promise<string> {
-  const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString("base64")
-  
-  const response = await fetch(`${PAYPAL_API_URL}/v1/oauth2/token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Authorization": `Basic ${auth}`,
-    },
-    body: "grant_type=client_credentials",
-  })
-
-  if (!response.ok) {
-    throw new Error("Failed to get PayPal access token")
-  }
-
-  const data = await response.json()
-  return data.access_token
-}
+import type { ShippingAddress } from "@/types/order"
+import { getPayPalAccessToken, PAYPAL_API_URL } from "@/lib/paypal"
 
 export async function POST(request: NextRequest) {
   try {
@@ -65,6 +41,16 @@ export async function POST(request: NextRequest) {
     }
 
     const captureData = await response.json()
+    const customId = captureData.purchase_units?.[0]?.custom_id
+
+    // Security check: Verify that the PayPal order belongs to our local order
+    if (orderId && customId !== orderId) {
+      console.error(`Security Alert: custom_id mismatch. Expected ${orderId}, got ${customId}`)
+      return NextResponse.json(
+        { error: "Zahlungsverifizierung fehlgeschlagen (ID mismatch)" },
+        { status: 403 }
+      )
+    }
 
     // Check if payment was successful
     if (captureData.status === "COMPLETED") {
@@ -90,9 +76,25 @@ export async function POST(request: NextRequest) {
 
         console.log(`Order ${order.orderNumber} marked as PAID via PayPal`)
 
-        // Send confirmation email
+        // Send confirmation email — normalize Decimal fields to number
         try {
-          await sendPaymentConfirmationEmail(order)
+          await sendPaymentConfirmationEmail({
+            orderNumber: order.orderNumber,
+            customerName: order.customerName,
+            customerEmail: order.customerEmail || '',
+            shippingCost: Number(order.shippingCost || 0),
+            total: Number(order.total || 0),
+            items: order.items.map(item => ({
+              unitPrice: Number(item.unitPrice),
+              quantity: item.quantity,
+              productName: item.productName || item.product?.nameDe,
+              product: item.product ? {
+                nameDe: item.product.nameDe,
+                images: []
+              } : undefined
+            })),
+            shippingAddress: order.shippingAddress as unknown as ShippingAddress
+          })
           console.log(`PayPal payment confirmation email sent for order ${order.orderNumber}`)
         } catch (emailError) {
           console.error("Failed to send PayPal payment confirmation email:", emailError)

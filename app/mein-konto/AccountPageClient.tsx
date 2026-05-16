@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
-  Package, Heart, MapPin, CreditCard, Settings, User, LogOut, 
+  Package, Heart, MapPin, Settings, User, LogOut, 
   ChevronRight, ShoppingBag, Bell, Menu, X, Trash2, Plus,
   Home, ArrowLeft, Pencil, Loader2
 } from 'lucide-react'
@@ -22,7 +22,6 @@ const TABS = [
   { id: 'orders', label: 'Bestellungen', icon: Package },
   { id: 'wishlist', label: 'Wunschliste', icon: Heart },
   { id: 'addresses', label: 'Adressen', icon: MapPin },
-  { id: 'payment', label: 'Zahlungsmethoden', icon: CreditCard },
   { id: 'settings', label: 'Einstellungen', icon: Settings },
 ]
 
@@ -113,7 +112,6 @@ export default function AccountPageClient() {
       case 'orders': return <OrdersTab />
       case 'wishlist': return <WishlistTab items={wishlistItems} onRemove={removeItem} onAddToCart={handleAddToCart} />
       case 'addresses': return <AddressesTab />
-      case 'payment': return <PaymentTab />
       case 'settings': return <SettingsTab user={user} />
       default: return <OverviewTab user={user} wishlistCount={wishlistCount} ordersCount={ordersCount} addressesCount={addressesCount} setActiveTab={setActiveTab} />
     }
@@ -369,15 +367,18 @@ function OrdersTab() {
             </div>
             <div className="mt-3 sm:mt-4">
               <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                order.status === 'completed' ? 'bg-green-100 text-green-800' :
-                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                order.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
+                order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                order.status === 'SHIPPED' ? 'bg-indigo-100 text-indigo-800' :
                 'bg-gray-100 text-gray-800'
               }`}>
-                {order.status === 'pending' ? 'Ausstehend' :
-                 order.status === 'processing' ? 'In Bearbeitung' :
-                 order.status === 'completed' ? 'Abgeschlossen' :
-                 order.status === 'cancelled' ? 'Storniert' : order.status}
+                {order.status === 'PENDING' ? 'Ausstehend' :
+                 order.status === 'PROCESSING' ? 'In Bearbeitung' :
+                 order.status === 'SHIPPED' ? 'Versendet' :
+                 order.status === 'DELIVERED' ? 'Zugestellt' :
+                 order.status === 'CANCELLED' ? 'Storniert' :
+                 order.status === 'REFUNDED' ? 'Erstattet' : order.status}
               </span>
             </div>
           </div>
@@ -656,21 +657,7 @@ function AddressesTab() {
   )
 }
 
-function PaymentTab() {
-  return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
-      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <CreditCard className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
-      </div>
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Zahlungsmethoden</h2>
-      <p className="text-gray-600 mb-4 text-sm sm:text-base">Hinterlege Deine bevorzugten Zahlungsmethoden.</p>
-      <button className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base">
-        <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-        Zahlungsmethode hinzufügen
-      </button>
-    </div>
-  )
-}
+
 
 function SettingsTab({ user }: { user: any }) {
   return (

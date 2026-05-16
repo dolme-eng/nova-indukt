@@ -262,7 +262,7 @@ export function ContentAdminClient() {
               <option value="returns">Rückgabe</option>
               <option value="product">Produkte</option>
               <option value="warranty">Garantie</option>
-              <option value="support">Support</option>
+              <option value="support">Kundenservice</option>
             </select>
             <input
               value={newFaq.question}
@@ -300,7 +300,7 @@ export function ContentAdminClient() {
                     <option value="returns">Rückgabe</option>
                     <option value="product">Produkte</option>
                     <option value="warranty">Garantie</option>
-                    <option value="support">Support</option>
+                    <option value="support">Kundenservice</option>
                   </select>
                   <input
                     value={item.question}

@@ -1,87 +1,108 @@
-// Simple in-memory rate limiting for API routes
-// For production, consider using Redis (Upstash) for distributed rate limiting
+/**
+ * Rate limiting module — in-memory avec LRU eviction.
+ *
+ * ⚠️  LIMITATION PRODUCTION (Netlify / serverless) :
+ *     Chaque Function instance a sa propre mémoire isolée.
+ *     Ce store N'EST PAS partagé entre instances parallèles.
+ *     → Un attaquant peut contourner ce rate limit en distribuant
+ *       ses requêtes sur plusieurs instances.
+ *
+ * 🔧  MIGRATION RECOMMANDÉE vers Upstash Redis :
+ *     1. npm install @upstash/ratelimit @upstash/redis
+ *     2. Ajouter UPSTASH_REDIS_REST_URL et UPSTASH_REDIS_REST_TOKEN dans .env
+ *     3. Remplacer ce module par :
+ *
+ *     import { Ratelimit } from "@upstash/ratelimit"
+ *     import { Redis } from "@upstash/redis"
+ *     const ratelimit = new Ratelimit({
+ *       redis: Redis.fromEnv(),
+ *       limiter: Ratelimit.slidingWindow(10, "60 s"),
+ *     })
+ *     const { success } = await ratelimit.limit(identifier)
+ *
+ *  En attendant, ce module est suffisant pour ralentir les abus
+ *  sur une instance unique (dev, preview déployé seul).
+ */
 
-type RateLimitStore = {
-  [key: string]: {
-    count: number
-    resetTime: number
+interface Entry {
+  count: number
+  resetTime: number
+}
+
+// Capacité max du store avant eviction des entrées les plus anciennes
+const MAX_ENTRIES = 10_000
+const store = new Map<string, Entry>()
+
+function evictExpired(): void {
+  const now = Date.now()
+  for (const [key, entry] of store) {
+    if (entry.resetTime < now) store.delete(key)
+    // Arrêt anticipé : on ne nettoie pas tout si c'est déjà OK
+    if (store.size < MAX_ENTRIES * 0.8) break
   }
 }
 
-const store: RateLimitStore = {}
-
 interface RateLimitOptions {
-  windowMs: number // Time window in milliseconds
-  maxRequests: number // Maximum requests per window
+  /** Fenêtre de temps en millisecondes (défaut : 60 000 = 1 min) */
+  windowMs?: number
+  /** Nombre maximum de requêtes par fenêtre (défaut : 10) */
+  maxRequests?: number
 }
 
-const defaultOptions: RateLimitOptions = {
-  windowMs: 60 * 1000, // 1 minute
-  maxRequests: 10, // 10 requests per minute
+export interface RateLimitResult {
+  success: boolean
+  limit: number
+  remaining: number
+  resetTime: number
 }
 
 export function rateLimit(
   identifier: string,
-  options: Partial<RateLimitOptions> = {}
-): { success: boolean; limit: number; remaining: number; resetTime: number } {
-  const config = { ...defaultOptions, ...options }
+  options: RateLimitOptions = {}
+): RateLimitResult {
+  const windowMs = options.windowMs ?? 60_000
+  const maxRequests = options.maxRequests ?? 10
   const now = Date.now()
-  
-  // Clean up old entries
-  for (const key in store) {
-    if (store[key].resetTime < now) {
-      delete store[key]
-    }
+
+  // Nettoyage périodique si le store grossit trop
+  if (store.size >= MAX_ENTRIES) evictExpired()
+
+  const existing = store.get(identifier)
+
+  if (!existing || existing.resetTime < now) {
+    // Nouvelle fenêtre
+    store.set(identifier, { count: 1, resetTime: now + windowMs })
+    return { success: true, limit: maxRequests, remaining: maxRequests - 1, resetTime: now + windowMs }
   }
-  
-  // Get or create entry
-  if (!store[identifier] || store[identifier].resetTime < now) {
-    store[identifier] = {
-      count: 0,
-      resetTime: now + config.windowMs,
-    }
-  }
-  
-  const entry = store[identifier]
-  
-  // Check if limit exceeded
-  if (entry.count >= config.maxRequests) {
+
+  if (existing.count >= maxRequests) {
     return {
       success: false,
-      limit: config.maxRequests,
+      limit: maxRequests,
       remaining: 0,
-      resetTime: entry.resetTime,
+      resetTime: existing.resetTime,
     }
   }
-  
-  // Increment counter
-  entry.count++
-  
+
+  existing.count++
   return {
     success: true,
-    limit: config.maxRequests,
-    remaining: config.maxRequests - entry.count,
-    resetTime: entry.resetTime,
+    limit: maxRequests,
+    remaining: maxRequests - existing.count,
+    resetTime: existing.resetTime,
   }
 }
 
-// Get IP address from request
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+/** Extrait l'adresse IP réelle depuis les headers de la requête */
 export function getIP(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for')
-  const realIP = request.headers.get('x-real-ip')
-  
-  if (forwarded) {
-    return forwarded.split(',')[0].trim()
-  }
-  
-  if (realIP) {
-    return realIP
-  }
-  
-  return 'unknown'
+  if (forwarded) return forwarded.split(',')[0].trim()
+  return request.headers.get('x-real-ip') ?? 'unknown'
 }
 
-// Create a rate limit key from IP and route
+/** Construit la clé de rate-limit : "<ip>:<route>" */
 export function createRateLimitKey(ip: string, route: string): string {
   return `${ip}:${route}`
 }

@@ -5,12 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPrice(price: number, currency = 'EUR', locale = 'de-DE'): string {
+export function formatPriceDe(price: number, currency = 'EUR', locale = 'de-DE'): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency,
   }).format(price)
 }
+
+export const formatPrice = formatPriceDe
 
 export function formatDate(date: string, locale = 'de-DE'): string {
   return new Intl.DateTimeFormat(locale, {

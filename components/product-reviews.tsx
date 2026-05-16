@@ -54,6 +54,8 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedRating, setSelectedRating] = useState(0)
+  const [hoverRating, setHoverRating] = useState(0)
 
   const fetchReviews = useCallback(async (pageNum = 1, reset = false) => {
     try {
@@ -271,9 +273,19 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                   <label className="block text-sm font-medium text-gray-700 mb-2">Bewertung</label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <label key={star} className="cursor-pointer">
-                        <input type="radio" name="rating" value={star} required className="sr-only" />
-                        <Star className="w-8 h-8 text-gray-300 hover:text-amber-400 peer-checked:text-amber-400 peer-checked:fill-amber-400" />
+                      <label
+                        key={star}
+                        className="cursor-pointer"
+                        onMouseEnter={() => setHoverRating(star)}
+                        onMouseLeave={() => setHoverRating(0)}
+                        onClick={() => setSelectedRating(star)}
+                      >
+                        <input type="radio" name="rating" value={star} required className="sr-only" checked={selectedRating === star} onChange={() => setSelectedRating(star)} />
+                        <Star className={`w-8 h-8 transition-colors ${
+                          star <= (hoverRating || selectedRating)
+                            ? 'text-amber-400 fill-amber-400'
+                            : 'text-gray-300 hover:text-amber-300'
+                        }`} />
                       </label>
                     ))}
                   </div>
@@ -404,7 +416,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                 </div>
 
                 {/* Review Content */}
-                <div className="ml-13">
+                <div className="ml-[3.25rem]">
                   <h4 className="font-semibold text-gray-900 mb-2">{review.title}</h4>
                   <p className={`text-gray-600 ${expandedReview === review.id ? '' : 'line-clamp-3'}`}>
                     {review.content}

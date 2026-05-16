@@ -1,5 +1,6 @@
 import React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { 
   ArrowLeft, 
   Mail, 
@@ -7,7 +8,7 @@ import {
   MapPin, 
   Calendar, 
   ShoppingBag, 
-  CreditCard, 
+  Banknote, 
   Clock, 
   ChevronRight,
   TrendingUp,
@@ -18,7 +19,7 @@ import {
 import { prisma } from "@/lib/prisma"
 export const dynamic = 'force-dynamic'
 import { format } from "date-fns"
-import { fr } from "date-fns/locale"
+import { de } from "date-fns/locale"
 import { notFound } from "next/navigation"
 
 async function getCustomer(id: string) {
@@ -60,22 +61,22 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
           <div className="flex items-center gap-4">
             <div className="h-14 w-14 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-bold border-2 border-white shadow-sm ring-1 ring-slate-200">
               {customer.image ? (
-                <img src={customer.image} alt={customer.name || ""} className="w-full h-full rounded-full object-cover" />
+                <Image src={customer.image} alt={customer.name || ""} width={56} height={56} className="w-full h-full rounded-full object-cover" />
               ) : (
                 (customer.name?.charAt(0) || customer.email.charAt(0)).toUpperCase()
               )}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold text-slate-900">{customer.name || "Utilisateur"}</h1>
+                <h1 className="text-2xl font-bold text-slate-900">{customer.name || "Benutzer"}</h1>
                 {customer.role === "ADMIN" ? (
                   <span className="px-2.5 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-bold rounded-full border border-purple-200 uppercase tracking-widest">Admin</span>
                 ) : (
-                  <span className="px-2.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full border border-blue-200 uppercase tracking-widest">Client</span>
+                  <span className="px-2.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full border border-blue-200 uppercase tracking-widest">Kunde</span>
                 )}
               </div>
               <p className="text-slate-500 text-sm flex items-center gap-1 mt-1 font-medium">
-                Membre depuis le {format(new Date(customer.createdAt), "dd MMMM yyyy", { locale: fr })}
+                Mitglied seit dem {format(new Date(customer.createdAt), "dd. MMMM yyyy", { locale: de })}
               </p>
             </div>
           </div>
@@ -83,11 +84,11 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
         <div className="flex gap-3">
           <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-50 transition-colors shadow-sm">
             <Mail size={18} />
-            Contacter
+            Kontaktieren
           </button>
           <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-sm">
             <Settings size={18} />
-            Gérer le compte
+            Konto verwalten
           </button>
         </div>
       </div>
@@ -95,25 +96,25 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <StatItem 
-          label="Total Dépensé" 
+          label="Gesamtumsatz" 
           value={`${totalSpent.toFixed(2)} €`} 
-          icon={<CreditCard className="text-emerald-600" size={20} />} 
+          icon={<Banknote className="text-emerald-600" size={20} />} 
           color="bg-emerald-50 border-emerald-100"
         />
         <StatItem 
-          label="Commandes" 
+          label="Bestellungen" 
           value={customer._count.orders.toString()} 
           icon={<ShoppingBag className="text-blue-600" size={20} />} 
           color="bg-blue-50 border-blue-100"
         />
         <StatItem 
-          label="Panier Moyen" 
+          label="Ø Bestellwert" 
           value={`${averageOrderValue.toFixed(2)} €`} 
           icon={<TrendingUp className="text-orange-600" size={20} />} 
           color="bg-orange-50 border-orange-100"
         />
         <StatItem 
-          label="Avis publiés" 
+          label="Bewertungen" 
           value={customer._count.reviews.toString()} 
           icon={<CheckCircle2 className="text-purple-600" size={20} />} 
           color="bg-purple-50 border-purple-100"
@@ -127,7 +128,7 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
                 <Clock size={16} />
-                Historique des Commandes
+                Bestellhistorie
               </h2>
             </div>
             <div className="divide-y divide-slate-100">
@@ -142,14 +143,14 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
                         <p className="font-bold text-slate-900">{order.orderNumber}</p>
                         <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-1 font-medium">
                           <Calendar size={12} />
-                          {format(new Date(order.createdAt), "dd MMM yyyy", { locale: fr })}
+                          {format(new Date(order.createdAt), "dd. MMM yyyy", { locale: de })}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-6">
                       <div className="text-right">
                         <p className="font-bold text-slate-900">{Number(order.total).toFixed(2)} €</p>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{order.items.length} article(s)</p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{order.items.length} Artikel</p>
                       </div>
                       <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border uppercase tracking-widest ${
                         order.status === 'DELIVERED' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-blue-50 text-blue-700 border-blue-100'
@@ -165,7 +166,7 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
               ))}
               {customer.orders.length === 0 && (
                 <div className="p-12 text-center text-slate-500 italic">
-                  Aucune commande pour ce client.
+                  Keine Bestellungen für diesen Kunden.
                 </div>
               )}
             </div>
@@ -177,7 +178,7 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
               <Mail size={16} />
-              Contact
+              Kontakt
             </h2>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
@@ -186,7 +187,7 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
               </div>
               <div className="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
                 <Phone size={18} className="text-slate-400" />
-                <span className="font-medium">Non renseigné</span>
+                <span className="font-medium">Nicht angegeben</span>
               </div>
             </div>
           </div>
@@ -194,14 +195,14 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
               <MapPin size={16} />
-              Adresses ({customer.addresses.length})
+              Adressen ({customer.addresses.length})
             </h2>
             <div className="space-y-6">
               {customer.addresses.map((address) => (
                 <div key={address.id} className="space-y-2 relative pb-4 last:pb-0 last:border-0 border-b border-slate-100">
                   {address.isDefault && (
                     <span className="absolute top-0 right-0 text-[8px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase tracking-widest border border-primary/20">
-                      Par défaut
+                      Standard
                     </span>
                   )}
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">{address.type}</span>
@@ -214,7 +215,7 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
                 </div>
               ))}
               {customer.addresses.length === 0 && (
-                <p className="text-sm text-slate-400 italic text-center py-4">Aucune adresse enregistrée.</p>
+                <p className="text-sm text-slate-400 italic text-center py-4">Keine Adressen gespeichert.</p>
               )}
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { resend, FROM_EMAIL, FROM_NAME } from './resend'
+import { getResend, FROM_EMAIL, FROM_NAME } from './resend'
 import { render } from '@react-email/render'
 import ShippingNotificationEmail from './templates/shipping-notification'
 import ReviewRequestEmail from './templates/review-request'
@@ -28,14 +28,16 @@ export async function sendShippingNotification(orderId: string, trackingInfo?: {
       },
     })
 
-    if (!order || !order.user?.email) {
-      throw new Error('Order or user email not found')
+    // M14 FIX: Support guest orders
+    const recipientEmail = order?.user?.email || order?.customerEmail
+    if (!order || !recipientEmail) {
+      throw new Error('Order or recipient email not found')
     }
 
     const html = await render(
       ShippingNotificationEmail({
         orderNumber: order.orderNumber,
-        customerName: order.user.name || 'Kunde',
+        customerName: order.user?.name || order.customerName || 'Kunde',
         trackingNumber: trackingInfo?.trackingNumber || '',
         carrier: trackingInfo?.carrier || 'DHL',
         trackingUrl: trackingInfo?.trackingUrl || '#',
@@ -49,29 +51,25 @@ export async function sendShippingNotification(orderId: string, trackingInfo?: {
       })
     )
 
-    const result = await resend.emails.send({
+    const result = await getResend()?.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
-      to: order.user.email,
+      to: recipientEmail,
       subject: `Ihre Bestellung wurde versandt! - ${order.orderNumber}`,
       html,
-    })
+    }) ?? { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
 
     if (result.error) {
       console.error('Failed to send shipping notification:', result.error)
       return { success: false, error: result.error }
     }
 
-    // Update order to mark shipping email sent
-    /* 
+    // M18 FIX: Mark shipping email as sent
     await prisma.order.update({
       where: { id: orderId },
       data: {
-        metadata: {
-          shippingEmailSentAt: new Date().toISOString(),
-        },
+        shippingEmailSentAt: new Date(),
       },
     })
-    */
 
     return { success: true, id: result.data?.id }
   } catch (error) {
@@ -100,15 +98,8 @@ export async function sendReviewRequests() {
           gte: sevenDaysAgo,
           lt: oneDayAgo,
         },
-        // Check if review email not already sent (via metadata)
-        /* 
-        NOT: {
-          metadata: {
-            path: ['reviewEmailSentAt'],
-            not: null,
-          },
-        },
-        */
+        // M18 FIX: Filter out orders that already received review email
+        reviewEmailSentAt: null,
         user: {
           isNot: null,
         },
@@ -140,7 +131,7 @@ export async function sendReviewRequests() {
           ReviewRequestEmail({
             orderNumber: typedOrder.orderNumber,
             customerName: typedOrder.user.name || 'Kunde',
-            items: typedOrder.items.map((item: any) => ({
+            items: typedOrder.items.map((item: { productId: string; productName?: string; product?: { nameDe?: string; slug?: string; images?: { url: string }[] } }) => ({
               productId: item.productId,
               name: item.product?.nameDe || item.productName || 'Produkt',
               image: item.product?.images?.[0]?.url,
@@ -149,29 +140,25 @@ export async function sendReviewRequests() {
           })
         )
 
-        const result = await resend.emails.send({
+        const result = await getResend()?.emails.send({
           from: `${FROM_NAME} <${FROM_EMAIL}>`,
           to: typedOrder.user.email,
           subject: `Wie gefällt Ihnen Ihre Bestellung ${typedOrder.orderNumber}?`,
           html,
-        })
+        }) ?? { data: null, error: null }
 
         if (result.error) {
           results.push({ orderId: typedOrder.id, success: false, error: result.error })
           continue
         }
 
-        // Mark as sent - skip metadata for now
-        /* 
+        // M18 FIX: Mark review email as sent
         await prisma.order.update({
           where: { id: typedOrder.id },
           data: {
-            metadata: {
-              reviewEmailSentAt: new Date().toISOString(),
-            },
+            reviewEmailSentAt: new Date(),
           },
         })
-        */
 
         results.push({ orderId: typedOrder.id, success: true, id: result.data?.id })
       } catch (error) {
@@ -256,12 +243,12 @@ export async function checkStockAndAlert() {
       })
     )
 
-    const result = await resend.emails.send({
+    const result = await getResend()?.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: ADMIN_EMAIL,
       subject: `⚠️ Lagerbestands-Warnung - ${new Date().toLocaleDateString('de-DE')}`,
       html,
-    })
+    }) ?? { data: null, error: null }
 
     if (result.error) {
       return { success: false, error: result.error }
@@ -326,12 +313,12 @@ export async function sendWelcomeEmail(subscriberEmail: string, firstName?: stri
       })
     )
 
-    const result = await resend.emails.send({
+    const result = await getResend()?.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: subscriberEmail,
       subject: 'Willkommen bei NOVA INDUKT! Ihr 10% Rabatt wartet auf Sie',
       html,
-    })
+    }) ?? { data: null, error: null }
 
     if (result.error) {
       console.error('Failed to send welcome email:', result.error)

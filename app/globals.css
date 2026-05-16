@@ -26,10 +26,17 @@
     --input: 200 9% 75%;
     --ring: 161 51% 55%;
     --radius: 0.5rem;
+    --container-padding: 1rem;
   }
 
   * {
     @apply border-border;
+  }
+
+  html {
+    font-size: 12px;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
   }
 
   /* Barrierefreiheit: WCAG 2.1 AA - Fokus sichtbar */
@@ -38,8 +45,10 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    line-height: 1.6;
+    @apply bg-[#fdfdfd] text-gray-900 antialiased;
+    font-feature-settings: "cv02", "cv05", "cv11";
+    line-height: 1.35;
+    letter-spacing: -0.01em;
   }
 
   /* Lesbarkeit: Optimale Lesebreite (66-75 Zeichen) — nur für Fließtext, nicht Layout-Wrapper */
@@ -103,5 +112,15 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .container-tight {
+    @apply mx-auto px-[var(--container-padding)] max-w-7xl;
   }
 }

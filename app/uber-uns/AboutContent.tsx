@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
+
 export default function AboutContent() {
   const values = [
     {
@@ -63,28 +64,25 @@ export default function AboutContent() {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#17423C]/40 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
         
         <div className="container mx-auto px-4 relative z-10 max-w-7xl">
-          <div className="max-w-4xl">
+          <div className="max-w-2xl">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[#4ECCA3] text-sm font-bold tracking-widest uppercase mb-8"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-nova-400 text-[10px] font-black tracking-widest uppercase mb-6"
             >
-              <Zap className="w-4 h-4" /> Vision & Mission
+              <Zap className="w-3.5 h-3.5" /> Vision & Mission
             </motion.div>
             <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 font-heading leading-tight tracking-tight text-balance"
+              className="text-xl md:text-2xl font-black mb-4 font-heading leading-tight tracking-tight uppercase"
             >
               Über NOVA INDUKT
             </motion.h1>
             <motion.p 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl md:text-2xl text-gray-400 leading-relaxed font-medium max-w-3xl text-balance"
+              className="text-xs sm:text-sm text-gray-400 leading-relaxed font-medium max-w-lg"
             >
               Wir kombinieren deutsche Ingenieurskunst mit modernem Design, um die Zukunft des Kochens zu gestalten. Effizient, sicher und kompromisslos in der Qualität.
             </motion.p>
@@ -94,19 +92,19 @@ export default function AboutContent() {
 
       {/* Raised Stats Section */}
       <section className="relative z-20 -mt-16 sm:-mt-20">
-        <div className="container mx-auto px-4 max-w-6xl">
+        <div className="container mx-auto px-4 max-w-5xl">
           <motion.div 
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-white rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-gray-100 p-8 sm:p-12 overflow-hidden relative"
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 overflow-hidden relative"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-[#4ECCA3]" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 relative z-10">
+            <div className="absolute top-0 left-0 w-full h-0.5 bg-nova-500" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 relative z-10">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center group">
-                  <div className="text-4xl md:text-5xl font-black text-[#0C211E] mb-3 group-hover:text-[#4ECCA3] transition-colors font-heading tracking-tight">{stat.value}</div>
-                  <p className="text-gray-500 text-sm md:text-base font-bold uppercase tracking-wider">{stat.label}</p>
+                  <div className="text-2xl md:text-3xl font-black text-[#0C211E] mb-1 group-hover:text-nova-600 transition-colors font-heading tracking-tighter tabular-nums">{stat.value}</div>
+                  <p className="text-gray-400 text-[9px] font-black uppercase tracking-widest">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -115,17 +113,17 @@ export default function AboutContent() {
       </section>
 
       {/* Story */}
-      <section className="py-24 lg:py-32">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <section className="py-12 lg:py-20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div 
-              initial={{ opacity: 0, x: -40 }}
+              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="space-y-8"
+              className="space-y-6"
             >
-              <h2 className="text-4xl lg:text-5xl font-bold text-[#0C211E] font-heading leading-tight">Unsere Geschichte</h2>
-              <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-medium">
+              <h2 className="text-lg lg:text-xl font-black text-[#0C211E] font-heading uppercase tracking-tight">Unsere Geschichte</h2>
+              <div className="space-y-4 text-xs sm:text-sm text-gray-500 leading-relaxed font-medium">
                 <p>Gegründet aus der Leidenschaft für exzellentes Kochen und dem Anspruch auf höchste Effizienz, begann unsere Reise in einer kleinen Manufaktur in Berlin. Wir sahen, dass herkömmliche Kochfelder oft Energie verschwenden und nicht die Präzision bieten, die moderne Küchen erfordern.</p>
                 <p>Heute ist NOVA INDUKT ein Synonym für Premium-Induktionszubehör. Wir entwickeln Produkte, die nicht nur hervorragend funktionieren, sondern auch ein Statement für Nachhaltigkeit und Design setzen.</p>
                 <p>Unser Fokus liegt auf Langlebigkeit und Performance. Jedes unserer Produkte durchläuft strenge Qualitätskontrollen, bevor es unsere Manufaktur verlässt. Denn wir glauben daran, dass gute Werkzeuge das Fundament für großartige Ergebnisse sind.</p>
@@ -291,8 +289,18 @@ export default function AboutContent() {
                 <h3 className="text-2xl font-bold text-[#4ECCA3] mb-6 relative z-10">NOVA INDUKT Zentrale</h3>
                 <div className="space-y-4 text-gray-300 font-medium text-lg relative z-10">
                   <p className="text-white font-bold text-xl">NOVA INDUKT GmbH</p>
-                  <p>Musterstraße 42<br/>10115 Berlin<br/>Deutschland</p>
-                  <p className="pt-4 flex items-center gap-3"><span className="w-10 text-gray-500 text-sm uppercase">Tel</span> +49 (0) 30 123 456 789</p>
+                  <p>Industriestraße 123<br/>12345 Berlin<br/>Deutschland</p>
+                  <div className="pt-4 flex items-center gap-3">
+                    <span className="w-10 text-gray-500 text-sm uppercase">Service</span>
+                    <a 
+                      href="https://wa.me/493012345678?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt." 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-white hover:text-nova transition-colors font-bold"
+                    >
+                      WhatsApp-Kundenservice
+                    </a>
+                  </div>
                   <p className="flex items-center gap-3"><span className="w-10 text-gray-500 text-sm uppercase">Mail</span> info@nova-indukt.de</p>
                 </div>
                 <div className="mt-10 pt-10 border-t border-white/10 relative z-10">

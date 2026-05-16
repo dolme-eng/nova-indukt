@@ -1,63 +1,55 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { hashPassword } from "@/lib/auth/auth.config"
+import { registerSchema } from "@/lib/validations/auth"
 
-// WebCrypto API based hash function (Edge Runtime compatible)
-async function sha256(message: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(message)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-}
-
-// Generate random salt
-function generateSalt(): string {
-  const array = new Uint8Array(16)
-  crypto.getRandomValues(array)
-  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('')
-}
-
-// Hash password using SHA-256 with salt
-async function hashPassword(password: string): Promise<string> {
-  const salt = generateSalt()
-  const hash = await sha256(password + salt)
-  return `${salt}:${hash}`
-}
-
+/**
+ * API Route de registration.
+ * Le store Zustand (lib/store/auth.ts) appelle cette route via fetch().
+ * La logique est dupliquée depuis la Server Action pour éviter les problèmes
+ * d'appel de Server Actions depuis une API Route.
+ * Validation Zod + bcrypt identiques.
+ */
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password } = await request.json()
-    
-    // Validation
-    if (!email || !password || !name) {
+    const body = await request.json()
+
+    // Validation Zod stricte — identique à app/actions/auth.ts
+    const parsed = registerSchema.safeParse(body)
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]
+      const translations: Record<string, string> = {
+        "Name must be at least 2 characters": "Name muss mindestens 2 Zeichen haben",
+        "Invalid email address": "Ungültige E-Mail-Adresse",
+        "Password must be at least 8 characters": "Passwort muss mindestens 8 Zeichen lang sein",
+        "Password must contain at least one uppercase letter": "Passwort muss mindestens einen Großbuchstaben enthalten",
+        "Password must contain at least one lowercase letter": "Passwort muss mindestens einen Kleinbuchstaben enthalten",
+        "Password must contain at least one number": "Passwort muss mindestens eine Ziffer enthalten",
+      }
+      const message = translations[firstError.message] ?? firstError.message
       return NextResponse.json(
-        { success: false, error: "Alle Felder sind erforderlich" },
+        { success: false, error: message },
         { status: 400 }
       )
     }
-    
-    if (password.length < 6) {
-      return NextResponse.json(
-        { success: false, error: "Passwort muss mindestens 6 Zeichen lang sein" },
-        { status: 400 }
-      )
-    }
-    
+
+    const { name, email, password } = parsed.data
+
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { email: email.toLowerCase() }
     })
-    
+
     if (existingUser) {
       return NextResponse.json(
         { success: false, error: "Ein Benutzer mit dieser E-Mail existiert bereits" },
         { status: 409 }
       )
     }
-    
-    // Hash password
+
+    // Hash password avec bcrypt (via hashPassword partagé)
     const hashedPassword = await hashPassword(password)
-    
+
     // Create user
     const user = await prisma.user.create({
       data: {
@@ -67,7 +59,7 @@ export async function POST(request: NextRequest) {
         role: "USER"
       }
     })
-    
+
     return NextResponse.json({
       success: true,
       user: {
@@ -77,7 +69,7 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error("Registration error:", error)
+    console.error("Registration API error:", error)
     return NextResponse.json(
       { success: false, error: "Registrierung fehlgeschlagen" },
       { status: 500 }

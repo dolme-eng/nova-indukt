@@ -1,81 +1,72 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-
-const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID
-const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET
-const PAYPAL_API_URL = process.env.NODE_ENV === "production" 
-  ? "https://api-m.paypal.com" 
-  : "https://api-m.sandbox.paypal.com"
-
-async function getPayPalAccessToken(): Promise<string> {
-  const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString("base64")
-  
-  const response = await fetch(`${PAYPAL_API_URL}/v1/oauth2/token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Authorization": `Basic ${auth}`,
-    },
-    body: "grant_type=client_credentials",
-  })
-
-  if (!response.ok) {
-    throw new Error("Failed to get PayPal access token")
-  }
-
-  const data = await response.json()
-  return data.access_token
-}
+import { getPayPalAccessToken, PAYPAL_API_URL } from "@/lib/paypal"
 
 export async function POST(request: NextRequest) {
   try {
     await auth()
     const body = await request.json()
     
-    const { amount, orderId } = body
+    const { orderId } = body
     
-    if (!amount || amount <= 0) {
+    // C7 FIX: orderId is required — we read the amount from DB, never trust the client
+    if (!orderId) {
       return NextResponse.json(
-        { error: "Invalid amount" },
+        { error: "Order ID is required" },
         { status: 400 }
       )
     }
 
-    // Verify order exists
-    if (orderId) {
-      const order = await prisma.order.findUnique({
-        where: { id: orderId },
-      })
-      
-      if (!order) {
-        return NextResponse.json(
-          { error: "Order not found" },
-          { status: 404 }
-        )
-      }
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: { items: true }
+    })
+    
+    if (!order) {
+      return NextResponse.json(
+        { error: "Order not found" },
+        { status: 404 }
+      )
     }
+
+    const subtotal = Number(order.subtotal)
+    const shipping = Number(order.shippingCost)
+    const total = Number(order.total)
 
     const accessToken = await getPayPalAccessToken()
 
-    // Create PayPal order
+    // Create PayPal order with detailed breakdown from DB
     const paypalOrder = {
       intent: "CAPTURE",
       purchase_units: [
         {
           amount: {
             currency_code: "EUR",
-            value: amount.toFixed(2),
+            value: total.toFixed(2),
             breakdown: {
               item_total: {
                 currency_code: "EUR",
-                value: amount.toFixed(2),
+                value: subtotal.toFixed(2),
               },
+              shipping: {
+                currency_code: "EUR",
+                value: shipping.toFixed(2),
+              }
             },
           },
-          description: `NOVA INDUKT Bestellung`,
-          custom_id: orderId || "",
-          invoice_id: orderId ? `INV-${orderId}` : undefined,
+          items: order.items.map(item => ({
+            name: item.productName,
+            unit_amount: {
+              currency_code: "EUR",
+              value: Number(item.unitPrice).toFixed(2),
+            },
+            quantity: item.quantity.toString(),
+            category: "PHYSICAL_GOODS",
+          })),
+          description: `NOVA INDUKT Bestellung ${order.orderNumber}`,
+          custom_id: orderId,
+          invoice_id: order.orderNumber, // Use human-readable order number
         },
       ],
       application_context: {

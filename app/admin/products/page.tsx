@@ -2,12 +2,9 @@ import React from "react"
 import Link from "next/link"
 import { 
   Plus, 
-  Search, 
-  Filter, 
   Edit, 
   Trash2, 
   Eye, 
-  ArrowUpDown,
   Image as ImageIcon,
   CheckCircle2,
   XCircle
@@ -16,8 +13,25 @@ import { prisma } from "@/lib/prisma"
 export const dynamic = 'force-dynamic'
 import Image from "next/image"
 
-async function getProducts() {
+import { ProductsFilter } from "./_components/products-filter"
+
+async function getProducts(search?: string, category?: string) {
+  const where: any = {}
+  
+  if (category) {
+    where.categoryId = category
+  }
+  
+  if (search) {
+    where.OR = [
+      { nameDe: { contains: search, mode: 'insensitive' } },
+      { supplierSku: { contains: search, mode: 'insensitive' } },
+      { ean: { contains: search, mode: 'insensitive' } }
+    ]
+  }
+
   return await prisma.product.findMany({
+    where,
     include: {
       category: true,
       images: {
@@ -29,8 +43,22 @@ async function getProducts() {
   })
 }
 
-export default async function AdminProductsPage() {
-  const products = await getProducts()
+async function getCategories() {
+  return await prisma.category.findMany({
+    orderBy: { nameDe: 'asc' }
+  })
+}
+
+export default async function AdminProductsPage({
+  searchParams
+}: {
+  searchParams: Promise<{ q?: string, category?: string }>
+}) {
+  const resolvedParams = await searchParams
+  const [products, categories] = await Promise.all([
+    getProducts(resolvedParams.q, resolvedParams.category),
+    getCategories()
+  ])
 
   return (
     <div className="space-y-6">
@@ -50,26 +78,7 @@ export default async function AdminProductsPage() {
       </div>
 
       {/* Filters & Search */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
-            type="text" 
-            placeholder="Produkt suchen (Name, SKU, EAN...)" 
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-          />
-        </div>
-        <div className="flex gap-2">
-          <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
-            <Filter size={18} />
-            Kategorie
-          </button>
-          <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
-            <ArrowUpDown size={18} />
-            Sortieren nach
-          </button>
-        </div>
-      </div>
+      <ProductsFilter categories={categories} />
 
       {/* Products Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">

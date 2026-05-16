@@ -4,41 +4,30 @@ import { useState, useEffect, useRef, useMemo, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { motion, AnimatePresence } from 'framer-motion'
-import type { TargetAndTransition, VariantLabels, ViewportOptions } from 'framer-motion'
-import { 
-  ArrowRight, Truck, RotateCcw, Shield, Headphones, 
-  Award, ChevronRight, Star,
-  ShoppingCart, Heart, Eye, Flame, ChevronLeft,
-  Sparkles, CheckCircle, BadgePercent
-} from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight, Star, ShoppingCart, Heart, Flame, BadgePercent, Award, Sparkles } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { Product, Category, BlogPost } from '@/lib/data/products'
 import { TiltCard } from '@/components/animations'
 import { MagneticButton } from '@/components/magnetic-button'
 import { formatPriceDe } from '@/lib/utils/vat'
-import type { AppliedPromotion } from '@/lib/promotions'
+import { HomeHero } from '@/components/home/home-hero'
+import { HomeTrustBar } from '@/components/home/home-trust-bar'
+import { HomeCategoriesGrid } from '@/components/home/home-categories-grid'
+import { HomeNewsletter } from '@/components/home/home-newsletter'
 
 const TechnologySection = dynamic(
   () => import('@/components/home/technology-section').then((m) => m.TechnologySection),
-  {
-    loading: () => <div className="h-[520px] bg-gray-900" />,
-  }
+  { loading: () => <div className="h-[520px] bg-gray-900" /> }
 )
-
 const BlogPreview = dynamic(
   () => import('@/components/home/blog-preview').then((m) => m.BlogPreview),
-  {
-    loading: () => <div className="h-[420px] bg-gray-50" />,
-  }
+  { loading: () => <div className="h-[420px] bg-gray-50" /> }
 )
-
 const TestimonialsSection = dynamic(
   () => import('@/components/testimonials-section').then((m) => m.TestimonialsSection),
-  {
-    loading: () => <div className="h-[420px] bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10" />,
-  }
+  { loading: () => <div className="h-[420px] bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10" /> }
 )
 
 interface HomeContentProps {
@@ -46,834 +35,319 @@ interface HomeContentProps {
   initialCategories: Category[]
   initialBlogPosts: BlogPost[]
   activePromotions?: {
-    id: string
-    name: string
-    discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
-    discountValue: any
-    productIds: string[]
-    categoryIds: string[]
-    isGlobal: boolean
-    badge: string | null
-    bannerText: string | null
-    highlightColor: string | null
+    id: string; name: string; discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
+    discountValue: number; productIds: string[]; categoryIds: string[]
+    isGlobal: boolean; badge: string | null; bannerText: string | null; highlightColor: string | null
   }[]
 }
 
 export function HomeContent({ initialProducts, initialCategories, initialBlogPosts, activePromotions = [] }: HomeContentProps) {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [email, setEmail] = useState('')
-  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const slides = ['slide1', 'slide2', 'slide3'] as const
   const sliderContainerRef = useRef<HTMLDivElement>(null)
 
-  // Flash deals — uses real DB promotions when available, falls back to oldPrice discount
   const flashDeals = useMemo(() => {
     const candidates = initialProducts.slice(0, 8)
-
-    // Map each product to its best applicable promotion
     const withPromo = candidates.map(p => {
-      // Find applicable promotions for this product
-      const applicable = activePromotions.filter(promo => {
-        if (promo.isGlobal) return true
-        if (promo.productIds.includes(p.id)) return true
-        if (promo.categoryIds.includes(p.category)) return true
-        return false
-      })
-
+      const applicable = activePromotions.filter(promo =>
+        promo.isGlobal || promo.productIds.includes(p.id) || promo.categoryIds.includes(p.category)
+      )
       if (applicable.length > 0) {
         const best = applicable[0]
         const value = Number(best.discountValue)
-        const discount = best.discountType === 'PERCENTAGE'
-          ? Math.round(value)
-          : Math.round((value / p.price) * 100)
+        const discount = best.discountType === 'PERCENTAGE' ? Math.round(value) : Math.round((value / p.price) * 100)
         return { ...p, discount, promoName: best.name, promoBadge: best.badge }
       }
-
-      // Fallback: use oldPrice if available
       if (p.oldPrice && p.oldPrice > p.price) {
-        const discount = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)
-        return { ...p, discount, promoName: null, promoBadge: null }
+        return { ...p, discount: Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100), promoName: null, promoBadge: null }
       }
-
       return null
     }).filter((p): p is NonNullable<typeof p> => p !== null)
-
-    // If no deals found, take first 4 products with a nominal display
-    if (withPromo.length === 0) {
-      return initialProducts.slice(0, 4).map(p => ({ ...p, discount: 0, promoName: null, promoBadge: null }))
-    }
-
+    if (withPromo.length === 0) return initialProducts.slice(0, 4).map(p => ({ ...p, discount: 0, promoName: null, promoBadge: null }))
     return withPromo.slice(0, 4)
   }, [initialProducts, activePromotions])
-  
-  const productCardVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
-    }
-  }
 
   const sliderProducts = useMemo(() => {
-    const list: Product[] = [];
-    const catGroups = new Map<string, number>();
+    const list: Product[] = []
+    const catGroups = new Map<string, number>()
     for (const p of initialProducts) {
-      if (!catGroups.has(p.category)) catGroups.set(p.category, 0);
-      const count = catGroups.get(p.category)!;
-      if (count < 2) {
-        list.push(p);
-        catGroups.set(p.category, count + 1);
-      }
-      if (list.length >= 16) break;
+      const count = catGroups.get(p.category) ?? 0
+      if (count < 2) { list.push(p); catGroups.set(p.category, count + 1) }
+      if (list.length >= 16) break
     }
-    return list;
-  }, [initialProducts]);
-
-  useEffect(() => {
-    const autoScroll = setInterval(() => {
-      if (sliderContainerRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = sliderContainerRef.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 10) {
-          sliderContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          sliderContainerRef.current.scrollBy({ left: window.innerWidth > 640 ? 344 : 276, behavior: 'smooth' });
-        }
-      }
-    }, 4500);
-    return () => clearInterval(autoScroll);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length)
-    }, 6000)
-    return () => clearInterval(timer)
-  }, [slides.length])
-
-  const getLocalizedName = (item: { name: { de: string } }) => {
-    return item.name.de
-  }
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
-      }
-    }
-  }
-
-  const heroContentVariants = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      filter: 'blur(0px)',
-      transition: { 
-        duration: 1, 
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    },
-    exit: { 
-      opacity: 0, 
-      y: -20, 
-      filter: 'blur(10px)',
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
-    }
-  }
-
-  const heroItemVariants = {
-    hidden: { opacity: 0, y: 20, filter: 'blur(5px)' },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      filter: 'blur(0px)',
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
-    }
-  }
-
-  const heroImages = [
-    '/images/hero/Die-Zukunft-der-Induktion.webp',
-    '/images/hero/Professionelle-Topfsets.webp',
-    '/images/hero/Smarte-Küchentechnologie.webp'
-  ]
+    return list
+  }, [initialProducts])
 
   return (
     <div className="min-h-screen bg-gray-50/50 selection:bg-[#4ECCA3]/30">
       {/* Announcement Bar */}
-      <motion.div 
-        initial={{ y: -40 }}
-        animate={{ y: 0 }}
-        className="bg-nova-900 border-b border-nova-800 text-nova-100 py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide relative overflow-hidden flex justify-center items-center"
-      >
-        <div className="absolute inset-0 bg-[url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;)] opacity-[0.15] mix-blend-overlay"></div>
-        <span className="inline-flex items-center gap-3 relative z-10">
+      <motion.div initial={{ y: -40 }} animate={{ y: 0 }} className="bg-nova-900 border-b border-nova-800 text-nova-100 py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide flex justify-center items-center">
+        <span className="inline-flex items-center gap-3">
           <Sparkles className="w-4 h-4 text-nova-400" />
-          <span>Kostenlose Lieferung ab 500€ <span className="text-nova-600 px-2">•</span> 30 Tage Rückgabe <span className="text-nova-600 px-2">•</span> 2 Jahre Garantie</span>
+          Kostenlose Lieferung ab 500€ <span className="text-nova-600 px-2">•</span> 30 Tage Rückgabe <span className="text-nova-600 px-2">•</span> 2 Jahre Garantie
           <Sparkles className="w-4 h-4 text-nova-400" />
         </span>
       </motion.div>
 
-      {/* Hero Carousel */}
-      <section className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] min-h-[550px] md:min-h-[650px] overflow-hidden group bg-gray-900">
-        {/* Fond de secours pour éviter le flash blanc */}
-        <div className="absolute inset-0 bg-gradient-to-br from-nova-900 via-gray-900 to-black" />
-        
-        <AnimatePresence mode="sync">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={heroImages[currentSlide]}
-              alt="Die Zukunft der Induktion"
-              fill
-              className="object-cover object-center"
-              priority={currentSlide === 0}
-              fetchPriority={currentSlide === 0 ? 'high' : 'auto'}
-              loading={currentSlide === 0 ? 'eager' : 'lazy'}
-              sizes="100vw"
-              placeholder="blur"
-              blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect fill='%230C211E' width='1920' height='1080'/%3E%3C/svg%3E"
-            />
-            {/* Elegant gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
-          </motion.div>
-        </AnimatePresence>
+      {/* Hero */}
+      <HomeHero />
 
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 h-full flex flex-col justify-center">
-          <div className="max-w-2xl mt-12 sm:mt-0">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlide}
-                variants={heroContentVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <motion.div
-                  variants={heroItemVariants}
-                  className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-2xl"
-                >
-                  <span className="w-2 h-2 rounded-full bg-nova-400 animate-pulse" />
-                  Neuheiten 2026
-                </motion.div>
-                
-                <motion.h1 
-                  variants={heroItemVariants}
-                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-heading leading-[1.1] tracking-tight drop-shadow-sm"
-                >
-                  Die Zukunft der Induktion
-                </motion.h1>
-                
-                <motion.p 
-                  variants={heroItemVariants}
-                  className="text-lg sm:text-xl text-gray-200 mb-8 max-w-xl font-light leading-relaxed drop-shadow-sm"
-                >
-                  Premium-Küchenzubehör für maximale Performance
-                </motion.p>
-                
-                <motion.div 
-                  variants={heroItemVariants}
-                  className="flex flex-col sm:flex-row gap-4 items-center sm:items-start"
-                >
-                  <Link href="/produkte" className="w-full sm:w-auto">
-                    <MagneticButton strength={0.2} className="w-full sm:w-auto">
-                      <div
-                        className="w-full sm:w-auto px-8 py-4 bg-nova-400 hover:bg-nova-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all shadow-[0_8px_30px_rgb(78,204,163,0.3)] hover:shadow-[0_8px_30px_rgb(78,204,163,0.5)] group/btn"
-                      >
-                        Jetzt entdecken
-                        <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                      </div>
-                    </MagneticButton>
-                  </Link>
-                  
-                  <Link href="/produkte" className="w-full sm:w-auto">
-                    <MagneticButton strength={0.15} className="w-full sm:w-auto">
-                      <div
-                        className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all"
-                      >
-                        <Eye className="w-5 h-5 opacity-70" />
-                        Katalog
-                      </div>
-                    </MagneticButton>
-                  </Link>
-                </motion.div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
+      {/* Trust Bar */}
+      <HomeTrustBar />
+      <div className="h-6 sm:h-12" />
 
-      </section>
-
-      {/* Trust Bar - Elevated overlapping to Hero */}
-      <section className="relative z-20 -mt-10 sm:-mt-14 max-w-[1400px] mx-auto px-4 sm:px-6">
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={containerVariants}
-          className="bg-white/80 backdrop-blur-xl border border-white shadow-xl rounded-2xl p-6 sm:p-8"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-x divide-gray-100/0 md:divide-gray-200">
-            {[
-              { icon: Truck, title: 'Kostenlose Lieferung', desc: 'Ab 500€' },
-              { icon: RotateCcw, title: '30 Tage Rückgabe', desc: 'Kostenlos' },
-              { icon: Shield, title: '2 Jahre Garantie', desc: 'Auf alles' },
-              { icon: Headphones, title: 'Premium Support', desc: 'Mo-Fr' },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:pl-8 first:pl-0"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-nova-50 flex items-center justify-center flex-shrink-0 text-nova-500 shadow-sm border border-nova-100">
-                  <item.icon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
-                  <p className="text-gray-500 text-xs mt-1 leading-relaxed">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Recommended space */}
-      <div className="h-6 sm:h-12"></div>
-
-      {/* Highlights Lateral Slider (Semi-Auto) */}
+      {/* Product Slider */}
       <section className="py-4 pb-12 sm:py-8 bg-transparent overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 mb-8">
           <div className="flex items-end justify-between">
             <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               <span className="text-nova-500 font-semibold tracking-wider text-sm uppercase mb-2 block">Vorschau</span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 font-heading">
-                Top-Produkte pro Kategorie
-              </h2>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 font-heading">Top-Produkte pro Kategorie</h2>
             </motion.div>
             <div className="hidden sm:flex items-center gap-2">
-              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: -344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer z-10">
-                <ChevronLeft className="w-5 h-5 text-gray-600" />
-              </button>
-              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: 344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer z-10">
-                <ChevronRight className="w-5 h-5 text-gray-600" />
-              </button>
+              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: -344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm">◀</button>
+              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: 344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm">▶</button>
             </div>
           </div>
         </div>
-
-        {/* Swipeable & Auto-scroll track */}
-        <div className="relative">
-          <motion.div 
-            ref={sliderContainerRef}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={{
-              visible: {
-                transition: {
-                  staggerChildren: 0.05
-                }
-              }
-            }}
-            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-3 sm:gap-4 px-4 sm:px-6 pb-4 pt-2 scrollbar-hide items-stretch"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {sliderProducts.map((product, index) => (
-              <motion.div 
-                key={`highlights-${product.id}`} 
-                variants={productCardVariants}
-                className="w-[260px] sm:w-[320px] flex-shrink-0 snap-center sm:snap-start h-auto group/product"
-              >
-                <ProductCard product={product} index={index} />
-              </motion.div>
-            ))}
-            {/* Safe zone at end */}
-            <div className="w-2 sm:w-6 flex-shrink-0" />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Categories Modern Grid */}
-      <section className="py-8 sm:py-14 bg-gray-50/50">
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-col sm:flex-row items-end justify-between mb-6 gap-3"
-          >
-            <div>
-              <span className="text-nova-500 font-semibold tracking-wider text-sm uppercase mb-2 block">Unsere Kategorien</span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-heading">Beliebte Kategorien</h2>
+        <div ref={sliderContainerRef} className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-2 sm:gap-3 px-4 pb-4 pt-1 scrollbar-hide items-stretch" style={{ scrollbarWidth: 'none' }}>
+          {sliderProducts.map((product, index) => (
+            <div key={`slider-${product.id}`} className="w-[160px] sm:w-[240px] flex-shrink-0 snap-center sm:snap-start">
+              <ProductCard product={product} index={index} />
             </div>
-            <Link href="/produkte" className="group text-gray-600 hover:text-nova-500 font-medium flex items-center gap-2 transition-colors pb-1 border-b-2 border-transparent hover:border-nova-500">
-              Alle ansehen 
-              <span className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:bg-nova-50 transition-colors">
-                <ArrowRight className="w-4 h-4 ml-0.5" />
-              </span>
-            </Link>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-            {initialCategories.map((category, index) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group h-full"
-              >
-                <Link href={`/produkte?kategorie=${category.slug}`} className="block h-full cursor-pointer">
-                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-md group-hover:shadow-2xl transition-all duration-500 border border-gray-100">
-                    <Image
-                      src={category.image}
-                      alt={getLocalizedName(category)}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500" />
-                      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                      <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">{getLocalizedName(category)}</h3>
-                      
-                      <div className="flex items-center text-white/90 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
-                        Entdecken <ChevronRight className="w-4 h-4 ml-1" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+          ))}
+          <div className="w-2 sm:w-4 flex-shrink-0" />
         </div>
       </section>
 
-      {/* Flash Deals with Gradient Background */}
+      {/* Categories */}
+      <HomeCategoriesGrid categories={initialCategories} />
+
+      {/* Flash Deals */}
       <section className="py-10 sm:py-16 relative overflow-hidden">
-        {/* Background elements */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F0] via-white to-[#F0FFF9]" />
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-red-100/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-nova-100/40 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
-        
         <div className="container relative z-10 mx-auto px-4 sm:px-6">
-          <FlashDealsHeader
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {flashDeals.map((product, index) => (
-              <FlashDealCard 
-                key={product.id} 
-                product={product} 
-                index={index} 
-              />
-            ))}
+          <FlashDealsHeader />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+            {flashDeals.map((product, index) => <FlashDealCard key={product.id} product={product} index={index} />)}
           </div>
         </div>
       </section>
 
-      {/* Bestsellers Premium View */}
-      <section className="py-10 sm:py-16 bg-white relative">
+      {/* Bestsellers */}
+      <section className="py-10 sm:py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="text-center max-w-2xl mx-auto mb-16"
-          >
-            <div className="inline-flex items-center justify-center p-2 bg-nova-50 rounded-2xl mb-4">
-              <Award className="w-6 h-6 text-nova-500" />
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 font-heading mb-4 tracking-tight">
-              Bestseller
-            </h2>
-            <p className="text-gray-500 text-lg leading-relaxed">
-              Unsere meistverkauften Produkte
-            </p>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="text-center max-w-2xl mx-auto mb-16">
+            <div className="inline-flex items-center justify-center p-2 bg-nova-50 rounded-2xl mb-4"><Award className="w-6 h-6 text-nova-500" /></div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 font-heading mb-4 tracking-tight">Bestseller</h2>
+            <p className="text-gray-500 text-lg leading-relaxed">Unsere meistverkauften Produkte</p>
           </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {initialProducts.slice(0, 8).map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-4">
+            {initialProducts.slice(0, 12).map((product, index) => <ProductCard key={product.id} product={product} index={index} />)}
           </div>
-
           <div className="mt-16 text-center">
-            <Link href="/produkte">
-              <MagneticButton>
-                <div className="px-8 py-4 bg-gray-900 text-white font-semibold rounded-2xl hover:bg-gray-800 transition-colors shadow-xl shadow-gray-900/20 inline-flex items-center gap-2 cursor-pointer">
-                  Alle Bestseller ansehen <ArrowRight className="w-5 h-5" />
-                </div>
-              </MagneticButton>
-            </Link>
+            <Link href="/produkte"><MagneticButton><div className="px-8 py-4 bg-gray-900 text-white font-semibold rounded-2xl hover:bg-gray-800 transition-colors shadow-xl shadow-gray-900/20 inline-flex items-center gap-2 cursor-pointer">Alle Bestseller ansehen <ArrowRight className="w-5 h-5" /></div></MagneticButton></Link>
           </div>
         </div>
       </section>
 
-      {/* Technology Features */}
       <TechnologySection />
-
-      {/* Blog Preview Section */}
       <BlogPreview initialBlogPosts={initialBlogPosts} />
-
-      {/* Testimonials Section */}
       <TestimonialsSection />
-
-      {/* Modern Newsletter */}
-      <section className="py-12 sm:py-20 bg-white relative overflow-hidden">
-        {/* Decorative background vectors */}
-        <div className="absolute right-0 top-0 w-1/3 aspect-square bg-nova-50 rounded-bl-[100px] -z-10" />
-        <div className="absolute left-0 bottom-0 w-1/4 aspect-square bg-gray-50 rounded-tr-[100px] -z-10" />
-        
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-gray-900 rounded-[2.5rem] p-8 sm:p-14 lg:p-20 shadow-2xl relative overflow-hidden text-center max-w-5xl mx-auto border border-gray-800"
-          >
-            {/* Inner background glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-nova-500/20 blur-[120px] rounded-full pointer-events-none" />
-            
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/20 shadow-xl">
-                <Sparkles className="w-8 h-8 text-nova-400" />
-              </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 font-heading leading-tight">
-                Werde Induktions-Experte
-              </h2>
-              <p className="text-gray-300 mb-10 text-lg sm:text-xl font-light">
-                Erhalten Sie 10% Rabatt auf Ihre erste Bestellung plus exklusive Angebote und Rezepte.
-              </p>
-              
-              {newsletterStatus === 'success' ? (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-nova-500/20 border border-nova-500/30 text-nova-300 font-medium py-4 px-6 rounded-2xl inline-flex items-center gap-3 text-lg"
-                >
-                  <CheckCircle className="w-6 h-6" />
-                  Vielen Dank! Ihre Newsletter-Anmeldung ist bestätigt.
-                </motion.div>
-              ) : (
-                <form 
-                  onSubmit={async (e) => {
-                    e.preventDefault()
-                    if (!email || !email.includes('@')) return
-                    
-                    try {
-                      const response = await fetch('/api/newsletter/subscribe', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, source: 'homepage' })
-                      })
-                      
-                      if (response.ok) {
-                        setNewsletterStatus('success')
-                        setEmail('')
-                        setTimeout(() => setNewsletterStatus('idle'), 5000)
-                      } else {
-                        const data = await response.json()
-                        console.error('Newsletter error:', data.error)
-                        setNewsletterStatus('error')
-                        setTimeout(() => setNewsletterStatus('idle'), 3000)
-                      }
-                    } catch (err) {
-                      console.error('Newsletter submission failed:', err)
-                      setNewsletterStatus('error')
-                      setTimeout(() => setNewsletterStatus('idle'), 3000)
-                    }
-                  }}
-                  className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto"
-                >
-                  <div className="relative flex-1">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Ihre E-Mail-Adresse"
-                      required
-                      className="w-full px-6 py-4 sm:py-5 bg-white/5 border border-white/20 rounded-2xl text-white placeholder:text-gray-400 focus:outline-none focus:border-nova-400 focus:bg-white/10 transition-all font-medium backdrop-blur-sm"
-                    />
-                  </div>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="submit"
-                    className="px-8 py-4 sm:py-5 bg-nova-400 text-white font-bold rounded-2xl hover:bg-nova-500 transition-colors whitespace-nowrap shadow-lg shadow-nova-500/20 text-lg flex items-center justify-center gap-2"
-                  >
-                    Anmelden <ArrowRight className="w-5 h-5" />
-                  </motion.button>
-                </form>
-              )}
-              <p className="text-xs text-gray-500 mt-6">
-                Durch die Anmeldung akzeptieren Sie unsere Datenschutzbestimmungen. Abmeldung jederzeit möglich.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <HomeNewsletter />
     </div>
   )
 }
 
-// Polished Product Card
-const ProductCard = memo(function ProductCard({ product }: { product: Product; index: number }) {
+// ─── Sub-components ──────────────────────────────────────────────────────────
+
+const ProductCard = memo(function ProductCard({ product, index }: { product: Product; index: number }) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
-  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
-  
+  const isLocal = (src: string) => src.startsWith('/images/products/')
   const inWishlist = isInWishlist(product.id)
-  
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    addItem(product, 1)
+
+  const handleAddToCart = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1) }
+  const handleWishlist = async (e: React.MouseEvent) => {
+    e.preventDefault(); e.stopPropagation()
+    await toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug })
   }
-  
-  const handleToggleWishlist = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    await toggleItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.images[0],
-      slug: product.slug
-    })
-  }
-  
+
   return (
     <Link href={`/produkt/${product.slug}`} className="block group h-full">
-      <TiltCard 
-        className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
-        tiltAmount={5}
-        glowColor="rgba(78, 204, 163, 0.15)"
-      >
-        <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-gray-50 p-2 sm:p-3">
-          <div className="absolute inset-0 bg-white" />
-          <Image
-            src={product.images[0]}
-            alt={product.name.de}
-            fill
-            unoptimized={isLocalProductImage(product.images[0])}
-            className={`object-contain p-3 sm:p-4 transition-all duration-700 mix-blend-multiply ${product.images[1] ? 'group-hover:opacity-0 group-hover:scale-95' : 'group-hover:scale-110'}`}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+      <TiltCard className="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-500 border border-gray-100/50 flex flex-col h-full relative group/card" tiltAmount={5} glowColor="rgba(78, 204, 163, 0.1)">
+        
+        {/* Image Section - Perfect Square */}
+        <div className="relative aspect-square overflow-hidden bg-[#fdfdfd]">
+          <Image 
+            src={product.images[0]} 
+            alt={product.name.de} 
+            fill 
+            unoptimized={isLocal(product.images[0])} 
+            className="object-contain p-3 sm:p-5 transition-transform duration-700 ease-out group-hover:scale-110 mix-blend-multiply" 
+            sizes="(max-width: 640px) 50vw, 20vw" 
           />
-          {product.images[1] && (
-            <Image
-              src={product.images[1]}
-              alt={`${product.name.de} Lifestyle`}
-              fill
-              unoptimized={isLocalProductImage(product.images[1])}
-              className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-0"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            />
-          )}
           
-          {/* Badges */}
-          <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1.5 z-10">
+          {/* Glass Badges */}
+          <div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10">
             {product.badges?.includes('premium') && (
-              <span className="px-3 py-1 bg-nova-500 text-white text-xs font-bold rounded-lg shadow-sm border border-nova-400">
-                Premium
-              </span>
+              <span className="px-1.5 py-0.5 bg-black/80 backdrop-blur-md text-white text-[8px] font-black rounded-md uppercase tracking-tighter border border-white/10">Premium</span>
             )}
             {product.badges?.includes('bestseller') && (
-              <span className="px-3 py-1 bg-gray-900 text-white text-xs font-bold rounded-lg shadow-sm">
-                Bestseller
-              </span>
-            )}
-            {product.badges?.includes('new') && (
-              <span className="px-3 py-1 bg-amber-400 text-amber-950 text-xs font-bold rounded-lg shadow-sm">
-                Neu
-              </span>
+              <span className="px-1.5 py-0.5 bg-nova-500/90 backdrop-blur-md text-white text-[8px] font-black rounded-md uppercase tracking-tighter border border-white/10">Bestseller</span>
             )}
           </div>
 
-          {/* Quick Actions overlay */}
-          <div className="absolute top-4 right-4 flex flex-col gap-3 z-10 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-            <MagneticButton 
-              onClick={handleToggleWishlist}
-              className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-colors border ${
-                inWishlist ? 'bg-red-50 border-red-100' : 'bg-white border-gray-100 hover:bg-gray-50'
-              }`}
-            >
-              <Heart className={`w-5 h-5 transition-colors ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-red-500'}`} />
-            </MagneticButton>
-          </div>
-        </div>
-
-        <div className="p-2.5 sm:p-3 flex-1 flex flex-col">
-          <div className="flex items-center gap-1.5 mb-1">
-            <div className="flex text-amber-400">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? 'fill-amber-400' : 'fill-gray-200 text-gray-200'}`}
-                />
-              ))}
-            </div>
-            <span className="text-xs font-semibold text-gray-400">({product.reviewCount})</span>
-          </div>
-          
-          <h3 className="font-bold text-gray-900 text-[13px] sm:text-sm mb-1 line-clamp-2 group-hover:text-nova-500 transition-colors leading-snug flex-1">
-            {product.name.de}
-          </h3>
-          
-          <div className="mt-auto pt-1.5 sm:pt-2 relative border-t border-gray-50">
-            <div className="flex items-end gap-1.5 sm:gap-2 mb-0.5">
-              <span className="text-sm sm:text-base font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
-              {product.oldPrice && (
-                <span className="text-[11px] sm:text-xs font-semibold text-gray-400 line-through decoration-gray-300 pb-[2px] tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>
-              )}
-            </div>
-            <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-1.5 sm:mb-2 font-medium leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. <span className="underline decoration-dotted cursor-help">Versand</span></p>
-            
-            <button
+          {/* Quick Actions Overlay */}
+          <div className="absolute inset-x-0 bottom-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/20 to-transparent hidden sm:block">
+            <button 
               onClick={handleAddToCart}
-              className="w-full py-1.5 sm:py-2 bg-gray-50 border border-gray-200 text-gray-800 text-[13px] sm:text-sm font-bold rounded-lg sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm"
+              className="w-full py-2 bg-white/95 backdrop-blur-md text-nova-900 text-[10px] font-black rounded-lg shadow-xl hover:bg-nova-900 hover:text-white transition-all flex items-center justify-center gap-1.5 active:scale-95"
             >
-              <ShoppingCart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
-              <span className="hidden sm:inline">In den Warenkorb</span>
+              <ShoppingCart className="w-3 h-3" />
+              In den Korb
             </button>
           </div>
+
+          <button 
+            onClick={handleWishlist} 
+            className={`absolute top-1.5 right-1.5 w-7 h-7 rounded-lg flex items-center justify-center backdrop-blur-md transition-all z-10 border ${
+              inWishlist 
+                ? 'bg-red-500 text-white border-red-400' 
+                : 'bg-white/70 border-white/50 text-gray-400 opacity-0 group-hover:opacity-100 hover:bg-white hover:text-red-500'
+            }`}
+          >
+            <Heart className={`w-3.5 h-3.5 ${inWishlist ? 'fill-current' : ''}`} />
+          </button>
+        </div>
+
+        {/* Info Section - Ultra Compact */}
+        <div className="p-2 sm:p-2.5 flex-1 flex flex-col justify-between bg-white">
+          <div className="min-w-0">
+            <h3 className="font-bold text-gray-900 text-[10px] sm:text-[12px] line-clamp-1 leading-tight mb-1 group-hover:text-nova-600 transition-colors">
+              {product.name.de}
+            </h3>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs sm:text-[14px] font-black text-nova-900 tabular-nums">
+                {formatPriceDe(product.price)}
+              </span>
+              {product.oldPrice && (
+                <span className="text-[9px] font-bold text-gray-400 line-through tabular-nums">
+                  {formatPriceDe(product.oldPrice)}
+                </span>
+              )}
+            </div>
+          </div>
+          
+          {/* Mobile Cart Button - Always visible but minimal */}
+          <button 
+            onClick={handleAddToCart}
+            className="mt-1.5 sm:hidden w-full py-1 bg-nova-50 text-nova-900 text-[9px] font-black rounded-md flex items-center justify-center gap-1 border border-nova-100"
+          >
+            <ShoppingCart className="w-2.5 h-2.5" />
+            Korb
+          </button>
         </div>
       </TiltCard>
     </Link>
   )
 })
 
+type FlashProduct = Product & { discount: number; promoName: string | null; promoBadge: string | null }
 
-const FlashDealCard = memo(function FlashDealCard({ product, index }: { product: Product & { discount: number; promoName: string | null; promoBadge: string | null }; index: number }) {
+const FlashDealCard = memo(function FlashDealCard({ product, index }: { product: FlashProduct; index: number }) {
   const { isInWishlist, toggleItem } = useWishlist()
   const { addItem } = useCart()
+  const isLocal = (src: string) => src.startsWith('/images/products/')
   const inWishlist = isInWishlist(product.id)
-  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
-  
-  const handleToggleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    toggleItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.images[0],
-      slug: product.slug
-    })
-  }
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    addItem(product, 1)
-  }
-  
+  const handleWishlist = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug }) }
+  const handleAddToCart = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1) }
+
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 20 }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-300 flex flex-col"
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95, y: 20 }} 
+      whileInView={{ opacity: 1, scale: 1, y: 0 }} 
+      viewport={{ once: true }} 
+      transition={{ delay: index * 0.1 }} 
+      className="group bg-white rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] transition-all duration-500 flex flex-col relative border border-gray-100"
     >
-      <Link href={`/produkt/${product.slug}`} className="block relative aspect-square bg-gray-50 overflow-hidden">
-        <div className="absolute inset-0 bg-white" />
-        <Image
-          src={product.images[0]}
-          alt={product.name.de}
-          fill
-          unoptimized={isLocalProductImage(product.images[0])}
-          className="object-contain p-8 group-hover:scale-110 transition-transform duration-700 mix-blend-multiply"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      <Link href={`/produkt/${product.slug}`} className="block relative aspect-square bg-[#fdfdfd] overflow-hidden">
+        <Image 
+          src={product.images[0]} 
+          alt={product.name.de} 
+          fill 
+          unoptimized={isLocal(product.images[0])} 
+          className="object-contain p-6 group-hover:scale-110 transition-transform duration-700 mix-blend-multiply" 
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" 
         />
         
-        {/* Discount Badge */}
         {product.discount > 0 && (
-          <div className="absolute top-4 left-4">
-            <span className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-black rounded-lg shadow-lg shadow-red-500/30 flex items-center gap-1">
-              <BadgePercent className="w-3.5 h-3.5" />
+          <div className="absolute top-2 left-2">
+            <span className="px-2 py-1 bg-red-600/90 backdrop-blur-md text-white text-[9px] font-black rounded-lg shadow-lg flex items-center gap-1 uppercase tracking-tighter border border-white/10">
+              <Flame className="w-3 h-3" />
               {product.promoBadge ?? `-${product.discount}%`}
             </span>
           </div>
         )}
-
-        <div className="absolute top-4 right-4 z-10">
+        
+        <div className="absolute top-2 right-2 z-10">
           <button 
-            onClick={handleToggleWishlist}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-colors border ${
-              inWishlist ? 'bg-red-50 border-red-100' : 'bg-white border-gray-100 hover:bg-gray-50'
+            onClick={handleWishlist} 
+            className={`w-8 h-8 rounded-lg flex items-center justify-center backdrop-blur-md transition-all border ${
+              inWishlist ? 'bg-red-500 border-red-400 text-white' : 'bg-white/80 border-gray-100 text-gray-400 opacity-0 group-hover:opacity-100'
             }`}
           >
-            <Heart className={`w-5 h-5 transition-colors ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+            <Heart className={`w-4 h-4 ${inWishlist ? 'fill-current' : ''}`} />
           </button>
         </div>
       </Link>
-      
-      <div className="p-6 flex-1 flex flex-col border-t border-gray-50">
-        <Link href={`/produkt/${product.slug}`} className="block group-hover:text-nova-500 transition-colors">
-          <h3 className="font-bold text-gray-900 text-base mb-3 line-clamp-2 leading-snug">{product.name.de}</h3>
+
+      <div className="p-2 sm:p-3 flex-1 flex flex-col border-t border-gray-50">
+        <Link href={`/produkt/${product.slug}`} className="block mb-1">
+          <h3 className="font-bold text-gray-900 text-[11px] sm:text-sm line-clamp-1 group-hover:text-red-600 transition-colors leading-tight">
+            {product.name.de}
+          </h3>
         </Link>
         
         <div className="mt-auto">
-          <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
-            <span className="text-base sm:text-xl font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
+          <div className="flex items-baseline gap-1.5 mb-2">
+            <span className="text-sm sm:text-lg font-black text-red-600 tabular-nums">
+              {formatPriceDe(product.price)}
+            </span>
             {product.oldPrice && (
-              <span className="text-[11px] sm:text-sm font-semibold text-gray-400 line-through decoration-gray-300 pb-[3px] tabular-nums whitespace-nowrap">{formatPriceDe(product.oldPrice)}</span>
+              <span className="text-[10px] font-bold text-gray-400 line-through tabular-nums">
+                {formatPriceDe(product.oldPrice)}
+              </span>
             )}
           </div>
-          <p className="text-[9px] sm:text-[10px] text-gray-400 block mb-4 leading-[1.1]">inkl. MwSt.<br className="sm:hidden" /> zzgl. Versand</p>
           
-          <div className="mb-4">
-            <div className="flex justify-between text-xs font-bold mb-1.5">
-              <span className="text-red-600">Fast Ausverkauft</span>
-              <span className="text-gray-500">Noch {product.stock} Stück</span>
+          {/* Stock Progress */}
+          <div className="mb-2">
+            <div className="flex justify-between text-[8px] font-black mb-1 uppercase tracking-tighter">
+              <span className="text-red-600 animate-pulse">Heiß begehrt</span>
+              <span className="text-gray-400">Noch {product.stock}</span>
             </div>
-            <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-              <motion.div 
-                initial={{ width: 0 }}
-                whileInView={{ width: '85%' }}
-                transition={{ duration: 1, ease: 'easeOut' }}
-                className="bg-gradient-to-r from-red-500 to-orange-400 h-full rounded-full relative"
-              >
-                <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]" style={{ backgroundImage: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)' }} />
-              </motion.div>
+            <div className="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+              {(() => {
+                const initial = product.initialStock || (product.stock + 10)
+                const percentage = Math.min(95, Math.max(15, 100 - (product.stock / initial) * 100))
+                return (
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${percentage}%` }}
+                    transition={{ duration: 1, ease: 'easeOut' }}
+                    className="bg-red-500 h-full rounded-full shadow-[0_0_8px_rgba(239,68,68,0.3)]"
+                  />
+                )
+              })()}
             </div>
           </div>
-          
-          <button
-            onClick={handleAddToCart}
-            className="w-full py-2.5 sm:py-3 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-100 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl transition-colors duration-300 flex items-center justify-center gap-2"
+
+          <button 
+            onClick={handleAddToCart} 
+            className="w-full py-2 bg-nova-900 text-white text-[10px] font-black rounded-lg transition-all shadow-md hover:bg-black active:scale-95 flex items-center justify-center gap-1.5"
           >
-            <ShoppingCart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
-            <span className="hidden sm:inline">In den Warenkorb</span>
+            <ShoppingCart className="w-3 h-3" />
+            <span>Jetzt sichern</span>
           </button>
         </div>
       </div>
@@ -881,59 +355,39 @@ const FlashDealCard = memo(function FlashDealCard({ product, index }: { product:
   )
 })
 
-function FlashDealsHeader(props: {
-  initial: boolean | TargetAndTransition | VariantLabels
-  whileInView: TargetAndTransition | VariantLabels
-  viewport: ViewportOptions
-}) {
+function FlashDealsHeader() {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 })
 
   useEffect(() => {
-    const updateCountdown = () => {
+    const update = () => {
       const now = new Date()
-      const endOfDay = new Date(now)
-      endOfDay.setHours(23, 59, 59, 999)
-      const diff = Math.max(0, endOfDay.getTime() - now.getTime())
-      setTimeLeft({
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / 1000 / 60) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      })
+      const end = new Date(now); end.setHours(23, 59, 59, 999)
+      const diff = Math.max(0, end.getTime() - now.getTime())
+      setTimeLeft({ hours: Math.floor(diff / 3_600_000), minutes: Math.floor((diff % 3_600_000) / 60_000), seconds: Math.floor((diff % 60_000) / 1_000) })
     }
-    updateCountdown()
-    const countdown = setInterval(updateCountdown, 1000)
-    return () => clearInterval(countdown)
+    update()
+    const t = setInterval(update, 1000)
+    return () => clearInterval(t)
   }, [])
 
+  const pad = (n: number) => String(n).padStart(2, '0')
+
   return (
-    <motion.div
-      initial={props.initial}
-      whileInView={props.whileInView}
-      viewport={props.viewport}
-      className="flex flex-col md:flex-row items-center justify-between bg-white/60 backdrop-blur-xl border border-white/80 p-4 sm:p-6 rounded-3xl shadow-lg mb-8 gap-4"
-    >
-      <div className="flex items-center gap-5">
-        <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-red-500/20 shadow-xl">
-          <Flame className="w-8 h-8 text-white" />
+    <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="flex flex-col sm:flex-row items-center justify-between bg-white/80 backdrop-blur-md border border-white p-3 sm:p-4 rounded-2xl shadow-sm mb-6 gap-4">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-orange-500 rounded-xl flex items-center justify-center shadow-red-500/10 shadow-lg">
+          <Flame className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-heading flex items-center gap-2">
-            Flash Deals <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-lg uppercase tracking-wider">Nur Heute</span>
-          </h2>
-          <p className="text-gray-500 text-sm mt-1">Nur für kurze Zeit</p>
+          <h2 className="text-lg sm:text-xl font-black text-gray-900 font-heading flex items-center gap-2 uppercase tracking-tight">Flash Deals <span className="px-1.5 py-0.5 bg-red-50 text-red-600 text-[10px] font-black rounded-md uppercase tracking-tighter">Live</span></h2>
+          <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">Zeitlich begrenzt</p>
         </div>
       </div>
-      <div className="flex gap-3 text-center shrink-0">
-        {[
-          { l: 'Stunden', v: timeLeft.hours.toString().padStart(2, '0') },
-          { l: 'Minuten', v: timeLeft.minutes.toString().padStart(2, '0') },
-          { l: 'Sekunden', v: timeLeft.seconds.toString().padStart(2, '0') }
-        ].map((time, i) => (
-          <div key={i} className="flex flex-col w-[60px]">
-            <span className="w-14 h-14 mx-auto bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-xl font-bold text-gray-900 font-mono">
-              {time.v}
-            </span>
-            <span className="text-[9px] sm:text-[10px] uppercase text-gray-500 font-semibold mt-2">{time.l}</span>
+      <div className="flex gap-2 text-center shrink-0">
+        {([['Std', timeLeft.hours], ['Min', timeLeft.minutes], ['Sek', timeLeft.seconds]] as [string, number][]).map(([label, val]) => (
+          <div key={label} className="flex flex-col w-[44px]">
+            <span className="w-10 h-10 mx-auto bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center text-base font-bold text-gray-900 font-mono tabular-nums">{pad(val)}</span>
+            <span className="text-[8px] uppercase text-gray-400 font-bold mt-1 tracking-tighter">{label}</span>
           </div>
         ))}
       </div>

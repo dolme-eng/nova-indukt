@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const page = Number.isFinite(rawPage) ? Math.max(rawPage, 1) : 1
     const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 36) : 12
     
-    const where: any = {}
+    const where: any = { isActive: true }
     
     if (category && category !== "all") {
       where.category = {

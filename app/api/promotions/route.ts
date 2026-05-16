@@ -31,14 +31,11 @@ export async function GET(request: NextRequest) {
     }
     
     // Filter by product or category
-    if (productId) {
-      where.OR = [
-        { isGlobal: true },
-        { productIds: { has: productId } },
-      ]
-      if (categoryId) {
-        where.OR.push({ categoryIds: { has: categoryId } })
-      }
+    if (productId || categoryId) {
+      const orConditions: Prisma.PromotionWhereInput[] = [{ isGlobal: true }]
+      if (productId) orConditions.push({ productIds: { has: productId } })
+      if (categoryId) orConditions.push({ categoryIds: { has: categoryId } })
+      where.OR = orConditions
     }
     
     const promotions = await prisma.promotion.findMany({

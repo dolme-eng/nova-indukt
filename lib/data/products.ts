@@ -1,4 +1,58 @@
 import { stockImagePair } from './product-media'
+import { Prisma } from '@prisma/client'
+
+/**
+ * Types Prisma pour les mappings
+ */
+export type DbProduct = Prisma.ProductGetPayload<{ include: { images: true } }>
+export type DbCategory = Prisma.CategoryGetPayload<{ include: { _count?: { select: { products: true } } } }>
+
+/**
+ * Mappe un produit de la base de données vers l'interface UI.
+ */
+export function mapDbProductToUi(p: DbProduct): Product {
+  return {
+    id: p.id,
+    slug: p.slug,
+    name: { de: p.nameDe },
+    category: p.categoryId,
+    price: Number(p.price),
+    oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
+    images: [...p.images]
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((img) => img.url),
+    rating: p.rating,
+    reviewCount: p.reviewCount,
+    stock: p.stock,
+    initialStock: p.initialStock,
+    badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
+    description: { de: p.descriptionDe || '' },
+    shortDescription: { de: p.shortDescription || '' },
+    specs: {
+      material: p.material || '',
+      dimensions: p.dimensions || '',
+      weight: p.weightKg?.toString() || '',
+      dishwasher: p.dishwasherSafe || false,
+      induction: p.inductionSafe || false,
+    },
+    brand: p.brand || undefined,
+    ean: p.ean || undefined,
+    supplierSku: p.supplierSku || undefined
+  }
+}
+
+/**
+ * Mappe une catégorie de la base de données vers l'interface UI.
+ */
+export function mapDbCategoryToUi(c: DbCategory): Category {
+  return {
+    id: c.id,
+    slug: c.slug,
+    name: { de: c.nameDe },
+    image: c.image || '',
+    count: (c as any)._count?.products || 0
+  }
+}
 
 function stockPair(category: string, seed: number): string[] {
   const [a, b] = stockImagePair(category, seed)
@@ -17,6 +71,7 @@ export interface Product {
   rating: number
   reviewCount: number
   stock: number
+  initialStock?: number
   badges?: ('premium' | 'bestseller' | 'new')[]
   description: { de: string }
   shortDescription: { de: string }
@@ -67,7 +122,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'pfanne-kaufratgeber',
     title: { de: 'Der ultimative Induktions-Pfannen-Kaufratgeber' },
     excerpt: { de: 'Worauf Sie beim Kauf von Pfannen für Ihr Induktionskochfeld unbedingt achten sollten.' },
-    image: '/images/blog/Die richtige Pfanne für Induktion Der ultimative Kaufratgeber 2026.jpg',
+    image: '/images/blog/pfanne-induktion-kaufratgeber-2026.jpg',
     date: '2024-03-15',
     readTime: '8 min',
     category: 'Ratgeber',
@@ -78,7 +133,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'induktion-vs-gas',
     title: { de: 'Induktion vs. Gas: Was ist wirklich besser?' },
     excerpt: { de: 'Ein detaillierter Vergleich der beiden beliebtesten Kochtechnologien in der modernen Küche.' },
-    image: '/images/blog/Induktion vs. Gas Der große Energiekostenvergleich 2026.jpg',
+    image: '/images/blog/induktion-vs-gas-vergleich-2026.jpg',
     date: '2024-03-10',
     readTime: '12 min',
     category: 'Technik',
@@ -89,7 +144,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'kochfeld-pflege',
     title: { de: 'So bleibt Ihr Induktionskochfeld jahrelang wie neu' },
     excerpt: { de: 'Pflegetipps und Tricks für die tägliche Reinigung und den Werterhalt Ihrer Geräte.' },
-    image: '/images/blog/Edelstahlpfannen richtig reinigen & pflegen – ohne Kratzer und Flecken.jpg',
+    image: '/images/blog/edelstahlpfannen-reinigen-pflegen.jpg',
     date: '2024-03-05',
     readTime: '5 min',
     category: 'Pflege',

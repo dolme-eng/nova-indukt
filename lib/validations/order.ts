@@ -14,7 +14,7 @@ export const shippingDataSchema = z.object({
   email: z.string().email('Invalid email address'),
   firstName: z.string().min(1, 'First name is required').max(100),
   lastName: z.string().min(1, 'Last name is required').max(100),
-  phone: z.string().min(1, 'Phone is required').max(50),
+  phone: z.string().max(50).optional().or(z.literal('')),
   address: z.string().min(1, 'Address is required').max(200),
   zipCode: z.string().min(1, 'ZIP code is required').max(20),
   city: z.string().min(1, 'City is required').max(100),

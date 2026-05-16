@@ -11,7 +11,6 @@ export async function GET() {
         id: true,
         slug: true,
         nameDe: true,
-        nameEn: true,
         description: true,
         image: true,
         _count: {
@@ -34,7 +33,7 @@ export async function GET() {
         slug: cat.slug,
         name: {
           de: cat.nameDe,
-          en: cat.nameEn
+          en: cat.nameDe
         },
         description: {
           de: cat.description,

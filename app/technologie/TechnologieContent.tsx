@@ -71,71 +71,71 @@ export default function TechnologieContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-gray-900 text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#4ECCA3] via-transparent to-blue-600" />
+      <section className="relative bg-gray-900 text-white py-12 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-nova-400 via-transparent to-blue-500" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto text-center"
+            className="max-w-2xl mx-auto text-center"
           >
-            <span className="inline-block px-4 py-2 bg-[#4ECCA3]/20 text-[#4ECCA3] text-sm font-semibold rounded-full mb-6">
+            <span className="inline-block px-3 py-1 bg-nova-500/10 text-nova-400 text-[10px] font-black rounded-md mb-4 uppercase tracking-widest border border-nova-500/20">
               Innovation made in Germany
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-xl md:text-2xl font-black mb-3 uppercase tracking-tight">
               NOVA INDUKT
-              <span className="block text-[#4ECCA3]">Technologie</span>
+              <span className="block text-nova-400">Technologie</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+            <p className="text-xs sm:text-sm text-gray-400 max-w-lg mx-auto mb-6 leading-relaxed font-medium">
               Entdecken Sie die Zukunft des Kochens. Unsere bahnbrechenden Technologien 
               machen Induktion schneller, sicherer und effizienter als je zuvor.
             </p>
             <Link 
               href="/produkte"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#4ECCA3] text-white font-semibold rounded-xl hover:bg-[#3BA88A] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-nova-500 text-white font-black rounded-lg hover:bg-nova-600 transition-all text-xs shadow-lg active:scale-95"
             >
-              Produkte entdecken <ArrowRight className="w-5 h-5" />
+              Produkte entdecken <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section className="py-20">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Unsere Kerntechnologien</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-2 uppercase tracking-tight">Kerntechnologien</h2>
+            <p className="text-gray-400 text-xs max-w-xl mx-auto font-medium">
               Jede unserer Technologien wurde entwickelt, um Ihr Kocherlebnis zu revolutionieren.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 max-w-5xl mx-auto">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow"
+                transition={{ delay: index * 0.05 }}
+                className="bg-gray-50/50 rounded-xl p-4 sm:p-6 border border-gray-100 hover:border-nova-200 transition-all group"
               >
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6`}>
-                  <feature.icon className="w-7 h-7 text-white" />
+                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg shadow-gray-200`}>
+                  <feature.icon className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">{feature.description}</p>
-                <div className="pt-4 border-t border-gray-100">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-[#4ECCA3]">{feature.stats.value}</span>
-                    <span className="text-sm text-gray-500">{feature.stats.label}</span>
+                <h3 className="text-xs sm:text-sm font-black text-gray-900 mb-2 group-hover:text-nova-600 transition-colors uppercase tracking-tight">{feature.title}</h3>
+                <p className="text-gray-500 text-[10px] sm:text-[11px] mb-4 leading-relaxed font-medium line-clamp-3">{feature.description}</p>
+                <div className="pt-3 border-t border-gray-200/50">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-lg font-black text-nova-900 tabular-nums">{feature.stats.value}</span>
+                    <span className="text-[9px] font-bold text-gray-400 uppercase">{feature.stats.label}</span>
                   </div>
                 </div>
               </motion.div>

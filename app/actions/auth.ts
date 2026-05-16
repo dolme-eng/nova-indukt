@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { hashPassword } from "@/lib/auth/auth.config"
+import { registerSchema } from "@/lib/validations/auth"
 
 interface RegisterData {
   name: string
@@ -12,39 +13,49 @@ interface RegisterData {
 
 export async function register(data: RegisterData) {
   try {
-    // Validate input
-    if (!data.email || !data.password || !data.name) {
-      return { success: false, error: "Alle Felder sind erforderlich" }
+    // Validation Zod — schéma complet (min 8, majuscule, minuscule, chiffre)
+    const parsed = registerSchema.safeParse(data)
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]
+      // Traduction des messages Zod en allemand
+      const translations: Record<string, string> = {
+        "Name must be at least 2 characters": "Name muss mindestens 2 Zeichen haben",
+        "Invalid email address": "Ungültige E-Mail-Adresse",
+        "Password must be at least 8 characters": "Passwort muss mindestens 8 Zeichen lang sein",
+        "Password must contain at least one uppercase letter": "Passwort muss mindestens einen Großbuchstaben enthalten",
+        "Password must contain at least one lowercase letter": "Passwort muss mindestens einen Kleinbuchstaben enthalten",
+        "Password must contain at least one number": "Passwort muss mindestens eine Ziffer enthalten",
+      }
+      const message = translations[firstError.message] ?? firstError.message
+      return { success: false, error: message }
     }
-    
-    if (data.password.length < 6) {
-      return { success: false, error: "Passwort muss mindestens 6 Zeichen lang sein" }
-    }
-    
+
+    const { name, email, password } = parsed.data
+
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
-      where: { email: data.email }
+      where: { email }
     })
-    
+
     if (existingUser) {
       return { success: false, error: "Ein Benutzer mit dieser E-Mail existiert bereits" }
     }
-    
-    // Hash password
-    const hashedPassword = await hashPassword(data.password)
-    
+
+    // Hash password (12 rounds)
+    const hashedPassword = await hashPassword(password)
+
     // Create user
     const user = await prisma.user.create({
       data: {
-        email: data.email,
-        name: data.name,
+        email,
+        name,
         password: hashedPassword,
         role: "USER"
       }
     })
-    
+
     revalidatePath("/anmelden")
-    
+
     return { success: true, user: { id: user.id, email: user.email, name: user.name } }
   } catch (error) {
     console.error("Registration error:", error)

@@ -14,6 +14,7 @@ import {
   Link,
 } from '@react-email/components'
 import * as React from 'react'
+import { BANK_DETAILS, SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
 
 interface OrderItem {
   name: string
@@ -30,6 +31,7 @@ interface OrderConfirmationEmailProps {
   shipping: number
   tax: number
   total: number
+  paymentMethod?: string
   shippingAddress: {
     name: string
     street: string
@@ -49,6 +51,7 @@ export const OrderConfirmationEmail = ({
   shipping,
   tax,
   total,
+  paymentMethod,
   shippingAddress,
   estimatedDelivery,
 }: OrderConfirmationEmailProps) => {
@@ -67,7 +70,7 @@ export const OrderConfirmationEmail = ({
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Heading style={h1}>NOVA INDUKT</Heading>
+            <Heading style={h1}>{SHOP_NAME}</Heading>
           </Section>
 
           {/* Thank You */}
@@ -156,6 +159,41 @@ export const OrderConfirmationEmail = ({
             </Text>
           </Section>
 
+          {/* Payment Info for Bank Transfer */}
+          {paymentMethod === 'BANK_TRANSFER' && (
+            <Section style={bankSection}>
+              <Heading style={h3}>Zahlungsinformationen (Vorkasse)</Heading>
+              <Text style={text}>
+                Bitte überweisen Sie den Gesamtbetrag auf das folgende Konto:
+              </Text>
+              <Section style={bankDetailsCard}>
+                <Row>
+                  <Column style={bankLabel}>Kontoinhaber:</Column>
+                  <Column style={bankValue}>{BANK_DETAILS.holder}</Column>
+                </Row>
+                <Row>
+                  <Column style={bankLabel}>IBAN:</Column>
+                  <Column style={bankValue}>{BANK_DETAILS.iban}</Column>
+                </Row>
+                <Row>
+                  <Column style={bankLabel}>BIC:</Column>
+                  <Column style={bankValue}>{BANK_DETAILS.bic}</Column>
+                </Row>
+                <Row>
+                  <Column style={bankLabel}>Bank:</Column>
+                  <Column style={bankValue}>{BANK_DETAILS.bankName}</Column>
+                </Row>
+                <Row>
+                  <Column style={bankLabel}>Verwendungszweck:</Column>
+                  <Column style={bankValue}>{orderNumber}</Column>
+                </Row>
+              </Section>
+              <Text style={smallText}>
+                Hinweis: Ihre Bestellung wird erst nach Zahlungseingang versendet.
+              </Text>
+            </Section>
+          )}
+
           {/* Delivery Estimate */}
           <Section style={deliverySection}>
             <Text style={deliveryText}>
@@ -177,12 +215,12 @@ export const OrderConfirmationEmail = ({
           <Section style={footer}>
             <Text style={footerText}>
               Bei Fragen zu Ihrer Bestellung kontaktieren Sie uns unter{' '}
-              <Link href="mailto:support@nova-indukt.de" style={link}>
-                support@nova-indukt.de
+              <Link href={`mailto:${SUPPORT_EMAIL}`} style={link}>
+                {SUPPORT_EMAIL}
               </Link>
             </Text>
             <Text style={footerText}>
-              © {new Date().getFullYear()} NOVA INDUKT. Alle Rechte vorbehalten.
+              © {new Date().getFullYear()} {SHOP_NAME}. Alle Rechte vorbehalten.
             </Text>
           </Section>
         </Container>
@@ -394,6 +432,40 @@ const footerText = {
 const link = {
   color: '#4ECCA3',
   textDecoration: 'none',
+}
+
+const bankSection = {
+  marginBottom: '30px',
+  padding: '20px',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
+  backgroundColor: '#f8fafc',
+}
+
+const bankDetailsCard = {
+  marginBottom: '15px',
+}
+
+const bankLabel = {
+  color: '#718096',
+  fontSize: '12px',
+  fontWeight: 'bold',
+  textTransform: 'uppercase' as const,
+  width: '40%',
+}
+
+const bankValue = {
+  color: '#0C211E',
+  fontSize: '14px',
+  fontWeight: 'bold',
+  width: '60%',
+}
+
+const smallText = {
+  color: '#718096',
+  fontSize: '12px',
+  lineHeight: '18px',
+  fontStyle: 'italic',
 }
 
 export default OrderConfirmationEmail

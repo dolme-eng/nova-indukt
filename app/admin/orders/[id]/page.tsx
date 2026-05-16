@@ -3,7 +3,7 @@ import {
   ArrowLeft, 
   Package, 
   Truck, 
-  CreditCard,
+  Banknote,
   User,
   MapPin,
   Mail,
@@ -15,7 +15,7 @@ import {
 import { prisma } from "@/lib/prisma"
 export const dynamic = 'force-dynamic'
 import { format } from "date-fns"
-import { fr } from "date-fns/locale"
+import { de } from "date-fns/locale"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import { ShippingActions } from "./ShippingActions"
@@ -72,23 +72,23 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-slate-900">Commande {order.orderNumber}</h1>
+              <h1 className="text-2xl font-bold text-slate-900">Bestellung {order.orderNumber}</h1>
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${statusColors[order.status]}`}>
                 {order.status}
               </span>
             </div>
             <p className="text-slate-500 text-sm flex items-center gap-1 mt-1">
-              Passée le {format(new Date(order.createdAt), "dd MMMM yyyy 'à' HH:mm", { locale: fr })}
+              Aufgegeben am {format(new Date(order.createdAt), "dd. MMMM yyyy 'um' HH:mm", { locale: de })}
             </p>
           </div>
         </div>
         <div className="flex gap-3">
           <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-50 transition-colors shadow-sm">
             <Printer size={18} />
-            Imprimer Facture
+            Rechnung drucken
           </button>
           <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-sm">
-            Mettre à jour le statut
+            Status aktualisieren
           </button>
         </div>
       </div>
@@ -102,9 +102,9 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
             <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
               <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
                 <Package size={16} />
-                Articles ({order.items.length})
+                Artikel ({order.items.length})
               </h2>
-              <span className="text-xs text-slate-500 font-medium">Expédié depuis l'Entrepôt Central</span>
+              <span className="text-xs text-slate-500 font-medium">Versand aus Zentrallager</span>
             </div>
             <div className="divide-y divide-slate-100">
               {order.items.map((item) => (
@@ -126,10 +126,10 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                     </div>
                     <div className="flex items-center gap-4 mt-3 text-sm">
                       <span className="text-slate-600 flex items-center gap-1.5 bg-slate-100 px-2 py-0.5 rounded font-medium">
-                        Qté: <span className="font-bold">{item.quantity}</span>
+                        Menge: <span className="font-bold">{item.quantity}</span>
                       </span>
                       <span className="text-slate-400">×</span>
-                      <span className="text-slate-600 font-medium">{Number(item.unitPrice).toFixed(2)} € / unité</span>
+                      <span className="text-slate-600 font-medium">{Number(item.unitPrice).toFixed(2)} € / Einheit</span>
                     </div>
                   </div>
                 </div>
@@ -138,19 +138,19 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
             <div className="p-6 bg-slate-50 border-t border-slate-100">
               <div className="space-y-3 max-w-sm ml-auto">
                 <div className="flex justify-between text-sm text-slate-600">
-                  <span>Sous-total</span>
+                  <span>Zwischensumme</span>
                   <span>{Number(order.subtotal).toFixed(2)} €</span>
                 </div>
                 <div className="flex justify-between text-sm text-slate-600">
-                  <span>Livraison</span>
+                  <span>Versandkosten</span>
                   <span>{Number(order.shippingCost).toFixed(2)} €</span>
                 </div>
                 <div className="flex justify-between text-sm text-slate-600">
-                  <span>TVA (Incluse)</span>
+                  <span>MwSt. (Inklusive)</span>
                   <span>{Number(order.vatAmount).toFixed(2)} €</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold text-slate-900 pt-3 border-t border-slate-200">
-                  <span>Total</span>
+                  <span>Gesamt</span>
                   <span>{Number(order.total).toFixed(2)} €</span>
                 </div>
               </div>
@@ -160,12 +160,12 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
               <Truck size={16} />
-              Informations d'expédition
+              Versandinformationen
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Transporteur</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Transportdienst</span>
                   <div className="h-px flex-1 bg-slate-100"></div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -174,13 +174,13 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                   </div>
                   <div>
                     <p className="text-sm font-bold text-slate-900">DHL Express Standard</p>
-                    <p className="text-xs text-slate-500">Livraison sous 3-5 jours ouvrés</p>
+                    <p className="text-xs text-slate-500">Lieferung in 3-5 Werktagen</p>
                   </div>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Suivi colis</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Sendungsverfolgung</span>
                   <div className="h-px flex-1 bg-slate-100"></div>
                 </div>
                 {order.trackingNumber ? (
@@ -190,13 +190,13 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                     </div>
                     <div>
                       <p className="text-sm font-bold text-slate-900">{order.trackingNumber}</p>
-                      <button className="text-xs text-primary font-bold hover:underline">Suivre sur le site DHL</button>
+                      <button className="text-xs text-primary font-bold hover:underline">Auf DHL verfolgen</button>
                     </div>
                   </div>
                 ) : (
                   <button className="w-full py-2 border-2 border-dashed border-slate-200 rounded-lg text-slate-400 text-xs font-bold hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2 uppercase tracking-widest">
                     <Plus size={14} />
-                    Ajouter un n° de suivi
+                    Sendungsnummer hinzufügen
                   </button>
                 )}
               </div>
@@ -209,7 +209,7 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
               <User size={16} />
-              Client
+              Kunde
             </h2>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
@@ -218,7 +218,7 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                 </div>
                 <div>
                   <p className="font-bold text-slate-900">{order.customerName}</p>
-                  <Link href={`/admin/customers/${order.userId}`} className="text-xs text-primary font-bold hover:underline uppercase tracking-tighter">Voir le profil client</Link>
+                  <Link href={`/admin/customers/${order.userId}`} className="text-xs text-primary font-bold hover:underline uppercase tracking-tighter">Kundenprofil ansehen</Link>
                 </div>
               </div>
               <div className="space-y-3">
@@ -228,7 +228,7 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                 </div>
                 <div className="flex items-center gap-3 text-sm text-slate-600">
                   <Phone size={16} className="text-slate-400" />
-                  <span>{order.customerPhone || "Non renseigné"}</span>
+                  <span>{order.customerPhone || "Nicht angegeben"}</span>
                 </div>
               </div>
             </div>
@@ -237,11 +237,11 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
               <MapPin size={16} />
-              Adresses
+              Adressen
             </h2>
             <div className="space-y-6">
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Livraison</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Lieferadresse</span>
                 <p className="text-sm text-slate-600 leading-relaxed italic">
                   {shippingAddress.firstName} {shippingAddress.lastName}<br />
                   {shippingAddress.street}<br />
@@ -250,7 +250,7 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                 </p>
               </div>
               <div className="pt-4 border-t border-slate-100">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Facturation</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Rechnungsadresse</span>
                 <p className="text-sm text-slate-600 leading-relaxed italic">
                   {billingAddress.firstName} {billingAddress.lastName}<br />
                   {billingAddress.street}<br />
@@ -263,19 +263,19 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
 
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <CreditCard size={16} />
-              Paiement
+              <Banknote size={16} />
+              Zahlung
             </h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">Méthode</span>
+                <span className="text-sm text-slate-600">Methode</span>
                 <span className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                  <CreditCard size={14} className="text-slate-400" />
+                  <Banknote size={14} className="text-slate-400" />
                   {order.paymentMethod}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">Statut</span>
+                <span className="text-sm text-slate-600">Status</span>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                   order.paymentStatus === 'PAID' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-50 text-slate-600'
                 }`}>
@@ -284,7 +284,7 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
               </div>
               {order.paymentIntentId && (
                 <div className="pt-3 border-t border-slate-100">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">ID Transaction</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Transaktions-ID</span>
                   <code className="text-[10px] bg-slate-50 text-slate-500 px-1.5 py-0.5 rounded truncate block font-mono">
                     {order.paymentIntentId}
                   </code>

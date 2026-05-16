@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ChevronRight, ChevronDown, Search, HelpCircle,
-  Package, Truck, RotateCcw, CreditCard, Shield, MessageCircle, ArrowLeft
+  Package, Truck, RotateCcw, ShieldCheck, Shield, MessageCircle, ArrowLeft
 } from 'lucide-react'
 
 interface FAQItem {
@@ -23,11 +23,11 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
 
   const categories = [
     { id: 'shipping', label: 'Versand', icon: Truck },
-    { id: 'payment', label: 'Zahlung', icon: CreditCard },
+    { id: 'payment', label: 'Zahlung', icon: ShieldCheck },
     { id: 'returns', label: 'Rückgabe', icon: RotateCcw },
     { id: 'product', label: 'Produkte', icon: Package },
     { id: 'warranty', label: 'Garantie', icon: Shield },
-    { id: 'support', label: 'Support', icon: MessageCircle },
+    { id: 'support', label: 'Kundenservice', icon: MessageCircle },
   ]
 
   const fallbackItems: FAQItem[] = [
@@ -42,13 +42,13 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
       id: 'payment-1',
       question: 'Welche Zahlungsmethoden werden akzeptiert?',
       answer: 'Wir akzeptieren PayPal sowie Zahlung per E-Mail/Bankueberweisung. Die Zahlungsinformationen erhalten Sie nach der Bestellung per E-Mail.',
-      icon: CreditCard,
+      icon: ShieldCheck,
       category: 'payment'
     },
     {
       id: 'returns-1',
       question: 'Wie kann ich einen Artikel zurückgeben?',
-      answer: 'Sie können Artikel innerhalb von 30 Tagen kostenlos an uns zurücksenden. Kontaktieren Sie hierfür einfach unseren Support.',
+      answer: 'Sie können Artikel innerhalb von 30 Tagen kostenlos an uns zurücksenden. Kontaktieren Sie hierfür einfach unseren Kundenservice.',
       icon: RotateCcw,
       category: 'returns'
     },
@@ -68,7 +68,7 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
     },
     {
       id: 'support-1',
-      question: 'Wie erreiche ich den Kundensupport?',
+      question: 'Wie erreiche ich den Kundenservice?',
       answer: 'Sie erreichen uns per E-Mail unter support@nova-indukt.de oder über unser Kontaktformular.',
       icon: MessageCircle,
       category: 'support'
@@ -77,7 +77,7 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
 
   const iconByCategory: Record<string, typeof HelpCircle> = {
     shipping: Truck,
-    payment: CreditCard,
+    payment: ShieldCheck,
     returns: RotateCcw,
     product: Package,
     warranty: Shield,

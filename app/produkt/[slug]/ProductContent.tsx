@@ -9,7 +9,7 @@ import {
   Star, Heart, Share2, Truck, Shield, RotateCcw, ChevronRight, ChevronDown,
   Minus, Plus, ShoppingCart, Check,
   Award, Zap, Leaf, ZoomIn, ArrowLeft, ShieldCheck, Lock,
-  Layers, Maximize, Scale, Droplets, Barcode, Building2, Hash, Info,
+  Layers, Maximize, Scale, Droplets, Barcode, Building2, Hash, Info, Mail,
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
@@ -183,10 +183,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
 
       <nav
         aria-label="Breadcrumb"
-        className="sticky top-16 z-30 border-b border-gray-200/80 bg-white/90 backdrop-blur-md sm:top-[72px] lg:top-[88px]"
+        className="sticky top-[60px] z-[40] border-b border-gray-100 bg-white/80 backdrop-blur-md lg:top-[76px]"
       >
         <div className={SHELL}>
-          <div className="flex items-center gap-2 py-3 text-xs font-medium tracking-wide sm:py-3.5 sm:text-sm">
+          <div className="flex items-center gap-2 py-2 text-[10px] font-medium tracking-wide sm:py-2.5 sm:text-xs">
             <Link
               href="/produkte"
               className="inline-flex items-center gap-1.5 rounded-full border border-gray-100 bg-gray-50 px-3 py-1.5 text-gray-600 transition-colors hover:text-[#0C211E] lg:hidden"
@@ -285,39 +285,39 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   <span className="text-xs text-gray-400">({product.reviewCount})</span>
                 </div>
               </div>
-              <h1 data-testid="product-name" className="font-heading text-2xl font-bold leading-tight tracking-tight text-[#0C211E] sm:text-3xl lg:text-[1.85rem] xl:text-4xl 2xl:text-[2.5rem]">
+              <h1 data-testid="product-name" className="font-heading text-lg sm:text-xl font-black leading-tight tracking-tight text-[#0C211E] uppercase">
                 {product.name.de}
               </h1>
-              <p className="text-base leading-relaxed text-gray-600 lg:text-lg">{product.shortDescription.de}</p>
+              <p className="text-xs leading-snug text-gray-400 font-medium">{product.shortDescription.de}</p>
             </header>
 
             {/* Carte prix & CTA */}
-            <div className="relative rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 xl:rounded-3xl">
+            <div className="relative rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 xl:rounded-3xl">
               <AnimatePresence>
                 {showWishlistToast && (
                   <motion.div
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-xl bg-[#0C211E] px-3 py-2 text-xs font-bold text-white shadow-lg sm:text-sm"
+                    className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-xl bg-[#0C211E] px-3 py-1.5 text-[10px] font-bold text-white shadow-lg"
                   >
-                    <Check className="h-4 w-4 text-[#4ECCA3]" />
+                    <Check className="h-3 w-3 text-[#4ECCA3]" />
                     {wishlistToastMessage}
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-gray-100 pb-4">
-                <span className="text-2xl font-black tabular-nums tracking-tight text-[#0C211E] sm:text-3xl whitespace-nowrap">
+              <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 border-b border-gray-50 pb-2">
+                <span className="text-lg sm:text-xl font-black tabular-nums tracking-tight text-red-600 whitespace-nowrap">
                   {formatPriceDe(product.price)}
                 </span>
                 {product.oldPrice && (
-                  <span className="text-base font-semibold text-gray-400 line-through tabular-nums whitespace-nowrap sm:text-lg">
+                  <span className="text-[11px] font-bold text-gray-400 line-through tabular-nums whitespace-nowrap">
                     {formatPriceDe(product.oldPrice)}
                   </span>
                 )}
               </div>
-              <p className="mb-1 text-xs text-gray-500">
+              <p className="mb-1 text-[10px] text-gray-400 font-medium">
                 {priceIncludesVat ? (
                   <>
                     inkl. {vatPct}% MwSt. zzgl.{' '}
@@ -368,24 +368,24 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 </div>
               )}
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-                <div className="flex h-14 shrink-0 items-center overflow-hidden rounded-2xl border border-gray-200 bg-gray-50/80 sm:w-36">
+              <div className="flex gap-2">
+                <div className="flex h-11 shrink-0 items-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50 sm:w-32">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
-                    className="flex h-full w-11 items-center justify-center text-gray-500 hover:bg-white disabled:opacity-40"
+                    className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className="h-3 w-3" />
                   </button>
-                  <span className="flex-1 text-center font-bold text-[#0C211E]">{quantity}</span>
+                  <span className="flex-1 text-center text-xs font-bold text-[#0C211E]">{quantity}</span>
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
                     disabled={quantity >= product.stock}
-                    className="flex h-full w-11 items-center justify-center text-gray-500 hover:bg-white disabled:opacity-40"
+                    className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-3 w-3" />
                   </button>
                 </div>
                 <motion.button
@@ -394,20 +394,20 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   whileTap={{ scale: 0.99 }}
                   onClick={() => addItem(product, quantity)}
                   disabled={product.stock <= 0}
-                  className="flex h-14 flex-1 items-center justify-center gap-2 rounded-2xl bg-[#0C211E] font-bold text-white shadow-lg shadow-[#0C211E]/15 transition-colors hover:bg-[#17423C] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#0C211E] text-sm font-bold text-white shadow-md transition-colors hover:bg-nova-900 disabled:opacity-50"
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  In den Warenkorb
+                  <ShoppingCart className="h-4 w-4" />
+                  Warenkorb
                 </motion.button>
                 <button
                   type="button"
                   onClick={handleWishlistToggle}
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border shadow-sm transition-colors ${
-                    isWishlisted ? 'border-red-100 bg-red-50' : 'border-gray-200 bg-white hover:border-gray-300'
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-colors ${
+                    isWishlisted ? 'border-red-100 bg-red-50' : 'border-gray-100 bg-white hover:border-gray-200'
                   }`}
                   aria-label="Wunschliste"
                 >
-                  <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                  <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                 </button>
               </div>
 
@@ -415,9 +415,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 <button
                   type="button"
                   onClick={() => { addItem(product, quantity); window.location.href = '/kasse' }}
-                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-black text-sm font-bold text-white hover:bg-gray-900 transition-colors"
+                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-gray-100 text-sm font-bold text-[#0C211E] hover:bg-gray-200 transition-colors"
                 >
-                  <span className="text-lg leading-none"></span> Pay
+                  <Mail className="w-4 h-4" /> Überweisung
                 </button>
                 <button
                   type="button"
@@ -683,28 +683,32 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   transition={{ delay: index * 0.05 }}
                 >
                   <Link href={`/produkt/${item.slug}`} className="group block h-full">
-                    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-lg">
-                      <div className="relative aspect-square bg-gray-50 p-4">
+                    <div className="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-500 border border-gray-100/50 flex flex-col h-full relative">
+                      <div className="relative aspect-square bg-[#fdfdfd] overflow-hidden">
                         <Image
                           src={item.images[0]}
                           alt={item.name.de}
                           fill
                           unoptimized={isLocalProductImage(item.images[0])}
-                          className="object-contain p-3 mix-blend-multiply transition-transform group-hover:scale-105"
+                          className="object-contain p-3 sm:p-5 transition-transform duration-700 ease-out group-hover:scale-110 mix-blend-multiply"
                           sizes="(max-width: 640px) 45vw, 22vw"
                         />
                       </div>
-                      <div className="flex flex-1 flex-col border-t border-gray-50 p-3 sm:p-4">
-                        <h3 className="mb-2 line-clamp-2 text-xs font-bold text-gray-900 group-hover:text-[#4ECCA3] sm:text-sm">{item.name.de}</h3>
-                        <div className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                          <span className="text-sm font-black tabular-nums text-[#0C211E] sm:text-base whitespace-nowrap">
-                            {formatPriceDe(item.price)}
-                          </span>
-                          {item.oldPrice && (
-                            <span className="text-xs text-gray-400 line-through tabular-nums whitespace-nowrap">
-                              {formatPriceDe(item.oldPrice)}
+                      <div className="p-2 sm:p-3 flex-1 flex flex-col justify-between">
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-gray-900 text-[10px] sm:text-[12px] line-clamp-1 leading-tight mb-1 group-hover:text-nova-600 transition-colors">
+                            {item.name.de}
+                          </h3>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs sm:text-[14px] font-black text-nova-900 tabular-nums">
+                              {formatPriceDe(item.price)}
                             </span>
-                          )}
+                            {item.oldPrice && (
+                              <span className="text-[9px] font-bold text-gray-400 line-through tabular-nums">
+                                {formatPriceDe(item.oldPrice)}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

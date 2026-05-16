@@ -16,10 +16,9 @@ const nextConfig = {
       },
     ],
   },
-  // Turbopack désactivé temporairement pour éviter les problèmes avec pino
-  // turbopack: {},
   experimental: {
-    optimizeCss: true,
+    // optimizeCss removed — requires `critters` package which is not installed.
+    // Re-enable after `npm i critters` if CSS optimization is desired.
   },
   compress: true,
   poweredByHeader: false,

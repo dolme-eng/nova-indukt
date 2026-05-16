@@ -25,6 +25,9 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+// NOTE : Ce modèle est requis par @auth/prisma-adapter mais n'est JAMAIS peuplé
+// car la stratégie d'authentification est "jwt" (voir auth.config.ts).
+// Ne pas supprimer : le build Prisma en a besoin pour la compatibilité de l'adapter.
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -68,7 +71,6 @@ model Category {
   id          String    @id @default(cuid())
   slug        String    @unique
   nameDe      String
-  nameEn      String?
   description String?
   image       String?
   sortOrder   Int       @default(0)
@@ -86,9 +88,7 @@ model Product {
   supplierSku      String?        @unique
   ean              String?        @unique
   nameDe           String
-  nameEn           String?
   descriptionDe    String?
-  descriptionEn    String?
   shortDescription String?
   price            Decimal        @db.Decimal(10, 2)
   oldPrice         Decimal?       @db.Decimal(10, 2)
@@ -96,6 +96,7 @@ model Product {
   vatRatePercent   Int            @default(19)
   priceIncludesVat Boolean        @default(true)
   stock            Int            @default(0)
+  initialStock     Int            @default(0)
   stockAlertAt     Int            @default(5)
   weightKg         Decimal?       @db.Decimal(8, 3)
   brand            String?
@@ -163,6 +164,8 @@ model Order {
   deliveredAt     DateTime?
   customerNote    String?
   internalNote    String?
+  shippingEmailSentAt DateTime?   // M18: Track shipping notification email
+  reviewEmailSentAt   DateTime?   // M18: Track review request email
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   user            User?         @relation(fields: [userId], references: [id])
@@ -229,6 +232,7 @@ model Review {
   rating      Int
   title       String?
   content     String
+  helpful     Int      @default(0)
   isVerified  Boolean  @default(false)
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
@@ -272,11 +276,8 @@ model BlogPost {
   id          String    @id @default(cuid())
   slug        String    @unique
   titleDe     String
-  titleEn     String?
   excerptDe   String?
-  excerptEn   String?
   contentDe   String
-  contentEn   String?
   image       String?
   author      String    @default("NOVA Team")
   category    String?
@@ -439,10 +440,8 @@ enum PaymentStatus {
 }
 
 enum PaymentMethod {
-  STRIPE
   PAYPAL
   BANK_TRANSFER
-  CASH_ON_DELIVERY
 }
 
 enum AddressType {

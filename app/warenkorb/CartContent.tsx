@@ -12,6 +12,7 @@ import { useCart } from '@/lib/store/cart'
 import { useState } from 'react'
 import { Product } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
+import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD, calculateShipping } from '@/lib/constants/shop'
 
 export interface CartContentProps {
   recommendedProducts?: Product[]
@@ -25,9 +26,9 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
   const [showSuccessToast, setShowSuccessToast] = useState(false)
 
   const subtotal = totalPrice
-  const shipping = subtotal > 500 ? 0 : 9.99
+  const shipping = calculateShipping(subtotal)
   const total = subtotal + shipping
-  const freeShippingRemaining = Math.max(0, 500 - subtotal)
+  const freeShippingRemaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal)
   const isFreeShipping = shipping === 0
 
   // Show loading state while hydrating
@@ -101,17 +102,17 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
       </nav>
 
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
-        <div className="flex items-center justify-between mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0C211E] font-heading tracking-tight">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl font-black text-[#0C211E] font-heading tracking-tight uppercase">
             {items.length > 0 ? `Ihr Warenkorb (${totalItems})` : 'Ihr Warenkorb'}
           </h1>
           
           {items.length > 0 && (
             <Link 
               href="/produkte" 
-              className="hidden lg:flex items-center gap-2 text-gray-500 hover:text-[#0C211E] transition-colors font-bold group"
+              className="hidden lg:flex items-center gap-1.5 text-gray-400 hover:text-[#0C211E] transition-colors font-bold text-xs group"
             >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
               Weiter einkaufen
             </Link>
           )}
@@ -120,22 +121,22 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
         {items.length === 0 ? (
           <motion.div 
             data-testid="empty-cart"
-            initial={{ opacity: 0, scale: 0.9 }} 
+            initial={{ opacity: 0, scale: 0.95 }} 
             animate={{ opacity: 1, scale: 1 }} 
-            className="max-w-2xl mx-auto text-center py-20 px-6 bg-white rounded-[3rem] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-gray-100"
+            className="max-w-xl mx-auto text-center py-12 px-6 bg-white rounded-3xl shadow-sm border border-gray-100"
           >
-            <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 transform -rotate-6">
-              <ShoppingCart className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300" />
+            <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <ShoppingCart className="w-8 h-8 text-gray-300" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0C211E] mb-4 font-heading">Ihr Warenkorb ist leer</h2>
-            <p className="text-gray-500 mb-10 text-base sm:text-lg max-w-md mx-auto font-medium">
+            <h2 className="text-xl font-bold text-[#0C211E] mb-2 font-heading">Ihr Warenkorb ist leer</h2>
+            <p className="text-gray-400 mb-8 text-sm max-w-xs mx-auto font-medium">
               Entdecke unsere Premium-Produkte und füge Deine Favoriten hinzu.
             </p>
             <Link 
               href="/produkte" 
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[#0C211E] text-white rounded-2xl hover:bg-[#17423C] transition-all duration-300 font-bold text-lg shadow-xl shadow-[#0C211E]/20 hover:-translate-y-1"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#0C211E] text-white rounded-xl hover:bg-black transition-all duration-300 font-bold text-xs shadow-lg active:scale-95"
             >
-              <Package className="w-5 h-5" />
+              <Package className="w-4 h-4" />
               Weiter einkaufen
             </Link>
           </motion.div>
@@ -182,33 +183,30 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                         <div className="flex items-start justify-between gap-4">
                           <Link 
                             href={`/produkt/${item.product.slug}`}
-                            className="font-bold text-[#0C211E] hover:text-[#4ECCA3] transition-colors line-clamp-2 text-base sm:text-xl leading-tight pr-6 sm:pr-0"
+                            className="font-bold text-[#0C211E] hover:text-nova-600 transition-colors line-clamp-1 text-sm sm:text-base leading-tight pr-6 sm:pr-0"
                           >
                             {item.product.name.de}
                           </Link>
                           
-                          {/* Remove Button - Desktop */}
                           <button 
                             data-testid="remove-cart-item"
                             onClick={() => handleRemoveItem(item.product.id)}
-                            className="hidden sm:flex p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                            title="Entfernen"
+                            className="hidden sm:flex p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
                           >
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                         
-                          {/* Price Display */}
-                          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mt-2 sm:mt-1">
-                            <span data-testid="cart-item-price" className="text-[#0C211E] font-black text-lg sm:text-xl tracking-tight tabular-nums whitespace-nowrap">
-                              {formatPriceDe(item.product.price)}
+                        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mt-1">
+                          <span data-testid="cart-item-price" className="text-red-600 font-black text-sm sm:text-lg tabular-nums whitespace-nowrap">
+                            {formatPriceDe(item.product.price)}
+                          </span>
+                          {item.product.oldPrice && (
+                            <span className="text-[10px] font-bold text-gray-400 line-through tabular-nums whitespace-nowrap">
+                              {formatPriceDe(item.product.oldPrice)}
                             </span>
-                            {item.product.oldPrice && (
-                              <span className="text-sm font-semibold text-gray-400 line-through decoration-gray-300 tabular-nums whitespace-nowrap">
-                                {formatPriceDe(item.product.oldPrice)}
-                              </span>
-                            )}
-                          </div>
+                          )}
+                        </div>
 
                         {/* Controls & Total Row */}
                         <div className="flex items-center justify-between mt-auto pt-4 border-t sm:border-t-0 sm:pt-0 border-gray-50">
@@ -306,74 +304,65 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
             
             {/* Order Summary - Desktop Sidebar */}
             <div className="hidden lg:block lg:w-[420px] flex-shrink-0">
-              <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_40px_rgb(0,0,0,0.06)] border border-gray-100 sticky top-32">
-                <h2 className="font-bold text-[#0C211E] mb-6 text-2xl font-heading flex items-center gap-3">
+              <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 sticky top-32">
+                <h2 className="font-bold text-[#0C211E] mb-4 text-xl font-heading flex items-center gap-2 uppercase tracking-tight">
                   Zusammenfassung
                 </h2>
                 
-                {/* Free Shipping Progress */}
-                <div className="mb-8 p-5 bg-gradient-to-br from-green-50 to-[#F0FFF9] rounded-2xl border border-green-100/50">
-                  <div className="flex items-center justify-between mb-3 text-sm font-bold">
-                    <span className="text-green-700 flex items-center gap-2">
-                       {isFreeShipping ? <CheckCircle className="w-4 h-4"/> : <Truck className="w-4 h-4"/>}
-                       {isFreeShipping ? 'Kostenloser Versand erreicht!' : `Noch ${freeShippingRemaining.toFixed(2).replace('.', ',')}€ bis zum kostenlosen Versand`}
+                {/* Free Shipping Progress - Compact */}
+                <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                  <div className="flex items-center justify-between mb-2 text-[10px] font-black uppercase tracking-wider">
+                    <span className="text-gray-900 flex items-center gap-2">
+                       {isFreeShipping ? <CheckCircle className="w-3 h-3 text-green-500"/> : <Truck className="w-3 h-3"/>}
+                       {isFreeShipping ? 'Gratisversand!' : `Noch ${freeShippingRemaining.toFixed(2).replace('.', ',')}€`}
                     </span>
                   </div>
-                  <div className="w-full bg-green-200/50 rounded-full h-2.5 overflow-hidden">
+                  <div className="w-full bg-gray-200 rounded-full h-1 overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
-                      animate={{ width: `${Math.min(100, (subtotal / 500) * 100)}%` }}
+                      animate={{ width: `${Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100)}%` }}
                       transition={{ duration: 1, ease: 'easeOut' }}
-                      className={`h-full rounded-full relative ${isFreeShipping ? 'bg-green-500' : 'bg-gradient-to-r from-emerald-400 to-[#4ECCA3]'}`}
-                    >
-                      {!isFreeShipping && (
-                        <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]" style={{ backgroundImage: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)' }} />
-                      )}
-                    </motion.div>
+                      className={`h-full rounded-full ${isFreeShipping ? 'bg-green-500' : 'bg-nova-900'}`}
+                    />
                   </div>
                 </div>
                 
-                <div className="space-y-4 mb-6">
-                  <div className="flex justify-between items-center text-[15px] font-medium">
-                    <span className="text-gray-500">Zwischensumme</span>
-                    <span data-testid="cart-subtotal" className="text-gray-900 tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-tight">
+                    <span className="text-gray-400">Netto</span>
+                    <span data-testid="cart-subtotal" className="text-gray-900 tabular-nums">{formatPriceDe(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between items-center text-[15px] font-medium">
-                    <span className="text-gray-500">Versand</span>
-                    <span className={shipping === 0 ? 'text-green-600 font-bold px-2 py-0.5 bg-green-50 rounded-md' : 'text-gray-900'}>
-                      {shipping === 0 ? 'Kostenlos' : formatPriceDe(shipping)}
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-tight">
+                    <span className="text-gray-400">Versand</span>
+                    <span className={shipping === 0 ? 'text-green-600' : 'text-gray-900'}>
+                      {shipping === 0 ? 'GRATIS' : formatPriceDe(shipping)}
                     </span>
                   </div>
                 </div>
 
-                <div className="border-t border-gray-100 py-6 my-2">
-                  <div className="flex justify-between items-end mb-1">
-                    <span className="font-bold text-[#0C211E] text-xl">Gesamtsumme</span>
-                    <span className="font-black text-2xl sm:text-3xl tracking-tight text-[#0C211E] tabular-nums whitespace-nowrap">
+                <div className="border-t border-gray-100 pt-3 mb-4">
+                  <div className="flex justify-between items-end mb-0.5">
+                    <span className="font-black text-[#0C211E] text-[10px] uppercase tracking-tighter">Gesamt (Brutto)</span>
+                    <span className="font-black text-xl tracking-tighter text-nova-900 tabular-nums">
                       {formatPriceDe(total)}
                     </span>
                   </div>
-                  <p className="text-[11px] font-bold text-gray-400 flex justify-end items-center gap-1">
-                    Inkl. 19% MwSt.
-                  </p>
+                  <p className="text-[10px] text-gray-400 text-right font-medium italic">inkl. 19% MwSt.</p>
                 </div>
 
                 <motion.button 
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => router.push('/kasse')}
-                  className="w-full py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 text-lg shadow-xl shadow-[#0C211E]/20"
+                  className="w-full py-3 bg-[#0C211E] text-white font-black rounded-xl hover:bg-black transition-colors flex items-center justify-center gap-2 text-xs uppercase tracking-widest shadow-xl shadow-gray-900/10"
                 >
-                  <Lock className="w-4 h-4 opacity-70" /> Zur Kasse
+                  <Lock className="w-3.5 h-3.5 opacity-70" /> Zur Kasse
                 </motion.button>
                 
-                {/* Payments accepted icon placeholder */}
-                <div className="mt-6 flex justify-center gap-2">
-                   {/* This could be actual payment icons later */}
-                   <div className="h-6 w-10 bg-gray-100 rounded border border-gray-200"></div>
-                   <div className="h-6 w-10 bg-gray-100 rounded border border-gray-200"></div>
-                   <div className="h-6 w-10 bg-gray-100 rounded border border-gray-200"></div>
-                   <div className="h-6 w-10 bg-gray-100 rounded border border-gray-200"></div>
+                {/* Payments accepted */}
+                <div className="mt-6 flex flex-wrap justify-center gap-3">
+                   <div className="px-3 py-1 bg-gray-50 rounded border border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-wider">PayPal</div>
+                   <div className="px-3 py-1 bg-gray-50 rounded border border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Banküberweisung</div>
                 </div>
 
               </div>
@@ -382,32 +371,24 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
         )}
       </div>
 
-      {/* Mobile Sticky Summary Bar */}
+      {/* Mobile Sticky Summary Bar - Ultra Compact */}
       {items.length > 0 && (
         <motion.div 
           initial={{ y: 150 }}
           animate={{ y: 0 }}
-          className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 pt-3 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.06)]"
+          className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 pt-2 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.06)]"
         >
-          {/* Mobile Free shipping toast */}
-          <div className="px-4 mb-2">
-            <div className={`flex items-center justify-center gap-2 text-xs font-bold py-1.5 px-3 rounded-md ${isFreeShipping ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'}`}>
-              {isFreeShipping ? <CheckCircle className="w-3.5 h-3.5" /> : <Truck className="w-3.5 h-3.5" />}
-              <span>{isFreeShipping ? 'Kostenloser Versand erreicht!' : `Noch ${freeShippingRemaining.toFixed(2).replace('.', ',')}€`}</span>
-            </div>
-          </div>
-          
-          <div className="px-4 pb-4 flex items-center justify-between gap-4">
+          <div className="px-4 pb-2 flex items-center justify-between gap-4">
             <div>
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Gesamtsumme</p>
-              <p className="text-xl sm:text-2xl font-black text-[#0C211E] tracking-tight tabular-nums whitespace-nowrap">{formatPriceDe(total)}</p>
+              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Gesamt</p>
+              <p className="text-xl font-black text-[#0C211E] tracking-tighter tabular-nums">{formatPriceDe(total)}</p>
             </div>
             <motion.button 
               whileTap={{ scale: 0.96 }}
               onClick={() => router.push('/kasse')}
-              className="flex-[1.5] max-w-xs py-3.5 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-2 text-base shadow-xl shadow-[#0C211E]/20"
+              className="flex-1 py-3 bg-[#0C211E] text-white font-black rounded-xl hover:bg-black transition-colors flex items-center justify-center gap-2 text-xs uppercase tracking-widest"
             >
-              <Lock className="w-4 h-4 opacity-70" /> Zur Kasse
+              <Lock className="w-3.5 h-3.5" /> Kasse
             </motion.button>
           </div>
         </motion.div>

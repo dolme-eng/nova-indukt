@@ -25,7 +25,7 @@ export default async function AdminBlogPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Blog / Magazin</h1>
-          <p className="text-slate-500">Gérer les articles de votre magazine</p>
+          <p className="text-slate-500">Verwalten Sie Ihre Magazinartikel</p>
         </div>
         <Link 
           href="/admin/blog/new" 
@@ -39,15 +39,15 @@ export default async function AdminBlogPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Articles</p>
+          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Gesamtartikel</p>
           <p className="text-3xl font-bold text-slate-900 mt-2">{posts.length}</p>
         </div>
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Publiés</p>
+          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Veröffentlicht</p>
           <p className="text-3xl font-bold text-emerald-600 mt-2">{posts.filter(p => p.isPublished).length}</p>
         </div>
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Brouillons</p>
+          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Entwürfe</p>
           <p className="text-3xl font-bold text-amber-500 mt-2">{posts.filter(p => !p.isPublished).length}</p>
         </div>
       </div>
@@ -69,11 +69,11 @@ export default async function AdminBlogPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Article</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Catégorie</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Statut</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Artikel</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Kategorie</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Datum</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Aktionen</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -98,7 +98,7 @@ export default async function AdminBlogPage() {
                   </td>
                   <td className="px-6 py-4">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
-                      {post.category || 'Non classé'}
+                      {post.category || 'Nicht kategorisiert'}
                     </span>
                   </td>
                   <td className="px-6 py-4">
@@ -111,12 +111,12 @@ export default async function AdminBlogPage() {
                     {post.isPublished ? (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
                         <CheckCircle2 size={12} />
-                        Publié
+                        Veröffentlicht
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
                         <XCircle size={12} />
-                        Brouillon
+                        Entwurf
                       </span>
                     )}
                   </td>
@@ -126,14 +126,14 @@ export default async function AdminBlogPage() {
                         href={`/blog/${post.slug}`} 
                         target="_blank"
                         className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-all"
-                        title="Voir l'article"
+                        title="Artikel ansehen"
                       >
                         <Eye size={18} />
                       </Link>
                       <Link 
                         href={`/admin/blog/edit/${post.id}`} 
                         className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                        title="Modifier"
+                        title="Bearbeiten"
                       >
                         <Edit size={18} />
                       </Link>

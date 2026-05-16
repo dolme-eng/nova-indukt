@@ -7,8 +7,8 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     
-    // Only authenticated users can upload
-    if (!session?.user?.id) {
+    // Only admins can upload images
+    if (!session?.user?.id || session.user.role !== 'ADMIN') {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -76,7 +76,8 @@ export async function DELETE(request: NextRequest) {
   try {
     const session = await auth()
     
-    if (!session?.user?.id) {
+    // Only admins can delete images
+    if (!session?.user?.id || session.user.role !== 'ADMIN') {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

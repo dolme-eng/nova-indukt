@@ -1,15 +1,10 @@
-// VAT (MwSt) Constants for Germany
-export const VAT_RATE = 0.19 // 19%
-export const VAT_RATE_PERCENT = 19
+/**
+ * @deprecated — Ce module est conservé pour compatibilité mais toute la logique
+ * TVA est désormais centralisée dans `@/lib/utils/vat`.
+ *
+ * Préférez les imports suivants :
+ *   import { VAT_RATE, VAT_RATE_PERCENT, vatFromGross, netFromGross } from '@/lib/utils/vat'
+ */
 
-export function calculateVAT(amount: number): number {
-  return Math.round(amount * VAT_RATE * 100) / 100
-}
-
-export function calculatePriceWithVAT(amount: number): number {
-  return Math.round(amount * (1 + VAT_RATE) * 100) / 100
-}
-
-export function calculatePriceWithoutVAT(amount: number): number {
-  return Math.round((amount / (1 + VAT_RATE)) * 100) / 100
-}
+// Re-export depuis la source de vérité unique
+export { VAT_RATE, VAT_RATE_PERCENT, vatFromGross as calculateVAT, grossFromNet as calculatePriceWithVAT, netFromGross as calculatePriceWithoutVAT } from '@/lib/utils/vat'

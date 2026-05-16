@@ -6,8 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     
-    // Vérification admin simplifiée pour l'exemple
-    if (!session?.user) {
+    if (!session?.user || session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 

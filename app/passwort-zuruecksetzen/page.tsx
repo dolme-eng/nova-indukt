@@ -37,8 +37,8 @@ function ResetPasswordContent() {
       return
     }
 
-    if (password.length < 6) {
-      toast.error('Passwort muss mindestens 6 Zeichen lang sein')
+    if (password.length < 8) {
+      toast.error('Passwort muss mindestens 8 Zeichen lang sein')
       return
     }
 
@@ -159,10 +159,10 @@ function ResetPasswordContent() {
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Mindestens 6 Zeichen"
+                      placeholder="Mindestens 8 Zeichen"
                       required
                       disabled={isLoading}
-                      minLength={6}
+                      minLength={8}
                       className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#4ECCA3] focus:ring-[#4ECCA3]/20 pr-10"
                     />
                     <button

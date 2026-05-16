@@ -120,7 +120,7 @@ export const WelcomeEmail = ({
               </Link>
             </Text>
             <Text style={footerText}>
-              NOVA INDUKT GmbH · Musterstraße 123 · 12345 Berlin
+              NOVA INDUKT GmbH · Industriestraße 123 · 12345 Berlin
             </Text>
             <Text style={footerText}>
               <Link href="https://nova-indukt.de" style={link}>www.nova-indukt.de</Link> ·{' '}

@@ -36,17 +36,16 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
   // Form states
   const [formData, setFormData] = useState({
     nameDe: initialData?.nameDe || "",
-    nameEn: initialData?.nameEn || "",
     slug: initialData?.slug || "",
     supplierSku: initialData?.supplierSku || "",
     ean: initialData?.ean || "",
     descriptionDe: initialData?.descriptionDe || "",
-    descriptionEn: initialData?.descriptionEn || "",
     shortDescription: initialData?.shortDescription || "",
     price: initialData?.price ? Number(initialData.price) : 0,
     oldPrice: initialData?.oldPrice ? Number(initialData.oldPrice) : null,
     costPrice: initialData?.costPrice ? Number(initialData.costPrice) : null,
     stock: initialData?.stock || 0,
+    initialStock: initialData?.initialStock || 0,
     stockAlertAt: initialData?.stockAlertAt || 5,
     categoryId: initialData?.categoryId || (categories[0]?.id || ""),
     isActive: initialData?.isActive ?? true,
@@ -56,7 +55,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
     dimensions: initialData?.dimensions || "",
     dishwasherSafe: initialData?.dishwasherSafe ?? false,
     inductionSafe: initialData?.inductionSafe ?? true,
-    images: initialData?.images || []
+    images: initialData?.images?.map((img: any) => typeof img === 'string' ? img : img.url) || []
   })
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -75,13 +74,13 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
         }
       )
 
-      if (!response.ok) throw new Error("Une erreur est survenue")
+      if (!response.ok) throw new Error("Ein Fehler ist aufgetreten")
 
-      toast.success(initialData ? "Produit mis à jour" : "Produit créé")
+      toast.success(initialData ? "Produkt aktualisiert" : "Produkt erstellt")
       router.push("/admin/products")
       router.refresh()
     } catch {
-      toast.error("Erreur lors de la sauvegarde")
+      toast.error("Fehler beim Speichern")
     } finally {
       setIsLoading(false)
     }
@@ -109,9 +108,9 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-slate-900">
-              {initialData ? "Modifier le produit" : "Nouveau produit"}
+              {initialData ? "Produkt bearbeiten" : "Neues Produkt"}
             </h1>
-            <p className="text-slate-500 text-sm">Remplissez les informations ci-dessous</p>
+            <h2 className="text-slate-500 text-sm">Füllen Sie die untenstehenden Informationen aus</h2>
           </div>
         </div>
         <div className="flex gap-3">
@@ -120,7 +119,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
             onClick={() => router.push("/admin/products")}
             className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
           >
-            Annuler
+            Abbrechen
           </button>
           <button 
             onClick={onSubmit}
@@ -128,7 +127,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
             className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors shadow-sm"
           >
             <Save size={18} />
-            {isLoading ? "Enregistrement..." : "Enregistrer"}
+            {isLoading ? "Wird gespeichert..." : "Speichern"}
           </button>
         </div>
       </div>
@@ -140,31 +139,31 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
             active={activeTab === "general"} 
             onClick={() => setActiveTab("general")}
             icon={<Settings size={18} />}
-            label="Informations"
+            label="Informationen"
           />
           <TabButton 
             active={activeTab === "translations"} 
             onClick={() => setActiveTab("translations")}
             icon={<Languages size={18} />}
-            label="Langues"
+            label="Texte"
           />
           <TabButton 
             active={activeTab === "pricing"} 
             onClick={() => setActiveTab("pricing")}
             icon={<BadgePercent size={18} />}
-            label="Prix & Stock"
+            label="Preis & Lager"
           />
           <TabButton 
             active={activeTab === "media"} 
             onClick={() => setActiveTab("media")}
             icon={<ImageIcon size={18} />}
-            label="Médias"
+            label="Medien"
           />
           <TabButton 
             active={activeTab === "specs"} 
             onClick={() => setActiveTab("specs")}
             icon={<Box size={18} />}
-            label="Spécifications"
+            label="Spezifikationen"
           />
         </div>
 
@@ -172,11 +171,11 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
         <div className="lg:col-span-3 space-y-6">
           <form className="space-y-6">
             {activeTab === "general" && (
-              <Section title="Informations Générales">
+              <Section title="Allgemeine Informationen">
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 gap-4">
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Nom (Allemand) *</span>
+                      <span className="text-sm font-semibold text-slate-700">Name (Deutsch) *</span>
                       <div className="mt-1 flex gap-2">
                         <input 
                           type="text" 
@@ -207,7 +206,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">SKU Fournisseur</span>
+                      <span className="text-sm font-semibold text-slate-700">Lieferanten-SKU</span>
                       <input 
                         type="text" 
                         value={formData.supplierSku}
@@ -216,7 +215,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       />
                     </label>
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Code EAN</span>
+                      <span className="text-sm font-semibold text-slate-700">EAN-Code</span>
                       <input 
                         type="text" 
                         value={formData.ean}
@@ -226,7 +225,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                     </label>
                   </div>
                   <label className="block">
-                    <span className="text-sm font-semibold text-slate-700">Catégorie *</span>
+                    <span className="text-sm font-semibold text-slate-700">Kategorie *</span>
                     <select 
                       value={formData.categoryId}
                       onChange={(e) => setFormData({...formData, categoryId: e.target.value})}
@@ -245,8 +244,8 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       className="w-5 h-5 rounded text-primary focus:ring-primary"
                     />
                     <div>
-                      <span className="text-sm font-bold text-slate-900">Produit Actif</span>
-                      <p className="text-xs text-slate-500">Rendre le produit visible sur le site public.</p>
+                      <span className="text-sm font-bold text-slate-900">Produkt aktiv</span>
+                      <p className="text-xs text-slate-500">Machen Sie das Produkt auf der öffentlichen Website sichtbar.</p>
                     </div>
                   </label>
                 </div>
@@ -254,38 +253,12 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
             )}
 
             {activeTab === "translations" && (
-              <Section title="Traductions">
+              <Section title="Texte & Beschreibungen">
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
-                      <span className="bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">EN</span>
-                      Anglais
-                    </h3>
-                    <div className="space-y-4">
-                      <label className="block">
-                        <span className="text-sm font-semibold text-slate-700">Nom (Anglais)</span>
-                        <input 
-                          type="text" 
-                          value={formData.nameEn}
-                          onChange={(e) => setFormData({...formData, nameEn: e.target.value})}
-                          className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
-                        />
-                      </label>
-                      <label className="block">
-                        <span className="text-sm font-semibold text-slate-700">Description (Anglais)</span>
-                        <textarea 
-                          rows={4}
-                          value={formData.descriptionEn}
-                          onChange={(e) => setFormData({...formData, descriptionEn: e.target.value})}
-                          className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none"
-                        />
-                      </label>
-                    </div>
-                  </div>
                   <div className="border-t border-slate-100 pt-6">
                     <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
                       <span className="bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">DE</span>
-                      Description Allemande
+                      Deutsche Beschreibung
                     </h3>
                     <textarea 
                       rows={6}
@@ -294,16 +267,28 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none"
                     />
                   </div>
+                  <div className="border-t border-slate-100 pt-6">
+                    <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                      <span className="bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">DE</span>
+                      Kurzbeschreibung
+                    </h3>
+                    <textarea 
+                      rows={2}
+                      value={formData.shortDescription}
+                      onChange={(e) => setFormData({...formData, shortDescription: e.target.value})}
+                      className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none"
+                    />
+                  </div>
                 </div>
               </Section>
             )}
 
             {activeTab === "pricing" && (
-              <Section title="Tarification & Stock">
+              <Section title="Preise & Lagerbestand">
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Prix de vente (€) *</span>
+                      <span className="text-sm font-semibold text-slate-700">Verkaufspreis (€) *</span>
                       <input 
                         type="number" 
                         step="0.01"
@@ -314,7 +299,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       />
                     </label>
                     <label className="block text-slate-400">
-                      <span className="text-sm font-semibold text-slate-500">Prix barré (€)</span>
+                      <span className="text-sm font-semibold text-slate-500">Alter Preis (€)</span>
                       <input 
                         type="number" 
                         step="0.01"
@@ -324,7 +309,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       />
                     </label>
                     <label className="block text-slate-400">
-                      <span className="text-sm font-semibold text-slate-500">Prix de revient (€)</span>
+                      <span className="text-sm font-semibold text-slate-500">Selbstkosten (€)</span>
                       <input 
                         type="number" 
                         step="0.01"
@@ -334,9 +319,9 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       />
                     </label>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Quantité en stock</span>
+                      <span className="text-sm font-semibold text-slate-700">Aktueller Bestand</span>
                       <input 
                         type="number" 
                         value={formData.stock}
@@ -345,7 +330,16 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       />
                     </label>
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Alerte stock bas</span>
+                      <span className="text-sm font-semibold text-slate-700">Anfangsbestand (für UI)</span>
+                      <input 
+                        type="number" 
+                        value={formData.initialStock}
+                        onChange={(e) => setFormData({...formData, initialStock: Number(e.target.value)})}
+                        className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="text-sm font-semibold text-slate-700">Bestandswarnung bei</span>
                       <input 
                         type="number" 
                         value={formData.stockAlertAt}
@@ -359,47 +353,84 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
             )}
 
             {activeTab === "media" && (
-              <Section title="Images du produit">
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {formData.images.map((img: any, index: number) => (
-                      <div key={index} className="aspect-square relative rounded-xl overflow-hidden bg-slate-100 border border-slate-200 group">
-                        <Image src={img.url} alt="Produit" fill className="object-cover" />
-                        <button 
-                          type="button"
-                          onClick={() => {
-                            const newImages = [...formData.images]
-                            newImages.splice(index, 1)
-                            setFormData({...formData, images: newImages})
-                          }}
-                          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <X size={14} />
-                        </button>
-                        {index === 0 && (
-                          <span className="absolute bottom-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">Main</span>
-                        )}
-                      </div>
-                    ))}
+          <Section title="Produktbilder">
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {formData.images.map((imgUrl: string, index: number) => (
+                  <div key={index} className="aspect-square relative rounded-xl overflow-hidden bg-slate-100 border border-slate-200 group">
+                    <Image src={imgUrl} alt="Produkt" fill className="object-cover" />
                     <button 
                       type="button"
-                      className="aspect-square border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-2 text-slate-400 hover:text-primary hover:border-primary hover:bg-slate-50 transition-all"
+                      onClick={() => {
+                        const newImages = [...formData.images]
+                        newImages.splice(index, 1)
+                        setFormData({...formData, images: newImages})
+                      }}
+                      className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
-                      <Plus size={24} />
-                      <span className="text-xs font-bold uppercase tracking-wider">Ajouter</span>
+                      <X size={14} />
                     </button>
+                    {index === 0 && (
+                      <span className="absolute bottom-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">Hauptbild</span>
+                    )}
                   </div>
-                  <p className="text-xs text-slate-500 italic">Glissez et déposez pour réorganiser l'ordre des images. La première image sera l'image principale.</p>
+                ))}
+                <div className="relative aspect-square">
+                  <input 
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                    onChange={async (e) => {
+                      const files = e.target.files
+                      if (!files) return
+                      
+                      setIsLoading(true)
+                      const newImages = [...formData.images]
+                      
+                      for (let i = 0; i < files.length; i++) {
+                        const file = files[i]
+                        const uploadFormData = new FormData()
+                        uploadFormData.append("file", file)
+                        
+                        try {
+                          const res = await fetch("/api/admin/upload", {
+                            method: "POST",
+                            body: uploadFormData
+                          })
+                          const data = await res.json()
+                          if (data.url) {
+                            newImages.push(data.url)
+                          }
+                        } catch (err) {
+                          toast.error(`Upload fehlgeschlagen für ${file.name}`)
+                        }
+                      }
+                      
+                      setFormData({...formData, images: newImages})
+                      setIsLoading(false)
+                    }}
+                  />
+                  <button 
+                    type="button"
+                    className="w-full h-full border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-2 text-slate-400 hover:text-primary hover:border-primary hover:bg-slate-50 transition-all"
+                  >
+                    <Plus size={24} />
+                    <span className="text-xs font-bold uppercase tracking-wider">Hinzufügen</span>
+                  </button>
                 </div>
-              </Section>
+              </div>
+              <p className="text-xs text-slate-500 italic">Die Bilder werden automatisch hochgeladen. Das erste Bild ist das Hauptbild.</p>
+            </div>
+          </Section>
             )}
 
             {activeTab === "specs" && (
-              <Section title="Spécifications Techniques">
+              <Section title="Technische Spezifikationen">
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Marque</span>
+                      <span className="text-sm font-semibold text-slate-700">Marke</span>
                       <input 
                         type="text" 
                         value={formData.brand}
@@ -408,7 +439,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       />
                     </label>
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Matériau</span>
+                      <span className="text-sm font-semibold text-slate-700">Material</span>
                       <input 
                         type="text" 
                         value={formData.material}
@@ -419,17 +450,17 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Dimensions</span>
+                      <span className="text-sm font-semibold text-slate-700">Abmessungen</span>
                       <input 
                         type="text" 
-                        placeholder="ex: 20cm x 15cm"
+                        placeholder="z.B.: 20cm x 15cm"
                         value={formData.dimensions}
                         onChange={(e) => setFormData({...formData, dimensions: e.target.value})}
                         className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
                       />
                     </label>
                     <label className="block text-slate-400">
-                      <span className="text-sm font-semibold text-slate-500">Poids (kg)</span>
+                      <span className="text-sm font-semibold text-slate-500">Gewicht (kg)</span>
                       <input 
                         type="number" 
                         step="0.001"
@@ -447,7 +478,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                         onChange={(e) => setFormData({...formData, dishwasherSafe: e.target.checked})}
                         className="w-5 h-5 rounded text-primary focus:ring-primary"
                       />
-                      <span className="text-sm font-bold text-slate-900 italic">Lave-vaisselle OK</span>
+                      <span className="text-sm font-bold text-slate-900 italic">Spülmaschinenfest</span>
                     </label>
                     <label className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
                       <input 
@@ -456,7 +487,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                         onChange={(e) => setFormData({...formData, inductionSafe: e.target.checked})}
                         className="w-5 h-5 rounded text-primary focus:ring-primary"
                       />
-                      <span className="text-sm font-bold text-slate-900 italic">Induction OK</span>
+                      <span className="text-sm font-bold text-slate-900 italic">Induktionsgeeignet</span>
                     </label>
                   </div>
                 </div>

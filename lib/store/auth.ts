@@ -17,7 +17,7 @@ interface AuthState {
   isAuthenticated: boolean
   isHydrated: boolean
   login: (email: string, password: string) => Promise<boolean>
-  register: (name: string, email: string, password: string) => Promise<boolean>
+  register: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>
   logout: () => void
   setHydrated: () => void
   setUser: (user: User | null) => void
@@ -60,7 +60,7 @@ export const useAuth = create<AuthState>()(
           const data = await response.json()
           
           if (!data.success) {
-            return false
+            return { success: false, error: data.error || 'Registrierung fehlgeschlagen' }
           }
           
           // Auto login after registration
@@ -70,10 +70,14 @@ export const useAuth = create<AuthState>()(
             redirect: false
           })
           
-          return !result?.error
+          if (result?.error) {
+            return { success: false, error: 'Automatische Anmeldung fehlgeschlagen. Bitte manuell anmelden.' }
+          }
+
+          return { success: true }
         } catch (error) {
           console.error('Registration error:', error)
-          return false
+          return { success: false, error: 'Registrierung fehlgeschlagen' }
         }
       },
 

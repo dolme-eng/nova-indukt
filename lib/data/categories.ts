@@ -7,7 +7,6 @@ export interface CategoryConfig {
   id: string
   slug: string
   nameDe: string
-  nameEn: string
   descriptionDe: string
   image: string
   sortOrder: number
@@ -20,7 +19,6 @@ export const categoriesConfig: CategoryConfig[] = [
     id: 'cat-kochen-braten',
     slug: 'kochen-braten',
     nameDe: 'Kochen & Braten',
-    nameEn: 'Cooking & Frying',
     descriptionDe: 'Premium Töpfe, Pfannen, Bräter und Kochgeschirr für Induktion',
     image: '/images/Kategorien/kochen-braten.webp',
     sortOrder: 1,
@@ -30,8 +28,7 @@ export const categoriesConfig: CategoryConfig[] = [
     id: 'cat-messer-vorbereitung',
     slug: 'messer-vorbereitung',
     nameDe: 'Messer & Vorbereitung',
-    nameEn: 'Knives & Preparation',
-    descriptionDe: 'Präzisionsmesser, Schneidebretter und Werkzeuge für die perfekte Zubereitung',
+    descriptionDe: 'Präzisionsmesser, Schneidebretter und Werkzeuge für die parfaite Zubereitung',
     image: '/images/Kategorien/vorbereitung.webp',
     sortOrder: 2,
     isActive: true,
@@ -40,7 +37,6 @@ export const categoriesConfig: CategoryConfig[] = [
     id: 'cat-kuechenhelfer-zubehoer',
     slug: 'kuechenhelfer-zubehoer',
     nameDe: 'Küchenhelfer & Zubehör',
-    nameEn: 'Kitchen Helpers & Accessories',
     descriptionDe: 'Nützliche Helfer, Küchengeräte und praktisches Zubehör für die Küche',
     image: '/images/Kategorien/kuechenzubehoer.webp',
     sortOrder: 3,

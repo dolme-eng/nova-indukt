@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -59,13 +59,19 @@ export function useWishlist() {
   const { status } = useSession()
   const isAuthenticated = status === 'authenticated'
 
+  const hasSynced = useRef(false)
+
   // Sync on login & hydration
   useEffect(() => {
     setMounted(true)
     
-    if (isAuthenticated) {
+    if (isAuthenticated && !hasSynced.current) {
+      hasSynced.current = true
       syncOnLogin()
       fetchWishlistFromApi()
+    }
+    if (!isAuthenticated) {
+      hasSynced.current = false
     }
   }, [isAuthenticated])
 

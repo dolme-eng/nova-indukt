@@ -5,7 +5,7 @@ import {
   Filter, 
   Eye, 
   Calendar,
-  CreditCard,
+  Banknote,
   Truck,
   Download,
   MoreVertical,
@@ -22,8 +22,25 @@ import { format } from "date-fns"
 import { de } from "date-fns/locale"
 import { OrderStatus, PaymentStatus } from "@prisma/client"
 
-async function getOrders() {
+import { OrdersFilter } from "./_components/orders-filter"
+
+async function getOrders(search?: string, status?: string) {
+  const where: any = {}
+  
+  if (status) {
+    where.status = status
+  }
+  
+  if (search) {
+    where.OR = [
+      { orderNumber: { contains: search, mode: 'insensitive' } },
+      { customerName: { contains: search, mode: 'insensitive' } },
+      { customerEmail: { contains: search, mode: 'insensitive' } }
+    ]
+  }
+
   return await prisma.order.findMany({
+    where,
     orderBy: { createdAt: "desc" },
     include: {
       items: true
@@ -49,8 +66,13 @@ const paymentMap: Record<PaymentStatus, { label: string, color: string }> = {
   PARTIALLY_REFUNDED: { label: "Teilweise", color: "bg-orange-50 text-orange-600" }
 }
 
-export default async function AdminOrdersPage() {
-  const orders = await getOrders()
+export default async function AdminOrdersPage({
+  searchParams
+}: {
+  searchParams: Promise<{ q?: string, status?: string }>
+}) {
+  const resolvedParams = await searchParams
+  const orders = await getOrders(resolvedParams.q, resolvedParams.status)
 
   return (
     <div className="space-y-6">
@@ -67,26 +89,7 @@ export default async function AdminOrdersPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
-            type="text" 
-            placeholder="Suchen (Kunde, Bestellnummer, E-Mail...)" 
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none transition-all"
-          />
-        </div>
-        <div className="flex gap-2">
-          <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
-            <Filter size={18} />
-            Status
-          </button>
-          <button className="inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
-            <Calendar size={18} />
-            Date
-          </button>
-        </div>
-      </div>
+      <OrdersFilter />
 
       {/* Orders Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
@@ -129,7 +132,7 @@ export default async function AdminOrdersPage() {
                         {paymentMap[order.paymentStatus].label}
                       </span>
                       <span className="text-[10px] text-slate-400 flex items-center gap-1">
-                        <CreditCard size={10} />
+                        <Banknote size={10} />
                         {order.paymentMethod}
                       </span>
                     </div>
@@ -148,7 +151,7 @@ export default async function AdminOrdersPage() {
                       <Link 
                         href={`/admin/orders/${order.id}`}
                         className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-all"
-                        title="Détails"
+                        title="Details"
                       >
                         <Eye size={18} />
                       </Link>

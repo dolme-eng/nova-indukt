@@ -12,12 +12,13 @@ import {
   Mail,
   Star,
   ChevronRight,
-  CreditCard,
+  Banknote,
   User,
   Loader2,
   Clock
 } from "lucide-react"
 import Link from "next/link"
+import { formatPriceDe } from "@/lib/utils"
 
 interface Stats {
   orders: { total: number; recent: number; revenue: number }
@@ -31,6 +32,13 @@ interface Stats {
     customerName: string
     status: string
     total: number
+    createdAt: string
+  }[]
+  recentActivity?: {
+    id: string
+    action: string
+    entityType: string
+    entityId: string
     createdAt: string
   }[]
 }
@@ -58,10 +66,7 @@ export default function AdminDashboard() {
   }
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR'
-    }).format(value)
+    return formatPriceDe(value)
   }
 
   if (loading) {
@@ -87,28 +92,28 @@ export default function AdminDashboard() {
           value={formatCurrency(stats?.orders.revenue || 0)} 
           change={`${stats?.orders.recent || 0} diesen Monat`} 
           isPositive={true} 
-          icon={<TrendingUp className="text-emerald-600" size={24} />} 
+          icon={<TrendingUp className="text-nova-400" size={24} />} 
         />
         <StatCard 
           title="Bestellungen" 
           value={(stats?.orders.total || 0).toString()} 
           change={`${stats?.orders.recent || 0} diesen Monat`} 
           isPositive={true} 
-          icon={<ShoppingCart className="text-blue-600" size={24} />} 
+          icon={<ShoppingCart className="text-nova-400" size={24} />} 
         />
         <StatCard 
           title="Kunden" 
           value={(stats?.customers.total || 0).toString()} 
           change={`+${stats?.customers.new || 0} diesen Monat`} 
           isPositive={true} 
-          icon={<Users className="text-violet-600" size={24} />} 
+          icon={<Users className="text-nova-400" size={24} />} 
         />
         <StatCard 
           title="Aktive Produkte" 
           value={(stats?.products.active || 0).toString()} 
           change="online" 
           isPositive={true} 
-          icon={<Package className="text-orange-600" size={24} />} 
+          icon={<Package className="text-nova-400" size={24} />} 
         />
       </div>
 
@@ -120,7 +125,7 @@ export default function AdminDashboard() {
             value={(stats?.promotions.active || 0).toString()} 
             change={`${stats?.promotions.total || 0} gesamt`} 
             isPositive={true} 
-            icon={<Tag className="text-pink-600" size={24} />} 
+            icon={<Tag className="text-nova-400" size={24} />} 
           />
         </Link>
         <Link href="/admin/newsletter">
@@ -129,26 +134,26 @@ export default function AdminDashboard() {
             value={(stats?.newsletter.subscribers || 0).toString()} 
             change="aktiv" 
             isPositive={true} 
-            icon={<Mail className="text-cyan-600" size={24} />} 
+            icon={<Mail className="text-nova-400" size={24} />} 
           />
         </Link>
         <Link href="/admin/reviews">
           <StatCard 
-            title="Ausstehende Bewertungen" 
+            title="Bewertungen" 
             value={(stats?.reviews.pending || 0).toString()} 
-            change="zu moderieren" 
+            change="ausstehend" 
             isPositive={stats?.reviews.pending === 0} 
-            icon={<Star className="text-yellow-600" size={24} />} 
+            icon={<Star className="text-nova-400" size={24} />} 
           />
         </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Orders */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-slate-900">Neue Bestellungen</h2>
-            <Link href="/admin/orders" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+        <div className="lg:col-span-2 bg-white rounded-3xl border border-nova-100 shadow-xl shadow-nova-900/5 overflow-hidden">
+          <div className="p-8 border-b border-nova-100 flex items-center justify-between bg-white">
+            <h2 className="text-xl font-black text-nova-900 font-heading">Neue Bestellungen</h2>
+            <Link href="/admin/orders" className="text-xs font-black text-nova-500 hover:text-nova-600 flex items-center gap-2 uppercase tracking-widest transition-colors">
               Alle ansehen <ChevronRight size={14} />
             </Link>
           </div>
@@ -160,12 +165,12 @@ export default function AdminDashboard() {
             ) : (
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold">
-                  <th className="px-6 py-4">Bestellung</th>
-                  <th className="px-6 py-4">Kunde</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Betrag</th>
-                  <th className="px-6 py-4">Datum</th>
+                <tr className="bg-nova-50/50 text-nova-400 text-[10px] uppercase tracking-[0.2em] font-black">
+                  <th className="px-8 py-5">Bestellung</th>
+                  <th className="px-8 py-5">Kunde</th>
+                  <th className="px-8 py-5">Status</th>
+                  <th className="px-8 py-5">Betrag</th>
+                  <th className="px-8 py-5">Datum</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -213,30 +218,36 @@ export default function AdminDashboard() {
             <h2 className="text-lg font-bold text-slate-900">Letzte Aktivitäten</h2>
           </div>
           <div className="p-6 space-y-6">
-            <ActivityItem 
-              icon={<CreditCard className="text-emerald-500" size={18} />}
-              title="Zahlung erhalten"
-              description="Bestellung #NO-2024-001 bestätigt"
-              time="2 min"
-            />
-            <ActivityItem 
-              icon={<User className="text-blue-500" size={18} />}
-              title="Neuer Benutzer"
-              description="Jean Martin hat sich registriert"
-              time="15 min"
-            />
-            <ActivityItem 
-              icon={<Package className="text-orange-500" size={18} />}
-              title="Niedriger Lagerbestand"
-              description="Induct-Pro Max (SKU: IP-001)"
-              time="1h"
-            />
-            <ActivityItem 
-              icon={<Clock className="text-slate-500" size={18} />}
-              title="Neue Bewertung"
-              description="5 Sterne für Induct-Pro"
-              time="3h"
-            />
+            {stats?.recentActivity && stats.recentActivity.length > 0 ? (
+              stats.recentActivity.map(log => {
+                let icon = <Clock className="text-slate-500" size={18} />;
+                if (log.entityType === 'ORDER') icon = <Banknote className="text-emerald-500" size={18} />;
+                if (log.entityType === 'USER') icon = <User className="text-blue-500" size={18} />;
+                if (log.entityType === 'PRODUCT') icon = <Package className="text-orange-500" size={18} />;
+                
+                // Format relative time
+                const diffMs = Date.now() - new Date(log.createdAt).getTime();
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMins / 60);
+                const diffDays = Math.floor(diffHours / 24);
+                
+                let timeStr = `${diffMins} min`;
+                if (diffDays > 0) timeStr = `${diffDays}d`;
+                else if (diffHours > 0) timeStr = `${diffHours}h`;
+
+                return (
+                  <ActivityItem 
+                    key={log.id}
+                    icon={icon}
+                    title={`${log.action} ${log.entityType}`}
+                    description={`ID: ${log.entityId}`}
+                    time={timeStr}
+                  />
+                )
+              })
+            ) : (
+              <div className="text-sm text-slate-500 text-center py-4">Keine aktuellen Aktivitäten.</div>
+            )}
           </div>
           <div className="p-4 bg-slate-50 border-t border-slate-200 text-center">
             <button className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
@@ -258,21 +269,24 @@ function StatCard({ title, value, change, isPositive, icon, className = '' }: {
   className?: string
 }) {
   return (
-    <div className={`bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group ${className}`}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="p-3 bg-slate-50 rounded-lg group-hover:bg-white transition-colors">
-          {icon}
+    <div className={`bg-white p-8 rounded-3xl border border-nova-100 shadow-xl shadow-nova-900/5 hover:shadow-nova-900/10 transition-all group relative overflow-hidden ${className}`}>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-nova-50 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-500" />
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-6">
+          <div className="p-4 bg-nova-900 text-nova-400 rounded-2xl shadow-lg shadow-nova-900/20 group-hover:scale-110 transition-transform">
+            {icon}
+          </div>
+          <div className={`flex items-center gap-1 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider ${
+            isPositive ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"
+          }`}>
+            {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+            {change}
+          </div>
         </div>
-        <div className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${
-          isPositive ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"
-        }`}>
-          {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-          {change}
+        <div>
+          <p className="text-[10px] font-black text-nova-300 uppercase tracking-[0.2em]">{title}</p>
+          <h3 className="text-3xl font-black text-nova-900 mt-2 font-heading tracking-tight">{value}</h3>
         </div>
-      </div>
-      <div>
-        <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">{title}</p>
-        <h3 className="text-2xl font-bold text-slate-900 mt-1">{value}</h3>
       </div>
     </div>
   )

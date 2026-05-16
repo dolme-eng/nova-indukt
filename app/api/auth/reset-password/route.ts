@@ -1,25 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
-import crypto from "crypto"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { hashPassword } from "@/lib/auth/auth.config"
 
 const resetPasswordSchema = z.object({
   token: z.string().min(1, "Token ist erforderlich"),
-  password: z.string().min(6, "Passwort muss mindestens 6 Zeichen lang sein"),
+  password: z.string().min(8, "Passwort muss mindestens 8 Zeichen lang sein"),
 })
 
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 minutes
 const RATE_LIMIT_MAX = 5 // 5 attempts per 15 minutes per IP
-
-// Hash password with SHA-256 (same as auth.config.ts)
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-}
 
 export async function POST(request: NextRequest) {
   try {

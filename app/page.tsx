@@ -1,6 +1,14 @@
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
-import { Product, Category, blogPosts } from '@/lib/data/products'
+import { 
+  Product, 
+  Category, 
+  blogPosts, 
+  mapDbProductToUi, 
+  mapDbCategoryToUi,
+  DbProduct,
+  DbCategory
+} from '@/lib/data/products'
 import { categoriesConfig } from '@/lib/data/categories'
 import { logError } from '@/lib/logger'
 import { getActivePromotions } from '@/lib/promotions'
@@ -20,9 +28,8 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-  let products: any[] = []
-  // Raw categories shape differs between DB and static config; we normalize later.
-  let categories: any[] = []
+  let products: DbProduct[] = []
+  let categories: DbCategory[] = []
   let activePromotions: Awaited<ReturnType<typeof getActivePromotions>> = []
 
   try {
@@ -50,47 +57,15 @@ export default async function Page() {
       nameDe: c.nameDe,
       image: c.image,
       _count: { products: 0 }
-    }))
+    })) as unknown as DbCategory[]
     products = []
   }
 
   const formattedProducts: Product[] = products
     .filter((p) => Array.isArray(p.images) && p.images.length > 0)
-    .map(p => ({
-    id: p.id,
-    slug: p.slug,
-    name: { de: p.nameDe },
-    category: p.categoryId,
-    price: Number(p.price),
-    oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
-    images: (p.images as Array<{ sortOrder: number; url: string }>)
-      .sort((a, b) => a.sortOrder - b.sortOrder)
-      .map((img) => img.url),
-    rating: p.rating,
-    reviewCount: p.reviewCount,
-    stock: p.stock,
-    badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
-    description: { de: p.descriptionDe || '' },
-    shortDescription: { de: p.shortDescription || '' },
-    specs: {
-      material: p.material || '',
-      dimensions: p.dimensions || '',
-      weight: p.weightKg?.toString() || '',
-      dishwasher: p.dishwasherSafe || false,
-      induction: p.inductionSafe || false,
-    },
-    brand: p.brand || undefined,
-    ean: p.ean || undefined,
-    supplierSku: p.supplierSku || undefined
-  }))
+    .map(mapDbProductToUi)
 
-  const formattedCategories: Category[] = categories.map(c => ({
-    id: c.id,
-    slug: c.slug,
-    name: { de: c.nameDe },
-    image: c.image || '',
-    count: (c as any)._count?.products || 0
-  }))
+  const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -118,7 +93,7 @@ export default async function Page() {
         initialProducts={formattedProducts} 
         initialCategories={formattedCategories}
         initialBlogPosts={blogPosts}
-        activePromotions={activePromotions}
+        activePromotions={activePromotions.map(p => ({ ...p, discountValue: Number(p.discountValue) }))}
       />
     </>
   )

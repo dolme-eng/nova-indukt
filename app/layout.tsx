@@ -124,16 +124,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "logo": "https://nova-indukt.de/logo0.png",
           "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "+49-89-123-456-78",
             "contactType": "customer service",
+            "url": "https://nova-indukt.de/kontakt",
             "areaServed": "DE",
             "availableLanguage": "German"
           },
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "Musterstraße 42",
+            "streetAddress": "Industriestraße 123",
             "addressLocality": "Berlin",
-            "postalCode": "10115",
+            "postalCode": "12345",
             "addressCountry": "DE"
           }
         })}} />

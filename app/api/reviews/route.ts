@@ -68,18 +68,14 @@ export async function GET(request: NextRequest) {
       }),
     ])
     
-    // Calculate average rating
-    const allApprovedReviews = await prisma.review.findMany({
-      where: {
-        productId,
-        isPublished: true,
-      },
-      select: { rating: true },
+    // Calculate average rating from the groupBy result (no extra DB query needed)
+    let totalRatings = 0
+    let ratingSum = 0
+    ratingStats.forEach(stat => {
+      totalRatings += stat._count.rating
+      ratingSum += stat.rating * stat._count.rating
     })
-    
-    const averageRating = allApprovedReviews.length > 0
-      ? allApprovedReviews.reduce((sum, r) => sum + r.rating, 0) / allApprovedReviews.length
-      : 0
+    const averageRating = totalRatings > 0 ? ratingSum / totalRatings : 0
     
     // Build rating distribution
     const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
@@ -110,7 +106,7 @@ export async function GET(request: NextRequest) {
       },
       stats: {
         average: Math.round(averageRating * 10) / 10,
-        count: allApprovedReviews.length,
+        count: totalRatings,
         distribution,
       },
     })
@@ -223,26 +219,9 @@ export async function POST(request: NextRequest) {
       },
     })
     
-    // Update product rating if needed
-    const approvedReviews = await prisma.review.findMany({
-      where: {
-        productId,
-        isPublished: true,
-      },
-      select: { rating: true },
-    })
-    
-    const newAverage = approvedReviews.length > 0
-      ? approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length
-      : rating
-      
-    await prisma.product.update({
-      where: { id: productId },
-      data: {
-        rating: newAverage,
-        reviewCount: { increment: 1 },
-      },
-    })
+    // NOTE: reviewCount et rating ne sont PAS mis à jour ici.
+    // Ils seront recalculés quand l'admin publie la review (isPublished → true).
+    // Cela évite d'afficher un compteur gonflé avec des avis en attente.
     
     return NextResponse.json(
       {
@@ -269,7 +248,66 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PUT has been replaced with a toggle in admin route
-export async function PUT() {
-  return NextResponse.json({ error: "Not Implemented" }, { status: 400 })
+// PUT - Mark review as helpful
+export async function PUT(request: NextRequest) {
+  try {
+    // M16 FIX: Require authentication to prevent vote manipulation
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    // Rate limit: 10 helpful votes per minute per user
+    const rl = rateLimit(createRateLimitKey(session.user.id, 'helpful'), {
+      windowMs: 60_000,
+      maxRequests: 10,
+    })
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: "Zu viele Anfragen. Bitte warten Sie einen Moment." },
+        { status: 429 }
+      )
+    }
+
+    const { searchParams } = new URL(request.url)
+    const reviewId = searchParams.get('id')
+    const action = searchParams.get('action')
+
+    if (!reviewId || action !== 'helpful') {
+      return NextResponse.json(
+        { error: "Review ID and action=helpful are required" },
+        { status: 400 }
+      )
+    }
+
+    const review = await prisma.review.findUnique({
+      where: { id: reviewId },
+    })
+
+    if (!review || !review.isPublished) {
+      return NextResponse.json(
+        { error: "Review not found" },
+        { status: 404 }
+      )
+    }
+
+    const updated = await prisma.review.update({
+      where: { id: reviewId },
+      data: { helpful: { increment: 1 } },
+    })
+
+    return NextResponse.json({
+      success: true,
+      helpful: updated.helpful,
+    })
+  } catch (error) {
+    console.error("Error updating review:", error)
+    return NextResponse.json(
+      { error: "Failed to update review" },
+      { status: 500 }
+    )
+  }
 }

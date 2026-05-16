@@ -38,7 +38,7 @@ export async function GET() {
         wishlistItemId: item.id,
         name: {
           de: item.product.nameDe,
-          en: item.product.nameEn,
+          en: item.product.nameDe,
         },
         price: Number(item.product.price),
         oldPrice: item.product.oldPrice ? Number(item.product.oldPrice) : null,
