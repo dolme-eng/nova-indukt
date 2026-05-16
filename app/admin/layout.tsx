@@ -1,6 +1,7 @@
 import React from "react"
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
+import Link from "next/link"
 import { 
   LayoutDashboard, 
   Package, 
@@ -67,7 +68,7 @@ export default async function AdminLayout({
           <form
             action={async () => {
               'use server'
-              const { signOut } = await import('next-auth')
+              const { signOut } = await import('@/lib/auth')
               await signOut({ redirectTo: '/' })
             }}
           >

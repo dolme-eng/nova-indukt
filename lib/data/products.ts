@@ -105,3 +105,16 @@ export interface Category {
   image: string
   count: number
 }
+
+/** Shape utilisé par HomeContent et blog-preview pour les articles venant de Prisma. */
+export interface BlogPost {
+  id: string
+  slug: string
+  title: { de: string }
+  excerpt: { de: string }
+  image: string
+  date: string
+  readTime: string
+  category: string
+  author: string
+}
