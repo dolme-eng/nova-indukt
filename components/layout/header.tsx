@@ -119,7 +119,7 @@ export function Header() {
   }, [searchOpen])
 
   const navItems = [
-    { label: 'Produkte', href: '/produkte', hasMega: true },
+    { label: 'Produkte', href: '/produkte', hasMega: true, alsoActiveFor: ['/produkt'] },
     { label: 'Technologie', href: '/technologie', hasMega: false },
     { label: 'Über uns', href: '/uber-uns', hasMega: false },
     { label: 'Blog', href: '/blog', hasMega: false },
@@ -147,7 +147,10 @@ export function Header() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
+  const isActive = (href: string, alsoActiveFor?: string[]) => {
+    if (pathname === href || pathname.startsWith(href + '/')) return true
+    return alsoActiveFor?.some(prefix => pathname === prefix || pathname.startsWith(prefix + '/')) ?? false
+  }
 
   return (
     <>
@@ -217,7 +220,7 @@ export function Header() {
                       <button
                         onMouseEnter={() => setMegaMenuOpen(true)}
                         className={`group flex items-center gap-1 px-4 py-2 text-xs font-black transition-all duration-500 ease-[0.22,1,0.36,1] uppercase tracking-tight ${
-                          isActive(item.href) || megaMenuOpen
+                          isActive(item.href, item.alsoActiveFor) || megaMenuOpen
                             ? 'text-[#0C211E]' 
                             : 'text-gray-600 hover:text-gray-900'
                         }`}
@@ -229,7 +232,7 @@ export function Header() {
                       <Link 
                         href={item.href} 
                         className={`block px-4 py-2 text-xs font-black transition-all duration-500 ease-[0.22,1,0.36,1] uppercase tracking-tight ${
-                          isActive(item.href) 
+                          isActive(item.href, item.alsoActiveFor) 
                             ? 'text-[#0C211E]' 
                             : 'text-gray-500 hover:text-gray-900'
                         }`}
@@ -238,7 +241,7 @@ export function Header() {
                       </Link>
                     )}
                     {/* Indicateur de ligne pour l'élément actif */}
-                    {isActive(item.href) && (
+                    {isActive(item.href, item.alsoActiveFor) && (
                       <motion.div 
                         layoutId="nav-underline"
                         className="absolute bottom-0 left-5 right-5 h-0.5 bg-[#4ECCA3]"

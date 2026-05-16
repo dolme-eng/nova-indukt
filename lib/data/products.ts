@@ -5,7 +5,9 @@ import { Prisma } from '@prisma/client'
  * Types Prisma pour les mappings
  */
 export type DbProduct = Prisma.ProductGetPayload<{ include: { images: true } }>
-export type DbCategory = Prisma.CategoryGetPayload<{ include: { _count?: { select: { products: true } } } }>
+export type DbCategory = Prisma.CategoryGetPayload<{}>
+/** DbCategory enrichie avec le compteur de produits (via _count dans la query). */
+export type DbCategoryWithCount = DbCategory & { _count?: { products: number } }
 
 /**
  * Mappe un produit de la base de données vers l'interface UI.
@@ -44,13 +46,13 @@ export function mapDbProductToUi(p: DbProduct): Product {
 /**
  * Mappe une catégorie de la base de données vers l'interface UI.
  */
-export function mapDbCategoryToUi(c: DbCategory): Category {
+export function mapDbCategoryToUi(c: DbCategoryWithCount): Category {
   return {
     id: c.id,
     slug: c.slug,
     name: { de: c.nameDe },
     image: c.image || '',
-    count: (c as any)._count?.products || 0
+    count: c._count?.products ?? 0
   }
 }
 

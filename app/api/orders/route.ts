@@ -8,6 +8,7 @@ import { createOrderSchema, type OrderItemInput } from "@/lib/validations/order"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { calculateShipping } from "@/lib/constants/shop"
 import { applyPromotionsToProducts, validateCoupon, incrementPromotionUsage } from "@/lib/promotions"
+import { randomUUID } from "crypto"
 
 // Get user's orders
 export async function GET() {
@@ -181,8 +182,8 @@ export async function POST(request: NextRequest) {
     const serverTotal = Math.max(0, serverSubtotal + serverShipping - serverDiscountAmount)
     // ────────────────────────────────────────────────────────────────────────
 
-    // 2. Generate order number
-    const orderNumber = `NOV-${Date.now().toString(36).toUpperCase()}`
+    // 2. Generate collision-safe order number (UUID v4, no Date.now() race condition)
+    const orderNumber = `NOV-${randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()}`
     
     // 3. Create order in a transaction to include stock update
     const order = await prisma.$transaction(async (tx) => {
