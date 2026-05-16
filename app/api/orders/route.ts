@@ -7,7 +7,7 @@ import { VAT_RATE_PERCENT, vatFromGross } from "@/lib/utils/vat"
 import { createOrderSchema, type OrderItemInput } from "@/lib/validations/order"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { calculateShipping } from "@/lib/constants/shop"
-import { applyBestPromotion, validateCoupon, incrementPromotionUsage } from "@/lib/promotions"
+import { applyPromotionsToProducts, validateCoupon, incrementPromotionUsage } from "@/lib/promotions"
 
 // Get user's orders
 export async function GET() {
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // ── C7 FIX: Verify product prices from database ─────────────────────────
+    // ── Verify product prices from database ─────────────────────────────────
     const productIds = items.map(item => item.id)
     const dbProducts = await prisma.product.findMany({
       where: { id: { in: productIds } },
@@ -124,6 +124,11 @@ export async function POST(request: NextRequest) {
 
     const dbProductMap = new Map(dbProducts.map(p => [p.id, p]))
     const serverItems: Array<OrderItemInput & { dbPrice: number }> = []
+
+    // ── Fix N+1: single DB call for ALL promotions before the loop ───────────
+    const promotionMap = await applyPromotionsToProducts(
+      dbProducts.map(p => ({ id: p.id, categoryId: p.categoryId, price: Number(p.price) }))
+    )
 
     for (const item of items) {
       const dbProduct = dbProductMap.get(item.id)
@@ -139,13 +144,10 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         )
       }
-      
-      // APPLY PROMOTIONS ON SERVER
-      const { discountedPrice } = await applyBestPromotion(
-        dbProduct.id,
-        dbProduct.categoryId,
-        Number(dbProduct.price)
-      )
+
+      // Use pre-fetched promotion map — zero extra DB calls per item
+      const promo = promotionMap.get(dbProduct.id)
+      const discountedPrice = promo?.discountedPrice ?? Number(dbProduct.price)
 
       serverItems.push({
         ...item,

@@ -12,12 +12,12 @@ import {
   LogOut,
   Bell,
   Search,
-  ChevronRight,
   Menu,
   Tag,
   Mail,
   BookOpen
 } from "lucide-react"
+import { AdminNavLink } from "./_components/admin-nav-link"
 
 export default async function AdminLayout({
   children,
@@ -122,17 +122,3 @@ export default async function AdminLayout({
   )
 }
 
-function AdminNavLink({ href, icon, label }: { href: string, icon: React.ReactNode, label: string }) {
-  return (
-    <Link 
-      href={href}
-      className="flex items-center justify-between px-4 py-2.5 text-nova-300/70 hover:text-white hover:bg-white/5 rounded-xl transition-all group"
-    >
-      <div className="flex items-center gap-3">
-        <span className="text-nova-300/40 group-hover:text-nova-400 transition-colors">{icon}</span>
-        <span className="font-bold text-sm tracking-wide">{label}</span>
-      </div>
-      <ChevronRight size={14} className="text-nova-300/20 group-hover:text-nova-400 group-hover:translate-x-1 transition-all" />
-    </Link>
-  )
-}
