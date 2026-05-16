@@ -1,14 +1,14 @@
 import { MetadataRoute } from 'next'
-import { blogPosts } from '@/lib/data/products'
 import { prisma } from '@/lib/prisma'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. Fetch products and categories from Prisma (Production source)
-  const [dbProducts, dbCategories] = await Promise.all([
+  const [dbProducts, dbCategories, dbBlogPosts] = await Promise.all([
     prisma.product.findMany({ where: { isActive: true }, select: { slug: true } }),
-    prisma.category.findMany({ where: { isActive: true }, select: { slug: true } })
+    prisma.category.findMany({ where: { isActive: true }, select: { slug: true } }),
+    prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, publishedAt: true, createdAt: true } }),
   ])
 
   // Static routes
@@ -97,10 +97,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Blog post routes (still using static data for now, or could be moved to DB too)
-  const blogRoutes = blogPosts.map((post) => ({
+  // Blog post routes — sourced from Prisma (published only)
+  const blogRoutes = dbBlogPosts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+    lastModified: post.publishedAt || post.createdAt,
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))

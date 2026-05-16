@@ -39,7 +39,7 @@ export function mapDbProductToUi(p: DbProduct): Product {
     },
     brand: p.brand || undefined,
     ean: p.ean || undefined,
-    supplierSku: p.supplierSku || undefined
+    supplierSku: p.supplierSku || undefined,
   }
 }
 
@@ -52,7 +52,7 @@ export function mapDbCategoryToUi(c: DbCategoryWithCount): Category {
     slug: c.slug,
     name: { de: c.nameDe },
     image: c.image || '',
-    count: c._count?.products ?? 0
+    count: c._count?.products ?? 0,
   }
 }
 
@@ -105,51 +105,3 @@ export interface Category {
   image: string
   count: number
 }
-
-export interface BlogPost {
-  id: string
-  slug: string
-  title: { de: string }
-  excerpt: { de: string }
-  image: string
-  date: string
-  readTime: string
-  category: string
-  author: string
-}
-
-export const blogPosts: BlogPost[] = [
-  {
-    id: 'post-1',
-    slug: 'pfanne-kaufratgeber',
-    title: { de: 'Der ultimative Induktions-Pfannen-Kaufratgeber' },
-    excerpt: { de: 'Worauf Sie beim Kauf von Pfannen für Ihr Induktionskochfeld unbedingt achten sollten.' },
-    image: '/images/blog/pfanne-induktion-kaufratgeber-2026.jpg',
-    date: '2024-03-15',
-    readTime: '8 min',
-    category: 'Ratgeber',
-    author: 'Nova Team'
-  },
-  {
-    id: 'post-2',
-    slug: 'induktion-vs-gas',
-    title: { de: 'Induktion vs. Gas: Was ist wirklich besser?' },
-    excerpt: { de: 'Ein detaillierter Vergleich der beiden beliebtesten Kochtechnologien in der modernen Küche.' },
-    image: '/images/blog/induktion-vs-gas-vergleich-2026.jpg',
-    date: '2024-03-10',
-    readTime: '12 min',
-    category: 'Technik',
-    author: 'Dr. Koch'
-  },
-  {
-    id: 'post-3',
-    slug: 'kochfeld-pflege',
-    title: { de: 'So bleibt Ihr Induktionskochfeld jahrelang wie neu' },
-    excerpt: { de: 'Pflegetipps und Tricks für die tägliche Reinigung und den Werterhalt Ihrer Geräte.' },
-    image: '/images/blog/edelstahlpfannen-reinigen-pflegen.jpg',
-    date: '2024-03-05',
-    readTime: '5 min',
-    category: 'Pflege',
-    author: 'Nova Team'
-  }
-]
