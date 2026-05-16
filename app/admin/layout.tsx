@@ -1,7 +1,6 @@
 import React from "react"
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
-import Link from "next/link"
 import { 
   LayoutDashboard, 
   Package, 
@@ -65,15 +64,23 @@ export default async function AdminLayout({
         </nav>
 
         <div className="p-4 border-t border-white/5">
-          <Link 
-            href="/api/auth/signout" 
-            className="flex items-center gap-3 px-4 py-3 text-nova-300/70 hover:text-white hover:bg-white/5 rounded-xl transition-all group"
+          <form
+            action={async () => {
+              'use server'
+              const { signOut } = await import('next-auth')
+              await signOut({ redirectTo: '/' })
+            }}
           >
-            <div className="p-2 bg-white/5 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
-              <LogOut size={18} />
-            </div>
-            <span className="font-bold text-sm">Abmelden</span>
-          </Link>
+            <button
+              type="submit"
+              className="w-full flex items-center gap-3 px-4 py-3 text-nova-300/70 hover:text-white hover:bg-white/5 rounded-xl transition-all group"
+            >
+              <div className="p-2 bg-white/5 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
+                <LogOut size={18} />
+              </div>
+              <span className="font-bold text-sm">Abmelden</span>
+            </button>
+          </form>
         </div>
       </aside>
 

@@ -14,7 +14,8 @@ import { logError } from '@/lib/logger'
 import { getActivePromotions } from '@/lib/promotions'
 import { HomeContent } from './HomeContent'
 
-export const revalidate = 300
+// Revalidate every hour — use revalidatePath('/') in admin actions for on-demand invalidation
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Premium Induktions-Kochgeschirr | NOVA INDUKT',
