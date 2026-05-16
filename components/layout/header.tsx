@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useDebounce } from '@/lib/hooks/use-debounce'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -73,6 +74,7 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const debouncedSearch = useDebounce(searchQuery, 300)
   const megaRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
@@ -81,34 +83,18 @@ export function Header() {
 
   useEffect(() => {
     const controller = new AbortController()
-    const delayDebounceFn = setTimeout(async () => {
-      if (searchQuery.trim().length >= 2) {
-        setIsSearching(true)
-        try {
-          const response = await fetch(
-            `/api/products/search?q=${encodeURIComponent(searchQuery)}`,
-            { signal: controller.signal }
-          )
-          if (response.ok) {
-            const data = await response.json()
-            setSearchResults(data)
-          }
-        } catch (error) {
-          if (error instanceof Error && error.name === 'AbortError') return
-          console.error("Search error:", error)
-        } finally {
-          setIsSearching(false)
-        }
-      } else {
-        setSearchResults([])
-      }
-    }, 300)
-
-    return () => {
-      clearTimeout(delayDebounceFn)
-      controller.abort()
+    if (debouncedSearch.trim().length >= 2) {
+      setIsSearching(true)
+      fetch(`/api/products/search?q=${encodeURIComponent(debouncedSearch)}`, { signal: controller.signal })
+        .then(res => res.ok ? res.json() : [])
+        .then(data => setSearchResults(data))
+        .catch(err => { if (err?.name !== 'AbortError') console.error('Search error:', err) })
+        .finally(() => setIsSearching(false))
+    } else {
+      setSearchResults([])
     }
-  }, [searchQuery])
+    return () => controller.abort()
+  }, [debouncedSearch])
 
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {

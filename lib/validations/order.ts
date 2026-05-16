@@ -16,7 +16,8 @@ export const shippingDataSchema = z.object({
   lastName: z.string().min(1, 'Last name is required').max(100),
   phone: z.string().max(50).optional().or(z.literal('')),
   address: z.string().min(1, 'Address is required').max(200),
-  zipCode: z.string().min(1, 'ZIP code is required').max(20),
+  // ZIP codes: DE = 5 digits, AT/CH = 4 digits
+  zipCode: z.string().regex(/^\d{4,5}$/, 'Ungültige Postleitzahl (DE: 5-stellig, AT/CH: 4-stellig)'),
   city: z.string().min(1, 'City is required').max(100),
   country: z.string().min(1, 'Country is required').max(100),
 })
