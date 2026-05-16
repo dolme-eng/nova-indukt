@@ -7,8 +7,17 @@ export const SHIPPING_COST = 9.99
 export const FREE_SHIPPING_THRESHOLD = 500
 
 export const SHOP_NAME = 'NOVA INDUKT'
-export const SHOP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://nova-indukt.de'
-export const SUPPORT_EMAIL = 'support@nova-indukt.de'
+/** Canonical domain without trailing slash, used in schema.org, metadata and emails. */
+export const SHOP_DOMAIN = process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de'
+/** @deprecated Use SHOP_DOMAIN — kept for backward compatibility */
+export const SHOP_URL = SHOP_DOMAIN
+
+// ─── Contact emails ────────────────────────────────────────────────────────
+export const SUPPORT_EMAIL    = process.env.SUPPORT_EMAIL     || 'support@nova-indukt.de'
+export const INFO_EMAIL        = process.env.INFO_EMAIL         || 'info@nova-indukt.de'
+export const DATENSCHUTZ_EMAIL = process.env.DATENSCHUTZ_EMAIL || 'datenschutz@nova-indukt.de'
+export const WIDERRUF_EMAIL    = process.env.WIDERRUF_EMAIL    || 'widerruf@nova-indukt.de'
+export const NEWSLETTER_EMAIL  = process.env.NEWSLETTER_EMAIL  || 'newsletter@nova-indukt.de'
 
 // ⚠️ CRITICAL: Never ship with placeholder bank details.
 // These env vars MUST be set in production — missing values will cause

@@ -8,6 +8,7 @@ import ContactNotificationEmail from './templates/contact-notification'
 import PasswordResetEmail from './templates/password-reset'
 import { prisma } from '../prisma'
 import { calculateOrderTotals } from '../utils/pricing'
+import { SHOP_DOMAIN } from '../constants/shop'
 
 async function sendEmailWithRetry(payload: Parameters<Resend['emails']['send']>[0], maxRetries = 3) {
   const resend = getResend()
@@ -350,7 +351,7 @@ export async function sendNewsletterConfirmationEmail(
   firstName?: string
 ) {
   try {
-    const unsubscribeUrl = `https://nova-indukt.de/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
+    const unsubscribeUrl = `${SHOP_DOMAIN}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
 
     const html = await render(
       NewsletterConfirmationEmail({

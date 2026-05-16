@@ -11,6 +11,7 @@ import {
 import { categoriesConfig } from '@/lib/data/categories'
 import { logError } from '@/lib/logger'
 import { getActivePromotions } from '@/lib/promotions'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 import { HomeContent } from './HomeContent'
 
 // Revalidate every hour — use revalidatePath('/') in admin actions for on-demand invalidation
@@ -115,14 +116,14 @@ export default async function Page() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    url: 'https://nova-indukt.de',
+    url: SHOP_DOMAIN,
     name: 'NOVA INDUKT',
     description: 'Premium Induktions-Kochgeschirr aus Deutschland',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://nova-indukt.de/suche?suche={search_term_string}',
+        urlTemplate: `${SHOP_DOMAIN}/suche?suche={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
