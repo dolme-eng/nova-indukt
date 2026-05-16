@@ -9,11 +9,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Code ist erforderlich' }, { status: 400 })
     }
 
-    const promo = await prisma.promotion.findUnique({
-      where: { code: code.toUpperCase() }
+    const promo = await prisma.promotion.findFirst({
+      where: {
+        code: { equals: code.toUpperCase(), mode: 'insensitive' },
+        isCoupon: true,  // Security: only real coupons, not auto-promotions
+        isActive: true,
+      }
     })
 
-    if (!promo || !promo.isActive) {
+    if (!promo) {
       return NextResponse.json({ error: 'Ungültiger oder abgelaufener Code' }, { status: 404 })
     }
 

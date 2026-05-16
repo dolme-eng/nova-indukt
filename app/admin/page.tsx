@@ -18,7 +18,7 @@ import {
   Clock
 } from "lucide-react"
 import Link from "next/link"
-import { formatPriceDe } from "@/lib/utils"
+import { formatPriceDe } from "@/lib/utils/vat"
 
 interface Stats {
   orders: { total: number; recent: number; revenue: number }

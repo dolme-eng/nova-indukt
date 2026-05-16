@@ -614,8 +614,13 @@ export default function CheckoutContent() {
                     </div>
                     
                     {/* Payment Form Based on Selection */}
+                    {paymentMethod === 'paypal' && !process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
+                      <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 font-bold">
+                        ⚠️ PayPal ist momentan nicht konfiguriert. Bitte wählen Sie Überweisung oder kontaktieren Sie uns.
+                      </div>
+                    )}
                     <AnimatePresence mode="wait">
-                      {paymentMethod === 'paypal' && (
+                      {paymentMethod === 'paypal' && !!process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
                         <motion.div
                           key="paypal"
                           initial={{ opacity: 0, height: 0 }}
@@ -624,7 +629,7 @@ export default function CheckoutContent() {
                           className="overflow-hidden"
                         >
                           <PayPalScriptProvider options={{ 
-                            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test',
+                            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
                             currency: 'EUR',
                             intent: 'capture',
                             'disabled-funding': 'card,sepa,giropay,sofort,mybank,p24'
