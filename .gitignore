@@ -50,3 +50,6 @@ Desktop.ini
 .windsurf/workflows/
 
 /lib/generated/prisma
+
+# Antigravity scratch files (AI assistant temp files)
+.gemini/
