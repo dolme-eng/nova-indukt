@@ -1,4 +1,3 @@
-import { stockImagePair } from './product-media'
 import { Prisma } from '@prisma/client'
 
 /**
@@ -56,10 +55,6 @@ export function mapDbCategoryToUi(c: DbCategoryWithCount): Category {
   }
 }
 
-function stockPair(category: string, seed: number): string[] {
-  const [a, b] = stockImagePair(category, seed)
-  return [a, b]
-}
 
 export interface Product {
   id: string
