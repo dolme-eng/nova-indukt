@@ -89,7 +89,7 @@ export default async function AdminLayout({
         {/* Header */}
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-nova-100 flex items-center justify-between px-8 sticky top-0 z-10">
           <div className="flex items-center gap-6">
-            <button className="md:hidden text-nova-900 p-2 hover:bg-nova-50 rounded-lg transition-colors">
+            <button type="button" aria-label="Menü öffnen" className="md:hidden text-nova-900 p-2 hover:bg-nova-50 rounded-lg transition-colors">
               <Menu size={24} />
             </button>
             <div className="relative hidden lg:block">
@@ -103,9 +103,9 @@ export default async function AdminLayout({
           </div>
 
           <div className="flex items-center gap-6">
-            <button className="relative p-2.5 text-nova-600 hover:bg-nova-50 rounded-xl transition-all">
+            <button type="button" aria-label="Benachrichtigungen" className="relative p-2.5 text-nova-600 hover:bg-nova-50 rounded-xl transition-all">
               <Bell size={20} />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
             </button>
             <div className="h-8 w-px bg-nova-100 mx-2"></div>
             <div className="flex items-center gap-4 group cursor-pointer">

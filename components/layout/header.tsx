@@ -427,7 +427,7 @@ export function Header() {
                       <Loader2 className="w-5 h-5 text-[#4ECCA3] animate-spin" />
                     )}
                     {searchQuery && (
-                      <button onClick={() => setSearchQuery('')} className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-200 rounded-full transition-colors">
+                      <button onClick={() => setSearchQuery('')} aria-label="Suche löschen" className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-200 rounded-full transition-colors">
                         <X className="w-5 h-5" />
                       </button>
                     )}
@@ -518,7 +518,7 @@ export function Header() {
                   <h2 className="text-xl font-bold font-heading flex items-center gap-2 text-[#0C211E]">
                     <ShoppingCart className="w-6 h-6 text-[#4ECCA3]" /> Warenkorb ({totalItems})
                   </h2>
-                  <button onClick={() => setCartDrawerOpen(false)} className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-900 transition-all">
+                  <button onClick={() => setCartDrawerOpen(false)} aria-label="Warenkorb schließen" className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-900 transition-all">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -549,13 +549,13 @@ export function Header() {
                                   <h4 className="font-bold text-[#0C211E] text-sm line-clamp-2 leading-snug"><Link href={`/produkt/${item.product.slug}`} onClick={() => setCartDrawerOpen(false)} className="hover:text-[#4ECCA3] transition-colors">{item.product.name.de}</Link></h4>
                                   <p data-testid="cart-item-price" className="text-[#0C211E] font-black text-sm mt-1 tabular-nums whitespace-nowrap">{formatPriceDe(item.product.price)}</p>
                                 </div>
-                                <button onClick={() => removeItem(item.product.id)} className="text-gray-400 hover:text-red-500 transition-colors p-1 self-start">
+                                <button onClick={() => removeItem(item.product.id)} aria-label={`${item.product.name.de} entfernen`} className="text-gray-400 hover:text-red-500 transition-colors p-1 self-start">
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
                               <div className="flex items-center gap-3">
                                 <div className="flex items-center bg-gray-50 rounded-xl p-1 border border-gray-100">
-                                  <button onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))} className="w-7 h-7 flex items-center justify-center text-gray-500 hover:bg-white rounded-lg shadow-sm transition-colors">
+                                  <button onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))} aria-label="Menge verringern" className="w-7 h-7 flex items-center justify-center text-gray-500 hover:bg-white rounded-lg shadow-sm transition-colors">
                                     <Minus className="w-3 h-3" />
                                   </button>
                                   <input
@@ -563,9 +563,10 @@ export function Header() {
                                     type="text"
                                     readOnly
                                     value={item.quantity}
+                                    aria-label={`Anzahl: ${item.quantity}`}
                                     className="w-8 text-center bg-transparent text-sm font-bold text-gray-900 outline-none"
                                   />
-                                  <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} disabled={item.quantity >= item.product.stock} className="w-7 h-7 flex items-center justify-center text-gray-500 hover:bg-white rounded-lg shadow-sm transition-colors disabled:opacity-50">
+                                  <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} disabled={item.quantity >= item.product.stock} aria-label="Menge erhöhen" className="w-7 h-7 flex items-center justify-center text-gray-500 hover:bg-white rounded-lg shadow-sm transition-colors disabled:opacity-50">
                                     <Plus className="w-3 h-3" />
                                   </button>
                                 </div>
@@ -664,7 +665,7 @@ export function Header() {
             >
               <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-gray-50/50 text-black">
                 <Image src="/logo0.png" alt="NOVA INDUKT" width={140} height={42} className="h-9 w-auto" />
-                <button onClick={() => setMobileMenuOpen(false)} data-testid="mobile-menu-close-button" className="p-2.5 text-gray-400 hover:text-gray-900 bg-white shadow-sm border border-gray-100 rounded-full hover:bg-gray-50 transition-all">
+                <button onClick={() => setMobileMenuOpen(false)} data-testid="mobile-menu-close-button" aria-label="Menü schließen" className="p-2.5 text-gray-400 hover:text-gray-900 bg-white shadow-sm border border-gray-100 rounded-full hover:bg-gray-50 transition-all">
                   <X className="w-5 h-5" />
                 </button>
               </div>
