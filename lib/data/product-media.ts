@@ -68,11 +68,12 @@ function categoryOffset(categoryId: string): number {
   return h
 }
 
-// Les 3 catégories actives NOVA INDUKT (avec produits)
+// Les 4 catégories actives NOVA INDUKT (avec produits)
 export const categorySlugs = [
-  'kochen-braten',
-  'messer-vorbereitung',
-  'kuechenhelfer-zubehoer',
+  'induktionspfannen',
+  'induktionstoepfe',
+  'induktions-sets',
+  'induktions-zubehoer',
 ] as const
 
 export type CategorySlug = typeof categorySlugs[number]
@@ -87,7 +88,7 @@ export const stockImagesByCategory: Record<string, string[]> = (() => {
 })()
 
 export function stockImagePair(categoryId: string, seed: number): [string, string] {
-  const pool = stockImagesByCategory[categoryId] ?? stockImagesByCategory['kochen-braten']
+  const pool = stockImagesByCategory[categoryId] ?? stockImagesByCategory['induktionspfannen']
   const i = Math.abs(seed) % pool.length
   const j = (i + 1 + (Math.abs(seed) % (pool.length - 1 || 1))) % pool.length
   return [pool[i], pool[j]]

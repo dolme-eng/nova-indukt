@@ -13,6 +13,7 @@ import { PageLoader } from "@/components/page-loader"
 import { PreloadResources } from "./preload-resources"
 import { Providers } from "@/components/providers"
 import { AuthSync } from "@/components/auth-sync"
+import { SHOP_DOMAIN, SHOP_NAME, SUPPORT_EMAIL } from "@/lib/constants/shop"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -119,23 +120,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "NOVA INDUKT",
-          "url": "https://nova-indukt.de",
-          "logo": "https://nova-indukt.de/logo0.png",
+          "name": SHOP_NAME,
+          "url": SHOP_DOMAIN,
+          "logo": `${SHOP_DOMAIN}/logo0.png`,
+          "email": SUPPORT_EMAIL,
           "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer service",
-            "url": "https://nova-indukt.de/kontakt",
+            "url": `${SHOP_DOMAIN}/kontakt`,
             "areaServed": "DE",
             "availableLanguage": "German"
           },
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Industriestraße 123",
-            "addressLocality": "Berlin",
-            "postalCode": "12345",
-            "addressCountry": "DE"
-          }
+          // Adresse : renseigner NEXT_PUBLIC_COMPANY_ADDRESS_STREET, _CITY, _ZIP en prod
+          ...(process.env.NEXT_PUBLIC_COMPANY_ADDRESS_STREET ? {
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": process.env.NEXT_PUBLIC_COMPANY_ADDRESS_STREET,
+              "addressLocality": process.env.NEXT_PUBLIC_COMPANY_ADDRESS_CITY,
+              "postalCode": process.env.NEXT_PUBLIC_COMPANY_ADDRESS_ZIP,
+              "addressCountry": "DE"
+            }
+          } : {})
         })}} />
         <a href="#main-content" className="skip-link">
           Zum Hauptinhalt springen

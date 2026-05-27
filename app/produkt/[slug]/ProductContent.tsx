@@ -278,12 +278,26 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
           {/* Colonne achat — une seule colonne fluide, pas de sous-grille étroite */}
           <div ref={infoRef} className="relative flex min-w-0 flex-col gap-4 lg:sticky lg:top-28 lg:self-start xl:top-32">
             <header className="space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
                 <div className="flex items-center gap-1.5 rounded-lg border border-gray-100 bg-white px-2.5 py-1 text-sm shadow-sm">
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                   <span className="font-bold text-gray-900">{product.rating}</span>
                   <span className="text-xs text-gray-400">({product.reviewCount})</span>
                 </div>
+                {product.badges && product.badges.map((badge) => {
+                  let bgColor = 'bg-gray-100 text-gray-800 border border-gray-200'
+                  if (badge.toLowerCase() === 'testsieger') bgColor = 'bg-red-50 text-red-700 border border-red-200'
+                  else if (badge.toLowerCase() === 'made in germany') bgColor = 'bg-blue-50 text-blue-700 border border-blue-200'
+                  else if (badge.toLowerCase() === 'pfoa-frei') bgColor = 'bg-green-50 text-green-700 border border-green-200'
+                  else if (badge.toLowerCase().includes('ofenfest')) bgColor = 'bg-amber-50 text-amber-700 border border-amber-200'
+                  else if (badge.toLowerCase() === 'premium') bgColor = 'bg-[#0C211E] text-white'
+                  else if (badge.toLowerCase() === 'bestseller') bgColor = 'bg-[#4ECCA3] text-[#0C211E]'
+                  return (
+                    <span key={badge} className={`rounded-lg px-2.5 py-1 text-xs font-bold shadow-sm ${bgColor}`}>
+                      {badge}
+                    </span>
+                  )
+                })}
               </div>
               <h1 data-testid="product-name" className="font-heading text-lg sm:text-xl font-black leading-tight tracking-tight text-[#0C211E] uppercase">
                 {product.name.de}
@@ -522,7 +536,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     className="w-full"
                   >
                     <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">Produktdetails</h2>
-                    <p className="mb-10 max-w-4xl text-base leading-relaxed text-gray-600 xl:text-lg">{product.description.de}</p>
+                    <div className="mb-10 max-w-4xl text-base leading-relaxed text-gray-600 xl:text-lg whitespace-pre-line">{product.description.de}</div>
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                       {[
                         { icon: Zap, title: 'SmartHeat™', desc: 'Präzise Temperaturkontrolle' },

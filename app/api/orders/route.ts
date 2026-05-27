@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
   try {
     // Rate limit: 5 orders per minute per IP
     const ip = getIP(request)
-    const rl = rateLimit(createRateLimitKey(ip, 'orders'), { windowMs: 60_000, maxRequests: 5 })
+    const rl = await rateLimit(createRateLimitKey(ip, 'orders'), { windowMs: 60_000, maxRequests: 5 })
     if (!rl.success) {
       return NextResponse.json(
         { error: 'Zu viele Anfragen. Bitte warten Sie einen Moment.' },

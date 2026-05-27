@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
     // Rate limiting
     const ip = getIP(request)
     const key = createRateLimitKey(ip, 'reviews')
-    const limitResult = rateLimit(key, {
+    const limitResult = await rateLimit(key, {
       windowMs: RATE_LIMIT_WINDOW,
       maxRequests: RATE_LIMIT_MAX,
     })
@@ -261,7 +261,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Rate limit: 10 helpful votes per minute per user
-    const rl = rateLimit(createRateLimitKey(session.user.id, 'helpful'), {
+    const rl = await rateLimit(createRateLimitKey(session.user.id, 'helpful'), {
       windowMs: 60_000,
       maxRequests: 10,
     })

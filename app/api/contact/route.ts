@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     // Rate limiting
     const ip = getIP(request)
     const key = createRateLimitKey(ip, 'contact')
-    const limitResult = rateLimit(key, {
+    const limitResult = await rateLimit(key, {
       windowMs: RATE_LIMIT_WINDOW,
       maxRequests: RATE_LIMIT_MAX,
     })

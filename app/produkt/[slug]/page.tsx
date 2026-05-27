@@ -29,7 +29,7 @@ export async function generateMetadata({
   
   if (!product) return {}
 
-  const title = `${product.nameDe} | Premium Induktions-Kochgeschirr`
+  const title = product.metaTitle || `${product.nameDe} | Premium Induktions-Kochgeschirr`
   const description = product.metaDescription || product.shortDescription || `Kaufen Sie ${product.nameDe} bei NOVA INDUKT. Erstklassige Qualität für Induktionsherde.`
   const mainImage = product.images.find(img => img.isMain)?.url || product.images[0]?.url
 
