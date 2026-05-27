@@ -29,23 +29,23 @@ export function ShopSettingsClient() {
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Shop</h1>
-          <p className="text-slate-600 mt-1">Paiements, taxes et livraison (config centrale).</p>
+          <p className="text-slate-600 mt-1">Zahlungen, Steuern und Versand (zentrale Konfiguration).</p>
         </div>
         <div className="flex items-center gap-2">
           <Link href="/admin/settings" className="px-4 py-2 text-sm font-semibold border border-slate-200 rounded-lg bg-white hover:bg-slate-50">
-            Retour
+            Zurück
           </Link>
           <button
             onClick={() => save({ ...data, shop })}
             disabled={isSaving}
             className="px-4 py-2 text-sm font-semibold rounded-lg bg-primary text-white hover:bg-primary/90 disabled:opacity-60"
           >
-            {isSaving ? "Sauvegarde..." : "Enregistrer"}
+            {isSaving ? "Wird gespeichert..." : "Speichern"}
           </button>
         </div>
       </div>
 
-      <Section title="Paiements" desc="Stripe est retiré. On garde PayPal + e-mail (virement).">
+      <Section title="Zahlungsmethoden" desc="Aktive Zahlungsmethoden für den Shop.">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
@@ -53,7 +53,7 @@ export function ShopSettingsClient() {
               checked={shop.payments?.paypalEnabled ?? true}
               onChange={(e) => setData({ ...data, shop: { ...shop, payments: { ...(shop.payments ?? {}), paypalEnabled: e.target.checked } } })}
             />
-            PayPal activé
+            PayPal aktiviert
           </label>
           <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
@@ -63,15 +63,15 @@ export function ShopSettingsClient() {
                 setData({ ...data, shop: { ...shop, payments: { ...(shop.payments ?? {}), bankTransferEnabled: e.target.checked } } })
               }
             />
-            Paiement par e-mail / virement activé
+            Zahlung per E-Mail / Überweisung aktiviert
           </label>
         </div>
       </Section>
 
-      <Section title="Taxes" desc="TVA par défaut (affichage & calcul).">
+      <Section title="Steuern" desc="Standard-MwSt. (Anzeige & Berechnung).">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">TVA (%)</label>
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">MwSt. (%)</label>
             <input
               type="number"
               value={shop.taxes?.vatRatePercent ?? 19}
@@ -84,10 +84,10 @@ export function ShopSettingsClient() {
         </div>
       </Section>
 
-      <Section title="Livraison" desc="Coût et seuil de gratuité.">
+      <Section title="Versand" desc="Versandkosten und kostenloser Versand ab Bestellwert.">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Frais (€)</label>
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Versandkosten (€)</label>
             <input
               type="number"
               value={shop.shipping?.cost ?? 9.99}
@@ -98,7 +98,7 @@ export function ShopSettingsClient() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Gratuit à partir de (€)</label>
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Kostenlos ab (€)</label>
             <input
               type="number"
               value={shop.shipping?.freeThreshold ?? 500}
@@ -111,7 +111,7 @@ export function ShopSettingsClient() {
         </div>
       </Section>
 
-      <Section title="Site" desc="URL publique utilisée pour les liens emails/SEO.">
+      <Section title="Website" desc="Öffentliche URL für E-Mail-Links und SEO.">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Base URL</label>
