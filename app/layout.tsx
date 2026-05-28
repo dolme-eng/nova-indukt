@@ -109,7 +109,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${sora.variable} ${jetbrainsMono.variable}`}>
+    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${sora.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth">
       <body className="font-sans antialiased min-h-screen bg-gray-50 text-gray-900">
         {/* Kritische Ressourcen vorladen */}
         <PreloadResources />

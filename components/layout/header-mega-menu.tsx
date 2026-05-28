@@ -46,6 +46,16 @@ export const megaMenuDepartments = [
       { label: 'Adapterplatten', href: '/produkte?kategorie=induktions-zubehoer' },
     ],
   },
+  {
+    title: 'Kochfelder & Herde',
+    icon: <Sparkles className="w-5 h-5 text-[#4ECCA3]" />,
+    links: [
+      { label: 'Alle Kochfelder', href: '/produkte?kategorie=induktionskochfelder-herde' },
+      { label: 'Einbau-Kochfelder', href: '/produkte?kategorie=induktionskochfelder-herde' },
+      { label: 'Kochfelder mit Abzug', href: '/produkte?kategorie=induktionskochfelder-herde' },
+      { label: 'Mobile Induktionsplatten', href: '/produkte?kategorie=induktionskochfelder-herde' },
+    ],
+  },
 ]
 
 interface MegaMenuProps {
@@ -83,7 +93,7 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
           <div className="grid grid-cols-12 gap-10">
 
             {/* Left: Categories */}
-            <div className="col-span-9 grid grid-cols-4 gap-x-6 gap-y-10">
+            <div className="col-span-9 grid grid-cols-3 gap-x-6 gap-y-10">
               {megaMenuDepartments.map((dept, idx) => (
                 <motion.div
                   key={dept.title}

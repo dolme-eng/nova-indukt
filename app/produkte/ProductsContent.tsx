@@ -244,7 +244,7 @@ export function ProductsContent({
                       />
                       <div className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#4ECCA3] rounded-full shadow-md pointer-events-none transition-all" style={{ left: `calc(${(priceRange[1] / PRICE_FILTER_MAX) * 100}% - 10px)` }} />
                     </div>
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
                       <input 
                         data-testid="price-filter-min"
                         type="number" 
@@ -252,9 +252,9 @@ export function ProductsContent({
                         max={PRICE_FILTER_MAX} 
                         value={priceRange[0]} 
                         onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
-                        className="w-20 px-2 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 text-center"
+                        className="w-16 px-1 py-1.5 bg-gray-50 rounded-lg border border-gray-200 text-xs font-bold text-gray-700 text-center"
                       />
-                      <span className="text-gray-400">-</span>
+                      <span className="text-gray-400 text-xs">-</span>
                       <input 
                         data-testid="price-filter-max"
                         type="number" 
@@ -262,13 +262,13 @@ export function ProductsContent({
                         max={PRICE_FILTER_MAX} 
                         value={priceRange[1]} 
                         onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || PRICE_FILTER_MAX])}
-                        className="w-20 px-2 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 text-center"
+                        className="w-16 px-1 py-1.5 bg-gray-50 rounded-lg border border-gray-200 text-xs font-bold text-gray-700 text-center"
                       />
-                      <span className="text-gray-400">€</span>
+                      <span className="text-gray-400 text-xs">€</span>
                       <button 
                         data-testid="apply-filters"
                         onClick={() => setShowFilters(false)}
-                        className="ml-2 px-3 py-2 bg-[#0C211E] text-white text-xs font-bold rounded-lg hover:bg-[#17423C] transition-colors"
+                        className="ml-auto px-2.5 py-1.5 bg-[#0C211E] text-white text-xs font-bold rounded-lg hover:bg-[#17423C] transition-colors shrink-0"
                       >
                         OK
                       </button>

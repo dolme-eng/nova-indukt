@@ -52,7 +52,6 @@ export default async function Page() {
       prisma.product.findMany({
         where: { isActive: true },
         include: { images: true },
-        orderBy: { createdAt: 'desc' },
       }),
       prisma.category
         .findMany({
@@ -107,8 +106,18 @@ export default async function Page() {
     products = []
   }
 
+  // Badge priority sort: bestseller > premium > has discount > rest
+  const badgeScore = (p: DbProduct): number => {
+    const badges = (p.badges ?? []) as string[]
+    if (badges.includes('bestseller')) return 3
+    if (badges.includes('premium')) return 2
+    if (p.oldPrice && Number(p.oldPrice) > Number(p.price)) return 1
+    return 0
+  }
+
   const formattedProducts: Product[] = products
     .filter((p) => Array.isArray(p.images) && p.images.length > 0)
+    .sort((a, b) => badgeScore(b) - badgeScore(a))
     .map(mapDbProductToUi)
 
   const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
