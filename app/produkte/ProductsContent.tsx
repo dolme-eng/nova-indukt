@@ -107,6 +107,18 @@ export function ProductsContent({
     return () => clearTimeout(t)
   }, [viewMode])
 
+  // Empêcher le scroll du body quand le menu des filtres (budget/catégories) est ouvert sur mobile
+  useEffect(() => {
+    if (showFilters) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [showFilters])
+
   const handleToggleWishlist = async (e: React.MouseEvent, product: Product) => {
     e.preventDefault()
     e.stopPropagation()
