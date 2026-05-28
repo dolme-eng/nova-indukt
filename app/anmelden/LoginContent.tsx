@@ -2,13 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle, Chrome } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
 
 export function LoginContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,7 +28,8 @@ export function LoginContent() {
     if (result) {
       setSuccess(true)
       setTimeout(() => {
-        router.push('/mein-konto')
+        const redirectUrl = searchParams.get('redirect') || '/mein-konto'
+        router.push(redirectUrl)
       }, 1000)
     } else {
       setError('E-Mail oder Passwort ist falsch.')
