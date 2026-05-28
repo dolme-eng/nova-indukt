@@ -171,9 +171,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 data-testid="add-to-cart-button"
                 whileTap={{ scale: 0.97 }}
                 onClick={() => addItem(product, 1)}
-                className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0C211E] px-4 text-sm font-bold text-white shadow-md sm:px-8"
+                className="flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0C211E] px-5 text-base font-bold text-white shadow-md sm:px-10"
               >
-                <ShoppingCart className="h-4 w-4" />
+                <ShoppingCart className="h-5 w-5" />
                 <span className="hidden sm:inline">Warenkorb</span>
               </motion.button>
             </div>
@@ -383,23 +383,23 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               )}
 
               <div className="flex gap-2">
-                <div className="flex h-11 shrink-0 items-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50 sm:w-32">
+                <div className="flex h-14 shrink-0 items-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50 sm:w-32">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
-                    className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
+                    className="flex h-full w-10 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
                   >
-                    <Minus className="h-3 w-3" />
+                    <Minus className="h-4 w-4" />
                   </button>
-                  <span className="flex-1 text-center text-xs font-bold text-[#0C211E]">{quantity}</span>
+                  <span className="flex-1 text-center text-sm font-bold text-[#0C211E]">{quantity}</span>
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
                     disabled={quantity >= product.stock}
-                    className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
+                    className="flex h-full w-10 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
                   >
-                    <Plus className="h-3 w-3" />
+                    <Plus className="h-4 w-4" />
                   </button>
                 </div>
                 <motion.button
@@ -408,20 +408,20 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   whileTap={{ scale: 0.99 }}
                   onClick={() => addItem(product, quantity)}
                   disabled={product.stock <= 0}
-                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#0C211E] text-sm font-bold text-white shadow-md transition-colors hover:bg-nova-900 disabled:opacity-50"
+                  className="flex h-14 flex-1 items-center justify-center gap-2 rounded-xl bg-[#0C211E] text-base font-bold text-white shadow-md transition-colors hover:bg-nova-900 disabled:opacity-50"
                 >
-                  <ShoppingCart className="h-4 w-4" />
+                  <ShoppingCart className="h-5 w-5" />
                   Warenkorb
                 </motion.button>
                 <button
                   type="button"
                   onClick={handleWishlistToggle}
-                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-colors ${
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border transition-colors ${
                     isWishlisted ? 'border-red-100 bg-red-50' : 'border-gray-100 bg-white hover:border-gray-200'
                   }`}
                   aria-label="Wunschliste"
                 >
-                  <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                  <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                 </button>
               </div>
 
@@ -429,14 +429,14 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 <button
                   type="button"
                   onClick={() => { addItem(product, quantity); window.location.href = '/kasse' }}
-                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-gray-100 text-sm font-bold text-[#0C211E] hover:bg-gray-200 transition-colors"
+                  className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-gray-100 text-sm font-bold text-[#0C211E] hover:bg-gray-200 transition-colors"
                 >
                   <Mail className="w-4 h-4" /> Überweisung
                 </button>
                 <button
                   type="button"
                   onClick={() => { addItem(product, quantity); window.location.href = '/kasse' }}
-                  className="flex h-11 items-center justify-center rounded-xl bg-[#FFC439] text-sm font-bold italic text-[#003087] hover:bg-[#F4BB33] transition-colors"
+                  className="flex h-12 items-center justify-center rounded-xl bg-[#FFC439] text-sm font-bold italic text-[#003087] hover:bg-[#F4BB33] transition-colors"
                 >
                   PayPal
                 </button>

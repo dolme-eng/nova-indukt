@@ -71,8 +71,9 @@ export function ShopSettingsClient() {
       <Section title="Steuern" desc="Standard-MwSt. (Anzeige & Berechnung).">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">MwSt. (%)</label>
+            <label htmlFor="vatRatePercent" className="text-xs font-bold text-slate-500 uppercase tracking-widest">MwSt. (%)</label>
             <input
+              id="vatRatePercent"
               type="number"
               value={shop.taxes?.vatRatePercent ?? 19}
               onChange={(e) =>
@@ -87,8 +88,9 @@ export function ShopSettingsClient() {
       <Section title="Versand" desc="Versandkosten und kostenloser Versand ab Bestellwert.">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Versandkosten (€)</label>
+            <label htmlFor="shippingCost" className="text-xs font-bold text-slate-500 uppercase tracking-widest">Versandkosten (€)</label>
             <input
+              id="shippingCost"
               type="number"
               value={shop.shipping?.cost ?? 9.99}
               onChange={(e) =>
@@ -98,8 +100,9 @@ export function ShopSettingsClient() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Kostenlos ab (€)</label>
+            <label htmlFor="freeThreshold" className="text-xs font-bold text-slate-500 uppercase tracking-widest">Kostenlos ab (€)</label>
             <input
+              id="freeThreshold"
               type="number"
               value={shop.shipping?.freeThreshold ?? 500}
               onChange={(e) =>
