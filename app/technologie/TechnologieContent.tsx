@@ -283,7 +283,7 @@ export default function TechnologieContent() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/produkte"
-                className="px-8 py-4 bg-[#4ECCA3] text-white font-semibold rounded-xl hover:bg-[#3BA88A] transition-colors"
+                className="px-8 py-4 bg-[#0C211E] text-white font-semibold rounded-xl hover:bg-[#17423C] transition-colors"
               >
                 Produkte ansehen
               </Link>

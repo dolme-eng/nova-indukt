@@ -86,7 +86,7 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={status === 'loading'}
-                  className="px-8 py-4 sm:py-5 bg-nova-400 text-white font-bold rounded-2xl hover:bg-nova-500 transition-colors whitespace-nowrap shadow-lg shadow-nova-500/20 text-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="px-8 py-4 sm:py-5 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors whitespace-nowrap shadow-lg shadow-[#0C211E]/20 text-lg flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   {status === 'loading' ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

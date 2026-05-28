@@ -334,7 +334,7 @@ export default function AboutContent() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
               <Link 
                 href="/produkte"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#4ECCA3] text-[#0C211E] font-bold rounded-xl hover:bg-white hover:text-[#0C211E] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
               >
                 Zum Shop <ArrowRight className="w-5 h-5" />
               </Link>

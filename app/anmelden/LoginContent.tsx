@@ -168,7 +168,7 @@ export function LoginContent() {
               data-testid="login-submit"
               type="submit"
               disabled={loading || success}
-              className="w-full py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-[#0C211E] text-white font-medium rounded-xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

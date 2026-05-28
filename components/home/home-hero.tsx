@@ -179,7 +179,7 @@ export const HomeHero = memo(function HomeHero() {
               >
                 <Link href="/produkte">
                   <MagneticButton>
-                    <div className="px-8 py-4 bg-nova-400 hover:bg-nova-500 text-nova-950 text-xs sm:text-sm font-black rounded-xl flex items-center justify-center gap-2.5 transition-all shadow-xl shadow-nova-400/20 group/btn">
+                    <div className="px-8 py-4 bg-[#0C211E] hover:bg-[#17423C] text-white text-xs sm:text-sm font-black rounded-xl flex items-center justify-center gap-2.5 transition-all shadow-xl shadow-[#0C211E]/20 group/btn">
                       {heroSlides[currentSlide].primaryBtn}
                       <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                     </div>

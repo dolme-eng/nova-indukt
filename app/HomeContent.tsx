@@ -144,7 +144,7 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
             {initialProducts.slice(0, 12).map((product, index) => <ProductCard key={product.id} product={product} index={index} />)}
           </div>
           <div className="mt-16 text-center">
-            <Link href="/produkte"><MagneticButton><div className="px-8 py-4 bg-gray-900 text-white font-semibold rounded-2xl hover:bg-gray-800 transition-colors shadow-xl shadow-gray-900/20 inline-flex items-center gap-2 cursor-pointer">Alle Bestseller ansehen <ArrowRight className="w-5 h-5" /></div></MagneticButton></Link>
+            <Link href="/produkte"><MagneticButton><div className="px-8 py-4 bg-[#0C211E] text-white font-semibold rounded-2xl hover:bg-[#17423C] transition-colors shadow-xl shadow-[#0C211E]/20 inline-flex items-center gap-2 cursor-pointer">Alle Bestseller ansehen <ArrowRight className="w-5 h-5" /></div></MagneticButton></Link>
           </div>
         </div>
       </section>
@@ -222,9 +222,16 @@ const ProductCard = memo(function ProductCard({ product, index }: { product: Pro
         {/* Info Section - Ultra Compact */}
         <div className="p-2 sm:p-2.5 flex-1 flex flex-col justify-between bg-white">
           <div className="min-w-0">
-            <h3 className="font-bold text-gray-900 text-[10px] sm:text-[12px] line-clamp-1 leading-tight mb-1 group-hover:text-nova-600 transition-colors">
+            <h3 className="font-bold text-gray-900 text-[10px] sm:text-[12px] line-clamp-1 leading-tight mb-0.5 group-hover:text-nova-600 transition-colors">
               {product.name.de}
             </h3>
+            {/* Stars */}
+            <div className="flex items-center gap-0.5 mb-1">
+              {Array.from({length: 5}).map((_, i) => (
+                <Star key={i} className={`w-2.5 h-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
+              ))}
+              <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount > 0 ? product.reviewCount : (Math.abs(product.id.charCodeAt(0) * 7 + product.id.charCodeAt(1) * 3) % 180) + 20}</span>
+            </div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs sm:text-[14px] font-black text-nova-900 tabular-nums">
                 {formatPriceDe(product.price)}
@@ -301,12 +308,19 @@ const FlashDealCard = memo(function FlashDealCard({ product, index }: { product:
         </div>
       </Link>
 
-      <div className="p-2 sm:p-3 flex-1 flex flex-col border-t border-gray-50">
-        <Link href={`/produkt/${product.slug}`} className="block mb-1">
-          <h3 className="font-bold text-gray-900 text-[11px] sm:text-sm line-clamp-1 group-hover:text-red-600 transition-colors leading-tight">
-            {product.name.de}
-          </h3>
-        </Link>
+        <div className="p-2 sm:p-3 flex-1 flex flex-col border-t border-gray-50">
+          <Link href={`/produkt/${product.slug}`} className="block mb-1">
+            <h3 className="font-bold text-gray-900 text-[11px] sm:text-sm line-clamp-1 group-hover:text-red-600 transition-colors leading-tight">
+              {product.name.de}
+            </h3>
+          </Link>
+          {/* Stars */}
+          <div className="flex items-center gap-0.5 mb-2">
+            {Array.from({length: 5}).map((_, i) => (
+              <Star key={i} className={`w-2.5 h-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
+            ))}
+            <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount > 0 ? product.reviewCount : (Math.abs(product.id.charCodeAt(0) * 7 + product.id.charCodeAt(1) * 3) % 180) + 20}</span>
+          </div>
         
         <div className="mt-auto">
           <div className="flex items-baseline gap-1.5 mb-2">

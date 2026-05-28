@@ -181,7 +181,7 @@ export function Header() {
                 alt="NOVA INDUKT"
                 width={150}
                 height={45}
-                className={`w-auto transition-all duration-500 ease-out ${scrolled ? 'h-5 sm:h-7' : 'h-6 sm:h-9'} group-hover:scale-105`}
+                className={`w-auto transition-all duration-500 ease-out ${scrolled ? 'h-7 sm:h-8' : 'h-8 sm:h-9'} group-hover:scale-105`}
                 priority
                 fetchPriority="high"
               />
