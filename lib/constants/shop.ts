@@ -25,7 +25,7 @@ export const NEWSLETTER_EMAIL  = process.env.NEWSLETTER_EMAIL  || 'newsletter@no
 function requireEnv(key: string, fallback: string): string {
   const value = process.env[key]
   if (!value && process.env.NODE_ENV === 'production') {
-    throw new Error(`[nova-indukt] Missing required env variable: ${key}`)
+    console.warn(`[nova-indukt] Warning: Missing env variable: ${key}. Using fallback.`);
   }
   return value ?? fallback
 }
