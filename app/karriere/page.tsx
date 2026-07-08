@@ -31,7 +31,7 @@ export default function KarrierePage() {
                 Im Moment haben wir keine offenen Positionen. Schauen Sie später wieder vorbei oder senden Sie uns gerne eine Initiativbewerbung.
               </p>
               <a 
-                href="mailto:kontakt@nova-indukt.de?subject=Initiativbewerbung" 
+                href={`mailto:${COMPANY.email.kontakt}?subject=Initiativbewerbung`} 
                 className="inline-flex items-center gap-2 px-8 py-4 bg-[#0C211E] text-white font-semibold rounded-2xl hover:bg-[#17423C] transition-colors"
               >
                 Initiativbewerbung senden

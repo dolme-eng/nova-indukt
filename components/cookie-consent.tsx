@@ -58,8 +58,7 @@ export function CookieConsent() {
   }
 
   const applyConsentChoices = (consent: CookieConsent) => {
-    console.log('Analytics:', consent.analytics ? 'enabled' : 'disabled')
-    console.log('Marketing:', consent.marketing ? 'enabled' : 'disabled')
+    // Analytics and marketing consent applied
   }
 
   const openSettings = () => {

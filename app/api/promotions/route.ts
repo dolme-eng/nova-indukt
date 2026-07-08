@@ -3,11 +3,10 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { createPromotionSchema } from '@/lib/validations/promotion'
 import { Prisma } from '@prisma/client'
+import { requireAdmin } from '@/lib/admin/require-admin'
+import { auditLog } from '@/lib/admin/audit'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
-/**
- * GET: Fetch active promotions
- * Query params: productId, categoryId
- */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -30,7 +29,6 @@ export async function GET(request: NextRequest) {
       where.endDate = { gt: now }
     }
     
-    // Filter by product or category
     if (productId || categoryId) {
       const orConditions: Prisma.PromotionWhereInput[] = [{ isGlobal: true }]
       if (productId) orConditions.push({ productIds: { has: productId } })
@@ -61,30 +59,14 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/**
- * POST: Manually create a promotion (admin only)
- * Requires ADMIN role authentication
- */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Vérification authentification
-    const session = await auth()
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in' },
-        { status: 401 }
-      )
-    }
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: 'Forbidden', details: authz.status }, { status: authz.status })
 
-    // 2. Vérification rôle ADMIN
-    if (session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Forbidden - Admin access required' },
-        { status: 403 }
-      )
-    }
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'promotions:create'), { windowMs: 60_000, maxRequests: 10 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
-    // 3. Parsing et validation du body
     const body = await request.json()
     const validationResult = createPromotionSchema.safeParse(body)
 
@@ -100,7 +82,6 @@ export async function POST(request: NextRequest) {
 
     const validatedData = validationResult.data
 
-    // 4. Création de la promotion avec données validées
     const promotion = await prisma.promotion.create({
       data: {
         name: validatedData.name,
@@ -125,12 +106,21 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    await auditLog({
+      action: 'CREATE',
+      entityType: 'Promotion',
+      entityId: promotion.id,
+      userId: authz.session.user.id,
+      newValues: { name: promotion.name, code: promotion.code, discountValue: promotion.discountValue, discountType: promotion.discountType },
+      ipAddress: request.headers.get('x-forwarded-for'),
+      userAgent: request.headers.get('user-agent'),
+    })
+
     return NextResponse.json(promotion, { status: 201 })
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
-    console.error('Error creating promotion:', errorMessage)
+    console.error('Error creating promotion:', error)
     return NextResponse.json(
-      { error: 'Failed to create promotion', message: errorMessage },
+      { error: 'Failed to create promotion' },
       { status: 500 }
     )
   }

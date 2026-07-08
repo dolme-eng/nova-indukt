@@ -6,12 +6,12 @@ import { sendOrderConfirmationForOrder } from "@/lib/email/send"
 import { VAT_RATE_PERCENT, vatFromGross } from "@/lib/utils/vat"
 import { createOrderSchema, type OrderItemInput } from "@/lib/validations/order"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { auditLog } from "@/lib/admin/audit"
 import { calculateShipping } from "@/lib/constants/shop"
 import { applyPromotionsToProducts, validateCoupon, incrementPromotionUsage } from "@/lib/promotions"
 import { randomUUID } from "crypto"
 
-// Get user's orders
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const session = await auth()
     
@@ -21,6 +21,9 @@ export async function GET() {
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "orders:get"), { windowMs: 60_000, maxRequests: 20 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const orders = await prisma.order.findMany({
       where: { userId: session.user.id },
@@ -289,6 +292,22 @@ export async function POST(request: NextRequest) {
     }
     
     revalidatePath("/mein-konto")
+
+    await auditLog({
+      action: "CREATE",
+      entityType: "Order",
+      entityId: order.id,
+      userId: session?.user?.id || null,
+      newValues: {
+        orderNumber: order.orderNumber,
+        total: Number(order.total),
+        paymentMethod,
+        customerName: order.customerName,
+        itemCount: order.items.length,
+      },
+      ipAddress: getIP(request),
+      userAgent: request.headers.get("user-agent"),
+    })
     
     return NextResponse.json({
       ...order,

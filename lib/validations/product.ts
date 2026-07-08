@@ -11,7 +11,6 @@ export const createProductSchema = z.object({
   nameDe: z.string().min(1, 'German name is required').max(200, 'Name too long'),
   slug: z.string().min(1, 'Slug is required').max(100, 'Slug too long')
     .regex(/^[a-z0-9-]+$/, 'Slug must contain only lowercase letters, numbers, and hyphens'),
-  supplierSku: z.string().max(100).optional().nullable(),
   ean: z.string().max(13, 'EAN must be 13 characters').optional().nullable(),
   descriptionDe: z.string().max(5000, 'Description too long').optional().nullable(),
   shortDescription: z.string().max(500, 'Short description too long').optional().nullable(),

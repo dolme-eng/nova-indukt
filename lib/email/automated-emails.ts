@@ -118,7 +118,7 @@ export async function sendReviewRequests() {
       },
     })
 
-    console.log(`Found ${orders.length} orders ready for review requests`)
+    // Found N orders ready for review requests
 
     const results = []
 

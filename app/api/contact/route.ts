@@ -79,9 +79,9 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error("Error sending contact message:", error)
     return NextResponse.json(
-      { error: "Failed to send message", message: errorMessage },
+      { error: "Failed to send message" },
       { status: 500 }
     )
   }

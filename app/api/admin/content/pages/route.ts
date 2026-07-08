@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
+import { createStaticPageSchema } from "@/lib/validations/admin"
 
 export async function GET() {
   const authz = await requireAdmin()
@@ -19,15 +20,15 @@ export async function POST(req: NextRequest) {
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
   const body = await req.json()
-  const { slug, title, content, isActive = true } = body ?? {}
-
-  if (!slug || !title || typeof content !== "string") {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 })
+  const parsed = createStaticPageSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    )
   }
 
-  const page = await prisma.staticPageContent.create({
-    data: { slug, title, content, isActive: Boolean(isActive) },
-  })
+  const page = await prisma.staticPageContent.create({ data: parsed.data })
 
   await auditLog({
     action: "CREATE",

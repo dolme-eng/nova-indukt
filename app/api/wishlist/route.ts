@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const wishlistItemSchema = z.object({
   productId: z.string(),
@@ -69,6 +70,9 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "wishlist:post"), { windowMs: 60_000, maxRequests: 20 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const body = await request.json()
     const result = wishlistItemSchema.safeParse(body)
@@ -160,6 +164,9 @@ export async function DELETE(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "wishlist:delete"), { windowMs: 60_000, maxRequests: 20 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')

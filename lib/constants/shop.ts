@@ -3,22 +3,27 @@
  * Centralized values for shipping, taxes, and other business rules.
  */
 
+import { COMPANY } from './company'
+
 export const SHIPPING_COST = 9.99
 export const FREE_SHIPPING_THRESHOLD = 500
 
-export const SHOP_NAME = 'NOVA INDUKT'
+export const SHOP_NAME = COMPANY.nameShort
 /** Canonical domain without trailing slash, used in schema.org, metadata and emails. */
-export const SHOP_DOMAIN = process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de'
+export const SHOP_DOMAIN = COMPANY.website
 /** @deprecated Use SHOP_DOMAIN — kept for backward compatibility */
 export const SHOP_URL = SHOP_DOMAIN
 
-// ─── Contact emails ────────────────────────────────────────────────────────
-export const SUPPORT_EMAIL    = process.env.SUPPORT_EMAIL     || 'support@nova-indukt.de'
-export const INFO_EMAIL        = process.env.INFO_EMAIL         || 'info@nova-indukt.de'
-export const DATENSCHUTZ_EMAIL = process.env.DATENSCHUTZ_EMAIL || 'datenschutz@nova-indukt.de'
-export const WIDERRUF_EMAIL    = process.env.WIDERRUF_EMAIL    || 'widerruf@nova-indukt.de'
-export const NEWSLETTER_EMAIL  = process.env.NEWSLETTER_EMAIL  || 'newsletter@nova-indukt.de'
+// ─── Contact emails (centralized in COMPANY) ──────────────────────────────────
+export const SUPPORT_EMAIL    = COMPANY.email.support
+export const INFO_EMAIL       = COMPANY.email.info
+export const DATENSCHUTZ_EMAIL = COMPANY.email.datenschutz
+export const WIDERRUF_EMAIL   = COMPANY.email.widerruf
+export const NEWSLETTER_EMAIL = COMPANY.email.newsletter
+export const FROM_EMAIL       = COMPANY.email.noreply
+export const FROM_NAME        = COMPANY.nameShort
 
+// ─── Bank details ─────────────────────────────────────────────────────────────
 // ⚠️ CRITICAL: Never ship with placeholder bank details.
 // These env vars MUST be set in production — missing values will cause
 // customers to receive fake bank transfer instructions.
@@ -31,7 +36,7 @@ function requireEnv(key: string, fallback: string): string {
 }
 
 export const BANK_DETAILS = {
-  holder:   requireEnv('NEXT_PUBLIC_BANK_HOLDER',  'NOVA INDUKT GmbH'),
+  holder:   requireEnv('NEXT_PUBLIC_BANK_HOLDER',  COMPANY.name),
   iban:     requireEnv('NEXT_PUBLIC_BANK_IBAN',    'DE00 0000 0000 0000 0000 00'),
   bic:      requireEnv('NEXT_PUBLIC_BANK_BIC',     'XXXXXXXXXXXXXXX'),
   bankName: requireEnv('NEXT_PUBLIC_BANK_NAME',    'Bank nicht konfiguriert'),

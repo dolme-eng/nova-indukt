@@ -72,7 +72,6 @@ export async function checkAndCreateRandomPromotion(): Promise<boolean> {
   
   // Don't create if there's already 2+ active promotions
   if (activePromotions >= 2) {
-    console.log('Already have', activePromotions, 'active promotions. Skipping.')
     return false
   }
   
@@ -81,7 +80,6 @@ export async function checkAndCreateRandomPromotion(): Promise<boolean> {
   
   // Roll the dice
   if (Math.random() > chance) {
-    console.log('No promotion this time (chance:', chance, ')')
     return false
   }
   
@@ -175,13 +173,7 @@ async function createRandomPromotion(isWeekend: boolean): Promise<void> {
     },
   })
   
-  console.log('Created random promotion:', {
-    id: promotion.id,
-    name: promotion.name,
-    discount: badge,
-    duration: `${durationHours}h`,
-    products: productIds.length || 'global',
-  })
+  // Created random promotion
 }
 
 /**
@@ -253,7 +245,7 @@ export async function cleanupExpiredPromotions(): Promise<number> {
     },
   })
   
-  console.log('Deactivated', result.count, 'expired promotions')
+  // Deactivated expired promotions
   return result.count
 }
 

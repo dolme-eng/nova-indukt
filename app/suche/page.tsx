@@ -49,8 +49,7 @@ export default async function SuchePage() {
       induction: p.inductionSafe || false,
     },
     brand: p.brand || undefined,
-    ean: p.ean || undefined,
-    supplierSku: p.supplierSku || undefined
+    ean: p.ean || undefined
   }))
 
   const formattedCategories: Category[] = categories.map(c => ({

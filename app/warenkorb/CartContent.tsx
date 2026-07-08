@@ -361,7 +361,6 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                 
                 {/* Payments accepted */}
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
-                   <div className="px-3 py-1 bg-gray-50 rounded border border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-wider">PayPal</div>
                    <div className="px-3 py-1 bg-gray-50 rounded border border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Banküberweisung</div>
                 </div>
 

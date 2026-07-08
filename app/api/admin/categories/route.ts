@@ -1,25 +1,18 @@
-import { NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/admin/require-admin'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
-// GET - Liste toutes les catégories
-export async function GET() {
-  try {
-    const session = await auth()
-    if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+export async function GET(req: NextRequest) {
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
 
-    const categories = await prisma.category.findMany({
-      orderBy: { nameDe: 'asc' }
-    })
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:categories'), { windowMs: 60_000, maxRequests: 30 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
-    return NextResponse.json(categories)
-  } catch (error) {
-    console.error('Error fetching categories:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch categories' },
-      { status: 500 }
-    )
-  }
+  const categories = await prisma.category.findMany({
+    orderBy: { nameDe: 'asc' }
+  })
+
+  return NextResponse.json(categories)
 }

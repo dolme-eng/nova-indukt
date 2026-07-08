@@ -41,7 +41,7 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
     {
       id: 'payment-1',
       question: 'Welche Zahlungsmethoden werden akzeptiert?',
-      answer: 'Wir akzeptieren PayPal sowie Zahlung per E-Mail/Bankueberweisung. Die Zahlungsinformationen erhalten Sie nach der Bestellung per E-Mail.',
+      answer: 'Wir akzeptieren ausschließlich Zahlung per Banküberweisung. Die Zahlungsinformationen erhalten Sie nach der Bestellung per E-Mail.',
       icon: ShieldCheck,
       category: 'payment'
     },
@@ -69,7 +69,7 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
     {
       id: 'support-1',
       question: 'Wie erreiche ich den Kundenservice?',
-      answer: 'Sie erreichen uns per E-Mail unter support@nova-indukt.de oder über unser Kontaktformular.',
+      answer: `Sie erreichen uns per E-Mail unter ${COMPANY.email.support} oder über unser Kontaktformular.`,
       icon: MessageCircle,
       category: 'support'
     }

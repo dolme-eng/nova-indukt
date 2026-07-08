@@ -50,7 +50,7 @@ export function KontaktContent() {
     {
       icon: MapPin,
       title: 'Besuchen Sie uns',
-      content: 'Nova Indukt GmbH\nIndustriestraße 123\n12345 Berlin, Deutschland'
+      content: `${COMPANY.name}\n${COMPANY.street}\n${COMPANY.zip} ${COMPANY.city}, ${COMPANY.country}`
     },
     {
       icon: Phone,
@@ -61,12 +61,12 @@ export function KontaktContent() {
     {
       icon: Mail,
       title: 'Schreiben Sie uns',
-      content: 'support@nova-indukt.de'
+      content: COMPANY.email.support
     },
     {
       icon: Clock,
       title: 'Öffnungszeiten',
-      content: 'Mo-Fr: 09:00 - 18:00 Uhr\nSa: 10:00 - 14:00 Uhr'
+      content: COMPANY.hours.combined
     }
   ]
 
@@ -138,7 +138,7 @@ export function KontaktContent() {
                       <div className="flex flex-col gap-3">
                          <p className="text-gray-500 text-sm font-medium">{item.content}</p>
                          <a 
-                           href="https://wa.me/493012345678?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt." 
+                           href={COMPANY.whatsapp.url} 
                            target="_blank" 
                            rel="noopener noreferrer"
                            className="inline-flex items-center gap-3 px-6 py-3 bg-[#25D366] text-white rounded-xl font-bold hover:bg-[#20ba5a] transition-all shadow-lg shadow-green-500/20 w-fit"

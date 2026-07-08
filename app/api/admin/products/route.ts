@@ -1,19 +1,21 @@
-import { NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { requireAdmin } from "@/lib/admin/require-admin"
+import { auditLog } from "@/lib/admin/audit"
 import { createProductSchema } from "@/lib/validations/product"
 import type { ProductImageInput } from "@/lib/validations/product"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const session = await auth()
-    if (!session || session.user?.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 })
-    }
+    const authz = await requireAdmin()
+    if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:products"), { windowMs: 60_000, maxRequests: 10 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
 
     const body = await req.json()
     
-    // Validation Zod du body
     const validationResult = createProductSchema.safeParse(body)
     
     if (!validationResult.success) {
@@ -29,7 +31,6 @@ export async function POST(req: Request) {
     const {
       nameDe,
       slug,
-      supplierSku,
       ean,
       descriptionDe,
       shortDescription,
@@ -54,7 +55,6 @@ export async function POST(req: Request) {
       data: {
         nameDe,
         slug,
-        supplierSku,
         ean,
         descriptionDe,
         shortDescription,
@@ -83,6 +83,16 @@ export async function POST(req: Request) {
           }
         }
       }
+    })
+
+    await auditLog({
+      action: "CREATE",
+      entityType: "Product",
+      entityId: product.id,
+      userId: authz.session.user.id,
+      newValues: { slug: product.slug, nameDe: product.nameDe, price: product.price },
+      ipAddress: req.headers.get("x-forwarded-for"),
+      userAgent: req.headers.get("user-agent"),
     })
 
     return NextResponse.json(product)

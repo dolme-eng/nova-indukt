@@ -12,8 +12,9 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-const WHATSAPP_URL =
-  'https://wa.me/493012345678?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt.'
+import { COMPANY } from '@/lib/constants/company'
+
+const WHATSAPP_URL = `${COMPANY.whatsapp.url}?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt.`
 
 interface NavItem {
   label: string

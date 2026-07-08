@@ -37,7 +37,6 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
   const [formData, setFormData] = useState({
     nameDe: initialData?.nameDe || "",
     slug: initialData?.slug || "",
-    supplierSku: initialData?.supplierSku || "",
     ean: initialData?.ean || "",
     descriptionDe: initialData?.descriptionDe || "",
     shortDescription: initialData?.shortDescription || "",
@@ -204,17 +203,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       />
                     </label>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Lieferanten-SKU</span>
-                      <input 
-                        type="text" 
-                        value={formData.supplierSku}
-                        onChange={(e) => setFormData({...formData, supplierSku: e.target.value})}
-                        className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                      />
-                    </label>
-                    <label className="block">
+                  <label className="block">
                       <span className="text-sm font-semibold text-slate-700">EAN-Code</span>
                       <input 
                         type="text" 
@@ -223,7 +212,6 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                         className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                       />
                     </label>
-                  </div>
                   <label className="block">
                     <span className="text-sm font-semibold text-slate-700">Kategorie *</span>
                     <select 

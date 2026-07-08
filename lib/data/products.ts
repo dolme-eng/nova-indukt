@@ -38,7 +38,6 @@ export function mapDbProductToUi(p: DbProduct): Product {
     },
     brand: p.brand || undefined,
     ean: p.ean || undefined,
-    supplierSku: p.supplierSku || undefined,
   }
 }
 
@@ -79,12 +78,10 @@ export interface Product {
     dishwasher: boolean
     induction: boolean
   }
-  /** GTIN-13 / EAN – nur echte Lieferanten-Codes. */
+  /** GTIN-13 / EAN. */
   ean?: string
-  /** Markenname laut Lieferant. */
+  /** Markenname. */
   brand?: string
-  /** Lieferanten-Artikelnummer / Hersteller-SKU. */
-  supplierSku?: string
   /** `true` (Standard): `price` ist inkl. MwSt. */
   priceIncludesVat?: boolean
   /** z. B. 19 für DE */

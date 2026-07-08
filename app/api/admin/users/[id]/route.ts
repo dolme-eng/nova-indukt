@@ -1,22 +1,35 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+
+const updateUserRoleSchema = z.object({
+  role: z.enum(["USER", "ADMIN"]),
+})
 
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+  const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:users:update"), { windowMs: 60_000, maxRequests: 20 })
+  if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
 
   const { id } = await context.params
   const before = await prisma.user.findUnique({ where: { id } })
   if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   const body = await req.json()
-  const { role } = body ?? {}
-
-  if (role !== "USER" && role !== "ADMIN") {
-    return NextResponse.json({ error: "Invalid role" }, { status: 400 })
+  const parsed = updateUserRoleSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    )
   }
+
+  const { role } = parsed.data
 
   // Prevent self-demotion from ADMIN (basic safety)
   if (before.id === authz.session.user.id && before.role === "ADMIN" && role !== "ADMIN") {

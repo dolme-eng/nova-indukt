@@ -2,19 +2,34 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { hashPassword } from "@/lib/auth/auth.config"
 import { registerSchema } from "@/lib/validations/auth"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import crypto from "crypto"
+import { sendEmailWithRetry, FROM_EMAIL, FROM_NAME } from "@/lib/email/send"
+import EmailVerificationEmail from "@/lib/email/templates/email-verification"
+import { render } from "@react-email/render"
 
 /**
  * API Route de registration.
- * Le store Zustand (lib/store/auth.ts) appelle cette route via fetch().
- * La logique est dupliquée depuis la Server Action pour éviter les problèmes
- * d'appel de Server Actions depuis une API Route.
- * Validation Zod + bcrypt identiques.
+ * Envoie un email de vérification après l'inscription.
  */
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 5 registrations per hour per IP
+    const ip = getIP(request)
+    const rl = await rateLimit(createRateLimitKey(ip, "register"), {
+      windowMs: 60 * 60 * 1000,
+      maxRequests: 5,
+    })
+    if (!rl.success) {
+      return NextResponse.json(
+        { success: false, error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
 
-    // Validation Zod stricte — identique à app/actions/auth.ts
+    // Validation Zod stricte
     const parsed = registerSchema.safeParse(body)
     if (!parsed.success) {
       const firstError = parsed.error.issues[0]
@@ -47,8 +62,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Hash password avec bcrypt (via hashPassword partagé)
+    // Hash password
     const hashedPassword = await hashPassword(password)
+
+    // Generate verification token
+    const verificationToken = crypto.randomBytes(32).toString("hex")
+    const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
 
     // Create user
     const user = await prisma.user.create({
@@ -56,12 +75,34 @@ export async function POST(request: NextRequest) {
         email: email.toLowerCase(),
         name,
         password: hashedPassword,
-        role: "USER"
+        role: "USER",
+        resetToken: verificationToken,
+        resetTokenExpiry: verificationExpiry,
       }
+    })
+
+    // Send verification email
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nova-indukt.de"
+    const verificationUrl = `${siteUrl}/api/auth/verify-email?token=${verificationToken}`
+
+    const html = await render(
+      EmailVerificationEmail({
+        firstName: name?.split(" ")[0],
+        verificationUrl,
+        expiresIn: "24 Stunden",
+      })
+    )
+
+    await sendEmailWithRetry({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
+      to: email.toLowerCase(),
+      subject: "E-Mail-Adresse verifizieren - NOVA INDUKT",
+      html,
     })
 
     return NextResponse.json({
       success: true,
+      message: "Registrierung erfolgreich. Bitte überprüfen Sie Ihre E-Mail zur Verifizierung.",
       user: {
         id: user.id,
         email: user.email,

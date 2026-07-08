@@ -1,54 +1,62 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { auth } from "@/lib/auth"
+import { requireAdmin } from "@/lib/admin/require-admin"
+import { auditLog } from "@/lib/admin/audit"
+import { updateBlogPostSchema } from "@/lib/validations/admin"
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
     const { id } = await params
-    
-    if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
 
     const body = await request.json()
-    const { 
-      titleDe, 
-      slug, 
-      excerptDe, 
-      contentDe, 
-      image, 
-      category, 
-      author, 
-      readTime, 
-      isPublished 
-    } = body
+    const parsed = updateBlogPostSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+    }
 
-    // Récupérer l'état actuel pour gérer la date de publication
     const currentPost = await prisma.blogPost.findUnique({ where: { id } })
-    
-    let publishedAt = currentPost?.publishedAt
-    if (isPublished && !currentPost?.isPublished) {
+    if (!currentPost) return NextResponse.json({ error: "Not found" }, { status: 404 })
+
+    const data = parsed.data
+    let publishedAt = currentPost.publishedAt
+    if (data.isPublished && !currentPost.isPublished) {
       publishedAt = new Date()
     }
 
     const post = await prisma.blogPost.update({
       where: { id },
       data: {
-        titleDe,
-        slug,
-        excerptDe,
-        contentDe,
-        image,
-        category,
-        author,
-        readTime,
-        isPublished,
-        publishedAt
+        titleDe: data.titleDe,
+        slug: data.slug,
+        contentDe: data.contentDe,
+        isPublished: data.isPublished,
+        excerptDe: data.excerptDe ?? null,
+        image: data.image ?? null,
+        category: data.category ?? null,
+        author: data.author ?? undefined,
+        readTime: data.readTime != null ? String(data.readTime) : null,
+        publishedAt,
       }
+    })
+
+    await auditLog({
+      action: "UPDATE",
+      entityType: "BlogPost",
+      entityId: post.id,
+      userId: authz.session.user.id,
+      oldValues: currentPost,
+      newValues: post,
+      ipAddress: request.headers.get("x-forwarded-for"),
+      userAgent: request.headers.get("user-agent"),
     })
 
     return NextResponse.json(post)
@@ -63,15 +71,24 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
-    const { id } = await params
-    
-    if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-    await prisma.blogPost.delete({
-      where: { id }
+    const { id } = await params
+
+    const post = await prisma.blogPost.findUnique({ where: { id } })
+    if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 })
+
+    await prisma.blogPost.delete({ where: { id } })
+
+    await auditLog({
+      action: "DELETE",
+      entityType: "BlogPost",
+      entityId: id,
+      userId: authz.session.user.id,
+      oldValues: post,
+      ipAddress: request.headers.get("x-forwarded-for"),
+      userAgent: request.headers.get("user-agent"),
     })
 
     return NextResponse.json({ success: true })

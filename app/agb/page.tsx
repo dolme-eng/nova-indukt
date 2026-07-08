@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getStaticPageContent } from '@/lib/content/static'
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants/shop'
+import { COMPANY } from '@/lib/constants/company'
 import { formatPriceDe } from '@/lib/utils'
 
 export const metadata: Metadata = {
@@ -38,8 +39,8 @@ export default async function AGBPage() {
             <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
               <p>
                 (1) Die folgenden Allgemeinen Geschäftsbedingungen (nachfolgend "AGB") gelten für alle Verträge, 
-                die ein Verbraucher oder Unternehmer (nachfolgend "Kunde") mit NOVA INDUKT GmbH, Industriestraße 123, 
-                12345 Berlin, Deutschland (nachfolgend "Anbieter") über die im Internet-Shop des Anbieters dargestellten 
+                die ein Verbraucher oder Unternehmer (nachfolgend "Kunde") mit {COMPANY.name}, {COMPANY.street}, 
+                {COMPANY.zip} {COMPANY.city}, Deutschland (nachfolgend "Anbieter") über die im Internet-Shop des Anbieters dargestellten 
                 Waren und/oder Dienstleistungen abschließt.
               </p>
               <p>
@@ -88,11 +89,10 @@ export default async function AGBPage() {
                 (2) Die folgenden Zahlungsarten sind verfügbar:
               </p>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>PayPal</li>
-                <li>Zahlung per E-Mail mit Banküberweisung</li>
+                <li>Banküberweisung</li>
               </ul>
               <p>
-                (3) Bei Zahlung per PayPal erfolgt die Belastung des Kontos mit Abschluss des Bezahlvorgangs.
+                (3) Bei Zahlung per Banküberweisung erfolgt die Lieferung erst nach Eingang der Zahlung auf unserem Konto.
               </p>
               <p>
                 (4) Der Kunde verpflichtet sich, die angegebenen Kontodaten korrekt und vollständig anzugeben.

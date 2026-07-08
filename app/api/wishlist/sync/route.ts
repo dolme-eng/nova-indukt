@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const syncSchema = z.object({
   localItems: z.array(z.object({
@@ -9,7 +10,6 @@ const syncSchema = z.object({
   })),
 })
 
-// POST - Sync localStorage wishlist with DB on login
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -20,6 +20,9 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "wishlist:sync"), { windowMs: 60_000, maxRequests: 10 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const body = await request.json()
     const result = syncSchema.safeParse(body)

@@ -1,13 +1,40 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
-export async function POST(request: Request) {
+const validateCouponSchema = z.object({
+  code: z.string().min(1, 'Code ist erforderlich').max(50),
+  amount: z.number().positive('Betrag muss positiv sein'),
+})
+
+export async function POST(request: NextRequest) {
   try {
-    const { code, amount } = await request.json()
-
-    if (!code) {
-      return NextResponse.json({ error: 'Code ist erforderlich' }, { status: 400 })
+    // Rate limit: 10 validations per minute per IP (prevent brute-force)
+    const ip = getIP(request)
+    const rl = await rateLimit(createRateLimitKey(ip, 'coupons'), {
+      windowMs: 60_000,
+      maxRequests: 10,
+    })
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Zu viele Anfragen. Bitte warten Sie einen Moment.' },
+        { status: 429 }
+      )
     }
+
+    const body = await request.json()
+
+    // Zod validation
+    const parsed = validateCouponSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Ungültige Daten', details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+    }
+
+    const { code, amount } = parsed.data
 
     const promo = await prisma.promotion.findFirst({
       where: {

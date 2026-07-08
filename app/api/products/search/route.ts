@@ -1,13 +1,23 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
-export async function GET(req: Request) {
+const MAX_QUERY_LENGTH = 200
+
+export async function GET(req: NextRequest) {
   try {
+    const rl = await rateLimit(createRateLimitKey(getIP(req), "search"), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
     const { searchParams } = new URL(req.url)
-    const query = searchParams.get("q")
+    let query = searchParams.get("q")
 
     if (!query || query.length < 2) {
       return NextResponse.json([])
+    }
+
+    if (query.length > MAX_QUERY_LENGTH) {
+      query = query.slice(0, MAX_QUERY_LENGTH)
     }
 
     const products = await prisma.product.findMany({

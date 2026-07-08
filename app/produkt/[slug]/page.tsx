@@ -91,7 +91,7 @@ export default async function ProductPage({
     "name": product.nameDe,
     "image": product.images.map(img => img.url),
     "description": product.descriptionDe || product.shortDescription,
-    "sku": product.supplierSku,
+    "sku": product.id,
     "gtin13": product.ean,
     "brand": {
       "@type": "Brand",

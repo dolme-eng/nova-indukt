@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import { authConfig, verifyPassword } from "./auth.config"
 import { prisma } from "@/lib/prisma"
 import Credentials from "next-auth/providers/credentials"
+import { isLockedOut, recordFailedLogin, recordSuccessfulLogin } from "./login-lockout"
 
 const { handlers, auth, signOut, signIn } = NextAuth({
   ...authConfig,
@@ -12,12 +13,20 @@ const { handlers, auth, signOut, signIn } = NextAuth({
           return null
         }
 
+        const email = credentials.email as string
+
         try {
+          // Check brute-force lockout
+          if (isLockedOut(email)) {
+            return null
+          }
+
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string }
+            where: { email }
           })
 
           if (!user || !user.password) {
+            recordFailedLogin(email)
             return null
           }
 
@@ -27,8 +36,11 @@ const { handlers, auth, signOut, signIn } = NextAuth({
           )
 
           if (!isValid) {
+            recordFailedLogin(email)
             return null
           }
+
+          recordSuccessfulLogin(email)
 
           return {
             id: user.id,

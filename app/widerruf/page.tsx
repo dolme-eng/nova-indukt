@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getStaticPageContent } from '@/lib/content/static'
+import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
   title: 'Widerrufsrecht | NOVA INDUKT',
@@ -44,13 +45,13 @@ export default async function WiderrufPage() {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Um Ihr Widerrufsrecht auszuüben, müssen Sie uns</h3>
                 <div className="space-y-2">
-                  <p className="font-medium">NOVA INDUKT GmbH</p>
-                  <p>Industriestraße 123</p>
-                  <p>12345 Berlin</p>
+                  <p className="font-medium">{COMPANY.name}</p>
+                  <p>{COMPANY.street}</p>
+                  <p>{COMPANY.zip} {COMPANY.city}</p>
                   <p className="flex items-center gap-2">
                     WhatsApp: 
                     <a 
-                      href="https://wa.me/493012345678" 
+                      href={COMPANY.whatsapp} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-[#25D366] hover:underline font-bold"
@@ -59,7 +60,7 @@ export default async function WiderrufPage() {
                       Service kontaktieren
                     </a>
                   </p>
-                  <p>E-Mail: widerruf@nova-indukt.de</p>
+                  <p>E-Mail: {COMPANY.email.widerruf}</p>
                 </div>
                 <p className="mt-4">
                   mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief, Telefax oder E-Mail) 
@@ -127,10 +128,10 @@ export default async function WiderrufPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">An</label>
                     <div className="bg-white p-3 rounded-lg text-sm text-gray-600 border">
-                      <p>NOVA INDUKT GmbH</p>
-                      <p>Industriestraße 123</p>
-                      <p>12345 Berlin</p>
-                      <p>E-Mail: widerruf@nova-indukt.de</p>
+                      <p>{COMPANY.name}</p>
+                      <p>{COMPANY.street}</p>
+                      <p>{COMPANY.zip} {COMPANY.city}</p>
+                      <p>E-Mail: {COMPANY.email.widerruf}</p>
                     </div>
                   </div>
                   <div>
@@ -218,16 +219,16 @@ export default async function WiderrufPage() {
               <div>
                 <h3 className="font-medium text-gray-900 mb-2">Per Post</h3>
                 <p className="text-sm text-gray-700">
-                  NOVA INDUKT GmbH<br />
-                  Industriestraße 123<br />
-                  12345 Berlin<br />
+                  {COMPANY.name}<br />
+                  {COMPANY.street}<br />
+                  {COMPANY.zip} {COMPANY.city}<br />
                   <span className="text-gray-500">Bitte vermerken: "Widerruf"</span>
                 </p>
               </div>
               <div>
                 <h3 className="font-medium text-gray-900 mb-2">Per E-Mail</h3>
                 <p className="text-sm text-gray-700">
-                  widerruf@nova-indukt.de<br />
+                  {COMPANY.email.widerruf}<br />
                   <span className="text-gray-500">Betreff: Widerruf - Bestellnummer</span>
                 </p>
               </div>
@@ -248,10 +249,10 @@ export default async function WiderrufPage() {
               <div>
                 <h3 className="font-medium text-gray-900 mb-2">Deutschland</h3>
                 <p className="text-sm text-gray-700">
-                  NOVA INDUKT GmbH - Retouren<br />
+                  {COMPANY.name} - Retouren<br />
                   Retourenabteilung<br />
-                  Logistikstraße 45<br />
-                  12345 Berlin
+                  {COMPANY.logistics.street}<br />
+                  {COMPANY.logistics.zip} {COMPANY.logistics.city}
                 </p>
               </div>
               <div>

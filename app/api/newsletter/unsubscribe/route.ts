@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const unsubscribeSchema = z.object({
   email: z.string().email("Ungültige E-Mail-Adresse"),
@@ -8,6 +9,9 @@ const unsubscribeSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "newsletter:unsub"), { windowMs: 60_000, maxRequests: 5 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
     const body = await request.json()
     
     // Validation
@@ -68,6 +72,9 @@ export async function POST(request: NextRequest) {
 // Also support GET with token for unsubscribe links in emails
 export async function GET(request: NextRequest) {
   try {
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "newsletter:unsub"), { windowMs: 60_000, maxRequests: 10 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
     const { searchParams } = new URL(request.url)
     const email = searchParams.get("email")
     

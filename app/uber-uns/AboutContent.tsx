@@ -33,26 +33,14 @@ export default function AboutContent() {
     { value: '15', label: 'Experten im Team' }
   ]
 
-  const team = [
-    {
-      name: 'Max Mustermann',
-      role: 'Geschäftsführer',
-      description: 'Visionär mit 15 Jahren Erfahrung in der Küchengeräte-Industrie.',
-      img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200'
-    },
-    {
-      name: 'Anna Schmidt',
-      role: 'Leitung Produktentwicklung',
-      description: 'Sorgt für das perfekte Zusammenspiel von Design und Funktion.',
-      img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200'
-    },
-    {
-      name: 'Thomas Weber',
-      role: 'Leitung Kundenservice',
-      description: 'Spezialist für reibungslose Abläufe und höchste Kundenzufriedenheit.',
-      img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200&h=200'
-    }
-  ]
+  const team = COMPANY.team.map((member, index) => ({
+    ...member,
+    img: [
+      'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200&h=200',
+    ][index]
+  }))
 
   return (
     <div className="min-h-screen bg-gray-50/50 selection:bg-[#4ECCA3]/30">
@@ -286,14 +274,14 @@ export default function AboutContent() {
               <div className="bg-[#0C211E] text-white rounded-[2rem] p-10 lg:p-12 shadow-2xl relative overflow-hidden h-full flex flex-col justify-center">
                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#4ECCA3]/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
                 
-                <h3 className="text-2xl font-bold text-[#4ECCA3] mb-6 relative z-10">NOVA INDUKT Zentrale</h3>
+                <h3 className="text-2xl font-bold text-[#4ECCA3] mb-6 relative z-10">{COMPANY.nameShort} Zentrale</h3>
                 <div className="space-y-4 text-gray-300 font-medium text-lg relative z-10">
-                  <p className="text-white font-bold text-xl">NOVA INDUKT GmbH</p>
-                  <p>Industriestraße 123<br/>12345 Berlin<br/>Deutschland</p>
+                  <p className="text-white font-bold text-xl">{COMPANY.name}</p>
+                  <p>{COMPANY.street}<br/>{COMPANY.zip} {COMPANY.city}<br/>{COMPANY.country}</p>
                   <div className="pt-4 flex items-center gap-3">
                     <span className="w-10 text-gray-500 text-sm uppercase">Service</span>
                     <a 
-                      href="https://wa.me/493012345678?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt." 
+                      href={COMPANY.whatsapp.url} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-white hover:text-nova transition-colors font-bold"
@@ -301,13 +289,13 @@ export default function AboutContent() {
                       WhatsApp-Kundenservice
                     </a>
                   </div>
-                  <p className="flex items-center gap-3"><span className="w-10 text-gray-500 text-sm uppercase">Mail</span> info@nova-indukt.de</p>
+                  <p className="flex items-center gap-3"><span className="w-10 text-gray-500 text-sm uppercase">Mail</span> {COMPANY.email.info}</p>
                 </div>
                 <div className="mt-10 pt-10 border-t border-white/10 relative z-10">
                   <h4 className="font-bold text-white mb-4 text-lg">Öffnungszeiten</h4>
                   <div className="text-gray-400 space-y-2 font-medium">
-                    <p className="flex justify-between items-center max-w-[300px]"><span>Mo - Fr</span> <span className="text-white">09:00 - 18:00 Uhr</span></p>
-                    <p className="flex justify-between items-center max-w-[300px]"><span>Samstag</span> <span className="text-white">10:00 - 14:00 Uhr</span></p>
+                    <p className="flex justify-between items-center max-w-[300px]"><span>Mo - Fr</span> <span className="text-white">{COMPANY.hours.weekdays.split(' ').slice(1).join(' ')}</span></p>
+                    <p className="flex justify-between items-center max-w-[300px]"><span>Samstag</span> <span className="text-white">{COMPANY.hours.saturday.split(' ').slice(1).join(' ')}</span></p>
                   </div>
                 </div>
               </div>

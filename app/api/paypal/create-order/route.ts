@@ -1,38 +1,86 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { getPayPalAccessToken, PAYPAL_API_URL } from "@/lib/paypal"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+
+const createPaypalOrderSchema = z.object({
+  orderId: z.string().min(1, "Order ID is required"),
+})
 
 export async function POST(request: NextRequest) {
   try {
-    await auth()
-    const body = await request.json()
-    
-    const { orderId } = body
-    
-    // C7 FIX: orderId is required — we read the amount from DB, never trust the client
-    if (!orderId) {
+    // Rate limit: 10 PayPal order creations per minute per IP
+    const ip = getIP(request)
+    const rl = await rateLimit(createRateLimitKey(ip, "paypal-create"), {
+      windowMs: 60_000,
+      maxRequests: 10,
+    })
+    if (!rl.success) {
       return NextResponse.json(
-        { error: "Order ID is required" },
+        { error: "Zu viele Anfragen. Bitte warten Sie einen Moment." },
+        { status: 429 }
+      )
+    }
+
+    // Auth required — only the order owner or an admin can create a PayPal order
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const body = await request.json()
+
+    // Zod validation
+    const parsed = createPaypalOrderSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
         { status: 400 }
       )
     }
 
+    const { orderId } = parsed.data
+
+    // Verify order exists and user owns it (or is admin)
     const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      select: { id: true, userId: true, paymentStatus: true },
+    })
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 })
+    }
+    const isAdmin = session.user.role === "ADMIN"
+    const isOwner = order.userId === session.user.id
+    if (!isAdmin && !isOwner) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+    }
+
+    // Prevent creating PayPal order for already-paid orders
+    if (order.paymentStatus === "PAID") {
+      return NextResponse.json(
+        { error: "Diese Bestellung wurde bereits bezahlt" },
+        { status: 400 }
+      )
+    }
+
+    // Fetch full order details for PayPal
+    const fullOrder = await prisma.order.findUnique({
       where: { id: orderId },
       include: { items: true }
     })
     
-    if (!order) {
+    if (!fullOrder) {
       return NextResponse.json(
         { error: "Order not found" },
         { status: 404 }
       )
     }
 
-    const subtotal = Number(order.subtotal)
-    const shipping = Number(order.shippingCost)
-    const total = Number(order.total)
+    const subtotal = Number(fullOrder.subtotal)
+    const shipping = Number(fullOrder.shippingCost)
+    const total = Number(fullOrder.total)
 
     const accessToken = await getPayPalAccessToken()
 
@@ -55,7 +103,7 @@ export async function POST(request: NextRequest) {
               }
             },
           },
-          items: order.items.map(item => ({
+          items: fullOrder.items.map(item => ({
             name: item.productName,
             unit_amount: {
               currency_code: "EUR",
@@ -64,9 +112,9 @@ export async function POST(request: NextRequest) {
             quantity: item.quantity.toString(),
             category: "PHYSICAL_GOODS",
           })),
-          description: `NOVA INDUKT Bestellung ${order.orderNumber}`,
+          description: `NOVA INDUKT Bestellung ${fullOrder.orderNumber}`,
           custom_id: orderId,
-          invoice_id: order.orderNumber, // Use human-readable order number
+          invoice_id: fullOrder.orderNumber, // Use human-readable order number
         },
       ],
       application_context: {

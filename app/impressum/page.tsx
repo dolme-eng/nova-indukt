@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getStaticPageContent } from '@/lib/content/static'
+import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
   title: 'Impressum | NOVA INDUKT',
@@ -30,9 +31,9 @@ export default async function ImpressumPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Angaben gemäß § 5 TMG</h2>
             <div className="space-y-2 text-gray-700">
-              <p className="font-semibold">NOVA INDUKT GmbH</p>
-              <p>Industriestraße 123</p>
-              <p>12345 Berlin</p>
+              <p className="font-semibold">{COMPANY.name}</p>
+              <p>{COMPANY.street}</p>
+              <p>{COMPANY.zip} {COMPANY.city}</p>
               <p>Deutschland</p>
             </div>
           </section>
@@ -40,7 +41,7 @@ export default async function ImpressumPage() {
           {/* Vertreten durch */}
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Vertreten durch</h2>
-            <p className="text-gray-700">Geschäftsführer: Max Mustermann</p>
+            <p className="text-gray-700">Geschäftsführer: {COMPANY.geschaeftsfuehrer}</p>
           </section>
 
           {/* Kontakt */}
@@ -50,7 +51,7 @@ export default async function ImpressumPage() {
               <p className="flex items-center gap-2">
                 WhatsApp-Kundenservice: 
                 <a 
-                  href="https://wa.me/493012345678" 
+                  href={COMPANY.whatsapp} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-[#25D366] hover:underline font-bold"
@@ -59,7 +60,7 @@ export default async function ImpressumPage() {
                   Service kontaktieren
                 </a>
               </p>
-              <p>E-Mail: info@nova-indukt.de</p>
+              <p>E-Mail: {COMPANY.email.info}</p>
             </div>
           </section>
 
@@ -67,9 +68,9 @@ export default async function ImpressumPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Registereintrag</h2>
             <div className="space-y-2 text-gray-700">
-              <p>Registergericht: Amtsgericht Berlin-Charlottenburg</p>
-              <p>Registernummer: HRB 284756</p>
-              <p>USt-IdNr.: DE312456789</p>
+              <p>Registergericht: {COMPANY.registergericht}</p>
+              <p>Registernummer: {COMPANY.registernummer}</p>
+              <p>USt-IdNr.: {COMPANY.ustIdNr}</p>
             </div>
           </section>
 
@@ -77,10 +78,10 @@ export default async function ImpressumPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
             <div className="space-y-2 text-gray-700">
-              <p>Max Mustermann</p>
-              <p>NOVA INDUKT GmbH</p>
-              <p>Industriestraße 123</p>
-              <p>12345 Berlin</p>
+              <p>{COMPANY.geschaeftsfuehrer}</p>
+              <p>{COMPANY.name}</p>
+              <p>{COMPANY.street}</p>
+              <p>{COMPANY.zip} {COMPANY.city}</p>
             </div>
           </section>
 

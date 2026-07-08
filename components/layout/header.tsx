@@ -38,8 +38,9 @@ const navItems = [
 
 // ─── WhatsApp helper ─────────────────────────────────────────────────────────
 
-const WHATSAPP_URL =
-  'https://wa.me/493012345678?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt.'
+import { COMPANY } from '@/lib/constants/company'
+
+const WHATSAPP_URL = `${COMPANY.whatsapp.url}?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt.`
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-[#25D366]">

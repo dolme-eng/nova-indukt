@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 
 const KEY = "site"
+
+const settingsSchema = z.record(z.string(), z.unknown())
 
 export async function GET() {
   const authz = await requireAdmin()
@@ -17,13 +20,22 @@ export async function PUT(req: NextRequest) {
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-  const data = await req.json()
+  const body = await req.json()
+  const parsed = settingsSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    )
+  }
+
+  const data = parsed.data
   const before = await prisma.appConfig.findUnique({ where: { key: KEY } })
 
   const cfg = await prisma.appConfig.upsert({
     where: { key: KEY },
-    update: { data },
-    create: { key: KEY, data },
+    update: { data: data as any },
+    create: { key: KEY, data: data as any },
   })
 
   await auditLog({

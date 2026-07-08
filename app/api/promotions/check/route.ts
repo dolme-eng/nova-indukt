@@ -8,11 +8,19 @@ import { checkAndCreateRandomPromotion, cleanupExpiredPromotions } from '@/lib/p
 // Or: Every 30 minutes (30 * * * *) for more frequent checks
 export async function GET(request: NextRequest) {
   try {
-    // Optional: Verify cron secret for security
+    // Verify cron secret — mandatory in all environments (fail closed)
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET
     
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    if (!cronSecret) {
+      console.error('CRON_SECRET is not configured. Rejecting request.')
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      )
+    }
+    
+    if (authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

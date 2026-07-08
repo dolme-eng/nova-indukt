@@ -1,12 +1,27 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { deleteImage } from "@/lib/cloudinary"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+
+const mediaAssetSchema = z.object({
+  publicId: z.string().min(1),
+  url: z.string().url(),
+  width: z.number().positive().optional(),
+  height: z.number().positive().optional(),
+  bytes: z.number().nonnegative().optional(),
+  format: z.string().max(10).optional(),
+  folder: z.string().max(200).optional(),
+})
 
 export async function GET(req: NextRequest) {
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+  const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:media"), { windowMs: 60_000, maxRequests: 30 })
+  if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
 
   const { searchParams } = new URL(req.url)
   const folder = searchParams.get("folder") || undefined
@@ -24,31 +39,38 @@ export async function POST(req: NextRequest) {
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-  const body = await req.json()
-  const { publicId, url, width, height, bytes, format, folder } = body ?? {}
+  const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:media:post"), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
 
-  if (!publicId || !url) {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 })
+  const body = await req.json()
+  const parsed = mediaAssetSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    )
   }
+
+  const { publicId, url, width, height, bytes, format, folder } = parsed.data
 
   const asset = await prisma.mediaAsset.upsert({
     where: { publicId },
     update: {
       url,
-      width: typeof width === "number" ? width : undefined,
-      height: typeof height === "number" ? height : undefined,
-      bytes: typeof bytes === "number" ? bytes : undefined,
-      format: typeof format === "string" ? format : undefined,
-      folder: typeof folder === "string" ? folder : undefined,
+      width,
+      height,
+      bytes,
+      format,
+      folder,
     },
     create: {
       publicId,
       url,
-      width: typeof width === "number" ? width : undefined,
-      height: typeof height === "number" ? height : undefined,
-      bytes: typeof bytes === "number" ? bytes : undefined,
-      format: typeof format === "string" ? format : undefined,
-      folder: typeof folder === "string" ? folder : undefined,
+      width,
+      height,
+      bytes,
+      format,
+      folder,
       uploadedByUserId: authz.session.user.id,
     },
   })
@@ -69,6 +91,9 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+  const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:media:delete"), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
 
   const { searchParams } = new URL(req.url)
   const publicId = searchParams.get("publicId")

@@ -50,20 +50,12 @@ export function ShopSettingsClient() {
           <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"
-              checked={shop.payments?.paypalEnabled ?? true}
-              onChange={(e) => setData({ ...data, shop: { ...shop, payments: { ...(shop.payments ?? {}), paypalEnabled: e.target.checked } } })}
-            />
-            PayPal aktiviert
-          </label>
-          <label className="flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
               checked={shop.payments?.bankTransferEnabled ?? true}
               onChange={(e) =>
                 setData({ ...data, shop: { ...shop, payments: { ...(shop.payments ?? {}), bankTransferEnabled: e.target.checked } } })
               }
             />
-            Zahlung per E-Mail / Überweisung aktiviert
+            Banküberweisung aktiviert
           </label>
         </div>
       </Section>

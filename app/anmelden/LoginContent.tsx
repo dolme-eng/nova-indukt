@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle, Chrome } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle, Chrome, Info } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
 
 export function LoginContent() {
@@ -17,6 +17,22 @@ export function LoginContent() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+
+  // Check URL params for verification status
+  useEffect(() => {
+    const verified = searchParams.get('verified')
+    const errorParam = searchParams.get('error')
+    
+    if (verified === 'true') {
+      setSuccess(true)
+      setError('')
+      setTimeout(() => setSuccess(false), 5000)
+    } else if (errorParam === 'invalid-token' || errorParam === 'invalid-or-expired-token') {
+      setError('Der Verifizierungslink ist ungültig oder abgelaufen. Bitte registrieren Sie sich erneut.')
+    } else if (errorParam === 'verification-failed') {
+      setError('E-Mail-Verifizierung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -73,6 +89,13 @@ export function LoginContent() {
           className="bg-white rounded-2xl shadow-lg p-8"
         >
           <h1 className="text-2xl font-bold text-gray-900 mb-6">Anmelden</h1>
+
+          {success && (
+            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-600 text-sm">
+              <CheckCircle className="w-4 h-4" />
+              E-Mail erfolgreich verifiziert! Sie können sich jetzt anmelden.
+            </div>
+          )}
 
           {/* Google Sign In Button */}
           <button

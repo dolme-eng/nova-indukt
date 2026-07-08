@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getStaticPageContent } from '@/lib/content/static'
+import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
   title: 'Datenschutzerklärung | NOVA INDUKT',
@@ -43,15 +44,15 @@ export default async function DatenschutzPage() {
             <h2 className="text-lg font-semibold text-gray-900 mb-3">1. Verantwortlicher und Datenschutzbeauftragter</h2>
             <div className="space-y-2 text-gray-700 text-sm leading-relaxed">
               <p className="font-medium">Verantwortlicher:</p>
-              <p>NOVA INDUKT GmbH</p>
-              <p>Industriestraße 123</p>
-              <p>12345 Berlin</p>
+              <p>{COMPANY.name}</p>
+              <p>{COMPANY.street}</p>
+              <p>{COMPANY.zip} {COMPANY.city}</p>
               <p>Deutschland</p>
-              <p className="mt-2">E-Mail: datenschutz@nova-indukt.de</p>
+              <p className="mt-2">E-Mail: {COMPANY.email.datenschutz}</p>
               <p className="flex items-center gap-2">
                 WhatsApp-Kundenservice: 
                 <a 
-                  href="https://wa.me/493012345678" 
+                  href={COMPANY.whatsapp} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-[#25D366] hover:underline font-bold"
@@ -62,8 +63,8 @@ export default async function DatenschutzPage() {
             </p>
               
               <p className="font-medium mt-4">Datenschutzbeauftragter:</p>
-              <p>Max Mustermann</p>
-              <p>E-Mail: datenschutz@nova-indukt.de</p>
+              <p>{COMPANY.datenschutzbeauftragter}</p>
+              <p>E-Mail: {COMPANY.email.datenschutz}</p>
             </div>
           </section>
 
@@ -143,7 +144,7 @@ export default async function DatenschutzPage() {
               </p>
               <ul className="list-disc list-inside ml-4 space-y-1">
                 <li>Versanddienstleister (DHL, DPD, UPS) zur Zustellung der Ware</li>
-                <li>Zahlungsdienstleister (PayPal) zur Abwicklung von Zahlungen</li>
+                <li>Bankinstitute zur Abwicklung von Überweisungen</li>
                 <li>Webhosting-Provider (zur technischen Bereitstellung der Website)</li>
                 <li>IT-Dienstleister (zur Wartung unserer Systeme)</li>
               </ul>

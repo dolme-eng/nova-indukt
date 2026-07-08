@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
+import { updateFaqSchema } from "@/lib/validations/admin"
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const authz = await requireAdmin()
@@ -12,17 +13,17 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
   if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   const body = await req.json()
-  const { question, answer, category, sortOrder, isActive } = body ?? {}
+  const parsed = updateFaqSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    )
+  }
 
   const item = await prisma.faqItem.update({
     where: { id },
-    data: {
-      category: typeof category === "string" ? category : undefined,
-      question: typeof question === "string" ? question : undefined,
-      answer: typeof answer === "string" ? answer : undefined,
-      sortOrder: typeof sortOrder === "number" ? sortOrder : undefined,
-      isActive: typeof isActive === "boolean" ? isActive : undefined,
-    },
+    data: parsed.data,
   })
 
   await auditLog({

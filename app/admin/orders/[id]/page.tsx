@@ -120,7 +120,6 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-bold text-slate-900 truncate hover:text-primary transition-colors cursor-pointer">{item.productName}</h3>
-                        <p className="text-xs text-slate-500 mt-1 uppercase tracking-tighter">SKU: {item.product.supplierSku || "N/A"}</p>
                       </div>
                       <p className="font-bold text-slate-900">{(Number(item.unitPrice) * item.quantity).toFixed(2)} €</p>
                     </div>

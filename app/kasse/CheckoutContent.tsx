@@ -13,9 +13,7 @@ import { useCart } from '@/lib/store/cart'
 import { useAuth } from '@/lib/store/auth'
 import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
-
-// PayPal import
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
+import { BANK_TRANSFER } from '@/lib/constants/bank'
 
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD, calculateShipping } from '@/lib/constants/shop'
 
@@ -57,7 +55,7 @@ export default function CheckoutContent() {
     country: 'Deutschland'
   })
   
-  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'email'>('paypal')
+  const [paymentMethod, setPaymentMethod] = useState<'bank_transfer'>('bank_transfer')
   const [contactEmail, setContactEmail] = useState('')
   
   // Promo code state
@@ -202,41 +200,8 @@ export default function CheckoutContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Handle PayPal success
-  const handlePayPalSuccess = async (details: Record<string, unknown>) => {
-    setIsProcessing(true)
-    try {
-      let currentOrderId = orderId
-      if (!currentOrderId) {
-         throw new Error('No local order ID found. Order must be created before capturing.')
-      }
-
-      // Capture PayPal order
-      const response = await fetch('/api/paypal/capture-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          paypalOrderId: details.id,
-          orderId: currentOrderId,
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('PayPal capture failed')
-      }
-
-      setOrderComplete(true)
-      clearCart()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    } catch (error) {
-      console.error('PayPal error:', error)
-      toast.error('PayPal-Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut.')
-      setIsProcessing(false)
-    }
-  }
-
-  // Handle email payment (create order only)
-  const handleEmailPayment = async (e: React.FormEvent) => {
+  // Handle bank transfer (create order only)
+  const handleBankTransfer = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!contactEmail || !contactEmail.includes('@')) {
@@ -254,7 +219,7 @@ export default function CheckoutContent() {
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     } catch (error) {
-      console.error('Email payment error:', error)
+      console.error('Order error:', error)
     } finally {
       setIsProcessing(false)
     }
@@ -283,10 +248,7 @@ export default function CheckoutContent() {
             
             <h1 className="text-3xl sm:text-4xl font-bold text-[#0C211E] mb-4 font-heading">Vielen Dank für Ihre Bestellung!</h1>
             <p className="text-gray-500 mb-8 text-lg">
-              {paymentMethod === 'email' 
-                ? 'Wir haben Ihre Bestellung erhalten und senden Ihnen in Kürze die Zahlungsinformationen per E-Mail.'
-                : 'Ihre Zahlung wurde erfolgreich verarbeitet. Wir haben eine Bestätigung an Ihre E-Mail gesendet.'
-              }
+              Wir haben Ihre Bestellung erhalten. Die Zahlungsinformationen werden Ihnen in Kürze per E-Mail zugesandt.
             </p>
             
             <div className="bg-gray-50/80 rounded-[2rem] p-6 sm:p-8 mb-10 text-left border border-gray-100">
@@ -308,7 +270,7 @@ export default function CheckoutContent() {
                   <span>Zahlungsmethode</span>
                   <div className="flex items-center gap-2 font-medium">
                     <ShieldCheck className="w-4 h-4"/>
-                    {paymentMethod === 'paypal' ? 'PayPal' : 'E-Mail-Bestätigung'}
+                    Banküberweisung
                   </div>
                 </div>
                 <div className="flex items-start justify-between text-gray-500 pt-2 border-t border-gray-200/60">
@@ -320,6 +282,40 @@ export default function CheckoutContent() {
                     {shippingData.country}
                   </span>
                 </div>
+              </div>
+            </div>
+
+            {/* Bank Transfer Details */}
+            <div className="bg-[#0C211E] rounded-[2rem] p-6 sm:p-8 mb-10 text-left text-white">
+              <div className="flex items-center gap-3 mb-6">
+                <Mail className="w-6 h-6 text-[#4ECCA3]" />
+                <h3 className="text-xl font-bold">Zahlungsinformationen</h3>
+              </div>
+              <p className="text-white/70 mb-6">
+                Bitte überweisen Sie den Gesamtbetrag auf folgendes Konto. Verwenden Sie bitte Ihre Bestellnummer als Verwendungszweck.
+              </p>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-white/60">Kontoinhaber</span>
+                  <span className="font-bold">{BANK_TRANSFER.holder}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/60">IBAN</span>
+                  <span className="font-mono font-bold">{BANK_TRANSFER.iban}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/60">BIC</span>
+                  <span className="font-mono font-bold">{BANK_TRANSFER.bic}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/60">Verwendungszweck</span>
+                  <span className="font-mono font-bold">{orderNumber}</span>
+                </div>
+              </div>
+              <div className="mt-6 p-4 bg-white/10 rounded-xl">
+                <p className="text-sm text-white/80">
+                  Die Zahlungsinformationen wurden auch an Ihre E-Mail-Adresse gesendet. Bitte beachten Sie, dass die Lieferung erst nach Eingang der Zahlung erfolgt.
+                </p>
               </div>
             </div>
             
@@ -564,210 +560,85 @@ export default function CheckoutContent() {
                   </div>
                   
                   <div className="space-y-6">
-                    {/* Payment Method Selection */}
+                    {/* Bank Transfer Info */}
                     <div className="space-y-3">
-                      <label 
-                        className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
-                          paymentMethod === 'paypal' ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
-                        }`}
+                      <div 
+                        className="flex items-center gap-5 p-5 border-2 border-[#0C211E] bg-gray-50/80 shadow-sm rounded-2xl"
                       >
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="paypal"
-                          checked={paymentMethod === 'paypal'}
-                          onChange={() => setPaymentMethod('paypal')}
-                          className="sr-only"
-                        />
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                          paymentMethod === 'paypal' ? 'border-[#0C211E]' : 'border-gray-300'
-                        }`}>
-                          {paymentMethod === 'paypal' && <div className="w-3 h-3 rounded-full bg-[#0C211E]" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <Shield className="w-5 h-5 text-[#0C211E]" />
-                            <span className="font-bold text-[#0C211E] text-base">PayPal</span>
-                          </div>
-                          <p className="text-sm font-medium text-gray-500 mt-0.5">Schnelle und sichere Zahlung über PayPal</p>
-                        </div>
-                      </label>
-
-                      <label 
-                        className={`flex items-center gap-5 p-5 border-2 rounded-2xl cursor-pointer transition-all ${
-                          paymentMethod === 'email' ? 'border-[#0C211E] bg-gray-50/80 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="email"
-                          checked={paymentMethod === 'email'}
-                          onChange={() => setPaymentMethod('email')}
-                          className="sr-only"
-                        />
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                          paymentMethod === 'email' ? 'border-[#0C211E]' : 'border-gray-300'
-                        }`}>
-                          {paymentMethod === 'email' && <div className="w-3 h-3 rounded-full bg-[#0C211E]" />}
+                        <div className="w-6 h-6 rounded-full border-2 border-[#0C211E] flex items-center justify-center flex-shrink-0">
+                          <div className="w-3 h-3 rounded-full bg-[#0C211E]" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <Mail className="w-5 h-5 text-[#0C211E]" />
-                            <span className="font-bold text-[#0C211E] text-base">Überweisung / E-Mail</span>
+                            <span className="font-bold text-[#0C211E] text-base">Banküberweisung</span>
                           </div>
                           <p className="text-sm font-medium text-gray-500 mt-0.5">Wir senden Ihnen die Zahlungsinformationen per E-Mail</p>
                         </div>
-                      </label>
+                      </div>
                     </div>
                     
-                    {/* Payment Form Based on Selection */}
-                    {paymentMethod === 'paypal' && !process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
-                      <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 font-bold">
-                        ⚠️ PayPal ist momentan nicht konfiguriert. Bitte wählen Sie Überweisung oder kontaktieren Sie uns.
-                      </div>
-                    )}
-                    <AnimatePresence mode="wait">
-                      {paymentMethod === 'paypal' && !!process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
-                        <motion.div
-                          key="paypal"
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <PayPalScriptProvider options={{ 
-                            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
-                            currency: 'EUR',
-                            intent: 'capture',
-                            'disabled-funding': 'card,sepa,giropay,sofort,mybank,p24'
-                          }}>
-                            <PayPalButtons
-                              style={{ layout: 'vertical', shape: 'rect', label: 'paypal' }}
-                              disabled={isProcessing}
-                              createOrder={async () => {
-                                try {
-                                  let currentOrderId = orderId
-                                  if (!currentOrderId) {
-                                    const dbOrder = await createOrder('PAYPAL')
-                                    if (!dbOrder?.id) {
-                                      throw new Error('Bestellung konnte nicht erstellt werden. Bitte versuchen Sie es erneut.')
-                                    }
-                                    currentOrderId = dbOrder.id
-                                  }
-                                  const response = await fetch('/api/paypal/create-order', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ amount: total, orderId: currentOrderId })
-                                  })
-                                  if (!response.ok) {
-                                    const errData = await response.json().catch(() => ({}))
-                                    throw new Error(errData.error || 'PayPal-Bestellung konnte nicht erstellt werden.')
-                                  }
-                                  const orderData = await response.json()
-                                  if (!orderData.orderId) {
-                                    throw new Error('Ungültige PayPal-Antwort. Bitte versuchen Sie es erneut.')
-                                  }
-                                  return orderData.orderId
-                                } catch (err) {
-                                  const msg = err instanceof Error ? err.message : 'Unbekannter Fehler bei der Bestellerstellung.'
-                                  toast.error(msg)
-                                  throw err // re-throw so PayPal SDK shows its own error state
-                                }
-                              }}
-                              onApprove={async (data) => {
-                                setIsProcessing(true)
-                                await handlePayPalSuccess({ id: data.orderID })
-                              }}
-                              onError={(err) => {
-                                console.error('PayPal error:', err)
-                                toast.error('PayPal-Fehler aufgetreten. Bitte versuchen Sie es erneut oder wählen Sie eine andere Zahlungsmethode.')
-                                setIsProcessing(false)
-                              }}
+                    {/* Bank Transfer Form */}
+                    <form onSubmit={handleBankTransfer} className="space-y-6">
+                      <div className="p-6 bg-[#0C211E] rounded-2xl space-y-5">
+                        <div className="space-y-3">
+                          <label className="text-xs font-bold text-[#4ECCA3] uppercase tracking-wider">E-Mail für Rechnung</label>
+                          <p className="text-sm text-white/70 leading-relaxed">
+                            Wir senden Ihnen eine Rechnung per E-Mail mit allen Zahlungsinformationen (Banküberweisung).
+                          </p>
+                          <div className="relative">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input
+                              type="email" required
+                              value={contactEmail || shippingData.email}
+                              onChange={(e) => setContactEmail(e.target.value)}
+                              className="w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:bg-white/15 focus:border-[#4ECCA3] outline-none transition-all text-white placeholder-white/30"
+                              placeholder="ihre@email.de"
                             />
-                          </PayPalScriptProvider>
-                          {isProcessing && (
-                            <div className="mt-4 flex items-center justify-center">
-                              <div className="w-5 h-5 border-2 border-[#0C211E]/30 border-t-[#0C211E] rounded-full animate-spin" />
-                              <span className="ml-2 text-sm font-medium text-gray-600">PayPal-Zahlung wird verarbeitet...</span>
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-
-                      {paymentMethod === 'email' && (
-                        <motion.div
-                          key="email"
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <form onSubmit={handleEmailPayment} className="space-y-6">
-                            <div className="p-6 bg-[#0C211E] rounded-2xl space-y-5">
-                              <div className="space-y-3">
-                                <label className="text-xs font-bold text-[#4ECCA3] uppercase tracking-wider">E-Mail für Rechnung</label>
-                                <p className="text-sm text-white/70 leading-relaxed">
-                                  Wir senden Ihnen eine Rechnung per E-Mail mit allen Zahlungsinformationen (Banküberweisung).
-                                </p>
-                                <div className="relative">
-                                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                  <input
-                                    type="email" required
-                                    value={contactEmail || shippingData.email}
-                                    onChange={(e) => setContactEmail(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:bg-white/15 focus:border-[#4ECCA3] outline-none transition-all text-white placeholder-white/30"
-                                    placeholder="ihre@email.de"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <div className="flex flex-col sm:flex-row gap-4">
-                              <button
-                                type="button"
-                                onClick={() => setStep(1)}
-                                className="sm:w-1/3 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-100 transition-colors"
-                              >
-                                Zurück
-                              </button>
-                              <motion.button
-                                whileHover={{ scale: 1.01 }}
-                                whileTap={{ scale: 0.99 }}
-                                type="submit"
-                                disabled={isProcessing}
-                                className="sm:w-2/3 flex-1 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
-                              >
-                                {isProcessing ? (
-                                  <>
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Wird verarbeitet...
-                                  </>
-                                ) : (
-                                  <>
-                                    <Mail className="w-4 h-4" />
-                                    Bestellung aufgeben {formatPriceDe(total)}
-                                  </>
-                                )}
-                              </motion.button>
-                            </div>
-                          </form>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    
-                    {/* Back button */}
-                    {paymentMethod === 'paypal' && (
-                      <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row gap-4">
                         <button
                           type="button"
                           onClick={() => setStep(1)}
-                          className="text-[#0C211E] hover:underline"
+                          className="sm:w-1/3 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-100 transition-colors"
                         >
-                          ← Zurück zum Versand
+                          Zurück
                         </button>
+                        <motion.button
+                          whileHover={{ scale: 1.01 }}
+                          whileTap={{ scale: 0.99 }}
+                          type="submit"
+                          disabled={isProcessing}
+                          className="sm:w-2/3 flex-1 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
+                        >
+                          {isProcessing ? (
+                            <>
+                              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              Wird verarbeitet...
+                            </>
+                          ) : (
+                            <>
+                              <Mail className="w-4 h-4" />
+                              Bestellung aufgeben {formatPriceDe(total)}
+                            </>
+                          )}
+                        </motion.button>
                       </div>
-                    )}
+                    </form>
+                    
+                    {/* Back button */}
+                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
+                      <button
+                        type="button"
+                        onClick={() => setStep(1)}
+                        className="text-[#0C211E] hover:underline"
+                      >
+                        ← Zurück zum Versand
+                      </button>
+                    </div>
                     
                     <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
                       <Lock className="w-4 h-4 text-[#4ECCA3]" />

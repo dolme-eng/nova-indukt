@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
+import { createFaqSchema } from "@/lib/validations/admin"
 
 export async function GET() {
   const authz = await requireAdmin()
@@ -18,15 +19,15 @@ export async function POST(req: NextRequest) {
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
   const body = await req.json()
-  const { question, answer, category = "support", sortOrder = 0, isActive = true } = body ?? {}
-
-  if (!question || !answer) {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 })
+  const parsed = createFaqSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    )
   }
 
-  const item = await prisma.faqItem.create({
-    data: { question, answer, category, sortOrder: Number(sortOrder) || 0, isActive: Boolean(isActive) },
-  })
+  const item = await prisma.faqItem.create({ data: parsed.data })
 
   await auditLog({
     action: "CREATE",

@@ -1,26 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { requireAdmin } from '@/lib/admin/require-admin'
+import { auditLog } from '@/lib/admin/audit'
 import { prisma } from '@/lib/prisma'
 import { DiscountType } from '@prisma/client'
-
-interface AutoGenerateRequest {
-  type: 'flash' | 'weekend' | 'clearance' | 'new-arrival'
-  discountPercent: number
-  durationDays: number
-  categoryIds?: string[]
-  productCount?: number
-}
+import { autoGeneratePromotionSchema } from '@/lib/validations/admin'
 
 // POST - Générer automatiquement des promotions
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const body = await request.json()
+    const parsed = autoGeneratePromotionSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Ungültige Daten', details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      )
     }
 
-    const data: AutoGenerateRequest = await request.json()
-    const { type, discountPercent, durationDays, categoryIds, productCount = 10 } = data
+    const { type, discountPercent, durationDays, categoryIds = [], productCount = 10 } = parsed.data
 
     const now = new Date()
     const endDate = new Date(now)

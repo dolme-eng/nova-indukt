@@ -9,6 +9,7 @@ import PasswordResetEmail from './templates/password-reset'
 import { prisma } from '../prisma'
 import { calculateOrderTotals } from '../utils/pricing'
 import { SHOP_DOMAIN } from '../constants/shop'
+import { generateInvoicePDF } from '../utils/invoice'
 
 async function sendEmailWithRetry(payload: Parameters<Resend['emails']['send']>[0], maxRetries = 3) {
   const resend = getResend()
@@ -111,11 +112,34 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
       })
     )
 
+    // Generate PDF invoice
+    const invoicePDF = generateInvoicePDF({
+      orderNumber: params.orderNumber,
+      items: params.items.map(item => ({
+        name: item.nameDe || item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      subtotal: params.subtotal,
+      shipping: params.shipping,
+      total: params.total,
+      createdAt: new Date(),
+    })
+
+    const pdfBuffer = Buffer.from(invoicePDF.output('arraybuffer'))
+
     const result = await sendEmailWithRetry({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: params.to,
       subject: `Ihre Bestellung bei NOVA INDUKT - ${params.orderNumber}`,
       html,
+      attachments: [
+        {
+          filename: `Rechnung-${params.orderNumber}.pdf`,
+          content: pdfBuffer,
+          contentType: 'application/pdf',
+        },
+      ],
     })
 
     if (result.error) {

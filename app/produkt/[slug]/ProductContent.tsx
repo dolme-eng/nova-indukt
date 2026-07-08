@@ -9,7 +9,7 @@ import {
   Star, Heart, Share2, Truck, Shield, RotateCcw, ChevronRight, ChevronDown,
   Minus, Plus, ShoppingCart, Check,
   Award, Zap, Leaf, ZoomIn, ArrowLeft, ShieldCheck, Lock,
-  Layers, Maximize, Scale, Droplets, Barcode, Building2, Hash, Info, Mail,
+  Layers, Maximize, Scale, Droplets, Barcode, Building2, Info, Mail,
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
@@ -37,7 +37,7 @@ function buildProductJsonLd(product: Product) {
     name: escapeHtml(product.name.de),
     image: product.images,
     description: escapeHtml(product.shortDescription.de),
-    sku: product.supplierSku || product.id,
+    sku: product.id,
     offers: {
       '@type': 'Offer',
       url: `https://nova-indukt.de/produkt/${product.slug}`,
@@ -56,15 +56,13 @@ function buildProductJsonLd(product: Product) {
   if (product.brand) o.brand = { '@type': 'Brand', name: escapeHtml(product.brand) }
   const ean = product.ean?.replace(/\s/g, '')
   if (ean && /^\d{8,14}$/.test(ean)) o.gtin13 = ean
-  if (product.supplierSku) o.mpn = product.supplierSku
   return o
 }
 
-function supplierSpecCards(product: Product): { icon: LucideIcon; label: string; value: string }[] {
+function specCards(product: Product): { icon: LucideIcon; label: string; value: string }[] {
   const out: { icon: LucideIcon; label: string; value: string }[] = []
   if (product.brand) out.push({ icon: Building2, label: 'Marke', value: product.brand })
   if (product.ean) out.push({ icon: Barcode, label: 'EAN / GTIN', value: product.ean })
-  if (product.supplierSku) out.push({ icon: Hash, label: 'Lieferanten-Art.-Nr.', value: product.supplierSku })
   return out
 }
 
@@ -117,7 +115,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
 
   const vatPct = product.vatRatePercent ?? DEFAULT_DE_VAT_PERCENT
   const priceIncludesVat = product.priceIncludesVat !== false
-  const supplierCards = supplierSpecCards(product)
+  const productSpecCards = specCards(product)
 
   const shareProduct = () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
@@ -435,13 +433,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 >
                   <Mail className="w-4 h-4" /> Überweisung
                 </button>
-                <button
-                  type="button"
-                  onClick={() => { addItem(product, quantity); window.location.href = '/kasse' }}
-                  className="flex h-11 items-center justify-center rounded-xl bg-[#FFC439] text-sm font-bold italic text-[#003087] hover:bg-[#F4BB33] transition-colors"
-                >
-                  PayPal
-                </button>
               </div>
             </div>
 
@@ -563,7 +554,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:gap-4">
                       {[
-                        ...supplierCards,
+                        ...productSpecCards,
                         { icon: Layers, label: 'Material', value: product.specs.material },
                         { icon: Maximize, label: 'Abmessungen', value: product.specs.dimensions },
                         { icon: Scale, label: 'Gewicht', value: product.specs.weight },
@@ -639,7 +630,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               content: (
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    ...supplierCards,
+                    ...productSpecCards,
                     { icon: Layers, label: 'Material', value: product.specs.material },
                     { icon: Scale, label: 'Gewicht', value: product.specs.weight },
                     { icon: Droplets, label: 'Spülmaschine', value: product.specs.dishwasher ? 'Ja' : 'Nein' },

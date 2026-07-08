@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const addressSchema = z.object({
   firstName: z.string().min(2).max(100),
@@ -41,9 +42,9 @@ export async function GET() {
     
     return NextResponse.json(addresses)
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error("Error fetching addresses:", error)
     return NextResponse.json(
-      { error: "Failed to fetch addresses", message: errorMessage },
+      { error: "Failed to fetch addresses" },
       { status: 500 }
     )
   }
@@ -60,6 +61,9 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "addresses:post"), { windowMs: 60_000, maxRequests: 10 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const body = await request.json()
     const result = addressSchema.safeParse(body)
@@ -99,9 +103,9 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(address, { status: 201 })
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error("Error creating address:", error)
     return NextResponse.json(
-      { error: "Failed to create address", message: errorMessage },
+      { error: "Failed to create address" },
       { status: 500 }
     )
   }
@@ -118,6 +122,9 @@ export async function PUT(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "addresses:put"), { windowMs: 60_000, maxRequests: 10 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const { searchParams } = new URL(request.url)
     const addressId = searchParams.get('id')
@@ -172,9 +179,9 @@ export async function PUT(request: NextRequest) {
     
     return NextResponse.json(address)
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error("Error updating address:", error)
     return NextResponse.json(
-      { error: "Failed to update address", message: errorMessage },
+      { error: "Failed to update address" },
       { status: 500 }
     )
   }
@@ -191,6 +198,9 @@ export async function DELETE(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "addresses:delete"), { windowMs: 60_000, maxRequests: 10 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const { searchParams } = new URL(request.url)
     const addressId = searchParams.get('id')
@@ -237,9 +247,9 @@ export async function DELETE(request: NextRequest) {
     
     return NextResponse.json({ success: true })
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error("Error deleting address:", error)
     return NextResponse.json(
-      { error: "Failed to delete address", message: errorMessage },
+      { error: "Failed to delete address" },
       { status: 500 }
     )
   }

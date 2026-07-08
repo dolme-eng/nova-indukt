@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -16,6 +17,9 @@ export async function GET(
         { status: 401 }
       )
     }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "orders:get"), { windowMs: 60_000, maxRequests: 20 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
     
     const order = await prisma.order.findUnique({
       where: { id },
@@ -39,7 +43,6 @@ export async function GET(
       )
     }
     
-    // Check if order belongs to user
     if (order.userId !== session.user.id) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -65,6 +68,100 @@ export async function GET(
     console.error("Error fetching order:", error)
     return NextResponse.json(
       { error: "Failed to fetch order" },
+      { status: 500 }
+    )
+  }
+}
+
+/**
+ * PATCH: Annuler une commande (uniquement si le statut est PENDING)
+ */
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await auth()
+    const { id } = await params
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "orders:cancel"), { windowMs: 60_000, maxRequests: 5 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+    
+    const body = await request.json()
+    const { action } = body
+
+    if (action !== "cancel") {
+      return NextResponse.json(
+        { error: "Ungültige Aktion" },
+        { status: 400 }
+      )
+    }
+    
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: {
+        items: true
+      }
+    })
+    
+    if (!order) {
+      return NextResponse.json(
+        { error: "Bestellung nicht gefunden" },
+        { status: 404 }
+      )
+    }
+    
+    if (order.userId !== session.user.id) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+      )
+    }
+
+    // Only allow cancellation of PENDING orders
+    if (order.status !== "PENDING") {
+      return NextResponse.json(
+        { error: "Nur Bestellungen mit Status 'Ausstehend' können storniert werden." },
+        { status: 400 }
+      )
+    }
+
+    // Cancel order and restore stock in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Update order status
+      await tx.order.update({
+        where: { id },
+        data: { status: "CANCELLED" }
+      })
+
+      // Restore stock for each item
+      for (const item of order.items) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: {
+              increment: item.quantity
+            }
+          }
+        })
+      }
+    })
+    
+    return NextResponse.json({
+      success: true,
+      message: "Bestellung erfolgreich storniert."
+    })
+  } catch (error) {
+    console.error("Error cancelling order:", error)
+    return NextResponse.json(
+      { error: "Failed to cancel order" },
       { status: 500 }
     )
   }

@@ -111,9 +111,9 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error("Error fetching reviews:", error)
     return NextResponse.json(
-      { error: "Failed to fetch reviews", message: errorMessage },
+      { error: "Failed to fetch reviews" },
       { status: 500 }
     )
   }
@@ -240,9 +240,9 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error("Error creating review:", error)
     return NextResponse.json(
-      { error: "Failed to create review", message: errorMessage },
+      { error: "Failed to create review" },
       { status: 500 }
     )
   }

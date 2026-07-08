@@ -296,9 +296,10 @@ interface Order {
 }
 
 function OrdersTab() {
-  const [orders, setOrders] = useState<Order[]>([])
+  const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [cancellingId, setCancellingId] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchOrders() {
@@ -318,6 +319,35 @@ function OrdersTab() {
     }
     fetchOrders()
   }, [])
+
+  const handleCancelOrder = async (orderId: string) => {
+    if (!confirm('Sind Sie sicher, dass Sie diese Bestellung stornieren möchten?')) {
+      return
+    }
+
+    setCancellingId(orderId)
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'cancel' })
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Stornierung fehlgeschlagen')
+      }
+
+      // Update the order status in the local state
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, status: 'CANCELLED' } : order
+      ))
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Stornierung fehlgeschlagen')
+    } finally {
+      setCancellingId(null)
+    }
+  }
 
   if (loading) {
     return (
@@ -377,7 +407,7 @@ function OrdersTab() {
                 </div>
               </div>
             </div>
-            <div className="mt-3 sm:mt-4">
+            <div className="mt-3 sm:mt-4 flex items-center gap-3">
               <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                 order.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
                 order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
@@ -392,6 +422,15 @@ function OrdersTab() {
                  order.status === 'CANCELLED' ? 'Storniert' :
                  order.status === 'REFUNDED' ? 'Erstattet' : order.status}
               </span>
+              {order.status === 'PENDING' && (
+                <button
+                  onClick={() => handleCancelOrder(order.id)}
+                  disabled={cancellingId === order.id}
+                  className="text-xs text-red-600 hover:text-red-800 font-medium disabled:opacity-50"
+                >
+                  {cancellingId === order.id ? 'Wird storniert...' : 'Stornieren'}
+                </button>
+              )}
             </div>
           </div>
           

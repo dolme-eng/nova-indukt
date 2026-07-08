@@ -25,7 +25,6 @@ async function getProducts(search?: string, category?: string) {
   if (search) {
     where.OR = [
       { nameDe: { contains: search, mode: 'insensitive' } },
-      { supplierSku: { contains: search, mode: 'insensitive' } },
       { ean: { contains: search, mode: 'insensitive' } }
     ]
   }
@@ -115,7 +114,6 @@ export default async function AdminProductsPage({
                       </div>
                       <div className="min-w-0">
                         <p className="font-semibold text-slate-900 truncate max-w-[200px]">{product.nameDe}</p>
-                        <p className="text-xs text-slate-500 truncate">SKU: {product.supplierSku || 'N/A'}</p>
                       </div>
                     </div>
                   </td>

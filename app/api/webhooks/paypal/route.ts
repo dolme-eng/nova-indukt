@@ -3,12 +3,11 @@ import { prisma } from "@/lib/prisma"
 import { sendPaymentConfirmationEmail } from "@/lib/email/send"
 import type { ShippingAddress } from "@/types/order"
 import { getPayPalAccessToken, PAYPAL_API_URL } from "@/lib/paypal"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID
 
 async function verifyWebhookSignature(request: NextRequest, rawBody: string): Promise<boolean> {
-  // If no webhook ID is configured, we bypass signature validation ONLY in development
-  // In production, we MUST fail closed if PAYPAL_WEBHOOK_ID is missing
   if (!PAYPAL_WEBHOOK_ID) {
     if (process.env.NODE_ENV === "development") {
       console.warn("⚠️ PAYPAL_WEBHOOK_ID not set. Skipping signature verification in development.")
@@ -55,6 +54,9 @@ async function verifyWebhookSignature(request: NextRequest, rawBody: string): Pr
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = await rateLimit(createRateLimitKey(getIP(request), "webhooks:paypal"), { windowMs: 60_000, maxRequests: 100 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
     const rawBody = await request.text()
     
     // Verify Webhook Signature

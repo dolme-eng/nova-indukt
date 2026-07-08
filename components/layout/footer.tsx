@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Truck, ShieldCheck, RotateCcw, Mail, MapPin, Phone, ChevronRight, Lock, Flag, CheckCircle, Leaf, Shield } from 'lucide-react'
+import { COMPANY } from '@/lib/constants/company'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -19,6 +20,7 @@ export function Footer() {
       { label: 'FAQ', href: '/faq' },
       { label: 'Lieferung & Versand', href: '/lieferung' },
       { label: 'Rückgabe & Umtausch', href: '/rueckgabe' },
+      { label: 'Zahlungsinformationen', href: '/informationen-zur-zahlung' },
     ],
     legal: [
       { label: 'Impressum', href: '/impressum' },
@@ -32,7 +34,7 @@ export function Footer() {
     { icon: Truck, title: 'Kostenfreier Versand', desc: 'Ab 500 € innerhalb Deutschlands' },
     { icon: ShieldCheck, title: 'Sichere Zahlung', desc: 'SSL-Verschlüsselung & Käuferschutz' },
     { icon: RotateCcw, title: '30 Tage Rückgaberecht', desc: 'Stressfreier Rückversand' },
-    { icon: ShieldCheck, title: 'Flexible Zahlung', desc: 'PayPal oder Zahlung per E-Mail' },
+    { icon: ShieldCheck, title: 'Flexible Zahlung', desc: 'Sichere Banküberweisung' },
   ]
 
   return (
@@ -75,7 +77,7 @@ export function Footer() {
             
             <div className="space-y-2 mb-6">
               <a 
-                href="https://wa.me/493012345678" 
+                href={COMPANY.whatsapp.url} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 group text-[11px] font-black text-[#9FE1CD] hover:text-white transition-all uppercase tracking-tighter"
@@ -89,13 +91,13 @@ export function Footer() {
                 <div className="w-8 h-8 rounded-lg bg-[#17423C] flex items-center justify-center">
                   <Mail className="w-3.5 h-3.5" />
                 </div>
-                <a href="mailto:info@nova-indukt.de" className="hover:text-white transition-colors">info@nova-indukt.de</a>
+                <a href={`mailto:${COMPANY.email.info}`} className="hover:text-white transition-colors">{COMPANY.email.info}</a>
               </div>
               <div className="flex items-center gap-3 group text-[11px] font-black text-[#9FE1CD] uppercase tracking-tighter">
                 <div className="w-8 h-8 rounded-lg bg-[#17423C] flex items-center justify-center">
                   <MapPin className="w-3.5 h-3.5" />
                 </div>
-                <span>Berlin, DE</span>
+                <span>{COMPANY.city}, {COMPANY.countryShort}</span>
               </div>
             </div>
 
@@ -166,7 +168,7 @@ export function Footer() {
                 <ShieldCheck className="w-4 h-4 text-[#4ECCA3]" /> Sichere Zahlungsarten
               </p>
               <div className="flex flex-wrap items-center gap-3">
-                {['PayPal', 'Banküberweisung'].map(m => (
+                {['Banküberweisung'].map(m => (
                   <span key={m} className="px-4 py-2 bg-[#17423C] rounded-lg text-xs font-bold text-white border border-[#236456]/50 hover:border-[#4ECCA3]/50 transition-colors cursor-default">{m}</span>
                 ))}
               </div>
@@ -203,7 +205,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-10 pt-8 border-t border-[#236456]/50 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-          <p className="text-sm font-medium text-[#6FD2B4]">© {currentYear} NOVA INDUKT GmbH. Alle Rechte vorbehalten.</p>
+          <p className="text-sm font-medium text-[#6FD2B4]">© {currentYear} {COMPANY.name}. Alle Rechte vorbehalten.</p>
           <div className="text-sm font-medium text-[#6FD2B4] flex items-center gap-4">
             <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4"/> SSL-secured</span>
             <span>Alle Preise inkl. gesetzl. MwSt. zzgl. <Link href="/lieferung" className="underline decoration-dotted hover:text-white transition-colors">Versandkosten</Link></span>

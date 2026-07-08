@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
+import { updateStaticPageSchema } from "@/lib/validations/admin"
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ slug: string }> }) {
   const authz = await requireAdmin()
@@ -22,15 +23,17 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ slug: s
   if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   const body = await req.json()
-  const { title, content, isActive } = body ?? {}
+  const parsed = updateStaticPageSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    )
+  }
 
   const page = await prisma.staticPageContent.update({
     where: { slug },
-    data: {
-      title: typeof title === "string" ? title : undefined,
-      content: typeof content === "string" ? content : undefined,
-      isActive: typeof isActive === "boolean" ? isActive : undefined,
-    },
+    data: parsed.data,
   })
 
   await auditLog({
