@@ -5,10 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { 
+import {
   Search, Star, Heart, Grid3X3, LayoutList, ShoppingCart, Check,
-  SlidersHorizontal, X, ChevronDown, ArrowRight, Filter, ChevronRight as ChevronRightIcon,
-  Loader2
+  SlidersHorizontal, X, ChevronDown, Filter, ChevronRight as ChevronRightIcon,
+  Loader2, ChevronLeft
 } from 'lucide-react'
 import { Product, Category } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
@@ -16,7 +16,6 @@ import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { TiltCard } from '@/components/animations'
 
-const ITEMS_PER_PAGE = 12
 const PRICE_FILTER_MAX = 2500
 
 export interface ProductsContentProps {
@@ -26,22 +25,28 @@ export interface ProductsContentProps {
   initialSearch?: string
   initialPriceRange?: [number, number]
   initialSort?: string
+  currentPage?: number
+  totalPages?: number
+  totalProducts?: number
 }
 
-export function ProductsContent({ 
-  initialProducts, 
+export function ProductsContent({
+  initialProducts,
   initialCategories,
   activeCategory,
   initialSearch = '',
   initialPriceRange = [0, 2500],
-  initialSort = 'newest'
+  initialSort = 'newest',
+  currentPage = 1,
+  totalPages = 1,
+  totalProducts = 0
 }: ProductsContentProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
-  
+
   const [searchQuery, setSearchQuery] = useState(initialSearch)
   const debouncedSearchQuery = useDebouncedValue(searchQuery, 300)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(activeCategory || null)
@@ -49,27 +54,29 @@ export function ProductsContent({
   const [sortBy, setSortBy] = useState(initialSort)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showFilters, setShowFilters] = useState(false)
-  const [displayedCount, setDisplayedCount] = useState(ITEMS_PER_PAGE)
   const [isSyncing, setIsSyncing] = useState(false)
 
-  // Synchronisation des filtres avec l'URL
+  // Synchronisation des filtres avec l'URL (réinitialise à la page 1)
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString())
-    
+
     if (selectedCategory) params.set('kategorie', selectedCategory)
     else params.delete('kategorie')
-    
+
     if (debouncedSearchQuery) params.set('suche', debouncedSearchQuery)
     else params.delete('suche')
-    
+
     if (priceRange[0] > 0) params.set('minPrice', priceRange[0].toString())
     else params.delete('minPrice')
-    
+
     if (priceRange[1] < PRICE_FILTER_MAX) params.set('maxPrice', priceRange[1].toString())
     else params.delete('maxPrice')
-    
+
     if (sortBy !== 'newest') params.set('sort', sortBy)
     else params.delete('sort')
+
+    // Réinitialiser à la page 1 quand les filtres changent
+    params.delete('page')
 
     const newQuery = params.toString()
     const currentQuery = searchParams.toString()
@@ -80,25 +87,39 @@ export function ProductsContent({
     }
   }, [selectedCategory, debouncedSearchQuery, priceRange, sortBy, pathname, router, searchParams])
 
-  // Désactiver l'état de chargement une fois que les props changent
   useEffect(() => {
     setIsSyncing(false)
     setIsLoading(false)
   }, [initialProducts])
 
-  const filteredProducts = initialProducts // Déjà filtré côté serveur
-
-  const paginatedProducts = useMemo(
-    () => filteredProducts.slice(0, displayedCount),
-    [filteredProducts, displayedCount]
-  )
+  const filteredProducts = initialProducts
 
   const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
 
-  useEffect(() => {
-    setDisplayedCount(ITEMS_PER_PAGE)
-  }, [initialProducts])
+  const goToPage = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (newPage > 1) params.set('page', newPage.toString())
+    else params.delete('page')
+    setIsLoading(true)
+    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+  }
+
+  // Générer les numéros de page à afficher
+  const visiblePages = useMemo(() => {
+    const pages: (number | '...')[] = []
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i)
+    } else {
+      pages.push(1)
+      if (currentPage > 3) pages.push('...')
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        pages.push(i)
+      }
+      if (currentPage < totalPages - 2) pages.push('...')
+      pages.push(totalPages)
+    }
+    return pages
+  }, [currentPage, totalPages])
 
   // Loading court pour le changement de vue (grid/list) - sans skeleton complet
   useEffect(() => {
@@ -194,7 +215,7 @@ export function ProductsContent({
           <div className="mb-3 sm:mb-4">
             <h1 className="text-lg sm:text-xl font-black text-gray-900 mb-0.5 font-heading tracking-tight uppercase">Produkte</h1>
             <div className="flex items-center gap-2 text-[10px] sm:text-xs text-gray-400 font-bold uppercase tracking-wider">
-              <span>{filteredProducts.length} {filteredProducts.length === 1 ? 'Produkt' : 'Produkte'}</span>
+              <span>{totalProducts} {totalProducts === 1 ? 'Produkt' : 'Produkte'}</span>
               <span className="w-1 h-1 rounded-full bg-gray-200"></span>
               <span>Versandfrei ab 500 €</span>
             </div>
@@ -402,7 +423,7 @@ export function ProductsContent({
                     {/* Apply Button */}
                     <div className="p-3 bg-white border-t border-gray-100 pb-safe">
                       <button onClick={() => setShowFilters(false)} className="w-full py-3.5 bg-[#0C211E] text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-xl shadow-gray-900/10 flex items-center justify-center gap-2 active:scale-95 transition-transform">
-                        Zeige {filteredProducts.length} Produkte
+                        Zeige {totalProducts} Produkte
                       </button>
                     </div>
                   </motion.aside>
@@ -510,7 +531,7 @@ export function ProductsContent({
                             </div>
                           </div>
                         </motion.div>
-                      )) : paginatedProducts.map(product => (
+                      )) : filteredProducts.map(product => (
                         viewMode === 'grid' ? (
                           <motion.div data-testid="product-card" variants={cardVariants} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} key={product.id}>
                             <Link href={`/produkt/${product.slug}`} className="block group h-full">
@@ -674,32 +695,40 @@ export function ProductsContent({
                     </AnimatePresence>
                   </motion.div>
 
-                  {/* Load More Button */}
-                  {displayedCount < filteredProducts.length && (
-                    <div className="mt-16 flex items-center justify-center">
-                      <button 
-                        onClick={() => {
-                          setIsLoadingMore(true)
-                          // Petit délai pour l'animation avant d'ajouter les produits
-                          setTimeout(() => {
-                            setDisplayedCount(prev => prev + ITEMS_PER_PAGE)
-                            setIsLoadingMore(false)
-                          }, 300)
-                        }} 
-                        disabled={isLoadingMore}
-                        className="px-10 py-4 bg-white border-2 border-[#0C211E] text-[#0C211E] font-bold text-lg rounded-2xl hover:bg-[#0C211E] hover:text-white transition-colors flex items-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="mt-12 flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage <= 1 || isLoading}
+                        className="p-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                       >
-                        {isLoadingMore ? (
-                          <>
-                            <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                            Wird geladen...
-                          </>
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      {visiblePages.map((p, i) =>
+                        p === '...' ? (
+                          <span key={`dots-${i}`} className="px-2 text-gray-400 font-bold">...</span>
                         ) : (
-                          <>
-                            Mehr laden
-                            <ArrowRight className="w-5 h-5 group-hover:translate-y-1 group-hover:translate-x-0 transition-transform rotate-90" />
-                          </>
-                        )}
+                          <button
+                            key={p}
+                            onClick={() => goToPage(p)}
+                            disabled={isLoading}
+                            className={`min-w-[40px] h-10 rounded-xl font-bold text-sm transition-all ${
+                              p === currentPage
+                                ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10'
+                                : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300'
+                            }`}
+                          >
+                            {p}
+                          </button>
+                        )
+                      )}
+                      <button
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage >= totalPages || isLoading}
+                        className="p-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronLeft className="w-5 h-5 rotate-180" />
                       </button>
                     </div>
                   )}

@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const cspHeader = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.paypal.com https://www.sandbox.paypal.com https://js.paypal.com https://accounts.google.com/gsi/client",
+  "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://browser.sentry-cdn.com https://accounts.google.com/gsi/client",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: blob: https: http:",
   "font-src 'self' https://fonts.gstatic.com",
-  "connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com",
-  "frame-src 'self' https://www.paypal.com https://www.sandbox.paypal.com https://js.paypal.com https://accounts.google.com",
+  "connect-src 'self' https://*.sentry.io https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com",
+  "frame-src 'self' https://accounts.google.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

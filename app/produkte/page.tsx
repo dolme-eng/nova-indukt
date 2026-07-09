@@ -5,6 +5,8 @@ import { Product, Category, mapDbProductToUi, mapDbCategoryToUi } from '@/lib/da
 
 export const revalidate = 120
 
+const ITEMS_PER_PAGE = 12
+
 export async function generateMetadata({
   searchParams,
 }: {
@@ -42,7 +44,7 @@ export async function generateMetadata({
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ kategorie?: string; suche?: string; minPrice?: string; maxPrice?: string; sort?: string }>
+  searchParams: Promise<{ kategorie?: string; suche?: string; minPrice?: string; maxPrice?: string; sort?: string; page?: string }>
 }) {
   const params = await searchParams
   const categorySlug = params.kategorie
@@ -50,38 +52,49 @@ export default async function ProductsPage({
   const minPrice = params.minPrice ? Number(params.minPrice) : undefined
   const maxPrice = params.maxPrice ? Number(params.maxPrice) : undefined
   const sort = params.sort || 'newest'
+  const rawPage = Number.parseInt(params.page || '1', 10)
+  const page = Number.isFinite(rawPage) ? Math.max(rawPage, 1) : 1
 
-  const [products, categories] = await Promise.all([
+  const where: any = {
+    isActive: true,
+    ...(categorySlug ? { category: { slug: categorySlug } } : {}),
+    ...(search ? {
+      OR: [
+        { nameDe: { contains: search, mode: 'insensitive' } },
+        { descriptionDe: { contains: search, mode: 'insensitive' } },
+        { brand: { contains: search, mode: 'insensitive' } }
+      ]
+    } : {}),
+    ...(minPrice || maxPrice ? {
+      price: {
+        ...(minPrice ? { gte: minPrice } : {}),
+        ...(maxPrice ? { lte: maxPrice } : {}),
+      }
+    } : {}),
+  }
+
+  const orderBy: any = sort === 'price-asc'
+    ? { price: 'asc' }
+    : sort === 'price-desc'
+    ? { price: 'desc' }
+    : sort === 'name'
+    ? { nameDe: 'asc' }
+    : { createdAt: 'desc' }
+
+  const skip = (page - 1) * ITEMS_PER_PAGE
+
+  const [products, total, categories] = await Promise.all([
     prisma.product.findMany({
-      where: { 
-        isActive: true,
-        ...(categorySlug ? { category: { slug: categorySlug } } : {}),
-        ...(search ? {
-          OR: [
-            { nameDe: { contains: search, mode: 'insensitive' } },
-            { descriptionDe: { contains: search, mode: 'insensitive' } },
-            { brand: { contains: search, mode: 'insensitive' } }
-          ]
-        } : {}),
-        ...(minPrice || maxPrice ? {
-          price: {
-            ...(minPrice ? { gte: minPrice } : {}),
-            ...(maxPrice ? { lte: maxPrice } : {}),
-          }
-        } : {}),
-      },
-      include: { 
+      where,
+      include: {
         images: true,
-        category: true 
+        category: true
       },
-      orderBy: sort === 'price-asc' 
-        ? { price: 'asc' } 
-        : sort === 'price-desc' 
-        ? { price: 'desc' }
-        : sort === 'name'
-        ? { nameDe: 'asc' }
-        : { createdAt: 'desc' }
+      orderBy,
+      skip,
+      take: ITEMS_PER_PAGE
     }),
+    prisma.product.count({ where }),
     prisma.category.findMany({
       where: { isActive: true },
       include: { _count: { select: { products: true } } },
@@ -89,17 +102,19 @@ export default async function ProductsPage({
     }).then(cats => cats.filter(c => c._count.products > 0))
   ])
 
-  // Transformer les données pour correspondre à l'interface attendue par ProductsContent
   const formattedProducts: Product[] = products.map(mapDbProductToUi)
-
   const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
 
-  return <ProductsContent 
-    initialProducts={formattedProducts} 
+  return <ProductsContent
+    initialProducts={formattedProducts}
     initialCategories={formattedCategories}
     activeCategory={categorySlug}
     initialSearch={search}
     initialPriceRange={[minPrice || 0, maxPrice || 2500]}
     initialSort={sort}
+    currentPage={page}
+    totalPages={totalPages}
+    totalProducts={total}
   />
 }
