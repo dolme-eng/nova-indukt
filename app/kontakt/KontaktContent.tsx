@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   MapPin, Phone, Mail, Clock, Send, CheckCircle, ChevronRight, ArrowLeft, AlertCircle
 } from 'lucide-react'
+import { COMPANY } from '@/lib/constants/company'
 
 
 export function KontaktContent() {

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
   title: 'Karriere bei NOVA INDUKT',
