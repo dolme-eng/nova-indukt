@@ -41,7 +41,7 @@ export default async function ImpressumPage() {
           {/* Vertreten durch */}
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Vertreten durch</h2>
-            <p className="text-gray-700">Geschäftsführer: {COMPANY.geschaeftsfuehrer}</p>
+            <p className="text-gray-700">Geschäftsführer: {COMPANY.legal.geschaeftsfuehrer}</p>
           </section>
 
           {/* Kontakt */}
@@ -68,9 +68,9 @@ export default async function ImpressumPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Registereintrag</h2>
             <div className="space-y-2 text-gray-700">
-              <p>Registergericht: {COMPANY.registergericht}</p>
-              <p>Registernummer: {COMPANY.registernummer}</p>
-              <p>USt-IdNr.: {COMPANY.ustIdNr}</p>
+              <p>Registergericht: {COMPANY.legal.registergericht}</p>
+              <p>Registernummer: {COMPANY.legal.registernummer}</p>
+              <p>USt-IdNr.: {COMPANY.legal.ustIdNr}</p>
             </div>
           </section>
 
@@ -78,7 +78,7 @@ export default async function ImpressumPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
             <div className="space-y-2 text-gray-700">
-              <p>{COMPANY.geschaeftsfuehrer}</p>
+              <p>{COMPANY.legal.geschaeftsfuehrer}</p>
               <p>{COMPANY.name}</p>
               <p>{COMPANY.street}</p>
               <p>{COMPANY.zip} {COMPANY.city}</p>
