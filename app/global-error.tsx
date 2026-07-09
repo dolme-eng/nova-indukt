@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-
 export default function GlobalError({
   error,
   reset,
@@ -9,16 +7,6 @@ export default function GlobalError({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    // Sentry capture — only when @sentry/nextjs is installed
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const Sentry = require('@sentry/nextjs')
-      Sentry.captureException(error)
-    } catch {
-      // @sentry/nextjs not installed — skip
-    }
-  }, [error])
   return (
     <html lang="de">
       <body>

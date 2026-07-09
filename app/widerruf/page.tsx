@@ -51,7 +51,7 @@ export default async function WiderrufPage() {
                   <p className="flex items-center gap-2">
                     WhatsApp: 
                     <a 
-                      href={COMPANY.whatsapp} 
+                      href={COMPANY.whatsapp.url} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-[#25D366] hover:underline font-bold"
