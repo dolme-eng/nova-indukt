@@ -63,7 +63,7 @@ export default async function DatenschutzPage() {
             </p>
               
               <p className="font-medium mt-4">Datenschutzbeauftragter:</p>
-              <p>{COMPANY.datenschutzbeauftragter}</p>
+              <p>{COMPANY.legal.datenschutzbeauftragter}</p>
               <p>E-Mail: {COMPANY.email.datenschutz}</p>
             </div>
           </section>
