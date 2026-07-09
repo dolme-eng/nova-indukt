@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
-import { COMPANY } from './company'
-import { BANK_TRANSFER } from './bank'
+import { COMPANY } from '@/lib/constants/company'
+import { BANK_TRANSFER } from '@/lib/constants/bank'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 interface InvoiceItem {
@@ -31,9 +31,9 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
   doc.text(COMPANY.name, 20, 45)
-  doc.text(COMPANY.address, 20, 52)
-  doc.text(`${COMPANY.zipCode} ${COMPANY.city}`, 20, 59)
-  doc.text(`E-Mail: ${COMPANY.email}`, 20, 66)
+  doc.text(COMPANY.street, 20, 52)
+  doc.text(`${COMPANY.zip} ${COMPANY.city}`, 20, 59)
+  doc.text(`E-Mail: ${COMPANY.email.info}`, 20, 66)
 
   // Invoice details
   doc.setFontSize(10)
@@ -96,7 +96,7 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
   doc.text('Vielen Dank für Ihre Bestellung!', 20, 280)
-  doc.text(`${COMPANY.name} | ${COMPANY.address} | ${COMPANY.zipCode} ${COMPANY.city}`, 20, 285)
+  doc.text(`${COMPANY.name} | ${COMPANY.street} | ${COMPANY.zip} ${COMPANY.city}`, 20, 285)
 
   return doc
 }

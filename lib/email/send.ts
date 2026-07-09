@@ -11,7 +11,9 @@ import { calculateOrderTotals } from '../utils/pricing'
 import { SHOP_DOMAIN } from '../constants/shop'
 import { generateInvoicePDF } from '../utils/invoice'
 
-async function sendEmailWithRetry(payload: Parameters<Resend['emails']['send']>[0], maxRetries = 3) {
+export { FROM_EMAIL, FROM_NAME }
+
+export async function sendEmailWithRetry(payload: Parameters<Resend['emails']['send']>[0], maxRetries = 3) {
   const resend = getResend()
   if (!resend) {
     console.warn('Resend client not available — skipping email send (RESEND_API_KEY missing?)')
