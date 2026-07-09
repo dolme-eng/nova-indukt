@@ -7,6 +7,7 @@ import {
   ChevronRight, ChevronDown, Search, HelpCircle,
   Package, Truck, RotateCcw, ShieldCheck, Shield, MessageCircle, ArrowLeft
 } from 'lucide-react'
+import { COMPANY } from '@/lib/constants/company'
 
 interface FAQItem {
   id: string
