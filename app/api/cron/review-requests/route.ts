@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendReviewRequests } from '@/lib/email/automated-emails'
 import { logError } from '@/lib/logger'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
 /**
  * GET: Send review request emails
@@ -9,6 +10,9 @@ import { logError } from '@/lib/logger'
  * This checks for orders delivered 7 days ago and sends review requests
  */
 export async function GET(request: NextRequest) {
+  const ip = getIP(request)
+  const { success } = await rateLimit(createRateLimitKey(ip, 'cron:review-requests'), { windowMs: 60_000, maxRequests: 5 })
+  if (!success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     // Verify cron secret — OBLIGATOIRE en production
     const authHeader = request.headers.get('authorization')
