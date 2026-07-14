@@ -28,11 +28,7 @@ export const FROM_NAME        = COMPANY.nameShort
 // These env vars MUST be set in production — missing values will cause
 // customers to receive fake bank transfer instructions.
 function requireEnv(key: string, fallback: string): string {
-  const value = process.env[key]
-  if (!value && process.env.NODE_ENV === 'production') {
-    console.warn(`[nova-indukt] Warning: Missing env variable: ${key}. Using fallback.`);
-  }
-  return value ?? fallback
+  return process.env[key] ?? fallback
 }
 
 export const BANK_DETAILS = {
