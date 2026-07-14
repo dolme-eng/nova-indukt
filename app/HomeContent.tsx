@@ -334,25 +334,10 @@ const FlashDealCard = memo(function FlashDealCard({ product, index }: { product:
             )}
           </div>
           
-          {/* Stock Progress */}
+          {/* Stock Indicator */}
           <div className="mb-2">
             <div className="flex justify-between text-[8px] font-black mb-1 uppercase tracking-tighter">
               <span className="text-red-600 animate-pulse">Heiß begehrt</span>
-              <span className="text-gray-400">Noch {product.stock}</span>
-            </div>
-            <div className="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
-              {(() => {
-                const initial = product.initialStock || (product.stock + 10)
-                const percentage = Math.min(95, Math.max(15, 100 - (product.stock / initial) * 100))
-                return (
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${percentage}%` }}
-                    transition={{ duration: 1, ease: 'easeOut' }}
-                    className="bg-red-500 h-full rounded-full shadow-[0_0_8px_rgba(239,68,68,0.3)]"
-                  />
-                )
-              })()}
             </div>
           </div>
 

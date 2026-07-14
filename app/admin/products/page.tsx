@@ -88,7 +88,6 @@ export default async function AdminProductsPage({
                 <th className="px-6 py-4">Produkt</th>
                 <th className="px-6 py-4">Kategorie</th>
                 <th className="px-6 py-4">Preis</th>
-                <th className="px-6 py-4">Lagerbestand</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-right">Aktionen</th>
               </tr>
@@ -127,18 +126,6 @@ export default async function AdminProductsPage({
                       <span className="text-sm font-bold text-slate-900">{Number(product.price).toFixed(2)} €</span>
                       {product.oldPrice && (
                         <span className="text-xs text-slate-400 line-through">{Number(product.oldPrice).toFixed(2)} €</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex flex-col gap-1">
-                      <span className={`text-sm font-medium ${
-                        product.stock <= product.stockAlertAt ? "text-red-600 font-bold" : "text-slate-700"
-                      }`}>
-                        {product.stock} auf Lager
-                      </span>
-                      {product.stock <= product.stockAlertAt && (
-                        <span className="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded font-bold uppercase tracking-tight">Vorsicht</span>
                       )}
                     </div>
                   </td>
@@ -184,7 +171,7 @@ export default async function AdminProductsPage({
               ))}
               {products.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
                     Keine Produkte im Katalog gefunden.
                   </td>
                 </tr>

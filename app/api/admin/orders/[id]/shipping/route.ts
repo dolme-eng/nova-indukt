@@ -19,105 +19,110 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-  const { id } = await context.params
-  const order = await prisma.order.findUnique({
-    where: { id },
-    include: { items: true },
-  })
-  if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 })
+  try {
+    const { id } = await context.params
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: { items: true },
+    })
+    if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  const body = await req.json()
-  const parsed = shippingUpdateSchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
-      { status: 400 }
-    )
-  }
-
-  const { status, trackingNumber, carrier, trackingUrl, sendEmail } = parsed.data
-
-  const next = await prisma.order.update({
-    where: { id },
-    data: {
-      status: status as OrderStatus,
-      trackingNumber: trackingNumber ?? undefined,
-      shippedAt: status === "SHIPPED" ? new Date() : undefined,
-      deliveredAt: status === "DELIVERED" ? new Date() : undefined,
-    },
-  })
-
-  await auditLog({
-    action: "UPDATE",
-    entityType: "Order",
-    entityId: next.id,
-    userId: authz.session.user.id,
-    oldValues: { status: order.status, trackingNumber: order.trackingNumber },
-    newValues: { status: next.status, trackingNumber: next.trackingNumber },
-    ipAddress: req.headers.get("x-forwarded-for"),
-    userAgent: req.headers.get("user-agent"),
-  })
-
-  // Send email based on status change
-  if (sendEmail) {
-    const shippingAddress = (order.shippingAddress as Record<string, string>) || {}
-
-    if (status === "SHIPPED" && next.trackingNumber) {
-      // Send shipping notification with tracking
-      await sendShippingNotification({
-        to: order.customerEmail,
-        customerName: order.customerName,
-        orderNumber: order.orderNumber,
-        trackingNumber: next.trackingNumber,
-        carrier: carrier || "DHL",
-        trackingUrl: trackingUrl || "https://www.dhl.de/de/privatkunden/dhl-sendungsverfolgung.html",
-        items: order.items.map((i) => ({ name: i.productName, quantity: i.quantity })),
-        shippingAddress: {
-          name: shippingAddress?.name || order.customerName,
-          street: shippingAddress?.street || "",
-          postalCode: shippingAddress?.postalCode || "",
-          city: shippingAddress?.city || "",
-          country: shippingAddress?.country || "DE",
-        },
-      })
-    } else if (status === "PROCESSING") {
-      // Send processing notification
-      const html = await render(
-        OrderStatusEmail({
-          orderNumber: order.orderNumber,
-          customerName: order.customerName,
-          status: "In Bearbeitung",
-          statusMessage: "Ihre Bestellung wird nun bearbeitet und vorbereitet.",
-        })
+    const body = await req.json()
+    const parsed = shippingUpdateSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
       )
-
-      await sendEmailWithRetry({
-        from: `${FROM_NAME} <${FROM_EMAIL}>`,
-        to: order.customerEmail,
-        subject: `Bestellung in Bearbeitung - ${order.orderNumber}`,
-        html,
-      })
-    } else if (status === "DELIVERED") {
-      // Send delivery confirmation
-      const html = await render(
-        OrderStatusEmail({
-          orderNumber: order.orderNumber,
-          customerName: order.customerName,
-          status: "Zugestellt",
-          statusMessage: "Ihre Bestellung wurde erfolgreich zugestellt. Wir hoffen, Sie sind zufrieden!",
-        })
-      )
-
-      await sendEmailWithRetry({
-        from: `${FROM_NAME} <${FROM_EMAIL}>`,
-        to: order.customerEmail,
-        subject: `Bestellung zugestellt - ${order.orderNumber}`,
-        html,
-      })
     }
-  }
 
-  return NextResponse.json(next)
+    const { status, trackingNumber, carrier, trackingUrl, sendEmail } = parsed.data
+
+    const next = await prisma.order.update({
+      where: { id },
+      data: {
+        status: status as OrderStatus,
+        trackingNumber: trackingNumber ?? undefined,
+        shippedAt: status === "SHIPPED" ? new Date() : undefined,
+        deliveredAt: status === "DELIVERED" ? new Date() : undefined,
+      },
+    })
+
+    await auditLog({
+      action: "UPDATE",
+      entityType: "Order",
+      entityId: next.id,
+      userId: authz.session.user.id,
+      oldValues: { status: order.status, trackingNumber: order.trackingNumber },
+      newValues: { status: next.status, trackingNumber: next.trackingNumber },
+      ipAddress: req.headers.get("x-forwarded-for"),
+      userAgent: req.headers.get("user-agent"),
+    })
+
+    // Send email based on status change
+    if (sendEmail) {
+      const shippingAddress = (order.shippingAddress as Record<string, string>) || {}
+
+      if (status === "SHIPPED" && next.trackingNumber) {
+        // Send shipping notification with tracking
+        await sendShippingNotification({
+          to: order.customerEmail,
+          customerName: order.customerName,
+          orderNumber: order.orderNumber,
+          trackingNumber: next.trackingNumber,
+          carrier: carrier || "DHL",
+          trackingUrl: trackingUrl || "https://www.dhl.de/de/privatkunden/dhl-sendungsverfolgung.html",
+          items: order.items.map((i) => ({ name: i.productName, quantity: i.quantity })),
+          shippingAddress: {
+            name: shippingAddress?.name || order.customerName,
+            street: shippingAddress?.street || "",
+            postalCode: shippingAddress?.postalCode || "",
+            city: shippingAddress?.city || "",
+            country: shippingAddress?.country || "DE",
+          },
+        })
+      } else if (status === "PROCESSING") {
+        // Send processing notification
+        const html = await render(
+          OrderStatusEmail({
+            orderNumber: order.orderNumber,
+            customerName: order.customerName,
+            status: "In Bearbeitung",
+            statusMessage: "Ihre Bestellung wird nun bearbeitet und vorbereitet.",
+          })
+        )
+
+        await sendEmailWithRetry({
+          from: `${FROM_NAME} <${FROM_EMAIL}>`,
+          to: order.customerEmail,
+          subject: `Bestellung in Bearbeitung - ${order.orderNumber}`,
+          html,
+        })
+      } else if (status === "DELIVERED") {
+        // Send delivery confirmation
+        const html = await render(
+          OrderStatusEmail({
+            orderNumber: order.orderNumber,
+            customerName: order.customerName,
+            status: "Zugestellt",
+            statusMessage: "Ihre Bestellung wurde erfolgreich zugestellt. Wir hoffen, Sie sind zufrieden!",
+          })
+        )
+
+        await sendEmailWithRetry({
+          from: `${FROM_NAME} <${FROM_EMAIL}>`,
+          to: order.customerEmail,
+          subject: `Bestellung zugestellt - ${order.orderNumber}`,
+          html,
+        })
+      }
+    }
+
+    return NextResponse.json(next)
+  } catch (error) {
+    console.error("[SHIPPING_PATCH]", error)
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+  }
 }
 
 // Simple email template for order status updates

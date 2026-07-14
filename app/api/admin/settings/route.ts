@@ -10,46 +10,56 @@ const KEY = "site"
 const settingsSchema = z.record(z.string(), z.unknown())
 
 export async function GET() {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+  try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-  const cfg = await prisma.appConfig.findUnique({ where: { key: KEY } })
-  return NextResponse.json({ key: KEY, data: cfg?.data ?? {} })
+    const cfg = await prisma.appConfig.findUnique({ where: { key: KEY } })
+    return NextResponse.json({ key: KEY, data: cfg?.data ?? {} })
+  } catch (error) {
+    console.error("[SETTINGS_GET]", error)
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+  }
 }
 
 export async function PUT(req: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+  try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-  const body = await req.json()
-  const parsed = settingsSchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
-      { status: 400 }
-    )
+    const body = await req.json()
+    const parsed = settingsSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+    }
+
+    const data = parsed.data
+    const before = await prisma.appConfig.findUnique({ where: { key: KEY } })
+
+    const cfg = await prisma.appConfig.upsert({
+      where: { key: KEY },
+      update: { data: data as Prisma.InputJsonValue },
+      create: { key: KEY, data: data as Prisma.InputJsonValue },
+    })
+
+    await auditLog({
+      action: "UPSERT",
+      entityType: "AppConfig",
+      entityId: cfg.id,
+      userId: authz.session.user.id,
+      oldValues: before?.data ?? null,
+      newValues: cfg.data,
+      ipAddress: req.headers.get("x-forwarded-for"),
+      userAgent: req.headers.get("user-agent"),
+    })
+
+    return NextResponse.json({ key: KEY, data: cfg.data })
+  } catch (error) {
+    console.error("[SETTINGS_PUT]", error)
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
-
-  const data = parsed.data
-  const before = await prisma.appConfig.findUnique({ where: { key: KEY } })
-
-  const cfg = await prisma.appConfig.upsert({
-    where: { key: KEY },
-    update: { data: data as Prisma.InputJsonValue },
-    create: { key: KEY, data: data as Prisma.InputJsonValue },
-  })
-
-  await auditLog({
-    action: "UPSERT",
-    entityType: "AppConfig",
-    entityId: cfg.id,
-    userId: authz.session.user.id,
-    oldValues: before?.data ?? null,
-    newValues: cfg.data,
-    ipAddress: req.headers.get("x-forwarded-for"),
-    userAgent: req.headers.get("user-agent"),
-  })
-
-  return NextResponse.json({ key: KEY, data: cfg.data })
 }
 

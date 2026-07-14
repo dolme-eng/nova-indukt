@@ -32,7 +32,6 @@ export default function WishlistContent() {
       price: item.price,
       images: [{ url: item.image }],
       slug: item.slug || item.id,
-      stock: 10,
       isActive: true,
       categoryId: ''
     } as any, 1)

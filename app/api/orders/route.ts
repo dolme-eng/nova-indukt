@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     const productIds = items.map(item => item.id)
     const dbProducts = await prisma.product.findMany({
       where: { id: { in: productIds } },
-      select: { id: true, price: true, nameDe: true, stock: true, isActive: true, categoryId: true }
+      select: { id: true, price: true, nameDe: true, isActive: true, categoryId: true }
     })
 
     const dbProductMap = new Map(dbProducts.map(p => [p.id, p]))
@@ -241,17 +241,6 @@ export async function POST(request: NextRequest) {
           }
         }
       })
-
-      // Update stocks — atomic check inside transaction to prevent race conditions
-      for (const item of items) {
-        const updated = await tx.product.updateMany({
-          where: { id: item.id, stock: { gte: item.quantity } },
-          data: { stock: { decrement: item.quantity } },
-        })
-        if (updated.count === 0) {
-          throw new Error(`STOCK_INSUFFICIENT:${item.name}`)
-        }
-      }
 
       // Increment promo usage if applicable
       if (verifiedPromotionId) {

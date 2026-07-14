@@ -16,7 +16,6 @@ interface CartItemData {
     price: number
     oldPrice?: number
     images: string[]
-    stock: number
     rating: number
     reviewCount: number
     badges?: ('premium' | 'bestseller' | 'new')[]
@@ -127,7 +126,6 @@ export async function addToCart(productId: string, quantity: number = 1) {
             price: Number(product.price),
             oldPrice: product.oldPrice ? Number(product.oldPrice) : undefined,
             images: product.images.map(img => img.url),
-            stock: product.stock,
             rating: product.rating,
             reviewCount: product.reviewCount,
             badges: product.badges as ('premium' | 'bestseller' | 'new')[] | undefined,

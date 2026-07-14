@@ -21,7 +21,6 @@ interface ApiWishlistItem {
   image: string
   slug: string
   category?: string
-  stock: number
   addedAt: string
 }
 

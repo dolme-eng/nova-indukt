@@ -87,14 +87,13 @@ export async function POST(request: NextRequest) {
       }
 
       case 'clearance': {
-        // Produits avec stock élevé
+        // Produits les moins performants
         const products = await prisma.product.findMany({
           where: {
             isActive: true,
-            stock: { gt: 20 },
             ...(categoryIds?.length ? { categoryId: { in: categoryIds } } : {})
           },
-          orderBy: { stock: 'desc' },
+          orderBy: { rating: 'asc' },
           take: productCount,
           select: { id: true }
         })

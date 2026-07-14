@@ -231,8 +231,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                             <button 
                               data-testid="quantity-increase"
                               onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                              disabled={item.quantity >= item.product.stock}
-                              className="w-10 h-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:hover:bg-transparent text-gray-600"
+                              className="w-10 h-full flex items-center justify-center hover:bg-gray-50 transition-colors text-gray-600"
                             >
                               <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </button>

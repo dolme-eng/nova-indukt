@@ -24,8 +24,6 @@ export function mapDbProductToUi(p: DbProduct): Product {
       .map((img) => img.url),
     rating: p.rating,
     reviewCount: p.reviewCount,
-    stock: p.stock,
-    initialStock: p.initialStock,
     badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
     description: { de: p.descriptionDe || '' },
     shortDescription: { de: p.shortDescription || '' },
@@ -66,8 +64,6 @@ export interface Product {
   images: string[]
   rating: number
   reviewCount: number
-  stock: number
-  initialStock?: number
   badges?: ('premium' | 'bestseller' | 'new')[]
   description: { de: string }
   shortDescription: { de: string }

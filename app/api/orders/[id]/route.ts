@@ -134,25 +134,10 @@ export async function PATCH(
       )
     }
 
-    // Cancel order and restore stock in a transaction
-    await prisma.$transaction(async (tx) => {
-      // Update order status
-      await tx.order.update({
-        where: { id },
-        data: { status: "CANCELLED" }
-      })
-
-      // Restore stock for each item
-      for (const item of order.items) {
-        await tx.product.update({
-          where: { id: item.productId },
-          data: {
-            stock: {
-              increment: item.quantity
-            }
-          }
-        })
-      }
+    // Cancel order
+    await prisma.order.update({
+      where: { id },
+      data: { status: "CANCELLED" }
     })
 
     // Send cancellation email (non-blocking)

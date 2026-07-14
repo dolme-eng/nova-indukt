@@ -30,7 +30,6 @@ export default async function CartPage() {
     images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map((img) => img.url),
     rating: p.rating,
     reviewCount: p.reviewCount,
-    stock: p.stock,
     badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
     description: { de: p.descriptionDe || '' },
     shortDescription: { de: p.shortDescription || '' },

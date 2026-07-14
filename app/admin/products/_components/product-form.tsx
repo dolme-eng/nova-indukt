@@ -33,9 +33,6 @@ interface ProductData {
   price?: number | string | { toNumber: () => number }
   oldPrice?: number | string | { toNumber: () => number } | null
   costPrice?: number | string | { toNumber: () => number } | null
-  stock?: number
-  initialStock?: number
-  stockAlertAt?: number
   categoryId?: string | null
   isActive?: boolean
   weightKg?: number | string | { toNumber: () => number } | null
@@ -67,9 +64,6 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
     price: initialData?.price ? Number(initialData.price) : 0,
     oldPrice: initialData?.oldPrice ? Number(initialData.oldPrice) : null,
     costPrice: initialData?.costPrice ? Number(initialData.costPrice) : null,
-    stock: initialData?.stock || 0,
-    initialStock: initialData?.initialStock || 0,
-    stockAlertAt: initialData?.stockAlertAt || 5,
     categoryId: initialData?.categoryId || (categories[0]?.id || ""),
     isActive: initialData?.isActive ?? true,
     weightKg: initialData?.weightKg ? Number(initialData.weightKg) : null,
@@ -174,7 +168,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
             active={activeTab === "pricing"} 
             onClick={() => setActiveTab("pricing")}
             icon={<BadgePercent size={18} />}
-            label="Preis & Lager"
+            label="Preise"
           />
           <TabButton 
             active={activeTab === "media"} 
@@ -296,7 +290,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
             )}
 
             {activeTab === "pricing" && (
-              <Section title="Preise & Lagerbestand">
+              <Section title="Preise">
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <label className="block">
@@ -327,35 +321,6 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                         step="0.01"
                         value={formData.costPrice || ""}
                         onChange={(e) => setFormData({...formData, costPrice: e.target.value ? Number(e.target.value) : null})}
-                        className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
-                      />
-                    </label>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
-                    <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Aktueller Bestand</span>
-                      <input 
-                        type="number" 
-                        value={formData.stock}
-                        onChange={(e) => setFormData({...formData, stock: Number(e.target.value)})}
-                        className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
-                      />
-                    </label>
-                    <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Anfangsbestand (für UI)</span>
-                      <input 
-                        type="number" 
-                        value={formData.initialStock}
-                        onChange={(e) => setFormData({...formData, initialStock: Number(e.target.value)})}
-                        className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
-                      />
-                    </label>
-                    <label className="block">
-                      <span className="text-sm font-semibold text-slate-700">Bestandswarnung bei</span>
-                      <input 
-                        type="number" 
-                        value={formData.stockAlertAt}
-                        onChange={(e) => setFormData({...formData, stockAlertAt: Number(e.target.value)})}
                         className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
                       />
                     </label>

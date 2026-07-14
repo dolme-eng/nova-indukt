@@ -3,7 +3,6 @@ import { getResend, FROM_EMAIL, FROM_NAME } from './resend'
 import { render } from '@react-email/render'
 import ShippingNotificationEmail from './templates/shipping-notification'
 import ReviewRequestEmail from './templates/review-request'
-import LowStockAlertEmail from './templates/low-stock-alert'
 import WelcomeEmail from './templates/welcome'
 
 /**
@@ -175,130 +174,11 @@ export async function sendReviewRequests() {
 }
 
 /**
- * Check stock levels and send low stock alerts
- * Called by cron job daily
+ * Stock management is handled externally.
+ * This function is deprecated and returns a no-op.
  */
 export async function checkStockAndAlert() {
-  try {
-    const LOW_STOCK_THRESHOLD = 5
-    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@nova-indukt.de'
-
-    // Find products with low stock
-    const lowStockProducts = await prisma.product.findMany({
-      where: {
-        stock: {
-          lte: LOW_STOCK_THRESHOLD,
-          gt: 0,
-        },
-        isActive: true,
-        // Don't alert if already alerted in last 7 days
-        /* 
-        NOT: {
-          metadata: {
-            path: ['lowStockAlertedAt'],
-            not: null,
-          },
-        },
-        */
-      },
-      include: {
-        category: true,
-      },
-      orderBy: {
-        stock: 'asc',
-      },
-    })
-
-    // Find out of stock products
-    const outOfStockProducts = await prisma.product.findMany({
-      where: {
-        stock: 0,
-        isActive: true,
-      },
-      include: {
-        category: true,
-      },
-    })
-
-    if (lowStockProducts.length === 0 && outOfStockProducts.length === 0) {
-      return { success: true, message: 'No stock alerts needed' }
-    }
-
-    const html = await render(
-      LowStockAlertEmail({
-        lowStockProducts: lowStockProducts.map(p => ({
-          id: p.id,
-          name: p.nameDe,
-          stock: p.stock,
-          category: (p as any).category?.nameDe,
-          adminUrl: `${process.env.NEXTAUTH_URL}/admin/products/${p.id}`,
-        })),
-        outOfStockProducts: outOfStockProducts.map(p => ({
-          id: p.id,
-          name: p.nameDe,
-          category: (p as any).category?.nameDe,
-          adminUrl: `${process.env.NEXTAUTH_URL}/admin/products/${p.id}`,
-        })),
-        date: new Date().toLocaleDateString('de-DE'),
-      })
-    )
-
-    const result = await getResend()?.emails.send({
-      from: `${FROM_NAME} <${FROM_EMAIL}>`,
-      to: ADMIN_EMAIL,
-      subject: `⚠️ Lagerbestands-Warnung - ${new Date().toLocaleDateString('de-DE')}`,
-      html,
-    }) ?? { data: null, error: null }
-
-    if (result.error) {
-      return { success: false, error: result.error }
-    }
-
-    // Mark low stock products as alerted - skip metadata for now
-    /* 
-    for (const product of lowStockProducts) {
-      await prisma.product.update({
-        where: { id: product.id },
-        data: {
-          metadata: {
-            ...(product.metadata as object || {}),
-            lowStockAlertedAt: new Date().toISOString(),
-          },
-        },
-      })
-    }
-    */
-
-    // Auto-disable out of stock products
-    if (outOfStockProducts.length > 0) {
-      await prisma.product.updateMany({
-        where: {
-          id: {
-            in: outOfStockProducts.map(p => p.id),
-          },
-        },
-        data: {
-          isActive: false,
-          /* 
-          metadata: {
-            autoDisabledAt: new Date().toISOString(),
-            autoDisabledReason: 'out_of_stock',
-          },
-          */
-        },
-      })
-    }
-
-    return {
-      success: true,
-      lowStockCount: lowStockProducts.length,
-      outOfStockCount: outOfStockProducts.length,
-      autoDisabled: outOfStockProducts.length,
-    }
-  } catch (error) {
-    console.error('Error checking stock:', error)
-    return { success: false, error }
-  }
+  return { success: true, message: 'Stock management is handled externally.' }
 }
 
 /**

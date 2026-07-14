@@ -99,7 +99,6 @@ export default function AccountPageClient() {
       price: item.price,
       images: [item.image],
       slug: item.slug || item.id,
-      stock: 10,
       category: ''
     } as Product, 1)
   }

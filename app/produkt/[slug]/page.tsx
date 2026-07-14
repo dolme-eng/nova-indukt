@@ -102,7 +102,7 @@ export default async function ProductPage({
       "url": `https://nova-indukt.de/produkt/${product.slug}`,
       "priceCurrency": "EUR",
       "price": Number(product.price).toFixed(2),
-      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "availability": "https://schema.org/InStock",
       "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
     },
     ...(product.reviewCount > 0 ? {

@@ -1,38 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { checkStockAndAlert } from '@/lib/email/automated-emails'
+import { NextResponse } from 'next/server'
 
 /**
- * GET: Check stock levels and send alerts
- * Cron: 0 9 * * * (Every day at 9 AM)
- * 
- * This checks for low stock and out of stock products
- * and sends email alerts to admin
+ * Stock management is handled externally.
+ * This endpoint is deprecated and returns a no-op response.
  */
-export async function GET(request: NextRequest) {
-  try {
-    // Verify cron secret — OBLIGATOIRE en production
-    const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-    
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-    
-    const result = await checkStockAndAlert()
-    
-    return NextResponse.json({
-      ...result,
-      success: true,
-      timestamp: new Date().toISOString(),
-    })
-  } catch (error) {
-    console.error('Error in stock check cron:', error)
-    return NextResponse.json(
-      { error: 'Failed to check stock levels' },
-      { status: 500 }
-    )
-  }
+export async function GET() {
+  return NextResponse.json({
+    success: true,
+    message: 'Stock management is handled externally.',
+    timestamp: new Date().toISOString(),
+  })
 }

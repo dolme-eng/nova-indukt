@@ -46,7 +46,6 @@ export async function GET() {
         image: item.product.images.find(img => img.isMain)?.url || item.product.images[0]?.url,
         slug: item.product.slug,
         category: item.product.category?.nameDe,
-        stock: item.product.stock,
         addedAt: item.createdAt,
       }))
     )

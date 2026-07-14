@@ -5,61 +5,71 @@ import { auditLog } from "@/lib/admin/audit"
 import { updateFaqSchema } from "@/lib/validations/admin"
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+  try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-  const { id } = await context.params
-  const before = await prisma.faqItem.findUnique({ where: { id } })
-  if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
+    const { id } = await context.params
+    const before = await prisma.faqItem.findUnique({ where: { id } })
+    if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  const body = await req.json()
-  const parsed = updateFaqSchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
-      { status: 400 }
-    )
+    const body = await req.json()
+    const parsed = updateFaqSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Ungültige Daten", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+    }
+
+    const item = await prisma.faqItem.update({
+      where: { id },
+      data: parsed.data,
+    })
+
+    await auditLog({
+      action: "UPDATE",
+      entityType: "FaqItem",
+      entityId: item.id,
+      userId: authz.session.user.id,
+      oldValues: before,
+      newValues: item,
+      ipAddress: req.headers.get("x-forwarded-for"),
+      userAgent: req.headers.get("user-agent"),
+    })
+
+    return NextResponse.json(item)
+  } catch (error) {
+    console.error("[FAQ_PUT]", error)
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
-
-  const item = await prisma.faqItem.update({
-    where: { id },
-    data: parsed.data,
-  })
-
-  await auditLog({
-    action: "UPDATE",
-    entityType: "FaqItem",
-    entityId: item.id,
-    userId: authz.session.user.id,
-    oldValues: before,
-    newValues: item,
-    ipAddress: req.headers.get("x-forwarded-for"),
-    userAgent: req.headers.get("user-agent"),
-  })
-
-  return NextResponse.json(item)
 }
 
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+  try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
-  const { id } = await context.params
-  const before = await prisma.faqItem.findUnique({ where: { id } })
-  if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
+    const { id } = await context.params
+    const before = await prisma.faqItem.findUnique({ where: { id } })
+    if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  await prisma.faqItem.delete({ where: { id } })
+    await prisma.faqItem.delete({ where: { id } })
 
-  await auditLog({
-    action: "DELETE",
-    entityType: "FaqItem",
-    entityId: before.id,
-    userId: authz.session.user.id,
-    oldValues: before,
-    ipAddress: req.headers.get("x-forwarded-for"),
-    userAgent: req.headers.get("user-agent"),
-  })
+    await auditLog({
+      action: "DELETE",
+      entityType: "FaqItem",
+      entityId: before.id,
+      userId: authz.session.user.id,
+      oldValues: before,
+      ipAddress: req.headers.get("x-forwarded-for"),
+      userAgent: req.headers.get("user-agent"),
+    })
 
-  return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("[FAQ_DELETE]", error)
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+  }
 }
 

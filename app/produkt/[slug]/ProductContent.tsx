@@ -43,8 +43,7 @@ function buildProductJsonLd(product: Product) {
       url: `https://nova-indukt.de/produkt/${product.slug}`,
       priceCurrency: 'EUR',
       price: product.price,
-      availability:
-        product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
     aggregateRating: {
@@ -356,23 +355,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               )}
 
               <div
-                className={`mb-5 inline-flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold ${
-                  product.stock > 0
-                    ? 'border-green-200 bg-green-50/80 text-green-800'
-                    : 'border-red-200 bg-red-50 text-red-800'
-                }`}
+                className="mb-5 inline-flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold border-green-200 bg-green-50/80 text-green-800"
               >
-                {product.stock > 0 ? (
-                  <>
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-                    Sofort lieferbar ({product.stock} auf Lager)
-                  </>
-                ) : (
-                  <>
-                    <span className="h-2 w-2 rounded-full bg-red-500" />
-                    Nicht vorrätig
-                  </>
-                )}
+                <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+                Verfügbar
               </div>
 
               {product.deliveryNote && (
@@ -396,8 +382,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
-                    disabled={quantity >= product.stock}
-                    className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
+                    className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white"
                   >
                     <Plus className="h-3 w-3" />
                   </button>
@@ -407,8 +392,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   onClick={() => addItem(product, quantity)}
-                  disabled={product.stock <= 0}
-                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#0C211E] text-sm font-bold text-white shadow-md transition-colors hover:bg-nova-900 disabled:opacity-50"
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#0C211E] text-sm font-bold text-white shadow-md transition-colors hover:bg-nova-900"
                 >
                   <ShoppingCart className="h-4 w-4" />
                   Warenkorb
