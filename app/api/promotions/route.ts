@@ -6,6 +6,7 @@ import { Prisma } from '@prisma/client'
 import { requireAdmin } from '@/lib/admin/require-admin'
 import { auditLog } from '@/lib/admin/audit'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { logError } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
   try {
@@ -51,7 +52,7 @@ export async function GET(request: NextRequest) {
     )
     return response
   } catch (error) {
-    console.error('Error fetching promotions:', error)
+    logError('Error fetching promotions:', error)
     return NextResponse.json(
       { error: 'Failed to fetch promotions' },
       { status: 500 }
@@ -118,7 +119,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(promotion, { status: 201 })
   } catch (error) {
-    console.error('Error creating promotion:', error)
+    logError('Error creating promotion:', error)
     return NextResponse.json(
       { error: 'Failed to create promotion' },
       { status: 500 }

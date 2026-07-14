@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import type { Prisma } from "@prisma/client"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const KEY = "site"
 
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
     const cfg = await prisma.appConfig.findUnique({ where: { key: KEY } })
     return NextResponse.json({ key: KEY, data: cfg?.data ?? {} })
   } catch (error) {
-    console.error("[SETTINGS_GET]", error)
+    logError("[SETTINGS_GET]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
@@ -63,7 +64,7 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json({ key: KEY, data: cfg.data })
   } catch (error) {
-    console.error("[SETTINGS_PUT]", error)
+    logError("[SETTINGS_PUT]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

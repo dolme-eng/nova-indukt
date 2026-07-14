@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const cspHeader = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://browser.sentry-cdn.com https://accounts.google.com/gsi/client",
+  "script-src 'self' https://accounts.google.com/gsi/client",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https: http:",
+  "img-src 'self' data: blob: https:",
   "font-src 'self' https://fonts.gstatic.com",
-  "connect-src 'self' https://*.sentry.io https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com",
+  "connect-src 'self' https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com",
   "frame-src 'self' https://accounts.google.com",
   "object-src 'none'",
   "base-uri 'self'",

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const syncSchema = z.object({
   localItems: z.array(z.object({
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
       })),
     })
   } catch (error) {
-    console.error("Error syncing wishlist:", error)
+    logError("Error syncing wishlist:", error)
     return NextResponse.json(
       { error: "Failed to sync wishlist" },
       { status: 500 }

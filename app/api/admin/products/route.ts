@@ -5,6 +5,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { createProductSchema } from "@/lib/validations/product"
 import type { ProductImageInput } from "@/lib/validations/product"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function POST(req: NextRequest) {
   try {
@@ -91,7 +92,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(product)
   } catch (error) {
-    console.error("[PRODUCTS_POST]", error)
+    logError("[PRODUCTS_POST]", error)
     return new NextResponse("Internal error", { status: 500 })
   }
 }

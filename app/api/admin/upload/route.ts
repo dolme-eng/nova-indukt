@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { uploadImage } from "@/lib/cloudinary"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"]
 const MAX_SIZE = 10 * 1024 * 1024
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
       publicId: result.public_id
     })
   } catch (error) {
-    console.error("Upload error:", error)
+    logError("Upload error:", error)
     return NextResponse.json({ error: "Upload failed" }, { status: 500 })
   }
 }

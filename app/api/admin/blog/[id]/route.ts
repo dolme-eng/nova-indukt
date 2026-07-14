@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { updateBlogPostSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function PUT(
   request: NextRequest,
@@ -64,7 +65,7 @@ export async function PUT(
 
     return NextResponse.json(post)
   } catch (error) {
-    console.error("Error updating blog post:", error)
+    logError("Error updating blog post:", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
@@ -98,7 +99,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error deleting blog post:", error)
+    logError("Error deleting blog post:", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

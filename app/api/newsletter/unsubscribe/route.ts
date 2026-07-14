@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const unsubscribeSchema = z.object({
   email: z.string().email("Ungültige E-Mail-Adresse"),
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
-    console.error("Error unsubscribing from newsletter:", error)
+    logError("Error unsubscribing from newsletter:", error)
     return NextResponse.json(
       { error: "Abmeldung fehlgeschlagen" },
       { status: 500 }
@@ -126,7 +127,7 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
-    console.error("Error unsubscribing from newsletter:", error)
+    logError("Error unsubscribing from newsletter:", error)
     return NextResponse.json(
       { error: "Abmeldung fehlgeschlagen" },
       { status: 500 }

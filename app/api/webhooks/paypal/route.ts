@@ -4,17 +4,17 @@ import { sendPaymentConfirmationEmail } from "@/lib/email/send"
 import type { ShippingAddress } from "@/types/order"
 import { getPayPalAccessToken, PAYPAL_API_URL } from "@/lib/paypal"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
-import { logInfo } from "@/lib/logger"
+import { logInfo, logError, logWarn } from "@/lib/logger"
 
 const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID
 
 async function verifyWebhookSignature(request: NextRequest, rawBody: string): Promise<boolean> {
   if (!PAYPAL_WEBHOOK_ID) {
     if (process.env.NODE_ENV === "development") {
-      console.warn("⚠️ PAYPAL_WEBHOOK_ID not set. Skipping signature verification in development.")
+      logWarn("PAYPAL_WEBHOOK_ID not set. Skipping signature verification in development.")
       return true
     }
-    console.error("❌ PAYPAL_WEBHOOK_ID is not set in production. Failing closed.")
+    logError("PAYPAL_WEBHOOK_ID is not set in production. Failing closed.")
     return false
   }
 
@@ -41,14 +41,14 @@ async function verifyWebhookSignature(request: NextRequest, rawBody: string): Pr
     })
 
     if (!response.ok) {
-      console.error("PayPal webhook verification request failed", await response.text())
+      logError("PayPal webhook verification request failed", await response.text())
       return false
     }
 
     const data = await response.json()
     return data.verification_status === "SUCCESS"
   } catch (error) {
-    console.error("Error during webhook verification:", error)
+    logError("Error during webhook verification:", error)
     return false
   }
 }
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       const captureId = resource.id
 
       if (!customId) {
-        console.warn("PayPal webhook received but no custom_id (internal order ID) found.", event)
+        logWarn("PayPal webhook received but no custom_id (internal order ID) found.", event)
         return NextResponse.json({ received: true })
       }
 
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       })
 
       if (!existingOrder) {
-        console.error(`Order with ID ${customId} not found for PayPal Webhook`)
+        logError(`Order with ID ${customId} not found for PayPal Webhook`)
         return NextResponse.json({ received: true })
       }
 
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
           // Use customerEmail (stored at order creation) — works for both guests and registered users
           const recipientEmail = updatedOrder.customerEmail || updatedOrder.user?.email
           if (!recipientEmail) {
-            console.error(`No email available for order ${updatedOrder.orderNumber}. Skipping confirmation email.`)
+            logError(`No email available for order ${updatedOrder.orderNumber}. Skipping confirmation email.`)
           } else {
             await sendPaymentConfirmationEmail({
               orderNumber: updatedOrder.orderNumber,
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
             logInfo("[PAYPAL_WEBHOOK] Confirmation email sent", { orderId: updatedOrder.orderNumber })
           }
         } catch (emailErr) {
-          console.error("Webhook email sending failed:", emailErr)
+          logError("Webhook email sending failed:", emailErr)
         }
       } else {
         logInfo("[PAYPAL_WEBHOOK] Order already PAID, ignored", { orderId: existingOrder.orderNumber })
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true })
   } catch (error) {
-    console.error("PayPal Webhook processing error:", error)
+    logError("PayPal Webhook processing error:", error)
     if (error instanceof SyntaxError) {
       return NextResponse.json({ error: "Invalid JSON format" }, { status: 400 })
     }

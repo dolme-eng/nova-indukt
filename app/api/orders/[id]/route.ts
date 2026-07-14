@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendOrderCancellationEmail } from "@/lib/email/send"
+import { logError } from "@/lib/logger"
 
 export async function GET(
   request: NextRequest,
@@ -66,7 +67,7 @@ export async function GET(
       }))
     })
   } catch (error) {
-    console.error("Error fetching order:", error)
+    logError("Error fetching order:", error)
     return NextResponse.json(
       { error: "Failed to fetch order" },
       { status: 500 }
@@ -148,7 +149,7 @@ export async function PATCH(
         order.customerName,
         order.orderNumber,
         Number(order.total)
-      ).catch(err => console.error("Failed to send cancellation email:", err))
+      ).catch(err => logError("Failed to send cancellation email:", err))
     }
     
     return NextResponse.json({
@@ -156,7 +157,7 @@ export async function PATCH(
       message: "Bestellung erfolgreich storniert."
     })
   } catch (error) {
-    console.error("Error cancelling order:", error)
+    logError("Error cancelling order:", error)
     return NextResponse.json(
       { error: "Failed to cancel order" },
       { status: 500 }

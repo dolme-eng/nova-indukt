@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const marketingReviewSchema = z.discriminatedUnion('action', [
   z.object({
@@ -99,7 +100,7 @@ export async function PATCH(req: NextRequest) {
 
     return new NextResponse("Invalid action", { status: 400 })
   } catch (error) {
-    console.error("[MARKETING_PATCH]", error)
+    logError("[MARKETING_PATCH]", error)
     return new NextResponse("Internal error", { status: 500 })
   }
 }
@@ -130,7 +131,7 @@ export async function DELETE(req: NextRequest) {
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
-    console.error("[MARKETING_DELETE]", error)
+    logError("[MARKETING_DELETE]", error)
     return new NextResponse("Internal error", { status: 500 })
   }
 }

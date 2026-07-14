@@ -5,6 +5,12 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Cookie, Shield, Settings, Check } from 'lucide-react'
 
+declare global {
+  interface Window {
+    openCookieSettings?: () => void
+  }
+}
+
 interface CookieConsent {
   necessary: boolean
   analytics: boolean
@@ -67,7 +73,7 @@ export function CookieConsent() {
   }
 
   useEffect(() => {
-    (window as any).openCookieSettings = openSettings
+    window.openCookieSettings = openSettings
   }, [])
 
   if (!isVisible) {
@@ -254,6 +260,6 @@ export function useCookieConsent() {
     analyticsAllowed: consent?.analytics ?? false,
     marketingAllowed: consent?.marketing ?? false,
     necessaryAllowed: true,
-    openSettings: () => (window as any).openCookieSettings?.()
+    openSettings: () => window.openCookieSettings?.()
   }
 }

@@ -7,6 +7,7 @@ import crypto from "crypto"
 import { sendEmailWithRetry, FROM_EMAIL, FROM_NAME } from "@/lib/email/send"
 import EmailVerificationEmail from "@/lib/email/templates/email-verification"
 import { render } from "@react-email/render"
+import { logError } from "@/lib/logger"
 
 /**
  * API Route de registration.
@@ -110,7 +111,7 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error("Registration API error:", error)
+    logError("Registration API error:", error)
     return NextResponse.json(
       { success: false, error: "Registrierung fehlgeschlagen" },
       { status: 500 }

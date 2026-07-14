@@ -4,6 +4,7 @@ import { z } from "zod"
 import crypto from "crypto"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendPasswordResetEmail } from "@/lib/email/send"
+import { logError } from "@/lib/logger"
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Ungültige E-Mail-Adresse"),
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
     try {
       await sendPasswordResetEmail(user.email, user.name, resetToken)
     } catch (emailError) {
-      console.error("Failed to send password reset email:", emailError)
+      logError("Failed to send password reset email:", emailError)
       // Continue - don't expose email sending failure to user
     }
 
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
-    console.error("Error in forgot password:", error)
+    logError("Error in forgot password:", error)
     return NextResponse.json(
       { error: "Ein Fehler ist aufgetreten" },
       { status: 500 }

@@ -13,6 +13,7 @@ import {
   Plus
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+import { OrderStatus } from "@prisma/client"
 export const dynamic = 'force-dynamic'
 import { format } from "date-fns"
 import { de } from "date-fns/locale"
@@ -97,7 +98,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Column - Order Items */}
         <div className="lg:col-span-2 space-y-6">
-          <ShippingActions orderId={order.id} currentStatus={order.status as any} trackingNumber={order.trackingNumber} />
+          <ShippingActions orderId={order.id} currentStatus={order.status as OrderStatus} trackingNumber={order.trackingNumber} />
 
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">

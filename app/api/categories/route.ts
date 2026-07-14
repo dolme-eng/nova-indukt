@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function GET(request: NextRequest) {
   try {
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
     response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=900")
     return response
   } catch (error) {
-    console.error("Error fetching categories:", error)
+    logError("Error fetching categories:", error)
     return NextResponse.json(
       { error: "Failed to fetch categories" },
       { status: 500 }

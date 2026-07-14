@@ -18,7 +18,7 @@ export async function sendEmailWithRetry(payload: Parameters<Resend['emails']['s
   const resend = getResend()
   if (!resend) {
     console.warn('Resend client not available — skipping email send (RESEND_API_KEY missing?)')
-    return { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } as any }
+    return { data: null, error: { name: 'missing_api_key', message: 'Resend not configured', statusCode: null } }
   }
 
   let attempt = 0;

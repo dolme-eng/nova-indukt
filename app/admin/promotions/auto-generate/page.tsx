@@ -125,7 +125,7 @@ export default function AutoGeneratePromotionsPage() {
             key={template.id}
             onClick={() => setConfig({ 
               ...config, 
-              type: template.id as any,
+              type: template.id as typeof config.type,
               discountPercent: template.defaultDiscount,
               durationDays: template.defaultDuration
             })}

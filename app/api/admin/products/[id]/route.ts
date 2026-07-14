@@ -4,6 +4,8 @@ import { auditLog } from "@/lib/admin/audit"
 import { prisma } from "@/lib/prisma"
 import { updateProductSchema } from "@/lib/validations/admin"
 import type { Prisma } from "@prisma/client"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function PATCH(
   req: NextRequest,
@@ -12,6 +14,10 @@ export async function PATCH(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const ip = getIP(req)
+    const { success } = await rateLimit(createRateLimitKey(ip, "admin:products:id"), { windowMs: 60_000, maxRequests: 15 })
+    if (!success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
 
     const { id } = await params
 
@@ -58,7 +64,7 @@ export async function PATCH(
 
     return NextResponse.json(product)
   } catch (error) {
-    console.error("[PRODUCT_PATCH]", error)
+    logError("[PRODUCT_PATCH]", error)
     return new NextResponse("Internal error", { status: 500 })
   }
 }
@@ -70,6 +76,10 @@ export async function DELETE(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const ip = getIP(req)
+    const { success } = await rateLimit(createRateLimitKey(ip, "admin:products:id"), { windowMs: 60_000, maxRequests: 15 })
+    if (!success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
 
     const { id } = await params
 
@@ -88,7 +98,7 @@ export async function DELETE(
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
-    console.error("[PRODUCT_DELETE]", error)
+    logError("[PRODUCT_DELETE]", error)
     return new NextResponse("Internal error", { status: 500 })
   }
 }

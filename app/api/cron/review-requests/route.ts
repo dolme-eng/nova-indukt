@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendReviewRequests } from '@/lib/email/automated-emails'
+import { logError } from '@/lib/logger'
 
 /**
  * GET: Send review request emails
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('Error in review requests cron:', error)
+    logError('Error in review requests cron:', error)
     return NextResponse.json(
       { error: 'Failed to process review requests' },
       { status: 500 }

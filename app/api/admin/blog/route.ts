@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { createBlogPostSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function POST(request: NextRequest) {
   const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:post'), { windowMs: 60_000, maxRequests: 15 })
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(post)
   } catch (error) {
-    console.error("Error creating blog post:", error)
+    logError("Error creating blog post:", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

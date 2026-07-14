@@ -10,6 +10,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { calculateShipping } from "@/lib/constants/shop"
 import { applyPromotionsToProducts, validateCoupon, incrementPromotionUsage } from "@/lib/promotions"
 import { randomUUID } from "crypto"
+import { logError } from "@/lib/logger"
 
 export async function GET(request: NextRequest) {
   try {
@@ -60,7 +61,7 @@ export async function GET(request: NextRequest) {
       }))
     )
   } catch (error) {
-    console.error("Error fetching orders:", error)
+    logError("Error fetching orders:", error)
     return NextResponse.json(
       { error: "Failed to fetch orders" },
       { status: 500 }
@@ -275,7 +276,7 @@ export async function POST(request: NextRequest) {
       try {
         await sendOrderConfirmationForOrder(order.id)
       } catch (emailError) {
-        console.error("Failed to send order confirmation email:", emailError)
+        logError("Failed to send order confirmation email:", emailError)
         // Continue - order is still created even if email fails
       }
     }
@@ -305,7 +306,7 @@ export async function POST(request: NextRequest) {
       shippingCost: Number(order.shippingCost)
     })
   } catch (error) {
-    console.error("Error creating order:", error)
+    logError("Error creating order:", error)
     if (error instanceof Error && error.message.startsWith("STOCK_INSUFFICIENT:")) {
       const productName = error.message.replace("STOCK_INSUFFICIENT:", "")
       return NextResponse.json(

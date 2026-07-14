@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { logError } from '@/lib/logger'
 
 const validateCouponSchema = z.object({
   code: z.string().min(1, 'Code ist erforderlich').max(50),
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Coupon validation error:', error)
+    logError('Coupon validation error:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

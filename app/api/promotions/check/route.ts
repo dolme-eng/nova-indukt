@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkAndCreateRandomPromotion, cleanupExpiredPromotions } from '@/lib/promotions/random-promotions'
+import { logError } from '@/lib/logger'
 
 // API Route: Check and create random promotions
 // Should be called by a cron job (e.g., Vercel Cron, GitHub Actions)
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
     const cronSecret = process.env.CRON_SECRET
     
     if (!cronSecret) {
-      console.error('CRON_SECRET is not configured. Rejecting request.')
+      logError('CRON_SECRET is not configured. Rejecting request.')
       return NextResponse.json(
         { error: 'Server configuration error' },
         { status: 500 }
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('Error in promotion check:', error)
+    logError('Error in promotion check:', error)
     return NextResponse.json(
       { error: 'Failed to check promotions' },
       { status: 500 }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendNewsletterConfirmationEmail } from "@/lib/email/send"
+import { logError } from "@/lib/logger"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 subscriptions per hour per IP
@@ -91,7 +92,7 @@ export async function POST(request: NextRequest) {
     try {
       await sendNewsletterConfirmationEmail(email, firstName)
     } catch (emailError) {
-      console.error("Failed to send newsletter confirmation email:", emailError)
+      logError("Failed to send newsletter confirmation email:", emailError)
       // Continue - subscription is still created even if email fails
     }
 
@@ -104,7 +105,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error("Error subscribing to newsletter:", error)
+    logError("Error subscribing to newsletter:", error)
     return NextResponse.json(
       { error: "Anmeldung fehlgeschlagen" },
       { status: 500 }

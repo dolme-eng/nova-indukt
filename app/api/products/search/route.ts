@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const MAX_QUERY_LENGTH = 200
 
@@ -53,7 +54,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(formattedResults)
   } catch (error) {
-    console.error("[SEARCH_API_ERROR]", error)
+    logError("[SEARCH_API_ERROR]", error)
     return new NextResponse("Internal error", { status: 500 })
   }
 }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const addressSchema = z.object({
   firstName: z.string().min(2).max(100),
@@ -42,7 +43,7 @@ export async function GET() {
     
     return NextResponse.json(addresses)
   } catch (error) {
-    console.error("Error fetching addresses:", error)
+    logError("Error fetching addresses:", error)
     return NextResponse.json(
       { error: "Failed to fetch addresses" },
       { status: 500 }
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(address, { status: 201 })
   } catch (error) {
-    console.error("Error creating address:", error)
+    logError("Error creating address:", error)
     return NextResponse.json(
       { error: "Failed to create address" },
       { status: 500 }
@@ -179,7 +180,7 @@ export async function PUT(request: NextRequest) {
     
     return NextResponse.json(address)
   } catch (error) {
-    console.error("Error updating address:", error)
+    logError("Error updating address:", error)
     return NextResponse.json(
       { error: "Failed to update address" },
       { status: 500 }
@@ -247,7 +248,7 @@ export async function DELETE(request: NextRequest) {
     
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error deleting address:", error)
+    logError("Error deleting address:", error)
     return NextResponse.json(
       { error: "Failed to delete address" },
       { status: 500 }

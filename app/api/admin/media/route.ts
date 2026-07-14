@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { deleteImage } from "@/lib/cloudinary"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const mediaAssetSchema = z.object({
   publicId: z.string().min(1),
@@ -35,7 +36,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(assets)
   } catch (error) {
-    console.error("[MEDIA_GET]", error)
+    logError("[MEDIA_GET]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
@@ -93,7 +94,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(asset)
   } catch (error) {
-    console.error("[MEDIA_POST]", error)
+    logError("[MEDIA_POST]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
@@ -130,7 +131,7 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[MEDIA_DELETE]", error)
+    logError("[MEDIA_DELETE]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { DiscountType } from '@prisma/client'
 import { autoGeneratePromotionSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { logError } from '@/lib/logger'
 
 // POST - Générer automatiquement des promotions
 export async function POST(request: NextRequest) {
@@ -149,7 +150,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ promotions, count: promotions.length })
   } catch (error) {
-    console.error('Error auto-generating promotions:', error)
+    logError('Error auto-generating promotions:', error)
     return NextResponse.json(
       { error: 'Failed to generate promotions' },
       { status: 500 }

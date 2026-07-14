@@ -4,6 +4,7 @@ import { auditLog } from '@/lib/admin/audit'
 import { prisma } from '@/lib/prisma'
 import { createPromotionAdminSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { logError } from '@/lib/logger'
 
 // GET - Liste toutes les promotions
 export async function GET(req: NextRequest) {
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(promotions)
   } catch (error) {
-    console.error('Error fetching promotions:', error)
+    logError('Error fetching promotions:', error)
     return NextResponse.json(
       { error: 'Failed to fetch promotions' },
       { status: 500 }
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(promotion)
   } catch (error) {
-    console.error('Error creating promotion:', error)
+    logError('Error creating promotion:', error)
     return NextResponse.json(
       { error: 'Failed to create promotion' },
       { status: 500 }

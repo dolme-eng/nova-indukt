@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { getResend, FROM_EMAIL, FROM_NAME } from './resend'
 import { render } from '@react-email/render'
 import ShippingNotificationEmail from './templates/shipping-notification'
@@ -119,10 +120,25 @@ export async function sendReviewRequests() {
 
     // Found N orders ready for review requests
 
+    type OrderWithProduct = Prisma.OrderGetPayload<{
+      include: {
+        items: {
+          include: {
+            product: {
+              include: {
+                images: true,
+              },
+            },
+          },
+        },
+        user: true,
+      }
+    }>
+
     const results = []
 
     for (const order of orders) {
-      const typedOrder = order as any
+      const typedOrder = order as OrderWithProduct
       if (!typedOrder.user?.email) continue
 
       try {
@@ -130,7 +146,7 @@ export async function sendReviewRequests() {
           ReviewRequestEmail({
             orderNumber: typedOrder.orderNumber,
             customerName: typedOrder.user.name || 'Kunde',
-            items: typedOrder.items.map((item: { productId: string; productName?: string; product?: { nameDe?: string; slug?: string; images?: { url: string }[] } }) => ({
+            items: typedOrder.items.map((item) => ({
               productId: item.productId,
               name: item.product?.nameDe || item.productName || 'Produkt',
               image: item.product?.images?.[0]?.url,

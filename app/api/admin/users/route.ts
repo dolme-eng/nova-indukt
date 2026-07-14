@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function GET(req: NextRequest) {
   try {
@@ -47,7 +48,7 @@ export async function GET(req: NextRequest) {
     response.headers.set("Cache-Control", "no-store")
     return response
   } catch (error) {
-    console.error("[USERS_GET]", error)
+    logError("[USERS_GET]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

@@ -4,6 +4,7 @@ import { auditLog } from '@/lib/admin/audit'
 import { prisma } from '@/lib/prisma'
 import { updatePromotionAdminSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { logError } from '@/lib/logger'
 
 // GET - Récupérer une promotion spécifique
 export async function GET(
@@ -25,7 +26,7 @@ export async function GET(
 
     return NextResponse.json(promotion)
   } catch (error) {
-    console.error('Error fetching promotion:', error)
+    logError('Error fetching promotion:', error)
     return NextResponse.json({ error: 'Failed to fetch promotion' }, { status: 500 })
   }
 }
@@ -77,7 +78,7 @@ export async function PUT(
 
     return NextResponse.json(promotion)
   } catch (error) {
-    console.error('Error updating promotion:', error)
+    logError('Error updating promotion:', error)
     return NextResponse.json({ error: 'Failed to update promotion' }, { status: 500 })
   }
 }
@@ -111,7 +112,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error deleting promotion:', error)
+    logError('Error deleting promotion:', error)
     return NextResponse.json({ error: 'Failed to delete promotion' }, { status: 500 })
   }
 }

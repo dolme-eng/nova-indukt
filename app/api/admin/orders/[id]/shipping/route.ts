@@ -7,6 +7,7 @@ import { sendShippingNotification, sendEmailWithRetry, FROM_EMAIL, FROM_NAME } f
 import { render } from "@react-email/render"
 import type { OrderStatus } from "@prisma/client"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const shippingUpdateSchema = z.object({
   status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']).optional(),
@@ -123,7 +124,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     return NextResponse.json(next)
   } catch (error) {
-    console.error("[SHIPPING_PATCH]", error)
+    logError("[SHIPPING_PATCH]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { createStaticPageSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function GET(req: NextRequest) {
   const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:pages'), { windowMs: 60_000, maxRequests: 30 })
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
     })
     return NextResponse.json(pages)
   } catch (error) {
-    console.error("[PAGES_GET]", error)
+    logError("[PAGES_GET]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(page)
   } catch (error) {
-    console.error("[PAGES_POST]", error)
+    logError("[PAGES_POST]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

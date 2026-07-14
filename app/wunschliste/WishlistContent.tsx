@@ -28,13 +28,23 @@ export default function WishlistContent() {
   const handleAddToCart = (item: WishlistItem) => {
     addItem({
       id: item.id,
-      nameDe: item.name.de,
-      price: item.price,
-      images: [{ url: item.image }],
       slug: item.slug || item.id,
-      isActive: true,
-      categoryId: ''
-    } as any, 1)
+      name: { de: item.name.de },
+      category: '',
+      price: item.price,
+      images: [item.image],
+      rating: 0,
+      reviewCount: 0,
+      description: { de: '' },
+      shortDescription: { de: '' },
+      specs: {
+        material: '',
+        dimensions: '',
+        weight: '',
+        dishwasher: false,
+        induction: false,
+      },
+    }, 1)
     
     setAddedToCart(prev => [...prev, item.id])
     setTimeout(() => {

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const updateUserRoleSchema = z.object({
   role: z.enum(["USER", "ADMIN"]),
@@ -56,7 +57,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     return NextResponse.json(user)
   } catch (error) {
-    console.error("[USERS_PATCH]", error)
+    logError("[USERS_PATCH]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

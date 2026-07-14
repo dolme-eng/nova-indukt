@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const wishlistItemSchema = z.object({
   productId: z.string(),
@@ -50,7 +51,7 @@ export async function GET() {
       }))
     )
   } catch (error) {
-    console.error("Error fetching wishlist:", error)
+    logError("Error fetching wishlist:", error)
     return NextResponse.json(
       { error: "Failed to fetch wishlist" },
       { status: 500 }
@@ -144,7 +145,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error("Error adding to wishlist:", error)
+    logError("Error adding to wishlist:", error)
     return NextResponse.json(
       { error: "Failed to add to wishlist" },
       { status: 500 }
@@ -193,7 +194,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
   } catch (error) {
-    console.error("Error removing from wishlist:", error)
+    logError("Error removing from wishlist:", error)
     return NextResponse.json(
       { error: "Failed to remove from wishlist" },
       { status: 500 }

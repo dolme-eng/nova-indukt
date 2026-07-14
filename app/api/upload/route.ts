@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { uploadImage, deleteImage } from "@/lib/cloudinary"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 // POST - Upload image
 export async function POST(request: NextRequest) {
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error("Error uploading image:", error)
+    logError("Error uploading image:", error)
     return NextResponse.json(
       { error: "Failed to upload image" },
       { status: 500 }
@@ -105,7 +106,7 @@ export async function DELETE(request: NextRequest) {
     
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error deleting image:", error)
+    logError("Error deleting image:", error)
     return NextResponse.json(
       { error: "Failed to delete image" },
       { status: 500 }

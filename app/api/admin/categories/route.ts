@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin/require-admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { logError } from '@/lib/logger'
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,7 +18,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(categories)
   } catch (error) {
-    console.error("[CATEGORIES_GET]", error)
+    logError("[CATEGORIES_GET]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 reviews per hour per IP
@@ -111,7 +112,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("Error fetching reviews:", error)
+    logError("Error fetching reviews:", error)
     return NextResponse.json(
       { error: "Failed to fetch reviews" },
       { status: 500 }
@@ -240,7 +241,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error("Error creating review:", error)
+    logError("Error creating review:", error)
     return NextResponse.json(
       { error: "Failed to create review" },
       { status: 500 }
@@ -304,7 +305,7 @@ export async function PUT(request: NextRequest) {
       helpful: updated.helpful,
     })
   } catch (error) {
-    console.error("Error updating review:", error)
+    logError("Error updating review:", error)
     return NextResponse.json(
       { error: "Failed to update review" },
       { status: 500 }

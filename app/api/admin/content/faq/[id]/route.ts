@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { updateFaqSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logError } from "@/lib/logger"
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:put'), { windowMs: 60_000, maxRequests: 15 })
@@ -43,7 +44,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
 
     return NextResponse.json(item)
   } catch (error) {
-    console.error("[FAQ_PUT]", error)
+    logError("[FAQ_PUT]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
@@ -73,7 +74,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[FAQ_DELETE]", error)
+    logError("[FAQ_DELETE]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

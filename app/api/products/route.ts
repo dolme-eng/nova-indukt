@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import type { Prisma } from "@prisma/client"
+import { logError } from "@/lib/logger"
 
 export async function GET(request: NextRequest) {
   try {
@@ -96,7 +97,7 @@ export async function GET(request: NextRequest) {
 
     return response
   } catch (error) {
-    console.error("Error fetching products:", error)
+    logError("Error fetching products:", error)
     return NextResponse.json(
       { error: "Failed to fetch products" },
       { status: 500 }
