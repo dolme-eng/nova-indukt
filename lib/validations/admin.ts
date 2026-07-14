@@ -10,7 +10,7 @@ export const createBlogPostSchema = z.object({
   image: z.string().url().optional().nullable(),
   category: z.string().max(100).optional().nullable(),
   author: z.string().max(100).optional().nullable(),
-  readTime: z.number().int().positive().optional().nullable(),
+  readTime: z.string().max(20).optional().nullable(),
   isPublished: z.boolean().default(false),
 })
 

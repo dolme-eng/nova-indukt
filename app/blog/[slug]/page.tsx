@@ -3,7 +3,8 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { ArrowLeft, Clock, Calendar, User, Share2, Facebook, Twitter, Linkedin } from 'lucide-react'
+import { ArrowLeft, Clock, Calendar, User } from 'lucide-react'
+import { ShareButtons } from './share-buttons'
 
 // Sanitize text for safe HTML rendering
 function escapeHtml(text: string): string {
@@ -48,35 +49,153 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
+function renderInlineMarkdown(text: string): string {
+  let safe = escapeHtml(text)
+  safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  safe = safe.replace(/\*(.+?)\*/g, '<em>$1</em>')
+  safe = safe.replace(/`(.+?)`/g, '<code class="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">$1</code>')
+  safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-[#4ECCA3] hover:underline" target="_blank" rel="noopener noreferrer">$1</a>')
+  return safe
+}
+
 function renderContent(content: string): JSX.Element {
-  // Simple markdown-like renderer for the DB content
-  const paragraphs = content.split('\n\n')
-  
-  return (
-    <>
-      {paragraphs.map((paragraph, index) => {
-        if (paragraph.startsWith('## ')) {
-          return <h2 key={index} className="text-2xl font-bold text-gray-900 mt-10 mb-4">{escapeHtml(paragraph.replace('## ', ''))}</h2>
-        }
-        if (paragraph.startsWith('### ')) {
-          return <h3 key={index} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{escapeHtml(paragraph.replace('### ', ''))}</h3>
-        }
-        
-        // Escape HTML first, then apply safe markdown transforms
-        let safeHtml = escapeHtml(paragraph)
-        safeHtml = safeHtml.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        safeHtml = safeHtml.replace(/\n/g, '<br />')
-        
-        return (
-          <p 
-            key={index} 
-            className="text-gray-700 leading-relaxed mb-4"
-            dangerouslySetInnerHTML={{ __html: safeHtml }}
-          />
+  const lines = content.split('\n')
+  const elements: JSX.Element[] = []
+  let i = 0
+
+  while (i < lines.length) {
+    const line = lines[i]
+
+    // Headings
+    if (line.startsWith('## ')) {
+      elements.push(<h2 key={i} className="text-2xl font-bold text-gray-900 mt-10 mb-4">{renderInlineMarkdown(line.replace('## ', ''))}</h2>)
+      i++
+      continue
+    }
+    if (line.startsWith('### ')) {
+      elements.push(<h3 key={i} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{renderInlineMarkdown(line.replace('### ', ''))}</h3>)
+      i++
+      continue
+    }
+
+    // Blockquote
+    if (line.startsWith('> ')) {
+      const quoteLines: string[] = []
+      while (i < lines.length && lines[i].startsWith('> ')) {
+        quoteLines.push(lines[i].replace('> ', ''))
+        i++
+      }
+      elements.push(
+        <blockquote key={i} className="border-l-4 border-[#4ECCA3] pl-4 py-2 my-4 bg-gray-50 rounded-r-lg">
+          <p className="text-gray-600 italic" dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(quoteLines.join(' ')) }} />
+        </blockquote>
+      )
+      continue
+    }
+
+    // Unordered list
+    if (line.startsWith('- ')) {
+      const listItems: string[] = []
+      while (i < lines.length && lines[i].startsWith('- ')) {
+        listItems.push(lines[i].replace('- ', ''))
+        i++
+      }
+      elements.push(
+        <ul key={i} className="list-disc list-inside space-y-1 my-4 text-gray-700">
+          {listItems.map((item, j) => (
+            <li key={j} dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(item) }} />
+          ))}
+        </ul>
+      )
+      continue
+    }
+
+    // Ordered list
+    if (/^\d+\.\s/.test(line)) {
+      const listItems: string[] = []
+      while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
+        listItems.push(lines[i].replace(/^\d+\.\s/, ''))
+        i++
+      }
+      elements.push(
+        <ol key={i} className="list-decimal list-inside space-y-1 my-4 text-gray-700">
+          {listItems.map((item, j) => (
+            <li key={j} dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(item) }} />
+          ))}
+        </ol>
+      )
+      continue
+    }
+
+    // Table
+    if (line.includes('|') && i + 1 < lines.length && lines[i + 1]?.includes('---')) {
+      const headers = line.split('|').map(h => h.trim()).filter(Boolean)
+      i += 2 // skip header + separator
+      const rows: string[][] = []
+      while (i < lines.length && lines[i].includes('|')) {
+        rows.push(lines[i].split('|').map(c => c.trim()).filter(Boolean))
+        i++
+      }
+      elements.push(
+        <div key={i} className="overflow-x-auto my-6">
+          <table className="w-full border-collapse border border-gray-200 rounded-lg">
+            <thead>
+              <tr className="bg-gray-50">
+                {headers.map((h, j) => (
+                  <th key={j} className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b border-gray-200">{renderInlineMarkdown(h)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, j) => (
+                <tr key={j} className="border-b border-gray-100 hover:bg-gray-50">
+                  {row.map((cell, k) => (
+                    <td key={k} className="px-4 py-3 text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(cell) }} />
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+      continue
+    }
+
+    // Empty line
+    if (line.trim() === '') {
+      i++
+      continue
+    }
+
+    // Image
+    if (line.startsWith('![')) {
+      const match = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+      if (match) {
+        elements.push(
+          <div key={i} className="my-6">
+            <Image src={match[2]} alt={match[1]} width={800} height={450} className="rounded-xl w-full" />
+            {match[1] && <p className="text-center text-sm text-gray-500 mt-2">{match[1]}</p>}
+          </div>
         )
-      })}
-    </>
-  )
+        i++
+        continue
+      }
+    }
+
+    // Regular paragraph — collect consecutive non-empty lines
+    const paraLines: string[] = []
+    while (i < lines.length && lines[i].trim() !== '' && !lines[i].startsWith('#') && !lines[i].startsWith('- ') && !/^\d+\.\s/.test(lines[i]) && !lines[i].startsWith('> ') && !lines[i].startsWith('![')) {
+      paraLines.push(lines[i])
+      i++
+    }
+    if (paraLines.length > 0) {
+      elements.push(
+        <p key={i} className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(paraLines.join(' ')) }} />
+      )
+    }
+  }
+
+  return <>{elements}</>
 }
 
 export default async function BlogPostPage({ 
@@ -185,21 +304,7 @@ export default async function BlogPostPage({
               </div>
 
               {/* Share */}
-              <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-200">
-                <span className="text-sm text-gray-500">Teilen:</span>
-                <button className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
-                  <Facebook className="w-4 h-4" />
-                </button>
-                <button className="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center hover:bg-sky-600 transition-colors">
-                  <Twitter className="w-4 h-4" />
-                </button>
-                <button className="w-8 h-8 bg-blue-700 text-white rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
-                  <Linkedin className="w-4 h-4" />
-                </button>
-                <button className="w-8 h-8 bg-gray-200 text-gray-600 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors">
-                  <Share2 className="w-4 h-4" />
-                </button>
-              </div>
+              <ShareButtons slug={resolvedParams.slug} title={post.titleDe} />
             </div>
           </div>
         </div>

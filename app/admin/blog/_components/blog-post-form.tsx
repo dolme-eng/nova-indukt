@@ -79,14 +79,14 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
         body: JSON.stringify(formData)
       })
 
-      if (!response.ok) throw new Error('Erreur lors de l\'enregistrement')
+      if (!response.ok) throw new Error('Fehler beim Speichern')
 
-      toast.success(initialData ? 'Article mis à jour' : 'Article créé avec succès')
+      toast.success(initialData ? 'Artikel aktualisiert' : 'Artikel erfolgreich erstellt')
       router.push('/admin/blog')
       router.refresh()
     } catch (error) {
       console.error(error)
-      toast.error('Une erreur est survenue')
+      toast.error('Ein Fehler ist aufgetreten')
     } finally {
       setIsSubmitting(false)
     }
@@ -106,7 +106,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
             <h1 className="text-2xl font-bold text-slate-900">
               {initialData ? 'Artikel bearbeiten' : 'Neuer Artikel'}
             </h1>
-            <p className="text-slate-500">Remplissez les détails de votre article</p>
+            <p className="text-slate-500">Füllen Sie die Details Ihres Artikels aus</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -114,7 +114,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
             href="/admin/blog"
             className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors"
           >
-            Annuler
+            Abbrechen
           </Link>
           <button
             type="submit"
@@ -126,7 +126,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
             ) : (
               <Save size={18} />
             )}
-            Sauvegarder
+            Speichern
           </button>
         </div>
       </div>
@@ -143,7 +143,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
                 name="titleDe"
                 value={formData.titleDe}
                 onChange={handleChange}
-                placeholder="Ex: Die Wahl der richtigen Pfanne..."
+                placeholder="z.B. Die Wahl der richtigen Pfanne..."
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all font-medium"
               />
             </div>
@@ -187,7 +187,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
                 placeholder="## Überschrift... - Liste... **Fett**..."
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all font-mono text-sm"
               />
-              <p className="text-[10px] text-slate-400">Supporte le Markdown de base (## pour les titres, - pour les listes, ** pour le gras).</p>
+              <p className="text-[10px] text-slate-400">Unterstützt einfaches Markdown (## für Überschriften, - für Listen, ** für Fett).</p>
             </div>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
             >
               <div className="flex items-center gap-3">
                 {formData.isPublished ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
-                <span className="font-bold">{formData.isPublished ? 'Publié' : 'Brouillon'}</span>
+                <span className="font-bold">{formData.isPublished ? 'Veröffentlicht' : 'Entwurf'}</span>
               </div>
               <div className={`w-10 h-5 rounded-full relative transition-colors ${formData.isPublished ? 'bg-emerald-500' : 'bg-slate-300'}`}>
                 <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${formData.isPublished ? 'right-1' : 'left-1'}`} />
@@ -221,19 +221,19 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
             
             <p className="text-xs text-slate-500 leading-relaxed">
               {formData.isPublished 
-                ? 'L\'article est visible par tous les visiteurs sur le site.' 
-                : 'L\'article n\'est visible que dans l\'administration.'}
+                ? 'Der Artikel ist für alle Besucher auf der Seite sichtbar.' 
+                : 'Der Artikel ist nur in der Verwaltung sichtbar.'}
             </p>
           </div>
 
           {/* Details */}
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
-            <h3 className="font-bold text-slate-900">Détails de l'article</h3>
+            <h3 className="font-bold text-slate-900">Artikeldetails</h3>
             
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-500 uppercase flex items-center gap-2">
-                  <Tag size={14} /> Catégorie
+                  <Tag size={14} /> Kategorie
                 </label>
                 <select
                   name="category"
@@ -243,6 +243,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
                 >
                   <option value="Ratgeber">Ratgeber</option>
                   <option value="Technik">Technik</option>
+                  <option value="Pflege">Pflege</option>
                   <option value="Rezepte">Rezepte</option>
                   <option value="Lifestyle">Lifestyle</option>
                 </select>
@@ -250,7 +251,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
 
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-500 uppercase flex items-center gap-2">
-                  <User size={14} /> Auteur
+                  <User size={14} /> Autor
                 </label>
                 <input
                   type="text"
@@ -263,14 +264,14 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
 
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-500 uppercase flex items-center gap-2">
-                  <Clock size={14} /> Temps de lecture
+                  <Clock size={14} /> Lesezeit
                 </label>
                 <input
                   type="text"
                   name="readTime"
                   value={formData.readTime}
                   onChange={handleChange}
-                  placeholder="Ex: 8 min"
+                  placeholder="z.B. 8 min"
                   className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm"
                 />
               </div>
@@ -309,7 +310,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
               />
             </div>
             
-            <p className="text-[10px] text-slate-400">Uploadez une image sur Cloudinary ou utilisez un lien Unsplash.</p>
+            <p className="text-[10px] text-slate-400">Laden Sie ein Bild auf Cloudinary hoch oder verwenden Sie einen Unsplash-Link.</p>
           </div>
         </div>
       </div>
