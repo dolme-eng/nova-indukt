@@ -6,6 +6,7 @@ import { sendPaymentConfirmationEmail } from "@/lib/email/send"
 import type { ShippingAddress } from "@/types/order"
 import { getPayPalAccessToken, PAYPAL_API_URL } from "@/lib/paypal"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logInfo } from "@/lib/logger"
 
 const captureOrderSchema = z.object({
   paypalOrderId: z.string().min(1, "PayPal order ID is required"),
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      console.log(`Order ${updatedOrder.orderNumber} marked as PAID via PayPal`)
+      logInfo("[PAYPAL_CAPTURE] Order marked as PAID", { orderId: updatedOrder.orderNumber })
 
       // Send confirmation email — normalize Decimal fields to number
       try {
@@ -146,7 +147,7 @@ export async function POST(request: NextRequest) {
           })),
           shippingAddress: updatedOrder.shippingAddress as unknown as ShippingAddress
         })
-        console.log(`PayPal payment confirmation email sent for order ${updatedOrder.orderNumber}`)
+        logInfo("[PAYPAL_CAPTURE] Confirmation email sent", { orderId: updatedOrder.orderNumber })
       } catch (emailError) {
         console.error("Failed to send PayPal payment confirmation email:", emailError)
       }

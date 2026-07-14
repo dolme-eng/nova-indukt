@@ -3,8 +3,11 @@ import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { updateFaqSchema } from "@/lib/validations/admin"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:put'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
@@ -46,6 +49,8 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
 }
 
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:delete'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })

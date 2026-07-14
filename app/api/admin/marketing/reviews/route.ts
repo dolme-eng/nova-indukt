@@ -3,6 +3,7 @@ import { z } from "zod"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { prisma } from "@/lib/prisma"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const marketingReviewSchema = z.discriminatedUnion('action', [
   z.object({
@@ -18,6 +19,8 @@ const marketingReviewSchema = z.discriminatedUnion('action', [
 ])
 
 export async function PATCH(req: NextRequest) {
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:patch'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
@@ -102,6 +105,8 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:delete'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })

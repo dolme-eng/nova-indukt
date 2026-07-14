@@ -4,6 +4,7 @@ import { sendPaymentConfirmationEmail } from "@/lib/email/send"
 import type { ShippingAddress } from "@/types/order"
 import { getPayPalAccessToken, PAYPAL_API_URL } from "@/lib/paypal"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { logInfo } from "@/lib/logger"
 
 const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID
 
@@ -105,7 +106,7 @@ export async function POST(request: NextRequest) {
           include: { items: { include: { product: { include: { images: true } } } }, user: true }
         })
 
-        console.log(`Order ${updatedOrder.orderNumber} automatically marked as PAID via PayPal Webhook.`)
+        logInfo("[PAYPAL_WEBHOOK] Order marked as PAID", { orderId: updatedOrder.orderNumber })
 
         // Send Email using the strictly typed OrderInput
         try {
@@ -131,13 +132,13 @@ export async function POST(request: NextRequest) {
               })),
               shippingAddress: updatedOrder.shippingAddress as unknown as ShippingAddress
             })
-            console.log(`PayPal webhook payment confirmation email sent for order ${updatedOrder.orderNumber}`)
+            logInfo("[PAYPAL_WEBHOOK] Confirmation email sent", { orderId: updatedOrder.orderNumber })
           }
         } catch (emailErr) {
           console.error("Webhook email sending failed:", emailErr)
         }
       } else {
-        console.log(`Order ${existingOrder.orderNumber} is already PAID. Webhook ignored.`)
+        logInfo("[PAYPAL_WEBHOOK] Order already PAID, ignored", { orderId: existingOrder.orderNumber })
       }
     }
 

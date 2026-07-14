@@ -6,6 +6,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { sendShippingNotification, sendEmailWithRetry, FROM_EMAIL, FROM_NAME } from "@/lib/email/send"
 import { render } from "@react-email/render"
 import type { OrderStatus } from "@prisma/client"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const shippingUpdateSchema = z.object({
   status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']).optional(),
@@ -16,6 +17,8 @@ const shippingUpdateSchema = z.object({
 })
 
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:orders:shipping'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 

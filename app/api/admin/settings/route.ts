@@ -4,12 +4,15 @@ import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import type { Prisma } from "@prisma/client"
+import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 const KEY = "site"
 
 const settingsSchema = z.record(z.string(), z.unknown())
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings'), { windowMs: 60_000, maxRequests: 30 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
@@ -23,6 +26,8 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
+  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings:put'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })

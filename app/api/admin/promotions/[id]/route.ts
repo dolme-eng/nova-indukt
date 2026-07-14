@@ -3,12 +3,15 @@ import { requireAdmin } from '@/lib/admin/require-admin'
 import { auditLog } from '@/lib/admin/audit'
 import { prisma } from '@/lib/prisma'
 import { updatePromotionAdminSchema } from '@/lib/validations/admin'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
 // GET - Récupérer une promotion spécifique
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:get'), { windowMs: 60_000, maxRequests: 30 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
@@ -32,6 +35,8 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:put'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
@@ -82,6 +87,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:delete'), { windowMs: 60_000, maxRequests: 15 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })

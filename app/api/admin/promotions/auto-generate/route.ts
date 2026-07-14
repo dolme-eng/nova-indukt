@@ -4,9 +4,12 @@ import { auditLog } from '@/lib/admin/audit'
 import { prisma } from '@/lib/prisma'
 import { DiscountType } from '@prisma/client'
 import { autoGeneratePromotionSchema } from '@/lib/validations/admin'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
 // POST - Générer automatiquement des promotions
 export async function POST(request: NextRequest) {
+  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:auto-generate'), { windowMs: 60_000, maxRequests: 5 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
