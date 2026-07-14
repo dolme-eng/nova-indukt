@@ -76,8 +76,8 @@ export async function POST(request: NextRequest) {
         name,
         password: hashedPassword,
         role: "USER",
-        resetToken: verificationToken,
-        resetTokenExpiry: verificationExpiry,
+        verificationToken: verificationToken,
+        verificationTokenExpiry: verificationExpiry,
       }
     })
 

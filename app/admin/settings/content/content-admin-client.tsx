@@ -39,8 +39,8 @@ export function ContentAdminClient() {
       ])
       setPages(Array.isArray(p) ? p : [])
       setFaq(Array.isArray(f) ? f : [])
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsLoading(false)
     }
@@ -61,8 +61,8 @@ export function ContentAdminClient() {
         if (!res.ok) throw new Error("Failed to load page")
         const json = await res.json()
         setPageDraft(json)
-      } catch (e: any) {
-        toast.error(e?.message || "Erreur")
+      } catch (e: unknown) {
+        toast.error(e instanceof Error ? e.message : "Erreur")
       }
     })()
   }, [selectedSlug])
@@ -81,8 +81,8 @@ export function ContentAdminClient() {
       if (!res.ok) throw new Error("Failed to save page")
       toast.success("Page enregistrée")
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }
@@ -101,8 +101,8 @@ export function ContentAdminClient() {
       toast.success("Page créée")
       setNewPage({ slug: "", title: "" })
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }
@@ -121,8 +121,8 @@ export function ContentAdminClient() {
       toast.success("FAQ ajoutée")
       setNewFaq({ category: "support", question: "", answer: "" })
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }
@@ -138,8 +138,8 @@ export function ContentAdminClient() {
       })
       if (!res.ok) throw new Error("Failed to update FAQ")
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }
@@ -152,8 +152,8 @@ export function ContentAdminClient() {
       if (!res.ok) throw new Error("Failed to delete FAQ")
       toast.success("FAQ supprimée")
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }

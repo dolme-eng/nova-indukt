@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import type { Prisma } from "@prisma/client"
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
     const page = Number.isFinite(rawPage) ? Math.max(rawPage, 1) : 1
     const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 36) : 12
     
-    const where: any = { isActive: true }
+    const where: Prisma.ProductWhereInput = { isActive: true }
     
     if (category && category !== "all") {
       where.category = {
@@ -35,12 +36,13 @@ export async function GET(request: NextRequest) {
     }
     
     if (minPrice || maxPrice) {
-      where.price = {}
-      if (minPrice) where.price.gte = parseFloat(minPrice)
-      if (maxPrice) where.price.lte = parseFloat(maxPrice)
+      where.price = {
+        ...(minPrice ? { gte: parseFloat(minPrice) } : {}),
+        ...(maxPrice ? { lte: parseFloat(maxPrice) } : {}),
+      }
     }
     
-    const orderBy: any = {}
+    const orderBy: Prisma.ProductOrderByWithRelationInput = {}
     switch (sortBy) {
       case "price-asc":
         orderBy.price = "asc"

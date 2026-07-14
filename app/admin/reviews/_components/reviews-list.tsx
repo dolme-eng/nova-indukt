@@ -41,7 +41,7 @@ interface Review {
   } | null
 }
 
-export default function ReviewsList({ initialReviews }: { initialReviews: any[] }) {
+export default function ReviewsList({ initialReviews }: { initialReviews: Review[] }) {
   const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>(initialReviews.map(r => ({
     ...r,

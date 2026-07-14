@@ -32,8 +32,8 @@ export function MediaAdminClient() {
       if (!res.ok) throw new Error("Failed to load media")
       const json = await res.json()
       setItems(Array.isArray(json) ? json : [])
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsLoading(false)
     }
@@ -69,8 +69,8 @@ export function MediaAdminClient() {
       })
       toast.success("Upload OK")
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsUploading(false)
     }
@@ -83,8 +83,8 @@ export function MediaAdminClient() {
       if (!res.ok) throw new Error(json?.error || "Delete failed")
       toast.success("Supprimé")
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     }
   }
 

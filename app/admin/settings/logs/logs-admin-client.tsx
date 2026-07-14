@@ -32,8 +32,8 @@ export function LogsAdminClient() {
       const nextItems = Array.isArray(json?.items) ? json.items : []
       setItems((prev) => (first ? nextItems : [...prev, ...nextItems]))
       setCursor(json?.nextCursor ?? null)
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       if (first) setIsLoading(false)
       else setIsMoreLoading(false)

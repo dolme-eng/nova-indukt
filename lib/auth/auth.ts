@@ -40,6 +40,11 @@ const { handlers, auth, signOut, signIn } = NextAuth({
             return null
           }
 
+          // Check if email is verified
+          if (!user.emailVerified) {
+            return null
+          }
+
           recordSuccessfulLogin(email)
 
           return {

@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { prisma } from "@/lib/prisma"
 import { updateProductSchema } from "@/lib/validations/admin"
+import type { Prisma } from "@prisma/client"
 
 export async function PATCH(
   req: NextRequest,
@@ -28,7 +29,7 @@ export async function PATCH(
 
     const product = await prisma.product.update({
       where: { id },
-      data: productData as any,
+      data: productData as Prisma.ProductUpdateInput,
     })
 
     if (images && Array.isArray(images)) {

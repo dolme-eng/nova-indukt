@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { sendShippingNotification, sendEmailWithRetry, FROM_EMAIL, FROM_NAME } from "@/lib/email/send"
 import { render } from "@react-email/render"
+import type { OrderStatus } from "@prisma/client"
 
 const shippingUpdateSchema = z.object({
   status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']).optional(),
@@ -39,7 +40,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   const next = await prisma.order.update({
     where: { id },
     data: {
-      status: status as any,
+      status: status as OrderStatus,
       trackingNumber: trackingNumber ?? undefined,
       shippedAt: status === "SHIPPED" ? new Date() : undefined,
       deliveredAt: status === "DELIVERED" ? new Date() : undefined,
@@ -59,7 +60,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
   // Send email based on status change
   if (sendEmail) {
-    const shippingAddress = order.shippingAddress as any
+    const shippingAddress = (order.shippingAddress as Record<string, string>) || {}
 
     if (status === "SHIPPED" && next.trackingNumber) {
       // Send shipping notification with tracking
@@ -131,6 +132,14 @@ function OrderStatusEmail({
   status: string
   statusMessage: string
 }) {
+  const escapeHtml = (str: string) =>
+    str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+  const safeName = escapeHtml(customerName)
+  const safeMessage = escapeHtml(statusMessage)
+  const safeOrderNumber = escapeHtml(orderNumber)
+  const safeStatus = escapeHtml(status)
+
   return `
     <!DOCTYPE html>
     <html>
@@ -144,16 +153,16 @@ function OrderStatusEmail({
             <h1 style="color: white; margin: 0; font-size: 24px; letter-spacing: 2px;">NOVA INDUKT</h1>
           </div>
           <div style="padding: 40px;">
-            <h2 style="color: #0C211E; margin: 0 0 20px 0;">Hallo ${customerName},</h2>
+            <h2 style="color: #0C211E; margin: 0 0 20px 0;">Hallo ${safeName},</h2>
             <p style="color: #374151; line-height: 1.6; margin: 0 0 20px 0;">
-              ${statusMessage}
+              ${safeMessage}
             </p>
             <div style="background-color: #f9fafb; border-radius: 12px; padding: 20px; margin: 20px 0;">
               <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">Bestellnummer</p>
-              <p style="margin: 0; color: #0C211E; font-weight: bold; font-size: 18px;">${orderNumber}</p>
+              <p style="margin: 0; color: #0C211E; font-weight: bold; font-size: 18px;">${safeOrderNumber}</p>
             </div>
             <div style="background-color: #4ECCA3; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
-              <p style="margin: 0; color: #0C211E; font-weight: bold; font-size: 16px;">Status: ${status}</p>
+              <p style="margin: 0; color: #0C211E; font-weight: bold; font-size: 16px;">Status: ${safeStatus}</p>
             </div>
           </div>
           <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">

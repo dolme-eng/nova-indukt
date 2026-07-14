@@ -23,8 +23,32 @@ interface Category {
   nameDe: string
 }
 
+interface ProductData {
+  id?: string
+  nameDe?: string | null
+  slug?: string | null
+  ean?: string | null
+  descriptionDe?: string | null
+  shortDescription?: string | null
+  price?: number | string | { toNumber: () => number }
+  oldPrice?: number | string | { toNumber: () => number } | null
+  costPrice?: number | string | { toNumber: () => number } | null
+  stock?: number
+  initialStock?: number
+  stockAlertAt?: number
+  categoryId?: string | null
+  isActive?: boolean
+  weightKg?: number | string | { toNumber: () => number } | null
+  brand?: string | null
+  material?: string | null
+  dimensions?: string | null
+  dishwasherSafe?: boolean | null
+  inductionSafe?: boolean | null
+  images?: Array<string | { url: string }>
+}
+
 interface ProductFormProps {
-  initialData?: any
+  initialData?: ProductData
   categories: Category[]
 }
 
@@ -54,7 +78,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
     dimensions: initialData?.dimensions || "",
     dishwasherSafe: initialData?.dishwasherSafe ?? false,
     inductionSafe: initialData?.inductionSafe ?? true,
-    images: initialData?.images?.map((img: any) => typeof img === 'string' ? img : img.url) || []
+    images: initialData?.images?.map((img: string | { url: string }) => typeof img === 'string' ? img : img.url) || []
   })
 
   const onSubmit = async (e: React.FormEvent) => {

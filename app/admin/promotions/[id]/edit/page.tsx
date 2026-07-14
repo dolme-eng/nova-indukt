@@ -11,14 +11,14 @@ interface Promotion {
   code: string | null
   isCoupon: boolean
   discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
-  discountValue: any
+  discountValue: number
   isGlobal: boolean
   productIds: string[]
   categoryIds: string[]
-  startDate: any
-  endDate: any
-  minOrderAmount: any
-  maxDiscount: any
+  startDate: string
+  endDate: string
+  minOrderAmount: number | null
+  maxDiscount: number | null
   usageLimit: number | null
   badge: string | null
   bannerText: string | null

@@ -3,6 +3,7 @@ import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
+import type { Prisma } from "@prisma/client"
 
 const KEY = "site"
 
@@ -34,8 +35,8 @@ export async function PUT(req: NextRequest) {
 
   const cfg = await prisma.appConfig.upsert({
     where: { key: KEY },
-    update: { data: data as any },
-    create: { key: KEY, data: data as any },
+    update: { data: data as Prisma.InputJsonValue },
+    create: { key: KEY, data: data as Prisma.InputJsonValue },
   })
 
   await auditLog({

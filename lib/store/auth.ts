@@ -63,17 +63,8 @@ export const useAuth = create<AuthState>()(
             return { success: false, error: data.error || 'Registrierung fehlgeschlagen' }
           }
           
-          // Auto login after registration
-          const result = await signIn('credentials', {
-            email,
-            password,
-            redirect: false
-          })
-          
-          if (result?.error) {
-            return { success: false, error: 'Automatische Anmeldung fehlgeschlagen. Bitte manuell anmelden.' }
-          }
-
+          // Do NOT auto-login after registration.
+          // User must verify their email first, then log in manually.
           return { success: true }
         } catch (error) {
           console.error('Registration error:', error)

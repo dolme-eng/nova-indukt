@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
 
-export type SiteSettings = Record<string, any>
+export type SiteSettings = Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export function useSiteSettings() {
   const [data, setData] = useState<SiteSettings>({})
@@ -17,8 +17,8 @@ export function useSiteSettings() {
       if (!res.ok) throw new Error("Failed to load settings")
       const json = await res.json()
       setData(json?.data ?? {})
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsLoading(false)
     }
@@ -39,8 +39,8 @@ export function useSiteSettings() {
       const json = await res.json()
       setData(json?.data ?? next)
       toast.success("Paramètres enregistrés")
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }

@@ -19,8 +19,8 @@ export function UsersAdminClient() {
       const json = await res.json()
       const nextItems = Array.isArray(json?.items) ? json.items : []
       setUsers(nextItems)
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsLoading(false)
     }
@@ -42,8 +42,8 @@ export function UsersAdminClient() {
       if (!res.ok) throw new Error(json?.error || "Failed to update role")
       toast.success("Rôle mis à jour")
       await refresh()
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }

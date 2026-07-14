@@ -8,7 +8,7 @@ import { formatPriceDe } from '@/lib/utils/vat'
 
 export default function NotFound() {
   // Simuler des bestsellers vides ou statiques temporaires car products n'existe plus
-  const bestsellers: any[] = []
+  const bestsellers: Array<{id: string; slug: string; name: {de: string}; price: number; images: string[]}> = []
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center pt-24 pb-24 px-4 sm:px-6">

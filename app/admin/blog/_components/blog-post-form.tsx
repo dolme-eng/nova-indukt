@@ -17,8 +17,21 @@ import {
 import Link from 'next/link'
 import { toast } from 'sonner'
 
+interface BlogPostData {
+  id?: string
+  titleDe?: string | null
+  slug?: string | null
+  excerptDe?: string | null
+  contentDe?: string | null
+  image?: string | null
+  category?: string | null
+  author?: string | null
+  readTime?: string | null
+  isPublished?: boolean
+}
+
 interface BlogPostFormProps {
-  initialData?: any
+  initialData?: BlogPostData
 }
 
 export default function BlogPostForm({ initialData }: BlogPostFormProps) {

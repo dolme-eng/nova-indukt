@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:win": "node -e \"const{execSync:e}=require('child_process');e('npx next build --webpack',{stdio:'inherit',env:{...process.env,NODE_OPTIONS:'--require ./readlink-patch.cjs'}})\"",
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest",

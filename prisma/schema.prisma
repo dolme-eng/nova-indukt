@@ -48,6 +48,8 @@ model User {
   updatedAt        DateTime       @updatedAt
   resetToken       String?        @unique
   resetTokenExpiry DateTime?
+  verificationToken       String?        @unique
+  verificationTokenExpiry DateTime?
   accounts         Account[]
   addresses        Address[]
   orders           Order[]

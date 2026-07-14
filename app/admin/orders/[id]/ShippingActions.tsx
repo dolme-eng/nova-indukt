@@ -34,8 +34,8 @@ export function ShippingActions(props: { orderId: string; currentStatus: OrderSt
         throw new Error(data?.error || "Failed to update shipping")
       }
       toast.success("Expédition mise à jour")
-    } catch (e: any) {
-      toast.error(e?.message || "Erreur")
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur")
     } finally {
       setIsSaving(false)
     }

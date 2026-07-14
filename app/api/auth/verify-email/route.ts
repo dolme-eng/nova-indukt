@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
     // Find user with this verification token
     const user = await prisma.user.findFirst({
       where: {
-        resetToken: token,
-        resetTokenExpiry: {
+        verificationToken: token,
+        verificationTokenExpiry: {
           gt: new Date()
         }
       }
@@ -33,8 +33,8 @@ export async function GET(request: NextRequest) {
       where: { id: user.id },
       data: {
         emailVerified: new Date(),
-        resetToken: null,
-        resetTokenExpiry: null,
+        verificationToken: null,
+        verificationTokenExpiry: null,
       }
     })
 

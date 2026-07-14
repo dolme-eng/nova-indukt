@@ -42,7 +42,7 @@ async function getOrder(id: string) {
   return order
 }
 
-const statusColors: any = {
+const statusColors: Record<string, string> = {
   PENDING: "bg-amber-100 text-amber-700 border-amber-200",
   PROCESSING: "bg-blue-100 text-blue-700 border-blue-200",
   SHIPPED: "bg-purple-100 text-purple-700 border-purple-200",
@@ -51,13 +51,14 @@ const statusColors: any = {
   REFUNDED: "bg-red-100 text-red-700 border-red-200"
 }
 
-export default async function OrderDetailsPage({ params }: { params: { id: string } }) {
-  const order = await getOrder(params.id)
+export default async function OrderDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const order = await getOrder(id)
 
   if (!order) notFound()
 
-  const shippingAddress = order.shippingAddress as any
-  const billingAddress = (order.billingAddress as any) || shippingAddress
+  const shippingAddress = (order.shippingAddress as Record<string, string>) || {}
+  const billingAddress = (order.billingAddress as Record<string, string>) || shippingAddress
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">

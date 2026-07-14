@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { sendOrderCancellationEmail } from "@/lib/email/send"
 
 export async function GET(
   request: NextRequest,
@@ -153,6 +154,17 @@ export async function PATCH(
         })
       }
     })
+
+    // Send cancellation email (non-blocking)
+    const recipientEmail = order.customerEmail
+    if (recipientEmail) {
+      sendOrderCancellationEmail(
+        recipientEmail,
+        order.customerName,
+        order.orderNumber,
+        Number(order.total)
+      ).catch(err => console.error("Failed to send cancellation email:", err))
+    }
     
     return NextResponse.json({
       success: true,

@@ -3,6 +3,7 @@ import type { Resend } from 'resend'
 import { render } from '@react-email/render'
 import OrderConfirmationEmail from './templates/order-confirmation'
 import ShippingNotificationEmail from './templates/shipping-notification'
+import OrderCancellationEmail from './templates/order-cancellation'
 import NewsletterConfirmationEmail from './templates/newsletter-confirmation'
 import ContactNotificationEmail from './templates/contact-notification'
 import PasswordResetEmail from './templates/password-reset'
@@ -21,7 +22,7 @@ export async function sendEmailWithRetry(payload: Parameters<Resend['emails']['s
   }
 
   let attempt = 0;
-  let lastError: any = null;
+  let lastError: Error | null = null;
   
   while (attempt < maxRetries) {
     try {
@@ -39,7 +40,7 @@ export async function sendEmailWithRetry(payload: Parameters<Resend['emails']['s
       }
       return result;
     } catch (error) {
-      lastError = error;
+      lastError = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries - 1) {
         console.warn(`Exception sending email. Retrying attempt ${attempt + 1}/${maxRetries}...`, error);
         attempt++;
@@ -49,7 +50,7 @@ export async function sendEmailWithRetry(payload: Parameters<Resend['emails']['s
       break;
     }
   }
-  return { data: null, error: lastError as any };
+  return { data: null, error: lastError };
 }
 
 interface OrderItem {
@@ -486,6 +487,43 @@ export async function sendPasswordResetEmail(
     return { success: true, id: result.data?.id }
   } catch (error) {
     console.error('Error sending password reset email:', error)
+    return { success: false, error }
+  }
+}
+
+// Order cancellation email
+export async function sendOrderCancellationEmail(
+  email: string,
+  customerName: string,
+  orderNumber: string,
+  total: number,
+  reason?: string
+) {
+  try {
+    const html = await render(
+      OrderCancellationEmail({
+        orderNumber,
+        customerName,
+        total,
+        reason,
+      })
+    )
+
+    const result = await sendEmailWithRetry({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
+      to: email,
+      subject: `Bestellung ${orderNumber} storniert - NOVA INDUKT`,
+      html,
+    })
+
+    if (result.error) {
+      console.error('Failed to send order cancellation email:', result.error)
+      return { success: false, error: result.error }
+    }
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    console.error('Error sending order cancellation email:', error)
     return { success: false, error }
   }
 }

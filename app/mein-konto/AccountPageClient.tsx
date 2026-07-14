@@ -17,6 +17,21 @@ import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
 import { formatPriceDe } from '@/lib/utils/vat'
 import { Product } from '@/lib/data/products'
 
+interface Address {
+  id?: string
+  firstName: string
+  lastName: string
+  company?: string | null
+  street: string
+  street2?: string | null
+  zipCode: string
+  city: string
+  country: string
+  phone?: string | null
+  isDefault: boolean
+  state?: string | null
+}
+
 const TABS = [
   { id: 'overview', label: 'Übersicht', icon: Home },
   { id: 'orders', label: 'Bestellungen', icon: Package },
@@ -234,7 +249,15 @@ export default function AccountPageClient() {
 }
 
 // Tab Components
-function OverviewTab({ user, wishlistCount, setActiveTab, ordersCount = 0, addressesCount = 0 }: any) {
+interface OverviewTabProps {
+  user: { name?: string | null; email?: string | null; role?: string } | null
+  wishlistCount: number
+  ordersCount: number
+  addressesCount: number
+  setActiveTab: (tab: string) => void
+}
+
+function OverviewTab({ user, wishlistCount, setActiveTab, ordersCount = 0, addressesCount = 0 }: OverviewTabProps) {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
@@ -264,7 +287,15 @@ function OverviewTab({ user, wishlistCount, setActiveTab, ordersCount = 0, addre
   )
 }
 
-function StatCard({ icon: Icon, label, value, color, onClick }: any) {
+interface StatCardProps {
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  value: string
+  color: string
+  onClick?: () => void
+}
+
+function StatCard({ icon: Icon, label, value, color, onClick }: StatCardProps) {
   return (
     <button onClick={onClick} className={`bg-white rounded-xl sm:rounded-2xl shadow-sm p-3 sm:p-4 text-left transition-transform active:scale-95 border border-gray-100 ${onClick ? 'cursor-pointer' : ''}`}>
       <div className={`w-8 h-8 sm:w-10 ${color} rounded-lg sm:rounded-xl flex items-center justify-center mb-2 sm:mb-3`}>
@@ -296,7 +327,7 @@ interface Order {
 }
 
 function OrdersTab() {
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [cancellingId, setCancellingId] = useState<string | null>(null)
@@ -515,10 +546,10 @@ function WishlistTab({ items, onRemove, onAddToCart }: { items: WishlistItem[], 
 }
 
 function AddressesTab() {
-  const [addresses, setAddresses] = useState<any[]>([])
+  const [addresses, setAddresses] = useState<Address[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [editingAddress, setEditingAddress] = useState<any>(null)
+  const [editingAddress, setEditingAddress] = useState<Address | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -541,7 +572,7 @@ function AddressesTab() {
     }
   }
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: Address) => {
     setIsSubmitting(true)
     setError(null)
     
@@ -588,7 +619,7 @@ function AddressesTab() {
     }
   }
 
-  const handleEdit = (address: any) => {
+  const handleEdit = (address: Address) => {
     setEditingAddress(address)
     setShowForm(true)
   }
@@ -679,7 +710,7 @@ function AddressesTab() {
                     <Pencil className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => handleDelete(address.id)}
+                    onClick={() => address.id && handleDelete(address.id)}
                     className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     title="Löschen"
                   >
@@ -694,7 +725,7 @@ function AddressesTab() {
 
       {showForm && (
         <AddressForm 
-          address={editingAddress}
+          address={editingAddress ?? undefined}
           onSubmit={handleSubmit}
           onCancel={() => {
             setShowForm(false)
@@ -710,7 +741,7 @@ function AddressesTab() {
 
 
 
-function SettingsTab({ user }: { user: any }) {
+function SettingsTab({ user }: { user: { name?: string | null; email?: string | null; role?: string } | null }) {
   return (
     <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-6 border border-gray-100">
       <h2 className="text-lg sm:text-xl font-bold text-gray-900">Einstellungen</h2>

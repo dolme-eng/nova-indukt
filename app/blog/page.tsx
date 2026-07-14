@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import BlogContent from './BlogContent'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Nova Magazin | NOVA INDUKT',
   description: 'Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.',

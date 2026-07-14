@@ -5,12 +5,14 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Clock, Calendar, User, Share2, Facebook, Twitter, Linkedin } from 'lucide-react'
 
-// Sanitize HTML content to prevent XSS attacks
-function sanitizeHtml(html: string): string {
-  return html
-    .replace(/&lt;strong&gt;/g, '<strong>')
-    .replace(/&lt;\/strong&gt;/g, '</strong>')
-    .replace(/&lt;br\s*\/?&gt;/g, '<br />')
+// Sanitize text for safe HTML rendering
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 }
 
 // Generate metadata for each blog post
@@ -54,22 +56,22 @@ function renderContent(content: string): JSX.Element {
     <>
       {paragraphs.map((paragraph, index) => {
         if (paragraph.startsWith('## ')) {
-          return <h2 key={index} className="text-2xl font-bold text-gray-900 mt-10 mb-4">{paragraph.replace('## ', '')}</h2>
+          return <h2 key={index} className="text-2xl font-bold text-gray-900 mt-10 mb-4">{escapeHtml(paragraph.replace('## ', ''))}</h2>
         }
         if (paragraph.startsWith('### ')) {
-          return <h3 key={index} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{paragraph.replace('### ', '')}</h3>
+          return <h3 key={index} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{escapeHtml(paragraph.replace('### ', ''))}</h3>
         }
+        
+        // Escape HTML first, then apply safe markdown transforms
+        let safeHtml = escapeHtml(paragraph)
+        safeHtml = safeHtml.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        safeHtml = safeHtml.replace(/\n/g, '<br />')
         
         return (
           <p 
             key={index} 
             className="text-gray-700 leading-relaxed mb-4"
-            dangerouslySetInnerHTML={{ 
-              __html: sanitizeHtml(paragraph
-                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n/g, '<br />')
-              )
-            }}
+            dangerouslySetInnerHTML={{ __html: safeHtml }}
           />
         )
       })}
