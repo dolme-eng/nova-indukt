@@ -251,7 +251,7 @@ Unser eigenes Modell bietet **Premium-Qualität** mit speziell optimiertem Induk
 Für die meisten Hobbyköche empfehlen wir die **WMF Profi Select** als Testsieger. Wer Wert auf Antihaft legt, greift zur **Le Creuset Toughened**. Für Einsteiger ist die **Tefal Expertise** die beste Wahl.
 
 **Tipp:** Kommen Sie in unseren Showroom und testen Sie die Pfannen direkt auf einem Induktionskochfeld.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=800',
     category: 'Ratgeber',
     author: 'Chef Marcus',
     readTime: '15 Min.',
@@ -364,7 +364,7 @@ Bei 3 Kochvorgängen pro Tag amortisiert sich Induktion nach **ca. 5–7 Jahren*
 Für den **modernen Haushalt** ist Induktion die klar bessere Wahl. Sie ist effizienter, sicherer, präziser und zukunftssicher. Gas hat nur noch bei spezifischen Kochtechniken (Wok, Flambieren) klare Vorteile.
 
 **Empfehlung:** Investieren Sie in ein hochwertiges Induktionskochfeld — es zahlt sich langfristig aus.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800',
     category: 'Technik',
     author: 'Dr. Koch',
     readTime: '14 Min.',
@@ -505,7 +505,7 @@ Für intensive Pflege bietet sich eine professionelle Versiegelung an:
 ## Fazit
 
 Die richtige Pflege ist **einfach und lohnt sich**. Mit wenigen Minuten Aufwand pro Tag bleibt Ihr Induktionskochfeld jahrelang in bestem Zustand. Investieren Sie in hochwertige Reinigungsmittel und vermeiden Sie die häufigsten Fehler — Ihr Kochfeld wird es Ihnen mit langer Lebensdauer danken.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800',
     category: 'Pflege',
     author: 'NOVA Team',
     readTime: '10 Min.',
@@ -630,7 +630,7 @@ Moderne Systeme kochen mit dem **günstigsten Strom:**
 Induktion ist bereits die **effizienteste Kochtechnologie**. Mit den richtigen Tipps können Sie Ihre Energiekosten noch weiter senken. Die Kombination aus effizienter Technik, richtigem Kochgeschirr und bewusstem Umgang spart bis zu **30% zusätzliche Energie**.
 
 **Rechnung:** Bei 3 Kochvorgängen pro Tag sparen Sie jährlich **40–60 €** gegenüber einem Ceranfeld — und helfen der Umwelt.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1473341304170-975d4b645476?w=800',
     category: 'Technik',
     author: 'Dr. Koch',
     readTime: '11 Min.',
@@ -781,7 +781,7 @@ Mit trockenem Tuch nachwischen, um **Wasserflecken** zu vermeiden.
 ## Fazit
 
 Die Reinigung eines Induktionskochfelds ist **kinderleicht** — wenn Sie die richtige Technik kennen. Mit wenigen Minuten Aufwand pro Kochvorgang bleibt Ihre Glasfläche makellos. **Investieren Sie in Qualität:** Gute Reinigungsmittel und -werkzeuge zahlen sich langfristig aus.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800',
     category: 'Pflege',
     author: 'Chef Marcus',
     readTime: '9 Min.',
@@ -959,7 +959,7 @@ Für die meisten Anwendungen empfehlen wir eine **Kombination aus:**
 - **Gusseisenpfanne** (26 cm) für Steaks und Schmoren
 
 Besuchen Sie unseren **Online-Shop** für eine große Auswahl an induktionsgeeignetem Kochgeschirr.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=800',
     category: 'Ratgeber',
     author: 'Dr. Koch',
     readTime: '13 Min.',
@@ -1262,7 +1262,7 @@ Wenn Sie die Grundlagen beherrschen, versuchen Sie:
 Diese 5 Rezepte zeigen: **Induktion macht das Kochen einfacher, schneller und sicherer.** Mit etwas Übung werden Sie die Vorteile der Technik voll ausschöpfen. Viel Spaß beim Ausprobieren!
 
 **Tipp:** Besuchen Sie unseren **Online-Shop** für passende Kochgeschirr-Sets.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=800',
     category: 'Rezepte',
     author: 'Chef Marcus',
     readTime: '10 Min.',
@@ -1444,7 +1444,7 @@ Smarte Induktionskochfelder sind **mehr als nur ein Trend** — sie sind die Zuk
 **Unsere Empfehlung:** Wenn Sie in ein neues Kochfeld investieren, wählen Sie ein Modell mit Smart-Features. Die Anfangsinvestition zahlt sich durch Komfort und Energieersparnis langfristig aus.
 
 Die Frage ist nicht **ob**, sondern **wann** Sie auf smarte Induktion umsteigen werden.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800',
     category: 'Lifestyle',
     author: 'Dr. Koch',
     readTime: '14 Min.',
