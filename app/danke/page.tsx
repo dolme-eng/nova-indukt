@@ -1,17 +1,13 @@
+'use client'
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { CheckCircle, ShoppingBag, Mail } from 'lucide-react'
-
-export const metadata: Metadata = {
-  title: 'Vielen Dank für Ihre Bestellung | NOVA INDUKT',
-  description: 'Ihre Bestellung wurde erfolgreich aufgegeben. Sie erhalten eine Bestätigung per E-Mail.',
-  robots: {
-    index: false,
-    follow: false,
-  },
-}
+import { CheckCircle, ShoppingBag, Mail, Package } from 'lucide-react'
+import { useAuth } from '@/lib/store/auth'
 
 export default function ThankYouPage() {
+  const { isAuthenticated } = useAuth()
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 text-center">
@@ -46,12 +42,21 @@ export default function ThankYouPage() {
             Weiter einkaufen
           </Link>
           
-          <Link
-            href="/mein-konto"
-            className="block w-full bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors"
-          >
-            Zu meinem Konto
-          </Link>
+          {isAuthenticated ? (
+            <Link
+              href="/mein-konto"
+              className="block w-full bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors"
+            >
+              Zu meinem Konto
+            </Link>
+          ) : (
+            <Link
+              href="/bestellung-verfolgen"
+              className="block w-full bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors"
+            >
+              Bestellung verfolgen
+            </Link>
+          )}
         </div>
       </div>
     </div>

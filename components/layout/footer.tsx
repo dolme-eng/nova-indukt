@@ -18,6 +18,7 @@ export function Footer() {
     support: [
       { label: 'Kontakt', href: '/kontakt' },
       { label: 'FAQ', href: '/faq' },
+      { label: 'Bestellung verfolgen', href: '/bestellung-verfolgen' },
       { label: 'Lieferung & Versand', href: '/lieferung' },
       { label: 'Rückgabe & Umtausch', href: '/rueckgabe' },
       { label: 'Zahlungsinformationen', href: '/informationen-zur-zahlung' },

@@ -39,7 +39,7 @@ export const proxy = auth((req) => {
   }
 
   // ── Protected user routes: require login ──────────────────────────────────
-  const protectedRoutes = ["/mein-konto", "/wunschliste", "/kasse"]
+  const protectedRoutes = ["/mein-konto", "/wunschliste"]
   if (protectedRoutes.some((p) => pathname.startsWith(p)) && !isLoggedIn) {
     const signInUrl = new URL("/anmelden", req.url)
     signInUrl.searchParams.set("redirect", pathname)
