@@ -113,7 +113,7 @@ Achten Sie auf die **Lüfterstärke** (idealerweise unter 50 dB) und eine ausrei
 Die Wahl des richtigen Induktionskochfelds hängt von Ihren individuellen Bedürfnissen ab. **Für die meisten Haushalte** empfehlen wir ein 60-cm-Kochfeld mit 4 Zonen und Booster-Funktion. Investieren Sie in Qualität — das Kochfeld begleitet Sie über Jahre.
 
 Besuchen Sie unseren **Online-Shop** für weitere Informationen und Beratung durch unsere Küchenexperten.`,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
+    image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800',
     category: 'Ratgeber',
     author: 'Dr. Koch',
     readTime: '12 Min.',
@@ -251,7 +251,7 @@ Unser eigenes Modell bietet **Premium-Qualität** mit speziell optimiertem Induk
 Für die meisten Hobbyköche empfehlen wir die **WMF Profi Select** als Testsieger. Wer Wert auf Antihaft legt, greift zur **Le Creuset Toughened**. Für Einsteiger ist die **Tefal Expertise** die beste Wahl.
 
 **Tipp:** Kommen Sie in unseren Showroom und testen Sie die Pfannen direkt auf einem Induktionskochfeld.`,
-    image: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=800',
+    image: 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=800',
     category: 'Ratgeber',
     author: 'Chef Marcus',
     readTime: '15 Min.',
@@ -505,7 +505,7 @@ Für intensive Pflege bietet sich eine professionelle Versiegelung an:
 ## Fazit
 
 Die richtige Pflege ist **einfach und lohnt sich**. Mit wenigen Minuten Aufwand pro Tag bleibt Ihr Induktionskochfeld jahrelang in bestem Zustand. Investieren Sie in hochwertige Reinigungsmittel und vermeiden Sie die häufigsten Fehler — Ihr Kochfeld wird es Ihnen mit langer Lebensdauer danken.`,
-    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800',
+    image: 'https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=800',
     category: 'Pflege',
     author: 'NOVA Team',
     readTime: '10 Min.',
@@ -630,7 +630,7 @@ Moderne Systeme kochen mit dem **günstigsten Strom:**
 Induktion ist bereits die **effizienteste Kochtechnologie**. Mit den richtigen Tipps können Sie Ihre Energiekosten noch weiter senken. Die Kombination aus effizienter Technik, richtigem Kochgeschirr und bewusstem Umgang spart bis zu **30% zusätzliche Energie**.
 
 **Rechnung:** Bei 3 Kochvorgängen pro Tag sparen Sie jährlich **40–60 €** gegenüber einem Ceranfeld — und helfen der Umwelt.`,
-    image: 'https://images.unsplash.com/photo-1473341304170-975d4b645476?w=800',
+    image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800',
     category: 'Technik',
     author: 'Dr. Koch',
     readTime: '11 Min.',
@@ -781,7 +781,7 @@ Mit trockenem Tuch nachwischen, um **Wasserflecken** zu vermeiden.
 ## Fazit
 
 Die Reinigung eines Induktionskochfelds ist **kinderleicht** — wenn Sie die richtige Technik kennen. Mit wenigen Minuten Aufwand pro Kochvorgang bleibt Ihre Glasfläche makellos. **Investieren Sie in Qualität:** Gute Reinigungsmittel und -werkzeuge zahlen sich langfristig aus.`,
-    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800',
+    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800',
     category: 'Pflege',
     author: 'Chef Marcus',
     readTime: '9 Min.',
@@ -959,7 +959,7 @@ Für die meisten Anwendungen empfehlen wir eine **Kombination aus:**
 - **Gusseisenpfanne** (26 cm) für Steaks und Schmoren
 
 Besuchen Sie unseren **Online-Shop** für eine große Auswahl an induktionsgeeignetem Kochgeschirr.`,
-    image: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=800',
+    image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800',
     category: 'Ratgeber',
     author: 'Dr. Koch',
     readTime: '13 Min.',
