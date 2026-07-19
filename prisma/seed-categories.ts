@@ -1,195 +1,38 @@
-/**
- * Script de seed des 5 catégories NOVA INDUKT
- * Exécuter avec: npx tsx prisma/seed-categories.ts
- */
-
-import { PrismaClient } from '@prisma/client'
-
+const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-// Les 5 catégories principales
-const categories = [
-  {
-    slug: 'kochen-braten',
-    nameDe: 'Kochen & Braten',
-    descriptionDe: 'Premium Töpfe, Pfannen, Bräter und Kochgeschirr für Induktion',
-    image: '/images/Kategorien/kochen-braten.webp',
-    sortOrder: 1,
-  },
-  {
-    slug: 'messer-vorbereitung',
-    nameDe: 'Messer & Vorbereitung',
-    descriptionDe: 'Präzisionsmesser, Schneidebretter und Werkzeuge für die perfekte Zubereitung',
-    image: '/images/Kategorien/vorbereitung.webp',
-    sortOrder: 2,
-  },
-  {
-    slug: 'kuechenhelfer-zubehoer',
-    nameDe: 'Küchenhelfer & Zubehör',
-    descriptionDe: 'Nützliche Helfer, Küchengeräte und praktisches Zubehör für die Küche',
-    image: '/images/Kategorien/kuechenzubehoer.webp',
-    sortOrder: 3,
-  },
+const newCategories = [
+  { slug: 'messer', nameDe: 'Kochmesser & Messerblocks', description: 'Hochwertige Küchenmesser, Messerblöcke und Schärfwerkzeuge von Top-Marken', image: '/images/Kategorien/messer.png', sortOrder: 6 },
+  { slug: 'ustensiles', nameDe: 'Küchenutensilien', description: 'Kochlöffel, Schöpfkellen, Zangen und weiteres Kochbesteck für die Induktionsküche', image: '/images/Kategorien/ustensiles.png', sortOrder: 7 },
+  { slug: 'sauteusen', nameDe: 'Sauteusen', description: 'High-End Sauteusen aus Edelstahl und Gusseisen für professionelles Garen auf Induktion', image: '/images/Kategorien/sauteusen.png', sortOrder: 8 },
+  { slug: 'crepe-pfannen', nameDe: 'Crêpe-Pfannen', description: 'Professionelle Crêpe- und Pfannkuchenpfannen für perfekte Crêpes auf Induktion', image: '/images/Kategorien/crepe-pfannen.png', sortOrder: 9 },
+  { slug: 'schnellkochtopfe', nameDe: 'Schnellkochtöpfe', description: 'Druckkochtöpfe und Schnellkochtopf-Systeme für schnelles, energieeffizientes Kochen', image: '/images/Kategorien/schnellkochtopfe.png', sortOrder: 10 },
+  { slug: 'formes-de-cuisson', nameDe: 'Backformen & Auflaufformen', description: 'Hochwertige Backformen, Auflaufformen und Bräter aus Gusseisen und Edelstahl', image: '/images/Kategorien/formes-de-cuisson.png', sortOrder: 11 },
+  { slug: 'fondues-raclette', nameDe: 'Fondues & Raclette', description: 'Fonduesets, Raclette-Pfannen und Zubehör für gemütliche Abende zu Hause', image: '/images/Kategorien/fondues-raclette.png', sortOrder: 12 },
+  { slug: 'deckel-griffe', nameDe: 'Ersatzdeckel & Griffe', description: 'Passende Ersatzdeckel und Griffe für Kochgeschirr-Serien von WMF, Fissler und Zwilling', image: '/images/Kategorien/deckel-griffe.png', sortOrder: 13 },
+  { slug: 'pfannenschoner-topfregale', nameDe: 'Pfannenschoner & Topfregale', description: 'Schutzfolien, Stapelhilfen und Organizer für Ihre Kochgeschirrsammlung', image: '/images/Kategorien/pfannenschoner-topfregale.png', sortOrder: 14 },
+  { slug: 'elektrogeraete', nameDe: 'Elektro-Küchengeräte', description: 'Handmixer, Standmixer, Stabmixer und weitere Elektro-Küchengeräte für moderne Küchen', image: '/images/Kategorien/elektrogeraete.png', sortOrder: 15 },
+  { slug: 'bestecke', nameDe: 'Bestecke & Messerbestecke', description: 'Elegante Bestecksets, Messerbestecke und Einzelteile aus Edelstahl', image: '/images/Kategorien/bestecke.png', sortOrder: 16 },
+  { slug: 'reinigung-pflege', nameDe: 'Reinigung & Pflege', description: 'Reinigungsmittel, Pflegeöle und Zubehör für Kochgeschirr und Küchengeräte', image: '/images/Kategorien/reinigung-pflege.png', sortOrder: 17 },
 ]
 
 async function main() {
-  console.log('🌱 Migration vers 5 catégories NOVA INDUKT...')
-  console.log('')
-
-  // Récupérer les anciennes catégories pour mapping
-  const oldCategories = await prisma.category.findMany()
-  console.log(`📊 ${oldCategories.length} catégories existantes trouvées`)
-
-  // Mapping des anciennes catégories vers les 5 nouvelles catégories
-  const categoryMapping: Record<string, string> = {
-    'kochen': 'kochen-braten',
-    'kochen-braten': 'kochen-braten',
-    'zubehoer': 'kuechenhelfer-zubehoer',
-    'kuechenzubehoer': 'kuechenhelfer-zubehoer',
-    'vorbereitung': 'messer-vorbereitung',
-    'messer-vorbereitung': 'messer-vorbereitung',
-    'tischaccessoires': 'tisch-servieren',
-    'tisch-servier': 'tisch-servieren',
-    'tisch-servieren': 'tisch-servieren',
-    'spezial': 'kuechenhelfer-zubehoer',
-    'sets': 'kochen-braten',
-    'herde': 'kochen-braten',
-    'kuehlschraenke': 'kuechenhelfer-zubehoer',
-    'geschirrspueler': 'kuechenhelfer-zubehoer',
-    'kuechenmaschinen': 'backen-patisserie',
-    'waschmaschinen': 'kuechenhelfer-zubehoer',
-    'trockner': 'kuechenhelfer-zubehoer',
-    'staubsauger': 'kuechenhelfer-zubehoer',
-    'backen': 'backen-patisserie',
-    'backen-patisserie': 'backen-patisserie',
-  }
-
-  // Mettre à jour les produits avec les nouvelles catégories
-  for (const oldCat of oldCategories) {
-    const newSlug = categoryMapping[oldCat.slug]
-    if (newSlug && newSlug !== oldCat.slug) {
-      // Trouver la nouvelle catégorie
-      const newCat = categories.find(c => c.slug === newSlug)
-      if (newCat) {
-        // Créer la nouvelle catégorie si elle n'existe pas
-        const existing = await prisma.category.findUnique({
-          where: { slug: newSlug }
-        })
-        
-        if (!existing) {
-          const created = await prisma.category.create({
-            data: {
-              slug: newCat.slug,
-              nameDe: newCat.nameDe,
-              description: newCat.descriptionDe,
-              image: newCat.image,
-              sortOrder: newCat.sortOrder,
-              isActive: true,
-            }
-          })
-          console.log(`✅ Catégorie créée: ${created.nameDe}`)
-        }
-
-        // Mettre à jour les produits
-        const updated = await prisma.product.updateMany({
-          where: { categoryId: oldCat.id },
-          data: { 
-            categoryId: existing?.id || (await prisma.category.findUnique({ where: { slug: newSlug } }))?.id 
-          }
-        })
-        console.log(`   🔄 ${updated.count} produits migrés de ${oldCat.slug} → ${newSlug}`)
-      }
+  let created = 0
+  let skipped = 0
+  for (const cat of newCategories) {
+    const existing = await prisma.category.findUnique({ where: { slug: cat.slug } })
+    if (existing) {
+      console.log(`  ↻ Déjà existant : ${cat.slug}`)
+      skipped++
+      continue
     }
+    await prisma.category.create({ data: cat })
+    created++
+    console.log(`  ✓ Créé : ${cat.slug} (${cat.nameDe})`)
   }
-
-  // Créer les nouvelles catégories qui n'existent pas encore
-  console.log('')
-  console.log('📁 Création des nouvelles catégories...')
-  
-  for (const cat of categories) {
-    const existing = await prisma.category.findUnique({
-      where: { slug: cat.slug }
-    })
-
-    if (!existing) {
-      const created = await prisma.category.create({
-        data: {
-          slug: cat.slug,
-          nameDe: cat.nameDe,
-          description: cat.descriptionDe,
-          image: cat.image,
-          sortOrder: cat.sortOrder,
-          isActive: true,
-        }
-      })
-      console.log(`✅ ${created.nameDe} (ordre: ${created.sortOrder})`)
-    } else {
-      // Mettre à jour les informations
-      const updated = await prisma.category.update({
-        where: { slug: cat.slug },
-        data: {
-          nameDe: cat.nameDe,
-          description: cat.descriptionDe,
-          image: cat.image,
-          sortOrder: cat.sortOrder,
-          isActive: true,
-        }
-      })
-      console.log(`🔄 ${updated.nameDe} mise à jour`)
-    }
-  }
-
-  // Désactiver les anciennes catégories obsolètes
-  console.log('')
-  console.log('🗑️  Désactivation des anciennes catégories obsolètes...')
-  
-  const obsoleteSlugs = ['zubehoer', 'tischaccessoires', 'kochen', 'vorbereitung', 'kuechenzubehoer', 
-    'tisch-servier', 'spezial', 'sets', 'herde', 'kuehlschraenke', 'geschirrspueler', 
-    'kuechenmaschinen', 'waschmaschinen', 'trockner', 'staubsauger']
-  for (const slug of obsoleteSlugs) {
-    const cat = await prisma.category.findUnique({ where: { slug } })
-    if (cat) {
-      // Vérifier s'il reste des produits
-      const productCount = await prisma.product.count({
-        where: { categoryId: cat.id }
-      })
-      
-      if (productCount === 0) {
-        await prisma.category.delete({ where: { slug } })
-        console.log(`🗑️  ${slug} supprimée (aucun produit)`)
-      } else {
-        await prisma.category.update({
-          where: { slug },
-          data: { isActive: false }
-        })
-        console.log(`⚠️  ${slug} désactivée (${productCount} produits encore associés)`)
-      }
-    }
-  }
-
-  console.log('')
-  console.log('🎉 Migration terminée !')
-  
-  // Afficher le résumé
-  const finalCategories = await prisma.category.findMany({
-    orderBy: { sortOrder: 'asc' }
-  })
-  console.log('')
-  console.log(`📊 ${finalCategories.length} catégories dans la base:`)
-  for (const cat of finalCategories) {
-    const productCount = await prisma.product.count({
-      where: { categoryId: cat.id }
-    })
-    const status = cat.isActive ? '✅' : '⚠️'
-    console.log(`   ${status} ${cat.nameDe} (${cat.slug}) - ${productCount} produits`)
-  }
+  console.log(`\n📊 ${created} créées, ${skipped} déjà existantes`)
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ Erreur:', e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+  .catch(console.error)
+  .finally(() => prisma.$disconnect())
