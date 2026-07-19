@@ -60,6 +60,5 @@ export const config = {
     // Protected user routes
     "/mein-konto/:path*",
     "/wunschliste/:path*",
-    "/kasse/:path*",
   ],
 }
