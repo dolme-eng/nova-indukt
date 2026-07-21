@@ -59,7 +59,7 @@ export function CartDrawer({
               <button
                 onClick={onClose}
                 aria-label="Warenkorb schließen"
-                className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-900 transition-all"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-900 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>

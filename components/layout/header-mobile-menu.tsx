@@ -59,13 +59,13 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
         className="absolute top-0 right-0 bottom-0 w-[90%] max-w-sm bg-white shadow-[auto] flex flex-col rounded-l-3xl overflow-hidden"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-gray-50/50 text-black">
-          <Image src="/logo0.png" alt="NOVA INDUKT" width={140} height={42} className="h-9 w-auto" />
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100 bg-gray-50/50 text-black">
+          <Image src="/logo0.png" alt="NOVA INDUKT" width={140} height={42} className="h-7 sm:h-8 md:h-9 w-auto" />
           <button
             onClick={onClose}
             data-testid="mobile-menu-close-button"
             aria-label="Menü schließen"
-            className="p-2.5 text-gray-400 hover:text-gray-900 bg-white shadow-sm border border-gray-100 rounded-full hover:bg-gray-50 transition-all"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-900 bg-white shadow-sm border border-gray-100 rounded-full hover:bg-gray-50 transition-all"
           >
             <X className="w-5 h-5" />
           </button>

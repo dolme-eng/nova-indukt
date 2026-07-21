@@ -172,7 +172,7 @@ export function Header() {
             : 'bg-white border-b border-gray-50 py-1.5 sm:py-2.5'
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6">
           <div className="flex items-center justify-between relative" ref={megaRef}>
 
             {/* Logo */}
@@ -182,9 +182,10 @@ export function Header() {
                 alt="NOVA INDUKT"
                 width={150}
                 height={45}
-                className={`w-auto transition-all duration-500 ease-out ${scrolled ? 'h-7 sm:h-8' : 'h-8 sm:h-9'} group-hover:scale-105`}
+                className={`w-auto transition-all duration-500 ease-out ${scrolled ? 'h-6 sm:h-7 md:h-8' : 'h-7 sm:h-8 md:h-9'} group-hover:scale-105`}
                 priority
                 fetchPriority="high"
+                sizes="(max-width: 360px) 90px, (max-width: 640px) 110px, (max-width: 1024px) 130px, 150px"
               />
             </Link>
 
@@ -241,11 +242,11 @@ export function Header() {
             </nav>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-2 relative z-10">
+            <div className="flex items-center gap-1 sm:gap-2 relative z-10">
               <button
                 onClick={() => setSearchOpen(true)}
                 data-testid="search-button"
-                className="p-2 text-gray-600 hover:text-[#0C211E] transition-all relative group"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all relative group"
                 aria-label="Suchen"
               >
                 <Search className="w-5 h-5 transition-transform group-hover:scale-110" />
@@ -253,7 +254,7 @@ export function Header() {
 
               <Link
                 href="/mein-konto"
-                className="hidden md:flex p-2 text-gray-600 hover:text-[#0C211E] transition-all group"
+                className="hidden md:flex min-w-[44px] min-h-[44px] items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all group"
                 aria-label="Mein Konto"
               >
                 <User className="w-5 h-5 transition-transform group-hover:scale-110" />
@@ -262,7 +263,7 @@ export function Header() {
               <button
                 onClick={() => setCartDrawerOpen(true)}
                 data-testid="cart-button"
-                className="p-2 text-gray-600 hover:text-[#0C211E] transition-all relative group"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all relative group"
                 aria-label="Warenkorb"
               >
                 <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
@@ -273,7 +274,7 @@ export function Header() {
                       animate={{ scale: 1 }}
                       exit={{ scale: 0 }}
                       data-testid="cart-count"
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-[#4ECCA3] text-gray-900 text-[10px] font-black tracking-tighter rounded-full flex items-center justify-center shadow-sm shadow-[#4ECCA3]/40 border-2 border-white"
+                      className="absolute top-0.5 right-0.5 w-5 h-5 bg-[#4ECCA3] text-gray-900 text-[10px] font-black tracking-tighter rounded-full flex items-center justify-center shadow-sm shadow-[#4ECCA3]/40 border-2 border-white pointer-events-none"
                     >
                       {totalItems > 99 ? '99+' : totalItems}
                     </motion.span>
@@ -284,7 +285,7 @@ export function Header() {
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 data-testid="mobile-menu-button"
-                className="lg:hidden p-2 text-gray-600 hover:text-[#0C211E] transition-all group"
+                className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all group"
                 aria-label="Menü"
               >
                 <AnimatePresence mode="wait">
@@ -296,7 +297,6 @@ export function Header() {
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {/* X icon inline to avoid importing it separately */}
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                       </svg>
