@@ -473,7 +473,7 @@ function OrdersTab() {
                 <div key={item.id} className="flex items-center gap-3 sm:gap-4">
                   <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg bg-white overflow-hidden">
                     <Image
-                      src={item.product.images[0]?.url || '/placeholder.png'}
+                      src={item.product.images[0]?.url || '/placeholder.svg'}
                       alt={item.product.nameDe}
                       fill
                       className="object-cover"

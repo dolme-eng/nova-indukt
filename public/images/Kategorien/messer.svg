@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <g transform="translate(200,180)" fill="none" stroke="#e94560" stroke-width="4" stroke-linecap="round">
+    <path d="M0,-100 L0,80" stroke-width="8"/>
+    <path d="M-15,-100 L15,-100" stroke-width="10"/>
+    <ellipse cx="0" cy="85" rx="25" ry="10" fill="#e94560"/>
+  </g>
+  <text x="200" y="320" font-family="Arial, sans-serif" font-size="24" fill="#ffffff" text-anchor="middle" font-weight="bold">COUTEAUX</text>
+</svg>
