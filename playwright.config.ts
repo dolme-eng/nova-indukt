@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = process.env.PW_PORT ?? "3100";
+const PORT = process.env.PW_PORT ?? "3000";
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -15,11 +15,15 @@ export default defineConfig({
     video: "retain-on-failure",
   },
   webServer: {
-    command: `npm run build && npm run start -- -p ${PORT}`,
+    command: `npx next dev --webpack -p ${PORT}`,
     url: `http://localhost:${PORT}`,
-    reuseExistingServer: false,
-    timeout: 10 * 60 * 1000,
+    reuseExistingServer: true,
+    timeout: 5 * 60 * 1000,
+    env: {
+      NODE_OPTIONS: "--require ./readlink-patch.cjs",
+    },
   },
+  workers: 1,
   projects: [
     {
       name: "chromium",
