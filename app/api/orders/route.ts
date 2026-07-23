@@ -269,9 +269,7 @@ export async function POST(request: NextRequest) {
       })
     }
     
-    // Send order confirmation email only for BANK_TRANSFER
-    // For PAYPAL, the webhook (PAYMENT.CAPTURE.COMPLETED) handles the confirmation
-    // to avoid sending a duplicate email to the customer.
+    // Send order confirmation email
     if (paymentMethod.toUpperCase() === "BANK_TRANSFER") {
       try {
         await sendOrderConfirmationForOrder(order.id)

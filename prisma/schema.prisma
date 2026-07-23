@@ -153,7 +153,7 @@ model Order {
   appliedPromoCode String?
   vatAmount       Decimal       @db.Decimal(10, 2)
   total           Decimal       @db.Decimal(10, 2)
-  paymentMethod   PaymentMethod @default(PAYPAL)
+  paymentMethod   PaymentMethod @default(BANK_TRANSFER)
   paymentStatus   PaymentStatus @default(PENDING)
   paymentIntentId String?
   paidAt          DateTime?
@@ -440,7 +440,6 @@ enum PaymentStatus {
 }
 
 enum PaymentMethod {
-  PAYPAL
   BANK_TRANSFER
 }
 
