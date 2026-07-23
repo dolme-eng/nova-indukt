@@ -14,7 +14,8 @@ import {
   Link,
 } from '@react-email/components'
 import * as React from 'react'
-import { BANK_DETAILS, SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
+import { SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
+import { getBankDetailsSync } from '@/lib/data/bank-details'
 
 interface OrderItem {
   name: string
@@ -61,6 +62,8 @@ export const OrderConfirmationEmail = ({
       currency: 'EUR',
     }).format(price)
   }
+
+  const bank = getBankDetailsSync()
 
   return (
     <Html>
@@ -169,19 +172,19 @@ export const OrderConfirmationEmail = ({
               <Section style={bankDetailsCard}>
                 <Row>
                   <Column style={bankLabel}>Kontoinhaber:</Column>
-                  <Column style={bankValue}>{BANK_DETAILS.holder}</Column>
+                  <Column style={bankValue}>{bank.holder}</Column>
                 </Row>
                 <Row>
                   <Column style={bankLabel}>IBAN:</Column>
-                  <Column style={bankValue}>{BANK_DETAILS.iban}</Column>
+                  <Column style={bankValue}>{bank.iban}</Column>
                 </Row>
                 <Row>
                   <Column style={bankLabel}>BIC:</Column>
-                  <Column style={bankValue}>{BANK_DETAILS.bic}</Column>
+                  <Column style={bankValue}>{bank.bic}</Column>
                 </Row>
                 <Row>
                   <Column style={bankLabel}>Bank:</Column>
-                  <Column style={bankValue}>{BANK_DETAILS.bankName}</Column>
+                  <Column style={bankValue}>{bank.bankName}</Column>
                 </Row>
                 <Row>
                   <Column style={bankLabel}>Verwendungszweck:</Column>

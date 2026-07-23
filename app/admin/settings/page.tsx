@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Settings, ShieldCheck, Database, Bell, FileText, Users, Image as ImageIcon, ScrollText } from "lucide-react"
+import { Settings, ShieldCheck, Database, Bell, FileText, Users, Image as ImageIcon, ScrollText, CreditCard } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Admin Einstellungen",
@@ -27,10 +27,20 @@ export default function AdminSettingsPage() {
         <Link href="/admin/settings/shop" className="rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-300 transition-colors">
           <div className="flex items-center gap-2 font-semibold text-slate-800">
             <Database className="w-4 h-4" />
-            Shop (Zahlung/Steuer/Versand)
+            Shop (Steuer/Versand)
           </div>
           <p className="text-sm text-slate-600 mt-2">
-            Zahlungsarten, MwSt, Versandkosten, Schwellen, Basis-URL.
+            MwSt, Versandkosten, Schwellen, Basis-URL.
+          </p>
+        </Link>
+
+        <Link href="/admin/settings/payment" className="rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-300 transition-colors">
+          <div className="flex items-center gap-2 font-semibold text-slate-800">
+            <CreditCard className="w-4 h-4" />
+            Zahlungsdaten
+          </div>
+          <p className="text-sm text-slate-600 mt-2">
+            IBAN, BIC, Kontoinhaber für Banküberweisungen.
           </p>
         </Link>
 

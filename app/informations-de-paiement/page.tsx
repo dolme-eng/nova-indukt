@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { BANK_TRANSFER } from '@/lib/constants/bank'
+import { getBankDetails } from '@/lib/data/bank-details'
 import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
@@ -7,7 +7,9 @@ export const metadata: Metadata = {
   description: 'Instructions de paiement par virement bancaire pour vos commandes NOVA INDUKT',
 }
 
-export default function PaymentInfoPage() {
+export default async function PaymentInfoPage() {
+  const bank = await getBankDetails()
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4 max-w-4xl">
@@ -31,14 +33,14 @@ export default function PaymentInfoPage() {
             <div className="bg-[#4ECCA3]/5 border-l-4 border-[#4ECCA3] rounded-xl p-6 mb-6">
               <h4 className="font-bold text-gray-900 mb-4">Coordonnées bancaires</h4>
               <div className="space-y-3 text-sm">
-                {BANK_TRANSFER.bankName && (
-                  <p><span className="font-semibold">Banque :</span> {BANK_TRANSFER.bankName}</p>
+                {bank.bankName && (
+                  <p><span className="font-semibold">Banque :</span> {bank.bankName}</p>
                 )}
-                <p><span className="font-semibold">IBAN :</span> <span className="font-mono">{BANK_TRANSFER.iban}</span></p>
-                <p><span className="font-semibold">BIC :</span> <span className="font-mono">{BANK_TRANSFER.bic}</span></p>
-                <p><span className="font-semibold">Titulaire du compte :</span> {BANK_TRANSFER.holder}</p>
+                <p><span className="font-semibold">IBAN :</span> <span className="font-mono">{bank.iban}</span></p>
+                <p><span className="font-semibold">BIC :</span> <span className="font-mono">{bank.bic}</span></p>
+                <p><span className="font-semibold">Titulaire du compte :</span> {bank.holder}</p>
                 <p><span className="font-semibold">Concept du transfert :</span> Votre nom + numéro de commande</p>
-                <p><span className="font-semibold">Type de transfert :</span> <span className="text-[#8B0000] font-bold">{BANK_TRANSFER.transferType}</span></p>
+                <p><span className="font-semibold">Type de transfert :</span> <span className="text-[#8B0000] font-bold">ÜBERWEISUNG</span></p>
               </div>
             </div>
 
@@ -67,8 +69,8 @@ export default function PaymentInfoPage() {
               en utilisant l&apos;une des options suivantes :
             </p>
             <ul className="list-disc list-inside ml-4 text-gray-600 mb-6 space-y-2">
-              <li>Par courriel : <a href={`mailto:${BANK_TRANSFER.email}`} className="text-[#4ECCA3] hover:underline">{BANK_TRANSFER.email}</a></li>
-              <li>Par téléphone : <a href={`tel:${BANK_TRANSFER.phone.replace(/\s/g, '')}`} className="text-[#4ECCA3] hover:underline">{BANK_TRANSFER.phone}</a></li>
+              <li>Par courriel : <a href={`mailto:${COMPANY.email.support}`} className="text-[#4ECCA3] hover:underline">{COMPANY.email.support}</a></li>
+              <li>Par téléphone : <a href={`tel:${COMPANY.phone.number.replace(/\s/g, '')}`} className="text-[#4ECCA3] hover:underline">{COMPANY.phone.number}</a></li>
             </ul>
             <p className="text-gray-600">
               Nous traiterons votre commande dès réception et vérification de la preuve de paiement.
@@ -80,8 +82,8 @@ export default function PaymentInfoPage() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact et assistance</h2>
             <div className="space-y-2 text-gray-700">
               <p><strong>{COMPANY.name}</strong></p>
-              <p>Email : <a href={`mailto:${BANK_TRANSFER.email}`} className="text-[#4ECCA3] hover:underline">{BANK_TRANSFER.email}</a></p>
-              <p>Téléphone : <a href={`tel:${BANK_TRANSFER.phone.replace(/\s/g, '')}`} className="text-[#4ECCA3] hover:underline">{BANK_TRANSFER.phone}</a></p>
+              <p>Email : <a href={`mailto:${COMPANY.email.support}`} className="text-[#4ECCA3] hover:underline">{COMPANY.email.support}</a></p>
+              <p>Téléphone : <a href={`tel:${COMPANY.phone.number.replace(/\s/g, '')}`} className="text-[#4ECCA3] hover:underline">{COMPANY.phone.number}</a></p>
             </div>
           </div>
 

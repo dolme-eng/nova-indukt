@@ -24,18 +24,15 @@ export const FROM_EMAIL       = COMPANY.email.noreply
 export const FROM_NAME        = COMPANY.nameShort
 
 // ─── Bank details ─────────────────────────────────────────────────────────────
-// ⚠️ CRITICAL: Never ship with placeholder bank details.
-// These env vars MUST be set in production — missing values will cause
-// customers to receive fake bank transfer instructions.
-function requireEnv(key: string, fallback: string): string {
-  return process.env[key] ?? fallback
-}
-
+// Bank details are now managed via Admin → Einstellungen → Zahlungsdaten.
+// The static BANK_DETAILS constant is kept for backward compatibility but
+// consumers should prefer getBankDetails() / getBankDetailsSync() from
+// lib/data/bank-details.ts which reads from AppConfig with env var fallback.
 export const BANK_DETAILS = {
-  holder:   requireEnv('NEXT_PUBLIC_BANK_HOLDER',  COMPANY.name),
-  iban:     requireEnv('NEXT_PUBLIC_BANK_IBAN',    'DE00 0000 0000 0000 0000 00'),
-  bic:      requireEnv('NEXT_PUBLIC_BANK_BIC',     'XXXXXXXXXXXXXXX'),
-  bankName: requireEnv('NEXT_PUBLIC_BANK_NAME',    'Bank nicht konfiguriert'),
+  holder:   process.env.NEXT_PUBLIC_BANK_HOLDER  ?? COMPANY.name,
+  iban:     process.env.NEXT_PUBLIC_BANK_IBAN    ?? 'DE00 0000 0000 0000 0000 00',
+  bic:      process.env.NEXT_PUBLIC_BANK_BIC     ?? 'XXXXXXXXXXXXXXX',
+  bankName: process.env.NEXT_PUBLIC_BANK_NAME    ?? 'Bank nicht konfiguriert',
 }
 
 /**

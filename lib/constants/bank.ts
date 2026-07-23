@@ -1,11 +1,13 @@
-import { BANK_DETAILS } from './shop'
-import { COMPANY } from './company'
+import { getBankDetailsSync } from '@/lib/data/bank-details'
+import { COMPANY } from '@/lib/constants/company'
+
+const bank = getBankDetailsSync()
 
 export const BANK_TRANSFER = {
-  iban: BANK_DETAILS.iban,
-  bic: BANK_DETAILS.bic,
-  holder: BANK_DETAILS.holder,
-  bankName: BANK_DETAILS.bankName,
+  iban: bank.iban,
+  bic: bank.bic,
+  holder: bank.holder,
+  bankName: bank.bankName,
   transferType: 'ÜBERWEISUNG',
   instructions: [
     'Bitte überweisen Sie den Gesamtbetrag auf das folgende Konto.',
