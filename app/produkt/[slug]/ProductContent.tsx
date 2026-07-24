@@ -9,14 +9,14 @@ import {
   Star, Heart, Share2, Truck, Shield, RotateCcw, ChevronRight, ChevronDown,
   Minus, Plus, ShoppingCart, Check,
   Award, Zap, Leaf, ZoomIn, ArrowLeft, ShieldCheck, Lock,
-  Layers, Maximize, Scale, Droplets, Barcode, Building2, Info, Mail,
+  Layers, Maximize, Scale, Droplets, Barcode, Building2, Mail,
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { Product } from '@/lib/data/products'
 import { ProductReviews } from '@/components/product-reviews'
 import { ImageLightbox } from '@/components/image-lightbox'
-import { VAT_RATE_PERCENT, formatPriceDe, grossFromNet, netFromGross } from '@/lib/utils/vat'
+import { VAT_RATE_PERCENT, formatPriceDe, netFromGross } from '@/lib/utils/vat'
 
 const SHELL = 'w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-14'
 
@@ -112,8 +112,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
     setTimeout(() => setShowWishlistToast(false), 2000)
   }
 
-  const vatPct = product.vatRatePercent ?? VAT_RATE_PERCENT
-  const priceIncludesVat = product.priceIncludesVat !== false
+  const vatPct = VAT_RATE_PERCENT
   const productSpecCards = specCards(product)
 
   const shareProduct = () => {
@@ -331,27 +330,13 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 )}
               </div>
               <p className="mb-1 text-[10px] text-gray-400 font-medium">
-                {priceIncludesVat ? (
-                  <>
-                    inkl. {vatPct}% MwSt. zzgl.{' '}
-                    <Link href="/lieferung" className="underline decoration-dotted hover:text-gray-700">
-                      Versand
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    Netto zzgl. {vatPct}% MwSt. und{' '}
-                    <Link href="/lieferung" className="underline decoration-dotted hover:text-gray-700">
-                      Versand
-                    </Link>
-                  </>
-                )}
+                inkl. {vatPct}% MwSt. zzgl.{' '}
+                <Link href="/lieferung" className="underline decoration-dotted hover:text-gray-700">
+                  Versand
+                </Link>
               </p>
-              {priceIncludesVat && vatPct > 0 && (
+              {vatPct > 0 && (
                 <p className="mb-4 text-[11px] text-gray-500">Nettoanteil: {formatPriceDe(netFromGross(product.price, vatPct))}</p>
-              )}
-              {!priceIncludesVat && vatPct > 0 && (
-                <p className="mb-4 text-[11px] text-gray-500">Brutto: {formatPriceDe(grossFromNet(product.price, vatPct))}</p>
               )}
 
               <div
@@ -360,13 +345,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
                 Verfügbar
               </div>
-
-              {product.deliveryNote && (
-                <div className="mb-5 flex gap-2 text-sm text-gray-600">
-                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#4ECCA3]" />
-                  <span>{product.deliveryNote}</span>
-                </div>
-              )}
 
               <div className="flex gap-2">
                 <div className="flex h-11 shrink-0 items-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50 sm:w-32">

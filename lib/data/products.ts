@@ -78,12 +78,6 @@ export interface Product {
   ean?: string
   /** Markenname. */
   brand?: string
-  /** `true` (Standard): `price` ist inkl. MwSt. */
-  priceIncludesVat?: boolean
-  /** z. B. 19 für DE */
-  vatRatePercent?: number
-  /** Freitext: Lieferzeit etc. */
-  deliveryNote?: string
 }
 
 export interface Category {

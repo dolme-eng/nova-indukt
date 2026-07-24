@@ -14,6 +14,29 @@ import { generateInvoicePDF } from '../utils/invoice'
 
 export { FROM_EMAIL, FROM_NAME }
 
+/** Estimated delivery in business days (configurable via env). */
+const DELIVERY_DAYS = Number(process.env.ESTIMATED_DELIVERY_DAYS) || 3
+
+function getEstimatedDeliveryDate(): Date {
+  const date = new Date()
+  let daysAdded = 0
+  while (daysAdded < DELIVERY_DAYS) {
+    date.setDate(date.getDate() + 1)
+    const day = date.getDay()
+    // Skip weekends (0 = Sunday, 6 = Saturday)
+    if (day !== 0 && day !== 6) daysAdded++
+  }
+  return date
+}
+
+function formatEstimatedDelivery(): string {
+  return getEstimatedDeliveryDate().toLocaleDateString('de-DE', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
+}
+
 export async function sendEmailWithRetry(payload: Parameters<Resend['emails']['send']>[0], maxRetries = 3) {
   const resend = getResend()
   if (!resend) {
@@ -263,11 +286,7 @@ export async function sendPaymentConfirmationEmail(order: OrderInput) {
             country: addr.country || 'DE',
           };
         })(),
-        estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('de-DE', {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
-        }),
+        estimatedDelivery: formatEstimatedDelivery(),
       })
     )
 
@@ -328,14 +347,8 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
       Number(order.subtotal)
     )
 
-    // Calculate estimated delivery (2-3 business days)
-    const deliveryDate = new Date()
-    deliveryDate.setDate(deliveryDate.getDate() + 3)
-    const estimatedDelivery = deliveryDate.toLocaleDateString('de-DE', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-    })
+    // Calculate estimated delivery (business days)
+    const estimatedDelivery = formatEstimatedDelivery()
 
     const result = await sendOrderConfirmation({
       to: recipientEmail,
