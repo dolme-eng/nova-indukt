@@ -24,58 +24,8 @@ interface TestimonialsState {
   setHydrated: () => void
 }
 
-// Beispiel-Kundenbewertungen für den Start
-const initialTestimonials: Testimonial[] = [
-  {
-    id: '1',
-    name: 'Maria Schmidt',
-    email: 'm.schmidt@email.de',
-    rating: 5,
-    comment: 'Die Induktionspfanne ist absolut erstklassig! Das Essen wird gleichmäßig erhitzt und die Reinigung ist ein Kinderspiel. Kann ich nur empfehlen.',
-    productName: 'Premium Induktionspfanne',
-    createdAt: '2024-03-15T10:30:00Z',
-    isVerified: true
-  },
-  {
-    id: '2',
-    name: 'Hans Weber',
-    email: 'h.weber@email.de',
-    rating: 5,
-    comment: 'Habe das Topfset für meine neue Küche gekauft. Die Qualität ist hervorragend und sie sehen auch noch toll aus. Schnelle Lieferung!',
-    productName: 'Premium Topfset',
-    createdAt: '2024-03-10T14:20:00Z',
-    isVerified: true
-  },
-  {
-    id: '3',
-    name: 'Klaus Müller',
-    email: 'k.mueller@email.de',
-    rating: 4,
-    comment: 'Gute Produkte zu einem fairen Preis. Der Kundenservice war sehr hilfsbereit bei meinen Fragen zur Induktionstechnologie.',
-    createdAt: '2024-02-28T09:15:00Z',
-    isVerified: true
-  },
-  {
-    id: '4',
-    name: 'Anna Bauer',
-    email: 'a.bauer@email.de',
-    rating: 5,
-    comment: 'Mein Dutch Oven ist jetzt mein Lieblingsteil in der Küche. Perfekt für Schmorgerichte und Brotbacken.',
-    productName: 'Dutch Oven Gusseisen',
-    createdAt: '2024-02-20T16:45:00Z',
-    isVerified: true
-  },
-  {
-    id: '5',
-    name: 'Thomas Klein',
-    email: 't.klein@email.de',
-    rating: 5,
-    comment: 'Die Messer sind scharf und gut ausbalanciert. Endlich kann ich wie ein Profi schneiden!',
-    productName: 'Chef Messerset',
-    createdAt: '2024-02-15T11:30:00Z',
-    isVerified: true
-  }
-]
+// Initial testimonials loaded from DB via API — no hardcoded fake data
+const initialTestimonials: Testimonial[] = []
 
 export const useTestimonialsStore = create<TestimonialsState>()(
   persist(

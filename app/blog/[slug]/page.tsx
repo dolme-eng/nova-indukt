@@ -54,7 +54,13 @@ function renderInlineMarkdown(text: string): string {
   safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   safe = safe.replace(/\*(.+?)\*/g, '<em>$1</em>')
   safe = safe.replace(/`(.+?)`/g, '<code class="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">$1</code>')
-  safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-[#4ECCA3] hover:underline" target="_blank" rel="noopener noreferrer">$1</a>')
+  safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, linkText, url) => {
+    // Only allow http/https/relative URLs — block javascript: URIs
+    if (/^(https?:\/\/|\/|#)/.test(url)) {
+      return `<a href="${url}" class="text-[#4ECCA3] hover:underline" target="_blank" rel="noopener noreferrer">${linkText}</a>`
+    }
+    return linkText
+  })
   return safe
 }
 

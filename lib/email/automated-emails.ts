@@ -190,14 +190,6 @@ export async function sendReviewRequests() {
 }
 
 /**
- * Stock management is handled externally.
- * This function is deprecated and returns a no-op.
- */
-export async function checkStockAndAlert() {
-  return { success: true, message: 'Stock management is handled externally.' }
-}
-
-/**
  * Send welcome email to new newsletter subscriber
  */
 export async function sendWelcomeEmail(subscriberEmail: string, firstName?: string) {

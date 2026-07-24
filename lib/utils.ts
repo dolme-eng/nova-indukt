@@ -5,14 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPriceDe(price: number, currency = 'EUR', locale = 'de-DE'): string {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: currency,
-  }).format(price)
-}
-
-export const formatPrice = formatPriceDe
+// Re-export from canonical source (lib/utils/vat.ts) for backward compatibility
+export { formatPriceDe, formatPriceDe as formatPrice } from "@/lib/utils/vat"
 
 export function formatDate(date: string, locale = 'de-DE'): string {
   return new Intl.DateTimeFormat(locale, {

@@ -18,16 +18,5 @@ export function getResend(): Resend | null {
   return _resend
 }
 
-/** @deprecated Use getResend() instead for lazy initialization */
-export const resend = new Proxy({} as Resend, {
-  get(_target, prop) {
-    const client = getResend()
-    if (!client) {
-      throw new Error('Resend client not initialized - check RESEND_API_KEY')
-    }
-    return client[prop as keyof Resend]
-  }
-})
-
 export const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@nova-indukt.de'
 export const FROM_NAME = process.env.FROM_NAME || 'NOVA INDUKT'
