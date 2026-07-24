@@ -53,3 +53,6 @@ Desktop.ini
 
 # Antigravity scratch files (AI assistant temp files)
 .gemini/
+
+# Dev utilities (moved to scripts/dev/)
+scratch/

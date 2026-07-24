@@ -85,41 +85,55 @@ export default async function ProductPage({
 
   const relatedProducts = relatedDb.map(mapDbProductToUi)
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": product.nameDe,
-    "image": product.images.map(img => img.url),
-    "description": product.descriptionDe || product.shortDescription,
-    "sku": product.id,
-    "gtin13": product.ean,
-    "brand": {
-      "@type": "Brand",
-      "name": product.brand || "NOVA INDUKT"
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://nova-indukt.de" },
+        { "@type": "ListItem", "position": 2, "name": "Produkte", "item": "https://nova-indukt.de/produkte" },
+        { "@type": "ListItem", "position": 3, "name": product.category?.nameDe || "Produkt" },
+      ]
     },
-    "offers": {
-      "@type": "Offer",
-      "url": `https://nova-indukt.de/produkt/${product.slug}`,
-      "priceCurrency": "EUR",
-      "price": Number(product.price).toFixed(2),
-      "availability": "https://schema.org/InStock",
-      "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
-    },
-    ...(product.reviewCount > 0 ? {
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": product.rating,
-        "reviewCount": product.reviewCount
-      }
-    } : {})
-  }
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.nameDe,
+      "image": product.images.map(img => img.url),
+      "description": product.descriptionDe || product.shortDescription,
+      "sku": product.id,
+      "gtin13": product.ean,
+      "brand": {
+        "@type": "Brand",
+        "name": product.brand || "NOVA INDUKT"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": `https://nova-indukt.de/produkt/${product.slug}`,
+        "priceCurrency": "EUR",
+        "price": Number(product.price).toFixed(2),
+        "availability": "https://schema.org/InStock",
+        "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
+      },
+      ...(product.reviewCount > 0 ? {
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": product.rating,
+          "reviewCount": product.reviewCount
+        }
+      } : {})
+    }
+  ]
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      {structuredData.map((sd, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(sd) }}
+        />
+      ))}
       <ProductContent product={formattedProduct} relatedProducts={relatedProducts} />
     </>
   )

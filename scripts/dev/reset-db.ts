@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { categoriesConfig } from './lib/data/categories'
+import { categoriesConfig } from '../../lib/data/categories'
 
 const prisma = new PrismaClient()
 

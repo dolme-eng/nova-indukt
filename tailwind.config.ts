@@ -95,7 +95,6 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         heading: ['Space Grotesk', 'system-ui', 'sans-serif'],
-        subheading: ['Sora', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       keyframes: {

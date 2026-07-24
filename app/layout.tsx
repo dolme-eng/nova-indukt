@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Space_Grotesk, Sora, JetBrains_Mono } from "next/font/google"
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import { PromotionBanner } from '@/components/promotion-banner'
 import "./globals.css"
 import { Toaster } from "sonner"
@@ -24,12 +24,6 @@ const inter = Inter({
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
-  display: "swap",
-})
-
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-sora",
   display: "swap",
 })
 
@@ -65,7 +59,7 @@ export const metadata: Metadata = {
     description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision.",
     images: [
       {
-        url: "/og-image.svg",
+        url: "https://nova-indukt.de/og-image.svg",
         width: 1200,
         height: 630,
         alt: "NOVA INDUKT - Premium Induktions-Kochgeschirr",
@@ -109,7 +103,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${sora.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth">
+    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth">
       <body className="font-sans antialiased min-h-screen bg-gray-50 text-gray-900">
         {/* Kritische Ressourcen vorladen */}
         <PreloadResources />

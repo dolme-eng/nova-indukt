@@ -230,7 +230,9 @@ const ProductCard = memo(function ProductCard({ product, index }: { product: Pro
               {Array.from({length: 5}).map((_, i) => (
                 <Star key={i} className={`w-2.5 h-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
               ))}
-              <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount > 0 ? product.reviewCount : (Math.abs(product.id.charCodeAt(0) * 7 + product.id.charCodeAt(1) * 3) % 180) + 20}</span>
+              {product.reviewCount > 0 && (
+                <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount}</span>
+              )}
             </div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs sm:text-[14px] font-black text-nova-900 tabular-nums">
@@ -319,7 +321,9 @@ const FlashDealCard = memo(function FlashDealCard({ product, index }: { product:
             {Array.from({length: 5}).map((_, i) => (
               <Star key={i} className={`w-2.5 h-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
             ))}
-            <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount > 0 ? product.reviewCount : (Math.abs(product.id.charCodeAt(0) * 7 + product.id.charCodeAt(1) * 3) % 180) + 20}</span>
+            {product.reviewCount > 0 && (
+              <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount}</span>
+            )}
           </div>
         
         <div className="mt-auto">

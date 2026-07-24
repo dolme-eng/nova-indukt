@@ -14,8 +14,8 @@ import { getActivePromotions } from '@/lib/promotions'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
 import { HomeContent } from './HomeContent'
 
-// Revalidate every hour — use revalidatePath('/') in admin actions for on-demand invalidation
-export const revalidate = 3600
+// Revalidate every 5 minutes — use revalidatePath('/') in admin actions for on-demand invalidation
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Premium Induktions-Kochgeschirr | NOVA INDUKT',

@@ -68,10 +68,6 @@
     font-family: var(--font-space-grotesk), system-ui, sans-serif;
   }
 
-  .font-subheading {
-    font-family: var(--font-sora), system-ui, sans-serif;
-  }
-
   .font-mono {
     font-family: var(--font-jetbrains-mono), monospace;
   }

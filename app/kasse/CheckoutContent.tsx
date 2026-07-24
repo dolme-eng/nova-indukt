@@ -13,10 +13,9 @@ import { useCart } from '@/lib/store/cart'
 import { useAuth } from '@/lib/store/auth'
 import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
+import type { BankDetails } from '@/lib/data/bank-details'
 
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD, calculateShipping } from '@/lib/constants/shop'
-
-type BankDetails = { holder: string; iban: string; bic: string; bankName: string }
 
 // Type du code promo validé retourné par /api/coupons/validate
 interface AppliedPromo {
