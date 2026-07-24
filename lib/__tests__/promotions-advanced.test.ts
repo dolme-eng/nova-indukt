@@ -46,15 +46,15 @@ describe('calculateDiscountedPrice', () => {
     })
   })
 
-  describe('FIXED discount', () => {
+  describe('FIXED_AMOUNT discount', () => {
     it('subtracts fixed amount from price', () => {
-      const result = calculateDiscountedPrice(100, 'FIXED', 25)
+      const result = calculateDiscountedPrice(100, 'FIXED_AMOUNT', 25)
       expect(result.discountedPrice).toBe(75)
       expect(result.discountAmount).toBe(25)
     })
 
     it('handles 0 fixed discount', () => {
-      const result = calculateDiscountedPrice(100, 'FIXED', 0)
+      const result = calculateDiscountedPrice(100, 'FIXED_AMOUNT', 0)
       expect(result.discountedPrice).toBe(100)
       expect(result.discountAmount).toBe(0)
     })
@@ -68,13 +68,13 @@ describe('calculateDiscountedPrice', () => {
     })
 
     it('returns 0 discountedPrice for 0 price with FIXED discount', () => {
-      const result = calculateDiscountedPrice(0, 'FIXED', 10)
+      const result = calculateDiscountedPrice(0, 'FIXED_AMOUNT', 10)
       expect(result.discountedPrice).toBe(0)
       expect(result.discountAmount).toBe(0)
     })
 
     it('discount never exceeds price (clamped)', () => {
-      const result = calculateDiscountedPrice(50, 'FIXED', 100)
+      const result = calculateDiscountedPrice(50, 'FIXED_AMOUNT', 100)
       expect(result.discountAmount).toBe(50)
       expect(result.discountedPrice).toBe(0)
     })
@@ -99,7 +99,7 @@ describe('calculateDiscountedPrice', () => {
     })
 
     it('handles negative discount value as 0 effect on FIXED', () => {
-      const result = calculateDiscountedPrice(100, 'FIXED', -10)
+      const result = calculateDiscountedPrice(100, 'FIXED_AMOUNT', -10)
       // negative fixed means discountAmount = -10, then clamped: if -10 > 100? no
       // discountedPrice = max(0, 100 - (-10)) = max(0, 110) = 110
       // This is unexpected but matches the code logic

@@ -20,43 +20,6 @@ import { VAT_RATE_PERCENT, formatPriceDe, netFromGross } from '@/lib/utils/vat'
 
 const SHELL = 'w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-14'
 
-// Escape HTML special characters to prevent XSS in JSON-LD
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;')
-}
-
-function buildProductJsonLd(product: Product) {
-  const o: Record<string, unknown> = {
-    '@context': 'https://schema.org/',
-    '@type': 'Product',
-    name: escapeHtml(product.name.de),
-    image: product.images,
-    description: escapeHtml(product.shortDescription.de),
-    sku: product.id,
-    offers: {
-      '@type': 'Offer',
-      url: `https://nova-indukt.de/produkt/${product.slug}`,
-      priceCurrency: 'EUR',
-      price: product.price,
-      availability: 'https://schema.org/InStock',
-      itemCondition: 'https://schema.org/NewCondition',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: product.rating,
-      reviewCount: product.reviewCount,
-    },
-  }
-  if (product.brand) o.brand = { '@type': 'Brand', name: escapeHtml(product.brand) }
-  const ean = product.ean?.replace(/\s/g, '')
-  if (ean && /^\d{8,14}$/.test(ean)) o.gtin13 = ean
-  return o
-}
 
 function specCards(product: Product): { icon: LucideIcon; label: string; value: string }[] {
   const out: { icon: LucideIcon; label: string; value: string }[] = []
@@ -143,7 +106,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
 
   return (
     <article data-testid="product-detail" className="min-h-screen bg-[#f6f7f6] pb-24 lg:pb-14" itemScope itemType="https://schema.org/Product">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(product)) }} />
 
       <AnimatePresence>
         {showStickyBar && (

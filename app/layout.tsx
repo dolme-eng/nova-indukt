@@ -144,7 +144,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PromotionBanner />
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main id="main-content" className="flex-1" role="main" aria-label="Hauptinhalt">
+            <main id="main-content" className="flex-1" aria-label="Hauptinhalt">
               <SmoothScrollProvider>
                 <PageTransition>
                   {children}
