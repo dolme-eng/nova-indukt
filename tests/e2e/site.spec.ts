@@ -1,7 +1,13 @@
 import { test, expect, request } from "@playwright/test";
 
-const ADMIN_EMAIL = process.env.PW_ADMIN_EMAIL ?? "admin@nova-indukt.de";
-const ADMIN_PASSWORD = process.env.PW_ADMIN_PASSWORD ?? "NOVA-Test-Admin-2026!";
+const ADMIN_EMAIL = process.env.PW_ADMIN_EMAIL ?? ''
+const ADMIN_PASSWORD = process.env.PW_ADMIN_PASSWORD ?? ''
+
+function skipIfNoAdmin() {
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    test.skip(true, 'PW_ADMIN_EMAIL and PW_ADMIN_PASSWORD env vars required')
+  }
+}
 
 const publicPages = [
   "/",
@@ -75,6 +81,7 @@ test("protected pages redirect to login when logged out", async ({ page }) => {
 });
 
 test("admin login works via UI and admin pages load", async ({ page }) => {
+  skipIfNoAdmin()
   await page.goto("/anmelden", { waitUntil: "domcontentloaded" });
   await page.getByTestId("login-email").fill(ADMIN_EMAIL);
   await page.getByTestId("login-password").fill(ADMIN_PASSWORD);
@@ -95,6 +102,7 @@ test("admin login works via UI and admin pages load", async ({ page }) => {
 });
 
 test("admin business actions (create/update/delete) via API", async ({ baseURL }) => {
+  skipIfNoAdmin()
   if (!baseURL) throw new Error("Missing baseURL");
 
   const ctx = await request.newContext({ baseURL });

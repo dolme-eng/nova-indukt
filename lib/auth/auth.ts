@@ -17,7 +17,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
 
         try {
           // Check brute-force lockout
-          if (isLockedOut(email)) {
+          if (await isLockedOut(email)) {
             return null
           }
 
@@ -26,7 +26,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
           })
 
           if (!user || !user.password) {
-            recordFailedLogin(email)
+            await recordFailedLogin(email)
             return null
           }
 
@@ -36,7 +36,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
           )
 
           if (!isValid) {
-            recordFailedLogin(email)
+            await recordFailedLogin(email)
             return null
           }
 
@@ -45,7 +45,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
             return null
           }
 
-          recordSuccessfulLogin(email)
+          await recordSuccessfulLogin(email)
 
           return {
             id: user.id,

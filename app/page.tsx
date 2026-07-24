@@ -52,6 +52,7 @@ export default async function Page() {
       prisma.product.findMany({
         where: { isActive: true },
         include: { images: true },
+        take: 50,
       }),
       prisma.category
         .findMany({

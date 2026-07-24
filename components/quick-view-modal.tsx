@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingCart, Heart, Star, ChevronLeft, ChevronRight, Check } from 'lucide-react'
 import { Product } from '@/lib/data/products'
 import { useCart } from '@/lib/store/cart'
+import { useWishlist } from '@/lib/store/wishlist'
+import { formatPriceDe } from '@/lib/utils/vat'
 import { toast } from 'sonner'
 
 interface QuickViewModalProps {
@@ -17,6 +19,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const { addItem } = useCart()
+  const { toggleItem, isInWishlist } = useWishlist()
   const [isAdded, setIsAdded] = useState(false)
 
   if (!product) return null
@@ -112,9 +115,9 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                   </div>
 
                   <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-bold text-[#4ECCA3]">{product.price} €</span>
+                    <span className="text-3xl font-bold text-[#4ECCA3]">{formatPriceDe(product.price)}</span>
                     {product.oldPrice && (
-                      <span className="text-lg text-red-500 line-through decoration-black">{product.oldPrice} €</span>
+                      <span className="text-lg text-red-500 line-through decoration-black">{formatPriceDe(product.oldPrice)}</span>
                     )}
                   </div>
 
@@ -163,8 +166,24 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                         </>
                       )}
                     </button>
-                    <button className="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 group">
-                      <Heart className="w-5 h-5 text-gray-400 group-hover:text-red-500 group-hover:fill-red-500 transition-colors" />
+                    <button 
+                      onClick={async () => {
+                        const added = await toggleItem({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.images[0] ?? '',
+                          slug: product.slug,
+                        })
+                        toast.success(added ? `${product.name.de} zur Wunschliste hinzugefügt` : `${product.name.de} von der Wunschliste entfernt`)
+                      }}
+                      className={`w-12 h-12 border rounded-xl flex items-center justify-center transition-all ${
+                        isInWishlist(product.id)
+                          ? 'border-red-200 bg-red-50 text-red-500'
+                          : 'border-gray-200 hover:bg-gray-50 text-gray-400 hover:text-red-500'
+                      }`}
+                    >
+                      <Heart className={`w-5 h-5 transition-colors ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : ''}`} />
                     </button>
                   </div>
 

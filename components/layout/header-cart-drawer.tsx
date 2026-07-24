@@ -206,7 +206,7 @@ export function CartDrawer({
               <div className="p-4 border-t border-gray-100 bg-gray-50/80 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.03)] z-10">
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-xs text-gray-400 font-bold uppercase tracking-tight">
-                    <span>Netto</span>
+                    <span>Brutto</span>
                     <span data-testid="cart-subtotal" className="text-gray-900 tabular-nums">
                       {formatPriceDe(totalPrice)}
                     </span>

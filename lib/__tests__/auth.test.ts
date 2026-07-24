@@ -24,9 +24,9 @@ vi.mock('@/lib/auth/auth.config', () => ({
 }))
 
 vi.mock('@/lib/auth/login-lockout', () => ({
-  isLockedOut: vi.fn(() => false),
-  recordFailedLogin: vi.fn(),
-  recordSuccessfulLogin: vi.fn(),
+  isLockedOut: vi.fn(async () => false),
+  recordFailedLogin: vi.fn(async () => {}),
+  recordSuccessfulLogin: vi.fn(async () => {}),
 }))
 
 vi.mock('@/lib/prisma', () => ({
