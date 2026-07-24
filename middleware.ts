@@ -5,7 +5,7 @@ import type { Role } from "@prisma/client"
 
 const { auth } = NextAuth(authConfig)
 
-export const proxy = auth((req) => {
+export default auth((req) => {
   const { pathname } = req.nextUrl
   const isLoggedIn = !!req.auth
   const userRole = (req.auth?.user as { role?: Role } | undefined)?.role
