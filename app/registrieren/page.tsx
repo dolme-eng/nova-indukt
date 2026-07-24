@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: 'Registrieren | NOVA INDUKT',
   description: 'Erstellen Sie Ihr NOVA INDUKT Kundenkonto. Genießen Sie Vorteile wie schnelleres Bestellen, Bestellverfolgung und persönliche Wunschliste.',
   keywords: ['Registrieren', 'Konto erstellen', 'Kundenkonto', 'NOVA INDUKT', 'Mitglied werden'],
+  alternates: {
+    canonical: '/registrieren',
+  },
   robots: {
     index: false,
     follow: false,

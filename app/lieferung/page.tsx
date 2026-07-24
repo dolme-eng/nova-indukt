@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Lieferung & Versand | NOVA INDUKT',
   description: 'Informationen zur Lieferung und zum Versand von NOVA INDUKT Produkten. Schneller Versand innerhalb Deutschlands.',
   keywords: ['Lieferung', 'Versand', 'Lieferzeit', 'NOVA INDUKT', 'Versandkosten'],
+  alternates: {
+    canonical: '/lieferung',
+  },
   robots: {
     index: false,
     follow: true,

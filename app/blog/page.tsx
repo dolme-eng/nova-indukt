@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: 'Nova Magazin | NOVA INDUKT',
   description: 'Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.',
   keywords: ['Blog', 'Magazin', 'Rezepte', 'Küche', 'Induktion', 'NOVA INDUKT'],
+  alternates: {
+    canonical: '/blog',
+  },
 }
 
 export default async function BlogPage() {

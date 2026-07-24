@@ -5,6 +5,9 @@ import { COMPANY } from '@/lib/constants/company'
 export const metadata: Metadata = {
   title: 'Datenschutzerklärung | NOVA INDUKT',
   description: 'Datenschutzerklärung der NOVA INDUKT GmbH gemäß DSGVO',
+  alternates: {
+    canonical: '/datenschutz',
+  },
 }
 
 export default async function DatenschutzPage() {

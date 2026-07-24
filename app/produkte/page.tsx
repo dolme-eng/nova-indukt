@@ -24,6 +24,9 @@ export async function generateMetadata({
       return {
         title: `${category.nameDe} | Premium Induktions-Kochgeschirr`,
         description: `Entdecken Sie unsere Auswahl an ${category.nameDe}. Premium-Qualität von NOVA INDUKT für höchste Ansprüche.`,
+        alternates: {
+          canonical: `/produkte?kategorie=${categorySlug}`,
+        },
       }
     }
   }
@@ -32,12 +35,18 @@ export async function generateMetadata({
     return {
       title: `Suche: "${search}" | NOVA INDUKT`,
       description: `Suchergebnisse für "${search}" im NOVA INDUKT Shop. Finden Sie das perfekte Induktions-Kochgeschirr.`,
+      alternates: {
+        canonical: '/suche',
+      },
     }
   }
 
   return {
     title: 'Unsere Produkte | Premium Induktions-Kochgeschirr',
     description: 'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
+    alternates: {
+      canonical: '/produkte',
+    },
   }
 }
 

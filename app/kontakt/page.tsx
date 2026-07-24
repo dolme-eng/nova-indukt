@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: 'Kontakt | NOVA INDUKT',
   description: 'Kontaktieren Sie NOVA INDUKT. Wir sind für Sie da! Kundenservice, Beratung, Bestellungen. Rufen Sie uns an, schreiben Sie uns oder besuchen Sie uns vor Ort.',
   keywords: ['Kontakt', 'Kundenservice', 'Hilfe', 'Beratung', 'NOVA INDUKT', 'Berlin'],
+  alternates: {
+    canonical: '/kontakt',
+  },
   openGraph: {
     title: 'Kontakt | NOVA INDUKT',
     description: 'Kontaktieren Sie NOVA INDUKT. Wir sind für Sie da!',

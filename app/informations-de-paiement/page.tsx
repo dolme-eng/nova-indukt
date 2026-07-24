@@ -5,6 +5,9 @@ import { COMPANY } from '@/lib/constants/company'
 export const metadata: Metadata = {
   title: 'Informations de paiement | NOVA INDUKT',
   description: 'Instructions de paiement par virement bancaire pour vos commandes NOVA INDUKT',
+  alternates: {
+    canonical: '/informations-de-paiement',
+  },
 }
 
 export default async function PaymentInfoPage() {

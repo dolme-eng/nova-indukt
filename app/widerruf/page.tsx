@@ -6,6 +6,9 @@ import { COMPANY } from '@/lib/constants/company'
 export const metadata: Metadata = {
   title: 'Widerrufsrecht | NOVA INDUKT',
   description: 'Widerrufsbelehrung und Widerrufsformular der NOVA INDUKT GmbH',
+  alternates: {
+    canonical: '/widerruf',
+  },
 }
 
 export default async function WiderrufPage() {

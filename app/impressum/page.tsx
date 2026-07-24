@@ -5,6 +5,9 @@ import { COMPANY } from '@/lib/constants/company'
 export const metadata: Metadata = {
   title: 'Impressum | NOVA INDUKT',
   description: 'Impressum und gesetzliche Anbieterkennzeichnung von NOVA INDUKT GmbH',
+  alternates: {
+    canonical: '/impressum',
+  },
 }
 
 export default async function ImpressumPage() {

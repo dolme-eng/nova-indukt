@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Rückgabe & Widerruf | NOVA INDUKT',
   description: 'Informationen zur Rückgabe und zum Widerrufsrecht bei NOVA INDUKT. 30 Tage Rückgaberecht für alle Produkte.',
   keywords: ['Rückgabe', 'Widerruf', 'Rückgaberecht', 'NOVA INDUKT', 'Retoure'],
+  alternates: {
+    canonical: '/rueckgabe',
+  },
   robots: {
     index: false,
     follow: true,

@@ -4,6 +4,9 @@ import { COMPANY } from '@/lib/constants/company'
 export const metadata: Metadata = {
   title: 'Karriere bei NOVA INDUKT',
   description: 'Werden Sie Teil des NOVA INDUKT Teams. Entdecken Sie aktuelle Stellenangebote in der Premium-Küchenzubehör Branche.',
+  alternates: {
+    canonical: '/karriere',
+  },
 }
 
 export default function KarrierePage() {
