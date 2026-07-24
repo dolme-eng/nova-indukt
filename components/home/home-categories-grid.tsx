@@ -62,13 +62,23 @@ export const HomeCategoriesGrid = memo(function HomeCategoriesGrid({ categories 
             >
               <Link href={`/produkte?kategorie=${category.slug}`} className="block h-full cursor-pointer">
                 <div className="relative aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-md group-hover:shadow-2xl transition-all duration-500 border border-gray-100">
-                  <Image
-                    src={category.image}
-                    alt={category.name.de}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  />
+                  {category.image.endsWith('.svg') ? (
+                    <img
+                      src={category.image}
+                      alt={category.name.de}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <Image
+                      src={category.image}
+                      alt={category.name.de}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      unoptimized
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500" />
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                     <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">{category.name.de}</h3>

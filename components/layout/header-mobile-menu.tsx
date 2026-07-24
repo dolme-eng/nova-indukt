@@ -60,7 +60,7 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100 bg-gray-50/50 text-black">
-          <Image src="/logo0.png" alt="NOVA INDUKT" width={140} height={42} className="h-7 sm:h-8 md:h-9 w-auto" />
+          <Image src="/logo0.png" alt="NOVA INDUKT" width={140} height={42} className="h-7 sm:h-8 md:h-9 w-auto" unoptimized />
           <button
             onClick={onClose}
             data-testid="mobile-menu-close-button"

@@ -68,7 +68,7 @@ export function Footer() {
           {/* Brand & Contact Column */}
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block mb-4">
-              <Image src="/logo0.png" alt="Nova Indukt" width={120} height={36} className="h-8 w-auto brightness-0 invert opacity-80 hover:opacity-100 transition-opacity" style={{ width: 'auto', height: 'auto' }} />
+              <Image src="/logo0.png" alt="Nova Indukt" width={120} height={36} className="h-8 w-auto brightness-0 invert opacity-80 hover:opacity-100 transition-opacity" style={{ width: 'auto', height: 'auto' }} unoptimized />
             </Link>
             <p className="text-[#9FE1CD] text-sm mb-6 leading-relaxed font-medium pe-4">
               Premium-Küchenzubehör & Elektrogeräte für Induktion – entwickelt in Deutschland für maximale Performance.

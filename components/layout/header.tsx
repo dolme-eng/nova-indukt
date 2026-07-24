@@ -186,6 +186,7 @@ export function Header() {
                 priority
                 fetchPriority="high"
                 sizes="(max-width: 360px) 90px, (max-width: 640px) 110px, (max-width: 1024px) 130px, 150px"
+                unoptimized
               />
             </Link>
 
