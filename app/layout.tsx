@@ -8,8 +8,6 @@ import { Footer } from "@/components/layout/footer"
 import { CookieConsent } from "@/components/cookie-consent"
 import { PageTransition } from "@/components/page-transition"
 import { CustomCursor } from "@/components/custom-cursor"
-import { SmoothScrollProvider } from "@/components/smooth-scroll"
-import { PageLoader } from "@/components/page-loader"
 import { PreloadResources } from "./preload-resources"
 import { Providers } from "@/components/providers"
 import { AuthSync } from "@/components/auth-sync"
@@ -103,13 +101,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth">
+    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased min-h-screen bg-gray-50 text-gray-900">
         {/* Kritische Ressourcen vorladen */}
         <PreloadResources />
-        
-        {/* Globaler Loader mit verlängerter Animation */}
-        <PageLoader />
         
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
@@ -145,11 +140,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex min-h-screen flex-col">
             <Header />
             <main id="main-content" className="flex-1" aria-label="Hauptinhalt">
-              <SmoothScrollProvider>
-                <PageTransition>
-                  {children}
-                </PageTransition>
-              </SmoothScrollProvider>
+              <PageTransition>
+                {children}
+              </PageTransition>
             </main>
             <Footer />
           </div>
