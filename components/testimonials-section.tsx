@@ -105,9 +105,12 @@ export function TestimonialsSection() {
                 >
                   {/* Header with avatar and info flexed differently */}
                   <div className="flex items-center gap-4 mb-5">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#4ECCA3] to-[#3BA88A] rounded-full flex items-center justify-center flex-shrink-0 shadow-inner">
-                      <span className="text-white font-bold text-lg">{testimonial.name.charAt(0)}</span>
-                    </div>
+                    <img
+                      src={`https://i.pravatar.cc/96?u=${testimonial.id}`}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover flex-shrink-0 ring-2 ring-white shadow-sm"
+                      loading="lazy"
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-gray-900 text-base truncate tracking-tight">{testimonial.name}</p>
                       <div className="flex items-center gap-1 mt-0.5">

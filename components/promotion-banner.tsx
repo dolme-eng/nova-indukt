@@ -85,7 +85,7 @@ export function PromotionBanner() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -100, opacity: 0 }}
-        className="relative z-50"
+        className="relative"
         style={{ backgroundColor: promotion.highlightColor }}
       >
         <div className="container mx-auto px-4 py-3">

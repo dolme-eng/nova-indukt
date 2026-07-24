@@ -136,7 +136,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <Providers>
           <AuthSync />
-          <PromotionBanner />
+          <div className="hidden sm:block">
+            <PromotionBanner />
+          </div>
           <div className="flex min-h-screen flex-col">
             <Header />
             <main id="main-content" className="flex-1" aria-label="Hauptinhalt">

@@ -383,9 +383,12 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                 {/* Review Header */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-[#4ECCA3] to-[#3BA88A] rounded-full flex items-center justify-center text-white font-semibold">
-                      {review.user.displayName.charAt(0)}
-                    </div>
+                    <img
+                      src={`https://i.pravatar.cc/80?u=${review.id}`}
+                      alt={review.user.displayName}
+                      className="w-10 h-10 rounded-full object-cover flex-shrink-0 ring-2 ring-white shadow-sm"
+                      loading="lazy"
+                    />
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-gray-900">{review.user.displayName}</span>
