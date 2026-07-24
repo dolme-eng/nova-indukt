@@ -16,7 +16,7 @@ import { useWishlist } from '@/lib/store/wishlist'
 import { Product } from '@/lib/data/products'
 import { ProductReviews } from '@/components/product-reviews'
 import { ImageLightbox } from '@/components/image-lightbox'
-import { DEFAULT_DE_VAT_PERCENT, formatDeEuro, formatPriceDe, grossFromNet, netFromGross } from '@/lib/utils/vat'
+import { VAT_RATE_PERCENT, formatPriceDe, grossFromNet, netFromGross } from '@/lib/utils/vat'
 
 const SHELL = 'w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-14'
 
@@ -112,7 +112,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
     setTimeout(() => setShowWishlistToast(false), 2000)
   }
 
-  const vatPct = product.vatRatePercent ?? DEFAULT_DE_VAT_PERCENT
+  const vatPct = product.vatRatePercent ?? VAT_RATE_PERCENT
   const priceIncludesVat = product.priceIncludesVat !== false
   const productSpecCards = specCards(product)
 
@@ -348,10 +348,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 )}
               </p>
               {priceIncludesVat && vatPct > 0 && (
-                <p className="mb-4 text-[11px] text-gray-500">Nettoanteil: {formatDeEuro(netFromGross(product.price, vatPct))}</p>
+                <p className="mb-4 text-[11px] text-gray-500">Nettoanteil: {formatPriceDe(netFromGross(product.price, vatPct))}</p>
               )}
               {!priceIncludesVat && vatPct > 0 && (
-                <p className="mb-4 text-[11px] text-gray-500">Brutto: {formatDeEuro(grossFromNet(product.price, vatPct))}</p>
+                <p className="mb-4 text-[11px] text-gray-500">Brutto: {formatPriceDe(grossFromNet(product.price, vatPct))}</p>
               )}
 
               <div

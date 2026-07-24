@@ -8,6 +8,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/impressum',
   },
+  openGraph: {
+    title: 'Impressum | NOVA INDUKT',
+    description: 'Impressum und gesetzliche Anbieterkennzeichnung von NOVA INDUKT GmbH',
+    url: 'https://nova-indukt.de/impressum',
+    siteName: 'NOVA INDUKT',
+    images: [{ url: 'https://nova-indukt.de/og-image.png', width: 1200, height: 630, alt: 'NOVA INDUKT' }],
+    type: 'website',
+  },
 }
 
 export default async function ImpressumPage() {

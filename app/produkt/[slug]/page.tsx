@@ -43,8 +43,10 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
+      url: `https://nova-indukt.de/produkt/${product.slug}`,
+      siteName: 'NOVA INDUKT',
       type: 'website',
-      images: mainImage ? [{ url: mainImage, alt: product.nameDe }] : [],
+      images: mainImage ? [{ url: mainImage, alt: product.nameDe, width: 800, height: 600 }] : [],
     },
     twitter: {
       card: 'summary_large_image',
@@ -103,7 +105,7 @@ export default async function ProductPage({
       "description": product.descriptionDe || product.shortDescription,
       "sku": product.id,
       "gtin13": product.ean,
-      "mpn": product.sku || product.id,
+      "mpn": product.supplierSku || product.id,
       "itemCondition": "https://schema.org/NewCondition",
       "brand": {
         "@type": "Brand",

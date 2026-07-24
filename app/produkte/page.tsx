@@ -33,7 +33,7 @@ export async function generateMetadata({
 
   if (search) {
     return {
-      title: `Suche: "${search}" | NOVA INDUKT`,
+      title: `Suche: "${search}"`,
       description: `Suchergebnisse für "${search}" im NOVA INDUKT Shop. Finden Sie das perfekte Induktions-Kochgeschirr.`,
       alternates: {
         canonical: '/suche',

@@ -11,6 +11,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/blog',
   },
+  openGraph: {
+    title: 'Nova Magazin | NOVA INDUKT',
+    description: 'Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.',
+    url: 'https://nova-indukt.de/blog',
+    siteName: 'NOVA INDUKT',
+    images: [{ url: 'https://nova-indukt.de/og-image.png', width: 1200, height: 630, alt: 'NOVA INDUKT Blog' }],
+    type: 'website',
+  },
 }
 
 export default async function BlogPage() {

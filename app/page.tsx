@@ -18,13 +18,16 @@ import { HomeContent } from './HomeContent'
 export const revalidate = 300
 
 export const metadata: Metadata = {
-  title: 'Premium Induktions-Kochgeschirr | NOVA INDUKT',
+  title: 'Premium Induktions-Kochgeschirr',
   description:
     'Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche.',
   keywords: ['Induktion', 'Kochgeschirr', 'Pfannen', 'Töpfe', 'Premium', 'Deutschland', 'Küche', 'Induktionskochfeld'],
   openGraph: {
     title: 'Premium Induktions-Kochgeschirr | NOVA INDUKT',
     description: 'Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion.',
+    url: 'https://nova-indukt.de',
+    siteName: 'NOVA INDUKT',
+    images: [{ url: 'https://nova-indukt.de/og-image.png', width: 1200, height: 630, alt: 'NOVA INDUKT' }],
     type: 'website',
   },
 }

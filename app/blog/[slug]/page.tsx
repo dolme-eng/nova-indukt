@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   if (!post) {
     return {
-      title: 'Artikel nicht gefunden | NOVA INDUKT',
+      title: 'Artikel nicht gefunden',
     }
   }
 
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const description = post.excerptDe || ''
 
   return {
-    title: `${title} | Blog | NOVA INDUKT`,
+    title: `${title} | Blog`,
     description,
     alternates: {
       canonical: `/blog/${resolvedParams.slug}`,

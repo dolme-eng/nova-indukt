@@ -1,6 +1,5 @@
 'use client'
 
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CheckCircle, ShoppingBag, Mail, Package } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
