@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function KarrierePage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-24">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl sm:text-5xl font-bold text-[#0C211E] mb-6 font-heading">
@@ -71,6 +71,6 @@ export default function KarrierePage() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   )
 }

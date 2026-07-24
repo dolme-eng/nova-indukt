@@ -239,7 +239,7 @@ export default function AccountPageClient() {
               </div>
             </aside>
 
-            <main className="flex-1 min-w-0">{renderTab()}</main>
+            <div className="flex-1 min-w-0">{renderTab()}</div>
           </div>
         </div>
       </div>

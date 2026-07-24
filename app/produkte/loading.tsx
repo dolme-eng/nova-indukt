@@ -30,7 +30,7 @@ export default function Loading() {
             </aside>
 
             {/* Grid Skeleton */}
-            <main className="flex-1">
+            <div className="flex-1">
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="bg-white rounded-xl p-4 border border-gray-100 space-y-4">
@@ -44,7 +44,7 @@ export default function Loading() {
                   </div>
                 ))}
               </div>
-            </main>
+            </div>
           </div>
         </div>
       </div>

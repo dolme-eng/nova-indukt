@@ -11,14 +11,14 @@ export default function Loading() {
               <Skeleton key={i} className="h-10 w-full rounded-xl" />
             ))}
           </aside>
-          <main className="lg:col-span-3">
+          <div className="lg:col-span-3">
             <div className="bg-white rounded-xl p-6 border border-gray-100 space-y-4">
               <Skeleton className="h-6 w-48" />
               {[...Array(4)].map((_, i) => (
                 <Skeleton key={i} className="h-12 w-full" />
               ))}
             </div>
-          </main>
+          </div>
         </div>
       </div>
     </div>

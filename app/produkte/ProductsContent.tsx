@@ -432,7 +432,7 @@ export function ProductsContent({
             </AnimatePresence>
 
             {/* Main Content */}
-            <main className="flex-1">
+            <div className="flex-1">
               
               {/* Top Bar for View & Sort */}
               <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-white p-3 mb-5 sticky top-24 z-30">
@@ -734,7 +734,7 @@ export function ProductsContent({
                   )}
                 </>
               )}
-            </main>
+            </div>
           </div>
         </div>
       </div>
