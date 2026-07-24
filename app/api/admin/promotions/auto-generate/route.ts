@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     switch (type) {
       case 'flash': {
-        // Sélectionner les produits les plus populaires
+        // Select the most popular products
         const products = await prisma.product.findMany({
           where: {
             isActive: true,

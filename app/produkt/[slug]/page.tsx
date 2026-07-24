@@ -69,7 +69,7 @@ export default async function ProductPage({
     notFound()
   }
 
-  // Formatter le produit pour le client
+  // Format product for client component
   const formattedProduct = mapDbProductToUi(product)
 
   // Fetch related products from same category

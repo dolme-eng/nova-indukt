@@ -11,8 +11,6 @@ export const FREE_SHIPPING_THRESHOLD = 500
 export const SHOP_NAME = COMPANY.nameShort
 /** Canonical domain without trailing slash, used in schema.org, metadata and emails. */
 export const SHOP_DOMAIN = COMPANY.website
-/** @deprecated Use SHOP_DOMAIN — kept for backward compatibility */
-export const SHOP_URL = SHOP_DOMAIN
 
 // ─── Contact emails (centralized in COMPANY) ──────────────────────────────────
 export const SUPPORT_EMAIL    = COMPANY.email.support

@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision.",
     images: [
       {
-        url: "https://nova-indukt.de/og-image.svg",
+        url: "https://nova-indukt.de/og-image.png",
         width: 1200,
         height: 630,
         alt: "NOVA INDUKT - Premium Induktions-Kochgeschirr",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     creator: "@novaindukt",
     title: "NOVA INDUKT | Premium Induktions-Kochgeschirr",
     description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität.",
-    images: ["/og-image.svg"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,

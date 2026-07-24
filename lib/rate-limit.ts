@@ -1,7 +1,7 @@
 /**
  * Rate limiting module — Upstash Redis (distribué, compatible serverless Netlify).
  *
- * Variables d'environnement requises :
+ * Required environment variables:
  *   UPSTASH_REDIS_REST_URL   — URL REST de votre base Redis Upstash
  *   UPSTASH_REDIS_REST_TOKEN — Token d'authentification Upstash
  *
@@ -75,7 +75,7 @@ function getRedis(): Redis | null {
 }
 
 /**
- * Retourne un Ratelimit Upstash configuré en Sliding Window.
+ * Returns an Upstash Ratelimit configured with Sliding Window.
  * La clé cache inclut maxRequests + windowMs pour supporter plusieurs configs.
  */
 function getRatelimiter(maxRequests: number, windowSeconds: number): Ratelimit | null {
@@ -112,7 +112,7 @@ export interface RateLimitResult {
 }
 
 /**
- * Applique un rate limit sur `identifier`.
+ * Applies rate limiting to `identifier`.
  *
  * - En production avec Upstash configuré → Sliding Window Redis distribué.
  * - Sinon (dev / Redis non configuré) → fallback in-memory (non distribué).
@@ -144,7 +144,7 @@ export async function rateLimit(
       resetTime: Number(reset),
     }
   } catch (err) {
-    // En cas d'erreur Redis (timeout, connexion), on fail-open pour ne pas bloquer les users
+    // On Redis error (timeout, connection), fail open to avoid blocking users
     console.error('[rate-limit] Redis error, fail-open:', err)
     return { success: true, limit: maxRequests, remaining: 1, resetTime: Date.now() + windowMs }
   }
@@ -152,14 +152,14 @@ export async function rateLimit(
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Extrait l'adresse IP réelle depuis les headers de la requête */
+/** Extracts the real IP address from request headers */
 export function getIP(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for')
   if (forwarded) return forwarded.split(',')[0].trim()
   return request.headers.get('x-real-ip') ?? 'unknown'
 }
 
-/** Construit la clé de rate-limit : "<ip>:<route>" */
+/** Builds the rate-limit key: "<ip>:<route>" */
 export function createRateLimitKey(ip: string, route: string): string {
   return `${ip}:${route}`
 }

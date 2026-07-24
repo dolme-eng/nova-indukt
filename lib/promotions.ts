@@ -20,7 +20,7 @@ export interface ProductWithDiscount {
 }
 
 /**
- * Calcule le prix avec promotion pour un produit
+ * Calculate the discounted price for a product
  */
 export function calculateDiscountedPrice(
   price: number,
@@ -78,7 +78,7 @@ export async function getActivePromotions() {
 }
 
 /**
- * Applique la meilleure promotion disponible à un produit
+ * Apply the best available promotion to a product
  */
 export async function applyBestPromotion(
   productId: string,
@@ -140,7 +140,7 @@ export async function applyBestPromotion(
 }
 
 /**
- * Applique les promotions à une liste de produits
+ * Apply promotions to a list of products
  */
 export async function applyPromotionsToProducts(
   products: Array<{ id: string; categoryId: string; price: number }>

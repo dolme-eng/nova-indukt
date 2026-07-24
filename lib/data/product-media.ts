@@ -68,7 +68,7 @@ function categoryOffset(categoryId: string): number {
   return h
 }
 
-// Les 4 catégories actives NOVA INDUKT (avec produits)
+// The 4 active NOVA INDUKT categories (with products)
 export const categorySlugs = [
   'induktionspfannen',
   'induktionstoepfe',

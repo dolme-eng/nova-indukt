@@ -1,12 +1,12 @@
 import { z } from 'zod'
 
-// Schéma pour une image produit
+// Schema for a product image
 export const productImageSchema = z.object({
   url: z.string().url('Invalid image URL').min(1, 'Image URL is required'),
   alt: z.string().max(200, 'Alt text too long').optional(),
 })
 
-// Schéma pour la création d'un produit
+// Schema for creating a product
 export const createProductSchema = z.object({
   nameDe: z.string().min(1, 'German name is required').max(200, 'Name too long'),
   slug: z.string().min(1, 'Slug is required').max(100, 'Slug too long')
@@ -31,7 +31,7 @@ export const createProductSchema = z.object({
 export type CreateProductInput = z.infer<typeof createProductSchema>
 export type ProductImageInput = z.infer<typeof productImageSchema>
 
-// Schéma pour la mise à jour d'un produit
+// Schema for updating a product
 export const updateProductSchema = createProductSchema.partial().extend({
   id: z.string().cuid('Invalid product ID'),
 })

@@ -56,7 +56,7 @@ export function ProductsContent({
   const [showFilters, setShowFilters] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
 
-  // Synchronisation des filtres avec l'URL (réinitialise à la page 1)
+  // Sync filters with URL (reset to page 1)
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString())
 

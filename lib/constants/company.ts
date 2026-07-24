@@ -30,6 +30,11 @@ export const COMPANY = {
 
   website: process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://nova-indukt.de',
 
+  social: {
+    facebook: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK || 'https://facebook.com/novaindukt',
+    instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || 'https://instagram.com/novaindukt',
+  },
+
   legal: {
     registergericht: 'Amtsgericht Berlin-Charlottenburg',
     registernummer: 'HRB 219847',

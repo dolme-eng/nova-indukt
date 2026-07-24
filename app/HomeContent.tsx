@@ -103,8 +103,8 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 font-heading">Top-Produkte pro Kategorie</h2>
             </motion.div>
             <div className="hidden sm:flex items-center gap-2">
-              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: -344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm">◀</button>
-              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: 344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm">▶</button>
+              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: -344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm" aria-label="Vorherige Produkte">◀</button>
+              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: 344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm" aria-label="Nächste Produkte">▶</button>
             </div>
           </div>
         </div>

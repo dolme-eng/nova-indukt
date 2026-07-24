@@ -1,5 +1,5 @@
 /**
- * Configuration des catégories actives NOVA INDUKT
+ * Active NOVA INDUKT categories configuration
  * Spécialisé 100% Induction
  */
 

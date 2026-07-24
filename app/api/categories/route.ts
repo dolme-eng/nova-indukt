@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
       }
     })
     
-    // Ne retourner que les catégories avec des produits
+    // Only return categories with products
     const categoriesWithProducts = categories.filter(cat => cat._count.products > 0)
     
     const response = NextResponse.json(

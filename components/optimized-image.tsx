@@ -86,7 +86,7 @@ export function OptimizedImage({
   )
 }
 
-// Composant spécifique pour les images produits
+// Component for product images
 interface ProductImageProps {
   src: string
   alt: string

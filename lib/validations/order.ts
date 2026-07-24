@@ -33,7 +33,7 @@ export const createOrderSchema = z.object({
   appliedPromoCode: z.string().optional().nullable(),
   total: z.number().positive('Total must be positive'),
 }).refine((data) => {
-  // Vérification que le total est cohérent
+  // Verify that the total is consistent
   const calculatedTotal = data.subtotal + data.shipping - (data.discountAmount || 0)
   // Tolérance de 0.01 pour les erreurs de précision décimale
   return Math.abs(calculatedTotal - data.total) < 0.01
