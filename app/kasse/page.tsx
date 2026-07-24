@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import CheckoutContent from './CheckoutContent'
 
 export const metadata: Metadata = {
-  title: 'Kasse | NOVA INDUKT',
+  title: 'Kasse',
   description: 'Sichere Bezahlung und schnelle Lieferung Ihrer NOVA INDUKT Bestellung. Versandkostenfrei ab 500€.',
   keywords: ['Kasse', 'Bestellung', 'Bezahlung', 'Versand', 'NOVA INDUKT', 'Einkauf'],
   alternates: {

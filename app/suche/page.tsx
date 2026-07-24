@@ -6,7 +6,7 @@ import SearchContent from './SearchContent'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `Suchen | NOVA INDUKT`,
+    title: `Suchen`,
     description: 'Finden Sie die besten NOVA INDUKT Produkte. Durchsuchen Sie unser Sortiment nach Induktionskochfelder, Zubehör und mehr.',
     keywords: ['Suche', 'Produktsuche', 'NOVA INDUKT', 'Induktionskochfeld', 'Küchengeräte', 'Filter', 'Kategorien'],
     alternates: {

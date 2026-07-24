@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { getStaticPageContent } from '@/lib/content/static'
 
 export const metadata: Metadata = {
-  title: 'Lieferung & Versand | NOVA INDUKT',
+  title: 'Lieferung & Versand',
   description: 'Informationen zur Lieferung und zum Versand von NOVA INDUKT Produkten. Schneller Versand innerhalb Deutschlands.',
   keywords: ['Lieferung', 'Versand', 'Lieferzeit', 'NOVA INDUKT', 'Versandkosten'],
   alternates: {

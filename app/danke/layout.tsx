@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Bestellung aufgegeben | NOVA INDUKT',
+  title: 'Bestellung aufgegeben',
   description: 'Vielen Dank für Ihre Bestellung bei NOVA INDUKT.',
   alternates: {
     canonical: '/danke',

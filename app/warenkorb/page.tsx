@@ -4,7 +4,7 @@ import { Product } from '@/lib/data/products'
 import { CartContent } from './CartContent'
 
 export const metadata: Metadata = {
-  title: 'Warenkorb | NOVA INDUKT',
+  title: 'Warenkorb',
   description: 'Überprüfen Sie Ihre ausgewählten Produkte im Warenkorb. Sichere Bezahlung, kostenloser Versand ab 500€.',
   keywords: ['Warenkorb', 'Einkauf', 'Bestellung', 'Kasse', 'NOVA INDUKT'],
   alternates: {

@@ -5,8 +5,11 @@ import { COMPANY } from '@/lib/constants/company'
 import { formatPriceDe } from '@/lib/utils'
 
 export const metadata: Metadata = {
-  title: 'AGB - Allgemeine Geschäftsbedingungen | NOVA INDUKT',
+  title: 'AGB - Allgemeine Geschäftsbedingungen',
   description: 'Allgemeine Geschäftsbedingungen der NOVA INDUKT GmbH',
+  alternates: {
+    canonical: '/agb',
+  },
 }
 
 export default async function AGBPage() {

@@ -3,7 +3,7 @@ import { FAQContent } from './FAQContent'
 import { getFaqItems } from '@/lib/content/static'
 
 export const metadata: Metadata = {
-  title: 'FAQ - Häufig gestellte Fragen | NOVA INDUKT',
+  title: 'FAQ - Häufig gestellte Fragen',
   description: 'Finden Sie Antworten auf häufig gestellte Fragen zu Versand, Zahlung, Rückgabe, Garantie und Produkten von NOVA INDUKT.',
   keywords: ['FAQ', 'Hilfe', 'Fragen', 'Antworten', 'Kundenservice', 'NOVA INDUKT'],
   alternates: {

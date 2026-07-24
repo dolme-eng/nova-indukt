@@ -3,7 +3,7 @@ import { getStaticPageContent } from '@/lib/content/static'
 import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
-  title: 'Datenschutzerklärung | NOVA INDUKT',
+  title: 'Datenschutzerklärung',
   description: 'Datenschutzerklärung der NOVA INDUKT GmbH gemäß DSGVO',
   alternates: {
     canonical: '/datenschutz',

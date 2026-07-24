@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Passwort vergessen | NOVA INDUKT',
+  title: 'Passwort vergessen',
   description: 'Setzen Sie Ihr NOVA INDUKT Passwort zurück.',
   alternates: {
     canonical: '/passwort-vergessen',

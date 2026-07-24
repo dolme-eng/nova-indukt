@@ -4,7 +4,7 @@ import { getStaticPageContent } from '@/lib/content/static'
 import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
-  title: 'Widerrufsrecht | NOVA INDUKT',
+  title: 'Widerrufsrecht',
   description: 'Widerrufsbelehrung und Widerrufsformular der NOVA INDUKT GmbH',
   alternates: {
     canonical: '/widerruf',

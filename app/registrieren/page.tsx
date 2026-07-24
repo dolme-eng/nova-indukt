@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { RegisterContent } from './RegisterContent'
 
 export const metadata: Metadata = {
-  title: 'Registrieren | NOVA INDUKT',
+  title: 'Registrieren',
   description: 'Erstellen Sie Ihr NOVA INDUKT Kundenkonto. Genießen Sie Vorteile wie schnelleres Bestellen, Bestellverfolgung und persönliche Wunschliste.',
   keywords: ['Registrieren', 'Konto erstellen', 'Kundenkonto', 'NOVA INDUKT', 'Mitglied werden'],
   alternates: {

@@ -103,9 +103,16 @@ export default async function ProductPage({
       "description": product.descriptionDe || product.shortDescription,
       "sku": product.id,
       "gtin13": product.ean,
+      "mpn": product.sku || product.id,
+      "itemCondition": "https://schema.org/NewCondition",
       "brand": {
         "@type": "Brand",
         "name": product.brand || "NOVA INDUKT"
+      },
+      "seller": {
+        "@type": "Organization",
+        "name": "NOVA INDUKT",
+        "url": "https://nova-indukt.de"
       },
       "offers": {
         "@type": "Offer",

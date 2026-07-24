@@ -3,7 +3,7 @@ import { getBankDetails } from '@/lib/data/bank-details'
 import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
-  title: 'Informations de paiement | NOVA INDUKT',
+  title: 'Informations de paiement',
   description: 'Instructions de paiement par virement bancaire pour vos commandes NOVA INDUKT',
   alternates: {
     canonical: '/informations-de-paiement',

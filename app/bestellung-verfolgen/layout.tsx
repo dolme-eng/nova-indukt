@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Bestellung verfolgen | NOVA INDUKT',
+  title: 'Bestellung verfolgen',
   description: 'Verfolgen Sie den Status Ihrer NOVA INDUKT Bestellung.',
   alternates: {
     canonical: '/bestellung-verfolgen',

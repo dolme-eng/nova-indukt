@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { getStaticPageContent } from '@/lib/content/static'
 
 export const metadata: Metadata = {
-  title: 'Rückgabe & Widerruf | NOVA INDUKT',
+  title: 'Rückgabe & Widerruf',
   description: 'Informationen zur Rückgabe und zum Widerrufsrecht bei NOVA INDUKT. 30 Tage Rückgaberecht für alle Produkte.',
   keywords: ['Rückgabe', 'Widerruf', 'Rückgaberecht', 'NOVA INDUKT', 'Retoure'],
   alternates: {
