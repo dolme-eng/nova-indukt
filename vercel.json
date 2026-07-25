@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": "nextjs",
+  "headers": [
+    {
+      "source": "/_next/static/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/www.nova-indukt.de/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/informationen-zur-zahlung",
+      "destination": "/informations-de-paiement",
+      "permanent": false
+    }
+  ]
+}
