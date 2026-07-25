@@ -32,6 +32,11 @@
       "source": "/informationen-zur-zahlung",
       "destination": "/informations-de-paiement",
       "permanent": false
+    },
+    {
+      "source": "/wartung",
+      "destination": "/",
+      "permanent": false
     }
   ]
 }
