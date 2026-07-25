@@ -52,16 +52,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 // Render inline markdown as safe React elements (no dangerouslySetInnerHTML)
 function renderInlineMarkdown(text: string): React.ReactNode {
   const parts: React.ReactNode[] = []
-  let remaining = text
   let key = 0
 
-  // Process links first: [text](url)
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
   let lastIndex = 0
   let match: RegExpExecArray | null
-
-  // Reset regex
-  linkRegex.lastIndex = 0
 
   const tokens: { type: string; text: string; url?: string; index: number }[] = []
 
