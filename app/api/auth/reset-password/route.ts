@@ -7,7 +7,10 @@ import { logError } from "@/lib/logger"
 
 const resetPasswordSchema = z.object({
   token: z.string().min(1, "Token ist erforderlich"),
-  password: z.string().min(8, "Passwort muss mindestens 8 Zeichen lang sein"),
+  password: z.string().min(8, "Passwort muss mindestens 8 Zeichen lang sein").max(100)
+    .regex(/[A-Z]/, "Passwort muss mindestens einen Großbuchstaben enthalten")
+    .regex(/[a-z]/, "Passwort muss mindestens einen Kleinbuchstaben enthalten")
+    .regex(/[0-9]/, "Passwort muss mindestens eine Zahl enthalten"),
 })
 
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 minutes

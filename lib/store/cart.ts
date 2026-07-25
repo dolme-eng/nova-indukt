@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { useShallow } from 'zustand/react/shallow'
 import { Product } from '@/lib/data/products'
 import { addToCart, updateCartItem as updateServerCartItem, removeFromCart as removeFromServerCart, clearCart as clearServerCart } from '@/app/actions/cart'
 
@@ -110,13 +111,32 @@ export const useCartStore = create<CartState>()(
   )
 )
 
-// Hook pour accéder au panier
+// Hook pour accéder au panier — useShallow to prevent unnecessary re-renders
 export function useCart() {
-  const store = useCartStore()
-  
+  const { items, isHydrated, addItem, removeItem, updateQuantity, clearCart, setHydrated } = useCartStore(
+    useShallow((s) => ({
+      items: s.items,
+      isHydrated: s.isHydrated,
+      addItem: s.addItem,
+      removeItem: s.removeItem,
+      updateQuantity: s.updateQuantity,
+      clearCart: s.clearCart,
+      setHydrated: s.setHydrated,
+    }))
+  )
+
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0)
+  const totalPrice = items.reduce((total, item) => total + item.product.price * item.quantity, 0)
+
   return {
-    ...store,
-    totalItems: store.totalItems(),
-    totalPrice: store.totalPrice()
+    items,
+    isHydrated,
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart,
+    setHydrated,
+    totalItems,
+    totalPrice,
   }
 }

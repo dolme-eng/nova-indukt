@@ -30,10 +30,16 @@ const TestimonialsSection = dynamic(
   { loading: () => <div className="h-[420px] bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10" /> }
 )
 
+interface TestimonialData {
+  id: string; name: string; rating: number; comment: string
+  productName: string; createdAt: string; isVerified: boolean
+}
+
 interface HomeContentProps {
   initialProducts: Product[]
   initialCategories: Category[]
   initialBlogPosts: BlogPost[]
+  initialTestimonials?: TestimonialData[]
   activePromotions?: {
     id: string; name: string; discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
     discountValue: number; productIds: string[]; categoryIds: string[]
@@ -41,7 +47,7 @@ interface HomeContentProps {
   }[]
 }
 
-export function HomeContent({ initialProducts, initialCategories, initialBlogPosts, activePromotions = [] }: HomeContentProps) {
+export function HomeContent({ initialProducts, initialCategories, initialBlogPosts, initialTestimonials = [], activePromotions = [] }: HomeContentProps) {
   const sliderContainerRef = useRef<HTMLDivElement>(null)
 
   const flashDeals = useMemo(() => {
@@ -151,7 +157,7 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
 
       <TechnologySection />
       <BlogPreview initialBlogPosts={initialBlogPosts} />
-      <TestimonialsSection />
+      <TestimonialsSection initialTestimonials={initialTestimonials} />
       <HomeNewsletter />
     </div>
   )

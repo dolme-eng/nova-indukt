@@ -1,18 +1,4 @@
 /** @type {import('next').NextConfig} */
-const cspHeader = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' https://fonts.gstatic.com",
-  "connect-src 'self' https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com",
-  "frame-src 'self' https://accounts.google.com",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-].join('; ')
-
 const nextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -39,7 +25,6 @@ const nextConfig = {
       { key: 'X-Frame-Options', value: 'DENY' },
       { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
       { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-      { key: 'Content-Security-Policy', value: cspHeader },
       { key: 'X-XSS-Protection', value: '1; mode=block' },
       { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
       { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },

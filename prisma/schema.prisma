@@ -54,6 +54,7 @@ model User {
   addresses        Address[]
   orders           Order[]
   reviews          Review[]
+  reviewHelpfulVotes ReviewHelpfulVote[]
   sessions         Session[]
   wishlist         WishlistItem[]
 
@@ -236,11 +237,25 @@ model Review {
   isVerified  Boolean  @default(false)
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
-  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  user        User?    @relation(fields: [userId], references: [id])
+  product     Product              @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user        User?                @relation(fields: [userId], references: [id])
+  helpfulVotes ReviewHelpfulVote[]
 
   @@index([productId])
   @@index([userId])
+}
+
+model ReviewHelpfulVote {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
+  @@index([reviewId])
 }
 
 model NewsletterSubscriber {

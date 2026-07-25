@@ -53,6 +53,8 @@ const seedFiles = [
   'prisma/seed-products-thermometers.ts',
   // Blog
   'prisma/seed-blog-comprehensive.ts',
+  // Testimonials
+  'prisma/seed-testimonials.ts',
 ]
 
 console.log(`\n🌱 Running ${seedFiles.length} seed files...\n`)

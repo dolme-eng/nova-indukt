@@ -1,18 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Star, Quote } from 'lucide-react'
-import { useTestimonials } from '@/lib/store/testimonials'
+import { Star, Quote, MessageSquare } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
-import { AddTestimonialForm } from './add-testimonial-form'
+import { useRouter } from 'next/navigation'
 
-export function TestimonialsSection() {
-  const { testimonials, getAverageRating, isHydrated } = useTestimonials()
-  const averageRating = getAverageRating()
-  const [showForm, setShowForm] = useState(false)
+interface Testimonial {
+  id: string
+  name: string
+  rating: number
+  comment: string
+  productName: string
+  createdAt: string
+  isVerified: boolean
+}
 
-  if (!isHydrated) {
+function renderStars(rating: number) {
+  return Array.from({ length: 5 }).map((_, i) => (
+    <Star
+      key={i}
+      className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`}
+    />
+  ))
+}
+
+interface TestimonialsSectionProps {
+  initialTestimonials?: Testimonial[]
+}
+
+export function TestimonialsSection({ initialTestimonials }: TestimonialsSectionProps) {
+  const router = useRouter()
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials ?? [])
+  const [loading, setLoading] = useState(!initialTestimonials)
+
+  useEffect(() => {
+    if (initialTestimonials && initialTestimonials.length > 0) return
+    fetch('/api/testimonials')
+      .then((res) => res.json())
+      .then((data) => setTestimonials(data.testimonials ?? []))
+      .catch(() => setTestimonials([]))
+      .finally(() => setLoading(false))
+  }, [initialTestimonials])
+
+  const averageRating =
+    testimonials.length > 0
+      ? testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length
+      : 0
+
+  if (loading) {
     return (
       <section className="py-16 sm:py-24 bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10">
         <div className="container mx-auto px-4">
@@ -24,14 +60,7 @@ export function TestimonialsSection() {
     )
   }
 
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }).map((_, i) => (
-      <Star
-        key={i}
-        className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`}
-      />
-    ))
-  }
+  if (testimonials.length === 0) return null
 
   return (
     <section className="py-16 sm:py-24 bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10">
@@ -48,7 +77,7 @@ export function TestimonialsSection() {
               <Quote className="w-4 h-4 text-[#4ECCA3]" />
               <span className="text-sm font-medium text-[#4ECCA3]">Kundenstimmen</span>
             </motion.div>
-            
+
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -58,7 +87,7 @@ export function TestimonialsSection() {
             >
               Das sagen unsere Kunden
             </motion.h2>
-            
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -88,83 +117,88 @@ export function TestimonialsSection() {
 
           {/* Animated Testimonials Marquee */}
           <div className="relative overflow-hidden mt-16 py-4 -mx-4 px-4 sm:mx-0 sm:px-0">
-            {/* Fade edges */}
             <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-32 bg-gradient-to-r from-[#F4FBF9] to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-32 bg-gradient-to-l from-[#F4FBF9] to-transparent z-10 pointer-events-none" />
-            
-            <motion.div 
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ ease: "linear", duration: 40, repeat: Infinity }}
+
+            <motion.div
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ ease: 'linear', duration: 40, repeat: Infinity }}
               className="flex gap-6 w-max"
             >
-              {/* Duplicate array for seamless infinite scroll */}
-              {[...testimonials, ...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
-                <div
-                  key={`${testimonial.id}-${index}`}
-                  className="w-[280px] sm:w-[380px] flex-shrink-0 bg-white rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-xl hover:shadow-[#4ECCA3]/10 hover:-translate-y-1 transition-all duration-300 p-6 sm:p-8 flex flex-col border border-gray-100"
-                >
-                  {/* Header with avatar and info flexed differently */}
-                  <div className="flex items-center gap-4 mb-5">
-                    <img
-                      src={`https://i.pravatar.cc/96?u=${testimonial.id}`}
-                      alt={testimonial.name}
-                      className="w-12 h-12 rounded-full object-cover flex-shrink-0 ring-2 ring-white shadow-sm"
-                      loading="lazy"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-gray-900 text-base truncate tracking-tight">{testimonial.name}</p>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        {renderStars(testimonial.rating)}
+              {[...testimonials, ...testimonials, ...testimonials, ...testimonials].map(
+                (testimonial, index) => (
+                  <div
+                    key={`${testimonial.id}-${index}`}
+                    className="w-[280px] sm:w-[380px] flex-shrink-0 bg-white rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-xl hover:shadow-[#4ECCA3]/10 hover:-translate-y-1 transition-all duration-300 p-6 sm:p-8 flex flex-col border border-gray-100"
+                  >
+                    <div className="flex items-center gap-4 mb-5">
+                      <img
+                        src={`https://i.pravatar.cc/96?u=${testimonial.id}`}
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover flex-shrink-0 ring-2 ring-white shadow-sm"
+                        loading="lazy"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-gray-900 text-base truncate tracking-tight">
+                          {testimonial.name}
+                        </p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          {renderStars(testimonial.rating)}
+                        </div>
                       </div>
+                      {testimonial.isVerified && (
+                        <div
+                          className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0"
+                          title="Verifizierter Kauf"
+                        >
+                          <svg
+                            className="w-4 h-4 text-green-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
                     </div>
-                    {testimonial.isVerified && (
-                      <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0" title="Verifizierter Kauf">
-                        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
 
-                  {/* Comment */}
-                  <blockquote className="text-[15px] sm:text-base text-gray-600 leading-relaxed flex-1 italic relative z-10">
-                    <span className="text-4xl text-[#4ECCA3] opacity-20 absolute -top-4 -left-2 -z-10 font-serif">"</span>
-                    {testimonial.comment}
-                  </blockquote>
+                    <blockquote className="text-[15px] sm:text-base text-gray-600 leading-relaxed flex-1 italic relative z-10">
+                      <span className="text-4xl text-[#4ECCA3] opacity-20 absolute -top-4 -left-2 -z-10 font-serif">
+                        &ldquo;
+                      </span>
+                      {testimonial.comment}
+                    </blockquote>
 
-                  {/* Footer */}
-                  <div className="mt-6 pt-5 border-t border-gray-100/60 flex items-center justify-between">
-                    {testimonial.productName ? (
+                    <div className="mt-6 pt-5 border-t border-gray-100/60 flex items-center justify-between">
                       <p className="text-xs font-bold text-[#4ECCA3] truncate pr-4 max-w-[200px]">
                         {testimonial.productName}
                       </p>
-                    ) : (
-                      <span />
-                    )}
-                    <p className="text-xs font-semibold text-gray-400">
-                      {formatDate(testimonial.createdAt)}
-                    </p>
+                      <p className="text-xs font-semibold text-gray-400">
+                        {formatDate(testimonial.createdAt)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </motion.div>
           </div>
 
-          {/* Add Review Button */}
+          {/* Redirect to contact for reviews */}
           <div className="text-center mt-12">
             <button
-              onClick={() => setShowForm(true)}
+              onClick={() => router.push('/kontakt')}
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#4ECCA3] text-white rounded-xl font-semibold hover:bg-[#3BA88A] transition-colors shadow-lg hover:shadow-xl"
             >
-              <Star className="w-5 h-5" />
+              <MessageSquare className="w-5 h-5" />
               Bewertung schreiben
             </button>
           </div>
         </div>
       </div>
-
-      {/* Add Testimonial Modal */}
-      <AddTestimonialForm isOpen={showForm} onClose={() => setShowForm(false)} />
     </section>
   )
 }

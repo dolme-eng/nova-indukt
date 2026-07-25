@@ -297,27 +297,29 @@ export async function mergeGuestCartOnLogin() {
       })
     }
     
-    // Merge items
-    for (const guestItem of guestItems) {
-      const existingItem = cart.items.find(
-        item => item.productId === guestItem.product.id
-      )
-      
-      if (existingItem) {
-        await prisma.cartItem.update({
-          where: { id: existingItem.id },
-          data: { quantity: existingItem.quantity + guestItem.quantity }
-        })
-      } else {
-        await prisma.cartItem.create({
-          data: {
-            cartId: cart.id,
-            productId: guestItem.product.id,
-            quantity: guestItem.quantity
-          }
-        })
+    // Merge items in a transaction
+    await prisma.$transaction(async (tx) => {
+      for (const guestItem of guestItems) {
+        const existingItem = cart!.items.find(
+          item => item.productId === guestItem.product.id
+        )
+        
+        if (existingItem) {
+          await tx.cartItem.update({
+            where: { id: existingItem.id },
+            data: { quantity: existingItem.quantity + guestItem.quantity }
+          })
+        } else {
+          await tx.cartItem.create({
+            data: {
+              cartId: cart!.id,
+              productId: guestItem.product.id,
+              quantity: guestItem.quantity
+            }
+          })
+        }
       }
-    }
+    })
     
     // Clear guest cart cookie
     cookieStore.delete(CART_COOKIE)

@@ -242,7 +242,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     <Star key={i} className={`h-3.5 w-3.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
                   ))}
                   <span className="ml-1 font-bold text-gray-900 text-sm">{product.rating.toFixed(1)}</span>
-                  <span className="text-xs text-gray-400">({product.reviewCount > 0 ? product.reviewCount : (Math.abs(product.id.charCodeAt(0) * 7 + product.id.charCodeAt(1) * 3) % 180) + 20} Bewertungen)</span>
+                  <span className="text-xs text-gray-400">({product.reviewCount > 0 ? `${product.reviewCount} Bewertungen` : 'Noch keine Bewertungen'})</span>
                 </div>
                 {product.badges && product.badges.map((badge) => {
                   let bgColor = 'bg-gray-100 text-gray-800 border border-gray-200'
@@ -302,10 +302,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               )}
 
               <div
-                className="mb-5 inline-flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold border-green-200 bg-green-50/80 text-green-800"
+                className="mb-5 inline-flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold border-blue-200 bg-blue-50/80 text-blue-800"
               >
-                <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-                Verfügbar
+                <span className="h-2 w-2 rounded-full bg-blue-500" />
+                Auf Anfrage
               </div>
 
               <div className="flex gap-2">

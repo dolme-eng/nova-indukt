@@ -49,13 +49,14 @@ export default async function Page() {
   let categories: DbCategoryWithCount[] = []
   let activePromotions: Awaited<ReturnType<typeof getActivePromotions>> = []
   let blogPosts: HomeBlogPost[] = []
+  let testimonials: { id: string; name: string; rating: number; comment: string; productName: string; createdAt: string; isVerified: boolean }[] = []
 
   try {
-    const [dbProducts, dbCategories, dbPromotions, dbBlogPosts] = await Promise.all([
+    const [dbProducts, dbCategories, dbPromotions, dbBlogPosts, dbReviews] = await Promise.all([
       prisma.product.findMany({
         where: { isActive: true },
         include: { images: true },
-        take: 50,
+        take: 12,
       }),
       prisma.category
         .findMany({
@@ -82,6 +83,16 @@ export default async function Page() {
           author: true,
         },
       }),
+      // Published reviews for testimonials section
+      prisma.review.findMany({
+        where: { isPublished: true },
+        include: {
+          product: { select: { nameDe: true } },
+          user: { select: { name: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 12,
+      }),
     ])
 
     products = dbProducts
@@ -97,6 +108,15 @@ export default async function Page() {
       readTime: p.readTime || '',
       category: p.category || '',
       author: p.author,
+    }))
+    testimonials = dbReviews.map((r) => ({
+      id: r.id,
+      name: r.user?.name ?? 'Kunde',
+      rating: r.rating,
+      comment: r.content,
+      productName: r.product.nameDe,
+      createdAt: r.createdAt.toISOString(),
+      isVerified: r.isVerified,
     }))
   } catch (err) {
     logError('Database connection failed, using static fallback', err)
@@ -152,6 +172,7 @@ export default async function Page() {
         initialProducts={formattedProducts}
         initialCategories={formattedCategories}
         initialBlogPosts={blogPosts}
+        initialTestimonials={testimonials}
         activePromotions={activePromotions.map((p) => ({ ...p, discountValue: Number(p.discountValue) }))}
       />
     </>

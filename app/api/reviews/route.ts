@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')
     const published = searchParams.get('published') !== 'false'
-    const limit = parseInt(searchParams.get('limit') || '10')
+    const limit = Math.min(Math.max(parseInt(searchParams.get('limit') || '10', 10) || 10, 1), 50)
     const page = parseInt(searchParams.get('page') || '1')
     
     if (!productId) {
@@ -249,10 +249,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PUT - Mark review as helpful
+// PUT - Mark review as helpful (idempotent: one vote per user per review)
 export async function PUT(request: NextRequest) {
   try {
-    // M16 FIX: Require authentication to prevent vote manipulation
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -261,7 +260,6 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Rate limit: 10 helpful votes per minute per user
     const rl = await rateLimit(createRateLimitKey(session.user.id, 'helpful'), {
       windowMs: 60_000,
       maxRequests: 10,
@@ -295,10 +293,28 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    const updated = await prisma.review.update({
-      where: { id: reviewId },
-      data: { helpful: { increment: 1 } },
+    // Check for existing vote — idempotent
+    const existingVote = await prisma.reviewHelpfulVote.findUnique({
+      where: { userId_reviewId: { userId: session.user.id, reviewId } },
     })
+
+    if (existingVote) {
+      return NextResponse.json(
+        { error: "Sie haben diese Bewertung bereits als hilfreich markiert" },
+        { status: 409 }
+      )
+    }
+
+    // Create vote and increment helpful count in a transaction
+    const [, updated] = await prisma.$transaction([
+      prisma.reviewHelpfulVote.create({
+        data: { userId: session.user.id, reviewId },
+      }),
+      prisma.review.update({
+        where: { id: reviewId },
+        data: { helpful: { increment: 1 } },
+      }),
+    ])
 
     return NextResponse.json({
       success: true,
