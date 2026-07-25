@@ -1444,7 +1444,7 @@ Smarte Induktionskochfelder sind **mehr als nur ein Trend** — sie sind die Zuk
 **Unsere Empfehlung:** Wenn Sie in ein neues Kochfeld investieren, wählen Sie ein Modell mit Smart-Features. Die Anfangsinvestition zahlt sich durch Komfort und Energieersparnis langfristig aus.
 
 Die Frage ist nicht **ob**, sondern **wann** Sie auf smarte Induktion umsteigen werden.`,
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800',
+    image: 'https://images.unsplash.com/photo-1779457524854-208563209eea?w=800',
     category: 'Lifestyle',
     author: 'Dr. Koch',
     readTime: '14 Min.',
