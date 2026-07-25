@@ -37,6 +37,26 @@ const nextConfig = {
       })
     }
 
+    // CSP applied to ALL routes (not just middleware-matched ones)
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'strict-dynamic' https://accounts.google.com/gsi/client",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "img-src 'self' data: blob: https:",
+      "font-src 'self' https://fonts.gstatic.com",
+      "connect-src 'self' https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com",
+      "frame-src 'self' https://accounts.google.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'none'",
+    ].join('; ')
+
+    securityHeaders.push({
+      key: 'Content-Security-Policy',
+      value: csp,
+    })
+
     return [
       {
         source: '/:path*',

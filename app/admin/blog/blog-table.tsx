@@ -76,7 +76,7 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
                     <div className="flex items-center gap-4">
                       {post.image ? (
                         <div className="h-12 w-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
-                          <img src={post.image} alt="" className="h-full w-full object-cover" />
+                           <img src={post.image} alt={post.titleDe} className="h-full w-full object-cover" />
                         </div>
                       ) : (
                         <div className="h-12 w-16 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 flex-shrink-0">

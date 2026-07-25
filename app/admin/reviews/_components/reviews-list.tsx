@@ -128,7 +128,7 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-bold border border-slate-200 overflow-hidden flex-shrink-0">
                       {review.user?.image ? (
-                        <img src={review.user.image} alt="" className="w-full h-full object-cover" />
+                        <img src={review.user.image} alt={review.user?.name || 'Kunde'} className="w-full h-full object-cover" />
                       ) : (
                         <User size={20} />
                       )}
@@ -141,7 +141,7 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
                   <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
                     <div className="h-10 w-10 bg-white rounded border border-slate-200 relative overflow-hidden flex-shrink-0">
                       {review.product.images[0] && (
-                        <Image src={review.product.images[0].url} alt="" fill className="object-cover" />
+                         <Image src={review.product.images[0].url} alt={review.product.nameDe} fill className="object-cover" />
                       )}
                     </div>
                     <div className="min-w-0">

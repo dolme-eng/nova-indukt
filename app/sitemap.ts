@@ -31,14 +31,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const [dbProducts, dbCategories, dbBlogPosts] = await Promise.all([
-      prisma.product.findMany({ where: { isActive: true }, select: { slug: true } }),
+      prisma.product.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
       prisma.category.findMany({ where: { isActive: true }, select: { slug: true } }),
-      prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, publishedAt: true, createdAt: true } }),
+      prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, publishedAt: true, createdAt: true, updatedAt: true } }),
     ])
 
     const productRoutes: MetadataRoute.Sitemap = dbProducts.map((product) => ({
       url: `${BASE_URL}/produkt/${product.slug}`,
-      lastModified: new Date(),
+      lastModified: product.updatedAt,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }))
@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const blogRoutes: MetadataRoute.Sitemap = dbBlogPosts.map((post) => ({
       url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: post.publishedAt || post.createdAt,
+      lastModified: post.updatedAt || post.publishedAt || post.createdAt,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     }))

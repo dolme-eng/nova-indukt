@@ -49,19 +49,111 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-function renderInlineMarkdown(text: string): string {
-  let safe = escapeHtml(text)
-  safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-  safe = safe.replace(/\*(.+?)\*/g, '<em>$1</em>')
-  safe = safe.replace(/`(.+?)`/g, '<code class="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">$1</code>')
-  safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, linkText, url) => {
-    // Only allow http/https/relative URLs — block javascript: URIs
-    if (/^(https?:\/\/|\/|#)/.test(url)) {
-      return `<a href="${url}" class="text-[#4ECCA3] hover:underline" target="_blank" rel="noopener noreferrer">${linkText}</a>`
+// Render inline markdown as safe React elements (no dangerouslySetInnerHTML)
+function renderInlineMarkdown(text: string): React.ReactNode {
+  const parts: React.ReactNode[] = []
+  let remaining = text
+  let key = 0
+
+  // Process links first: [text](url)
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+
+  // Reset regex
+  linkRegex.lastIndex = 0
+
+  const tokens: { type: string; text: string; url?: string; index: number }[] = []
+
+  // Collect bold tokens
+  const boldRegex = /\*\*(.+?)\*\*/g
+  boldRegex.lastIndex = 0
+  while ((match = boldRegex.exec(text)) !== null) {
+    tokens.push({ type: 'bold', text: match[1], index: match.index })
+  }
+
+  // Collect italic tokens (only single *, not overlapping with bold)
+  const italicRegex = /(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g
+  italicRegex.lastIndex = 0
+  while ((match = italicRegex.exec(text)) !== null) {
+    tokens.push({ type: 'italic', text: match[1], index: match.index })
+  }
+
+  // Collect code tokens
+  const codeRegex = /`(.+?)`/g
+  codeRegex.lastIndex = 0
+  while ((match = codeRegex.exec(text)) !== null) {
+    tokens.push({ type: 'code', text: match[1], index: match.index })
+  }
+
+  // Sort by position, break ties by length (longer first)
+  tokens.sort((a, b) => a.index - b.index || b.text.length - a.text.length)
+
+  // Build JSX from tokens
+  lastIndex = 0
+  for (const token of tokens) {
+    // Skip if this token overlaps with a previous one
+    if (token.index < lastIndex) continue
+
+    // Add plain text before this token
+    if (token.index > lastIndex) {
+      parts.push(<span key={key++}>{escapeHtml(text.slice(lastIndex, token.index))}</span>)
     }
-    return linkText
-  })
-  return safe
+
+    if (token.type === 'bold') {
+      parts.push(<strong key={key++} className="font-semibold">{token.text}</strong>)
+    } else if (token.type === 'italic') {
+      parts.push(<em key={key++}>{token.text}</em>)
+    } else if (token.type === 'code') {
+      parts.push(
+        <code key={key++} className="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">
+          {escapeHtml(token.text)}
+        </code>
+      )
+    }
+
+    lastIndex = token.index + token.text.length + (token.type === 'bold' ? 4 : token.type === 'italic' ? 2 : 2)
+  }
+
+  // Add remaining plain text
+  if (lastIndex < text.length) {
+    parts.push(<span key={key++}>{escapeHtml(text.slice(lastIndex))}</span>)
+  }
+
+  return parts.length > 0 ? parts : escapeHtml(text)
+}
+
+// Render a link safely: [text](url)
+function renderLink(text: string): React.ReactNode {
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+  const parts: React.ReactNode[] = []
+  let lastIndex = 0
+  let key = 0
+  let match: RegExpExecArray | null
+
+  linkRegex.lastIndex = 0
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(<span key={key++}>{renderInlineMarkdown(text.slice(lastIndex, match.index))}</span>)
+    }
+    const [, linkText, url] = match
+    if (/^(https?:\/\/|\/|#)/.test(url)) {
+      parts.push(
+        <a key={key++} href={url} className="text-[#4ECCA3] hover:underline" target="_blank" rel="noopener noreferrer">
+          {linkText}
+        </a>
+      )
+    } else {
+      parts.push(<span key={key++}>{linkText}</span>)
+    }
+    lastIndex = match.index + match[0].length
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(<span key={key++}>{renderInlineMarkdown(text.slice(lastIndex))}</span>)
+  }
+
+  return parts.length > 0 ? parts : renderInlineMarkdown(text)
 }
 
 function renderContent(content: string): JSX.Element {
@@ -74,12 +166,12 @@ function renderContent(content: string): JSX.Element {
 
     // Headings
     if (line.startsWith('## ')) {
-      elements.push(<h2 key={i} className="text-2xl font-bold text-gray-900 mt-10 mb-4">{renderInlineMarkdown(line.replace('## ', ''))}</h2>)
+      elements.push(<h2 key={i} className="text-2xl font-bold text-gray-900 mt-10 mb-4">{renderLink(line.replace('## ', ''))}</h2>)
       i++
       continue
     }
     if (line.startsWith('### ')) {
-      elements.push(<h3 key={i} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{renderInlineMarkdown(line.replace('### ', ''))}</h3>)
+      elements.push(<h3 key={i} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{renderLink(line.replace('### ', ''))}</h3>)
       i++
       continue
     }
@@ -93,7 +185,7 @@ function renderContent(content: string): JSX.Element {
       }
       elements.push(
         <blockquote key={i} className="border-l-4 border-[#4ECCA3] pl-4 py-2 my-4 bg-gray-50 rounded-r-lg">
-          <p className="text-gray-600 italic" dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(quoteLines.join(' ')) }} />
+          <p className="text-gray-600 italic">{renderLink(quoteLines.join(' '))}</p>
         </blockquote>
       )
       continue
@@ -109,7 +201,7 @@ function renderContent(content: string): JSX.Element {
       elements.push(
         <ul key={i} className="list-disc list-inside space-y-1 my-4 text-gray-700">
           {listItems.map((item, j) => (
-            <li key={j} dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(item) }} />
+            <li key={j}>{renderLink(item)}</li>
           ))}
         </ul>
       )
@@ -126,7 +218,7 @@ function renderContent(content: string): JSX.Element {
       elements.push(
         <ol key={i} className="list-decimal list-inside space-y-1 my-4 text-gray-700">
           {listItems.map((item, j) => (
-            <li key={j} dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(item) }} />
+            <li key={j}>{renderLink(item)}</li>
           ))}
         </ol>
       )
@@ -148,7 +240,7 @@ function renderContent(content: string): JSX.Element {
             <thead>
               <tr className="bg-gray-50">
                 {headers.map((h, j) => (
-                  <th key={j} className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b border-gray-200">{renderInlineMarkdown(h)}</th>
+                  <th key={j} className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b border-gray-200">{renderLink(h)}</th>
                 ))}
               </tr>
             </thead>
@@ -156,7 +248,7 @@ function renderContent(content: string): JSX.Element {
               {rows.map((row, j) => (
                 <tr key={j} className="border-b border-gray-100 hover:bg-gray-50">
                   {row.map((cell, k) => (
-                    <td key={k} className="px-4 py-3 text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(cell) }} />
+                    <td key={k} className="px-4 py-3 text-sm text-gray-700">{renderLink(cell)}</td>
                   ))}
                 </tr>
               ))}
@@ -196,7 +288,7 @@ function renderContent(content: string): JSX.Element {
     }
     if (paraLines.length > 0) {
       elements.push(
-        <p key={i} className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(paraLines.join(' ')) }} />
+        <p key={i} className="text-gray-700 leading-relaxed mb-4">{renderLink(paraLines.join(' '))}</p>
       )
     }
   }
