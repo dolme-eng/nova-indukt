@@ -24,6 +24,11 @@
       "permanent": true
     },
     {
+      "source": "/shop",
+      "destination": "/produkte",
+      "permanent": true
+    },
+    {
       "source": "/informationen-zur-zahlung",
       "destination": "/informations-de-paiement",
       "permanent": false

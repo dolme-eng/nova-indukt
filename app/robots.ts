@@ -14,6 +14,8 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/warenkorb/',
           '/kasse/',
+          '/suche/',
+          '/bestellung-verfolgen/',
           '/_next/',
           '/studio/',
           '/private/',
