@@ -474,7 +474,7 @@ export async function sendPasswordResetEmail(
   resetToken: string
 ) {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de'
+    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de').replace(/\/+$/, '')
     const resetUrl = `${baseUrl}/passwort-zuruecksetzen?token=${resetToken}`
 
     const html = await render(
