@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de'
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de').replace(/\/+$/, '')
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes (always included)

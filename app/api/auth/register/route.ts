@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Send verification email
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nova-indukt.de"
+    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://nova-indukt.de").replace(/\/+$/, "")
     const verificationUrl = `${siteUrl}/api/auth/verify-email?token=${verificationToken}`
 
     const html = await render(
