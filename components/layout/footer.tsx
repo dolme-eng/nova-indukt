@@ -52,8 +52,8 @@ export function Footer() {
                   <feature.icon className="w-3.5 h-3.5 text-nova-400" />
                 </div>
                 <div className="flex flex-col justify-center min-w-0">
-                  <h3 className="font-black text-[10px] text-white uppercase tracking-tight truncate">{feature.title}</h3>
-                  <p className="text-[9px] text-[#9FE1CD] font-medium leading-none truncate">{feature.desc}</p>
+                  <h3 className="font-black text-[11px] sm:text-xs text-white uppercase tracking-tight truncate">{feature.title}</h3>
+                  <p className="text-[10px] sm:text-[11px] text-[#9FE1CD] font-medium leading-tight truncate">{feature.desc}</p>
                 </div>
               </div>
             ))}

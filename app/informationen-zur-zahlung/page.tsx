@@ -4,9 +4,7 @@ import { redirect } from 'next/navigation'
 export const metadata: Metadata = {
   title: 'Zahlungsinformationen',
   description: 'Zahlungsinformationen und Bankverbindung für Ihre Bestellung bei NOVA INDUKT',
-  alternates: {
-    canonical: '/informationen-zur-zahlung',
-  },
+  robots: { index: false },
 }
 
 export default function ZahlungsinformationenPage() {

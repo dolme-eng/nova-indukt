@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/footer"
 import { CookieConsent } from "@/components/cookie-consent"
 import { PageTransition } from "@/components/page-transition"
 import { CustomCursor } from "@/components/custom-cursor"
+import { ScrollToTop } from "@/components/layout/scroll-to-top"
 import { PreloadResources } from "./preload-resources"
 import { Providers } from "@/components/providers"
 import { AuthSync } from "@/components/auth-sync"
@@ -164,6 +165,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <CookieConsent />
         <CustomCursor />
+        <ScrollToTop />
       </body>
     </html>
   )

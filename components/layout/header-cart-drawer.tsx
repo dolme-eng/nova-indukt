@@ -68,21 +68,35 @@ export function CartDrawer({
             {/* Body */}
             <div className="flex-1 overflow-y-auto p-6 bg-white">
               {items.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
-                    <ShoppingCart className="w-8 h-8 text-gray-300" />
+                <div className="h-full flex flex-col items-center justify-center text-center space-y-6 py-8">
+                  <div className="w-24 h-24 bg-[#4ECCA3]/10 rounded-full flex items-center justify-center">
+                    <ShoppingCart className="w-10 h-10 text-[#4ECCA3]/40" />
                   </div>
-                  <h3 className="text-2xl font-bold font-heading text-[#0C211E]">Ihr Warenkorb ist leer</h3>
-                  <p className="text-gray-500 max-w-[280px]">
-                    Entdecken Sie unsere Premium-Kollektionen und lassen Sie sich inspirieren.
-                  </p>
-                  <Link
-                    href="/produkte"
-                    onClick={onClose}
-                    className="px-8 py-4 bg-[#0C211E] text-white rounded-xl font-bold hover:bg-[#17423C] shadow-lg shadow-[#0C211E]/20 transition-all mt-4"
-                  >
-                    Zum Shop
-                  </Link>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold font-heading text-[#0C211E]">Ihr Warenkorb ist leer</h3>
+                    <p className="text-gray-500 max-w-[300px] text-sm">
+                      Entdecken Sie unsere Premium-Kochgeschirr-Kollektion und finden Sie Ihr neues Lieblingsstück.
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[300px]">
+                    <Link
+                      href="/produkte"
+                      onClick={onClose}
+                      className="flex-1 px-6 py-3.5 bg-[#0C211E] text-white rounded-xl font-bold hover:bg-[#17423C] shadow-lg shadow-[#0C211E]/20 transition-all text-sm"
+                    >
+                      Zum Shop
+                    </Link>
+                    <Link
+                      href="/produkte?bestseller=true"
+                      onClick={onClose}
+                      className="flex-1 px-6 py-3.5 bg-white border border-gray-200 text-[#0C211E] rounded-xl font-bold hover:bg-gray-50 transition-colors text-sm"
+                    >
+                      Bestseller
+                    </Link>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-gray-400 mt-2">
+                    <Truck className="w-3.5 h-3.5" /> Kostenloser Versand ab 500 €
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-6">

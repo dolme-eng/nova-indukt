@@ -2,8 +2,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Search, X, Loader2, ArrowRight } from 'lucide-react'
+import { Search, X, Loader2, ArrowRight, Clock, Trash2 } from 'lucide-react'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 interface SearchResult {
@@ -24,6 +25,29 @@ interface SearchOverlayProps {
 }
 
 const POPULAR_SEARCHES = ['Induktionstopf', 'Bratpfanne', 'Messer aus Japan', 'Dampfgarer']
+const RECENT_SEARCHES_KEY = 'nova-recent-searches'
+const MAX_RECENT = 6
+
+function getRecentSearches(): string[] {
+  if (typeof window === 'undefined') return []
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY) || '[]')
+  } catch {
+    return []
+  }
+}
+
+function addRecentSearch(term: string) {
+  const trimmed = term.trim()
+  if (!trimmed || trimmed.length < 2) return
+  const existing = getRecentSearches().filter((s) => s.toLowerCase() !== trimmed.toLowerCase())
+  const updated = [trimmed, ...existing].slice(0, MAX_RECENT)
+  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated))
+}
+
+function clearRecentSearches() {
+  localStorage.removeItem(RECENT_SEARCHES_KEY)
+}
 
 export function SearchOverlay({
   searchQuery,
@@ -33,6 +57,28 @@ export function SearchOverlay({
   isSearching,
   inputRef,
 }: SearchOverlayProps) {
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
+
+  useEffect(() => {
+    setRecentSearches(getRecentSearches())
+  }, [])
+
+  const handleQueryChange = useCallback((q: string) => {
+    onQueryChange(q)
+  }, [onQueryChange])
+
+  useEffect(() => {
+    if (searchQuery && searchQuery.length >= 2) {
+      const timer = setTimeout(() => addRecentSearch(searchQuery), 800)
+      return () => clearTimeout(timer)
+    }
+  }, [searchQuery])
+
+  const clearAll = useCallback(() => {
+    clearRecentSearches()
+    setRecentSearches([])
+  }, [])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -80,9 +126,38 @@ export function SearchOverlay({
         <div className="max-w-4xl mx-auto">
           {!searchQuery ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 opacity-70">
-              <div className="col-span-full mb-4">
-                <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Beliebte Suchen</p>
-              </div>
+              {recentSearches.length > 0 && (
+                <>
+                  <div className="col-span-full mb-4 flex items-center justify-between">
+                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5" /> Zuletzt gesucht
+                    </p>
+                    <button
+                      onClick={clearAll}
+                      className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors"
+                    >
+                      <Trash2 className="w-3 h-3" /> Löschen
+                    </button>
+                  </div>
+                  {recentSearches.map((term) => (
+                    <button
+                      key={`recent-${term}`}
+                      onClick={() => handleQueryChange(term)}
+                      className="px-5 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl font-bold text-sm text-left transition-colors border border-gray-100 flex items-center gap-2"
+                    >
+                      <Clock className="w-3.5 h-3.5 text-gray-400" /> {term}
+                    </button>
+                  ))}
+                  <div className="col-span-full mt-4 mb-4">
+                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Beliebte Suchen</p>
+                  </div>
+                </>
+              )}
+              {recentSearches.length === 0 && (
+                <div className="col-span-full mb-4">
+                  <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Beliebte Suchen</p>
+                </div>
+              )}
               {POPULAR_SEARCHES.map((term) => (
                 <button
                   key={term}
