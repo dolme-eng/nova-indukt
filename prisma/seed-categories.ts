@@ -2,6 +2,9 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 const newCategories = [
+  { slug: 'induktionspfannen', nameDe: 'Induktionspfannen', description: 'Premium Bratpfannen, Woks und Schmorpfannen für maximale Induktionsleistung', image: '/images/Kategorien/induktionspfannen.jpg', sortOrder: 1 },
+  { slug: 'induktions-sets', nameDe: 'Topf- & Pfannensets', description: 'Perfekt abgestimmte Kochgeschirr-Sets für Ihre Induktionsküche', image: '/images/Kategorien/induktions-sets.jpg', sortOrder: 3 },
+  { slug: 'induktionskochfelder-herde', nameDe: 'Induktionskochfelder & Herde', description: 'Einbau-Kochfelder, autarke Induktionsplatten und Premium-Herde mit modernster Induktionstechnologie', image: '/images/Kategorien/induktionskochfelder-herde.jpg', sortOrder: 5 },
   { slug: 'messer', nameDe: 'Kochmesser & Messerblocks', description: 'Hochwertige Küchenmesser, Messerblöcke und Schärfwerkzeuge von Top-Marken', image: '/images/Kategorien/messer.jpg', sortOrder: 6 },
   { slug: 'ustensiles', nameDe: 'Küchenutensilien', description: 'Kochlöffel, Schöpfkellen, Zangen und weiteres Kochbesteck für die Induktionsküche', image: '/images/Kategorien/ustensiles.jpg', sortOrder: 7 },
   { slug: 'sauteusen', nameDe: 'Sauteusen', description: 'High-End Sauteusen aus Edelstahl und Gusseisen für professionelles Garen auf Induktion', image: '/images/Kategorien/sauteusen.jpg', sortOrder: 8 },
@@ -22,7 +25,12 @@ async function main() {
   for (const cat of newCategories) {
     const existing = await prisma.category.findUnique({ where: { slug: cat.slug } })
     if (existing) {
-      console.log(`  ↻ Déjà existant : ${cat.slug}`)
+      if (existing.image !== cat.image) {
+        await prisma.category.update({ where: { slug: cat.slug }, data: { image: cat.image } })
+        console.log(`  ↻ Mis à jour : ${cat.slug} → ${cat.image}`)
+      } else {
+        console.log(`  ↻ Déjà à jour : ${cat.slug}`)
+      }
       skipped++
       continue
     }
