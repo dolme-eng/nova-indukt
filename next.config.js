@@ -38,9 +38,13 @@ const nextConfig = {
     }
 
     // CSP applied to ALL routes (not just middleware-matched ones)
+    // NOTE: 'strict-dynamic' is intentionally NOT used because Next.js loads
+    // chunks via static <script> tags, which strict-dynamic blocks (it disables
+    // 'self' and 'unsafe-inline' per CSP3 spec). Instead we rely on 'self' +
+    // 'unsafe-inline' which is the standard Next.js CSP pattern.
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'strict-dynamic' https://accounts.google.com/gsi/client",
+      "script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' https://fonts.gstatic.com",
