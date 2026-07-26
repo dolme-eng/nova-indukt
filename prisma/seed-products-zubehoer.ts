@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Catégorie 4 : Induktions-Zubehör (5 Produits)
+﻿/**
+ * NOVA INDUKT - Seed Catégorie 4 : Induktions-Zubehör (5 Produits)
  * Exécuter avec : npx tsx prisma/seed-products-zubehoer.ts
  */
 
@@ -49,9 +49,10 @@ Ein absoluter Preis-Leistungs-Sieger (Note 1,2) für alle, die ihr altes Lieblin
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Rosenstein & Söhne Induktions-Adapterplatte 24 cm | NOVA INDUKT',
-    metaDescription: 'Universal-Adapterplatte für Induktion (24 cm) von Rosenstein & Söhne. Alu, Kupfer und Glas auf Induktion nutzen. Mit abnehmbarem Griff.',
+    metaDescription:
+      'Universal-Adapterplatte für Induktion (24 cm) von Rosenstein & Söhne. Alu, Kupfer und Glas auf Induktion nutzen. Mit abnehmbarem Griff.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Rosenstein & Söhne — Universal-Adapterplatte Ø 24 cm',
+    folder: 'Rosenstein & Söhne - Universal-Adapterplatte Ø 24 cm',
     imageFiles: ['1.png', '2.png', '3.png', '4.png'],
   },
   {
@@ -84,9 +85,10 @@ Hervorragendes Preis-Leistungs-Verhältnis für die alltäglichen kleinen Aufgab
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Rosenstein & Söhne Induktions-Adapterplatte 20 cm | NOVA INDUKT',
-    metaDescription: 'Kompakte 20 cm Adapterplatte für Induktion. Ideal für Teekannen und kleine Töpfe. Ferromagnetischer Edelstahl mit Alukern.',
+    metaDescription:
+      'Kompakte 20 cm Adapterplatte für Induktion. Ideal für Teekannen und kleine Töpfe. Ferromagnetischer Edelstahl mit Alukern.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Rosenstein & Söhne — Universal-Adapterplatte Ø 20 cm',
+    folder: 'Rosenstein & Söhne - Universal-Adapterplatte Ø 20 cm',
     imageFiles: ['1.png', '2.png', '3.png', '4.png'],
   },
   {
@@ -118,9 +120,10 @@ Hervorragendes Preis-Leistungs-Verhältnis für die alltäglichen kleinen Aufgab
     rating: 4.2,
     reviewCount: 0,
     metaTitle: 'INTERKITCHEN Induktions-Adapterplatte 20 cm | NOVA INDUKT',
-    metaDescription: 'Stabile INTERKITCHEN Induktions-Adapterplatte 20 cm. Extrem flaches Design ohne Griff für maximale Auflage und Hitzeverteilung.',
+    metaDescription:
+      'Stabile INTERKITCHEN Induktions-Adapterplatte 20 cm. Extrem flaches Design ohne Griff für maximale Auflage und Hitzeverteilung.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'INTERKITCHEN — Induktions-Adapterplatte Ø 20 cm',
+    folder: 'INTERKITCHEN - Induktions-Adapterplatte Ø 20 cm',
     imageFiles: ['1.png', '2.png', '3.png', '4.png'],
   },
   {
@@ -153,9 +156,10 @@ Ein unverzichtbares Zubehör für alle, die ihr Glasfeld makellos erhalten wolle
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Lukata Silikon-Schutzmatte für Induktion | NOVA INDUKT',
-    metaDescription: 'Magnetische Silikon-Schutzmatte für Induktionskochfelder von Lukata. Schützt vor Kratzern, rutschfest, hitzebeständig bis 300°C.',
+    metaDescription:
+      'Magnetische Silikon-Schutzmatte für Induktionskochfelder von Lukata. Schützt vor Kratzern, rutschfest, hitzebeständig bis 300°C.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Lukata — Silikon Induktionskochfeld-Schutzmatte (Magnétique)',
+    folder: 'Lukata - Silikon Induktionskochfeld-Schutzmatte (Magnétique)',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -188,9 +192,10 @@ Bewährte Qualität für ein entspanntes und sicheres Kocherlebnis auf Induktion
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Sallys Induktionsmatte Oval | NOVA INDUKT',
-    metaDescription: 'Ovale Induktionsmatte von Sallys Welt. Schützt das Glasfeld vor Kratzern, hitzebeständig bis 240°C, rutschfest.',
+    metaDescription:
+      'Ovale Induktionsmatte von Sallys Welt. Schützt das Glasfeld vor Kratzern, hitzebeständig bis 240°C, rutschfest.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Sallys — Induktionsmatte Oval',
+    folder: 'Sallys - Induktionsmatte Oval',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -227,7 +232,8 @@ Schützen Sie Ihre teure Induktionsplatte effektiv und kochen Sie direkt auf den
     rating: 4.6,
     reviewCount: 0,
     metaTitle: 'Dietrix Kochschutzmatten Induktion 4er-Set | NOVA INDUKT',
-    metaDescription: 'Premium-Kochschutzmatten von Dietrix für Induktionsplatten. 4er-Set (2x 20cm, 2x 26cm). Rutschfest, spülmaschinenfest, hitzebeständig bis 240°C.',
+    metaDescription:
+      'Premium-Kochschutzmatten von Dietrix für Induktionsplatten. 4er-Set (2x 20cm, 2x 26cm). Rutschfest, spülmaschinenfest, hitzebeständig bis 240°C.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Dietrix  Induktionsschutz.de  Kochschutzmatten Set (4-tlg.)',
     imageFiles: ['1.png', '2.png', '3.png'],
@@ -262,9 +268,10 @@ Die feste Paste löst selbst extremste Verkrustungen mühelos ohne jegliche Krat
     rating: 4.7,
     reviewCount: 0,
     metaTitle: 'Dr. Beckmann Glaskeramik-Putzstein 250g | NOVA INDUKT',
-    metaDescription: 'Dr. Beckmann Putzstein für Glaskeramik- und Induktionsfelder. Entfernt Eingebranntes kratzfrei. Inklusive zweiseitigem Schwamm. Made in Germany.',
+    metaDescription:
+      'Dr. Beckmann Putzstein für Glaskeramik- und Induktionsfelder. Entfernt Eingebranntes kratzfrei. Inklusive zweiseitigem Schwamm. Made in Germany.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Dr. Beckmann — Glaskeramik-Putzstein 250 g',
+    folder: 'Dr. Beckmann - Glaskeramik-Putzstein 250 g',
     imageFiles: ['1.png', '2.png', '3.png', '4.png'],
   },
   {
@@ -272,7 +279,7 @@ Die feste Paste löst selbst extremste Verkrustungen mühelos ohne jegliche Krat
     supplierSku: 'CER-3IN1-250',
     sortOrder: 8,
     nameDe: 'Ceraclen 3 in 1 Reiniger & Pfleger',
-    shortDescription: 'Vergleich.org Platz 1 Testsieger — reinigt, poliert und schützt intensiv',
+    shortDescription: 'Vergleich.org Platz 1 Testsieger - reinigt, poliert und schützt intensiv',
     descriptionDe: `Ceraclen 3 in 1 ist der unangefochtene Testsieger auf Vergleich.org für die regelmäßige Pflege von Glaskeramik- und Induktionskochfeldern. 
 
 **Merkmale:**
@@ -282,7 +289,7 @@ Die feste Paste löst selbst extremste Verkrustungen mühelos ohne jegliche Krat
 - Empfohlen für den täglichen Gebrauch nach dem Kochen
 
 Die Profi-Pflege für Ihr Induktionsfeld, damit es auch nach Jahren noch aussieht wie am ersten Tag!`,
-    price: 3.00,
+    price: 3.0,
     oldPrice: null,
     brand: 'Ceraclen',
     material: 'Flüssiger Glaskeramik-Reiniger',
@@ -296,9 +303,10 @@ Die Profi-Pflege für Ihr Induktionsfeld, damit es auch nach Jahren noch aussieh
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Ceraclen 3 in 1 Reiniger & Pfleger 250ml | NOVA INDUKT',
-    metaDescription: 'Ceraclen 3-in-1 Glaskeramikreiniger. Reinigt, poliert und schützt mit speziellem Hitzeschutzfilm. Testsieger auf Vergleich.org.',
+    metaDescription:
+      'Ceraclen 3-in-1 Glaskeramikreiniger. Reinigt, poliert und schützt mit speziellem Hitzeschutzfilm. Testsieger auf Vergleich.org.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Ceraclen — 3 in 1 Reiniger & Pfleger',
+    folder: 'Ceraclen - 3 in 1 Reiniger & Pfleger',
     imageFiles: ['1.png', '2.png', '3.png', '4.png'],
   },
   {
@@ -316,8 +324,8 @@ Die Profi-Pflege für Ihr Induktionsfeld, damit es auch nach Jahren noch aussieh
 - Verhindert abrasive Beschädigungen und Mikrokratzer durch den Verzicht auf aggressive Chemikalien
 
 Vertrauen Sie dem Original des Herstellers für eine materialschonende, hocheffiziente Reinigung Ihrer Design-Küche.`,
-    price: 13.90,
-    oldPrice: 15.00,
+    price: 13.9,
+    oldPrice: 15.0,
     brand: 'Siemens',
     material: 'Flüssiger Spezialreiniger',
     dimensions: '250 ml Flasche mit Dosierspender',
@@ -330,9 +338,10 @@ Vertrauen Sie dem Original des Herstellers für eine materialschonende, hocheffi
     rating: 4.6,
     reviewCount: 0,
     metaTitle: 'Siemens original BSH Kochfeldreiniger 250ml | NOVA INDUKT',
-    metaDescription: 'Original BSH Siemens & Bosch Spezialreiniger für Glaskeramik, Induktion und Edelstahl. Schonende Intensivreinigung ohne Kratzer.',
+    metaDescription:
+      'Original BSH Siemens & Bosch Spezialreiniger für Glaskeramik, Induktion und Edelstahl. Schonende Intensivreinigung ohne Kratzer.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Siemens — Kochfeldreiniger (Original)',
+    folder: 'Siemens - Kochfeldreiniger (Original)',
     imageFiles: ['1.png', '2.png', '3.png', '4.png'],
   },
   {
@@ -364,7 +373,8 @@ Ideal für Schokolade, cremige Saucen und alle Gerichte, die eine absolut gleich
     rating: 4.1,
     reviewCount: 0,
     metaTitle: 'Induktions-Simmerring / Wärmeverteilerplatte Ø 24cm | NOVA INDUKT',
-    metaDescription: 'Hitzeverteiler-Platte & Simmerring (24 cm) für Induktion. Verhindert das Anbrennen von Milch, Saucen und Schokolade. Edelstahl.',
+    metaDescription:
+      'Hitzeverteiler-Platte & Simmerring (24 cm) für Induktion. Verhindert das Anbrennen von Milch, Saucen und Schokolade. Edelstahl.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Simmerring  Wärmeverteiler-Platte  Ø 24 cm',
     imageFiles: ['1.png', '2.png', '3.png', '4.png'],
@@ -372,7 +382,7 @@ Ideal für Schokolade, cremige Saucen und alle Gerichte, die eine absolut gleich
 ]
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Catégorie 4 : Induktions-Zubehör (10 Produits)')
+  console.log('🌱 NOVA INDUKT - Seed Catégorie 4 : Induktions-Zubehör (10 Produits)')
   console.log('─'.repeat(70))
 
   const categories = await prisma.category.findMany()
@@ -423,7 +433,9 @@ async function main() {
           data: imageData.map((img) => ({ ...img, productId: existing.id })),
         })
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 60)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 60)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -453,12 +465,14 @@ async function main() {
           },
         })
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 60)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 60)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -473,7 +487,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Catégorie Induktions-Zubehör terminée avec succès ! 5/5 produits en base.')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs.`)
     process.exit(1)
   }
 }

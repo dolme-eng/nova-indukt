@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : 8 Induktionstöpfe
+﻿/**
+ * NOVA INDUKT - Seed Extra : 8 Induktionstöpfe
  * Exécuter avec : npx tsx prisma/seed-products-toepfe-extra.ts
  */
 
@@ -9,7 +9,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,12 +31,12 @@ const products = [
     slug: 'wmf-diadem-plus-kochtopf-hoch-20cm',
     supplierSku: 'WMF-DP-KT20',
     nameDe: 'WMF Diadem Plus Kochtopf hoch 20 cm',
-    shortDescription: 'Edelstahl-Topf mit TransTherm®-Boden — Made in Germany',
+    shortDescription: 'Edelstahl-Topf mit TransTherm®-Boden - Made in Germany',
     descriptionDe: `Der WMF Diadem Plus Kochtopf hoch 20 cm bietet bewährte WMF-Qualität mit dem patentierten TransTherm®-Universalboden für optimale Wärmeverteilung auf Induktion.
 
 **Merkmale:**
 - Cromargan® Edelstahl 18/10
-- TransTherm®-Universalboden — optimale Wärmeverteilung
+- TransTherm®-Universalboden - optimale Wärmeverteilung
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 - 3,0 L Fassungsvermögen
@@ -52,10 +55,11 @@ Kompakter Kochtopf für Suppen und Beilagen.`,
     badges: ['Made in Germany', 'TransTherm®'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Diadem Plus Kochtopf hoch 20 cm — Edelstahl Induktion | NOVA INDUKT',
-    metaDescription: 'WMF Diadem Plus Kochtopf 20 cm mit TransTherm®-Boden, Cromargan® Edelstahl, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Diadem Plus Kochtopf hoch 20 cm - Edelstahl Induktion | NOVA INDUKT',
+    metaDescription:
+      'WMF Diadem Plus Kochtopf 20 cm mit TransTherm®-Boden, Cromargan® Edelstahl, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'WMF Diadem Plus Kochtopf hoch — 20 cm',
+    folder: 'WMF Diadem Plus Kochtopf hoch - 20 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -63,12 +67,12 @@ Kompakter Kochtopf für Suppen und Beilagen.`,
     slug: 'wmf-diadem-plus-kochtopf-hoch-24cm',
     supplierSku: 'WMF-DP-KT24',
     nameDe: 'WMF Diadem Plus Kochtopf hoch 24 cm',
-    shortDescription: 'Edelstahl-Topf mit TransTherm®-Boden — Made in Germany, 5,0 L',
+    shortDescription: 'Edelstahl-Topf mit TransTherm®-Boden - Made in Germany, 5,0 L',
     descriptionDe: `Der WMF Diadem Plus Kochtopf hoch 24 cm ist die ideale Wahl für größere Portionen und bietet 5 Liter Fassungsvermögen.
 
 **Merkmale:**
 - Cromargan® Edelstahl 18/10
-- TransTherm®-Universalboden — optimale Wärmeverteilung
+- TransTherm®-Universalboden - optimale Wärmeverteilung
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 - 5,0 L Fassungsvermögen
@@ -87,10 +91,11 @@ Der Universaltopf für Familienkochen auf Induktion.`,
     badges: ['Made in Germany', 'TransTherm®'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Diadem Plus Kochtopf hoch 24 cm — Edelstahl Induktion | NOVA INDUKT',
-    metaDescription: 'WMF Diadem Plus Kochtopf 24 cm mit TransTherm®-Boden, Cromargan® Edelstahl, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Diadem Plus Kochtopf hoch 24 cm - Edelstahl Induktion | NOVA INDUKT',
+    metaDescription:
+      'WMF Diadem Plus Kochtopf 24 cm mit TransTherm®-Boden, Cromargan® Edelstahl, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'WMF Diadem Plus Kochtopf hoch — 24 cm',
+    folder: 'WMF Diadem Plus Kochtopf hoch - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -98,7 +103,7 @@ Der Universaltopf für Familienkochen auf Induktion.`,
     slug: 'zwilling-plus-kochtopf-hoch-20cm',
     supplierSku: 'ZWI-P-KT20',
     nameDe: 'Zwilling Plus Kochtopf hoch 20 cm',
-    shortDescription: '3-Ply Edelstahl-Topf mit Sigma Classic — ideal für Induktion',
+    shortDescription: '3-Ply Edelstahl-Topf mit Sigma Classic - ideal für Induktion',
     descriptionDe: `Der Zwilling Plus Kochtopf hoch 20 cm bietet eine 3-Schicht-Konstruktion für optimale Wärmeverteilung auf dem Induktionskochfeld.
 
 **Merkmale:**
@@ -122,10 +127,11 @@ Leichter und schneller Topf für die moderne Küche.`,
     badges: ['3-Ply', 'Sigma Classic'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Zwilling Plus Kochtopf hoch 20 cm — 3-Ply Induktion | NOVA INDUKT',
-    metaDescription: 'Zwilling Plus Kochtopf 20 cm mit 3-Ply-Technologie, Edelstahl, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Plus Kochtopf hoch 20 cm - 3-Ply Induktion | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Plus Kochtopf 20 cm mit 3-Ply-Technologie, Edelstahl, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Zwilling Plus Kochtopf hoch — 20 cm',
+    folder: 'Zwilling Plus Kochtopf hoch - 20 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -133,7 +139,7 @@ Leichter und schneller Topf für die moderne Küche.`,
     slug: 'zwilling-plus-kochtopf-hoch-24cm',
     supplierSku: 'ZWI-P-KT24',
     nameDe: 'Zwilling Plus Kochtopf hoch 24 cm',
-    shortDescription: '3-Ply Edelstahl-Topf mit Sigma Classic — 5,0 L',
+    shortDescription: '3-Ply Edelstahl-Topf mit Sigma Classic - 5,0 L',
     descriptionDe: `Der Zwilling Plus Kochtopf hoch 24 cm bietet 5 Liter Fassungsvermögen und die bewährte 3-Ply-Qualität.
 
 **Merkmale:**
@@ -157,10 +163,11 @@ Der Allround-Topf für Familien und größere Portionen.`,
     badges: ['3-Ply', 'Sigma Classic'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Zwilling Plus Kochtopf hoch 24 cm — 3-Ply Induktion | NOVA INDUKT',
-    metaDescription: 'Zwilling Plus Kochtopf 24 cm mit 3-Ply-Technologie, Edelstahl, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Plus Kochtopf hoch 24 cm - 3-Ply Induktion | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Plus Kochtopf 24 cm mit 3-Ply-Technologie, Edelstahl, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Zwilling Plus Kochtopf hoch — 24 cm',
+    folder: 'Zwilling Plus Kochtopf hoch - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -168,17 +175,17 @@ Der Allround-Topf für Familien und größere Portionen.`,
     slug: 'silit-silargan-kochtopf-hoch-20cm',
     supplierSku: 'SIL-SIL-KT20',
     nameDe: 'Silit Silargan Kochtopf hoch 20 cm',
-    shortDescription: 'Silargan® Funktionskeramik — Made in Germany, 3,0 L',
+    shortDescription: 'Silargan® Funktionskeramik - Made in Germany, 3,0 L',
     descriptionDe: `Der Silit Silargan Kochtopf hoch 20 cm bietet die einzigartige Silargan®-Funktionskeramik für schonendes Kochen und optimale Wärmespeicherung.
 
 **Merkmale:**
-- Silargan® Funktionskeramik — extrem robust und langlebig
+- Silargan® Funktionskeramik - extrem robust und langlebig
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 - 3,0 L Fassungsvermögen
 - Ohne PTFE und PFOA
 
-Ein Topf für das Leben — Silargan® wird mit der Zeit immer besser.`,
+Ein Topf für das Leben - Silargan® wird mit der Zeit immer besser.`,
     price: 59.99,
     oldPrice: 74.99,
     brand: 'Silit',
@@ -192,10 +199,11 @@ Ein Topf für das Leben — Silargan® wird mit der Zeit immer besser.`,
     badges: ['Made in Germany', 'Silargan®'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Silit Silargan Kochtopf hoch 20 cm — Funktionskeramik Induktion | NOVA INDUKT',
-    metaDescription: 'Silit Silargan Kochtopf 20 cm mit Funktionskeramik, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Silit Silargan Kochtopf hoch 20 cm - Funktionskeramik Induktion | NOVA INDUKT',
+    metaDescription:
+      'Silit Silargan Kochtopf 20 cm mit Funktionskeramik, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Silit Silargan Kochtopf hoch — 20 cm',
+    folder: 'Silit Silargan Kochtopf hoch - 20 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -203,11 +211,11 @@ Ein Topf für das Leben — Silargan® wird mit der Zeit immer besser.`,
     slug: 'silit-silargan-kochtopf-hoch-24cm',
     supplierSku: 'SIL-SIL-KT24',
     nameDe: 'Silit Silargan Kochtopf hoch 24 cm',
-    shortDescription: 'Silargan® Funktionskeramik — Made in Germany, 5,0 L',
+    shortDescription: 'Silargan® Funktionskeramik - Made in Germany, 5,0 L',
     descriptionDe: `Der Silit Silargan Kochtopf hoch 24 cm bietet 5 Liter Fassungsvermögen mit der exklusiven Silargan®-Qualität.
 
 **Merkmale:**
-- Silargan® Funktionskeramik — extrem robust und langlebig
+- Silargan® Funktionskeramik - extrem robust und langlebig
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 - 5,0 L Fassungsvermögen
@@ -227,10 +235,11 @@ Der große Silargan®-Topf für Familienkochen auf Induktion.`,
     badges: ['Made in Germany', 'Silargan®'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Silit Silargan Kochtopf hoch 24 cm — Funktionskeramik Induktion | NOVA INDUKT',
-    metaDescription: 'Silit Silargan Kochtopf 24 cm mit Funktionskeramik, Made in Germany, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Silit Silargan Kochtopf hoch 24 cm - Funktionskeramik Induktion | NOVA INDUKT',
+    metaDescription:
+      'Silit Silargan Kochtopf 24 cm mit Funktionskeramik, Made in Germany, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Silit Silargan Kochtopf hoch — 24 cm',
+    folder: 'Silit Silargan Kochtopf hoch - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -238,19 +247,19 @@ Der große Silargan®-Topf für Familienkochen auf Induktion.`,
     slug: 'fissler-opc-schmortopf-24cm',
     supplierSku: 'FIS-OPC-ST24',
     nameDe: 'Fissler OPC Schmortopf mit Metalldeckel 24 cm',
-    shortDescription: 'Premium-Schmortopf mit CookStar®-Boden — Made in Germany, 3,5 L',
+    shortDescription: 'Premium-Schmortopf mit CookStar®-Boden - Made in Germany, 3,5 L',
     descriptionDe: `Der Fissler OPC Schmortopf 24 cm mit Metalldeckel bietet die exklusive CookStar®-Bodentechnologie für optimales Schmoren auf Induktion.
 
 **Merkmale:**
 - Edelstahl 18/10 mit CookStar®-Universalboden
-- Metalldeckel — ideal zum Schmoren
+- Metalldeckel - ideal zum Schmoren
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 - 3,5 L Fassungsvermögen
 
 Der Premium-Schmortopf für anspruchsvolles Garen auf Induktion.`,
-    price: 119.00,
-    oldPrice: 149.00,
+    price: 119.0,
+    oldPrice: 149.0,
     brand: 'Fissler',
     material: 'Edelstahl 18/10',
     dimensions: 'Ø 24 cm, Höhe 10 cm, 3,5 L',
@@ -262,10 +271,11 @@ Der Premium-Schmortopf für anspruchsvolles Garen auf Induktion.`,
     badges: ['Made in Germany', 'CookStar®'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Fissler OPC Schmortopf 24 cm — CookStar® Edelstahl Induktion | NOVA INDUKT',
-    metaDescription: 'Fissler OPC Schmortopf 24 cm mit Metalldeckel und CookStar®-Boden, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler OPC Schmortopf 24 cm - CookStar® Edelstahl Induktion | NOVA INDUKT',
+    metaDescription:
+      'Fissler OPC Schmortopf 24 cm mit Metalldeckel und CookStar®-Boden, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Fissler OPC Schmortopf — 24 cm',
+    folder: 'Fissler OPC Schmortopf - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -273,19 +283,19 @@ Der Premium-Schmortopf für anspruchsvolles Garen auf Induktion.`,
     slug: 'fissler-opc-schmortopf-28cm',
     supplierSku: 'FIS-OPC-ST28',
     nameDe: 'Fissler OPC Schmortopf mit Metalldeckel 28 cm',
-    shortDescription: 'Premium-Schmortopf mit CookStar®-Boden — Made in Germany, 5,0 L',
+    shortDescription: 'Premium-Schmortopf mit CookStar®-Boden - Made in Germany, 5,0 L',
     descriptionDe: `Der Fissler OPC Schmortopf 28 cm mit Metalldeckel bietet 5 Liter Fassungsvermögen für großzügiges Schmoren.
 
 **Merkmale:**
 - Edelstahl 18/10 mit CookStar®-Universalboden
-- Metalldeckel — ideal zum Schmoren
+- Metalldeckel - ideal zum Schmoren
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 - 5,0 L Fassungsvermögen
 
 Der große Schmortopf für Festmahlzeiten und Familienkochen.`,
-    price: 139.00,
-    oldPrice: 179.00,
+    price: 139.0,
+    oldPrice: 179.0,
     brand: 'Fissler',
     material: 'Edelstahl 18/10',
     dimensions: 'Ø 28 cm, Höhe 11 cm, 5,0 L',
@@ -297,10 +307,11 @@ Der große Schmortopf für Festmahlzeiten und Familienkochen.`,
     badges: ['Made in Germany', 'CookStar®'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Fissler OPC Schmortopf 28 cm — CookStar® Edelstahl Induktion | NOVA INDUKT',
-    metaDescription: 'Fissler OPC Schmortopf 28 cm mit Metalldeckel und CookStar®-Boden, Made in Germany, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler OPC Schmortopf 28 cm - CookStar® Edelstahl Induktion | NOVA INDUKT',
+    metaDescription:
+      'Fissler OPC Schmortopf 28 cm mit Metalldeckel und CookStar®-Boden, Made in Germany, 5 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Fissler OPC Schmortopf — 28 cm',
+    folder: 'Fissler OPC Schmortopf - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -308,7 +319,7 @@ Der große Schmortopf für Festmahlzeiten und Familienkochen.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Induktionstöpfe (8 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Induktionstöpfe (8 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -363,7 +374,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -396,12 +409,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -416,7 +431,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Batch Töpfe Extra terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

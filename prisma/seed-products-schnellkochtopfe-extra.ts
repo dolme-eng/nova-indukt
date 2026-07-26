@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : Schnellkochtöpfe (6 Produkte)
+﻿/**
+ * NOVA INDUKT - Seed Extra : Schnellkochtöpfe (6 Produkte)
  * Exécuter avec : npx tsx prisma/seed-products-schnellkochtopfe-extra.ts
  *
  * Catégorie : schnellkochtopfe (sortOrder 6–11)
@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,12 +31,13 @@ const products = [
     slug: 'fissler-vitavit-edition-80l',
     supplierSku: 'FIS-VVE-80',
     nameDe: 'Fissler vitavit edition Schnellkochtopf 8,0 L',
-    shortDescription: 'Premium-Schnellkochtopf mit Sicomatic®-Verschluss — 8 Liter, hergestellt in Deutschland',
+    shortDescription:
+      'Premium-Schnellkochtopf mit Sicomatic®-Verschluss - 8 Liter, hergestellt in Deutschland',
     descriptionDe: `Das Fissler vitavit edition Schnellkochtopf ist ein Premium-Produkt der Extraklasse. Mit dem patentierten Sicomatic®-Sicherheitsverschluss bietet es maximale Sicherheit und Komfort beim Druckkochen.
 
 **Merkmale:**
-- Edelstahl 18/10 — hochwertig, langlebig, geschmacksneutral
-- Sicomatic®-Sicherheitsverschluss — einfach und sicher zu bedienen
+- Edelstahl 18/10 - hochwertig, langlebig, geschmacksneutral
+- Sicomatic®-Sicherheitsverschluss - einfach und sicher zu bedienen
 - Fissler-Original-Induktionsboden für optimale Wärmeverteilung
 - Integrierte Skala im Inneren für präzises Nachfüllen
 - Spülmaschinengeeignet
@@ -54,10 +58,12 @@ Mit 8 Litern Fassungsvermögen ideal für große Familien und Mahlzeiten für 6�
     badges: ['Made in Germany', 'Sicomatic®'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Fissler vitavit edition Schnellkochtopf 8,0 L — Premium Druckkochtopf | NOVA INDUKT',
-    metaDescription: 'Fissler vitavit edition Schnellkochtopf 8,0 L mit Sicomatic®-Verschluss. Edelstahl 18/10, induktionsgeeignet, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle:
+      'Fissler vitavit edition Schnellkochtopf 8,0 L - Premium Druckkochtopf | NOVA INDUKT',
+    metaDescription:
+      'Fissler vitavit edition Schnellkochtopf 8,0 L mit Sicomatic®-Verschluss. Edelstahl 18/10, induktionsgeeignet, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
-    folder: 'Fissler vitavit edition — 8,0 L',
+    folder: 'Fissler vitavit edition - 8,0 L',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -65,12 +71,12 @@ Mit 8 Litern Fassungsvermögen ideal für große Familien und Mahlzeiten für 6�
     slug: 'wmf-perfect-plus-80l',
     supplierSku: 'WMF-PP-80',
     nameDe: 'WMF Perfect Plus Schnellkochtopf 8,0 L',
-    shortDescription: 'Robuster Schnellkochtopf mit TransTherm®-Boden — Cromargan® Edelstahl',
+    shortDescription: 'Robuster Schnellkochtopf mit TransTherm®-Boden - Cromargan® Edelstahl',
     descriptionDe: `Das WMF Perfect Plus Schnellkochtopf überzeugt durch seine robuste Bauweise und den bewährten TransTherm®-Boden für gleichmäßige Wärmeverteilung auf allen Herdplatten inkl. Induktion.
 
 **Merkmale:**
-- Cromargan® Edelstahl 18/10 — robust und pflegeleicht
-- TransTherm®-Universalboden — optimale Wärmeverteilung auf Induktion
+- Cromargan® Edelstahl 18/10 - robust und pflegeleicht
+- TransTherm®-Universalboden - optimale Wärmeverteilung auf Induktion
 - Sicherheitsventil mit Doppelfunktion (Dampfableitung + Überdrucksicherung)
 - Ergonomischer SoftTouch-Griff
 - Integrierte Füllstandsanzeige
@@ -92,10 +98,11 @@ Das Perfect Plus ist der zuverlässige Begleiter für schnelles und energieeffiz
     badges: ['Made in Germany', 'TransTherm®'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'WMF Perfect Plus Schnellkochtopf 8,0 L — Cromargan® | NOVA INDUKT',
-    metaDescription: 'WMF Perfect Plus Schnellkochtopf 8,0 L mit TransTherm®-Boden. Cromargan® Edelstahl, induktionsgeeignet, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Perfect Plus Schnellkochtopf 8,0 L - Cromargan® | NOVA INDUKT',
+    metaDescription:
+      'WMF Perfect Plus Schnellkochtopf 8,0 L mit TransTherm®-Boden. Cromargan® Edelstahl, induktionsgeeignet, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
-    folder: 'WMF Perfect Plus — 8,0 L',
+    folder: 'WMF Perfect Plus - 8,0 L',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -103,16 +110,16 @@ Das Perfect Plus ist der zuverlässige Begleiter für schnelles und energieeffiz
     slug: 'kuhn-rikon-duromatic-40l',
     supplierSku: 'KRN-DT-40',
     nameDe: 'Kuhn Rikon Duromatic Top 4,0 L',
-    shortDescription: 'Schweizer Schnellkochtopf — kompakt, sicher, langlebig',
+    shortDescription: 'Schweizer Schnellkochtopf - kompakt, sicher, langlebig',
     descriptionDe: `Das Kuhn Rikon Duromatic Top ist ein Schweizer Klassiker unter den Schnellkochtöpfen. Mit 4 Litern Fassungsvermögen ideal für 2–4 Personen und überzeugt durch höchste Schweizer Qualitätsstandards.
 
 **Merkmale:**
-- Edelstahl 18/10 — hochwertig und robust
-- Swiss-Made Qualität — hergestellt in der Schweiz
+- Edelstahl 18/10 - hochwertig und robust
+- Swiss-Made Qualität - hergestellt in der Schweiz
 - Sicherheitsventil mit 3-facher Sicherheitsfunktion
 - Optimale Wärmeverteilung dank 5-Punkt-Boden
 - Spülmaschinengeeignet
-- Kompaktes Design — platzsparend in der Küche
+- Kompaktes Design - platzsparend in der Küche
 - Perfekt für kleine Haushalte und Beilagen
 
 Kuhn Rikon steht für Schweizer Präzision und höchste Sicherheitsstandards bei Druckkochtopf-Produkten.`,
@@ -129,10 +136,11 @@ Kuhn Rikon steht für Schweizer Präzision und höchste Sicherheitsstandards bei
     badges: ['Made in Switzerland'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Kuhn Rikon Duromatic Top 4,0 L — Schweizer Schnellkochtopf | NOVA INDUKT',
-    metaDescription: 'Kuhn Rikon Duromatic Top 4,0 L — Made in Switzerland, Edelstahl 18/10, induktionsgeeignet. Kompaktes Premium-Schnellkochtopf. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Kuhn Rikon Duromatic Top 4,0 L - Schweizer Schnellkochtopf | NOVA INDUKT',
+    metaDescription:
+      'Kuhn Rikon Duromatic Top 4,0 L - Made in Switzerland, Edelstahl 18/10, induktionsgeeignet. Kompaktes Premium-Schnellkochtopf. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
-    folder: 'Kuhn Rikon Duromatic Top — 4,0 L',
+    folder: 'Kuhn Rikon Duromatic Top - 4,0 L',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -140,12 +148,12 @@ Kuhn Rikon steht für Schweizer Präzision und höchste Sicherheitsstandards bei
     slug: 'kuhn-rikon-duromatic-65l',
     supplierSku: 'KRN-DT-65',
     nameDe: 'Kuhn Rikon Duromatic Top 6,5 L',
-    shortDescription: 'Schweizer Premium-Schnellkochtopf — 6,5 Liter für Familien',
-    descriptionDe: `Das Kuhn Rikon Duromatic Top 6,5 L ist die große Variante des Schweizer Klassikers. Ideal für Familien und wenn es mal mehr sein soll — mit höchster Schweizer Qualitätsarbeit.
+    shortDescription: 'Schweizer Premium-Schnellkochtopf - 6,5 Liter für Familien',
+    descriptionDe: `Das Kuhn Rikon Duromatic Top 6,5 L ist die große Variante des Schweizer Klassikers. Ideal für Familien und wenn es mal mehr sein soll - mit höchster Schweizer Qualitätsarbeit.
 
 **Merkmale:**
-- Edelstahl 18/10 — hochwertig, robust, langlebig
-- Swiss-Made Qualität — hergestellt in der Schweiz
+- Edelstahl 18/10 - hochwertig, robust, langlebig
+- Swiss-Made Qualität - hergestellt in der Schweiz
 - Sicherheitsventil mit 3-facher Sicherheitsfunktion
 - 5-Punkt-Boden für optimale Wärmeverteilung
 - Spülmaschinengeeignet
@@ -166,10 +174,11 @@ Das Duromatic Top 6,5 L vereint Schweizer Qualität mit großzügigem Fassungsve
     badges: ['Made in Switzerland'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Kuhn Rikon Duromatic Top 6,5 L — Schweizer Schnellkochtopf | NOVA INDUKT',
-    metaDescription: 'Kuhn Rikon Duromatic Top 6,5 L — Made in Switzerland, Edelstahl 18/10, induktionsgeeignet. Großes Familien-Schnellkochtopf. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Kuhn Rikon Duromatic Top 6,5 L - Schweizer Schnellkochtopf | NOVA INDUKT',
+    metaDescription:
+      'Kuhn Rikon Duromatic Top 6,5 L - Made in Switzerland, Edelstahl 18/10, induktionsgeeignet. Großes Familien-Schnellkochtopf. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
-    folder: 'Kuhn Rikon Duromatic Top — 6,5 L',
+    folder: 'Kuhn Rikon Duromatic Top - 6,5 L',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -177,13 +186,14 @@ Das Duromatic Top 6,5 L vereint Schweizer Qualität mit großzügigem Fassungsve
     slug: 'fissler-vitavit-edition-30l',
     supplierSku: 'FIS-VVE-30',
     nameDe: 'Fissler vitavit edition Schnellkochtopf 3,0 L',
-    shortDescription: 'Kompaktes Premium-Schnellkochtopf mit Sicomatic® — ideal für kleine Haushalte',
-    descriptionDe: `Das Fissler vitavit edition Schnellkochtopf in der kompakten 3,0 L Variante bietet die gleiche Premium-Qualität wie größere Modelle — ideal für Singles, Paare oder als zweites Topf in der Küche.
+    shortDescription:
+      'Kompaktes Premium-Schnellkochtopf mit Sicomatic® - ideal für kleine Haushalte',
+    descriptionDe: `Das Fissler vitavit edition Schnellkochtopf in der kompakten 3,0 L Variante bietet die gleiche Premium-Qualität wie größere Modelle - ideal für Singles, Paare oder als zweites Topf in der Küche.
 
 **Merkmale:**
-- Edelstahl 18/10 — hochwertig, langlebig, geschmacksneutral
-- Sicomatic®-Sicherheitsverschluss — einfach und sicher
-- Kompaktes Design — perfekt für kleine Portionen
+- Edelstahl 18/10 - hochwertig, langlebig, geschmacksneutral
+- Sicomatic®-Sicherheitsverschluss - einfach und sicher
+- Kompaktes Design - perfekt für kleine Portionen
 - Fissler-Original-Induktionsboden
 - Integrierte Skala im Inneren
 - Spülmaschinengeeignet
@@ -204,10 +214,11 @@ Das kompakte vitavit edition bietet Premium-Druckkochen auch für kleinere Haush
     badges: ['Made in Germany', 'Kompakt'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Fissler vitavit edition Schnellkochtopf 3,0 L — Kompakt | NOVA INDUKT',
-    metaDescription: 'Fissler vitavit edition Schnellkochtopf 3,0 L — kompakt, Sicomatic®-Verschluss, Edelstahl 18/10, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler vitavit edition Schnellkochtopf 3,0 L - Kompakt | NOVA INDUKT',
+    metaDescription:
+      'Fissler vitavit edition Schnellkochtopf 3,0 L - kompakt, Sicomatic®-Verschluss, Edelstahl 18/10, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
-    folder: 'Fissler vitavit edition — 3,0 L',
+    folder: 'Fissler vitavit edition - 3,0 L',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -219,10 +230,10 @@ Das kompakte vitavit edition bietet Premium-Druckkochen auch für kleinere Haush
     descriptionDe: `Das WMF Perfect Plus Schnellkochtopf in der 3,0 L Variante ist die ideale Wahl für kleinere Haushalte. Mit dem bewährten TransTherm®-Boden und robustem Cromargan® Edelstahl bietet es zuverlässige Leistung.
 
 **Merkmale:**
-- Cromargan® Edelstahl 18/10 — robust und pflegeleicht
-- TransTherm®-Universalboden — optimale Wärmeverteilung
+- Cromargan® Edelstahl 18/10 - robust und pflegeleicht
+- TransTherm®-Universalboden - optimale Wärmeverteilung
 - Sicherheitsventil mit Doppelfunktion
-- Kompaktes Design — platzsparend
+- Kompaktes Design - platzsparend
 - Ergonomischer SoftTouch-Griff
 - Spülmaschinengeeignet
 - 2 Kochstufen
@@ -242,10 +253,11 @@ Das kompakte Perfect Plus ist der zuverlässige Begleiter für schnelles Druckko
     badges: ['Made in Germany'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'WMF Perfect Plus Schnellkochtopf 3,0 L — Kompakt | NOVA INDUKT',
-    metaDescription: 'WMF Perfect Plus Schnellkochtopf 3,0 L — Cromargan® Edelstahl, TransTherm®-Boden, kompakt. Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Perfect Plus Schnellkochtopf 3,0 L - Kompakt | NOVA INDUKT',
+    metaDescription:
+      'WMF Perfect Plus Schnellkochtopf 3,0 L - Cromargan® Edelstahl, TransTherm®-Boden, kompakt. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
-    folder: 'WMF Perfect Plus — 3,0 L',
+    folder: 'WMF Perfect Plus - 3,0 L',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -253,7 +265,7 @@ Das kompakte Perfect Plus ist der zuverlässige Begleiter für schnelles Druckko
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Schnellkochtöpfe (6 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Schnellkochtöpfe (6 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -308,7 +320,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -341,12 +355,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -361,7 +377,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Schnellkochtöpfe Extra terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

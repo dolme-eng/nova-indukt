@@ -1,5 +1,5 @@
 ﻿/**
- * NOVA INDUKT — Seed Extra : Fondues & Raclette (6 Produkte)
+ * NOVA INDUKT - Seed Extra : Fondues & Raclette (6 Produkte)
  * Exécuter avec : npx tsx prisma/seed-products-fondues-extra.ts
  *
  * Catégorie : fondues-raclette (sortOrder 7–12)
@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,8 +31,9 @@ const products = [
     slug: 'staub-cocotte-fondue-25l',
     supplierSku: 'STB-CC-FD25',
     nameDe: 'Staub Cocotte Fondue-Set 2,5 L',
-    shortDescription: 'Elegantes Fondue-Set aus Gusseisen — Emaille-Innenbeschichtung',
-    descriptionDe: 'Das Staub Cocotte Fondue-Set 2,5 L vereint französische Kochkunst mit erstklassiger Qualität. Die Gusseisen-Konstruktion sorgt für gleichmäßige Wärmeverteilung und hält die Fondue langwarm.',
+    shortDescription: 'Elegantes Fondue-Set aus Gusseisen - Emaille-Innenbeschichtung',
+    descriptionDe:
+      'Das Staub Cocotte Fondue-Set 2,5 L vereint französische Kochkunst mit erstklassiger Qualität. Die Gusseisen-Konstruktion sorgt für gleichmäßige Wärmeverteilung und hält die Fondue langwarm.',
     price: 199.99,
     oldPrice: 249.99,
     brand: 'Staub',
@@ -43,18 +47,20 @@ const products = [
     badges: ['Französische Qualität', 'Gusseisen'],
     rating: 4.8,
     reviewCount: 0,
-    metaTitle: 'Staub Cocotte Fondue-Set 2,5 L — Gusseisen | NOVA INDUKT',
-    metaDescription: 'Staub Cocotte Fondue-Set 2,5 L aus Gusseisen mit Emaille. Französische Qualität, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Staub Cocotte Fondue-Set 2,5 L - Gusseisen | NOVA INDUKT',
+    metaDescription:
+      'Staub Cocotte Fondue-Set 2,5 L aus Gusseisen mit Emaille. Französische Qualität, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
-    folder: 'Staub Cocotte Fondue — 2,5 L',
+    folder: 'Staub Cocotte Fondue - 2,5 L',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
     slug: 'le-creuset-fondue-set-20l',
     supplierSku: 'LC-FD-20',
     nameDe: 'Le Creuset Fondue-Set 2,0 L',
-    shortDescription: 'Premium-Fondue-Set aus Gusseisen — ikonisches Design',
-    descriptionDe: 'Das Le Creuset Fondue-Set 2,0 L ist die Quintessenz französischer Kochkultur. Die Gusseisen-Konstruktion garantiert optimale Wärmespeicherung für genussreiches Fondue-Erlebnis.',
+    shortDescription: 'Premium-Fondue-Set aus Gusseisen - ikonisches Design',
+    descriptionDe:
+      'Das Le Creuset Fondue-Set 2,0 L ist die Quintessenz französischer Kochkultur. Die Gusseisen-Konstruktion garantiert optimale Wärmespeicherung für genussreiches Fondue-Erlebnis.',
     price: 259.99,
     oldPrice: 299.99,
     brand: 'Le Creuset',
@@ -68,10 +74,11 @@ const products = [
     badges: ['Premium', 'Französisches Design'],
     rating: 4.9,
     reviewCount: 0,
-    metaTitle: 'Le Creuset Fondue-Set 2,0 L — Premium Gusseisen | NOVA INDUKT',
-    metaDescription: 'Le Creuset Fondue-Set 2,0 L aus Gusseisen. Ikonisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Le Creuset Fondue-Set 2,0 L - Premium Gusseisen | NOVA INDUKT',
+    metaDescription:
+      'Le Creuset Fondue-Set 2,0 L aus Gusseisen. Ikonisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
-    folder: 'Le Creuset Fondue — 2,0 L',
+    folder: 'Le Creuset Fondue - 2,0 L',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -79,7 +86,8 @@ const products = [
     supplierSku: 'ZWI-RAC-8',
     nameDe: 'Zwilling Raclette-Pfanne 8-teilig',
     shortDescription: 'Hochwertiges Raclette-Set mit Granitium-Antihaftbeschichtung',
-    descriptionDe: 'Das Zwilling Raclette-Set bietet alles für gemütliche Raclette-Abende. Acht Pfännchen mit Granitium-Antihaftbeschichtung ermöglichen gleichzeitiges Garen und Servieren.',
+    descriptionDe:
+      'Das Zwilling Raclette-Set bietet alles für gemütliche Raclette-Abende. Acht Pfännchen mit Granitium-Antihaftbeschichtung ermöglichen gleichzeitiges Garen und Servieren.',
     price: 79.99,
     oldPrice: 99.99,
     brand: 'Zwilling',
@@ -93,18 +101,20 @@ const products = [
     badges: ['Granitium', '8 Pfännchen'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Zwilling Raclette-Pfanne 8-teilig — Granitium | NOVA INDUKT',
-    metaDescription: 'Zwilling Raclette-Set 8-teilig mit Granitium-Antihaftbeschichtung. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Raclette-Pfanne 8-teilig - Granitium | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Raclette-Set 8-teilig mit Granitium-Antihaftbeschichtung. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
-    folder: 'Zwilling Raclette — 8-teilig',
+    folder: 'Zwilling Raclette - 8-teilig',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
     slug: 'fissler-fondue-set-18l',
     supplierSku: 'FIS-FD-18',
     nameDe: 'Fissler Fondue-Set 1,8 L',
-    shortDescription: 'Praktisches Fondue-Set mit Edelstahlschale — Made in Germany',
-    descriptionDe: 'Das Fissler Fondue-Set 1,8 L bietet erstklassige deutsche Qualität für Ihr Fondue-Erlebnis. Die Edelstahlschale ist robust, pflegeleicht und induktionsgeeignet.',
+    shortDescription: 'Praktisches Fondue-Set mit Edelstahlschale - Made in Germany',
+    descriptionDe:
+      'Das Fissler Fondue-Set 1,8 L bietet erstklassige deutsche Qualität für Ihr Fondue-Erlebnis. Die Edelstahlschale ist robust, pflegeleicht und induktionsgeeignet.',
     price: 119.99,
     oldPrice: 149.99,
     brand: 'Fissler',
@@ -118,18 +128,20 @@ const products = [
     badges: ['Made in Germany', 'Edelstahl'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Fissler Fondue-Set 1,8 L — Edelstahl, Made in Germany | NOVA INDUKT',
-    metaDescription: 'Fissler Fondue-Set 1,8 L aus Edelstahl. Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Fondue-Set 1,8 L - Edelstahl, Made in Germany | NOVA INDUKT',
+    metaDescription:
+      'Fissler Fondue-Set 1,8 L aus Edelstahl. Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
-    folder: 'Fissler Fondue — 1,8 L',
+    folder: 'Fissler Fondue - 1,8 L',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
     slug: 'tefal-raclette-party-12-teilig',
     supplierSku: 'TEF-RAC-12',
     nameDe: 'Tefal Raclette Party 12-teilig',
-    shortDescription: 'Großes Raclette-Set für 12 Personen — Granitium-Antihaft',
-    descriptionDe: 'Das Tefal Raclette Party Set ist ideal für große Gesellschaften. 12 hochwertige Pfännchen mit Granitium-Antihaftbeschichtung ermöglichen gemütliche Raclette-Abende.',
+    shortDescription: 'Großes Raclette-Set für 12 Personen - Granitium-Antihaft',
+    descriptionDe:
+      'Das Tefal Raclette Party Set ist ideal für große Gesellschaften. 12 hochwertige Pfännchen mit Granitium-Antihaftbeschichtung ermöglichen gemütliche Raclette-Abende.',
     price: 89.99,
     oldPrice: 109.99,
     brand: 'Tefal',
@@ -143,10 +155,11 @@ const products = [
     badges: ['12 Pfännchen', 'Für große Gruppen'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Tefal Raclette Party 12-teilig — Granitium | NOVA INDUKT',
-    metaDescription: 'Tefal Raclette Party Set 12-teilig mit Granitium-Antihaftbeschichtung. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Tefal Raclette Party 12-teilig - Granitium | NOVA INDUKT',
+    metaDescription:
+      'Tefal Raclette Party Set 12-teilig mit Granitium-Antihaftbeschichtung. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
-    folder: 'Tefal Raclette Party — 12-teilig',
+    folder: 'Tefal Raclette Party - 12-teilig',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -154,7 +167,8 @@ const products = [
     supplierSku: 'BUG-RAC-8',
     nameDe: 'Bugatti Raclette-Set 8-teilig',
     shortDescription: 'Elegantes Raclette-Set mit italienischem Design',
-    descriptionDe: 'Das Bugatti Raclette-Set 8-teilig vereint italienisches Design mit erstklassiger Qualität. Die Pfännchen aus Aluminium mit Antihaftbeschichtung sorgen für perfekte Ergebnisse.',
+    descriptionDe:
+      'Das Bugatti Raclette-Set 8-teilig vereint italienisches Design mit erstklassiger Qualität. Die Pfännchen aus Aluminium mit Antihaftbeschichtung sorgen für perfekte Ergebnisse.',
     price: 69.99,
     oldPrice: 84.99,
     brand: 'Bugatti',
@@ -168,10 +182,11 @@ const products = [
     badges: ['Italienisches Design', 'Antihaft'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Bugatti Raclette-Set 8-teilig — Italienisches Design | NOVA INDUKT',
-    metaDescription: 'Bugatti Raclette-Set 8-teilig mit Antihaftbeschichtung. Italienisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Bugatti Raclette-Set 8-teilig - Italienisches Design | NOVA INDUKT',
+    metaDescription:
+      'Bugatti Raclette-Set 8-teilig mit Antihaftbeschichtung. Italienisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
-    folder: 'Bugatti Raclette — 8-teilig',
+    folder: 'Bugatti Raclette - 8-teilig',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
 ]
@@ -179,7 +194,7 @@ const products = [
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Fondues & Raclette (6 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Fondues & Raclette (6 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -234,7 +249,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -267,12 +284,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -287,7 +306,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Batch terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

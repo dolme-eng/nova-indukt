@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : Backformen (8 Produkte)
+﻿/**
+ * NOVA INDUKT - Seed Extra : Backformen (8 Produkte)
  * Exécuter avec : npx tsx prisma/seed-products-formes-extra.ts
  *
  * Catégorie : formes-de-cuisson (sortOrder 11–18)
@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,11 +31,12 @@ const products = [
     slug: 'le-creuset-signature-springform-24cm',
     supplierSku: 'LEC-SIG-SF24',
     nameDe: 'Le Creuset Signature Springform 24 cm',
-    shortDescription: 'Französische Premium-Springform aus emailliertem Gusseisen — 30 Jahre Garantie',
+    shortDescription:
+      'Französische Premium-Springform aus emailliertem Gusseisen - 30 Jahre Garantie',
     descriptionDe: `Die Le Creuset Signature Springform vereint die legendäre Gusseisen-Qualität mit der Praktikabilität einer Springform. Ideal für Kuchen, Tarten und Torten auf dem Induktionsherd oder im Backofen.
 
 **Merkmale:**
-- Emailliertes Gusseisen — gleichmäßige Wärmeverteilung, keine Hotspots
+- Emailliertes Gusseisen - gleichmäßige Wärmeverteilung, keine Hotspots
 - Abnehmbarer Springform-Rand für einfaches Entformen
 - Induktionsgeeignet und ofenfest
 - Spülmaschinengeeignet (vorsichtig)
@@ -40,7 +44,7 @@ const products = [
 - Hergestellt in Frankreich
 - Erhältlich in mehreren Farben
 
-Le Creuset steht für französische Tradition und höchste Kochkunst — die Springform ist eine Investition fürs Leben.`,
+Le Creuset steht für französische Tradition und höchste Kochkunst - die Springform ist eine Investition fürs Leben.`,
     price: 44.99,
     oldPrice: 54.99,
     brand: 'Le Creuset',
@@ -54,10 +58,11 @@ Le Creuset steht für französische Tradition und höchste Kochkunst — die Spr
     badges: ['Made in France', '30 Jahre Garantie'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Le Creuset Signature Springform 24 cm — Gusseisen | NOVA INDUKT',
-    metaDescription: 'Le Creuset Signature Springform 24 cm — emailliertes Gusseisen, Made in France, 30 Jahre Garantie. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Le Creuset Signature Springform 24 cm - Gusseisen | NOVA INDUKT',
+    metaDescription:
+      'Le Creuset Signature Springform 24 cm - emailliertes Gusseisen, Made in France, 30 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'Le Creuset Signature Springform — 24 cm',
+    folder: 'Le Creuset Signature Springform - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -65,16 +70,16 @@ Le Creuset steht für französische Tradition und höchste Kochkunst — die Spr
     slug: 'le-creuset-signature-kasserolle-20cm',
     supplierSku: 'LEC-SIG-KAS20',
     nameDe: 'Le Creuset Signature Kasserolle 20 cm',
-    shortDescription: 'Französische Gusseisen-Kasserolle — klassisches Design, 2,0 L Volumen',
+    shortDescription: 'Französische Gusseisen-Kasserolle - klassisches Design, 2,0 L Volumen',
     descriptionDe: `Die Le Creuset Signature Kasserolle ist ein Klassiker der französischen Küche. Aus emailliertem Gusseisen gefertigt, eignet sie sich perfekt für Saucen, Eintöpfe und Beilagen auf dem Induktionsherd.
 
 **Merkmale:**
-- Emailliertes Gusseisen — optimale Wärmespeicherung
+- Emailliertes Gusseisen - optimale Wärmespeicherung
 - Klassisches Le Creuset-Design mit Farbauswahl
 - Integrierte Ausgießer beidseitig
-- Gusseisen-Griff — vollständig ofenfest
+- Gusseisen-Griff - vollständig ofenfest
 - Induktionsgeeignet
-- 2,0 L Volumen — ideal für Saucen und Beilagen
+- 2,0 L Volumen - ideal für Saucen und Beilagen
 - Hergestellt in Frankreich
 
 Die Kasserolle ist ein unverzichtbares Werkzeug für alle, die französische Kochkunst zu Hause genießen möchten.`,
@@ -91,10 +96,11 @@ Die Kasserolle ist ein unverzichtbares Werkzeug für alle, die französische Koc
     badges: ['Made in France', 'Kasserolle'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Le Creuset Signature Kasserolle 20 cm — Gusseisen | NOVA INDUKT',
-    metaDescription: 'Le Creuset Signature Kasserolle 20 cm — emailliertes Gusseisen, Made in France, 2,0 L. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Le Creuset Signature Kasserolle 20 cm - Gusseisen | NOVA INDUKT',
+    metaDescription:
+      'Le Creuset Signature Kasserolle 20 cm - emailliertes Gusseisen, Made in France, 2,0 L. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'Le Creuset Signature Kasserolle — 20 cm',
+    folder: 'Le Creuset Signature Kasserolle - 20 cm',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -102,21 +108,21 @@ Die Kasserolle ist ein unverzichtbares Werkzeug für alle, die französische Koc
     slug: 'staub-cocotte-ronde-32cm',
     supplierSku: 'STB-COC-R32',
     nameDe: 'Staub Cocotte Ronde 32 cm',
-    shortDescription: 'Französische Gusseisen-Cocotte — großzügige 7,0 L für Braten und Eintöpfe',
+    shortDescription: 'Französische Gusseisen-Cocotte - großzügige 7,0 L für Braten und Eintöpfe',
     descriptionDe: `Die Staub Cocotte Ronde ist das ultimative französische Gusseisen-Topf. Mit 32 cm Durchmesser und 7 Litern Fassungsvermögen ideal für große Braten, Eintöpfe und Familiengerichte.
 
 **Merkmale:**
-- Emailliertes Gusseisen — mattschwarze Innenemaille für bessere Patina
+- Emailliertes Gusseisen - mattschwarze Innenemaille für bessere Patina
 - Großzügiges Fassungsvermögen von 7,0 L
 - Integrierte Ausgießer beidseitig
-- Gusseisen-Griff — vollständig ofenfest
+- Gusseisen-Griff - vollständig ofenfest
 - Induktionsgeeignet
 - Spülmaschinengeeignet (vorsichtig)
 - Hergestellt in Frankreich
 
-Die Cocotte Ronde ist ein Kochgerät für Generationen — sie wird mit jeder Benutzung besser.`,
-    price: 299.00,
-    oldPrice: 369.00,
+Die Cocotte Ronde ist ein Kochgerät für Generationen - sie wird mit jeder Benutzung besser.`,
+    price: 299.0,
+    oldPrice: 369.0,
     brand: 'Staub',
     material: 'Emailliertes Gusseisen',
     dimensions: 'Ø 32 cm, 7,0 L',
@@ -128,10 +134,11 @@ Die Cocotte Ronde ist ein Kochgerät für Generationen — sie wird mit jeder Be
     badges: ['Made in France', 'Groß'],
     rating: 4.8,
     reviewCount: 0,
-    metaTitle: 'Staub Cocotte Ronde 32 cm — Gusseisen 7,0 L | NOVA INDUKT',
-    metaDescription: 'Staub Cocotte Ronde 32 cm — emailliertes Gusseisen, 7,0 L, Made in France. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Staub Cocotte Ronde 32 cm - Gusseisen 7,0 L | NOVA INDUKT',
+    metaDescription:
+      'Staub Cocotte Ronde 32 cm - emailliertes Gusseisen, 7,0 L, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'Staub Cocotte Ronde — 32 cm',
+    folder: 'Staub Cocotte Ronde - 32 cm',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -139,21 +146,21 @@ Die Cocotte Ronde ist ein Kochgerät für Generationen — sie wird mit jeder Be
     slug: 'staub-cocotte-ronde-26cm',
     supplierSku: 'STB-COC-R26',
     nameDe: 'Staub Cocotte Ronde 26 cm',
-    shortDescription: 'Französische Gusseisen-Cocotte — 4,0 L für mittlere Portionen',
+    shortDescription: 'Französische Gusseisen-Cocotte - 4,0 L für mittlere Portionen',
     descriptionDe: `Die Staub Cocotte Ronde 26 cm ist die mittlere Größe der beliebten Cocotte-Serie. Mit 4 Litern Fassungsvermögen ideal für Familiengerichte und Eintöpfe für 4–6 Personen.
 
 **Merkmale:**
-- Emailliertes Gusseisen — mattschwarze Innenemaille
-- 4,0 L Fassungsvermögen — ideal für 4–6 Personen
+- Emailliertes Gusseisen - mattschwarze Innenemaille
+- 4,0 L Fassungsvermögen - ideal für 4–6 Personen
 - Integrierte Ausgießer beidseitig
-- Gusseisen-Griff — vollständig ofenfest
+- Gusseisen-Griff - vollständig ofenfest
 - Induktionsgeeignet
 - Spülmaschinengeeignet (vorsichtig)
 - Hergestellt in Frankreich
 
-Die Cocotte Ronde 26 cm ist die perfekte Größe für den Alltag — groß genug für die Familie, kompakt genug für den Herd.`,
-    price: 219.00,
-    oldPrice: 269.00,
+Die Cocotte Ronde 26 cm ist die perfekte Größe für den Alltag - groß genug für die Familie, kompakt genug für den Herd.`,
+    price: 219.0,
+    oldPrice: 269.0,
     brand: 'Staub',
     material: 'Emailliertes Gusseisen',
     dimensions: 'Ø 26 cm, 4,0 L',
@@ -165,10 +172,11 @@ Die Cocotte Ronde 26 cm ist die perfekte Größe für den Alltag — groß genug
     badges: ['Made in France'],
     rating: 4.8,
     reviewCount: 0,
-    metaTitle: 'Staub Cocotte Ronde 26 cm — Gusseisen 4,0 L | NOVA INDUKT',
-    metaDescription: 'Staub Cocotte Ronde 26 cm — emailliertes Gusseisen, 4,0 L, Made in France. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Staub Cocotte Ronde 26 cm - Gusseisen 4,0 L | NOVA INDUKT',
+    metaDescription:
+      'Staub Cocotte Ronde 26 cm - emailliertes Gusseisen, 4,0 L, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'Staub Cocotte Ronde — 26 cm',
+    folder: 'Staub Cocotte Ronde - 26 cm',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -176,21 +184,21 @@ Die Cocotte Ronde 26 cm ist die perfekte Größe für den Alltag — groß genug
     slug: 'petromax-dutch-oven-ft9-32cm',
     supplierSku: 'PET-FT9-32',
     nameDe: 'Petromax Dutch Oven ft9 Duroplast 32 cm',
-    shortDescription: 'Robuster Gusseisen-Bräter mit Duroplast-Griff — 8,2 L für Outdoor & Küche',
+    shortDescription: 'Robuster Gusseisen-Bräter mit Duroplast-Griff - 8,2 L für Outdoor & Küche',
     descriptionDe: `Die Petromax Dutch Oven ft9 ist ein massiver Gusseisen-Bräter mit innovativem Duroplast-Griff. Mit 8,2 Litern Fassungsvermögen ideal für große Braten, Eintöpfe und Outdoor-Cooking.
 
 **Merkmale:**
-- Emailliertes Gusseisen — PFAS-frei
-- Duroplast-Griff — hitzebeständig und griffig
-- 8,2 L Fassungsvermögen — ideal für große Portionen
+- Emailliertes Gusseisen - PFAS-frei
+- Duroplast-Griff - hitzebeständig und griffig
+- 8,2 L Fassungsvermögen - ideal für große Portionen
 - Induktionsgeeignet
 - Spülmaschinengeeignet (vorsichtig)
 - Outdoor-geeignet (Lagerfeuer, Grill)
 - Hergestellt in Deutschland
 
 Die Petromax Dutch Oven ft9 ist der zuverlässige Begleiter für Großverpflegung zu Hause und im Freien.`,
-    price: 199.00,
-    oldPrice: 249.00,
+    price: 199.0,
+    oldPrice: 249.0,
     brand: 'Petromax',
     material: 'Emailliertes Gusseisen',
     dimensions: 'Ø 32 cm, 8,2 L',
@@ -202,10 +210,11 @@ Die Petromax Dutch Oven ft9 ist der zuverlässige Begleiter für Großverpflegun
     badges: ['Made in Germany', 'Duroplast-Griff'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Petromax Dutch Oven ft9 32 cm — Gusseisen 8,2 L | NOVA INDUKT',
-    metaDescription: 'Petromax Dutch Oven ft9 32 cm — emailliertes Gusseisen, 8,2 L, Duroplast-Griff. Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Petromax Dutch Oven ft9 32 cm - Gusseisen 8,2 L | NOVA INDUKT',
+    metaDescription:
+      'Petromax Dutch Oven ft9 32 cm - emailliertes Gusseisen, 8,2 L, Duroplast-Griff. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'Petromax Dutch Oven ft9 — 32 cm',
+    folder: 'Petromax Dutch Oven ft9 - 32 cm',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -213,18 +222,18 @@ Die Petromax Dutch Oven ft9 ist der zuverlässige Begleiter für Großverpflegun
     slug: 'fissler-cenit-auflaufform-28x20cm',
     supplierSku: 'FIS-CEN-AF28',
     nameDe: 'Fissler Cenit Auflaufform 28×20 cm',
-    shortDescription: 'Aluminium-Auflaufform mit Antihaftbeschichtung — spülmaschinengeeignet',
+    shortDescription: 'Aluminium-Auflaufform mit Antihaftbeschichtung - spülmaschinengeeignet',
     descriptionDe: `Die Fissler Cenit Auflaufform bietet großzügigen Platz für Aufläufe, Lasagnen und Überbackenes. Der robuste Aluminiumkörper und die Antihaftbeschichtung sorgen für einfaches Ausräumen und schnelle Reinigung.
 
 **Merkmale:**
 - Robuster Aluminiumkörper
-- Antihaftbeschichtung — leichtes Ausräumen
+- Antihaftbeschichtung - leichtes Ausräumen
 - Großzügige Abmessungen: 28×20×7 cm
 - Spülmaschinengeeignet
 - Induktionsgeeignet
 - Hergestellt in Deutschland
 
-Die Cenit Auflaufform ist der zuverlässige Helfer für den Backofen — von Lasagne bis Auflauf.`,
+Die Cenit Auflaufform ist der zuverlässige Helfer für den Backofen - von Lasagne bis Auflauf.`,
     price: 44.99,
     oldPrice: 54.99,
     brand: 'Fissler',
@@ -238,10 +247,11 @@ Die Cenit Auflaufform ist der zuverlässige Helfer für den Backofen — von Las
     badges: ['Made in Germany'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Fissler Cenit Auflaufform 28×20 cm — Antihaft | NOVA INDUKT',
-    metaDescription: 'Fissler Cenit Auflaufform 28×20 cm — Aluminium mit Antihaft, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Cenit Auflaufform 28×20 cm - Antihaft | NOVA INDUKT',
+    metaDescription:
+      'Fissler Cenit Auflaufform 28×20 cm - Aluminium mit Antihaft, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'Fissler Cenit Auflaufform — 28×20 cm',
+    folder: 'Fissler Cenit Auflaufform - 28×20 cm',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -249,7 +259,7 @@ Die Cenit Auflaufform ist der zuverlässige Helfer für den Backofen — von Las
     slug: 'wmf-professional-s-plus-auflaufform-32x24cm',
     supplierSku: 'WMF-PP-AF32',
     nameDe: 'WMF Profi Plus Auflaufform 32×24 cm',
-    shortDescription: 'Edelstahl-Auflaufform — robust, spülmaschinenfest, induktionsgeeignet',
+    shortDescription: 'Edelstahl-Auflaufform - robust, spülmaschinenfest, induktionsgeeignet',
     descriptionDe: `Die WMF Profi Plus Auflaufform bietet großzügigen Platz für große Aufläufe und Überbackenes. Der robuste Edelstahlkörper ist besonders langlebig und spülmaschinenfest.
 
 **Merkmale:**
@@ -273,10 +283,11 @@ Die WMF Profi Plus Auflaufform ist die langlebige Wahl für den ambitionierten H
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Profi Plus Auflaufform 32×24 cm — Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Auflaufform 32×24 cm — Edelstahl, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Profi Plus Auflaufform 32×24 cm - Edelstahl | NOVA INDUKT',
+    metaDescription:
+      'WMF Profi Plus Auflaufform 32×24 cm - Edelstahl, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'WMF Profi Plus Auflaufform — 32×24 cm',
+    folder: 'WMF Profi Plus Auflaufform - 32×24 cm',
     imageFiles: ['1.png', '2.png'],
   },
 
@@ -284,21 +295,21 @@ Die WMF Profi Plus Auflaufform ist die langlebige Wahl für den ambitionierten H
     slug: 'petromax-dutch-oven-ft6-28cm',
     supplierSku: 'PET-FT6-28',
     nameDe: 'Petromax Dutch Oven ft6 Duroplast 28 cm',
-    shortDescription: 'Mittlerer Gusseisen-Bräter mit Duroplast-Griff — 5,3 L, PFAS-frei',
+    shortDescription: 'Mittlerer Gusseisen-Bräter mit Duroplast-Griff - 5,3 L, PFAS-frei',
     descriptionDe: `Die Petromax Dutch Oven ft6 ist die mittlere Größe der beliebten Dutch-Oven-Serie. Mit 5,3 Litern Fassungsvermögen ideal für Familiengerichte und Eintöpfe.
 
 **Merkmale:**
-- Emailliertes Gusseisen — PFAS-frei
-- Duroplast-Griff — hitzebeständig und griffig
-- 5,3 L Fassungsvermögen — ideal für 4–6 Personen
+- Emailliertes Gusseisen - PFAS-frei
+- Duroplast-Griff - hitzebeständig und griffig
+- 5,3 L Fassungsvermögen - ideal für 4–6 Personen
 - Induktionsgeeignet
 - Spülmaschinengeeignet (vorsichtig)
 - Outdoor-geeignet
 - Hergestellt in Deutschland
 
 Die Petromax Dutch Oven ft6 ist der vielseitige Bräter für die Küche und das Freien.`,
-    price: 149.00,
-    oldPrice: 189.00,
+    price: 149.0,
+    oldPrice: 189.0,
     brand: 'Petromax',
     material: 'Emailliertes Gusseisen',
     dimensions: 'Ø 28 cm, 5,3 L',
@@ -310,10 +321,11 @@ Die Petromax Dutch Oven ft6 ist der vielseitige Bräter für die Küche und das 
     badges: ['Made in Germany', 'PFAS-frei'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Petromax Dutch Oven ft6 28 cm — Gusseisen 5,3 L | NOVA INDUKT',
-    metaDescription: 'Petromax Dutch Oven ft6 28 cm — emailliertes Gusseisen, 5,3 L, PFAS-frei. Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Petromax Dutch Oven ft6 28 cm - Gusseisen 5,3 L | NOVA INDUKT',
+    metaDescription:
+      'Petromax Dutch Oven ft6 28 cm - emailliertes Gusseisen, 5,3 L, PFAS-frei. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
-    folder: 'Petromax Dutch Oven ft6 — 28 cm',
+    folder: 'Petromax Dutch Oven ft6 - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -321,7 +333,7 @@ Die Petromax Dutch Oven ft6 ist der vielseitige Bräter für die Küche und das 
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Backformen (8 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Backformen (8 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -376,7 +388,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -409,12 +423,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -429,7 +445,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Backformen Extra terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

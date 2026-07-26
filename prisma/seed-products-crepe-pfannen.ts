@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Crêpe-Pfannen : 4 Crêpe-Pfannen
+﻿/**
+ * NOVA INDUKT - Seed Crêpe-Pfannen : 4 Crêpe-Pfannen
  * Exécuter avec : npx tsx prisma/seed-products-crepe-pfannen.ts
  *
  * Catégories couvertes :
@@ -13,7 +13,10 @@ const prisma = new PrismaClient()
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /** Génère les images à partir du dossier public local */
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -30,14 +33,14 @@ const products = [
     slug: 'de-buyer-mineral-b-crepe-pfanne-24cm',
     supplierSku: 'DB-MINB-CP24',
     nameDe: 'de Buyer Mineral B Crêpe-Pfanne 24 cm',
-    shortDescription: 'Professionelle Crêpe-Pfanne mit Eisenbeschichtung — Made in France',
+    shortDescription: 'Professionelle Crêpe-Pfanne mit Eisenbeschichtung - Made in France',
     descriptionDe: `Die de Buyer Mineral B Crêpe-Pfanne 24 cm ist die Wahl professioneller Küchenchefs für perfekte Crêpes. Der Eisenbeschichtete Boden entwickelt mit der Zeit eine natürliche Patina, die die Antihaft-Eigenschaften verbessert.
 
 **Merkmale:**
-- Stahlkörper mit reiner Eisenbeschichtung — PFAS-frei
+- Stahlkörper mit reiner Eisenbeschichtung - PFAS-frei
 - natürliche Patina-Entwicklung für bessere Antihaft-Eigenschaften
-- Induktionsgeeignet — ferromagnetischer Boden
-- Nicht spülmaschinengeeignet — Handwäsche empfohlen
+- Induktionsgeeignet - ferromagnetischer Boden
+- Nicht spülmaschinengeeignet - Handwäsche empfohlen
 - Hergestellt in Frankreich
 - Professionelle Qualität für Heim und Gastronomie
 
@@ -55,10 +58,11 @@ Die Mineral B Serie ist die klassische Wahl für Crêpe-Liebhaber weltweit.`,
     badges: ['Made in France', 'Eisenbeschichtung', 'Professionell'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'de Buyer Mineral B Crêpe-Pfanne 24 cm — Eisenbeschichtet | NOVA INDUKT',
-    metaDescription: 'de Buyer Mineral B Crêpe-Pfanne 24 cm mit Eisenbeschichtung. Made in France, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'de Buyer Mineral B Crêpe-Pfanne 24 cm - Eisenbeschichtet | NOVA INDUKT',
+    metaDescription:
+      'de Buyer Mineral B Crêpe-Pfanne 24 cm mit Eisenbeschichtung. Made in France, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
-    folder: 'de Buyer Mineral B Crêpe — 24 cm',
+    folder: 'de Buyer Mineral B Crêpe - 24 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
 
@@ -66,11 +70,11 @@ Die Mineral B Serie ist die klassische Wahl für Crêpe-Liebhaber weltweit.`,
     slug: 'de-buyer-mineral-b-crepe-pfanne-28cm',
     supplierSku: 'DB-MINB-CP28',
     nameDe: 'de Buyer Mineral B Crêpe-Pfanne 28 cm',
-    shortDescription: 'Große Crêpe-Pfanne mit Eisenbeschichtung — ideal für größere Crêpes',
+    shortDescription: 'Große Crêpe-Pfanne mit Eisenbeschichtung - ideal für größere Crêpes',
     descriptionDe: `Die de Buyer Mineral B Crêpe-Pfanne 28 cm bietet mehr Platz für größere Crêpes und ist ideal für Familien oder wenn für mehrere Personen gleichzeitig gekocht wird. Die Eisenbeschichtung sorgt mit der Zeit für exzellente Antihaft-Eigenschaften.
 
 **Merkmale:**
-- Stahlkörper mit reiner Eisenbeschichtung — PFAS-frei
+- Stahlkörper mit reiner Eisenbeschichtung - PFAS-frei
 - Größere Variante für mehr Crêpes-Volumen
 - Natürliche Patina-Entwicklung
 - Induktionsgeeignet
@@ -91,10 +95,11 @@ Die 28 cm Variante ist die perfekte Wahl für alle, die mehr Platz benötigen.`,
     badges: ['Made in France', 'Eisenbeschichtung', 'Groß'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'de Buyer Mineral B Crêpe-Pfanne 28 cm — Eisenbeschichtet | NOVA INDUKT',
-    metaDescription: 'de Buyer Mineral B Crêpe-Pfanne 28 cm mit Eisenbeschichtung. Groß, induktionsgeeignet, Made in France.',
+    metaTitle: 'de Buyer Mineral B Crêpe-Pfanne 28 cm - Eisenbeschichtet | NOVA INDUKT',
+    metaDescription:
+      'de Buyer Mineral B Crêpe-Pfanne 28 cm mit Eisenbeschichtung. Groß, induktionsgeeignet, Made in France.',
     categorySlug: 'crepe-pfannen',
-    folder: 'de Buyer Mineral B Crêpe — 28 cm',
+    folder: 'de Buyer Mineral B Crêpe - 28 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
 
@@ -102,7 +107,7 @@ Die 28 cm Variante ist die perfekte Wahl für alle, die mehr Platz benötigen.`,
     slug: 'matfer-copper-steel-crepe-pfanne-24cm',
     supplierSku: 'MAT-CS-CP24',
     nameDe: 'Matfer Copper Steel Crêpe-Pfanne 24 cm',
-    shortDescription: 'Professionelle Crêpe-Pfanne mit Kupferkern — Made in France',
+    shortDescription: 'Professionelle Crêpe-Pfanne mit Kupferkern - Made in France',
     descriptionDe: `Die Matfer Copper Steel Crêpe-Pfanne 24 cm vereint die exzellente Wärmeleitfähigkeit von Kupfer mit der Robustheit von Edelstahl. Diese Kombination macht sie zur ersten Wahl professioneller Küchen für perfekte Crêpes und Pfannkuchen.
 
 **Merkmale:**
@@ -127,10 +132,11 @@ Die Copper Steel Serie steht für höchste französische Kochkunst.`,
     badges: ['Made in France', 'Kupferkern', 'Professionell'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Matfer Copper Steel Crêpe-Pfanne 24 cm — Kupferkern | NOVA INDUKT',
-    metaDescription: 'Matfer Copper Steel Crêpe-Pfanne 24 cm mit Kupferkern. Made in France, induktionsgeeignet, professionell.',
+    metaTitle: 'Matfer Copper Steel Crêpe-Pfanne 24 cm - Kupferkern | NOVA INDUKT',
+    metaDescription:
+      'Matfer Copper Steel Crêpe-Pfanne 24 cm mit Kupferkern. Made in France, induktionsgeeignet, professionell.',
     categorySlug: 'crepe-pfannen',
-    folder: 'Matfer Copper Steel Crêpe — 24 cm',
+    folder: 'Matfer Copper Steel Crêpe - 24 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
 
@@ -138,7 +144,7 @@ Die Copper Steel Serie steht für höchste französische Kochkunst.`,
     slug: 'tefal-preference-crepe-pfanne-25cm',
     supplierSku: 'TEF-PREF-CP25',
     nameDe: 'Tefal Préférence Crêpe-Pfanne 25 cm',
-    shortDescription: 'Einsteiger-Crêpe-Pfanne mit Antihaftbeschichtung — Thermo-Signal',
+    shortDescription: 'Einsteiger-Crêpe-Pfanne mit Antihaftbeschichtung - Thermo-Signal',
     descriptionDe: `Die Tefal Préférence Crêpe-Pfanne 25 cm ist die ideale Einsteiger-Option für alle, die regelmäßig Crêpes zubereiten möchten. Die bewährte Antihaftbeschichtung und das Thermo-Signal erleichtern das Garen.
 
 **Merkmale:**
@@ -163,10 +169,11 @@ Die Préférence Serie bietet Tefal-Qualität zum Einstiegspreis.`,
     badges: ['Thermo-Signal', 'Antihaft', 'Einsteiger'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Tefal Préférence Crêpe-Pfanne 25 cm — Antihaft | NOVA INDUKT',
-    metaDescription: 'Tefal Préférence Crêpe-Pfanne 25 cm mit Antihaft und Thermo-Signal. Leicht, induktionsgeeignet, spülmaschinenfest.',
+    metaTitle: 'Tefal Préférence Crêpe-Pfanne 25 cm - Antihaft | NOVA INDUKT',
+    metaDescription:
+      'Tefal Préférence Crêpe-Pfanne 25 cm mit Antihaft und Thermo-Signal. Leicht, induktionsgeeignet, spülmaschinenfest.',
     categorySlug: 'crepe-pfannen',
-    folder: 'Tefal Préférence Crêpe — 25 cm',
+    folder: 'Tefal Préférence Crêpe - 25 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
 ]
@@ -174,7 +181,7 @@ Die Préférence Serie bietet Tefal-Qualität zum Einstiegspreis.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Crêpe-Pfannen : 4 Produkte')
+  console.log('🌱 NOVA INDUKT - Seed Crêpe-Pfannen : 4 Produkte')
   console.log('─'.repeat(60))
 
   // Récupérer les catégories existantes
@@ -232,7 +239,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         // Création
         await prisma.product.create({
@@ -266,12 +275,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -286,7 +297,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Crêpe-Pfannen-Seed terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

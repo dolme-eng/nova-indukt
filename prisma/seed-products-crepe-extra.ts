@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : 6 Crêpe-Pfannen (Expansion)
+﻿/**
+ * NOVA INDUKT - Seed Extra : 6 Crêpe-Pfannen (Expansion)
  * Exécuter avec : npx tsx prisma/seed-products-crepe-extra.ts
  *
  * Catégorie : crepe-pfannen (sortOrder 5–10)
@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,11 +31,11 @@ const products = [
     slug: 'de-buyer-mineral-b-pro-crepe-24cm',
     supplierSku: 'DB-MINBP-CP24',
     nameDe: 'de Buyer Mineral B Pro Crêpe-Pfanne 24 cm',
-    shortDescription: 'Französische Crêpe-Pfanne mit Eisenbeschichtung — Made in France',
+    shortDescription: 'Französische Crêpe-Pfanne mit Eisenbeschichtung - Made in France',
     descriptionDe: `Die de Buyer Mineral B Pro Crêpe-Pfanne 24 cm ist eine echte französische Crêpe-Pfanne aus Stahl mit Eisenbeschichtung. Die professionelle Qualität eignet sich hervorragend für perfekte Crêpes und Pfannkuchen.
 
 **Merkmale:**
-- Stahl mit Eisenbeschichtung — natürliche Antihaft-Eigenschaften
+- Stahl mit Eisenbeschichtung - natürliche Antihaft-Eigenschaften
 - Professionelle Qualität aus Frankreich
 - Induktionsgeeignet
 - Nicht spülmaschinenfest (Handwäsche empfohlen)
@@ -52,17 +55,18 @@ Die Mineral B Pro Serie ist die Wahl von Profiköchen für Crêpes und Pfannkuch
     badges: ['Made in France', 'Pro Serie'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'de Buyer Mineral B Pro Crêpe-Pfanne 24 cm — Frankreich | NOVA INDUKT',
-    metaDescription: 'de Buyer Mineral B Pro Crêpe-Pfanne 24 cm — Stahl mit Eisenbeschichtung, Made in France. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'de Buyer Mineral B Pro Crêpe-Pfanne 24 cm - Frankreich | NOVA INDUKT',
+    metaDescription:
+      'de Buyer Mineral B Pro Crêpe-Pfanne 24 cm - Stahl mit Eisenbeschichtung, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
-    folder: 'de Buyer Mineral B Pro Crêpe — 24 cm',
+    folder: 'de Buyer Mineral B Pro Crêpe - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'de-buyer-mineral-b-pro-crepe-28cm',
     supplierSku: 'DB-MINBP-CP28',
     nameDe: 'de Buyer Mineral B Pro Crêpe-Pfanne 28 cm',
-    shortDescription: 'Große französische Crêpe-Pfanne — Made in France',
+    shortDescription: 'Große französische Crêpe-Pfanne - Made in France',
     descriptionDe: `Die de Buyer Mineral B Pro Crêpe-Pfanne 28 cm bietet mehr Platz für größere Crêpes. Die Eisenbeschichtung entwickelt mit der Zeit eine natürliche Patina.
 
 **Merkmale:**
@@ -87,21 +91,22 @@ Ideal für Crêpes, Pfannkuchen und mehr.`,
     badges: ['Made in France', 'Pro Serie'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'de Buyer Mineral B Pro Crêpe-Pfanne 28 cm — Groß | NOVA INDUKT',
-    metaDescription: 'de Buyer Mineral B Pro Crêpe-Pfanne 28 cm — Stahl mit Eisenbeschichtung, Made in France. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'de Buyer Mineral B Pro Crêpe-Pfanne 28 cm - Groß | NOVA INDUKT',
+    metaDescription:
+      'de Buyer Mineral B Pro Crêpe-Pfanne 28 cm - Stahl mit Eisenbeschichtung, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
-    folder: 'de Buyer Mineral B Pro Crêpe — 28 cm',
+    folder: 'de Buyer Mineral B Pro Crêpe - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'matfer-black-steel-crepe-25cm',
     supplierSku: 'MAT-BS-CP25',
     nameDe: 'Matfer Black Steel Crêpe-Pfanne 25 cm',
-    shortDescription: 'Französische Black Steel Crêpe-Pfanne — Made in France',
+    shortDescription: 'Französische Black Steel Crêpe-Pfanne - Made in France',
     descriptionDe: `Die Matfer Black Steel Crêpe-Pfanne 25 cm bietet eine einzigartige Black Steel Oberfläche für perfekte Crêpes. Die französische Qualität überzeugt durch höchste Verarbeitung.
 
 **Merkmale:**
-- Black Steel — natürliche Antihaft-Eigenschaften
+- Black Steel - natürliche Antihaft-Eigenschaften
 - Französische Qualität
 - Induktionsgeeignet
 - Nicht spülmaschinenfest
@@ -121,17 +126,18 @@ Die Black Steel Entwicklung sorgt für hervorragende Kochergebnisse.`,
     badges: ['Made in France', 'Black Steel'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Matfer Black Steel Crêpe-Pfanne 25 cm — Frankreich | NOVA INDUKT',
-    metaDescription: 'Matfer Black Steel Crêpe-Pfanne 25 cm — Made in France, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Matfer Black Steel Crêpe-Pfanne 25 cm - Frankreich | NOVA INDUKT',
+    metaDescription:
+      'Matfer Black Steel Crêpe-Pfanne 25 cm - Made in France, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
-    folder: 'Matfer Black Steel Crêpe — 25 cm',
+    folder: 'Matfer Black Steel Crêpe - 25 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'tefal-jamie-oliver-crepe-25cm',
     supplierSku: 'TEF-JO-CP25',
     nameDe: 'Tefal Jamie Oliver Crêpe-Pfanne 25 cm',
-    shortDescription: 'Antihaft-Crêpe-Pfanne mit Jamie Oliver Design — spülmaschinenfest',
+    shortDescription: 'Antihaft-Crêpe-Pfanne mit Jamie Oliver Design - spülmaschinenfest',
     descriptionDe: `Die Tefal Jamie Oliver Crêpe-Pfanne 25 cm bietet eine hochwertige Antihaftbeschichtung für perfekte Crêpes. Das Design von Jamie Oliver überzeugt durch Funktionalität und Ästhetik.
 
 **Merkmale:**
@@ -155,17 +161,18 @@ Die ideale Crêpe-Pfanne für Einsteiger und Fortgeschrittene.`,
     badges: ['Jamie Oliver', 'Antihaft'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Tefal Jamie Oliver Crêpe-Pfanne 25 cm — Antihaft | NOVA INDUKT',
-    metaDescription: 'Tefal Jamie Oliver Crêpe-Pfanne 25 cm — Antihaft, spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Tefal Jamie Oliver Crêpe-Pfanne 25 cm - Antihaft | NOVA INDUKT',
+    metaDescription:
+      'Tefal Jamie Oliver Crêpe-Pfanne 25 cm - Antihaft, spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
-    folder: 'Tefal Jamie Oliver Crêpe — 25 cm',
+    folder: 'Tefal Jamie Oliver Crêpe - 25 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'le-creuset-toughened-non-stick-crepe-24cm',
     supplierSku: 'LEC-TNS-CP24',
     nameDe: 'Le Creuset Toughened Non-Stick Crêpe 24 cm',
-    shortDescription: 'Premium Antihaft-Crêpe-Pfanne von Le Creuset — Made in France',
+    shortDescription: 'Premium Antihaft-Crêpe-Pfanne von Le Creuset - Made in France',
     descriptionDe: `Die Le Creuset Toughened Non-Stick Crêpe bietet eine hochwertige Antihaftbeschichtung für perfekte Crêpes. Die französische Qualität von Le Creuset steht für höchste Ansprüche.
 
 **Merkmale:**
@@ -189,17 +196,18 @@ Le Creuset steht für Premium-Qualität im Küchenbereich.`,
     badges: ['Made in France', 'Toughened'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Le Creuset Toughened Non-Stick Crêpe 24 cm — Premium | NOVA INDUKT',
-    metaDescription: 'Le Creuset Toughened Non-Stick Crêpe 24 cm — Made in France, Premium Antihaft. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Le Creuset Toughened Non-Stick Crêpe 24 cm - Premium | NOVA INDUKT',
+    metaDescription:
+      'Le Creuset Toughened Non-Stick Crêpe 24 cm - Made in France, Premium Antihaft. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
-    folder: 'Le Creuset Toughened Non-Stick Crêpe — 24 cm',
+    folder: 'Le Creuset Toughened Non-Stick Crêpe - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'fissler-cenit-crepe-pfanne-26cm',
     supplierSku: 'FIS-CEN-CP26',
     nameDe: 'Fissler Cenit Crêpe-Pfanne 26 cm',
-    shortDescription: 'Antihaft-Crêpe-Pfanne aus der Cenit Serie — Made in Germany',
+    shortDescription: 'Antihaft-Crêpe-Pfanne aus der Cenit Serie - Made in Germany',
     descriptionDe: `Die Fissler Cenit Crêpe-Pfanne 26 cm bietet eine hochwertige Antihaftbeschichtung für perfekte Crêpes. Die deutsche Qualität überzeugt durch Robustheit und Langlebigkeit.
 
 **Merkmale:**
@@ -223,10 +231,11 @@ Die Cenit Serie steht für deutsche Qualität im Küchenbereich.`,
     badges: ['Made in Germany', 'Antihaft'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Fissler Cenit Crêpe-Pfanne 26 cm — Antihaft | NOVA INDUKT',
-    metaDescription: 'Fissler Cenit Crêpe-Pfanne 26 cm — Antihaft, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Cenit Crêpe-Pfanne 26 cm - Antihaft | NOVA INDUKT',
+    metaDescription:
+      'Fissler Cenit Crêpe-Pfanne 26 cm - Antihaft, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
-    folder: 'Fissler Cenit Crêpe-Pfanne — 26 cm',
+    folder: 'Fissler Cenit Crêpe-Pfanne - 26 cm',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -234,7 +243,7 @@ Die Cenit Serie steht für deutsche Qualität im Küchenbereich.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Crêpe-Pfannen (6 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Crêpe-Pfannen (6 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -289,7 +298,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -322,12 +333,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -342,7 +355,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Seed Extra Crêpe-Pfannen terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

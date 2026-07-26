@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : 8 Sauteusen (Expansion)
+﻿/**
+ * NOVA INDUKT - Seed Extra : 8 Sauteusen (Expansion)
  * Exécuter avec : npx tsx prisma/seed-products-sauteusen-extra.ts
  *
  * Catégorie : sauteusen (sortOrder 7–14)
@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,11 +31,11 @@ const products = [
     slug: 'fissler-adamant-plus-sauteuse-24cm',
     supplierSku: 'FIS-ADP-SA24',
     nameDe: 'Fissler Adamant Plus Sauteuse 24 cm',
-    shortDescription: 'Keramikbeschichtete Sauteuse mit Adamant-Beschichtung — Made in Germany',
+    shortDescription: 'Keramikbeschichtete Sauteuse mit Adamant-Beschichtung - Made in Germany',
     descriptionDe: `Die Fissler Adamant Plus Sauteuse 24 cm bietet eine extrem robuste Adamant-Keramikbeschichtung, die langlebig und pflegeleicht ist. Der Aluminiumkörper sorgt für gleichmäßige Wärmeverteilung.
 
 **Merkmale:**
-- Adamant-Keramik-Antihaftbeschichtung — extrem robust
+- Adamant-Keramik-Antihaftbeschichtung - extrem robust
 - Aluminiumkörper für gleichmäßige Wärmeverteilung
 - Induktionsgeeigneter Boden
 - Spülmaschinenfest
@@ -52,17 +55,18 @@ Die Adamant Plus Serie steht für höchste Qualität im Küchenbereich.`,
     badges: ['Made in Germany', 'Keramikbeschichtung'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Fissler Adamant Plus Sauteuse 24 cm — Keramikbeschichtung | NOVA INDUKT',
-    metaDescription: 'Fissler Adamant Plus Sauteuse 24 cm — Adamant-Keramikbeschichtung, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Adamant Plus Sauteuse 24 cm - Keramikbeschichtung | NOVA INDUKT',
+    metaDescription:
+      'Fissler Adamant Plus Sauteuse 24 cm - Adamant-Keramikbeschichtung, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'Fissler Adamant Plus Sauteuse — 24 cm',
+    folder: 'Fissler Adamant Plus Sauteuse - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'fissler-adamant-plus-sauteuse-28cm',
     supplierSku: 'FIS-ADP-SA28',
     nameDe: 'Fissler Adamant Plus Sauteuse 28 cm',
-    shortDescription: 'Große keramikbeschichtete Sauteuse — Made in Germany',
+    shortDescription: 'Große keramikbeschichtete Sauteuse - Made in Germany',
     descriptionDe: `Die Fissler Adamant Plus Sauteuse 28 cm bietet mehr Platz für größere Gerichte. Die Adamant-Keramikbeschichtung und der Aluminiumkörper garantieren hervorragende Kochergebnisse.
 
 **Merkmale:**
@@ -87,17 +91,18 @@ Ideal für Familien und alle, die gerne für mehrere Personen kochen.`,
     badges: ['Made in Germany', 'Keramikbeschichtung'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Fissler Adamant Plus Sauteuse 28 cm — Große Keramikpfanne | NOVA INDUKT',
-    metaDescription: 'Fissler Adamant Plus Sauteuse 28 cm — Adamant-Keramikbeschichtung, Made in Germany, 3,2 L. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Adamant Plus Sauteuse 28 cm - Große Keramikpfanne | NOVA INDUKT',
+    metaDescription:
+      'Fissler Adamant Plus Sauteuse 28 cm - Adamant-Keramikbeschichtung, Made in Germany, 3,2 L. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'Fissler Adamant Plus Sauteuse — 28 cm',
+    folder: 'Fissler Adamant Plus Sauteuse - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'wmf-diadem-plus-sauteuse-24cm',
     supplierSku: 'WMF-DP-SA24',
     nameDe: 'WMF Diadem Plus Sauteuse 24 cm',
-    shortDescription: 'Edelstahl-Sauteuse mit TransTherm® Boden — Made in Germany',
+    shortDescription: 'Edelstahl-Sauteuse mit TransTherm® Boden - Made in Germany',
     descriptionDe: `Die WMF Diadem Plus Sauteuse 24 cm bietet eine hochwertige Verarbeitung aus Cromargan® Edelstahl 18/10 mit dem bewährten TransTherm® Boden für optimale Wärmeverteilung.
 
 **Merkmale:**
@@ -121,17 +126,18 @@ Die Diadem Plus Serie ist die Wahl für alle, die Wert auf Edelstahl-Qualität l
     badges: ['Made in Germany', 'TransTherm®'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Diadem Plus Sauteuse 24 cm — Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Diadem Plus Sauteuse 24 cm — Cromargan® Edelstahl, TransTherm® Boden, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Diadem Plus Sauteuse 24 cm - Edelstahl | NOVA INDUKT',
+    metaDescription:
+      'WMF Diadem Plus Sauteuse 24 cm - Cromargan® Edelstahl, TransTherm® Boden, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'WMF Diadem Plus Sauteuse — 24 cm',
+    folder: 'WMF Diadem Plus Sauteuse - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'wmf-diadem-plus-sauteuse-28cm',
     supplierSku: 'WMF-DP-SA28',
     nameDe: 'WMF Diadem Plus Sauteuse 28 cm',
-    shortDescription: 'Große Edelstahl-Sauteuse mit TransTherm® Boden — Made in Germany',
+    shortDescription: 'Große Edelstahl-Sauteuse mit TransTherm® Boden - Made in Germany',
     descriptionDe: `Die WMF Diadem Plus Sauteuse 28 cm bietet mehr Platz für größere Gerichte. Der TransTherm® Boden sorgt für gleichmäßige Wärmeverteilung auf allen Herdarten.
 
 **Merkmale:**
@@ -156,17 +162,18 @@ Ideal für Familien und anspruchsvolle Köche.`,
     badges: ['Made in Germany', 'TransTherm®'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Diadem Plus Sauteuse 28 cm — Edelstahl, groß | NOVA INDUKT',
-    metaDescription: 'WMF Diadem Plus Sauteuse 28 cm — Cromargan® Edelstahl, TransTherm® Boden, 3,2 L. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Diadem Plus Sauteuse 28 cm - Edelstahl, groß | NOVA INDUKT',
+    metaDescription:
+      'WMF Diadem Plus Sauteuse 28 cm - Cromargan® Edelstahl, TransTherm® Boden, 3,2 L. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'WMF Diadem Plus Sauteuse — 28 cm',
+    folder: 'WMF Diadem Plus Sauteuse - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'zwilling-spirit-sauteuse-24cm',
     supplierSku: 'ZWI-SPIR-SA24',
     nameDe: 'Zwilling Spirit Sauteuse 24 cm',
-    shortDescription: '3-Ply Edelstahl-Sauteuse aus der Spirit Serie — premium Verarbeitung',
+    shortDescription: '3-Ply Edelstahl-Sauteuse aus der Spirit Serie - premium Verarbeitung',
     descriptionDe: `Die Zwilling Spirit Sauteuse 24 cm bietet eine hochwertige 3-Ply-Konstruktion aus Edelstahl 18/10 für optimale Wärmeverteilung und Langlebigkeit.
 
 **Merkmale:**
@@ -190,17 +197,18 @@ Die Spirit Serie steht für modernes Design und erstklassige Kochleistung.`,
     badges: ['Spirit Serie', '3-Ply'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Zwilling Spirit Sauteuse 24 cm — 3-Ply Edelstahl | NOVA INDUKT',
-    metaDescription: 'Zwilling Spirit Sauteuse 24 cm — 3-Ply Edelstahl 18/10, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Spirit Sauteuse 24 cm - 3-Ply Edelstahl | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Spirit Sauteuse 24 cm - 3-Ply Edelstahl 18/10, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'Zwilling Spirit Sauteuse — 24 cm',
+    folder: 'Zwilling Spirit Sauteuse - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'zwilling-spirit-sauteuse-28cm',
     supplierSku: 'ZWI-SPIR-SA28',
     nameDe: 'Zwilling Spirit Sauteuse 28 cm',
-    shortDescription: 'Große 3-Ply Edelstahl-Sauteuse — Spirit Serie',
+    shortDescription: 'Große 3-Ply Edelstahl-Sauteuse - Spirit Serie',
     descriptionDe: `Die Zwilling Spirit Sauteuse 28 cm bietet mehr Platz für größere Gerichte. Die 3-Ply-Konstruktion sorgt für gleichmäßige Wärmeverteilung und hervorragende Kochergebnisse.
 
 **Merkmale:**
@@ -224,17 +232,18 @@ Ideal für Familien und anspruchsvolle Köche.`,
     badges: ['Spirit Serie', '3-Ply'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Zwilling Spirit Sauteuse 28 cm — 3-Ply Edelstahl, groß | NOVA INDUKT',
-    metaDescription: 'Zwilling Spirit Sauteuse 28 cm — 3-Ply Edelstahl 18/10, 3,2 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Spirit Sauteuse 28 cm - 3-Ply Edelstahl, groß | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Spirit Sauteuse 28 cm - 3-Ply Edelstahl 18/10, 3,2 L, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'Zwilling Spirit Sauteuse — 28 cm',
+    folder: 'Zwilling Spirit Sauteuse - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'demeyere-essential-5-sauteuse-24cm',
     supplierSku: 'DEM-ESS5-SA24',
     nameDe: 'Demeyere Essential 5 Sauteuse 24 cm',
-    shortDescription: 'Premium 5-Schicht-Edelstahl-Sauteuse — 30 Jahre Garantie',
+    shortDescription: 'Premium 5-Schicht-Edelstahl-Sauteuse - 30 Jahre Garantie',
     descriptionDe: `Die Demeyere Essential 5 Sauteuse 24 cm bietet eine außergewöhnliche 5-Schicht-Konstruktion für optimale Wärmeverteilung und Langlebigkeit. Die belgische Qualität überzeugt durch höchste Verarbeitung.
 
 **Merkmale:**
@@ -258,17 +267,18 @@ Die Essential 5 Serie ist die Wahl für anspruchsvolle Köche.`,
     badges: ['30 Jahre Garantie', '5-Schicht'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Demeyere Essential 5 Sauteuse 24 cm — 5-Schicht Edelstahl | NOVA INDUKT',
-    metaDescription: 'Demeyere Essential 5 Sauteuse 24 cm — 5-Schicht Edelstahl, 30 Jahre Garantie. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Demeyere Essential 5 Sauteuse 24 cm - 5-Schicht Edelstahl | NOVA INDUKT',
+    metaDescription:
+      'Demeyere Essential 5 Sauteuse 24 cm - 5-Schicht Edelstahl, 30 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'Demeyere Essential 5 Sauteuse — 24 cm',
+    folder: 'Demeyere Essential 5 Sauteuse - 24 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
     slug: 'demeyere-essential-5-sauteuse-28cm',
     supplierSku: 'DEM-ESS5-SA28',
     nameDe: 'Demeyere Essential 5 Sauteuse 28 cm',
-    shortDescription: 'Große 5-Schicht-Edelstahl-Sauteuse — 30 Jahre Garantie',
+    shortDescription: 'Große 5-Schicht-Edelstahl-Sauteuse - 30 Jahre Garantie',
     descriptionDe: `Die Demeyere Essential 5 Sauteuse 28 cm bietet mehr Platz für größere Gerichte. Die 5-Schicht-Konstruktion und der Induzall® Boden garantieren hervorragende Kochergebnisse.
 
 **Merkmale:**
@@ -293,10 +303,11 @@ Ideal für Familien und anspruchsvolle Köche.`,
     badges: ['30 Jahre Garantie', '5-Schicht'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Demeyere Essential 5 Sauteuse 28 cm — 5-Schicht, groß | NOVA INDUKT',
-    metaDescription: 'Demeyere Essential 5 Sauteuse 28 cm — 5-Schicht Edelstahl, 30 Jahre Garantie, 3,2 L. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Demeyere Essential 5 Sauteuse 28 cm - 5-Schicht, groß | NOVA INDUKT',
+    metaDescription:
+      'Demeyere Essential 5 Sauteuse 28 cm - 5-Schicht Edelstahl, 30 Jahre Garantie, 3,2 L. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
-    folder: 'Demeyere Essential 5 Sauteuse — 28 cm',
+    folder: 'Demeyere Essential 5 Sauteuse - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -304,7 +315,7 @@ Ideal für Familien und anspruchsvolle Köche.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Sauteusen (8 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Sauteusen (8 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -359,7 +370,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -392,12 +405,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -412,7 +427,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Seed Extra Sauteusen terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

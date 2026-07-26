@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed : Reinigung & Pflege (6 Produkte)
+﻿/**
+ * NOVA INDUKT - Seed : Reinigung & Pflege (6 Produkte)
  * Exécuter avec : npx tsx prisma/seed-products-reinigung-extra.ts
  *
  * Catégorie : reinigung-pflege (sortOrder 7–12)
@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,7 +31,7 @@ const products = [
     slug: 'wmf-edelstahl-reiniger-250ml',
     supplierSku: 'WMF-ER-250',
     nameDe: 'WMF Edelstahl-Reiniger 250 ml',
-    shortDescription: 'Spezialreiniger für Edelstahl-Oberflächen — 250 ml, Made in Germany',
+    shortDescription: 'Spezialreiniger für Edelstahl-Oberflächen - 250 ml, Made in Germany',
     descriptionDe: `Der WMF Edelstahl-Reiniger ist speziell für die Pflege von Edelstahl-Küchengeräten entwickelt worden. Das Reinigungsmittel entfernt Fingerabdrücke, Wasserflecken und kleine Kratzer und sorgt für einen glänzenden Look.
 
 **Merkmale:**
@@ -53,8 +56,9 @@ Die ideale Pflege für Ihre Edelstahl-Küchengeräte.`,
     badges: ['Made in Germany'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'WMF Edelstahl-Reiniger 250 ml — Pflege für Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Edelstahl-Reiniger 250 ml — speziell für Edelstahl, entfernt Flecken, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Edelstahl-Reiniger 250 ml - Pflege für Edelstahl | NOVA INDUKT',
+    metaDescription:
+      'WMF Edelstahl-Reiniger 250 ml - speziell für Edelstahl, entfernt Flecken, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'WMF Edelstahl-Reiniger 250ml',
     imageFiles: ['1.png', '2.png'],
@@ -64,7 +68,7 @@ Die ideale Pflege für Ihre Edelstahl-Küchengeräte.`,
     slug: 'fissler-antihaft-reiniger-250ml',
     supplierSku: 'FIS-AHR-250',
     nameDe: 'Fissler Antihaft-Reiniger 250 ml',
-    shortDescription: 'Spezialreiniger für Antihaftpfannen — 250 ml, Made in Germany',
+    shortDescription: 'Spezialreiniger für Antihaftpfannen - 250 ml, Made in Germany',
     descriptionDe: `Der Fissler Antihaft-Reiniger ist speziell für die Pflege von Antihaft-Beschichtungen entwickelt worden. Das Reinigungsmittel reinigt schonend und pflegt die empfindliche Beschichtung Ihrer Pfannen.
 
 **Merkmale:**
@@ -89,8 +93,9 @@ Die richtige Pflege für Ihre Fissler-Antihaftpfannen.`,
     badges: ['Made in Germany', 'Antihaft'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'Fissler Antihaft-Reiniger 250 ml — Pflege für Antihaftpfannen | NOVA INDUKT',
-    metaDescription: 'Fissler Antihaft-Reiniger 250 ml — speziell für Antihaft-Beschichtungen, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Antihaft-Reiniger 250 ml - Pflege für Antihaftpfannen | NOVA INDUKT',
+    metaDescription:
+      'Fissler Antihaft-Reiniger 250 ml - speziell für Antihaft-Beschichtungen, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Fissler Antihaft-Reiniger 250ml',
     imageFiles: ['1.png', '2.png'],
@@ -100,7 +105,7 @@ Die richtige Pflege für Ihre Fissler-Antihaftpfannen.`,
     slug: 'ballarini-reiniger-antihaft-250ml',
     supplierSku: 'BAL-RAH-250',
     nameDe: 'Ballarini Reiniger für Antihaft 250 ml',
-    shortDescription: 'Italienischer Antihaft-Reiniger — 250 ml, schonende Reinigung',
+    shortDescription: 'Italienischer Antihaft-Reiniger - 250 ml, schonende Reinigung',
     descriptionDe: `Der Ballarini Reiniger für Antihaft-Beschichtungen bringt italienische Qualität in die Pflegenroutine. Das Reinigungsmittel reinigt schonend und hält Ihre Antihaftpfannen in Schuss.
 
 **Merkmale:**
@@ -125,8 +130,9 @@ Pflegeprodukt für Ihre Ballarini-Antihaftpfannen.`,
     badges: ['Italianisch'],
     rating: 4.1,
     reviewCount: 0,
-    metaTitle: 'Ballarini Reiniger für Antihaft 250 ml — Italianische Qualität | NOVA INDUKT',
-    metaDescription: 'Ballarini Reiniger für Antihaft 250 ml — italienische Qualität, schonende Reinigung für Antihaftpfannen. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Ballarini Reiniger für Antihaft 250 ml - Italianische Qualität | NOVA INDUKT',
+    metaDescription:
+      'Ballarini Reiniger für Antihaft 250 ml - italienische Qualität, schonende Reinigung für Antihaftpfannen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Ballarini Reiniger Antihaft 250ml',
     imageFiles: ['1.png', '2.png'],
@@ -136,7 +142,7 @@ Pflegeprodukt für Ihre Ballarini-Antihaftpfannen.`,
     slug: 'le-creuset-pflegeoel-150ml',
     supplierSku: 'LEC-PO-150',
     nameDe: 'Le Creuset Pflegeöl 150 ml',
-    shortDescription: 'Hochwertiges Pflegeöl für Emaille-Oberflächen — 150 ml, Made in France',
+    shortDescription: 'Hochwertiges Pflegeöl für Emaille-Oberflächen - 150 ml, Made in France',
     descriptionDe: `Das Le Creuset Pflegeöl ist speziell für die Pflege von Emaille-Oberflächen entwickelt worden. Es schützt und pflegt Ihre Le Creuset-Kochgeschirre und sorgt für einen glänzenden Look.
 
 **Merkmale:**
@@ -161,8 +167,9 @@ Die ideale Pflege für Ihre Le Creuset-Kochgeschirre.`,
     badges: ['Made in France', 'Emaille-Pflege'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Le Creuset Pflegeöl 150 ml — Emaille-Pflege | NOVA INDUKT',
-    metaDescription: 'Le Creuset Pflegeöl 150 ml — speziell für Emaille, Made in France, pflegt und schützt. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Le Creuset Pflegeöl 150 ml - Emaille-Pflege | NOVA INDUKT',
+    metaDescription:
+      'Le Creuset Pflegeöl 150 ml - speziell für Emaille, Made in France, pflegt und schützt. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Le Creuset Pflegeöl 150ml',
     imageFiles: ['1.png', '2.png'],
@@ -172,8 +179,8 @@ Die ideale Pflege für Ihre Le Creuset-Kochgeschirre.`,
     slug: 'weber-grillreiniger-500ml',
     supplierSku: 'WEB-GR2-500',
     nameDe: 'Weber Grillreiniger 500 ml',
-    shortDescription: 'Weber Original Grillreiniger — 500 ml, für alle Grilltypen',
-    descriptionDe: `Der Weber Grillreiniger ist der perfekte Helfer für die Grillsaison. Das Reinigungsmittel entfernt hartnäckige Verschmutzungen und Fettreste von allen Grilltypen — ohne Beschädigung der Grillflächen.
+    shortDescription: 'Weber Original Grillreiniger - 500 ml, für alle Grilltypen',
+    descriptionDe: `Der Weber Grillreiniger ist der perfekte Helfer für die Grillsaison. Das Reinigungsmittel entfernt hartnäckige Verschmutzungen und Fettreste von allen Grilltypen - ohne Beschädigung der Grillflächen.
 
 **Merkmale:**
 - Weber Original Qualität
@@ -197,8 +204,9 @@ Der perfekte Begleiter für Sauberkeit am Grill.`,
     badges: ['Weber Original'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Weber Grillreiniger 500 ml — Original Grillreiniger | NOVA INDUKT',
-    metaDescription: 'Weber Grillreiniger 500 ml — Weber Original, entfernt Fett und Verschmutzungen. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Weber Grillreiniger 500 ml - Original Grillreiniger | NOVA INDUKT',
+    metaDescription:
+      'Weber Grillreiniger 500 ml - Weber Original, entfernt Fett und Verschmutzungen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Weber Grillreiniger 500ml',
     imageFiles: ['1.png', '2.png'],
@@ -208,7 +216,7 @@ Der perfekte Begleiter für Sauberkeit am Grill.`,
     slug: 'dr-beckmann-herdreiniger-500ml',
     supplierSku: 'DRB-HR-500',
     nameDe: 'Dr. Beckmann Herdreiniger 500 ml',
-    shortDescription: 'Spezialreiniger für Ceranfelder und Herdplatten — 500 ml',
+    shortDescription: 'Spezialreiniger für Ceranfelder und Herdplatten - 500 ml',
     descriptionDe: `Der Dr. Beckmann Herdreiniger ist speziell für die Reinigung von Ceranfeldern, Induktionskochfeldern und Herdplatten entwickelt worden. Er entfernt hartnäckige Verschmutzungen ohne Kratzer zu hinterlassen.
 
 **Merkmale:**
@@ -233,8 +241,9 @@ Die perfekte Lösung für saubere Kochfelder.`,
     badges: ['Herdreiniger', '500 ml'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'Dr. Beckmann Herdreiniger 500 ml — Ceranfeld-Reiniger | NOVA INDUKT',
-    metaDescription: 'Dr. Beckmann Herdreiniger 500 ml — speziell für Ceranfelder, kratzfreie Reinigung. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Dr. Beckmann Herdreiniger 500 ml - Ceranfeld-Reiniger | NOVA INDUKT',
+    metaDescription:
+      'Dr. Beckmann Herdreiniger 500 ml - speziell für Ceranfelder, kratzfreie Reinigung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Dr. Beckmann Herdreiniger 500ml',
     imageFiles: ['1.png', '2.png'],
@@ -244,7 +253,7 @@ Die perfekte Lösung für saubere Kochfelder.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed : Reinigung & Pflege (6 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed : Reinigung & Pflege (6 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -299,7 +308,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -332,12 +343,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -352,7 +365,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Reinigung & Pflege seed terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

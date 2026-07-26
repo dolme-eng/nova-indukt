@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Batch : 8 Elektro-Küchengeräte
+﻿/**
+ * NOVA INDUKT - Seed Batch : 8 Elektro-Küchengeräte
  * Exécuter avec : npx tsx prisma/seed-products-elektrogeraete.ts
  *
  * Catégories couvertes :
@@ -18,7 +18,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -35,7 +38,7 @@ const products = [
     slug: 'wm-zeppelin-handmixer',
     supplierSku: 'WMF-ZEP-HM',
     nameDe: 'WMF Zeppelin Handmixer',
-    shortDescription: 'Leistungsstarker Handmixer mit 300 Watt — 2 Stufen, inklusive Schneebesen',
+    shortDescription: 'Leistungsstarker Handmixer mit 300 Watt - 2 Stufen, inklusive Schneebesen',
     descriptionDe: `Der WMF Zeppelin Handmixer bietet mit 300 Watt Leistung und 2 Stufen die ideale Kombination aus Kraft und Komfort. Die hochwertige Verarbeitung aus Kunststoff und Edelstahl sorgt für Langlebigkeit.
 
 **Merkmale:**
@@ -60,8 +63,9 @@ Der praktische Helfer für Teig, Sahne und mehr.`,
     badges: ['300 Watt', '2 Stufen'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'WMF Zeppelin Handmixer 300W — 2 Stufen | NOVA INDUKT',
-    metaDescription: 'WMF Zeppelin Handmixer mit 300 Watt, 2 Stufen, Edelstahl. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Zeppelin Handmixer 300W - 2 Stufen | NOVA INDUKT',
+    metaDescription:
+      'WMF Zeppelin Handmixer mit 300 Watt, 2 Stufen, Edelstahl. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF Zeppelin Handmixer',
     imageFiles: ['1.png'],
@@ -71,12 +75,12 @@ Der praktische Helfer für Teig, Sahne und mehr.`,
     slug: 'wm-kitchenline-standmixer',
     supplierSku: 'WMF-KL-SM16',
     nameDe: 'WMF KitchenLine Standmixer 1,6 L',
-    shortDescription: 'Leistungsstarker Standmixer mit 600 Watt — 1,6 Liter Fassungsvermögen',
+    shortDescription: 'Leistungsstarker Standmixer mit 600 Watt - 1,6 Liter Fassungsvermögen',
     descriptionDe: `Der WMF KitchenLine Standmixer bietet mit 600 Watt Leistung und 1,6 Litern Fassungsvermögen die ideale Leistung für Smoothies, Suppen und mehr. Die hochwertige Verarbeitung aus Kunststoff und Metall sorgt für Langlebigkeit.
 
 **Merkmale:**
 - 600 Watt Leistung für starke Mixergebnisse
-- 1,6 Liter Fassungsvermögen — ideal für 2–4 Personen
+- 1,6 Liter Fassungsvermögen - ideal für 2–4 Personen
 - Hochwertige Verarbeitung aus Kunststoff und Metall
 - Verschiedene Geschwindigkeitsstufen
 - Ergonomischer Griff
@@ -96,8 +100,9 @@ Der leistungsstarke Standmixer für tägliche Küchenarbeit.`,
     badges: ['600 Watt', '1,6 Liter'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF KitchenLine Standmixer 1,6 L — 600W | NOVA INDUKT',
-    metaDescription: 'WMF KitchenLine Standmixer 1,6 L mit 600 Watt — leistungsstark, hochwertig. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF KitchenLine Standmixer 1,6 L - 600W | NOVA INDUKT',
+    metaDescription:
+      'WMF KitchenLine Standmixer 1,6 L mit 600 Watt - leistungsstark, hochwertig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF KitchenLine Standmixer',
     imageFiles: ['1.png'],
@@ -107,7 +112,7 @@ Der leistungsstarke Standmixer für tägliche Küchenarbeit.`,
     slug: 'wm-zeppelin-stabmixer',
     supplierSku: 'WMF-ZEP-SM',
     nameDe: 'WMF Zeppelin Stabmixer',
-    shortDescription: 'Praktischer Stabmixer mit 300 Watt — Edelstahl-Aufsatz',
+    shortDescription: 'Praktischer Stabmixer mit 300 Watt - Edelstahl-Aufsatz',
     descriptionDe: `Der WMF Zeppelin Stabmixer bietet mit 300 Watt Leistung und dem hochwertigen Edelstahl-Aufsatz die ideale Lösung für das Pürieren direkt im Topf. Die kompakte Bauweise macht ihn zum unverzichtbaren Küchenhelfer.
 
 **Merkmale:**
@@ -132,8 +137,9 @@ Der praktische Stabmixer für schnelle Küchenarbeit.`,
     badges: ['300 Watt', 'Edelstahl'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'WMF Zeppelin Stabmixer 300W — Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Zeppelin Stabmixer mit 300 Watt und Edelstahl-Aufsatz. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Zeppelin Stabmixer 300W - Edelstahl | NOVA INDUKT',
+    metaDescription:
+      'WMF Zeppelin Stabmixer mit 300 Watt und Edelstahl-Aufsatz. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF Zeppelin Stabmixer',
     imageFiles: ['1.png'],
@@ -143,7 +149,7 @@ Der praktische Stabmixer für schnelle Küchenarbeit.`,
     slug: 'wm-kitchenline-wasserkocher',
     supplierSku: 'WMF-KL-WK17',
     nameDe: 'WMF KitchenLine Wasserkocher 1,7 L',
-    shortDescription: 'Eleganter Wasserkocher mit 2400 Watt — 1,7 Liter Fassungsvermögen',
+    shortDescription: 'Eleganter Wasserkocher mit 2400 Watt - 1,7 Liter Fassungsvermögen',
     descriptionDe: `Der WMF KitchenLine Wasserkocher bietet mit 2400 Watt Leistung und 1,7 Litern Fassungsvermögen eine schnelle und effiziente Wasserkochung. Die hochwertige Verarbeitung aus Edelstahl und Glas sorgt für Eleganz und Langlebigkeit.
 
 **Merkmale:**
@@ -168,8 +174,9 @@ Der elegante Wasserkocher für schnellen Tee und Kaffee.`,
     badges: ['2400 Watt', '1,7 Liter'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF KitchenLine Wasserkocher 1,7 L — 2400W | NOVA INDUKT',
-    metaDescription: 'WMF KitchenLine Wasserkocher 1,7 L mit 2400 Watt — Edelstahl, elegant. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF KitchenLine Wasserkocher 1,7 L - 2400W | NOVA INDUKT',
+    metaDescription:
+      'WMF KitchenLine Wasserkocher 1,7 L mit 2400 Watt - Edelstahl, elegant. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF KitchenLine Wasserkocher',
     imageFiles: ['1.png'],
@@ -179,8 +186,8 @@ Der elegante Wasserkocher für schnellen Tee und Kaffee.`,
     slug: 'fissler-heat-memory-wasserkocher',
     supplierSku: 'FIS-HM-WK15',
     nameDe: 'Fissler Heat Memory Wasserkocher 1,5 L',
-    shortDescription: 'Premium-Wasserkocher mit Heat Memory — Temperaturhalt, Made in Germany',
-    descriptionDe: `Der Fissler Heat Memory Wasserkocher bietet eine einzigartige Kombination aus 2400 Watt Leistung und der patentierten Heat Memory-Technologie. Die Temperaturhalt-Funktion hält das Wasser auf der gewünschten Temperatur — ideal für verschiedene Teesorten.
+    shortDescription: 'Premium-Wasserkocher mit Heat Memory - Temperaturhalt, Made in Germany',
+    descriptionDe: `Der Fissler Heat Memory Wasserkocher bietet eine einzigartige Kombination aus 2400 Watt Leistung und der patentierten Heat Memory-Technologie. Die Temperaturhalt-Funktion hält das Wasser auf der gewünschten Temperatur - ideal für verschiedene Teesorten.
 
 **Merkmale:**
 - 2400 Watt Leistung für schnelles Aufkochen
@@ -205,8 +212,9 @@ Der Premium-Wasserkocher für anspruchsvolle Teeliebhaber.`,
     badges: ['Made in Germany', 'Heat Memory', 'Temperaturhalt'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Fissler Heat Memory Wasserkocher 1,5 L — Made in Germany | NOVA INDUKT',
-    metaDescription: 'Fissler Heat Memory Wasserkocher 1,5 L — Heat Memory, Temperaturhalt, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Heat Memory Wasserkocher 1,5 L - Made in Germany | NOVA INDUKT',
+    metaDescription:
+      'Fissler Heat Memory Wasserkocher 1,5 L - Heat Memory, Temperaturhalt, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Fissler Heat Memory Wasserkocher',
     imageFiles: ['1.png'],
@@ -216,7 +224,7 @@ Der Premium-Wasserkocher für anspruchsvolle Teeliebhaber.`,
     slug: 'tefal-masterclass-waffeleisen',
     supplierSku: 'TEF-MC-WAF',
     nameDe: 'Tefal Masterclass Waffeleisen',
-    shortDescription: 'Hochwertiges Waffeleisen mit Antihaft-Beschichtung — 1200 Watt',
+    shortDescription: 'Hochwertiges Waffeleisen mit Antihaft-Beschichtung - 1200 Watt',
     descriptionDe: `Das Tefal Masterclass Waffeleisen bietet mit 1200 Watt Leistung und der bewährten Antihaft-Beschichtung perfekte Waffeln. Die hochwertige Verarbeitung aus Aluminium sorgt für gleichmäßige Hitzeverteilung.
 
 **Merkmale:**
@@ -241,8 +249,9 @@ Für knusprige Waffeln zum Frühstück oder als Nachtisch.`,
     badges: ['Antihaft', '1200 Watt'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Tefal Masterclass Waffeleisen — Antihaft, 1200W | NOVA INDUKT',
-    metaDescription: 'Tefal Masterclass Waffeleisen mit Antihaft-Beschichtung und 1200 Watt. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Tefal Masterclass Waffeleisen - Antihaft, 1200W | NOVA INDUKT',
+    metaDescription:
+      'Tefal Masterclass Waffeleisen mit Antihaft-Beschichtung und 1200 Watt. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Masterclass Waffeleisen',
     imageFiles: ['1.png'],
@@ -252,7 +261,7 @@ Für knusprige Waffeln zum Frühstück oder als Nachtisch.`,
     slug: 'tefal-masterclass-contactgrill',
     supplierSku: 'TEF-MC-CG',
     nameDe: 'Tefal Masterclass Contactgrill',
-    shortDescription: 'Leistungsstarker Contactgrill mit 2000 Watt — beidseitig grillen',
+    shortDescription: 'Leistungsstarker Contactgrill mit 2000 Watt - beidseitig grillen',
     descriptionDe: `Der Tefal Masterclass Contactgrill bietet mit 2000 Watt Leistung die Möglichkeit, beidseitig zu grillen. Die hochwertige Verarbeitung aus Aluminium und Edelstahl sorgt für professionelle Ergebnisse.
 
 **Merkmale:**
@@ -277,8 +286,9 @@ Der leistungsstarke Contactgrill für Indoor-Grillerlebnisse.`,
     badges: ['2000 Watt', 'Beidseitig grillen'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Tefal Masterclass Contactgrill — 2000W, beidseitig | NOVA INDUKT',
-    metaDescription: 'Tefal Masterclass Contactgrill mit 2000 Watt — beidseitig grillen, leistungsstark. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Tefal Masterclass Contactgrill - 2000W, beidseitig | NOVA INDUKT',
+    metaDescription:
+      'Tefal Masterclass Contactgrill mit 2000 Watt - beidseitig grillen, leistungsstark. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Masterclass Contactgrill',
     imageFiles: ['1.png'],
@@ -288,7 +298,7 @@ Der leistungsstarke Contactgrill für Indoor-Grillerlebnisse.`,
     slug: 'tefal-pizzaofen-ondine',
     supplierSku: 'TEF-OND-PO',
     nameDe: 'Tefal Ondine Pizzaofen',
-    shortDescription: 'Premium-Pizzaofen mit Steinplatte — bis 400°C, 1600 Watt',
+    shortDescription: 'Premium-Pizzaofen mit Steinplatte - bis 400°C, 1600 Watt',
     descriptionDe: `Der Tefal Ondine Pizzaofen erreicht Temperaturen bis zu 400°C und ermöglicht so das-backen von perfekten Pizzen mit knusprigem Boden. Die hochwertige Steinplatte und die Edelstahlkonstruktion sorgen für professionelle Ergebnisse.
 
 **Merkmale:**
@@ -313,8 +323,9 @@ Der Pizzaofen für echte Pizzatalent zu Hause.`,
     badges: ['Bis 400°C', 'Steinplatte', 'Pizzaofen'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Tefal Ondine Pizzaofen — bis 400°C, Steinplatte | NOVA INDUKT',
-    metaDescription: 'Tefal Ondine Pizzaofen mit Steinplatte — bis 400°C, 1600W, Edelstahl. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Tefal Ondine Pizzaofen - bis 400°C, Steinplatte | NOVA INDUKT',
+    metaDescription:
+      'Tefal Ondine Pizzaofen mit Steinplatte - bis 400°C, 1600W, Edelstahl. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Ondine Pizzaofen',
     imageFiles: ['1.png'],
@@ -324,7 +335,7 @@ Der Pizzaofen für echte Pizzatalent zu Hause.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Batch : Elektro-Küchengeräte (8 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Batch : Elektro-Küchengeräte (8 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -379,7 +390,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -412,12 +425,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -432,7 +447,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Batch Elektro-Küchengeräte terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

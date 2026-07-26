@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Catégorie : Dampfgareinsätze / Dämpfeinsätze für Induktion (5 Produits)
+﻿/**
+ * NOVA INDUKT - Seed Catégorie : Dampfgareinsätze / Dämpfeinsätze für Induktion (5 Produits)
  * Exécuter avec : npx tsx prisma/seed-products-dampfgarer.ts
  */
 
@@ -23,7 +23,8 @@ const products = [
     supplierSku: 'FIS-OPC-DE20',
     sortOrder: 11,
     nameDe: 'Fissler Original Profi Collection Dämpfeinsatz 20 cm',
-    shortDescription: 'Hochwertiger Dämpfeinsatz für die Fissler OPC-Serie — vitaminbewarendes Garen im Edelstahl',
+    shortDescription:
+      'Hochwertiger Dämpfeinsatz für die Fissler OPC-Serie - vitaminbewarendes Garen im Edelstahl',
     descriptionDe: `Der Fissler Original Profi Collection Dämpfeinsatz (20 cm) ist die ideale Ergänzung für alle Fissler OPC-Bräter und -Töpfe. Mit ihm schonen Sie wertvolle Vitamine und behalten den vollen Geschmack Ihrer Speisen.
 
 **Merkmale:**
@@ -50,9 +51,10 @@ Der Dämpfeinsatz ermöglicht sanftes Garen auf dem Induktionsherd und passt per
     rating: 4.7,
     reviewCount: 0,
     metaTitle: 'Fissler OPC Dämpfeinsatz 20 cm Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Original Profi Collection Dämpfeinsatz Ø 20 cm aus Edelstahl 18/10. Vitaminbewares Garen auf Induktion. Ofengeeignet bis 230°C. Made in Germany.',
+    metaDescription:
+      'Fissler Original Profi Collection Dämpfeinsatz Ø 20 cm aus Edelstahl 18/10. Vitaminbewares Garen auf Induktion. Ofengeeignet bis 230°C. Made in Germany.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Fissler — Original Profi Collection Dämpfeinsatz Ø 20 cm',
+    folder: 'Fissler - Original Profi Collection Dämpfeinsatz Ø 20 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -60,7 +62,8 @@ Der Dämpfeinsatz ermöglicht sanftes Garen auf dem Induktionsherd und passt per
     supplierSku: 'FIS-OPC-DE24',
     sortOrder: 12,
     nameDe: 'Fissler Original Profi Collection Dämpfeinsatz 24 cm',
-    shortDescription: 'Großer Dämpfeinsatz für die Fissler OPC 24 cm Serie — sparsam und vitaminreich garen',
+    shortDescription:
+      'Großer Dämpfeinsatz für die Fissler OPC 24 cm Serie - sparsam und vitaminreich garen',
     descriptionDe: `Der Fissler Original Profi Collection Dämpfeinsatz (24 cm) wurde für die größeren Töpfe der OPC-Serie entwickelt und bietet Platz für großzügige Portionen.
 
 **Merkmale:**
@@ -73,8 +76,8 @@ Der Dämpfeinsatz ermöglicht sanftes Garen auf dem Induktionsherd und passt per
 - Made in Germany mit 10 Jahre Garantie
 
 Der 24 cm Dämpfeinsatz eignet sich besonders gut für Familienportionen und große Mengen. Dank des intelligenten Designs passt er perfekt in den 24er OPC-Bräter und sorgt für gleichmäßige Hitzeverteilung bei der Induktionszubereitung.`,
-    price: 95.00,
-    oldPrice: 119.00,
+    price: 95.0,
+    oldPrice: 119.0,
     brand: 'Fissler',
     material: 'Edelstahl 18/10',
     dimensions: 'Ø 24 cm, Höhe 11 cm',
@@ -87,9 +90,10 @@ Der 24 cm Dämpfeinsatz eignet sich besonders gut für Familienportionen und gro
     rating: 4.7,
     reviewCount: 0,
     metaTitle: 'Fissler OPC Dämpfeinsatz 24 cm Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Original Profi Collection Dämpfeinsatz Ø 24 cm. Premium Edelstahl 18/10 für vitaminbewares Garen. Ofenfest, spülmaschinenfest. Made in Germany.',
+    metaDescription:
+      'Fissler Original Profi Collection Dämpfeinsatz Ø 24 cm. Premium Edelstahl 18/10 für vitaminbewares Garen. Ofenfest, spülmaschinenfest. Made in Germany.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Fissler — Original Profi Collection Dämpfeinsatz Ø 24 cm',
+    folder: 'Fissler - Original Profi Collection Dämpfeinsatz Ø 24 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -105,7 +109,7 @@ Der 24 cm Dämpfeinsatz eignet sich besonders gut für Familienportionen und gro
 - Universell passend für viele 24 cm Kochtöpfe und -systeme
 - Ergonomische seitliche Griffe für sicheren Halt
 - Sanftes Garen von Gemüse, Fisch und eiweißreichen Speisen
-- Leicht zu reinigen — spülmaschinenfest
+- Leicht zu reinigen - spülmaschinenfest
 - Robuste Verarbeitung für den täglichen Einsatz
 
 Der Dämpfeinsatz von Zwilling bietet ein hervorragendes Preis-Leistungs-Verhältnis und überzeugt durch die bewährte Zwilling Qualität. Die seitlichen Griffe machen das Handling besonders sicher und komfortabel.`,
@@ -123,9 +127,10 @@ Der Dämpfeinsatz von Zwilling bietet ein hervorragendes Preis-Leistungs-Verhäl
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Zwilling Plus Dämpfeinsatz 24 cm Edelstahl | NOVA INDUKT',
-    metaDescription: 'Zwilling Plus Dämpfeinsatz Ø 24 cm aus Edelstahl 18/10. Universell passend, mit seitlichen Griffen. Spülmaschinenfest, ideal für Induktion.',
+    metaDescription:
+      'Zwilling Plus Dämpfeinsatz Ø 24 cm aus Edelstahl 18/10. Universell passend, mit seitlichen Griffen. Spülmaschinenfest, ideal für Induktion.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Zwilling — Plus Dämpfeinsatz Ø 24 cm',
+    folder: 'Zwilling - Plus Dämpfeinsatz Ø 24 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -133,17 +138,17 @@ Der Dämpfeinsatz von Zwilling bietet ein hervorragendes Preis-Leistungs-Verhäl
     supplierSku: 'WMF-COMPACT-DE24',
     sortOrder: 14,
     nameDe: 'WMF Compact Cuisine Dampfgareinsatz 24 cm',
-    shortDescription: 'Stapelfähiger Dampfgareinsatz aus Cromargan® — ideal für die sparsame Küche',
+    shortDescription: 'Stapelfähiger Dampfgareinsatz aus Cromargan® - ideal für die sparsame Küche',
     descriptionDe: `Der WMF Compact Cuisine Dampfgareinsatz (24 cm) wurde für die platzsparende Aufbewahrung entwickelt und eignet sich hervorragend für gesundes Garen auf Induktionskochfeldern.
 
 **Merkmale:**
-- Exklusiv aus Cromargan® Edelstahl 18/10 — particularly langlebig und pflegeleicht
+- Exklusiv aus Cromargan® Edelstahl 18/10 - particularly langlebig und pflegeleicht
 - Stapelbar für platzsparende Aufbewahrung in der Küchenschublade
 - Kompatibel mit allen WMF Compact Cuisine Töpfen (Ø 24 cm)
 - Perforierter Boden für gleichmäßige Hitzeverteilung und optimalen Wasserkreislauf
 - Kaltbleibende Griffe für sicheren Transport
 - Spülmaschinenfest und rostfrei
-- Made in Germany — deutsche Qualität
+- Made in Germany - deutsche Qualität
 
 Der Compact Cuisine Dampfgareinsatz ist die perfekte Wahl für bewusstes Kochen. Das Cromargan® Material sorgt für gleichmäßige Temperaturverteilung, während das stapelbare Design Platz in der Küche spart.`,
     price: 34.99,
@@ -160,9 +165,10 @@ Der Compact Cuisine Dampfgareinsatz ist die perfekte Wahl für bewusstes Kochen.
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'WMF Compact Cuisine Dampfgareinsatz 24 cm | NOVA INDUKT',
-    metaDescription: 'WMF Compact Cuisine Dampfgareinsatz Ø 24 cm aus Cromargan® Edelstahl. Stapelbar, spülmaschinenfest. Perfekt für gesundes Garen auf Induktion.',
+    metaDescription:
+      'WMF Compact Cuisine Dampfgareinsatz Ø 24 cm aus Cromargan® Edelstahl. Stapelbar, spülmaschinenfest. Perfekt für gesundes Garen auf Induktion.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'WMF — Compact Cuisine Dampfgareinsatz Ø 24 cm',
+    folder: 'WMF - Compact Cuisine Dampfgareinsatz Ø 24 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -170,7 +176,8 @@ Der Compact Cuisine Dampfgareinsatz ist die perfekte Wahl für bewusstes Kochen.
     supplierSku: 'FIS-OPC-DE28',
     sortOrder: 15,
     nameDe: 'Fissler Original Profi Collection Dämpfeinsatz 28 cm',
-    shortDescription: 'Der große Dämpfeinsatz für die Fissler OPC Serie — perfekt für Großfamilien und Feierlichkeiten',
+    shortDescription:
+      'Der große Dämpfeinsatz für die Fissler OPC Serie - perfekt für Großfamilien und Feierlichkeiten',
     descriptionDe: `Der Fissler Original Profi Collection Dämpfeinsatz (28 cm) ist das größte Modell der beliebten OPC-Serie und bietet maximale Kapazität für anspruchsvolle Gerichte.
 
 **Merkmale:**
@@ -183,9 +190,9 @@ Der Compact Cuisine Dampfgareinsatz ist die perfekte Wahl für bewusstes Kochen.
 - Ofenfest bis 230°C
 - Made in Germany mit 10 Jahre Garantie
 
-Der 28 cm Dämpfeinsatz rundet die Fissler OPC-Kochsysteme ab und ermöglicht das Garen großer Mengen ohne Kompromisse bei der Qualität. Ob Gemüse, Fisch oder Reis — mit diesem Dämpfeinsatz wird jedes Gericht zum Erlebnis.`,
-    price: 109.00,
-    oldPrice: 139.00,
+Der 28 cm Dämpfeinsatz rundet die Fissler OPC-Kochsysteme ab und ermöglicht das Garen großer Mengen ohne Kompromisse bei der Qualität. Ob Gemüse, Fisch oder Reis - mit diesem Dämpfeinsatz wird jedes Gericht zum Erlebnis.`,
+    price: 109.0,
+    oldPrice: 139.0,
     brand: 'Fissler',
     material: 'Edelstahl 18/10',
     dimensions: 'Ø 28 cm, Höhe 11 cm',
@@ -198,15 +205,16 @@ Der 28 cm Dämpfeinsatz rundet die Fissler OPC-Kochsysteme ab und ermöglicht da
     rating: 4.7,
     reviewCount: 0,
     metaTitle: 'Fissler OPC Dämpfeinsatz 28 cm Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Original Profi Collection Dämpfeinsatz Ø 28 cm. Großes Format für Familien. Edelstahl 18/10, ofenfest, Made in Germany.',
+    metaDescription:
+      'Fissler Original Profi Collection Dämpfeinsatz Ø 28 cm. Großes Format für Familien. Edelstahl 18/10, ofenfest, Made in Germany.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Fissler — Original Profi Collection Dämpfeinsatz Ø 28 cm',
+    folder: 'Fissler - Original Profi Collection Dämpfeinsatz Ø 28 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
 ]
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Catégorie : Dampfgareinsätze / Dämpfeinsätze (5 Produits)')
+  console.log('🌱 NOVA INDUKT - Seed Catégorie : Dampfgareinsätze / Dämpfeinsätze (5 Produits)')
   console.log('─'.repeat(70))
 
   const categories = await prisma.category.findMany()
@@ -257,7 +265,9 @@ async function main() {
           data: imageData.map((img) => ({ ...img, productId: existing.id })),
         })
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 60)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 60)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -287,12 +297,14 @@ async function main() {
           },
         })
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 60)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 60)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -307,7 +319,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Catégorie Dampfgareinsätze terminée avec succès ! 5/5 produits en base.')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs.`)
     process.exit(1)
   }
 }

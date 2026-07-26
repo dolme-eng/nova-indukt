@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed : Pfannenschoner & Topfregale (8 Produkte)
+﻿/**
+ * NOVA INDUKT - Seed : Pfannenschoner & Topfregale (8 Produkte)
  * Exécuter avec : npx tsx prisma/seed-products-pfannenschoner-extra.ts
  *
  * Catégorie : pfannenschoner-topfregale (sortOrder 11–18)
@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,14 +31,15 @@ const products = [
     slug: 'fissler-topfregal-edelstahl-4fach',
     supplierSku: 'FIS-TR-4F',
     nameDe: 'Fissler Topfregal Edelstahl 4-fach',
-    shortDescription: 'Stabiles Edelstahl-Topfregal mit 4 Fächern — platzsparend & induktionsgeeignet',
+    shortDescription:
+      'Stabiles Edelstahl-Topfregal mit 4 Fächern - platzsparend & induktionsgeeignet',
     descriptionDe: `Das Fissler Topfregal aus hochwertigem Edelstahl bietet Platz für bis zu 4 Pfannen oder Töpfe. Die stabile Konstruktion und die rutschfesten Füße sorgen für sicheren Stand im Schrank oder auf der Arbeitsplatte.
 
 **Merkmale:**
-- Hochwertiger Edelstahl — robust und langlebig
+- Hochwertiger Edelstahl - robust und langlebig
 - 4 Fächer für verschiedene Pfannen- und Topfgrößen
 - Rutschfeste Gummifüße für sicheren Stand
-- Platzsparendes Design — ideal für Einbau- und Stehschränke
+- Platzsparendes Design - ideal für Einbau- und Stehschränke
 - Einfache Montage ohne Werkzeug
 - Induktionsgeeignet
 
@@ -53,8 +57,9 @@ Praktische Lösung für die ordentliche Aufbewahrung Ihrer Induktionspfannen.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Fissler Topfregal Edelstahl 4-fach — Pfannenaufbewahrung | NOVA INDUKT',
-    metaDescription: 'Fissler Topfregal Edelstahl 4-fach — stabile Pfannenaufbewahrung, platzsparend, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Topfregal Edelstahl 4-fach - Pfannenaufbewahrung | NOVA INDUKT',
+    metaDescription:
+      'Fissler Topfregal Edelstahl 4-fach - stabile Pfannenaufbewahrung, platzsparend, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Fissler Topfregal Edelstahl 4-fach',
     imageFiles: ['1.png', '2.png'],
@@ -69,7 +74,7 @@ Praktische Lösung für die ordentliche Aufbewahrung Ihrer Induktionspfannen.`,
 
 **Merkmale:**
 - 3-fach-Aufteilung für Pfannen verschiedener Größen
-- Hochwertiger Edelstahl — langlebig und pflegeleicht
+- Hochwertiger Edelstahl - langlebig und pflegeleicht
 - Stabile Konstruktion mit rutschfesten Füßen
 - Elegantes Zwilling-Design
 - Induktionsgeeignet
@@ -89,8 +94,9 @@ Zwilling Qualität für die ordentliche Aufbewahrung Ihrer Kochgeschirre.`,
     badges: ['Zwilling Qualität'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Zwilling Topfregal Edelstahl 3-fach — Pfannenaufbewahrung | NOVA INDUKT',
-    metaDescription: 'Zwilling Topfregal Edelstahl 3-fach — hochwertige Pfannenaufbewahrung von Zwilling. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Topfregal Edelstahl 3-fach - Pfannenaufbewahrung | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Topfregal Edelstahl 3-fach - hochwertige Pfannenaufbewahrung von Zwilling. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Zwilling Topfregal Edelstahl 3-fach',
     imageFiles: ['1.png', '2.png'],
@@ -100,7 +106,7 @@ Zwilling Qualität für die ordentliche Aufbewahrung Ihrer Kochgeschirre.`,
     slug: 'rivsalt-topfregal-5-stufen',
     supplierSku: 'RIV-TR-5S',
     nameDe: 'Rivsalt Topfregal 5 Stufen',
-    shortDescription: 'Schwedisches Topfregal mit 5 Stufen — modernes Design für die Küchenzeile',
+    shortDescription: 'Schwedisches Topfregal mit 5 Stufen - modernes Design für die Küchenzeile',
     descriptionDe: `Das Rivsalt Topfregal besticht durch sein scandinavisches Design und bietet mit 5 Stufen großzügigen Platz für Pfannen, Töpfe und Kochgeschirr. Die schwarze Metallkonstruktion passt perfekt in moderne Küchen.
 
 **Merkmale:**
@@ -125,8 +131,9 @@ Schwedisches Design trifft auf praktische Stauraumlösung.`,
     badges: ['Schwedisches Design', '5 Stufen'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Rivsalt Topfregal 5 Stufen — Schwedisches Design | NOVA INDUKT',
-    metaDescription: 'Rivsalt Topfregal 5 Stufen — schwedisches Design, schwarzes Metall, 5 Ebenen für Pfannen und Töpfe. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Rivsalt Topfregal 5 Stufen - Schwedisches Design | NOVA INDUKT',
+    metaDescription:
+      'Rivsalt Topfregal 5 Stufen - schwedisches Design, schwarzes Metall, 5 Ebenen für Pfannen und Töpfe. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Rivsalt Topfregal 5 Stufen',
     imageFiles: ['1.png', '2.png'],
@@ -136,11 +143,12 @@ Schwedisches Design trifft auf praktische Stauraumlösung.`,
     slug: 'wmf-pfannenschoner-30cm',
     supplierSku: 'WMF-PS-30',
     nameDe: 'WMF Pfannenschoner 30 cm',
-    shortDescription: 'Pfannenschoner aus Filz und Stoff — schützt Antihaftbeschichtung zuverlässig',
+    shortDescription:
+      'Pfannenschoner aus Filz und Stoff - schützt Antihaftbeschichtung zuverlässig',
     descriptionDe: `Der WMF Pfannenschoner schützt Ihre wertvollen Antihaftpfannen vor Kratzern und Beschädigungen. Aus weichem Filz und strapazierfähigem Stoff gefertigt, passt er sich ideal an Pfannen mit 30 cm Durchmesser an.
 
 **Merkmale:**
-- Weicher Filz + stabiler Stoff — maximaler Kratzschutz
+- Weicher Filz + stabiler Stoff - maximaler Kratzschutz
 - Passend für Pfannen mit Ø 30 cm
 - Maschinenwäsche möglich
 - Kompakt und platzsparend
@@ -161,8 +169,9 @@ Einfache und wirkungsvolle Lösung zum Schutz Ihrer Pfannenbeschichtung.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Pfannenschoner 30 cm — Kratzschutz für Pfannen | NOVA INDUKT',
-    metaDescription: 'WMF Pfannenschoner 30 cm aus Filz und Stoff — schützt Antihaftbeschichtung vor Kratzern. Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Pfannenschoner 30 cm - Kratzschutz für Pfannen | NOVA INDUKT',
+    metaDescription:
+      'WMF Pfannenschoner 30 cm aus Filz und Stoff - schützt Antihaftbeschichtung vor Kratzern. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'WMF Pfannenschoner 30cm',
     imageFiles: ['1.png', '2.png'],
@@ -172,7 +181,7 @@ Einfache und wirkungsvolle Lösung zum Schutz Ihrer Pfannenbeschichtung.`,
     slug: 'fissler-pfannenschoner-30cm',
     supplierSku: 'FIS-PS-30',
     nameDe: 'Fissler Pfannenschoner 30 cm',
-    shortDescription: 'Hochwertiger Pfannenschoner von Fissler — schont Antihaftbeschichtungen',
+    shortDescription: 'Hochwertiger Pfannenschoner von Fissler - schont Antihaftbeschichtungen',
     descriptionDe: `Der Fissler Pfannenschoner aus Filz und Stoff bietet zuverlässigen Schutz für Ihre Fissler- und andere Antihaftpfannen. Das Material ist weich genug, um die Beschichtung nicht zu beschädigen, aber stabil genug für dauerhaften Einsatz.
 
 **Merkmale:**
@@ -197,8 +206,9 @@ Die ideale Ergänzung zu Ihren Fissler-Pfannen.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Fissler Pfannenschoner 30 cm — Schutz für Antihaftpfannen | NOVA INDUKT',
-    metaDescription: 'Fissler Pfannenschoner 30 cm — hochwertiger Kratzschutz aus Filz und Stoff. Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Pfannenschoner 30 cm - Schutz für Antihaftpfannen | NOVA INDUKT',
+    metaDescription:
+      'Fissler Pfannenschoner 30 cm - hochwertiger Kratzschutz aus Filz und Stoff. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Fissler Pfannenschoner 30cm',
     imageFiles: ['1.png', '2.png'],
@@ -208,13 +218,13 @@ Die ideale Ergänzung zu Ihren Fissler-Pfannen.`,
     slug: 'tefal-pfannenschoner-30cm',
     supplierSku: 'TEF-PS-30',
     nameDe: 'Tefal Pfannenschoner 30 cm',
-    shortDescription: 'Silikon-Pfannenschoner von Tefal — spülmaschinenfest & langlebig',
+    shortDescription: 'Silikon-Pfannenschoner von Tefal - spülmaschinenfest & langlebig',
     descriptionDe: `Der Tefal Pfannenschoner besteht aus robustem Silikon und bietet hervorragenden Schutz für Ihre Antihaftpfannen. Die Silikonscheibe ist besonders langlebig und einfach zu reinigen.
 
 **Merkmale:**
-- Robuste Silikonscheibe — extrem langlebig
+- Robuste Silikonscheibe - extrem langlebig
 - Passend für Pfannen mit Ø 30 cm
-- Spülmaschinenfest — einfache Reinigung
+- Spülmaschinenfest - einfache Reinigung
 - Hitzebeständig
 - Antihaft-Schutz
 - Induktionsgeeignet
@@ -233,8 +243,9 @@ Die langlebige Alternative zu Filz-Pfannenschonern.`,
     badges: ['Antihaft-Schutz'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Tefal Pfannenschoner 30 cm — Silikon Kratzschutz | NOVA INDUKT',
-    metaDescription: 'Tefal Pfannenschoner 30 cm aus Silikon — spülmaschinenfest, langlebig, schützt Antihaftbeschichtung. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Tefal Pfannenschoner 30 cm - Silikon Kratzschutz | NOVA INDUKT',
+    metaDescription:
+      'Tefal Pfannenschoner 30 cm aus Silikon - spülmaschinenfest, langlebig, schützt Antihaftbeschichtung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Tefal Pfannenschoner 30cm',
     imageFiles: ['1.png', '2.png'],
@@ -244,13 +255,13 @@ Die langlebige Alternative zu Filz-Pfannenschonern.`,
     slug: 'ikea-variera-topfregal-2fach',
     supplierSku: 'IKEA-VAR-TR2',
     nameDe: 'IKEA VARIERA Topfregal 2-fach',
-    shortDescription: 'Günstiges Topfregal von IKEA — 2 Fächer, stabiler Stahl',
+    shortDescription: 'Günstiges Topfregal von IKEA - 2 Fächer, stabiler Stahl',
     descriptionDe: `Das IKEA VARIERA Topfregal bietet mit 2 Fächern Platz für die wichtigsten Pfannen und Töpfe. Der stabile Stahl und das kompakte Design machen es zur idealen Lösung für kleine Küchen.
 
 **Merkmale:**
 - 2 Fächer für Pfannen und Töpfe
 - Robuster Stahl
-- Kompaktes Design — ideal für kleine Küchen
+- Kompaktes Design - ideal für kleine Küchen
 - Rutschfeste Füße
 - Günstiger Preis
 - Induktionsgeeignet
@@ -269,8 +280,9 @@ Günstige und praktische Aufbewahrungslösung für Ihre Pfannen.`,
     badges: ['Günstig'],
     rating: 4.1,
     reviewCount: 0,
-    metaTitle: 'IKEA VARIERA Topfregal 2-fach — Günstige Pfannenaufbewahrung | NOVA INDUKT',
-    metaDescription: 'IKEA VARIERA Topfregal 2-fach — günstige und stabile Pfannenaufbewahrung aus Stahl. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'IKEA VARIERA Topfregal 2-fach - Günstige Pfannenaufbewahrung | NOVA INDUKT',
+    metaDescription:
+      'IKEA VARIERA Topfregal 2-fach - günstige und stabile Pfannenaufbewahrung aus Stahl. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'IKEA VARIERA Topfregal 2-fach',
     imageFiles: ['1.png', '2.png'],
@@ -280,12 +292,12 @@ Günstige und praktische Aufbewahrungslösung für Ihre Pfannen.`,
     slug: 'wmf-topfregal-edelstahl-3fach',
     supplierSku: 'WMF-TR-3F',
     nameDe: 'WMF Topfregal Edelstahl 3-fach',
-    shortDescription: 'WMF Topfregal aus Cromargan® Edelstahl — 3 Fächer, Made in Germany',
+    shortDescription: 'WMF Topfregal aus Cromargan® Edelstahl - 3 Fächer, Made in Germany',
     descriptionDe: `Das WMF Topfregal aus Cromargan® Edelstahl überzeugt durch hochwertige Verarbeitung und elegantes Design. Drei Fächer bieten ausreichend Platz für Ihre Lieblingspfannen und Töpfe.
 
 **Merkmale:**
 - 3 Fächer für verschiedene Pfannengrößen
-- Cromargan® Edelstahl — rostfrei und pflegeleicht
+- Cromargan® Edelstahl - rostfrei und pflegeleicht
 - Stabile Konstruktion mit rutschfesten Füßen
 - Elegantes WMF-Design
 - Made in Germany
@@ -305,8 +317,9 @@ Hochwertige Aufbewahrungslösung von WMF für anspruchsvolle Kochenthusiasten.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Topfregal Edelstahl 3-fach — Cromargan® Pfannenaufbewahrung | NOVA INDUKT',
-    metaDescription: 'WMF Topfregal Edelstahl 3-fach — Cromargan® Edelstahl, Made in Germany, elegante Pfannenaufbewahrung. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Topfregal Edelstahl 3-fach - Cromargan® Pfannenaufbewahrung | NOVA INDUKT',
+    metaDescription:
+      'WMF Topfregal Edelstahl 3-fach - Cromargan® Edelstahl, Made in Germany, elegante Pfannenaufbewahrung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'WMF Topfregal Edelstahl 3-fach',
     imageFiles: ['1.png', '2.png'],
@@ -316,7 +329,7 @@ Hochwertige Aufbewahrungslösung von WMF für anspruchsvolle Kochenthusiasten.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed : Pfannenschoner & Topfregale (8 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed : Pfannenschoner & Topfregale (8 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -371,7 +384,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -404,12 +419,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -424,7 +441,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Pfannenschoner & Topfregale seed terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Catégorie : Kasserollen / Stielkasserollen (10 Produits)
+﻿/**
+ * NOVA INDUKT - Seed Catégorie : Kasserollen / Stielkasserollen (10 Produits)
  * Exécuter avec : npx tsx prisma/seed-products-kasserollen.ts
  */
 
@@ -23,21 +23,22 @@ const products = [
     supplierSku: 'FIS-OPC-SK16-D',
     sortOrder: 1,
     nameDe: 'Fissler Original Profi Collection Stielkasserolle 16 cm mit Metalldeckel',
-    shortDescription: 'Professionelle Stielkasserolle aus Edelstahl 18/10 mit CookStar® Allherdboden und Metalldeckel — 1,4 L',
+    shortDescription:
+      'Professionelle Stielkasserolle aus Edelstahl 18/10 mit CookStar® Allherdboden und Metalldeckel - 1,4 L',
     descriptionDe: `Die Fissler Original Profi Collection Stielkasserolle (16 cm) mit Metalldeckel ist die idealere Wahl für anspruchsvolle Hobbyköche und Profis. Hergestellt aus extrem dickwandigem, mattiertem Edelstahl 18/10, überzeugt diese Kasserolle durch ihre erstklassige Verarbeitung und hervorragende Kocheigenschaften auf Induktionskochfeldern.
 
 **Merkmale:**
 - CookStar® Allherdboden (7,2 mm) für perfekte Planstabilität und maximale Energieeffizienz auf Induktion
-- Hochwertiger, schwerer Edelstahl 18/10 (mattiert) — kratz- und wasserfleckenresistent
+- Hochwertiger, schwerer Edelstahl 18/10 (mattiert) - kratz- und wasserfleckenresistent
 - Kaltmetallgriffe: bleiben auf dem Herd spürbar kühler
 - Kondensat-Plus-Funktion im Metalldeckel für saftigeres Kochgut
 - Messskala an der Kasserolleninnenseite & extra breiter Schüttrand
 - Backofengeeignet bis 230 °C (auch mit Deckel)
 - Hergestellt in Deutschland (Made in Germany)
 
-Die absolute Referenz unter den Stielkasserollen — langlebig, robust und thermisch perfekt abgestimmt.`,
-    price: 139.00,
-    oldPrice: 169.00,
+Die absolute Referenz unter den Stielkasserollen - langlebig, robust und thermisch perfekt abgestimmt.`,
+    price: 139.0,
+    oldPrice: 169.0,
     brand: 'Fissler',
     material: 'Edelstahl 18/10 (unbeschichtet)',
     dimensions: 'Ø 16 cm, Höhe 8,5 cm, 1,4 Liter',
@@ -50,9 +51,10 @@ Die absolute Referenz unter den Stielkasserollen — langlebig, robust und therm
     rating: 4.8,
     reviewCount: 0,
     metaTitle: 'Fissler Original Profi Collection Stielkasserolle 16 cm Metalldeckel | NOVA INDUKT',
-    metaDescription: 'Fissler Original Profi Collection Stielkasserolle 16 cm mit Metalldeckel (1,4 L). Edelstahl 18/10, CookStar-Boden, induktionsgeeignet. Made in Germany bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Original Profi Collection Stielkasserolle 16 cm mit Metalldeckel (1,4 L). Edelstahl 18/10, CookStar-Boden, induktionsgeeignet. Made in Germany bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Fissler Original Profi Collection — Stielkasserolle 16 cm',
+    folder: 'Fissler Original Profi Collection - Stielkasserolle 16 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -60,21 +62,22 @@ Die absolute Referenz unter den Stielkasserollen — langlebig, robust und therm
     supplierSku: 'FIS-OPC-SK18',
     sortOrder: 2,
     nameDe: 'Fissler Original Profi Collection Stielkasserolle 18 cm',
-    shortDescription: 'Professionelle Stielkasserolle aus Edelstahl 18/10 mit CookStar® Allherdboden — 2,0 L',
+    shortDescription:
+      'Professionelle Stielkasserolle aus Edelstahl 18/10 mit CookStar® Allherdboden - 2,0 L',
     descriptionDe: `Die Fissler Original Profi Collection Stielkasserolle (18 cm) gehört zur Spitzenklasse des deutschen Kochgeschirrs. Ausgestattet mit dem bewährten CookStar® Allherdboden aus massivem, doppellagigem Edelstahl garantiert sie eine gleichmäßige und energieeffiziente Wärmeverteilung auf jedem Induktionsherd.
 
 **Merkmale:**
 - CookStar® Allherdboden (7,2 mm) für optimale Induktionsleistung und perfekte Planstabilität
-- Extrem dickwandiger Edelstahl 18/10 (mattiert) — langlebig und robust
+- Extrem dickwandiger Edelstahl 18/10 (mattiert) - langlebig und robust
 - Kaltmetallgriffe: bleiben auf dem Herd spürbar kühler
 - Integrierte Messskala an der Innenseite für genaues Dosieren
 - Extra breiter, tropffreier Schüttrand
 - Backofengeeignet bis 230 °C
 - Hergestellt in Deutschland (Made in Germany)
 
-Die perfekte Kasserolle für anspruchsvolles Kochen — von Soßen über Risotto bis hin zu Milchspeisen.`,
-    price: 119.00,
-    oldPrice: 149.00,
+Die perfekte Kasserolle für anspruchsvolles Kochen - von Soßen über Risotto bis hin zu Milchspeisen.`,
+    price: 119.0,
+    oldPrice: 149.0,
     brand: 'Fissler',
     material: 'Edelstahl 18/10',
     dimensions: 'Ø 18 cm, Höhe 9 cm, 2,0 Liter',
@@ -87,9 +90,10 @@ Die perfekte Kasserolle für anspruchsvolles Kochen — von Soßen über Risotto
     rating: 4.7,
     reviewCount: 0,
     metaTitle: 'Fissler Original Profi Collection Stielkasserolle 18 cm | NOVA INDUKT',
-    metaDescription: 'Fissler Original Profi Collection Stielkasserolle 18 cm (2,0 L). Edelstahl 18/10, CookStar-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Original Profi Collection Stielkasserolle 18 cm (2,0 L). Edelstahl 18/10, CookStar-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Fissler Original Profi Collection — Stielkasserolle 18 cm',
+    folder: 'Fissler Original Profi Collection - Stielkasserolle 18 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -97,8 +101,9 @@ Die perfekte Kasserolle für anspruchsvolles Kochen — von Soßen über Risotto
     supplierSku: 'FIS-ADAM-SK18',
     sortOrder: 3,
     nameDe: 'Fissler Adamant Stielkasserolle 18 cm mit Glasdeckel',
-    shortDescription: 'Leichte Aluminium-Kasserolle mit 3-fach Adamant-Keramikbeschichtung und Glasdeckel — 2,0 L',
-    descriptionDe: `Die Fissler Adamant Stielkasserolle (18 cm) bietet eine hervorragende Kombination aus leichtem Aluminium und der extrem widerstandsfähigen Adamant-Keramikbeschichtung. Die dreifache Beschichtung ist metallbeständig und besonders kratzfest — ideal für das tägliche Kochen auf Induktionsherden.
+    shortDescription:
+      'Leichte Aluminium-Kasserolle mit 3-fach Adamant-Keramikbeschichtung und Glasdeckel - 2,0 L',
+    descriptionDe: `Die Fissler Adamant Stielkasserolle (18 cm) bietet eine hervorragende Kombination aus leichtem Aluminium und der extrem widerstandsfähigen Adamant-Keramikbeschichtung. Die dreifache Beschichtung ist metallbeständig und besonders kratzfest - ideal für das tägliche Kochen auf Induktionsherden.
 
 **Merkmale:**
 - 3-fach Adamant-Keramikbeschichtung: extrem kratzfest, metallbeständig und pflegeleicht
@@ -123,9 +128,10 @@ Die ideale Kasserolle für alle, die eine leichte, pflegeleichte und langlebige 
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Fissler Adamant Stielkasserolle 18 cm mit Glasdeckel | NOVA INDUKT',
-    metaDescription: 'Fissler Adamant Stielkasserolle 18 cm (2,0 L) mit Glasdeckel. Adamant-Keramikbeschichtung, TransTherm-Boden, induktionsgeeignet bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Adamant Stielkasserolle 18 cm (2,0 L) mit Glasdeckel. Adamant-Keramikbeschichtung, TransTherm-Boden, induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Fissler Adamant — Stielkasserolle 18 cm',
+    folder: 'Fissler Adamant - Stielkasserolle 18 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -133,11 +139,12 @@ Die ideale Kasserolle für alle, die eine leichte, pflegeleichte und langlebige 
     supplierSku: 'WMF-FUNC4-SK16',
     sortOrder: 4,
     nameDe: 'WMF Function 4 Stielkasserolle 16 cm mit Deckel',
-    shortDescription: 'Cromargan® Edelstahl-Kasserolle mit innovativem 4-Positionen-Glasdeckel — 1,5 L',
+    shortDescription:
+      'Cromargan® Edelstahl-Kasserolle mit innovativem 4-Positionen-Glasdeckel - 1,5 L',
     descriptionDe: `Die WMF Function 4 Stielkasserolle (16 cm) vereint exzellente Kocheigenschaften mit dem genialen Multifunktionsdeckel. Der Deckel besitzt einen roten Silikonring mit 4 verschiedenen Abgießfunktionen, sodass Flüssigkeiten kontrolliert abgegossen werden können, ohne den Deckel abzunehmen.
 
 **Merkmale:**
-- Cromargan® Edelstahl Rostfrei 18/10 — unempfindlich, hygienisch und geschmacksneutral
+- Cromargan® Edelstahl Rostfrei 18/10 - unempfindlich, hygienisch und geschmacksneutral
 - TransTherm®-Allherdboden: dicker Aluminiumkern, gekapselt in Edelstahl, für beste Induktionseigenschaften
 - Function 4 Deckel: 4 Positionen zum Ausgießen (geschlossen, weit offen, feine Sieblöcher, grobe Sieblöcher)
 - Hohlgriff: erwärmt sich während des Kochens kaum
@@ -159,9 +166,10 @@ Die ideale Verbindung aus deutscher Ingenieurskunst und modernem Design für die
     rating: 4.6,
     reviewCount: 0,
     metaTitle: 'WMF Function 4 Stielkasserolle 16 cm | NOVA INDUKT',
-    metaDescription: 'WMF Function 4 Stielkasserolle 16 cm (1,5 L). Cromargan-Edelstahl 18/10, TransTherm-Boden, Multifunktionsdeckel. Induktionsgeeignet bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Function 4 Stielkasserolle 16 cm (1,5 L). Cromargan-Edelstahl 18/10, TransTherm-Boden, Multifunktionsdeckel. Induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'WMF Function 4 — Stielkasserolle 16 cm',
+    folder: 'WMF Function 4 - Stielkasserolle 16 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -169,18 +177,18 @@ Die ideale Verbindung aus deutscher Ingenieurskunst und modernem Design für die
     supplierSku: 'WMF-COMFORT-SK16',
     sortOrder: 5,
     nameDe: 'WMF Comfort Line Stielkasserolle 16 cm',
-    shortDescription: 'Kompakte Cromargan® Stielkasserolle mit TransTherm® Allherdboden — 1,4 L',
+    shortDescription: 'Kompakte Cromargan® Stielkasserolle mit TransTherm® Allherdboden - 1,4 L',
     descriptionDe: `Die WMF Comfort Line Stielkasserolle (16 cm) ist die kompakte Lösung für schnelles Kochen auf Induktionsherden. Aus Cromargan® Edelstahl 18/10 gefertigt und mit dem bewährten TransTherm® Allherdboden ausgestattet, bietet sie zuverlässige Kocheigenschaften zu einem hervorragenden Preis-Leistungs-Verhältnis.
 
 **Merkmale:**
-- Cromargan® Edelstahl 18/10 — hochwertig, langlebig und pflegeleicht
+- Cromargan® Edelstahl 18/10 - hochwertig, langlebig und pflegeleicht
 - TransTherm® Allherdboden: optimale Hitzeverteilung auf Induktion und anderen Herdarten
 - Robuster, ergonomisch geformter Edelstahl-Stielgriff
 - Breiter Schüttrand für tropffreies Ausgießen
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 
-Die bewährte Qualitätskasserolle für den täglichen Gebrauch — solide, zuverlässig und preiswert.`,
+Die bewährte Qualitätskasserolle für den täglichen Gebrauch - solide, zuverlässig und preiswert.`,
     price: 39.99,
     oldPrice: 49.99,
     brand: 'WMF',
@@ -195,9 +203,10 @@ Die bewährte Qualitätskasserolle für den täglichen Gebrauch — solide, zuve
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'WMF Comfort Line Stielkasserolle 16 cm | NOVA INDUKT',
-    metaDescription: 'WMF Comfort Line Stielkasserolle 16 cm (1,4 L). Cromargan-Edelstahl 18/10, TransTherm-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Comfort Line Stielkasserolle 16 cm (1,4 L). Cromargan-Edelstahl 18/10, TransTherm-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'WMF Comfort Line — Stielkasserolle 16 cm',
+    folder: 'WMF Comfort Line - Stielkasserolle 16 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -205,11 +214,12 @@ Die bewährte Qualitätskasserolle für den täglichen Gebrauch — solide, zuve
     supplierSku: 'WMF-DIAD-SK16',
     sortOrder: 6,
     nameDe: 'WMF Diadem Plus Stielkasserolle 16 cm mit Deckel',
-    shortDescription: 'Elegante Cromargan® Kasserolle mit Keramik-Innenbeschichtung und Glasdeckel — 1,5 L',
-    descriptionDe: `Die WMF Diadem Plus Stielkasserolle (16 cm) besticht durch ihre elegante Linienführung und die hochwertige Keramik-Innenbeschichtung. Die beschichtete Innenwand ist besonders pflegeleicht und verhindert das Anbacken — ideal für empfindliche Speisen wie Eier, Milch oder Soßen auf Induktionsherden.
+    shortDescription:
+      'Elegante Cromargan® Kasserolle mit Keramik-Innenbeschichtung und Glasdeckel - 1,5 L',
+    descriptionDe: `Die WMF Diadem Plus Stielkasserolle (16 cm) besticht durch ihre elegante Linienführung und die hochwertige Keramik-Innenbeschichtung. Die beschichtete Innenwand ist besonders pflegeleicht und verhindert das Anbacken - ideal für empfindliche Speisen wie Eier, Milch oder Soßen auf Induktionsherden.
 
 **Merkmale:**
-- Cromargan® Edelstahl 18/10 — elegant, robust und langlebig
+- Cromargan® Edelstahl 18/10 - elegant, robust und langlebig
 - TransTherm® Allherdboden: für gleichmäßige und energieeffiziente Wärmeverteilung auf Induktion
 - Keramik-Innenbeschichtung: pflegeleicht, geschmacksneutral und antiklebend
 - Glasdeckel für Sichtkochen
@@ -232,9 +242,10 @@ Die elegante Kasserolle für anspruchsvolles Kochen mit komfortabler Keramikbesc
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'WMF Diadem Plus Stielkasserolle 16 cm | NOVA INDUKT',
-    metaDescription: 'WMF Diadem Plus Stielkasserolle 16 cm (1,5 L) mit Keramik-Innenbeschichtung. Cromargan-Edelstahl, TransTherm-Boden, induktionsgeeignet bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Diadem Plus Stielkasserolle 16 cm (1,5 L) mit Keramik-Innenbeschichtung. Cromargan-Edelstahl, TransTherm-Boden, induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'WMF Diadem Plus — Stielkasserolle 16 cm',
+    folder: 'WMF Diadem Plus - Stielkasserolle 16 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -242,22 +253,23 @@ Die elegante Kasserolle für anspruchsvolles Kochen mit komfortabler Keramikbesc
     supplierSku: 'DEM-ESS5-SK18',
     sortOrder: 7,
     nameDe: 'Demeyere Essential 5 Stielkasserolle 18 cm mit Deckel',
-    shortDescription: 'Premium-Stielkasserolle aus Edelstahl 18/10 mit 5-Schicht-Material für optimale Wärmeverteilung — 2,2 L',
+    shortDescription:
+      'Premium-Stielkasserolle aus Edelstahl 18/10 mit 5-Schicht-Material für optimale Wärmeverteilung - 2,2 L',
     descriptionDe: `Die Demeyere Essential 5 Stielkasserolle (18 cm) bietet die bewährte 5-Schicht-Technologie des belgischen Premiumherstellers für eine gleichmäßige und effiziente Wärmeverteilung auf Induktionsherden. Die Kombination aus Edelstahl und Aluminium sorgt für optimale Hitzespeicherung und -verteilung.
 
 **Merkmale:**
 - 5-Schicht-Material (5-Ply): Edelstahl-Aluminium-Edelstahl für gleichmäßige Wärmeverteilung bis zum Rand
-- Hochwertiger Edelstahl 18/10 — langlebig und pflegeleicht
+- Hochwertiger Edelstahl 18/10 - langlebig und pflegeleicht
 - InductoSeal®-Technologie für optimale Induktionsleistung
 - Massiver, geschweißter Edelstahlgriff ohne Nieten (hygienisch)
 - Glasdeckel für bequemes Sichtkochen
 - Hergestellt in Belgien mit 30 Jahren Garantie
 
 Die erstklassige Kasserolle für anspruchsvolle Köche, die Wert auf gleichmäßiges Garen und Langlebigkeit legen.`,
-    price: 129.00,
-    oldPrice: 159.00,
+    price: 129.0,
+    oldPrice: 159.0,
     brand: 'Demeyere',
-    material: 'Edelstahl 18/10 — 5-Schicht-Material',
+    material: 'Edelstahl 18/10 - 5-Schicht-Material',
     dimensions: 'Ø 18 cm, Höhe 9 cm, 2,2 Liter',
     dishwasherSafe: true,
     inductionSafe: true,
@@ -268,9 +280,10 @@ Die erstklassige Kasserolle für anspruchsvolle Köche, die Wert auf gleichmäß
     rating: 4.7,
     reviewCount: 0,
     metaTitle: 'Demeyere Essential 5 Stielkasserolle 18 cm | NOVA INDUKT',
-    metaDescription: 'Demeyere Essential 5 Stielkasserolle 18 cm (2,2 L). 5-Schicht-Edelstahl, InductoSeal, induktionsgeeignet. 30 Jahre Garantie bei NOVA INDUKT.',
+    metaDescription:
+      'Demeyere Essential 5 Stielkasserolle 18 cm (2,2 L). 5-Schicht-Edelstahl, InductoSeal, induktionsgeeignet. 30 Jahre Garantie bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Demeyere Essential 5 — Stielkasserolle 18 cm',
+    folder: 'Demeyere Essential 5 - Stielkasserolle 18 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -278,7 +291,8 @@ Die erstklassige Kasserolle für anspruchsvolle Köche, die Wert auf gleichmäß
     supplierSku: 'DEM-ATL7-SK20',
     sortOrder: 8,
     nameDe: 'Demeyere Atlantis 7 Stielkasserolle 20 cm',
-    shortDescription: 'Premium-Stielkasserolle mit InductoSeal® Kupferboden und Silvinox® Finish — 3,0 L',
+    shortDescription:
+      'Premium-Stielkasserolle mit InductoSeal® Kupferboden und Silvinox® Finish - 3,0 L',
     descriptionDe: `Die Demeyere Atlantis 7 Stielkasserolle (20 cm) gehört zur unangefochtenen Spitzenklasse. Dank der TriplInduc®-Technologie ist diese Kasserolle auf Induktionsherden bis zu 30% effizienter als Standardgeschirr. Der patentierte InductoSeal®-Boden enthält eine integrierte Kupferscheibe für sofortige Wärmeleitung und optimale Temperaturkontrolle.
 
 **Merkmale:**
@@ -290,8 +304,8 @@ Die erstklassige Kasserolle für anspruchsvolle Köche, die Wert auf gleichmäß
 - Hergestellt in Belgien mit 30 Jahren Garantie
 
 Die absolute "Rolls-Royce" unter den Induktionskasserollen für anspruchsvolle Gourmetküchen.`,
-    price: 249.00,
-    oldPrice: 299.00,
+    price: 249.0,
+    oldPrice: 299.0,
     brand: 'Demeyere',
     material: 'Edelstahl 18/10 mit Kupfer-InductoSeal-Boden',
     dimensions: 'Ø 20 cm, Höhe 10 cm, 3,0 Liter',
@@ -303,10 +317,11 @@ Die absolute "Rolls-Royce" unter den Induktionskasserollen für anspruchsvolle G
     badges: ['30 Jahre Garantie', 'InductoSeal®', 'Silvinox®', 'Made in Belgium'],
     rating: 4.8,
     reviewCount: 0,
-    metaTitle: 'Demeyere Atlantis 7 Stielkasserolle 20 cm — Kupferkern | NOVA INDUKT',
-    metaDescription: 'Demeyere Atlantis 7 Stielkasserolle 20 cm mit InductoSeal-Kupferboden und TriplInduc. Höchste Induktionseffizienz. 30 Jahre Garantie bei NOVA INDUKT.',
+    metaTitle: 'Demeyere Atlantis 7 Stielkasserolle 20 cm - Kupferkern | NOVA INDUKT',
+    metaDescription:
+      'Demeyere Atlantis 7 Stielkasserolle 20 cm mit InductoSeal-Kupferboden und TriplInduc. Höchste Induktionseffizienz. 30 Jahre Garantie bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Demeyere Atlantis 7 — Stielkasserolle 20 cm',
+    folder: 'Demeyere Atlantis 7 - Stielkasserolle 20 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -314,7 +329,8 @@ Die absolute "Rolls-Royce" unter den Induktionskasserollen für anspruchsvolle G
     supplierSku: 'ZWI-PLUS-SK18',
     sortOrder: 9,
     nameDe: 'Zwilling Plus Stielkasserolle 18 cm mit Deckel',
-    shortDescription: '3-Ply Edelstahl-Kasserolle mit Sigma Classic Sandwichboden und Glasdeckel — 2,0 L',
+    shortDescription:
+      '3-Ply Edelstahl-Kasserolle mit Sigma Classic Sandwichboden und Glasdeckel - 2,0 L',
     descriptionDe: `Die Zwilling Plus Stielkasserolle (18 cm) bietet zuverlässige Qualität im eleganten Design. Ausgestattet mit dem Sigma Classic Sandwichboden mit starkem Aluminiumkern bietet sie eine gleichmäßige Wärmeverteilung und schnelle Reaktionszeit auf Induktionsplatten.
 
 **Merkmale:**
@@ -341,9 +357,10 @@ Qualität und Langlebigkeit im klassischen Design zum hervorragenden Preis-Leist
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Zwilling Plus Stielkasserolle 18 cm | NOVA INDUKT',
-    metaDescription: 'Zwilling Plus Stielkasserolle 18 cm (2,0 L) mit Sigma Classic Sandwichboden. 3-Ply Edelstahl 18/10, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Zwilling Plus Stielkasserolle 18 cm (2,0 L) mit Sigma Classic Sandwichboden. 3-Ply Edelstahl 18/10, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Zwilling Plus — Stielkasserolle 18 cm',
+    folder: 'Zwilling Plus - Stielkasserolle 18 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
   {
@@ -351,8 +368,9 @@ Qualität und Langlebigkeit im klassischen Design zum hervorragenden Preis-Leist
     supplierSku: 'SIL-MOD-SK16',
     sortOrder: 10,
     nameDe: 'Silit Silargan Modesto Stielkasserolle 16 cm',
-    shortDescription: 'Funktionskeramik Silargan® — extrem robust, schneidfest und nickelfrei, 1,4 L',
-    descriptionDe: `Die Silit Silargan Modesto Stielkasserolle (16 cm) besticht durch die innovative Funktionskeramik Silargan®. Die extrem harte, porenfreie und kratzfeste Oberfläche ist nickelfrei und geschmacksneutral — perfekt für Allergiker sowie das aromaschonende Zubereiten von Soßen, Suppen und Milchspeisen auf Induktionsherden.
+    shortDescription:
+      'Funktionskeramik Silargan® - extrem robust, schneidfest und nickelfrei, 1,4 L',
+    descriptionDe: `Die Silit Silargan Modesto Stielkasserolle (16 cm) besticht durch die innovative Funktionskeramik Silargan®. Die extrem harte, porenfreie und kratzfeste Oberfläche ist nickelfrei und geschmacksneutral - perfekt für Allergiker sowie das aromaschonende Zubereiten von Soßen, Suppen und Milchspeisen auf Induktionsherden.
 
 **Merkmale:**
 - Silargan® Funktionskeramik: unverwüstlich, kratzfest, nickelfrei und antibakteriell
@@ -377,15 +395,16 @@ Die perfekte Wahl für empfindliche Speisen und anspruchsvolle Allergiker, die k
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Silit Silargan Modesto Stielkasserolle 16 cm | NOVA INDUKT',
-    metaDescription: 'Silit Silargan Modesto Stielkasserolle 16 cm (1,4 L) aus Silargan-Funktionskeramik. Nickelfrei, kratzfest, induktionsgeeignet. Hergestellt in Deutschland.',
+    metaDescription:
+      'Silit Silargan Modesto Stielkasserolle 16 cm (1,4 L) aus Silargan-Funktionskeramik. Nickelfrei, kratzfest, induktionsgeeignet. Hergestellt in Deutschland.',
     categorySlug: 'induktionstoepfe',
-    folder: 'Silit Silargan Modesto — Stielkasserolle 16 cm',
+    folder: 'Silit Silargan Modesto - Stielkasserolle 16 cm',
     imageFiles: ['1.png', '2.png', '3.png'],
   },
 ]
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Catégorie : Kasserollen / Stielkasserollen (10 Produits)')
+  console.log('🌱 NOVA INDUKT - Seed Catégorie : Kasserollen / Stielkasserollen (10 Produits)')
   console.log('─'.repeat(70))
 
   const categories = await prisma.category.findMany()
@@ -436,7 +455,9 @@ async function main() {
           data: imageData.map((img) => ({ ...img, productId: existing.id })),
         })
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 60)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 60)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -466,12 +487,14 @@ async function main() {
           },
         })
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 60)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 60)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -486,7 +509,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Catégorie Kasserollen terminée avec succès ! 10/10 produits en base.')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs.`)
     process.exit(1)
   }
 }

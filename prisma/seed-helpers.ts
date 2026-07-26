@@ -10,10 +10,11 @@ const prisma = new PrismaClient()
  * Build image array for a product folder.
  */
 export function imgs(folder: string, files: string[]) {
-  const base = `/images/products/${folder}`
+  const normalized = folder.replace(/—/g, '-')
+  const base = `/images/products/${normalized}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
-    alt: folder,
+    alt: normalized,
     sortOrder: i,
     isMain: i === 0,
   }))
@@ -52,10 +53,7 @@ export interface SeedProduct {
 /**
  * Upsert a single product with its images.
  */
-export async function upsertProduct(
-  p: SeedProduct,
-  categoryMap: Map<string, string>
-) {
+export async function upsertProduct(p: SeedProduct, categoryMap: Map<string, string>) {
   const categoryId = categoryMap.get(p.categorySlug)
   if (!categoryId) {
     console.warn(`  ⚠ Category "${p.categorySlug}" not found for "${p.nameDe}", skipping.`)

@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Batch : 6 Reinigung & Pflege
+﻿/**
+ * NOVA INDUKT - Seed Batch : 6 Reinigung & Pflege
  * Exécuter avec : npx tsx prisma/seed-products-reinigung-pflege.ts
  *
  * Catégories couvertes :
@@ -13,7 +13,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -30,7 +33,7 @@ const products = [
     slug: 'weber-reiniger-grillreiniger',
     supplierSku: 'WEB-GR-500',
     nameDe: 'Weber Premium Grillreiniger 500 ml',
-    shortDescription: 'Hochwertiger Grillreiniger — Weber Original, 500 ml',
+    shortDescription: 'Hochwertiger Grillreiniger - Weber Original, 500 ml',
     descriptionDe: `Der Weber Premium Grillreiniger entfernt hartnäckige Verschmutzungen und Fettreste von Grillrost und Grilloberfläche. Das Weber Original in praktischer 500 ml Flasche.
 
 **Merkmale:**
@@ -55,8 +58,9 @@ Der perfekte Begleiter für die Grillpflege.`,
     badges: ['Weber Original', '500 ml'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Weber Premium Grillreiniger 500 ml — Weber Original | NOVA INDUKT',
-    metaDescription: 'Weber Premium Grillreiniger 500 ml — Weber Original, zuverlässig. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Weber Premium Grillreiniger 500 ml - Weber Original | NOVA INDUKT',
+    metaDescription:
+      'Weber Premium Grillreiniger 500 ml - Weber Original, zuverlässig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Weber Premium Grillreiniger',
     imageFiles: ['1.png'],
@@ -66,7 +70,7 @@ Der perfekte Begleiter für die Grillpflege.`,
     slug: 'weber-reiniger-holzschutz',
     supplierSku: 'WEB-HSO-250',
     nameDe: 'Weber Holzschutzöl 250 ml',
-    shortDescription: 'Pflegeöl für Holzgriffe und Holzbretter — Weber Original, 250 ml',
+    shortDescription: 'Pflegeöl für Holzgriffe und Holzbretter - Weber Original, 250 ml',
     descriptionDe: `Das Weber Holzschutzöl pflegt und schützt Holzgriffe, Holzbretter und andere Holzteile am Grill. Das Weber Original in praktischer 250 ml Flasche.
 
 **Merkmale:**
@@ -91,8 +95,9 @@ Die natürliche Pflege für Holzteile am Grill.`,
     badges: ['Weber Original', 'Holzschutz'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Weber Holzschutzöl 250 ml — Pflegeöl, Weber Original | NOVA INDUKT',
-    metaDescription: 'Weber Holzschutzöl 250 ml — pflegt Holzgriffe, Weber Original. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Weber Holzschutzöl 250 ml - Pflegeöl, Weber Original | NOVA INDUKT',
+    metaDescription:
+      'Weber Holzschutzöl 250 ml - pflegt Holzgriffe, Weber Original. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Weber Holzschutzöl',
     imageFiles: ['1.png'],
@@ -102,7 +107,7 @@ Die natürliche Pflege für Holzteile am Grill.`,
     slug: 'wmf-antihaft-reiniger',
     supplierSku: 'WMF-AHR-250',
     nameDe: 'WMF Antihaft-Reiniger 250 ml',
-    shortDescription: 'Reiniger speziell für Antihaftbeschichtungen — Made in Germany, 250 ml',
+    shortDescription: 'Reiniger speziell für Antihaftbeschichtungen - Made in Germany, 250 ml',
     descriptionDe: `Der WMF Antihaft-Reiniger ist speziell für die schonende Reinigung von Antihaftbeschichtungen entwickelt. Das Reinigungsmittel entfernt Verschmutzungen ohne die empfindliche Beschichtung zu beschädigen.
 
 **Merkmale:**
@@ -127,8 +132,9 @@ Die schonende Reinigung für Ihre Antihaftpfannen.`,
     badges: ['Made in Germany', '250 ml'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'WMF Antihaft-Reiniger 250 ml — Made in Germany | NOVA INDUKT',
-    metaDescription: 'WMF Antihaft-Reiniger 250 ml — Made in Germany, beschichtungsschonend. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Antihaft-Reiniger 250 ml - Made in Germany | NOVA INDUKT',
+    metaDescription:
+      'WMF Antihaft-Reiniger 250 ml - Made in Germany, beschichtungsschonend. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'WMF Antihaft-Reiniger',
     imageFiles: ['1.png'],
@@ -138,7 +144,7 @@ Die schonende Reinigung für Ihre Antihaftpfannen.`,
     slug: 'fissler-edelstahl-reiniger',
     supplierSku: 'FIS-ER-250',
     nameDe: 'Fissler Edelstahl-Reiniger 250 ml',
-    shortDescription: 'Reiniger speziell für Edelstahl — Made in Germany, 250 ml',
+    shortDescription: 'Reiniger speziell für Edelstahl - Made in Germany, 250 ml',
     descriptionDe: `Der Fissler Edelstahl-Reiniger entfernt Fingerabdrücke, Wasserflecken und Verschmutzungen von Edelstahloberflächen. Das Reinigungsmittel poliert Edelstahl zu Hochglanz.
 
 **Merkmale:**
@@ -163,8 +169,9 @@ Die perfekte Pflege für Ihre Edelstahlprodukte.`,
     badges: ['Made in Germany', 'Edelstahl'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'Fissler Edelstahl-Reiniger 250 ml — Made in Germany | NOVA INDUKT',
-    metaDescription: 'Fissler Edelstahl-Reiniger 250 ml — Made in Germany, poliert zu Hochglanz. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Edelstahl-Reiniger 250 ml - Made in Germany | NOVA INDUKT',
+    metaDescription:
+      'Fissler Edelstahl-Reiniger 250 ml - Made in Germany, poliert zu Hochglanz. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Fissler Edelstahl-Reiniger',
     imageFiles: ['1.png'],
@@ -174,7 +181,7 @@ Die perfekte Pflege für Ihre Edelstahlprodukte.`,
     slug: 'ballarini-pflege-ol',
     supplierSku: 'BAL-PO-250',
     nameDe: 'Ballarini Pflegeöl 250 ml',
-    shortDescription: 'Pflegeöl für Antihaftbeschichtungen — Italianisch, 250 ml',
+    shortDescription: 'Pflegeöl für Antihaftbeschichtungen - Italianisch, 250 ml',
     descriptionDe: `Das Ballarini Pflegeöl pflegt und schützt Antihaftbeschichtungen vor Austrocknung und Beschädigungen. Das Pflegeöl in praktischer 250 ml Flasche.
 
 **Merkmale:**
@@ -199,8 +206,9 @@ Die natürliche Pflege für Ihre Antihaftpfannen aus Italien.`,
     badges: ['Italianisch', 'Antihaft-Pflege'],
     rating: 4.1,
     reviewCount: 0,
-    metaTitle: 'Ballarini Pflegeöl 250 ml — Antihaft-Pflege | NOVA INDUKT',
-    metaDescription: 'Ballarini Pflegeöl 250 ml — pflegt Antihaftbeschichtung, Italianisch. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Ballarini Pflegeöl 250 ml - Antihaft-Pflege | NOVA INDUKT',
+    metaDescription:
+      'Ballarini Pflegeöl 250 ml - pflegt Antihaftbeschichtung, Italianisch. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Ballarini Pflegeöl',
     imageFiles: ['1.png'],
@@ -210,7 +218,7 @@ Die natürliche Pflege für Ihre Antihaftpfannen aus Italien.`,
     slug: 'le-creuset-emaille-reiniger',
     supplierSku: 'LEC-ER-250',
     nameDe: 'Le Creuset Emaille-Reiniger 250 ml',
-    shortDescription: 'Reiniger speziell für Emaille-Produkte — Made in France, 250 ml',
+    shortDescription: 'Reiniger speziell für Emaille-Produkte - Made in France, 250 ml',
     descriptionDe: `Der Le Creuset Emaille-Reiniger entfernt Verschmutzungen und Flecken von emaillierten Oberflächen. Das Reinigungsmittel in praktischer 250 ml Flasche, hergestellt in Frankreich.
 
 **Merkmale:**
@@ -235,8 +243,9 @@ Die schonende Reinigung für Ihre Le Creuset-Produkte.`,
     badges: ['Made in France', 'Emaille'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Le Creuset Emaille-Reiniger 250 ml — Made in France | NOVA INDUKT',
-    metaDescription: 'Le Creuset Emaille-Reiniger 250 ml — Made in France, Emaille-spezifisch. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Le Creuset Emaille-Reiniger 250 ml - Made in France | NOVA INDUKT',
+    metaDescription:
+      'Le Creuset Emaille-Reiniger 250 ml - Made in France, Emaille-spezifisch. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Le Creuset Emaille-Reiniger',
     imageFiles: ['1.png'],
@@ -246,7 +255,7 @@ Die schonende Reinigung für Ihre Le Creuset-Produkte.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Batch : Reinigung & Pflege (6 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Batch : Reinigung & Pflege (6 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -301,7 +310,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -334,12 +345,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -354,7 +367,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Batch Reinigung & Pflege terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

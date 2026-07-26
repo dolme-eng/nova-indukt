@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : 6 Kochfelder
+﻿/**
+ * NOVA INDUKT - Seed Extra : 6 Kochfelder
  * Exécuter avec : npx tsx prisma/seed-products-kochfelder-extra.ts
  */
 
@@ -9,7 +9,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,19 +31,19 @@ const products = [
     slug: 'bosch-serie-6-induktionskochfeld-60cm',
     supplierSku: 'BOS-S6-IK60',
     nameDe: 'Bosch Serie 6 Induktionskochfeld 60 cm',
-    shortDescription: 'Induktionskochfeld mit FlexZone — 2 Kochfelder, 60 cm',
+    shortDescription: 'Induktionskochfeld mit FlexZone - 2 Kochfelder, 60 cm',
     descriptionDe: `Das Bosch Serie 6 Induktionskochfeld 60 cm bietet die innovative FlexZone-Technologie für maximale Flexibilität beim Kochen.
 
 **Merkmale:**
 - Glaskeramik-Oberfläche
 - 2 Kochfelder + FlexZone
-- FlexZone — kombinierbar zu einer großen Kochfläche
+- FlexZone - kombinierbar zu einer großen Kochfläche
 - 60×52 cm Einbaumaß
 - Induktionskompatibel
 
 Das moderne Kochfeld für die Einbauküche.`,
-    price: 599.00,
-    oldPrice: 699.00,
+    price: 599.0,
+    oldPrice: 699.0,
     brand: 'Bosch',
     material: 'Glaskeramik',
     dimensions: '60×52 cm, 2 Kochfelder + FlexZone',
@@ -52,10 +55,11 @@ Das moderne Kochfeld für die Einbauküche.`,
     badges: ['Bosch Qualität', 'FlexZone'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Bosch Serie 6 Induktionskochfeld 60 cm — FlexZone | NOVA INDUKT',
-    metaDescription: 'Bosch Serie 6 Induktionskochfeld 60 cm mit FlexZone und 2 Kochfeldern. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Bosch Serie 6 Induktionskochfeld 60 cm - FlexZone | NOVA INDUKT',
+    metaDescription:
+      'Bosch Serie 6 Induktionskochfeld 60 cm mit FlexZone und 2 Kochfeldern. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionskochfelder-herde',
-    folder: 'Bosch Serie 6 Induktionskochfeld — 60 cm',
+    folder: 'Bosch Serie 6 Induktionskochfeld - 60 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -63,7 +67,7 @@ Das moderne Kochfeld für die Einbauküche.`,
     slug: 'siemens-iq700-induktionskochfeld-60cm',
     supplierSku: 'SIEM-IQ7-IK60',
     nameDe: 'Siemens iQ700 Induktionskochfeld 60 cm',
-    shortDescription: 'Premium-Induktionskochfeld mit flexInduction — 60 cm',
+    shortDescription: 'Premium-Induktionskochfeld mit flexInduction - 60 cm',
     descriptionDe: `Das Siemens iQ700 Induktionskochfeld 60 cm bietet die exklusive flexInduction-Technologie für maximale Kochflexibilität.
 
 **Merkmale:**
@@ -74,8 +78,8 @@ Das moderne Kochfeld für die Einbauküche.`,
 - Induktionskompatibel
 
 Das Premium-Kochfeld für anspruchsvolle Köche.`,
-    price: 699.00,
-    oldPrice: 799.00,
+    price: 699.0,
+    oldPrice: 799.0,
     brand: 'Siemens',
     material: 'Glaskeramik',
     dimensions: '60×52 cm, 2 Kochfelder',
@@ -87,10 +91,11 @@ Das Premium-Kochfeld für anspruchsvolle Köche.`,
     badges: ['iQ700', 'flexInduction'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Siemens iQ700 Induktionskochfeld 60 cm — flexInduction | NOVA INDUKT',
-    metaDescription: 'Siemens iQ700 Induktionskochfeld 60 cm mit flexInduction. Premium-Qualität. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Siemens iQ700 Induktionskochfeld 60 cm - flexInduction | NOVA INDUKT',
+    metaDescription:
+      'Siemens iQ700 Induktionskochfeld 60 cm mit flexInduction. Premium-Qualität. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionskochfelder-herde',
-    folder: 'Siemens iQ700 Induktionskochfeld — 60 cm',
+    folder: 'Siemens iQ700 Induktionskochfeld - 60 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -98,7 +103,7 @@ Das Premium-Kochfeld für anspruchsvolle Köche.`,
     slug: 'neff-induktionskochfeld-60cm',
     supplierSku: 'NEF-IK60',
     nameDe: 'Neff Induktionskochfeld 60 cm',
-    shortDescription: 'Induktionskochfeld mit powerBoost — 2 Kochfelder, 60 cm',
+    shortDescription: 'Induktionskochfeld mit powerBoost - 2 Kochfelder, 60 cm',
     descriptionDe: `Das Neff Induktionskochfeld 60 cm bietet die powerBoost-Funktion für schnelles Aufheizen und Kochen.
 
 **Merkmale:**
@@ -109,8 +114,8 @@ Das Premium-Kochfeld für anspruchsvolle Köche.`,
 - Induktionskompatibel
 
 Das zuverlässige Kochfeld mit Leistungsreserve.`,
-    price: 499.00,
-    oldPrice: 599.00,
+    price: 499.0,
+    oldPrice: 599.0,
     brand: 'Neff',
     material: 'Glaskeramik',
     dimensions: '60×52 cm, 2 Kochfelder',
@@ -122,10 +127,11 @@ Das zuverlässige Kochfeld mit Leistungsreserve.`,
     badges: ['Neff Qualität', 'powerBoost'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Neff Induktionskochfeld 60 cm — powerBoost | NOVA INDUKT',
-    metaDescription: 'Neff Induktionskochfeld 60 cm mit powerBoost-Funktion. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Neff Induktionskochfeld 60 cm - powerBoost | NOVA INDUKT',
+    metaDescription:
+      'Neff Induktionskochfeld 60 cm mit powerBoost-Funktion. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionskochfelder-herde',
-    folder: 'Neff Induktionskochfeld — 60 cm',
+    folder: 'Neff Induktionskochfeld - 60 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -133,19 +139,19 @@ Das zuverlässige Kochfeld mit Leistungsreserve.`,
     slug: 'aeg-induktionskochfeld-60cm',
     supplierSku: 'AEG-IK60',
     nameDe: 'AEG Induktionskochfeld 60 cm',
-    shortDescription: 'Induktionskochfeld mit MaxiSense — 2 Kochfelder, 60 cm',
+    shortDescription: 'Induktionskochfeld mit MaxiSense - 2 Kochfelder, 60 cm',
     descriptionDe: `Das AEG Induktionskochfeld 60 cm bietet die MaxiSense-Technologie für automatische Erkennung der Kochgeschirrgröße.
 
 **Merkmale:**
 - Glaskeramik-Oberfläche
 - 2 Kochfelder
-- MaxiSense — automatische Kochgeschirrerkenntnis
+- MaxiSense - automatische Kochgeschirrerkenntnis
 - 60×52 cm Einbaumaß
 - Induktionskompatibel
 
 Das intelligent Kochfeld für effizientes Kochen.`,
-    price: 449.00,
-    oldPrice: 549.00,
+    price: 449.0,
+    oldPrice: 549.0,
     brand: 'AEG',
     material: 'Glaskeramik',
     dimensions: '60×52 cm, 2 Kochfelder',
@@ -157,10 +163,11 @@ Das intelligent Kochfeld für effizientes Kochen.`,
     badges: ['AEG Qualität', 'MaxiSense'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'AEG Induktionskochfeld 60 cm — MaxiSense | NOVA INDUKT',
-    metaDescription: 'AEG Induktionskochfeld 60 cm mit MaxiSense-Technologie. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'AEG Induktionskochfeld 60 cm - MaxiSense | NOVA INDUKT',
+    metaDescription:
+      'AEG Induktionskochfeld 60 cm mit MaxiSense-Technologie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionskochfelder-herde',
-    folder: 'AEG Induktionskochfeld — 60 cm',
+    folder: 'AEG Induktionskochfeld - 60 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -168,7 +175,7 @@ Das intelligent Kochfeld für effizientes Kochen.`,
     slug: 'ikea-mittled-induktionskochfeld-60cm',
     supplierSku: 'IKEA-MIT-IK60',
     nameDe: 'IKEA MITTLED Induktionskochfeld 60 cm',
-    shortDescription: 'Induktionskochfeld mit 2 Kochfeldern — günstig und zuverlässig',
+    shortDescription: 'Induktionskochfeld mit 2 Kochfeldern - günstig und zuverlässig',
     descriptionDe: `Das IKEA MITTLED Induktionskochfeld 60 cm bietet günstige Qualität für die Einbauküche.
 
 **Merkmale:**
@@ -179,8 +186,8 @@ Das intelligent Kochfeld für effizientes Kochen.`,
 - Induktionskompatibel
 
 Das preiswerte Kochfeld für Jedermann.`,
-    price: 299.00,
-    oldPrice: 349.00,
+    price: 299.0,
+    oldPrice: 349.0,
     brand: 'IKEA',
     material: 'Glaskeramik',
     dimensions: '60×52 cm, 2 Kochfelder',
@@ -192,10 +199,11 @@ Das preiswerte Kochfeld für Jedermann.`,
     badges: ['IKEA', 'Günstig'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'IKEA MITTLED Induktionskochfeld 60 cm — Günstig | NOVA INDUKT',
-    metaDescription: 'IKEA MITTLED Induktionskochfeld 60 cm — günstig und zuverlässig. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'IKEA MITTLED Induktionskochfeld 60 cm - Günstig | NOVA INDUKT',
+    metaDescription:
+      'IKEA MITTLED Induktionskochfeld 60 cm - günstig und zuverlässig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionskochfelder-herde',
-    folder: 'IKEA MITTLED Induktionskochfeld — 60 cm',
+    folder: 'IKEA MITTLED Induktionskochfeld - 60 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -203,7 +211,7 @@ Das preiswerte Kochfeld für Jedermann.`,
     slug: 'amzchef-induktionskochfeld-2-kochfeld',
     supplierSku: 'AMZ-2K-IK',
     nameDe: 'AMZCHEF Induktionskochfeld 2-Kochfeld',
-    shortDescription: 'Tragbares 2-Kochfeld-Induktionskochfeld — kompakt und mobil',
+    shortDescription: 'Tragbares 2-Kochfeld-Induktionskochfeld - kompakt und mobil',
     descriptionDe: `Das AMZCHEF Induktionskochfeld mit 2 Kochfeldern ist ideal für kleine Küchen, WG-Zimmer oder als zusätzliche Kochstelle.
 
 **Merkmale:**
@@ -227,10 +235,11 @@ Das kompakte Kochfeld für unterwegs oder als Zusatzstelle.`,
     badges: ['2 Kochfelder', 'Tragbar'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'AMZCHEF Induktionskochfeld 2-Kochfeld — Tragbar | NOVA INDUKT',
-    metaDescription: 'AMZCHEF Induktionskochfeld mit 2 Kochfeldern — tragbar und kompakt. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'AMZCHEF Induktionskochfeld 2-Kochfeld - Tragbar | NOVA INDUKT',
+    metaDescription:
+      'AMZCHEF Induktionskochfeld mit 2 Kochfeldern - tragbar und kompakt. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionskochfelder-herde',
-    folder: 'AMZCHEF Induktionskochfeld — 2 Kochfeld',
+    folder: 'AMZCHEF Induktionskochfeld - 2 Kochfeld',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -238,7 +247,7 @@ Das kompakte Kochfeld für unterwegs oder als Zusatzstelle.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Kochfelder (6 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Kochfelder (6 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -293,7 +302,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -326,12 +337,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -346,7 +359,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Batch Kochfelder Extra terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

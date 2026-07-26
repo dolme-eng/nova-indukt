@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : 8 Zubehör
+﻿/**
+ * NOVA INDUKT - Seed Extra : 8 Zubehör
  * Exécuter avec : npx tsx prisma/seed-products-zubehoer-extra.ts
  */
 
@@ -9,7 +9,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,7 +31,7 @@ const products = [
     slug: 'tfa-digital-kuehlschrank-thermometer',
     supplierSku: 'TFA-DIG-KS',
     nameDe: 'TFA Digital-Kühlschrankthermometer',
-    shortDescription: 'Digitales Thermometer für den Kühlschrank — kompakt und zuverlässig',
+    shortDescription: 'Digitales Thermometer für den Kühlschrank - kompakt und zuverlässig',
     descriptionDe: `Das TFA Digital-Kühlschrankthermometer zeigt die Temperatur im Kühlschrank präzise an und hilft, Lebensmittel richtig zu lagern.
 
 **Merkmale:**
@@ -51,8 +54,9 @@ Ein unverzichtbares Hilfsmittel für die Küche.`,
     badges: ['Digital', 'Kühlschrank'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'TFA Digital-Kühlschrankthermometer — Küchenzubehör | NOVA INDUKT',
-    metaDescription: 'TFA Digital-Kühlschrankthermometer — digitale Temperaturanzeige für den Kühlschrank. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'TFA Digital-Kühlschrankthermometer - Küchenzubehör | NOVA INDUKT',
+    metaDescription:
+      'TFA Digital-Kühlschrankthermometer - digitale Temperaturanzeige für den Kühlschrank. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
     folder: 'TFA Digital-Kühlschrankthermometer',
     imageFiles: ['1.png', '2.png'],
@@ -62,7 +66,7 @@ Ein unverzichtbares Hilfsmittel für die Küche.`,
     slug: 'soehnle-kuechenwaage-digital',
     supplierSku: 'SOE-KWD-5',
     nameDe: 'Soehnle Küchenwaage Digital',
-    shortDescription: 'Digitale Küchenwaage mit Edelstahl und Glasplatte — 5 kg',
+    shortDescription: 'Digitale Küchenwaage mit Edelstahl und Glasplatte - 5 kg',
     descriptionDe: `Die Soehnle Küchenwaage Digital bietet präzise Wägungen bis 5 kg mit modernem Design aus Edelstahl und Glas.
 
 **Merkmale:**
@@ -85,8 +89,9 @@ Die elegante Küchenwaage für präzises Kochen.`,
     badges: ['Digital', '5 kg', 'Glasplatte'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Soehnle Küchenwaage Digital — Edelstahl + Glas | NOVA INDUKT',
-    metaDescription: 'Soehnle Küchenwaage Digital mit Edelstahl und Glasplatte, 5 kg Wäebereich. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Soehnle Küchenwaage Digital - Edelstahl + Glas | NOVA INDUKT',
+    metaDescription:
+      'Soehnle Küchenwaage Digital mit Edelstahl und Glasplatte, 5 kg Wäebereich. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Soehnle Küchenwaage Digital',
     imageFiles: ['1.png', '2.png'],
@@ -96,7 +101,7 @@ Die elegante Küchenwaage für präzises Kochen.`,
     slug: 'wmf-kitchenmaxx-schneidebrett',
     supplierSku: 'WMF-KM-SB',
     nameDe: 'WMF Küchenmaxx Schneidebrett',
-    shortDescription: 'Großes Bambus-Schneidebrett — 36×26 cm',
+    shortDescription: 'Großes Bambus-Schneidebrett - 36×26 cm',
     descriptionDe: `Das WMF Küchenmaxx Schneidebrett bietet großzügigen Platz für die Zubereitung und ist aus nachhaltigem Bambus gefertigt.
 
 **Merkmale:**
@@ -119,8 +124,9 @@ Das praktische Schneidebrett für die moderne Küche.`,
     badges: ['Bambus', 'Groß'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'WMF Küchenmaxx Schneidebrett — Bambus 36×26 cm | NOVA INDUKT',
-    metaDescription: 'WMF Küchenmaxx Schneidebrett aus Bambus, 36×26 cm, groß und schmutzabweisend. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Küchenmaxx Schneidebrett - Bambus 36×26 cm | NOVA INDUKT',
+    metaDescription:
+      'WMF Küchenmaxx Schneidebrett aus Bambus, 36×26 cm, groß und schmutzabweisend. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
     folder: 'WMF Küchenmaxx Schneidebrett',
     imageFiles: ['1.png', '2.png'],
@@ -130,7 +136,7 @@ Das praktische Schneidebrett für die moderne Küche.`,
     slug: 'fissler-adapterplatte-16cm',
     supplierSku: 'FIS-ADP-16',
     nameDe: 'Fissler Adapterplatte 16 cm',
-    shortDescription: 'Edelstahl-Adapterplatte für kleine Töpfe — Made in Germany',
+    shortDescription: 'Edelstahl-Adapterplatte für kleine Töpfe - Made in Germany',
     descriptionDe: `Die Fissler Adapterplatte 16 cm ermöglicht die Verwendung kleinerer Töpfe und Pfannen auf dem Induktionskochfeld.
 
 **Merkmale:**
@@ -154,10 +160,11 @@ Die Adapterplatte für den flexiblen Einsatz auf Induktion.`,
     badges: ['Made in Germany', 'Für kleine Töpfe'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Fissler Adapterplatte 16 cm — Edelstahl Induktion | NOVA INDUKT',
-    metaDescription: 'Fissler Adapterplatte 16 cm aus Edelstahl, Made in Germany, für kleine Töpfe auf Induktion. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler Adapterplatte 16 cm - Edelstahl Induktion | NOVA INDUKT',
+    metaDescription:
+      'Fissler Adapterplatte 16 cm aus Edelstahl, Made in Germany, für kleine Töpfe auf Induktion. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Fissler Adapterplatte — 16 cm',
+    folder: 'Fissler Adapterplatte - 16 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -165,7 +172,7 @@ Die Adapterplatte für den flexiblen Einsatz auf Induktion.`,
     slug: 'wmf-adapterplatte-14cm',
     supplierSku: 'WMF-ADP-14',
     nameDe: 'WMF Adapterplatte 14 cm',
-    shortDescription: 'Edelstahl-Adapterplatte für kleine Töpfe — Made in Germany',
+    shortDescription: 'Edelstahl-Adapterplatte für kleine Töpfe - Made in Germany',
     descriptionDe: `Die WMF Adapterplatte 14 cm ermöglicht die Verwendung von Espressokochern und kleinen Töpfen auf Induktion.
 
 **Merkmale:**
@@ -189,10 +196,11 @@ Die kompakte Adapterplatte für Spezialanwendungen.`,
     badges: ['Made in Germany'],
     rating: 4.2,
     reviewCount: 0,
-    metaTitle: 'WMF Adapterplatte 14 cm — Edelstahl Induktion | NOVA INDUKT',
-    metaDescription: 'WMF Adapterplatte 14 cm aus Edelstahl, Made in Germany, für kleine Töpfe auf Induktion. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Adapterplatte 14 cm - Edelstahl Induktion | NOVA INDUKT',
+    metaDescription:
+      'WMF Adapterplatte 14 cm aus Edelstahl, Made in Germany, für kleine Töpfe auf Induktion. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'WMF Adapterplatte — 14 cm',
+    folder: 'WMF Adapterplatte - 14 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -224,10 +232,11 @@ Das ultimative Schneidebrett-Set für jeden Bedarf.`,
     badges: ['3-teilig', 'Bambus'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Zwilling Schneidebrett Set 3-teilig — Bambus | NOVA INDUKT',
-    metaDescription: 'Zwilling Schneidebrett Set 3-teilig aus Bambus in verschiedenen Größen. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Schneidebrett Set 3-teilig - Bambus | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Schneidebrett Set 3-teilig aus Bambus in verschiedenen Größen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Zwilling Schneidebrett Set — 3-teilig',
+    folder: 'Zwilling Schneidebrett Set - 3-teilig',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -259,10 +268,11 @@ Die einfache und wirkungsvolle Lösung zum Schutz des Kochfelds.`,
     badges: ['Glasfaser', 'Kratzschutz'],
     rating: 4.1,
     reviewCount: 0,
-    metaTitle: 'Kratzschutzmatte Induktion 28 cm — Glasfaser | NOVA INDUKT',
-    metaDescription: 'Kratzschutzmatte 28 cm aus Glasfaser für Induktionskochfelder. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Kratzschutzmatte Induktion 28 cm - Glasfaser | NOVA INDUKT',
+    metaDescription:
+      'Kratzschutzmatte 28 cm aus Glasfaser für Induktionskochfelder. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Kratzschutzmatte Induktion — 28 cm',
+    folder: 'Kratzschutzmatte Induktion - 28 cm',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -294,10 +304,11 @@ Die größere Variante für Standard-Induktionskochfelder.`,
     badges: ['Glasfaser', 'Kratzschutz'],
     rating: 4.1,
     reviewCount: 0,
-    metaTitle: 'Kratzschutzmatte Induktion 32 cm — Glasfaser | NOVA INDUKT',
-    metaDescription: 'Kratzschutzmatte 32 cm aus Glasfaser für Induktionskochfelder. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Kratzschutzmatte Induktion 32 cm - Glasfaser | NOVA INDUKT',
+    metaDescription:
+      'Kratzschutzmatte 32 cm aus Glasfaser für Induktionskochfelder. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
-    folder: 'Kratzschutzmatte Induktion — 32 cm',
+    folder: 'Kratzschutzmatte Induktion - 32 cm',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -305,7 +316,7 @@ Die größere Variante für Standard-Induktionskochfelder.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Zubehör (8 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Zubehör (8 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -360,7 +371,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -393,12 +406,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -413,7 +428,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Batch Zubehör Extra terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

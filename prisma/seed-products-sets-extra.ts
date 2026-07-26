@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : 6 Induktions-Sets
+﻿/**
+ * NOVA INDUKT - Seed Extra : 6 Induktions-Sets
  * Exécuter avec : npx tsx prisma/seed-products-sets-extra.ts
  */
 
@@ -9,7 +9,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -28,8 +31,8 @@ const products = [
     slug: 'wmf-diadem-plus-set-7-teilig',
     supplierSku: 'WMF-DP-SET7',
     nameDe: 'WMF Diadem Plus Set 7-teilig',
-    shortDescription: '7-teiliges Kochgeschirr-Set mit Cromargan® Edelstahl — Made in Germany',
-    descriptionDe: `Das WMF Diadem Plus Set 7-teilig bietet alles, was für die Induktionsküche benötigt wird — Made in Germany.
+    shortDescription: '7-teiliges Kochgeschirr-Set mit Cromargan® Edelstahl - Made in Germany',
+    descriptionDe: `Das WMF Diadem Plus Set 7-teilig bietet alles, was für die Induktionsküche benötigt wird - Made in Germany.
 
 **Merkmale:**
 - Cromargan® Edelstahl 18/10
@@ -52,10 +55,11 @@ Das Komplettset für die Neuausstattung der Induktionsküche.`,
     badges: ['Made in Germany', '7-teilig'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'WMF Diadem Plus Set 7-teilig — Edelstahl Kochgeschirr Set | NOVA INDUKT',
-    metaDescription: 'WMF Diadem Plus Set 7-teilig mit Cromargan® Edelstahl, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Diadem Plus Set 7-teilig - Edelstahl Kochgeschirr Set | NOVA INDUKT',
+    metaDescription:
+      'WMF Diadem Plus Set 7-teilig mit Cromargan® Edelstahl, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
-    folder: 'WMF Diadem Plus Set — 7-teilig',
+    folder: 'WMF Diadem Plus Set - 7-teilig',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -63,13 +67,13 @@ Das Komplettset für die Neuausstattung der Induktionsküche.`,
     slug: 'wmf-function-4-set-7-teilig',
     supplierSku: 'WMF-F4-SET7',
     nameDe: 'WMF Function 4 Set 7-teilig',
-    shortDescription: '7-teiliges Kochgeschirr-Set mit Function 4 Deckel — Made in Germany',
+    shortDescription: '7-teiliges Kochgeschirr-Set mit Function 4 Deckel - Made in Germany',
     descriptionDe: `Das WMF Function 4 Set 7-teilig überzeugt durch den innovativen Function 4 Deckel mit 4 Funktionen.
 
 **Merkmale:**
 - Cromargan® Edelstahl 18/10
 - 7-teilig: 3 Töpfe + 2 Pfannen + 2 Deckel
-- Function 4 Deckel — Abgießen, Dünsten, Dampf ablassen, Ablage
+- Function 4 Deckel - Abgießen, Dünsten, Dampf ablassen, Ablage
 - Spülmaschinengeeignet
 - Hergestellt in Deutschland
 
@@ -87,10 +91,11 @@ Innovatives Set mit multifunktionalen Deckeln für die Induktionsküche.`,
     badges: ['Made in Germany', 'Function 4 Deckel'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'WMF Function 4 Set 7-teilig — Edelstahl Kochgeschirr Set | NOVA INDUKT',
-    metaDescription: 'WMF Function 4 Set 7-teilig mit Function 4 Deckeln, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'WMF Function 4 Set 7-teilig - Edelstahl Kochgeschirr Set | NOVA INDUKT',
+    metaDescription:
+      'WMF Function 4 Set 7-teilig mit Function 4 Deckeln, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
-    folder: 'WMF Function 4 Set — 7-teilig',
+    folder: 'WMF Function 4 Set - 7-teilig',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -122,10 +127,11 @@ Das Spirit-Set für den optimalen Einstieg in die Induktionswelt.`,
     badges: ['Spirit Serie', '7-teilig'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Zwilling Spirit Set 7-teilig — Edelstahl Kochgeschirr Set | NOVA INDUKT',
-    metaDescription: 'Zwilling Spirit Set 7-teilig mit Edelstahl, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Zwilling Spirit Set 7-teilig - Edelstahl Kochgeschirr Set | NOVA INDUKT',
+    metaDescription:
+      'Zwilling Spirit Set 7-teilig mit Edelstahl, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
-    folder: 'Zwilling Spirit Set — 7-teilig',
+    folder: 'Zwilling Spirit Set - 7-teilig',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -133,7 +139,7 @@ Das Spirit-Set für den optimalen Einstieg in die Induktionswelt.`,
     slug: 'fissler-opc-set-5-teilig',
     supplierSku: 'FIS-OPC-SET5',
     nameDe: 'Fissler OPC Set 5-teilig',
-    shortDescription: '5-teiliges Premium-Set mit CookStar®-Boden — Made in Germany',
+    shortDescription: '5-teiliges Premium-Set mit CookStar®-Boden - Made in Germany',
     descriptionDe: `Das Fissler OPC Set 5-teilig bietet exklusive CookStar®-Qualität im praktischen Set.
 
 **Merkmale:**
@@ -157,10 +163,11 @@ Das Premium-Set für anspruchsvolles Kochen auf Induktion.`,
     badges: ['Made in Germany', 'CookStar®', '5-teilig'],
     rating: 4.7,
     reviewCount: 0,
-    metaTitle: 'Fissler OPC Set 5-teilig — Premium Edelstahl Kochgeschirr | NOVA INDUKT',
-    metaDescription: 'Fissler OPC Set 5-teilig mit CookStar®-Boden, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Fissler OPC Set 5-teilig - Premium Edelstahl Kochgeschirr | NOVA INDUKT',
+    metaDescription:
+      'Fissler OPC Set 5-teilig mit CookStar®-Boden, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
-    folder: 'Fissler OPC Set — 5-teilig',
+    folder: 'Fissler OPC Set - 5-teilig',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -168,7 +175,7 @@ Das Premium-Set für anspruchsvolles Kochen auf Induktion.`,
     slug: 'demeyere-essential-5-set-5-teilig',
     supplierSku: 'DEM-ESS5-SET5',
     nameDe: 'Demeyere Essential 5 Set 5-teilig',
-    shortDescription: '5-teiliges Set mit 5-Schicht-Technologie — 30 Jahre Garantie',
+    shortDescription: '5-teiliges Set mit 5-Schicht-Technologie - 30 Jahre Garantie',
     descriptionDe: `Das Demeyere Essential 5 Set 5-teilig bietet die einzigartige 5-Schicht-Technologie für optimale Kochergebnisse.
 
 **Merkmale:**
@@ -178,7 +185,7 @@ Das Premium-Set für anspruchsvolles Kochen auf Induktion.`,
 - Spülmaschinengeeignet
 - Induktionskompatibel
 
-Premium-Set mit 30 Jahren Garantie — eine Investition fürs Leben.`,
+Premium-Set mit 30 Jahren Garantie - eine Investition fürs Leben.`,
     price: 199.99,
     oldPrice: 249.99,
     brand: 'Demeyere',
@@ -192,10 +199,11 @@ Premium-Set mit 30 Jahren Garantie — eine Investition fürs Leben.`,
     badges: ['30 Jahre Garantie', '5-Schicht'],
     rating: 4.6,
     reviewCount: 0,
-    metaTitle: 'Demeyere Essential 5 Set 5-teilig — 5-Schicht Edelstahl | NOVA INDUKT',
-    metaDescription: 'Demeyere Essential 5 Set 5-teilig mit 5-Schicht-Technologie, 30 Jahre Garantie, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Demeyere Essential 5 Set 5-teilig - 5-Schicht Edelstahl | NOVA INDUKT',
+    metaDescription:
+      'Demeyere Essential 5 Set 5-teilig mit 5-Schicht-Technologie, 30 Jahre Garantie, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
-    folder: 'Demeyere Essential 5 Set — 5-teilig',
+    folder: 'Demeyere Essential 5 Set - 5-teilig',
     imageFiles: ['1.png', '2.png'],
   },
   {
@@ -203,7 +211,7 @@ Premium-Set mit 30 Jahren Garantie — eine Investition fürs Leben.`,
     slug: 'silit-silargan-set-5-teilig',
     supplierSku: 'SIL-SIL-SET5',
     nameDe: 'Silit Silargan Set 5-teilig',
-    shortDescription: '5-teiliges Set mit Silargan® Funktionskeramik — Made in Germany',
+    shortDescription: '5-teiliges Set mit Silargan® Funktionskeramik - Made in Germany',
     descriptionDe: `Das Silit Silargan Set 5-teilig bietet die einzigartige Silargan®-Funktionskeramik im praktischen Komplett-Set.
 
 **Merkmale:**
@@ -227,10 +235,11 @@ Das Set für alle, die auf keramische Beschichtung setzen.`,
     badges: ['Made in Germany', 'Silargan®'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Silit Silargan Set 5-teilig — Funktionskeramik Kochgeschirr | NOVA INDUKT',
-    metaDescription: 'Silit Silargan Set 5-teilig mit Funktionskeramik, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
+    metaTitle: 'Silit Silargan Set 5-teilig - Funktionskeramik Kochgeschirr | NOVA INDUKT',
+    metaDescription:
+      'Silit Silargan Set 5-teilig mit Funktionskeramik, Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
-    folder: 'Silit Silargan Set — 5-teilig',
+    folder: 'Silit Silargan Set - 5-teilig',
     imageFiles: ['1.png', '2.png'],
   },
 ]
@@ -238,7 +247,7 @@ Das Set für alle, die auf keramische Beschichtung setzen.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Induktions-Sets (6 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Induktions-Sets (6 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -293,7 +302,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -326,12 +337,14 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -346,7 +359,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Batch Sets Extra terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }

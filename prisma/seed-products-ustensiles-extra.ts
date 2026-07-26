@@ -1,5 +1,5 @@
-/**
- * NOVA INDUKT — Seed Extra : 8 Ustensiles (Expansion)
+﻿/**
+ * NOVA INDUKT - Seed Extra : 8 Ustensiles (Expansion)
  * Exécuter avec : npx tsx prisma/seed-products-ustensiles-extra.ts
  *
  * Catégorie : ustensiles (sortOrder 21–28)
@@ -31,11 +31,11 @@ const products = [
     slug: 'wmf-profi-plus-nudelkelle',
     supplierSku: 'WMF-PP-NK',
     nameDe: 'WMF Profi Plus Nudelkelle',
-    shortDescription: 'Edelstahl-Nudelkelle aus der Profi Plus Serie — Made in Germany',
+    shortDescription: 'Edelstahl-Nudelkelle aus der Profi Plus Serie - Made in Germany',
     descriptionDe: `Die WMF Profi Plus Nudelkelle ist ein unverzichtbares Werkzeug für Pasta-Liebhaber. Aus Cromargan® Edelstahl 18/10 gefertigt, bietet sie optimale Haltbarkeit und ein elegantes Design.
 
 **Merkmale:**
-- Cromargan® Edelstahl 18/10 — rostfrei, geschmacksneutral
+- Cromargan® Edelstahl 18/10 - rostfrei, geschmacksneutral
 - Ergonomischer Griff für sicheren Halt
 - Perfekt zum Servieren von Nudeln und Salaten
 - Spülmaschinenfest
@@ -55,7 +55,7 @@ Die Profi Plus Serie steht für professionelle Qualität im Küchenalltag.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Profi Plus Nudelkelle — Edelstahl Küchenutensil | NOVA INDUKT',
+    metaTitle: 'WMF Profi Plus Nudelkelle - Edelstahl Küchenutensil | NOVA INDUKT',
     metaDescription:
       'WMF Profi Plus Nudelkelle aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
@@ -66,7 +66,7 @@ Die Profi Plus Serie steht für professionelle Qualität im Küchenalltag.`,
     slug: 'wmf-profi-plus-kartoffelstock',
     supplierSku: 'WMF-PP-KS',
     nameDe: 'WMF Profi Plus Kartoffelstock',
-    shortDescription: 'Edelstahl-Kartoffelstock aus der Profi Plus Serie — Made in Germany',
+    shortDescription: 'Edelstahl-Kartoffelstock aus der Profi Plus Serie - Made in Germany',
     descriptionDe: `Der WMF Profi Plus Kartoffelstock ist ideal zum Schockieren von Kartoffeln und Gemüse. Aus Cromargan® Edelstahl 18/10 gefertigt, überzeugt er durch Robustheit und Funktionalität.
 
 **Merkmale:**
@@ -90,9 +90,9 @@ Ein unverzichtbares Utensil für perfekt zubereitete Kartoffeln.`,
     badges: ['Made in Germany'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'WMF Profi Plus Kartoffelstock — Edelstahl Utensil | NOVA INDUKT',
+    metaTitle: 'WMF Profi Plus Kartoffelstock - Edelstahl Utensil | NOVA INDUKT',
     metaDescription:
-      'WMF Profi Plus Kartoffelstock — Cromargan® Edelstahl, spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
+      'WMF Profi Plus Kartoffelstock - Cromargan® Edelstahl, spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus Kartoffelstock',
     imageFiles: ['1.png', '2.png'],
@@ -101,11 +101,11 @@ Ein unverzichtbares Utensil für perfekt zubereitete Kartoffeln.`,
     slug: 'fissler-pure-collection-schneebesen',
     supplierSku: 'FIS-PC-SB',
     nameDe: 'Fissler Pure Collection Schneebesen',
-    shortDescription: 'Edelstahl-Schneebesen aus der Pure Collection — Made in Germany',
+    shortDescription: 'Edelstahl-Schneebesen aus der Pure Collection - Made in Germany',
     descriptionDe: `Der Fissler Pure Collection Schneebesen bietet ergonomisches Design und erstklassige Verarbeitung. Aus Edelstahl 18/10 gefertigt, eignet er sich hervorragend zum Schlagen von Eiern, Sahne und Teigen.
 
 **Merkmale:**
-- Edelstahl 18/10 — robust und langlebig
+- Edelstahl 18/10 - robust und langlebig
 - Ergonomischer Griff
 - Perfekt für Backen und Kochen
 - Spülmaschinenfest
@@ -125,9 +125,9 @@ Die Pure Collection verbindet minimalistisches Design mit höchster Funktionalit
     badges: ['Made in Germany'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Fissler Pure Collection Schneebesen — Edelstahl | NOVA INDUKT',
+    metaTitle: 'Fissler Pure Collection Schneebesen - Edelstahl | NOVA INDUKT',
     metaDescription:
-      'Fissler Pure Collection Schneebesen — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+      'Fissler Pure Collection Schneebesen - Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection Schneebesen',
     imageFiles: ['1.jpg', '2.jpg'],
@@ -136,11 +136,11 @@ Die Pure Collection verbindet minimalistisches Design mit höchster Funktionalit
     slug: 'fissler-pure-collection-grillzange',
     supplierSku: 'FIS-PC-GZ',
     nameDe: 'Fissler Pure Collection Grillzange',
-    shortDescription: 'Edelstahl-Grillzange aus der Pure Collection — Made in Germany',
+    shortDescription: 'Edelstahl-Grillzange aus der Pure Collection - Made in Germany',
     descriptionDe: `Die Fissler Pure Collection Grillzange ist ideal für Grill- und Bratgerichte. Aus Edelstahl 18/10 gefertigt, bietet sie sicheren Halt und präzises Arbeiten.
 
 **Merkmale:**
-- Edelstahl 18/10 — robust und langlebig
+- Edelstahl 18/10 - robust und langlebig
 - Ergonomischer Griff mit sicherem Halt
 - Perfekt für Grillen und Braten
 - Spülmaschinenfest
@@ -160,9 +160,9 @@ Die Grillzange ist ein unverzichtbares Werkzeug für jeden Grillmeister.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Fissler Pure Collection Grillzange — Edelstahl | NOVA INDUKT',
+    metaTitle: 'Fissler Pure Collection Grillzange - Edelstahl | NOVA INDUKT',
     metaDescription:
-      'Fissler Pure Collection Grillzange — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+      'Fissler Pure Collection Grillzange - Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection Grillzange',
     imageFiles: ['1.jpg', '2.jpg'],
@@ -171,11 +171,11 @@ Die Grillzange ist ein unverzichtbares Werkzeug für jeden Grillmeister.`,
     slug: 'roesle-edelstahl-schaumkelle',
     supplierSku: 'ROS-SS-SK',
     nameDe: 'Rösle Edelstahl Schaumkelle',
-    shortDescription: 'Präzise Edelstahl-Schaumkelle von Rösle — Made in Germany',
+    shortDescription: 'Präzise Edelstahl-Schaumkelle von Rösle - Made in Germany',
     descriptionDe: `Die Rösle Edelstahl Schaumkelle ist ein elegantes Utensil für das Servieren von Suppen und Saucen. Aus Edelstahl 18/10 gefertigt, überzeugt sie durch minimalistisches Design und höchste Qualität.
 
 **Merkmale:**
-- Edelstahl 18/10 — rostfrei und geschmacksneutral
+- Edelstahl 18/10 - rostfrei und geschmacksneutral
 - Elegant minimalistisches Design
 - Perfekt zum Servieren von Suppen
 - Spülmaschinenfest
@@ -195,9 +195,9 @@ Rösle steht für deutsche Präzision im Küchenbereich.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'Rösle Edelstahl Schaumkelle — Edelstahl Utensil | NOVA INDUKT',
+    metaTitle: 'Rösle Edelstahl Schaumkelle - Edelstahl Utensil | NOVA INDUKT',
     metaDescription:
-      'Rösle Edelstahl Schaumkelle — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+      'Rösle Edelstahl Schaumkelle - Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Edelstahl Schaumkelle',
     imageFiles: ['1.jpg', '2.jpg'],
@@ -206,11 +206,11 @@ Rösle steht für deutsche Präzision im Küchenbereich.`,
     slug: 'roesle-edelstahl-schneebesen',
     supplierSku: 'ROS-SS-SB',
     nameDe: 'Rösle Edelstahl Schneebesen',
-    shortDescription: 'Eleganter Edelstahl-Schneebesen von Rösle — Made in Germany',
+    shortDescription: 'Eleganter Edelstahl-Schneebesen von Rösle - Made in Germany',
     descriptionDe: `Der Rösle Edelstahl Schneebesen bietet perfekte Ergonomie und erstklassige Verarbeitung. Aus Edelstahl 18/10 gefertigt, eignet er sich hervorragend zum Schlagen von Eiern, Sahne und Teigen.
 
 **Merkmale:**
-- Edelstahl 18/10 — robust und langlebig
+- Edelstahl 18/10 - robust und langlebig
 - Elegant minimalistisches Design
 - Ergonomischer Griff
 - Spülmaschinenfest
@@ -230,9 +230,9 @@ Die Rösle Schneebesen vereinen Design und Funktionalität auf höchstem Niveau.
     badges: ['Made in Germany'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Rösle Edelstahl Schneebesen — Edelstahl | NOVA INDUKT',
+    metaTitle: 'Rösle Edelstahl Schneebesen - Edelstahl | NOVA INDUKT',
     metaDescription:
-      'Rösle Edelstahl Schneebesen — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+      'Rösle Edelstahl Schneebesen - Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Edelstahl Schneebesen',
     imageFiles: ['1.jpg', '2.jpg'],
@@ -241,7 +241,7 @@ Die Rösle Schneebesen vereinen Design und Funktionalität auf höchstem Niveau.
     slug: 'zwilling-now-s-kartoffelstock',
     supplierSku: 'ZWI-NS-KS',
     nameDe: 'Zwilling Now S Kartoffelstock',
-    shortDescription: 'Praktischer Kartoffelstock aus der Now S Serie — Edelstahl mit Silikongriff',
+    shortDescription: 'Praktischer Kartoffelstock aus der Now S Serie - Edelstahl mit Silikongriff',
     descriptionDe: `Der Zwilling Now S Kartoffelstock ist ein praktisches Utensil für das Schockieren von Kartoffeln und Gemüse. Der Silikongriff bietet sicheren Halt und Komfort.
 
 **Merkmale:**
@@ -265,9 +265,9 @@ Die Now S Serie bietet modernes Design zum fairen Preis.`,
     badges: ['Now S Serie'],
     rating: 4.3,
     reviewCount: 0,
-    metaTitle: 'Zwilling Now S Kartoffelstock — Edelstahl Utensil | NOVA INDUKT',
+    metaTitle: 'Zwilling Now S Kartoffelstock - Edelstahl Utensil | NOVA INDUKT',
     metaDescription:
-      'Zwilling Now S Kartoffelstock — Edelstahl mit Silikongriff, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+      'Zwilling Now S Kartoffelstock - Edelstahl mit Silikongriff, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S Kartoffelstock',
     imageFiles: ['1.jpg', '2.jpg'],
@@ -276,7 +276,7 @@ Die Now S Serie bietet modernes Design zum fairen Preis.`,
     slug: 'wmf-professional-s-plus-saucenheber-2',
     supplierSku: 'WMF-PP-SH2',
     nameDe: 'WMF Profi Plus Saucenheber',
-    shortDescription: 'Edelstahl-Saucenheber aus der Profi Plus Serie — Made in Germany',
+    shortDescription: 'Edelstahl-Saucenheber aus der Profi Plus Serie - Made in Germany',
     descriptionDe: `Der WMF Profi Plus Saucenheber ist ideal zum Servieren von Saucen, Suppen und Eintöpfen. Aus Cromargan® Edelstahl 18/10 gefertigt, bietet er optimale Haltbarkeit und ein elegantes Design.
 
 **Merkmale:**
@@ -300,9 +300,9 @@ Die Profi Plus Serie steht für professionelle Qualität im Küchenalltag.`,
     badges: ['Made in Germany'],
     rating: 4.4,
     reviewCount: 0,
-    metaTitle: 'WMF Profi Plus Saucenheber — Edelstahl Utensil | NOVA INDUKT',
+    metaTitle: 'WMF Profi Plus Saucenheber - Edelstahl Utensil | NOVA INDUKT',
     metaDescription:
-      'WMF Profi Plus Saucenheber — Cromargan® Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+      'WMF Profi Plus Saucenheber - Cromargan® Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus Saucenheber',
     imageFiles: ['1.png', '2.png'],
@@ -312,7 +312,7 @@ Die Profi Plus Serie steht für professionelle Qualität im Küchenalltag.`,
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 NOVA INDUKT — Seed Extra : Ustensiles (8 Produkte)')
+  console.log('🌱 NOVA INDUKT - Seed Extra : Ustensiles (8 Produkte)')
   console.log('─'.repeat(60))
 
   const categories = await prisma.category.findMany()
@@ -409,7 +409,7 @@ async function main() {
     } catch (err: unknown) {
       errors++
       const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} — ${msg}`)
+      console.error(`  ✗  ERREUR : ${p.nameDe.substring(0, 40)} - ${msg}`)
     }
   }
 
@@ -424,7 +424,7 @@ async function main() {
   if (errors === 0) {
     console.log('\n🎉 Seed Extra Ustensiles terminé avec succès !')
   } else {
-    console.log(`\n⚠️  ${errors} erreur(s) — vérifiez les logs ci-dessus.`)
+    console.log(`\n⚠️  ${errors} erreur(s) - vérifiez les logs ci-dessus.`)
     process.exit(1)
   }
 }
