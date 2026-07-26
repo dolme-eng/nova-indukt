@@ -7,6 +7,14 @@ import { ProductContent } from './ProductContent'
 
 export const revalidate = 120
 
+export async function generateStaticParams() {
+  const products = await prisma.product.findMany({
+    where: { isActive: true },
+    select: { slug: true },
+  })
+  return products.map((p) => ({ slug: p.slug }))
+}
+
 const getProductBySlug = cache(async (slug: string) => {
   return prisma.product.findUnique({
     where: { slug },
@@ -17,21 +25,24 @@ const getProductBySlug = cache(async (slug: string) => {
   })
 })
 
-export async function generateMetadata({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const resolvedParams = await params
   const decodedSlug = decodeURIComponent(resolvedParams.slug)
-  
+
   const product = await getProductBySlug(decodedSlug)
-  
+
   if (!product) return {}
 
   const title = product.metaTitle || `${product.nameDe} | Premium Induktions-Kochgeschirr`
-  const description = product.metaDescription || product.shortDescription || `Kaufen Sie ${product.nameDe} bei NOVA INDUKT. Erstklassige Qualität für Induktionsherde.`
-  const mainImage = product.images.find(img => img.isMain)?.url || product.images[0]?.url
+  const description =
+    product.metaDescription ||
+    product.shortDescription ||
+    `Kaufen Sie ${product.nameDe} bei NOVA INDUKT. Erstklassige Qualität für Induktionsherde.`
+  const mainImage = product.images.find((img) => img.isMain)?.url || product.images[0]?.url
 
   return {
     title,
@@ -53,20 +64,16 @@ export async function generateMetadata({
       title,
       description,
       images: mainImage ? [mainImage] : [],
-    }
+    },
   }
 }
 
-export default async function ProductPage({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
-}) {
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params
   const decodedSlug = decodeURIComponent(resolvedParams.slug)
-  
+
   const product = await getProductBySlug(decodedSlug)
-  
+
   if (!product || !product.isActive) {
     notFound()
   }
@@ -79,58 +86,67 @@ export default async function ProductPage({
     where: {
       categoryId: product.categoryId,
       id: { not: product.id },
-      isActive: true
+      isActive: true,
     },
     include: { images: true },
-    take: 4
+    take: 4,
   })
 
   const relatedProducts = relatedDb.map(mapDbProductToUi)
 
   const structuredData = [
     {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://nova-indukt.de" },
-        { "@type": "ListItem", "position": 2, "name": "Produkte", "item": "https://nova-indukt.de/produkte" },
-        { "@type": "ListItem", "position": 3, "name": product.category?.nameDe || "Produkt" },
-      ]
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://nova-indukt.de' },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Produkte',
+          item: 'https://nova-indukt.de/produkte',
+        },
+        { '@type': 'ListItem', position: 3, name: product.category?.nameDe || 'Produkt' },
+      ],
     },
     {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": product.nameDe,
-      "image": product.images.map(img => img.url),
-      "description": product.descriptionDe || product.shortDescription,
-      "sku": product.id,
-      "gtin13": product.ean,
-      "mpn": product.supplierSku || product.id,
-      "itemCondition": "https://schema.org/NewCondition",
-      "brand": {
-        "@type": "Brand",
-        "name": product.brand || "NOVA INDUKT"
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.nameDe,
+      image: product.images.map((img) => img.url),
+      description: product.descriptionDe || product.shortDescription,
+      sku: product.id,
+      gtin13: product.ean,
+      mpn: product.supplierSku || product.id,
+      itemCondition: 'https://schema.org/NewCondition',
+      brand: {
+        '@type': 'Brand',
+        name: product.brand || 'NOVA INDUKT',
       },
-      "seller": {
-        "@type": "Organization",
-        "name": "NOVA INDUKT",
-        "url": "https://nova-indukt.de"
+      seller: {
+        '@type': 'Organization',
+        name: 'NOVA INDUKT',
+        url: 'https://nova-indukt.de',
       },
-      "offers": {
-        "@type": "Offer",
-        "url": `https://nova-indukt.de/produkt/${product.slug}`,
-        "priceCurrency": "EUR",
-        "price": Number(product.price).toFixed(2),
-        "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
+      offers: {
+        '@type': 'Offer',
+        url: `https://nova-indukt.de/produkt/${product.slug}`,
+        priceCurrency: 'EUR',
+        price: Number(product.price).toFixed(2),
+        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+          .toISOString()
+          .split('T')[0],
       },
-      ...(product.reviewCount > 0 ? {
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": product.rating,
-          "reviewCount": product.reviewCount
-        }
-      } : {})
-    }
+      ...(product.reviewCount > 0
+        ? {
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: product.rating,
+              reviewCount: product.reviewCount,
+            },
+          }
+        : {}),
+    },
   ]
 
   return (

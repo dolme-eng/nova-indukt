@@ -1,6 +1,7 @@
 import { ProductsContent } from './ProductsContent'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { Product, Category, mapDbProductToUi, mapDbCategoryToUi } from '@/lib/data/products'
 
 export const revalidate = 120
@@ -18,7 +19,7 @@ export async function generateMetadata({
 
   if (categorySlug) {
     const category = await prisma.category.findUnique({
-      where: { slug: categorySlug }
+      where: { slug: categorySlug },
     })
     if (category) {
       return {
@@ -43,7 +44,8 @@ export async function generateMetadata({
 
   return {
     title: 'Unsere Produkte | Premium Induktions-Kochgeschirr',
-    description: 'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
+    description:
+      'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
     alternates: {
       canonical: '/produkte',
     },
@@ -53,7 +55,14 @@ export async function generateMetadata({
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ kategorie?: string; suche?: string; minPrice?: string; maxPrice?: string; sort?: string; page?: string }>
+  searchParams: Promise<{
+    kategorie?: string
+    suche?: string
+    minPrice?: string
+    maxPrice?: string
+    sort?: string
+    page?: string
+  }>
 }) {
   const params = await searchParams
   const categorySlug = params.kategorie
@@ -64,31 +73,36 @@ export default async function ProductsPage({
   const rawPage = Number.parseInt(params.page || '1', 10)
   const page = Number.isFinite(rawPage) ? Math.max(rawPage, 1) : 1
 
-  const where: any = {
+  const where: Prisma.ProductWhereInput = {
     isActive: true,
     ...(categorySlug ? { category: { slug: categorySlug } } : {}),
-    ...(search ? {
-      OR: [
-        { nameDe: { contains: search, mode: 'insensitive' } },
-        { descriptionDe: { contains: search, mode: 'insensitive' } },
-        { brand: { contains: search, mode: 'insensitive' } }
-      ]
-    } : {}),
-    ...(minPrice || maxPrice ? {
-      price: {
-        ...(minPrice ? { gte: minPrice } : {}),
-        ...(maxPrice ? { lte: maxPrice } : {}),
-      }
-    } : {}),
+    ...(search
+      ? {
+          OR: [
+            { nameDe: { contains: search, mode: 'insensitive' } },
+            { descriptionDe: { contains: search, mode: 'insensitive' } },
+            { brand: { contains: search, mode: 'insensitive' } },
+          ],
+        }
+      : {}),
+    ...(minPrice || maxPrice
+      ? {
+          price: {
+            ...(minPrice ? { gte: minPrice } : {}),
+            ...(maxPrice ? { lte: maxPrice } : {}),
+          },
+        }
+      : {}),
   }
 
-  const orderBy: any = sort === 'price-asc'
-    ? { price: 'asc' }
-    : sort === 'price-desc'
-    ? { price: 'desc' }
-    : sort === 'name'
-    ? { nameDe: 'asc' }
-    : { createdAt: 'desc' }
+  const orderBy: Prisma.ProductOrderByWithRelationInput =
+    sort === 'price-asc'
+      ? { price: 'asc' }
+      : sort === 'price-desc'
+        ? { price: 'desc' }
+        : sort === 'name'
+          ? { nameDe: 'asc' }
+          : { createdAt: 'desc' }
 
   const skip = (page - 1) * ITEMS_PER_PAGE
 
@@ -97,33 +111,37 @@ export default async function ProductsPage({
       where,
       include: {
         images: true,
-        category: true
+        category: true,
       },
       orderBy,
       skip,
-      take: ITEMS_PER_PAGE
+      take: ITEMS_PER_PAGE,
     }),
     prisma.product.count({ where }),
-    prisma.category.findMany({
-      where: { isActive: true },
-      include: { _count: { select: { products: true } } },
-      orderBy: { sortOrder: 'asc' }
-    }).then(cats => cats.filter(c => c._count.products > 0))
+    prisma.category
+      .findMany({
+        where: { isActive: true },
+        include: { _count: { select: { products: true } } },
+        orderBy: { sortOrder: 'asc' },
+      })
+      .then((cats) => cats.filter((c) => c._count.products > 0)),
   ])
 
   const formattedProducts: Product[] = products.map(mapDbProductToUi)
   const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
 
-  return <ProductsContent
-    initialProducts={formattedProducts}
-    initialCategories={formattedCategories}
-    activeCategory={categorySlug}
-    initialSearch={search}
-    initialPriceRange={[minPrice || 0, maxPrice || 2500]}
-    initialSort={sort}
-    currentPage={page}
-    totalPages={totalPages}
-    totalProducts={total}
-  />
+  return (
+    <ProductsContent
+      initialProducts={formattedProducts}
+      initialCategories={formattedCategories}
+      activeCategory={categorySlug}
+      initialSearch={search}
+      initialPriceRange={[minPrice || 0, maxPrice || 2500]}
+      initialSort={sort}
+      currentPage={page}
+      totalPages={totalPages}
+      totalProducts={total}
+    />
+  )
 }

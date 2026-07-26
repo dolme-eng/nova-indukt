@@ -1,9 +1,10 @@
 'use client'
 
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
 export function CustomCursor() {
+  const prefersReducedMotion = useReducedMotion()
   const [isHovering, setIsHovering] = useState(false)
   const [isClicking, setIsClicking] = useState(false)
   const [cursorText, setCursorText] = useState('')
@@ -17,6 +18,11 @@ export function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig)
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsVisible(false)
+      return
+    }
+
     // Only show custom cursor on desktop with mouse
     const isTouch = window.matchMedia('(pointer: coarse)').matches
     const isMobile = window.innerWidth < 1024
@@ -37,10 +43,10 @@ export function CustomCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement
-      
+
       if (target.closest('a, button, [role="button"], .cursor-pointer')) {
         setIsHovering(true)
-        
+
         // Check for custom cursor text
         const cursorElement = target.closest('[data-cursor]')
         if (cursorElement) {
@@ -67,7 +73,7 @@ export function CustomCursor() {
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [cursorX, cursorY])
+  }, [cursorX, cursorY, prefersReducedMotion])
 
   if (!isVisible) return null
 
@@ -75,7 +81,7 @@ export function CustomCursor() {
     <>
       {/* Main cursor dot - solid green */}
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-[#4ECCA3] rounded-full pointer-events-none z-[9999]"
+        className="pointer-events-none fixed left-0 top-0 z-[9999] h-3 w-3 rounded-full bg-[#4ECCA3]"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -90,7 +96,7 @@ export function CustomCursor() {
 
       {/* Cursor ring - solid green border */}
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border-2 border-[#4ECCA3] rounded-full pointer-events-none z-[9998]"
+        className="pointer-events-none fixed left-0 top-0 z-[9998] h-10 w-10 rounded-full border-2 border-[#4ECCA3]"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -108,7 +114,7 @@ export function CustomCursor() {
       {/* Cursor text label */}
       {cursorText && (
         <motion.div
-          className="fixed top-0 left-0 px-3 py-1 bg-[#4ECCA3] text-white text-xs font-medium rounded-full pointer-events-none z-[9997]"
+          className="pointer-events-none fixed left-0 top-0 z-[9997] rounded-full bg-[#4ECCA3] px-3 py-1 text-xs font-medium text-white"
           style={{
             x: cursorXSpring,
             y: cursorYSpring,

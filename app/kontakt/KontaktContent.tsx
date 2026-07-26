@@ -3,18 +3,25 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  MapPin, Phone, Mail, Clock, Send, CheckCircle, ChevronRight, ArrowLeft, AlertCircle
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Send,
+  CheckCircle,
+  ChevronRight,
+  ArrowLeft,
+  AlertCircle,
 } from 'lucide-react'
 import { COMPANY } from '@/lib/constants/company'
-
 
 export function KontaktContent() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -24,20 +31,20 @@ export function KontaktContent() {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
-    
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       })
-      
+
       const data = await response.json()
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Ein Fehler ist aufgetreten')
       }
-      
+
       setIsSubmitted(true)
       setFormData({ name: '', email: '', subject: '', message: '' })
     } catch (err) {
@@ -51,105 +58,110 @@ export function KontaktContent() {
     {
       icon: MapPin,
       title: 'Besuchen Sie uns',
-      content: `${COMPANY.name}\n${COMPANY.street}\n${COMPANY.zip} ${COMPANY.city}, ${COMPANY.country}`
+      content: `${COMPANY.name}\n${COMPANY.street}\n${COMPANY.zip} ${COMPANY.city}, ${COMPANY.country}`,
     },
     {
       icon: Phone,
       title: 'WhatsApp-Kundenservice',
       isWhatsApp: true,
-      content: 'Antwort in der Regel in wenigen Minuten'
+      content: 'Antwort in der Regel in wenigen Minuten',
     },
     {
       icon: Mail,
       title: 'Schreiben Sie uns',
-      content: COMPANY.email.support
+      content: COMPANY.email.support,
     },
     {
       icon: Clock,
       title: 'Öffnungszeiten',
-      content: COMPANY.hours.combined
-    }
+      content: COMPANY.hours.combined,
+    },
   ]
 
   return (
     <div className="min-h-screen bg-gray-50/50 pb-20 selection:bg-[#4ECCA3]/30">
-      
       {/* Abstract Background hero */}
-      <div className="absolute top-0 left-0 w-full h-[600px] overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#4ECCA3]/10 rounded-full blur-[120px] mix-blend-multiply" />
-        <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-[#17423C]/5 rounded-full blur-[100px] mix-blend-multiply" />
+      <div className="pointer-events-none absolute left-0 top-0 z-0 h-[600px] w-full overflow-hidden">
+        <div className="absolute right-[-5%] top-[-10%] h-[600px] w-[600px] rounded-full bg-[#4ECCA3]/10 mix-blend-multiply blur-[120px]" />
+        <div className="absolute left-[-10%] top-[20%] h-[500px] w-[500px] rounded-full bg-[#17423C]/5 mix-blend-multiply blur-[100px]" />
       </div>
 
       {/* Breadcrumbs */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-[72px] lg:top-[88px] z-30 shadow-[0_4px_20px_rgb(0,0,0,0.02)]">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex items-center gap-2 py-4 text-xs sm:text-sm font-medium tracking-wide">
-            <Link href="/" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 transition-colors lg:hidden bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
-              <ArrowLeft className="w-4 h-4" />
+      <nav className="sticky top-[72px] z-30 border-b border-gray-100 bg-white/80 shadow-[0_4px_20px_rgb(0,0,0,0.02)] backdrop-blur-md lg:top-[88px]">
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="flex items-center gap-2 py-4 text-xs font-medium tracking-wide sm:text-sm">
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 rounded-full border border-gray-100 bg-gray-50 px-3 py-1.5 text-gray-500 transition-colors hover:text-gray-900 lg:hidden"
+            >
+              <ArrowLeft className="h-4 w-4" />
               <span>Startseite</span>
             </Link>
-            <div className="hidden lg:flex items-center gap-2.5">
-              <Link href="/" className="text-gray-400 hover:text-[#4ECCA3] transition-colors">Startseite</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
-              <span className="text-[#0C211E] font-bold tracking-tight">Kontaktieren Sie uns</span>
+            <div className="hidden items-center gap-2.5 lg:flex">
+              <Link href="/" className="text-gray-400 transition-colors hover:text-[#4ECCA3]">
+                Startseite
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5 text-gray-300" />
+              <span className="font-bold tracking-tight text-[#0C211E]">Kontaktieren Sie uns</span>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-16 sm:py-24 max-w-7xl relative z-10">
-        
-        <div className="max-w-3xl mb-16 lg:mb-20">
-          <motion.h1 
+      <div className="container relative z-10 mx-auto max-w-7xl px-4 py-16 sm:py-24">
+        <div className="mb-16 max-w-3xl lg:mb-20">
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0C211E] mb-6 font-heading tracking-tight"
+            className="mb-6 font-heading text-4xl font-bold tracking-tight text-[#0C211E] sm:text-5xl lg:text-6xl"
           >
             Kontaktieren Sie uns
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg sm:text-xl text-gray-500 max-w-2xl font-medium leading-relaxed"
+            className="max-w-2xl text-lg font-medium leading-relaxed text-gray-500 sm:text-xl"
           >
-            Haben Sie Fragen zu unseren Produkten oder wünschen eine Beratung? Unser Team ist für Sie da.
+            Haben Sie Fragen zu unseren Produkten oder wünschen eine Beratung? Unser Team ist für
+            Sie da.
           </motion.p>
         </div>
-        
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
+
+        <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Contact Info Sidebar */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
+          <div className="flex flex-col gap-6 lg:col-span-5">
             {contactInfo.map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 + 0.2 }}
-                className="bg-white rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:border-gray-200 transition-colors group"
+                className="group rounded-[2rem] border border-gray-100 bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-colors hover:border-gray-200"
               >
                 <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 bg-[#4ECCA3]/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                    <item.icon className="w-8 h-8 text-[#4ECCA3]" />
+                  <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-[#4ECCA3]/10 transition-transform duration-300 group-hover:scale-110">
+                    <item.icon className="h-8 w-8 text-[#4ECCA3]" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#0C211E] text-lg mb-2">{item.title}</h3>
+                    <h3 className="mb-2 text-lg font-bold text-[#0C211E]">{item.title}</h3>
                     {item.isWhatsApp ? (
                       <div className="flex flex-col gap-3">
-                         <p className="text-gray-500 text-sm font-medium">{item.content}</p>
-                         <a 
-                           href={COMPANY.whatsapp.url} 
-                           target="_blank" 
-                           rel="noopener noreferrer"
-                           className="inline-flex items-center gap-3 px-6 py-3 bg-[#25D366] text-white rounded-xl font-bold hover:bg-[#20ba5a] transition-all shadow-lg shadow-green-500/20 w-fit"
-                         >
-                           <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                           Chat starten
-                         </a>
+                        <p className="text-sm font-medium text-gray-500">{item.content}</p>
+                        <a
+                          href={COMPANY.whatsapp.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex w-fit items-center gap-3 rounded-xl bg-[#25D366] px-6 py-3 font-bold text-white shadow-lg shadow-green-500/20 transition-all hover:bg-[#20ba5a]"
+                        >
+                          <svg viewBox="0 0 24 24" className="h-5 w-5 fill-white">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                          </svg>
+                          Chat starten
+                        </a>
                       </div>
                     ) : (
-                      <p className="text-gray-500 text-sm sm:text-base whitespace-pre-line leading-relaxed font-medium">
+                      <p className="whitespace-pre-line text-sm font-medium leading-relaxed text-gray-500 sm:text-base">
                         {item.content}
                       </p>
                     )}
@@ -165,83 +177,124 @@ export function KontaktContent() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-gray-100 relative overflow-hidden"
+              className="relative overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.08)] sm:p-12"
             >
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 to-[#4ECCA3]" />
-              
+              <div className="absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r from-emerald-400 to-[#4ECCA3]" />
+
               <AnimatePresence mode="wait">
                 {isSubmitted ? (
-                  <motion.div 
+                  <motion.div
                     key="success"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-16"
+                    className="py-16 text-center"
                   >
-                    <div className="w-24 h-24 bg-green-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 transform -rotate-6">
-                      <CheckCircle className="w-12 h-12 text-green-500" />
+                    <div className="mx-auto mb-6 flex h-24 w-24 -rotate-6 transform items-center justify-center rounded-[2rem] bg-green-50">
+                      <CheckCircle className="h-12 w-12 text-green-500" />
                     </div>
-                    <h2 className="text-3xl font-bold text-[#0C211E] mb-4 font-heading">Vielen Dank für Ihre Nachricht!</h2>
-                    <p className="text-gray-500 text-lg font-medium max-w-sm mx-auto">Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+                    <h2 className="mb-4 font-heading text-3xl font-bold text-[#0C211E]">
+                      Vielen Dank für Ihre Nachricht!
+                    </h2>
+                    <p className="mx-auto max-w-sm text-lg font-medium text-gray-500">
+                      Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen
+                      melden.
+                    </p>
+                    <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
                       <button
                         onClick={() => setIsSubmitted(false)}
-                        className="px-8 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                        className="rounded-xl border border-gray-200 bg-gray-50 px-8 py-4 font-bold text-[#0C211E] transition-colors hover:bg-gray-100"
                       >
                         Weitere Nachricht
                       </button>
                       <Link
                         href="/produkte"
-                        className="px-8 py-4 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] shadow-lg shadow-[#0C211E]/20 transition-all flex items-center justify-center gap-2"
+                        className="flex items-center justify-center gap-2 rounded-xl bg-[#0C211E] px-8 py-4 font-bold text-white shadow-lg shadow-[#0C211E]/20 transition-all hover:bg-[#17423C]"
                       >
-                        Produkte entdecken <ChevronRight className="w-5 h-5" />
+                        Produkte entdecken <ChevronRight className="h-5 w-5" />
                       </Link>
                     </div>
                   </motion.div>
                 ) : (
-                  <motion.form 
+                  <motion.form
                     key="form"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    onSubmit={handleSubmit} 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleSubmit}
                     className="space-y-6"
                   >
-                    <div className="grid sm:grid-cols-2 gap-6">
+                    <div className="grid gap-6 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700 ml-1">Ihr Name *</label>
+                        <label
+                          htmlFor="contact-name"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          Ihr Name *
+                        </label>
                         <input
-                          type="text" required value={formData.name}
-                          onChange={(e) => setFormData({...formData, name: e.target.value})}
-                          className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          id="contact-name"
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700 ml-1">Ihre E-Mail-Adresse *</label>
+                        <label
+                          htmlFor="contact-email"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          Ihre E-Mail-Adresse *
+                        </label>
                         <input
-                          type="email" required value={formData.email}
-                          onChange={(e) => setFormData({...formData, email: e.target.value})}
-                          className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          id="contact-email"
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700 ml-1">Betreff *</label>
+                      <label
+                        htmlFor="contact-subject"
+                        className="ml-1 text-sm font-bold text-gray-700"
+                      >
+                        Betreff *
+                      </label>
                       <input
-                        type="text" required value={formData.subject}
-                        onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                        className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                        id="contact-subject"
+                        type="text"
+                        required
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700 ml-1">Ihre Nachricht *</label>
+                      <label
+                        htmlFor="contact-message"
+                        className="ml-1 text-sm font-bold text-gray-700"
+                      >
+                        Ihre Nachricht *
+                      </label>
                       <textarea
-                        required value={formData.message}
-                        onChange={(e) => setFormData({...formData, message: e.target.value})}
+                        id="contact-message"
+                        required
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         rows={6}
-                        className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E] resize-none"
+                        className="w-full resize-none rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                       />
                     </div>
                     {error && (
-                      <div className="flex items-center gap-2 text-red-600 bg-red-50 px-4 py-3 rounded-xl">
-                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                      <div
+                        role="alert"
+                        className="flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-red-600"
+                      >
+                        <AlertCircle className="h-5 w-5 flex-shrink-0" />
                         <span className="text-sm font-medium">{error}</span>
                       </div>
                     )}
@@ -251,16 +304,19 @@ export function KontaktContent() {
                         whileTap={{ scale: 0.99 }}
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
+                        className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[#0C211E] py-4 text-lg font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C] disabled:opacity-50"
                       >
                         {isSubmitting ? (
                           <div className="flex items-center gap-3">
-                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <div
+                              aria-hidden="true"
+                              className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"
+                            />
                             <span>Wird gesendet...</span>
                           </div>
                         ) : (
                           <>
-                            <Send className="w-5 h-5" /> 
+                            <Send className="h-5 w-5" />
                             <span>Nachricht absenden</span>
                           </>
                         )}
@@ -271,7 +327,6 @@ export function KontaktContent() {
               </AnimatePresence>
             </motion.div>
           </div>
-
         </div>
       </div>
     </div>
