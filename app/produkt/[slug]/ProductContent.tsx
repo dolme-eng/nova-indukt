@@ -6,10 +6,32 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import {
-  Star, Heart, Share2, Truck, Shield, RotateCcw, ChevronRight, ChevronDown,
-  Minus, Plus, ShoppingCart, Check,
-  Award, Zap, Leaf, ZoomIn, ArrowLeft, ShieldCheck, Lock,
-  Layers, Maximize, Scale, Droplets, Barcode, Building2, Mail,
+  Star,
+  Heart,
+  Share2,
+  Truck,
+  Shield,
+  RotateCcw,
+  ChevronRight,
+  ChevronDown,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Check,
+  Award,
+  Zap,
+  Leaf,
+  ZoomIn,
+  ArrowLeft,
+  ShieldCheck,
+  Lock,
+  Layers,
+  Maximize,
+  Scale,
+  Droplets,
+  Barcode,
+  Building2,
+  Mail,
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
@@ -19,7 +41,6 @@ import { ImageLightbox } from '@/components/image-lightbox'
 import { VAT_RATE_PERCENT, formatPriceDe, netFromGross } from '@/lib/utils/vat'
 
 const SHELL = 'w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-14'
-
 
 function specCards(product: Product): { icon: LucideIcon; label: string; value: string }[] {
   const out: { icon: LucideIcon; label: string; value: string }[] = []
@@ -34,7 +55,7 @@ interface ProductContentProps {
 }
 
 export function ProductContent({ product, relatedProducts }: ProductContentProps) {
-  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
+  const isLocalProductImage = (src: string) => src?.startsWith('/images/products/') ?? false
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -68,9 +89,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
       image: product.images[0],
       slug: product.slug,
     })
-    setWishlistToastMessage(
-      added ? 'Zur Wunschliste hinzugefügt' : 'Von Wunschliste entfernt',
-    )
+    setWishlistToastMessage(added ? 'Zur Wunschliste hinzugefügt' : 'Von Wunschliste entfernt')
     setShowWishlistToast(true)
     setTimeout(() => setShowWishlistToast(false), 2000)
   }
@@ -105,24 +124,39 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
   ]
 
   return (
-    <article data-testid="product-detail" className="min-h-screen bg-[#f6f7f6] pb-24 lg:pb-14" itemScope itemType="https://schema.org/Product">
-
+    <article
+      data-testid="product-detail"
+      className="min-h-screen bg-[#f6f7f6] pb-24 lg:pb-14"
+      itemScope
+      itemType="https://schema.org/Product"
+    >
       <AnimatePresence>
         {showStickyBar && (
           <motion.div
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             exit={{ y: 100 }}
-            className="fixed bottom-0 inset-x-0 z-40 border-t border-gray-200/80 bg-white/95 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+            className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200/80 bg-white/95 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl"
           >
             <div className={`${SHELL} flex flex-row items-center gap-3 py-3 sm:py-3.5`}>
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <div className="relative hidden h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-gray-50 sm:block">
-                  <Image src={product.images[0]} alt={product.name.de} fill unoptimized={isLocalProductImage(product.images[0])} className="object-cover p-0.5 mix-blend-multiply" sizes="44px" />
+                  <Image
+                    src={product.images[0]}
+                    alt={product.name.de}
+                    fill
+                    unoptimized={isLocalProductImage(product.images[0])}
+                    className="object-cover p-0.5 mix-blend-multiply"
+                    sizes="44px"
+                  />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-bold tabular-nums text-[#0C211E] text-sm sm:text-base whitespace-nowrap">{formatPriceDe(product.price)}</p>
-                  <p className="hidden truncate text-xs font-medium text-gray-500 sm:block">{product.name.de}</p>
+                  <p className="whitespace-nowrap text-sm font-bold tabular-nums text-[#0C211E] sm:text-base">
+                    {formatPriceDe(product.price)}
+                  </p>
+                  <p className="hidden truncate text-xs font-medium text-gray-500 sm:block">
+                    {product.name.de}
+                  </p>
                 </div>
               </div>
               <motion.button
@@ -153,11 +187,17 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               Zurück
             </Link>
             <div className="hidden min-w-0 flex-1 items-center gap-2 lg:flex">
-              <Link href="/" className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]">
+              <Link
+                href="/"
+                className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]"
+              >
                 Startseite
               </Link>
               <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
-              <Link href="/produkte" className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]">
+              <Link
+                href="/produkte"
+                className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]"
+              >
                 Produkte
               </Link>
               <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
@@ -176,7 +216,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               data-testid="product-main-image"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="relative aspect-square w-full min-h-0 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm sm:aspect-auto sm:h-[min(56vh,480px)] sm:min-h-[360px] lg:h-[min(72vh,680px)] lg:min-h-[460px] xl:rounded-3xl cursor-zoom-in group"
+              className="group relative aspect-square min-h-0 w-full cursor-zoom-in overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm sm:aspect-auto sm:h-[min(56vh,480px)] sm:min-h-[360px] lg:h-[min(72vh,680px)] lg:min-h-[460px] xl:rounded-3xl"
               onClick={() => setLightboxOpen(true)}
               onMouseMove={(e) => {
                 const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
@@ -190,21 +230,27 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 fill
                 priority
                 unoptimized={isLocalProductImage(product.images[selectedImage])}
-                className="object-contain p-4 sm:p-6 lg:p-8 mix-blend-multiply transition-transform duration-200 ease-out group-hover:scale-[2.2] origin-[var(--x,50%)_var(--y,50%)]"
+                className="origin-[var(--x,50%)_var(--y,50%)] object-contain p-4 mix-blend-multiply transition-transform duration-200 ease-out group-hover:scale-[2.2] sm:p-6 lg:p-8"
                 sizes="(max-width: 1023px) 100vw, 50vw"
               />
-              <div className="pointer-events-none absolute bottom-4 right-4 hidden rounded-xl border border-gray-100 bg-white/90 p-2.5 shadow-md opacity-0 transition-opacity group-hover:opacity-100 sm:block">
+              <div className="pointer-events-none absolute bottom-4 right-4 hidden rounded-xl border border-gray-100 bg-white/90 p-2.5 opacity-0 shadow-md transition-opacity group-hover:opacity-100 sm:block">
                 <ZoomIn className="h-5 w-5 text-gray-700" />
               </div>
               <div className="absolute left-4 top-4 flex flex-col gap-2">
                 {product.badges?.includes('premium') && (
-                  <span className="rounded-lg bg-[#0C211E] px-3 py-1 text-xs font-bold text-white shadow">Premium</span>
+                  <span className="rounded-lg bg-[#0C211E] px-3 py-1 text-xs font-bold text-white shadow">
+                    Premium
+                  </span>
                 )}
                 {product.badges?.includes('bestseller') && (
-                  <span className="rounded-lg bg-[#4ECCA3] px-3 py-1 text-xs font-bold text-[#0C211E] shadow">Bestseller</span>
+                  <span className="rounded-lg bg-[#4ECCA3] px-3 py-1 text-xs font-bold text-[#0C211E] shadow">
+                    Bestseller
+                  </span>
                 )}
                 {product.badges?.includes('new') && (
-                  <span className="rounded-lg bg-amber-400 px-3 py-1 text-xs font-bold text-amber-950 shadow">Neu</span>
+                  <span className="rounded-lg bg-amber-400 px-3 py-1 text-xs font-bold text-amber-950 shadow">
+                    Neu
+                  </span>
                 )}
                 {product.oldPrice && (
                   <span className="rounded-lg bg-red-500 px-3 py-1 text-xs font-bold text-white shadow">
@@ -215,7 +261,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
             </motion.div>
 
             {product.images.length > 1 && (
-              <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-hide sm:w-20 sm:flex-col sm:overflow-y-auto sm:overflow-x-visible sm:pb-0 md:w-24 lg:w-[5.5rem]">
+              <div className="scrollbar-hide flex gap-2.5 overflow-x-auto pb-1 sm:w-20 sm:flex-col sm:overflow-y-auto sm:overflow-x-visible sm:pb-0 md:w-24 lg:w-[5.5rem]">
                 {product.images.map((img, index) => (
                   <button
                     key={index}
@@ -223,10 +269,19 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     data-testid="product-thumbnail"
                     onClick={() => setSelectedImage(index)}
                     className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 bg-white transition-colors sm:h-20 sm:w-full md:h-[4.5rem] ${
-                      selectedImage === index ? 'border-[#4ECCA3] ring-2 ring-[#4ECCA3]/20' : 'border-gray-100 hover:border-gray-300'
+                      selectedImage === index
+                        ? 'border-[#4ECCA3] ring-2 ring-[#4ECCA3]/20'
+                        : 'border-gray-100 hover:border-gray-300'
                     }`}
                   >
-                    <Image src={img} alt={`${product.name.de} ${index + 1}`} fill unoptimized={isLocalProductImage(img)} className="object-contain p-2 mix-blend-multiply" sizes="80px" />
+                    <Image
+                      src={img}
+                      alt={`${product.name.de} ${index + 1}`}
+                      fill
+                      unoptimized={isLocalProductImage(img)}
+                      className="object-contain p-2 mix-blend-multiply"
+                      sizes="80px"
+                    />
                   </button>
                 ))}
               </div>
@@ -234,35 +289,63 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
           </div>
 
           {/* Colonne achat — une seule colonne fluide, pas de sous-grille étroite */}
-          <div ref={infoRef} className="relative flex min-w-0 flex-col gap-4 lg:sticky lg:top-28 lg:self-start xl:top-32">
+          <div
+            ref={infoRef}
+            className="relative flex min-w-0 flex-col gap-4 lg:sticky lg:top-28 lg:self-start xl:top-32"
+          >
             <header className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
                 <div className="flex items-center gap-1.5 rounded-lg border border-gray-100 bg-white px-2.5 py-1.5 shadow-sm">
-                  {Array.from({length: 5}).map((_, i) => (
-                    <Star key={i} className={`h-3.5 w-3.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-3.5 w-3.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+                    />
                   ))}
-                  <span className="ml-1 font-bold text-gray-900 text-sm">{product.rating.toFixed(1)}</span>
-                  <span className="text-xs text-gray-400">({product.reviewCount > 0 ? `${product.reviewCount} Bewertungen` : 'Noch keine Bewertungen'})</span>
+                  <span className="ml-1 text-sm font-bold text-gray-900">
+                    {product.rating.toFixed(1)}
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    (
+                    {product.reviewCount > 0
+                      ? `${product.reviewCount} Bewertungen`
+                      : 'Noch keine Bewertungen'}
+                    )
+                  </span>
                 </div>
-                {product.badges && product.badges.map((badge) => {
-                  let bgColor = 'bg-gray-100 text-gray-800 border border-gray-200'
-                  if (badge.toLowerCase() === 'testsieger') bgColor = 'bg-red-50 text-red-700 border border-red-200'
-                  else if (badge.toLowerCase() === 'made in germany') bgColor = 'bg-blue-50 text-blue-700 border border-blue-200'
-                  else if (badge.toLowerCase() === 'pfoa-frei') bgColor = 'bg-green-50 text-green-700 border border-green-200'
-                  else if (badge.toLowerCase().includes('ofenfest')) bgColor = 'bg-amber-50 text-amber-700 border border-amber-200'
-                  else if (badge.toLowerCase() === 'premium') bgColor = 'bg-[#0C211E] text-white'
-                  else if (badge.toLowerCase() === 'bestseller') bgColor = 'bg-[#4ECCA3] text-[#0C211E]'
-                  return (
-                    <span key={badge} className={`rounded-lg px-2.5 py-1 text-xs font-bold shadow-sm ${bgColor}`}>
-                      {badge}
-                    </span>
-                  )
-                })}
+                {product.badges &&
+                  product.badges.map((badge) => {
+                    let bgColor = 'bg-gray-100 text-gray-800 border border-gray-200'
+                    if (badge.toLowerCase() === 'testsieger')
+                      bgColor = 'bg-red-50 text-red-700 border border-red-200'
+                    else if (badge.toLowerCase() === 'made in germany')
+                      bgColor = 'bg-blue-50 text-blue-700 border border-blue-200'
+                    else if (badge.toLowerCase() === 'pfoa-frei')
+                      bgColor = 'bg-green-50 text-green-700 border border-green-200'
+                    else if (badge.toLowerCase().includes('ofenfest'))
+                      bgColor = 'bg-amber-50 text-amber-700 border border-amber-200'
+                    else if (badge.toLowerCase() === 'premium') bgColor = 'bg-[#0C211E] text-white'
+                    else if (badge.toLowerCase() === 'bestseller')
+                      bgColor = 'bg-[#4ECCA3] text-[#0C211E]'
+                    return (
+                      <span
+                        key={badge}
+                        className={`rounded-lg px-2.5 py-1 text-xs font-bold shadow-sm ${bgColor}`}
+                      >
+                        {badge}
+                      </span>
+                    )
+                  })}
               </div>
-              <h1 data-testid="product-name" className="font-heading text-lg sm:text-xl font-black leading-tight tracking-tight text-[#0C211E] uppercase">
+              <h1
+                data-testid="product-name"
+                className="font-heading text-lg font-black uppercase leading-tight tracking-tight text-[#0C211E] sm:text-xl"
+              >
                 {product.name.de}
               </h1>
-              <p className="text-xs leading-snug text-gray-400 font-medium">{product.shortDescription.de}</p>
+              <p className="text-xs font-medium leading-snug text-gray-400">
+                {product.shortDescription.de}
+              </p>
             </header>
 
             {/* Carte prix & CTA */}
@@ -282,28 +365,28 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               </AnimatePresence>
 
               <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 border-b border-gray-50 pb-2">
-                <span className="text-lg sm:text-xl font-black tabular-nums tracking-tight text-red-600 whitespace-nowrap">
+                <span className="whitespace-nowrap text-lg font-black tabular-nums tracking-tight text-red-600 sm:text-xl">
                   {formatPriceDe(product.price)}
                 </span>
                 {product.oldPrice && (
-                  <span className="text-[11px] font-bold text-gray-400 line-through tabular-nums whitespace-nowrap">
+                  <span className="whitespace-nowrap text-[11px] font-bold tabular-nums text-gray-400 line-through">
                     {formatPriceDe(product.oldPrice)}
                   </span>
                 )}
               </div>
-              <p className="mb-1 text-[10px] text-gray-400 font-medium">
+              <p className="mb-1 text-[10px] font-medium text-gray-400">
                 inkl. {vatPct}% MwSt. zzgl.{' '}
                 <Link href="/lieferung" className="underline decoration-dotted hover:text-gray-700">
                   Versand
                 </Link>
               </p>
               {vatPct > 0 && (
-                <p className="mb-4 text-[11px] text-gray-500">Nettoanteil: {formatPriceDe(netFromGross(product.price, vatPct))}</p>
+                <p className="mb-4 text-[11px] text-gray-500">
+                  Nettoanteil: {formatPriceDe(netFromGross(product.price, vatPct))}
+                </p>
               )}
 
-              <div
-                className="mb-5 inline-flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold border-blue-200 bg-blue-50/80 text-blue-800"
-              >
+              <div className="mb-5 inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50/80 px-3 py-2.5 text-sm font-bold text-blue-800">
                 <span className="h-2 w-2 rounded-full bg-blue-500" />
                 Auf Anfrage
               </div>
@@ -318,7 +401,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   >
                     <Minus className="h-3 w-3" />
                   </button>
-                  <span className="flex-1 text-center text-xs font-bold text-[#0C211E]">{quantity}</span>
+                  <span className="flex-1 text-center text-xs font-bold text-[#0C211E]">
+                    {quantity}
+                  </span>
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
@@ -341,21 +426,28 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   type="button"
                   onClick={handleWishlistToggle}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-colors ${
-                    isWishlisted ? 'border-red-100 bg-red-50' : 'border-gray-100 bg-white hover:border-gray-200'
+                    isWishlisted
+                      ? 'border-red-100 bg-red-50'
+                      : 'border-gray-100 bg-white hover:border-gray-200'
                   }`}
                   aria-label="Wunschliste"
                 >
-                  <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                  <Heart
+                    className={`h-4 w-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+                  />
                 </button>
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => { addItem(product, quantity); window.location.href = '/kasse' }}
-                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-gray-100 text-sm font-bold text-[#0C211E] hover:bg-gray-200 transition-colors"
+                  onClick={() => {
+                    addItem(product, quantity)
+                    window.location.href = '/kasse'
+                  }}
+                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-gray-100 text-sm font-bold text-[#0C211E] transition-colors hover:bg-gray-200"
                 >
-                  <Mail className="w-4 h-4" /> Überweisung
+                  <Mail className="h-4 w-4" /> Überweisung
                 </button>
               </div>
             </div>
@@ -367,7 +459,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   key={item.title}
                   className="flex gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#4ECCA3]/12">
+                  <div className="bg-[#4ECCA3]/12 flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
                     <item.icon className="h-5 w-5 text-[#4ECCA3]" />
                   </div>
                   <div>
@@ -419,13 +511,11 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
         <section className="mt-8 hidden w-full lg:mt-12 lg:block xl:mt-14">
           <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm">
             <div className="flex flex-wrap justify-center gap-4 border-b border-gray-100 px-4 py-2 sm:gap-8 xl:gap-12">
-              {(
-                [
-                  { id: 'description' as const, label: 'Beschreibung' },
-                  { id: 'specs' as const, label: 'Technische Daten' },
-                  { id: 'reviews' as const, label: `Bewertungen (${product.reviewCount})` },
-                ]
-              ).map((tab) => (
+              {[
+                { id: 'description' as const, label: 'Beschreibung' },
+                { id: 'specs' as const, label: 'Technische Daten' },
+                { id: 'reviews' as const, label: `Bewertungen (${product.reviewCount})` },
+              ].map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
@@ -437,7 +527,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 >
                   {tab.label}
                   {activeTab === tab.id && (
-                    <motion.span layoutId="pd-tab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#4ECCA3]" />
+                    <motion.span
+                      layoutId="pd-tab"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#4ECCA3]"
+                    />
                   )}
                 </button>
               ))}
@@ -452,16 +545,27 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     exit={{ opacity: 0 }}
                     className="w-full"
                   >
-                    <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">Produktdetails</h2>
-                    <div className="mb-10 max-w-4xl text-base leading-relaxed text-gray-600 xl:text-lg whitespace-pre-line">{product.description.de}</div>
+                    <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">
+                      Produktdetails
+                    </h2>
+                    <div className="mb-10 max-w-4xl whitespace-pre-line text-base leading-relaxed text-gray-600 xl:text-lg">
+                      {product.description.de}
+                    </div>
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                       {[
                         { icon: Zap, title: 'SmartHeat™', desc: 'Präzise Temperaturkontrolle' },
                         { icon: Leaf, title: 'EcoPower™', desc: 'Energieeffizientes Kochen' },
                         { icon: Shield, title: 'SafetyGuard™', desc: 'Maximale Sicherheit' },
-                        { icon: Award, title: 'Premium Qualität', desc: 'Langlebigkeit garantiert' },
+                        {
+                          icon: Award,
+                          title: 'Premium Qualität',
+                          desc: 'Langlebigkeit garantiert',
+                        },
                       ].map((f) => (
-                        <div key={f.title} className="flex gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 p-4">
+                        <div
+                          key={f.title}
+                          className="flex gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 p-4"
+                        >
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0C211E]">
                             <f.icon className="h-5 w-5 text-[#4ECCA3]" />
                           </div>
@@ -475,7 +579,12 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   </motion.div>
                 )}
                 {activeTab === 'specs' && (
-                  <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <motion.div
+                    key="s"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:gap-4">
                       {[
                         ...productSpecCards,
@@ -499,7 +608,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                           className="flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm transition-shadow hover:shadow-md"
                         >
                           <spec.icon className="mb-3 h-8 w-8 text-[#4ECCA3]" />
-                          <span className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">{spec.label}</span>
+                          <span className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                            {spec.label}
+                          </span>
                           <span className="text-sm font-bold text-[#0C211E]">{spec.value}</span>
                         </div>
                       ))}
@@ -507,7 +618,13 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   </motion.div>
                 )}
                 {activeTab === 'reviews' && (
-                  <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
+                  <motion.div
+                    key="r"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full"
+                  >
                     <ProductReviews
                       productId={product.id}
                       initialRating={product.rating}
@@ -534,7 +651,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                       { icon: Zap, t: 'SmartHeat', d: 'Gleichmäßige Hitze.' },
                       { icon: Leaf, t: 'Eco', d: 'Ressourcenschonend.' },
                     ].map((x) => (
-                      <div key={x.t} className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
+                      <div
+                        key={x.t}
+                        className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3"
+                      >
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0C211E]">
                           <x.icon className="h-4 w-4 text-[#4ECCA3]" />
                         </div>
@@ -557,10 +677,17 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     ...productSpecCards,
                     { icon: Layers, label: 'Material', value: product.specs.material },
                     { icon: Scale, label: 'Gewicht', value: product.specs.weight },
-                    { icon: Droplets, label: 'Spülmaschine', value: product.specs.dishwasher ? 'Ja' : 'Nein' },
+                    {
+                      icon: Droplets,
+                      label: 'Spülmaschine',
+                      value: product.specs.dishwasher ? 'Ja' : 'Nein',
+                    },
                     { icon: Maximize, label: 'Größe', value: product.specs.dimensions },
                   ].map((spec, index) => (
-                    <div key={`${spec.label}-m-${index}`} className="rounded-xl border border-gray-100 bg-gray-50 p-3 text-center">
+                    <div
+                      key={`${spec.label}-m-${index}`}
+                      className="rounded-xl border border-gray-100 bg-gray-50 p-3 text-center"
+                    >
                       <spec.icon className="mx-auto mb-1 h-5 w-5 text-[#4ECCA3]" />
                       <p className="text-[9px] font-bold uppercase text-gray-400">{spec.label}</p>
                       <p className="text-xs font-bold text-[#0C211E]">{spec.value}</p>
@@ -573,15 +700,24 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               id: 'reviews',
               label: `Bewertungen (${product.reviewCount})`,
               content: (
-                <ProductReviews productId={product.id} initialRating={product.rating} initialCount={product.reviewCount} />
+                <ProductReviews
+                  productId={product.id}
+                  initialRating={product.rating}
+                  initialCount={product.reviewCount}
+                />
               ),
             },
           ].map((section) => (
-            <div key={section.id} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+            <div
+              key={section.id}
+              className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+            >
               <button
                 type="button"
                 data-testid={section.id === 'reviews' ? 'reviews-accordion' : undefined}
-                onClick={() => setExpandedAccordion(expandedAccordion === section.id ? null : section.id)}
+                onClick={() =>
+                  setExpandedAccordion(expandedAccordion === section.id ? null : section.id)
+                }
                 className="flex w-full items-center justify-between p-4 text-left sm:p-5"
               >
                 <span className="font-bold text-[#0C211E]">{section.label}</span>
@@ -591,7 +727,12 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               </button>
               <AnimatePresence>
                 {expandedAccordion === section.id && (
-                  <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden border-t border-gray-50">
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: 'auto' }}
+                    exit={{ height: 0 }}
+                    className="overflow-hidden border-t border-gray-50"
+                  >
                     <div className="p-4 pt-0 sm:p-5 sm:pt-0">{section.content}</div>
                   </motion.div>
                 )}
@@ -602,8 +743,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
 
         {/* Produits associés */}
         {relatedProducts.length > 0 && (
-          <section className="mt-12 border-t border-gray-200 pt-10 pb-24 lg:mt-16 lg:pt-14 lg:pb-32">
-            <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">Passend dazu</h2>
+          <section className="mt-12 border-t border-gray-200 pb-24 pt-10 lg:mt-16 lg:pb-32 lg:pt-14">
+            <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">
+              Passend dazu
+            </h2>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
               {relatedProducts.map((item, index) => (
                 <motion.div
@@ -614,28 +757,28 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   transition={{ delay: index * 0.05 }}
                 >
                   <Link href={`/produkt/${item.slug}`} className="group block h-full">
-                    <div className="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-500 border border-gray-100/50 flex flex-col h-full relative">
-                      <div className="relative aspect-square bg-[#fdfdfd] overflow-hidden">
+                    <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-100/50 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] sm:rounded-2xl">
+                      <div className="relative aspect-square overflow-hidden bg-[#fdfdfd]">
                         <Image
                           src={item.images[0]}
                           alt={item.name.de}
                           fill
                           unoptimized={isLocalProductImage(item.images[0])}
-                          className="object-contain p-3 sm:p-5 transition-transform duration-700 ease-out group-hover:scale-110 mix-blend-multiply"
+                          className="object-contain p-3 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110 sm:p-5"
                           sizes="(max-width: 640px) 45vw, 22vw"
                         />
                       </div>
-                      <div className="p-2 sm:p-3 flex-1 flex flex-col justify-between">
+                      <div className="flex flex-1 flex-col justify-between p-2 sm:p-3">
                         <div className="min-w-0">
-                          <h3 className="font-bold text-gray-900 text-[10px] sm:text-[12px] line-clamp-1 leading-tight mb-1 group-hover:text-nova-600 transition-colors">
+                          <h3 className="mb-1 line-clamp-1 text-[10px] font-bold leading-tight text-gray-900 transition-colors group-hover:text-nova-600 sm:text-[12px]">
                             {item.name.de}
                           </h3>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs sm:text-[14px] font-black text-nova-900 tabular-nums">
+                            <span className="text-xs font-black tabular-nums text-nova-900 sm:text-[14px]">
                               {formatPriceDe(item.price)}
                             </span>
                             {item.oldPrice && (
-                              <span className="text-[9px] font-bold text-gray-400 line-through tabular-nums">
+                              <span className="text-[9px] font-bold tabular-nums text-gray-400 line-through">
                                 {formatPriceDe(item.oldPrice)}
                               </span>
                             )}

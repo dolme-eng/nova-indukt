@@ -29,7 +29,7 @@ export interface CartContentProps {
 }
 
 export function CartContent({ recommendedProducts = [] }: CartContentProps) {
-  const isLocalProductImage = (src: string) => src.startsWith('/images/products/')
+  const isLocalProductImage = (src: string) => src?.startsWith('/images/products/') ?? false
   const router = useRouter()
   const { items, totalItems, totalPrice, updateQuantity, removeItem, isHydrated } = useCart()
   const [removingItem, setRemovingItem] = useState<string | null>(null)

@@ -21,7 +21,8 @@ export function mapDbProductToUi(p: DbProduct): Product {
     oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
     images: [...p.images]
       .sort((a, b) => a.sortOrder - b.sortOrder)
-      .map((img) => img.url),
+      .map((img) => img.url)
+      .filter((url): url is string => !!url),
     rating: p.rating,
     reviewCount: p.reviewCount,
     badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
@@ -51,7 +52,6 @@ export function mapDbCategoryToUi(c: DbCategoryWithCount): Category {
     count: c._count?.products ?? 0,
   }
 }
-
 
 export interface Product {
   id: string
