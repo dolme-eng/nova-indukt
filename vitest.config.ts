@@ -6,6 +6,16 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     exclude: ['tests/e2e/**', 'node_modules/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      thresholds: {
+        statements: 70,
+        branches: 60,
+        functions: 70,
+        lines: 70,
+      },
+    },
   },
   resolve: {
     alias: {

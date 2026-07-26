@@ -11,7 +11,10 @@ const prisma = new PrismaClient()
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -53,7 +56,8 @@ Die Profi Plus Serie steht für professionelle Qualität im Küchenalltag.`,
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Nudelkelle — Edelstahl Küchenutensil | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Nudelkelle aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Nudelkelle aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus Nudelkelle',
     imageFiles: ['1.png', '2.png'],
@@ -87,7 +91,8 @@ Ein unverzichtbares Utensil für perfekt zubereitete Kartoffeln.`,
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Kartoffelstock — Edelstahl Utensil | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Kartoffelstock — Cromargan® Edelstahl, spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Kartoffelstock — Cromargan® Edelstahl, spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus Kartoffelstock',
     imageFiles: ['1.png', '2.png'],
@@ -121,10 +126,11 @@ Die Pure Collection verbindet minimalistisches Design mit höchster Funktionalit
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Fissler Pure Collection Schneebesen — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Pure Collection Schneebesen — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Pure Collection Schneebesen — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection Schneebesen',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'fissler-pure-collection-grillzange',
@@ -155,10 +161,11 @@ Die Grillzange ist ein unverzichtbares Werkzeug für jeden Grillmeister.`,
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Fissler Pure Collection Grillzange — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Pure Collection Grillzange — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Pure Collection Grillzange — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection Grillzange',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'roesle-edelstahl-schaumkelle',
@@ -189,10 +196,11 @@ Rösle steht für deutsche Präzision im Küchenbereich.`,
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Rösle Edelstahl Schaumkelle — Edelstahl Utensil | NOVA INDUKT',
-    metaDescription: 'Rösle Edelstahl Schaumkelle — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Rösle Edelstahl Schaumkelle — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Edelstahl Schaumkelle',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'roesle-edelstahl-schneebesen',
@@ -223,10 +231,11 @@ Die Rösle Schneebesen vereinen Design und Funktionalität auf höchstem Niveau.
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Rösle Edelstahl Schneebesen — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Rösle Edelstahl Schneebesen — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Rösle Edelstahl Schneebesen — Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Edelstahl Schneebesen',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'zwilling-now-s-kartoffelstock',
@@ -257,10 +266,11 @@ Die Now S Serie bietet modernes Design zum fairen Preis.`,
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Zwilling Now S Kartoffelstock — Edelstahl Utensil | NOVA INDUKT',
-    metaDescription: 'Zwilling Now S Kartoffelstock — Edelstahl mit Silikongriff, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Zwilling Now S Kartoffelstock — Edelstahl mit Silikongriff, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S Kartoffelstock',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'wmf-professional-s-plus-saucenheber-2',
@@ -291,7 +301,8 @@ Die Profi Plus Serie steht für professionelle Qualität im Küchenalltag.`,
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Saucenheber — Edelstahl Utensil | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Saucenheber — Cromargan® Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Saucenheber — Cromargan® Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus Saucenheber',
     imageFiles: ['1.png', '2.png'],
@@ -356,7 +367,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -389,7 +402,9 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++

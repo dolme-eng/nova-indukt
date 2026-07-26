@@ -13,7 +13,10 @@ const prisma = new PrismaClient()
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /** Génère les images à partir du dossier public local */
-function imgs(folder: string, files: string[]): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
+function imgs(
+  folder: string,
+  files: string[]
+): { url: string; alt: string; sortOrder: number; isMain: boolean }[] {
   const base = `/images/products/${folder}`
   return files.map((file, i) => ({
     url: `${base}/${file}`,
@@ -62,7 +65,8 @@ Die Schöpfkellen aus der WMF Profi Plus-Serie sind unverzichtbare Helfer in der
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Schöpfkellen-Set 3-teilig — Edelstahl Küchenutensil | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Schöpfkellen-Set 3-teilig aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Schöpfkellen-Set 3-teilig aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus — Schöpfkellen-Set 3-teilig',
     imageFiles: ['1.png', '2.png', '3.png'],
@@ -100,7 +104,8 @@ Der Kochlöffel aus der WMF Profi Plus-Serie ist ein Multitalent in der Küche. 
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Kochlöffel 30 cm — Cromargan® Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Kochlöffel 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Kochlöffel 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus — Kochlöffel',
     imageFiles: ['1.png', '2.png', '3.png'],
@@ -138,7 +143,8 @@ Der Saucenheber zeichnet sich durch seine präzise Formgebung aus, die ein tropf
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Saucenheber 30 cm — Cromargan® Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Saucenheber 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Saucenheber 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus — Saucenheber',
     imageFiles: ['1.png', '2.png', '3.png'],
@@ -176,7 +182,8 @@ Die Schaumkelle aus der WMF Profi Plus-Serie überzeugt durch ihre funktionalen 
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Schaumkelle 30 cm — Cromargan® Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Schaumkelle 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Schaumkelle 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus — Schaumkelle',
     imageFiles: ['1.png', '2.png', '3.png'],
@@ -214,7 +221,8 @@ Die Grillzange aus der WMF Profi Plus-Serie überzeugt durch ihre robuste Bauwei
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Grillzange 30 cm — Cromargan® Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Grillzange 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Grillzange 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus — Grillzange',
     imageFiles: ['1.png', '2.png', '3.png'],
@@ -256,10 +264,11 @@ Der Kochlöffel aus der Fissler Pure Collection besticht durch seine klaren Lini
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Fissler Pure Collection Kochlöffel 30 cm — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Pure Collection Kochlöffel 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Pure Collection Kochlöffel 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection — Kochlöffel',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -294,10 +303,11 @@ Die Schöpfkelle aus der Fissler Pure Collection besticht durch ihre klaren Lini
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Fissler Pure Collection Schöpfkelle 30 cm — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Pure Collection Schöpfkelle 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Pure Collection Schöpfkelle 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection — Schöpfkelle',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -332,10 +342,11 @@ Der Saucenheber aus der Fissler Pure Collection besticht durch seine funktionale
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Fissler Pure Collection Saucenheber 30 cm — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Pure Collection Saucenheber 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Pure Collection Saucenheber 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection — Saucenheber',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -370,10 +381,11 @@ Die Nudelkelle aus der Fissler Pure Collection überzeugt durch ihre funktionale
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Fissler Pure Collection Nudelkelle 32 cm — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Pure Collection Nudelkelle 32 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Pure Collection Nudelkelle 32 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection — Nudelkelle',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -385,7 +397,8 @@ Die Nudelkelle aus der Fissler Pure Collection überzeugt durch ihre funktionale
     supplierSku: 'ROS-SIL-BB',
     sortOrder: 10,
     nameDe: 'Rösle Silicone Basting Brush',
-    shortDescription: 'Hochwertiger Basting-Pinsel aus Edelstahl und Silicone — 28 cm, spülmaschinenfest',
+    shortDescription:
+      'Hochwertiger Basting-Pinsel aus Edelstahl und Silicone — 28 cm, spülmaschinenfest',
     descriptionDe: `Der Rösle Silicone Basting Brush ist ein hochwertiges Küchenutensil für alle, die Wert auf Präzision und Qualität legen. Die Kombination aus Edelstahl und hitzebeständigem Silicone macht ihn zum idealen Begleiter beim Bestreichen und Basting.
 
 **Merkmale:**
@@ -412,10 +425,11 @@ Der Basting-Pinsel aus der Rösle Silicone-Serie besticht durch seine hochwertig
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Rösle Silicone Basting Brush 28 cm — Edelstahl + Silicone | NOVA INDUKT',
-    metaDescription: 'Rösle Silicone Basting Brush 28 cm aus Edelstahl und hitzebeständigem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Rösle Silicone Basting Brush 28 cm aus Edelstahl und hitzebeständigem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone — Basting Brush',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -450,10 +464,11 @@ Der Spatel aus der Rösle Silicone-Serie überzeugt durch seine vielseitige Eins
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Rösle Silicone Spatula 28 cm — Edelstahl + Silicone | NOVA INDUKT',
-    metaDescription: 'Rösle Silicone Spatula 28 cm aus Edelstahl und flexiblem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Rösle Silicone Spatula 28 cm aus Edelstahl und flexiblem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone — Spatula',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -488,10 +503,11 @@ Der Kochlöffel aus der Rösle Silicone-Serie besticht durch seine hochwertige M
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Rösle Silicone Cooking Spoon 28 cm — Edelstahl + Silicone | NOVA INDUKT',
-    metaDescription: 'Rösle Silicone Cooking Spoon 28 cm aus Edelstahl und weichem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Rösle Silicone Cooking Spoon 28 cm aus Edelstahl und weichem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone — Cooking Spoon',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -499,7 +515,8 @@ Der Kochlöffel aus der Rösle Silicone-Serie besticht durch seine hochwertige M
     supplierSku: 'ROS-SIL-KL2',
     sortOrder: 13,
     nameDe: 'Rösle Silicone Ladle',
-    shortDescription: 'Praktische Schöpfkelle aus Edelstahl und Silicone — 28 cm, spülmaschinenfest',
+    shortDescription:
+      'Praktische Schöpfkelle aus Edelstahl und Silicone — 28 cm, spülmaschinenfest',
     descriptionDe: `Die Rösle Silicone Ladle ist die perfekte Kombination aus Robustheit und Flexibilität. Die Edelstahlkonstruktion sorgt für Stabilität, während die Silicone-Beschichtung eine schonende Behandlung von Kochgeschirr gewährleistet.
 
 **Merkmale:**
@@ -526,10 +543,11 @@ Die Schöpfkelle aus der Rösle Silicone-Serie überzeugt durch ihre durchdachte
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Rösle Silicone Ladle 28 cm — Edelstahl + Silicone | NOVA INDUKT',
-    metaDescription: 'Rösle Silicone Ladle 28 cm aus Edelstahl und hitzebeständigem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Rösle Silicone Ladle 28 cm aus Edelstahl und hitzebeständigem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone — Ladle',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -564,10 +582,11 @@ Der Wender aus der Rösle Edelstahl-Serie besticht durch seine robuste Bauweise 
     rating: 4.5,
     reviewCount: 0,
     metaTitle: 'Rösle Stainless Steel Turner 30 cm — Edelstahl 18/10 | NOVA INDUKT',
-    metaDescription: 'Rösle Stainless Steel Turner 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Rösle Stainless Steel Turner 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Edelstahl — Turner',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -606,10 +625,11 @@ Die Küchenzange aus der Zwilling Now S-Serie besticht durch ihre hochwertige Ma
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Zwilling Now S Küchenzange 28 cm — Edelstahl + Silikongriff | NOVA INDUKT',
-    metaDescription: 'Zwilling Now S Küchenzange 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Zwilling Now S Küchenzange 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S — Küchenzange',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -644,10 +664,11 @@ Die Schaumkelle aus der Zwilling Now S-Serie überzeugt durch ihre funktionalen 
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Zwilling Now S Schaumkelle 28 cm — Edelstahl + Silikongriff | NOVA INDUKT',
-    metaDescription: 'Zwilling Now S Schaumkelle 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Zwilling Now S Schaumkelle 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S — Schaumkelle',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -682,10 +703,11 @@ Der Kochlöffel aus der Zwilling Now S-Serie besticht durch seine vielseitige Ei
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Zwilling Now S Kochlöffel 28 cm — Edelstahl + Silikongriff | NOVA INDUKT',
-    metaDescription: 'Zwilling Now S Kochlöffel 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Zwilling Now S Kochlöffel 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S — Kochlöffel',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -720,10 +742,11 @@ Der Schneebesen aus der Zwilling Now S-Serie überzeugt durch seine robuste Bauw
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'Zwilling Now S Schneebesen 28 cm — Edelstahl + Silikongriff | NOVA INDUKT',
-    metaDescription: 'Zwilling Now S Schneebesen 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Zwilling Now S Schneebesen 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S — Schneebesen',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -762,7 +785,8 @@ Der Sieblöffel aus der WMF Profi Plus-Serie besticht durch seine durchdachte Ko
     rating: 4.4,
     reviewCount: 0,
     metaTitle: 'WMF Profi Plus Sieblöffel 30 cm — Cromargan® Edelstahl | NOVA INDUKT',
-    metaDescription: 'WMF Profi Plus Sieblöffel 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'WMF Profi Plus Sieblöffel 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus — Sieblöffel',
     imageFiles: ['1.png', '2.png', '3.png'],
@@ -800,10 +824,11 @@ Der Kartoffelstößel aus der Fissler Pure Collection besticht durch seine spezi
     rating: 4.3,
     reviewCount: 0,
     metaTitle: 'Fissler Pure Collection Kartoffelstößel 30 cm — Edelstahl | NOVA INDUKT',
-    metaDescription: 'Fissler Pure Collection Kartoffelstößel 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
+    metaDescription:
+      'Fissler Pure Collection Kartoffelstößel 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection — Kartoffelstößel',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 ]
 
@@ -865,7 +890,9 @@ async function main() {
         })
 
         updated++
-        console.log(`  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ↻  [${updated + created}/${products.length}] MIS À JOUR : ${p.nameDe.substring(0, 55)}`
+        )
       } else {
         await prisma.product.create({
           data: {
@@ -898,7 +925,9 @@ async function main() {
         })
 
         created++
-        console.log(`  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`)
+        console.log(
+          `  ✓  [${updated + created}/${products.length}] CRÉÉ : ${p.nameDe.substring(0, 55)}`
+        )
       }
     } catch (err: unknown) {
       errors++

@@ -5,8 +5,12 @@ let _isConfigured = false
 
 function ensureConfigured() {
   if (_isConfigured) return
-  
-  if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+
+  if (
+    !process.env.CLOUDINARY_CLOUD_NAME ||
+    !process.env.CLOUDINARY_API_KEY ||
+    !process.env.CLOUDINARY_API_SECRET
+  ) {
     throw new Error('Cloudinary environment variables are not defined')
   }
 
@@ -16,7 +20,7 @@ function ensureConfigured() {
     api_secret: process.env.CLOUDINARY_API_SECRET,
     secure: true,
   })
-  
+
   _isConfigured = true
 }
 
@@ -35,12 +39,12 @@ export interface UploadResult {
 export async function uploadImage(
   file: string | Buffer,
   folder: string = 'nova-indukt/products',
-  options: Record<string, any> = {}
+  options: Record<string, string | number | boolean | undefined> = {}
 ): Promise<UploadResult> {
   ensureConfigured()
-  const fileToUpload = Buffer.isBuffer(file) 
-    ? `data:image/png;base64,${file.toString('base64')}` 
-    : file;
+  const fileToUpload = Buffer.isBuffer(file)
+    ? `data:image/png;base64,${file.toString('base64')}`
+    : file
 
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
@@ -50,10 +54,7 @@ export async function uploadImage(
         resource_type: 'image',
         allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
         max_bytes: 10 * 1024 * 1024, // 10MB max
-        transformation: [
-          { quality: 'auto:good' },
-          { fetch_format: 'auto' }
-        ],
+        transformation: [{ quality: 'auto:good' }, { fetch_format: 'auto' }],
         ...options,
       },
       (error, result) => {
@@ -101,11 +102,11 @@ export function getOptimizedUrl(
     'f_auto', // Auto format
     'q_auto', // Auto quality
   ]
-  
+
   if (width) options.push(`w_${width}`)
   if (height) options.push(`h_${height}`)
   if (width || height) options.push(`c_${crop}`)
-  
+
   return cloudinary.url(publicId, {
     transformation: [options.join(',')],
     secure: true,
@@ -115,11 +116,7 @@ export function getOptimizedUrl(
 export function getPlaceholderUrl(publicId: string): string {
   ensureConfigured()
   return cloudinary.url(publicId, {
-    transformation: [
-      { width: 50, crop: 'scale' },
-      { quality: 1 },
-      { blur: 1000 }
-    ],
+    transformation: [{ width: 50, crop: 'scale' }, { quality: 1 }, { blur: 1000 }],
     secure: true,
   })
 }

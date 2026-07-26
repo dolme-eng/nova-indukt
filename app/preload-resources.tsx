@@ -1,34 +1,19 @@
-'use client'
-
-import { useEffect } from 'react'
-
-// Précharger les ressources critiques
 export function PreloadResources() {
-  useEffect(() => {
-    // Préconnecter aux domaines externes
-    const preconnectDomains = [
-      'https://images.unsplash.com',
-    ]
-    
-    preconnectDomains.forEach(domain => {
-      const link = document.createElement('link')
-      link.rel = 'preconnect'
-      link.href = domain
-      link.crossOrigin = 'anonymous'
-      document.head.appendChild(link)
-    })
-
-    // Précharger les images hero
-    const heroImages = [
-      '/images/hero/Die-Zukunft-der-Induktion.webp',
-      '/images/hero/Professionelle-Topfsets.webp',
-    ]
-    
-    heroImages.forEach(src => {
-      const img = new Image()
-      img.src = src
-    })
-  }, [])
-
-  return null
+  return (
+    <>
+      <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero/Die-Zukunft-der-Induktion.webp"
+        imageSrcSet="/images/hero/Die-Zukunft-der-Induktion.webp"
+      />
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero/Professionelle-Topfsets.webp"
+        imageSrcSet="/images/hero/Professionelle-Topfsets.webp"
+      />
+    </>
+  )
 }

@@ -4,10 +4,19 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { 
-  ChevronRight, Check, Truck, 
-  AlertCircle, Lock, ArrowLeft, ChevronDown,
-  Package, Shield, MapPin, Mail, ShieldCheck
+import {
+  ChevronRight,
+  Check,
+  Truck,
+  AlertCircle,
+  Lock,
+  ArrowLeft,
+  ChevronDown,
+  Package,
+  Shield,
+  MapPin,
+  Mail,
+  ShieldCheck,
 } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useAuth } from '@/lib/store/auth'
@@ -41,7 +50,7 @@ export default function CheckoutContent() {
 
   useEffect(() => {
     fetch('/api/bank-details')
-      .then(r => r.json())
+      .then((r) => r.json())
       .then(setBankDetails)
       .catch(() => {})
   }, [])
@@ -50,7 +59,7 @@ export default function CheckoutContent() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
   const [showMobileSummary, setShowMobileSummary] = useState(false)
-  
+
   const [shippingData, setShippingData] = useState({
     firstName: user?.name?.split(' ')[0] ?? '',
     lastName: user?.name?.split(' ').slice(1).join(' ') ?? '',
@@ -59,85 +68,93 @@ export default function CheckoutContent() {
     address: '',
     zipCode: '',
     city: '',
-    country: 'Deutschland'
+    country: 'Deutschland',
   })
-  
+
   const [paymentMethod, setPaymentMethod] = useState<'bank_transfer'>('bank_transfer')
   const [contactEmail, setContactEmail] = useState('')
-  
+
   // Promo code state
   const [promoCode, setPromoCode] = useState('')
   const [isApplyingPromo, setIsApplyingPromo] = useState(false)
   const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>(null)
-  
+
   const [orderId, setOrderId] = useState<string | null>(null)
   const [orderNumber, setOrderNumber] = useState<string>('')
-  const [bankDetails, setBankDetails] = useState<BankDetails>({ holder: '', iban: '', bic: '', bankName: '' })
+  const [bankDetails, setBankDetails] = useState<BankDetails>({
+    holder: '',
+    iban: '',
+    bic: '',
+    bankName: '',
+  })
   const subtotal = totalPrice
   const shipping = calculateShipping(subtotal)
   const discountAmount = appliedPromo ? appliedPromo.discountAmount : 0
   const total = Math.max(0, subtotal + shipping - discountAmount)
 
-  if (!isHydrated) return null
+  const createOrder = useCallback(
+    async (currentPaymentMethod: string, overrideEmail?: string) => {
+      try {
+        const orderData = {
+          items: items.map((item) => ({
+            id: item.product.id,
+            quantity: item.quantity,
+            price: item.product.price,
+            name: item.product.name.de,
+            slug: item.product.slug,
+          })),
+          shippingData: {
+            ...shippingData,
+            email: overrideEmail || shippingData.email,
+            country: normalizeCountry(shippingData.country),
+          },
+          paymentMethod: currentPaymentMethod.toUpperCase(),
+          subtotal,
+          shipping,
+          discountAmount,
+          appliedPromoCode: appliedPromo?.code ?? null,
+          total,
+        }
 
-  const createOrder = useCallback(async (currentPaymentMethod: string, overrideEmail?: string) => {
-    try {
-      const orderData = {
-        items: items.map(item => ({
-          id: item.product.id,
-          quantity: item.quantity,
-          price: item.product.price,
-          name: item.product.name.de,
-          slug: item.product.slug,
-        })),
-        shippingData: {
-          ...shippingData,
-          email: overrideEmail || shippingData.email,
-          country: normalizeCountry(shippingData.country),
-        },
-        paymentMethod: currentPaymentMethod.toUpperCase(),
-        subtotal,
-        shipping,
-        discountAmount,
-        appliedPromoCode: appliedPromo?.code ?? null,
-        total
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.error || 'Fehler beim Erstellen der Bestellung')
+        }
+
+        const order = await response.json()
+        setOrderId(order.id)
+        setOrderNumber(order.orderNumber)
+        return order
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Fehler beim Erstellen der Bestellung'
+        toast.error(msg)
+        return null
       }
-      
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      })
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || 'Fehler beim Erstellen der Bestellung')
-      }
-      
-      const order = await response.json()
-      setOrderId(order.id)
-      setOrderNumber(order.orderNumber)
-      return order
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Fehler beim Erstellen der Bestellung'
-      toast.error(msg)
-      return null
-    }
-  }, [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total])
+    },
+    [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total]
+  )
+
+  if (!isHydrated) return null
 
   const handleApplyPromo = async () => {
     if (!promoCode) return
-    
+
     setIsApplyingPromo(true)
     try {
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: promoCode, amount: subtotal })
+        body: JSON.stringify({ code: promoCode, amount: subtotal }),
       })
-      
+
       const data = await response.json()
-      
+
       if (response.ok) {
         setAppliedPromo(data)
         toast.success(`Code "${data.code}" angewendet: -${formatPriceDe(data.discountAmount)}`)
@@ -160,40 +177,49 @@ export default function CheckoutContent() {
   // Normalise le nom de pays (texte long → code ISO 2 lettres)
   const normalizeCountry = (country: string): string => {
     const map: Record<string, string> = {
-      Deutschland: 'DE', Österreich: 'AT', Schweiz: 'CH',
-      Germany: 'DE', Austria: 'AT', Switzerland: 'CH',
+      Deutschland: 'DE',
+      Österreich: 'AT',
+      Schweiz: 'CH',
+      Germany: 'DE',
+      Austria: 'AT',
+      Switzerland: 'CH',
     }
     return map[country] ?? country.slice(0, 2).toUpperCase()
   }
 
-
-
   if (items.length === 0 && !orderComplete) {
     return (
       <div className="min-h-screen bg-gray-50/50">
-        <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30">
-          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
-            <div className="flex items-center gap-2 py-4 text-xs sm:text-sm font-medium">
-              <Link href="/warenkorb" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 transition-colors">
-                <ArrowLeft className="w-4 h-4" />
+        <nav className="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="flex items-center gap-2 py-4 text-xs font-medium sm:text-sm">
+              <Link
+                href="/warenkorb"
+                className="flex items-center gap-1.5 text-gray-500 transition-colors hover:text-gray-900"
+              >
+                <ArrowLeft className="h-4 w-4" />
                 <span>Zurück zum Warenkorb</span>
               </Link>
             </div>
           </div>
         </nav>
 
-        <div className="container mx-auto px-4 py-16 max-w-4xl">
-          <div className="bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-12 text-center">
-            <div className="w-24 h-24 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 transform -rotate-3">
-              <AlertCircle className="w-12 h-12 text-gray-300" />
+        <div className="container mx-auto max-w-4xl px-4 py-16">
+          <div className="rounded-[2.5rem] border border-gray-100 bg-white p-12 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div className="mx-auto mb-6 flex h-24 w-24 -rotate-3 transform items-center justify-center rounded-[2rem] bg-gray-50">
+              <AlertCircle className="h-12 w-12 text-gray-300" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0C211E] mb-4 font-heading">Warenkorb ist leer</h1>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg">Bitte füge Artikel hinzu, um fortzufahren.</p>
-            <Link 
+            <h1 className="mb-4 font-heading text-3xl font-bold text-[#0C211E]">
+              Warenkorb ist leer
+            </h1>
+            <p className="mx-auto mb-8 max-w-md text-lg text-gray-500">
+              Bitte füge Artikel hinzu, um fortzufahren.
+            </p>
+            <Link
               href="/produkte"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-all shadow-xl shadow-[#0C211E]/20 hover:-translate-y-1"
+              className="inline-flex items-center gap-3 rounded-2xl bg-[#0C211E] px-8 py-4 font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-all hover:-translate-y-1 hover:bg-[#17423C]"
             >
-              <Package className="w-5 h-5" />
+              <Package className="h-5 w-5" />
               Zu den Produkten
             </Link>
           </div>
@@ -211,7 +237,7 @@ export default function CheckoutContent() {
   // Handle bank transfer (create order only)
   const handleBankTransfer = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!contactEmail || !contactEmail.includes('@')) {
       toast.error('Bitte geben Sie eine gültige E-Mail-Adresse ein')
       return
@@ -236,57 +262,65 @@ export default function CheckoutContent() {
   const steps = [
     { id: 1, label: 'Versand', icon: Truck },
     { id: 2, label: 'Zahlung', icon: ShieldCheck },
-    { id: 3, label: 'Bestätigung', icon: Check }
+    { id: 3, label: 'Bestätigung', icon: Check },
   ]
 
   if (orderComplete) {
     return (
       <div className="min-h-screen bg-gray-50/50 pb-20 selection:bg-[#4ECCA3]/30">
-        <div className="container mx-auto px-4 py-12 sm:py-20 max-w-3xl">
-          <motion.div 
+        <div className="container mx-auto max-w-3xl px-4 py-12 sm:py-20">
+          <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="bg-white rounded-[2.5rem] shadow-[0_8px_40px_rgb(0,0,0,0.06)] border border-gray-100 p-8 sm:p-12 text-center relative overflow-hidden"
+            className="relative overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white p-8 text-center shadow-[0_8px_40px_rgb(0,0,0,0.06)] sm:p-12"
           >
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-[#4ECCA3]" />
-            
-            <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8 border-[6px] border-white shadow-lg shadow-green-100">
-              <Check className="w-10 h-10 text-green-500" />
+            <div className="absolute left-0 top-0 h-2 w-full bg-gradient-to-r from-emerald-400 to-[#4ECCA3]" />
+
+            <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border-[6px] border-white bg-green-50 shadow-lg shadow-green-100">
+              <Check className="h-10 w-10 text-green-500" />
             </div>
-            
-            <h1 className="text-3xl sm:text-4xl font-bold text-[#0C211E] mb-4 font-heading">Vielen Dank für Ihre Bestellung!</h1>
-            <p className="text-gray-500 mb-8 text-lg">
-              Wir haben Ihre Bestellung erhalten. Die Zahlungsinformationen werden Ihnen in Kürze per E-Mail zugesandt.
+
+            <h1 className="mb-4 font-heading text-3xl font-bold text-[#0C211E] sm:text-4xl">
+              Vielen Dank für Ihre Bestellung!
+            </h1>
+            <p className="mb-8 text-lg text-gray-500">
+              Wir haben Ihre Bestellung erhalten. Die Zahlungsinformationen werden Ihnen in Kürze
+              per E-Mail zugesandt.
             </p>
-            
-            <div className="bg-gray-50/80 rounded-[2rem] p-6 sm:p-8 mb-10 text-left border border-gray-100">
-              <div className="flex items-center justify-between border-b border-gray-200/60 pb-4 mb-4">
-                <span className="text-gray-500 font-medium">Bestellnummer</span>
-                <span className="font-mono font-bold text-[#0C211E] bg-white px-3 py-1 rounded-lg border border-gray-200 shadow-sm">
+
+            <div className="mb-10 rounded-[2rem] border border-gray-100 bg-gray-50/80 p-6 text-left sm:p-8">
+              <div className="mb-4 flex items-center justify-between border-b border-gray-200/60 pb-4">
+                <span className="font-medium text-gray-500">Bestellnummer</span>
+                <span className="rounded-lg border border-gray-200 bg-white px-3 py-1 font-mono font-bold text-[#0C211E] shadow-sm">
                   {orderNumber}
                 </span>
               </div>
-              
-              <h3 className="font-bold text-[#0C211E] mb-5 text-xl">Bestellübersicht</h3>
-              
+
+              <h3 className="mb-5 text-xl font-bold text-[#0C211E]">Bestellübersicht</h3>
+
               <div className="space-y-4 text-[15px]">
-                <div className="flex justify-between items-center text-gray-600">
+                <div className="flex items-center justify-between text-gray-600">
                   <span>Gesamtsumme</span>
-                  <span className="font-bold text-[#0C211E] text-lg sm:text-xl tabular-nums whitespace-nowrap">{formatPriceDe(total)}</span>
+                  <span className="whitespace-nowrap text-lg font-bold tabular-nums text-[#0C211E] sm:text-xl">
+                    {formatPriceDe(total)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-gray-500">
                   <span>Zahlungsmethode</span>
                   <div className="flex items-center gap-2 font-medium">
-                    <ShieldCheck className="w-4 h-4"/>
+                    <ShieldCheck className="h-4 w-4" />
                     Banküberweisung
                   </div>
                 </div>
-                <div className="flex items-start justify-between text-gray-500 pt-2 border-t border-gray-200/60">
+                <div className="flex items-start justify-between border-t border-gray-200/60 pt-2 text-gray-500">
                   <span>Versandadresse</span>
-                  <span className="text-right text-sm font-medium max-w-[200px] leading-relaxed">
-                    {shippingData.firstName} {shippingData.lastName}<br/>
-                    {shippingData.address}<br/>
-                    {shippingData.zipCode} {shippingData.city}<br/>
+                  <span className="max-w-[200px] text-right text-sm font-medium leading-relaxed">
+                    {shippingData.firstName} {shippingData.lastName}
+                    <br />
+                    {shippingData.address}
+                    <br />
+                    {shippingData.zipCode} {shippingData.city}
+                    <br />
                     {shippingData.country}
                   </span>
                 </div>
@@ -294,13 +328,14 @@ export default function CheckoutContent() {
             </div>
 
             {/* Bank Transfer Details */}
-            <div className="bg-[#0C211E] rounded-[2rem] p-6 sm:p-8 mb-10 text-left text-white">
-              <div className="flex items-center gap-3 mb-6">
-                <Mail className="w-6 h-6 text-[#4ECCA3]" />
+            <div className="mb-10 rounded-[2rem] bg-[#0C211E] p-6 text-left text-white sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <Mail className="h-6 w-6 text-[#4ECCA3]" />
                 <h3 className="text-xl font-bold">Zahlungsinformationen</h3>
               </div>
-              <p className="text-white/70 mb-6">
-                Bitte überweisen Sie den Gesamtbetrag auf folgendes Konto. Verwenden Sie bitte Ihre Bestellnummer als Verwendungszweck.
+              <p className="mb-6 text-white/70">
+                Bitte überweisen Sie den Gesamtbetrag auf folgendes Konto. Verwenden Sie bitte Ihre
+                Bestellnummer als Verwendungszweck.
               </p>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
@@ -320,24 +355,25 @@ export default function CheckoutContent() {
                   <span className="font-mono font-bold">{orderNumber}</span>
                 </div>
               </div>
-              <div className="mt-6 p-4 bg-white/10 rounded-xl">
+              <div className="mt-6 rounded-xl bg-white/10 p-4">
                 <p className="text-sm text-white/80">
-                  Die Zahlungsinformationen wurden auch an Ihre E-Mail-Adresse gesendet. Bitte beachten Sie, dass die Lieferung erst nach Eingang der Zahlung erfolgt.
+                  Die Zahlungsinformationen wurden auch an Ihre E-Mail-Adresse gesendet. Bitte
+                  beachten Sie, dass die Lieferung erst nach Eingang der Zahlung erfolgt.
                 </p>
               </div>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link 
+
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Link
                 href="/produkte"
-                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors shadow-lg shadow-[#0C211E]/20"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#0C211E] px-8 py-4 font-bold text-white shadow-lg shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C]"
               >
-                <Package className="w-5 h-5" />
+                <Package className="h-5 w-5" />
                 Weiter Einkaufen
               </Link>
-              <Link 
+              <Link
                 href="/"
-                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-100 transition-colors"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-gray-50 px-8 py-4 font-bold text-[#0C211E] transition-colors hover:bg-gray-100"
               >
                 Zur Startseite
               </Link>
@@ -349,269 +385,369 @@ export default function CheckoutContent() {
   }
 
   return (
-    <div data-testid="checkout-page" className="min-h-screen bg-gray-50/50 pb-32 lg:pb-16 selection:bg-[#4ECCA3]/30">
-      
+    <div
+      data-testid="checkout-page"
+      className="min-h-screen bg-gray-50/50 pb-32 selection:bg-[#4ECCA3]/30 lg:pb-16"
+    >
       {/* Navbar */}
-      <nav className="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30 shadow-[0_4px_20px_rgb(0,0,0,0.02)]">
-        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+      <nav className="sticky top-0 z-30 border-b border-gray-100 bg-white/90 shadow-[0_4px_20px_rgb(0,0,0,0.02)] backdrop-blur-md">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between py-2.5">
-            <Link href="/warenkorb" className="flex items-center gap-1 text-gray-400 hover:text-[#0C211E] transition-colors bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100 group text-[10px] font-black uppercase tracking-tighter">
-              <ArrowLeft className="w-3.5 h-3.5" />
+            <Link
+              href="/warenkorb"
+              className="group flex items-center gap-1 rounded-lg border border-gray-100 bg-gray-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-tighter text-gray-400 transition-colors hover:text-[#0C211E]"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
               <span className="hidden sm:block">Warenkorb</span>
             </Link>
-            <div className="flex items-center gap-2 text-[#0C211E] font-black font-heading tracking-widest text-xs uppercase">
-               NOVA <span className="font-light text-gray-300">|</span> KASSE
+            <div className="flex items-center gap-2 font-heading text-xs font-black uppercase tracking-widest text-[#0C211E]">
+              NOVA <span className="font-light text-gray-300">|</span> KASSE
             </div>
-            <div className="flex items-center gap-1.5 text-[9px] font-black text-gray-400 uppercase tracking-widest">
-               <ShieldCheck className="w-3 h-3 text-nova-500"/> SSL
+            <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+              <ShieldCheck className="h-3 w-3 text-nova-500" /> SSL
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
-        
+      <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Progress */}
         <div className="mb-8 lg:mb-10">
-          <div className="flex items-center justify-center max-w-2xl mx-auto">
+          <div className="mx-auto flex max-w-2xl items-center justify-center">
             {steps.map((s, index) => {
               const Icon = s.icon
               const isActive = step === s.id
               const isCompleted = step > s.id
-              
+
               return (
-                <div key={s.id} className="flex items-center flex-1 last:flex-none">
-                  <div className="flex flex-col items-center relative z-10">
-                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold transition-all duration-300 ${
-                      isActive ? 'bg-[#0C211E] text-white scale-110 shadow-lg shadow-[#0C211E]/10' : 
-                      isCompleted ? 'bg-nova-500 text-[#0C211E]' : 'bg-white text-gray-300 border border-gray-100'
-                    }`}>
-                      {isCompleted ? <Check className="w-4 h-4 stroke-[3]" /> : <Icon className="w-4 h-4" />}
+                <div key={s.id} className="flex flex-1 items-center last:flex-none">
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div
+                      className={`flex h-8 w-8 items-center justify-center rounded-xl font-bold transition-all duration-300 ${
+                        isActive
+                          ? 'scale-110 bg-[#0C211E] text-white shadow-lg shadow-[#0C211E]/10'
+                          : isCompleted
+                            ? 'bg-nova-500 text-[#0C211E]'
+                            : 'border border-gray-100 bg-white text-gray-300'
+                      }`}
+                    >
+                      {isCompleted ? (
+                        <Check className="h-4 w-4 stroke-[3]" />
+                      ) : (
+                        <Icon className="h-4 w-4" />
+                      )}
                     </div>
-                    <span className={`text-[9px] sm:text-[10px] mt-2 font-black uppercase tracking-tighter transition-colors absolute top-full whitespace-nowrap pt-0.5 ${isActive ? 'text-[#0C211E]' : isCompleted ? 'text-gray-900' : 'text-gray-400'}`}>
+                    <span
+                      className={`absolute top-full mt-2 whitespace-nowrap pt-0.5 text-[9px] font-black uppercase tracking-tighter transition-colors sm:text-[10px] ${isActive ? 'text-[#0C211E]' : isCompleted ? 'text-gray-900' : 'text-gray-400'}`}
+                    >
                       {s.label}
                     </span>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className={`flex-1 h-0.5 mx-2 rounded-full transition-colors duration-500 ${isCompleted ? 'bg-nova-500' : 'bg-gray-100'}`} />
+                    <div
+                      className={`mx-2 h-0.5 flex-1 rounded-full transition-colors duration-500 ${isCompleted ? 'bg-nova-500' : 'bg-gray-100'}`}
+                    />
                   )}
                 </div>
               )
             })}
           </div>
         </div>
-        
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 mt-16 sm:mt-20">
-          
+
+        <div className="mt-16 grid gap-8 sm:mt-20 lg:grid-cols-12 lg:gap-12">
           {/* Main Forms */}
           <div className="lg:col-span-7 xl:col-span-8">
             <AnimatePresence mode="wait">
               {step === 1 && (
-                <motion.div 
+                <motion.div
                   key="step1"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-8"
+                  className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-8"
                 >
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-[#0C211E] rounded-lg flex items-center justify-center shadow-lg shadow-[#0C211E]/10">
-                      <MapPin className="w-5 h-5 text-nova-400" />
+                  <div className="mb-6 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0C211E] shadow-lg shadow-[#0C211E]/10">
+                      <MapPin className="h-5 w-5 text-nova-400" />
                     </div>
-                    <h2 className="text-xl font-black text-[#0C211E] font-heading uppercase tracking-tight">Versandadresse</h2>
+                    <h2 className="font-heading text-xl font-black uppercase tracking-tight text-[#0C211E]">
+                      Versandadresse
+                    </h2>
                   </div>
-                  
+
                   {/* Guest login prompt — optional, non-blocking */}
                   {!isAuthenticated && (
-                    <div className="mb-6 p-4 rounded-2xl bg-[#4ECCA3]/10 border border-[#4ECCA3]/30 flex items-start gap-3">
-                      <Shield className="w-5 h-5 text-[#4ECCA3] mt-0.5 flex-shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-[#0C211E]">Haben Sie bereits ein Konto?</p>
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          <Link href={`/anmelden?redirect=/kasse`} className="text-[#4ECCA3] font-bold hover:underline">
+                    <div className="mb-6 flex items-start gap-3 rounded-2xl border border-[#4ECCA3]/30 bg-[#4ECCA3]/10 p-4">
+                      <Shield className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-bold text-[#0C211E]">
+                          Haben Sie bereits ein Konto?
+                        </p>
+                        <p className="mt-0.5 text-xs text-gray-500">
+                          <Link
+                            href={`/anmelden?redirect=/kasse`}
+                            className="font-bold text-[#4ECCA3] hover:underline"
+                          >
                             Jetzt anmelden
-                          </Link>
-                          {' '}um Ihre Bestellung zu verfolgen. Oder fahren Sie als Gast fort.
+                          </Link>{' '}
+                          um Ihre Bestellung zu verfolgen. Oder fahren Sie als Gast fort.
                         </p>
                       </div>
                     </div>
                   )}
 
                   <form onSubmit={handleShippingSubmit} className="space-y-5">
-                    <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="grid gap-5 sm:grid-cols-2">
                       <div className="space-y-1">
-                        <label htmlFor="shipping-firstName" className="text-sm font-bold text-gray-700 ml-1">Vorname *</label>
+                        <label
+                          htmlFor="shipping-firstName"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          Vorname *
+                        </label>
                         <input
                           id="shipping-firstName"
                           data-testid="shipping-firstName"
-                          type="text" required value={shippingData.firstName}
-                          onChange={(e) => setShippingData({...shippingData, firstName: e.target.value})}
-                          className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          type="text"
+                          required
+                          value={shippingData.firstName}
+                          onChange={(e) =>
+                            setShippingData({ ...shippingData, firstName: e.target.value })
+                          }
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="shipping-lastName" className="text-sm font-bold text-gray-700 ml-1">Nachname *</label>
+                        <label
+                          htmlFor="shipping-lastName"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          Nachname *
+                        </label>
                         <input
                           id="shipping-lastName"
                           data-testid="shipping-lastName"
-                          type="text" required value={shippingData.lastName}
-                          onChange={(e) => setShippingData({...shippingData, lastName: e.target.value})}
-                          className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          type="text"
+                          required
+                          value={shippingData.lastName}
+                          onChange={(e) =>
+                            setShippingData({ ...shippingData, lastName: e.target.value })
+                          }
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         />
                       </div>
                     </div>
-                    
-                    <div className="grid sm:grid-cols-2 gap-5">
+
+                    <div className="grid gap-5 sm:grid-cols-2">
                       <div className="space-y-1">
-                        <label htmlFor="shipping-email" className="text-sm font-bold text-gray-700 ml-1">E-Mail *</label>
+                        <label
+                          htmlFor="shipping-email"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          E-Mail *
+                        </label>
                         <input
                           id="shipping-email"
                           data-testid="shipping-email"
-                          type="email" required value={shippingData.email}
-                          onChange={(e) => setShippingData({...shippingData, email: e.target.value})}
-                          className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          type="email"
+                          required
+                          value={shippingData.email}
+                          onChange={(e) =>
+                            setShippingData({ ...shippingData, email: e.target.value })
+                          }
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="shipping-phone" className="text-sm font-bold text-gray-700 ml-1">Telefon (optional)</label>
+                        <label
+                          htmlFor="shipping-phone"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          Telefon (optional)
+                        </label>
                         <input
                           id="shipping-phone"
                           data-testid="shipping-phone"
-                          type="tel" value={shippingData.phone}
-                          onChange={(e) => setShippingData({...shippingData, phone: e.target.value})}
-                          className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          type="tel"
+                          value={shippingData.phone}
+                          onChange={(e) =>
+                            setShippingData({ ...shippingData, phone: e.target.value })
+                          }
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                           placeholder="+49 "
                         />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-1">
-                      <label htmlFor="shipping-address" className="text-sm font-bold text-gray-700 ml-1">Straße und Hausnummer *</label>
+                      <label
+                        htmlFor="shipping-address"
+                        className="ml-1 text-sm font-bold text-gray-700"
+                      >
+                        Straße und Hausnummer *
+                      </label>
                       <input
                         id="shipping-address"
                         data-testid="shipping-address"
-                        type="text" required value={shippingData.address}
-                        onChange={(e) => setShippingData({...shippingData, address: e.target.value})}
-                        className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                        type="text"
+                        required
+                        value={shippingData.address}
+                        onChange={(e) =>
+                          setShippingData({ ...shippingData, address: e.target.value })
+                        }
+                        className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                       />
                     </div>
-                    
+
                     <div className="grid grid-cols-3 gap-5">
                       <div className="col-span-1 space-y-1">
-                        <label htmlFor="shipping-zip" className="text-sm font-bold text-gray-700 ml-1">PLZ *</label>
+                        <label
+                          htmlFor="shipping-zip"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          PLZ *
+                        </label>
                         <input
                           id="shipping-zip"
                           data-testid="shipping-zip"
-                          type="text" required value={shippingData.zipCode}
-                          onChange={(e) => setShippingData({...shippingData, zipCode: e.target.value})}
-                          className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          type="text"
+                          required
+                          value={shippingData.zipCode}
+                          onChange={(e) =>
+                            setShippingData({ ...shippingData, zipCode: e.target.value })
+                          }
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         />
                       </div>
                       <div className="col-span-2 space-y-1">
-                        <label htmlFor="shipping-city" className="text-sm font-bold text-gray-700 ml-1">Stadt *</label>
+                        <label
+                          htmlFor="shipping-city"
+                          className="ml-1 text-sm font-bold text-gray-700"
+                        >
+                          Stadt *
+                        </label>
                         <input
                           id="shipping-city"
                           data-testid="shipping-city"
-                          type="text" required value={shippingData.city}
-                          onChange={(e) => setShippingData({...shippingData, city: e.target.value})}
-                          className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-medium text-[#0C211E]"
+                          type="text"
+                          required
+                          value={shippingData.city}
+                          onChange={(e) =>
+                            setShippingData({ ...shippingData, city: e.target.value })
+                          }
+                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-1">
-                      <label htmlFor="shipping-country" className="text-sm font-bold text-gray-700 ml-1">Land *</label>
+                      <label
+                        htmlFor="shipping-country"
+                        className="ml-1 text-sm font-bold text-gray-700"
+                      >
+                        Land *
+                      </label>
                       <div className="relative">
                         <select
                           id="shipping-country"
                           value={shippingData.country}
-                          onChange={(e) => setShippingData({...shippingData, country: e.target.value})}
-                          className="w-full px-5 py-3.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 outline-none transition-all font-bold text-[#0C211E] appearance-none"
+                          onChange={(e) =>
+                            setShippingData({ ...shippingData, country: e.target.value })
+                          }
+                          className="w-full appearance-none rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-bold text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                         >
                           <option value="Deutschland">Deutschland</option>
                           <option value="Österreich">Österreich</option>
                           <option value="Schweiz">Schweiz</option>
                         </select>
-                        <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#0C211E] pointer-events-none" />
+                        <ChevronDown className="pointer-events-none absolute right-5 top-1/2 h-5 w-5 -translate-y-1/2 text-[#0C211E]" />
                       </div>
                     </div>
-                    
+
                     <div className="pt-6">
                       <motion.button
                         data-testid="continue-to-payment"
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
                         type="submit"
-                        className="w-full py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 text-lg shadow-xl shadow-[#0C211E]/20"
+                        className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[#0C211E] py-4 text-lg font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C]"
                       >
-                        Weiter zur Zahlung <ChevronRight className="w-5 h-5" />
+                        Weiter zur Zahlung <ChevronRight className="h-5 w-5" />
                       </motion.button>
                     </div>
                   </form>
                 </motion.div>
               )}
-              
+
               {step === 2 && (
-                <motion.div 
+                <motion.div
                   data-testid="payment-section"
                   key="step2"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-6 sm:p-10"
+                  className="rounded-[2rem] border border-gray-100 bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:p-10"
                 >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-[#0C211E] rounded-xl flex items-center justify-center shadow-lg shadow-[#0C211E]/10">
-                      <ShieldCheck className="w-6 h-6 text-[#4ECCA3]" />
+                  <div className="mb-8 flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#0C211E] shadow-lg shadow-[#0C211E]/10">
+                      <ShieldCheck className="h-6 w-6 text-[#4ECCA3]" />
                     </div>
-                    <h2 className="text-2xl font-bold text-[#0C211E] font-heading">Zahlungsmethode</h2>
+                    <h2 className="font-heading text-2xl font-bold text-[#0C211E]">
+                      Zahlungsmethode
+                    </h2>
                   </div>
-                  
+
                   <div className="space-y-6">
                     {/* Bank Transfer Info */}
                     <div className="space-y-3">
-                      <div 
-                        className="flex items-center gap-5 p-5 border-2 border-[#0C211E] bg-gray-50/80 shadow-sm rounded-2xl"
-                      >
-                        <div className="w-6 h-6 rounded-full border-2 border-[#0C211E] flex items-center justify-center flex-shrink-0">
-                          <div className="w-3 h-3 rounded-full bg-[#0C211E]" />
+                      <div className="flex items-center gap-5 rounded-2xl border-2 border-[#0C211E] bg-gray-50/80 p-5 shadow-sm">
+                        <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-[#0C211E]">
+                          <div className="h-3 w-3 rounded-full bg-[#0C211E]" />
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <Mail className="w-5 h-5 text-[#0C211E]" />
-                            <span className="font-bold text-[#0C211E] text-base">Banküberweisung</span>
+                            <Mail className="h-5 w-5 text-[#0C211E]" />
+                            <span className="text-base font-bold text-[#0C211E]">
+                              Banküberweisung
+                            </span>
                           </div>
-                          <p className="text-sm font-medium text-gray-500 mt-0.5">Wir senden Ihnen die Zahlungsinformationen per E-Mail</p>
+                          <p className="mt-0.5 text-sm font-medium text-gray-500">
+                            Wir senden Ihnen die Zahlungsinformationen per E-Mail
+                          </p>
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Bank Transfer Form */}
                     <form onSubmit={handleBankTransfer} className="space-y-6">
-                      <div className="p-6 bg-[#0C211E] rounded-2xl space-y-5">
+                      <div className="space-y-5 rounded-2xl bg-[#0C211E] p-6">
                         <div className="space-y-3">
-                          <label className="text-xs font-bold text-[#4ECCA3] uppercase tracking-wider">E-Mail für Rechnung</label>
-                          <p className="text-sm text-white/70 leading-relaxed">
-                            Wir senden Ihnen eine Rechnung per E-Mail mit allen Zahlungsinformationen (Banküberweisung).
+                          <label className="text-xs font-bold uppercase tracking-wider text-[#4ECCA3]">
+                            E-Mail für Rechnung
+                          </label>
+                          <p className="text-sm leading-relaxed text-white/70">
+                            Wir senden Ihnen eine Rechnung per E-Mail mit allen
+                            Zahlungsinformationen (Banküberweisung).
                           </p>
                           <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                             <input
-                              type="email" required
+                              type="email"
+                              required
                               value={contactEmail || shippingData.email}
                               onChange={(e) => setContactEmail(e.target.value)}
-                              className="w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:bg-white/15 focus:border-[#4ECCA3] outline-none transition-all text-white placeholder-white/30"
+                              className="w-full rounded-xl border border-white/20 bg-white/10 py-3.5 pl-12 pr-4 text-white placeholder-white/30 outline-none transition-all focus:border-[#4ECCA3] focus:bg-white/15"
                               placeholder="ihre@email.de"
                             />
                           </div>
                         </div>
                       </div>
-                      
-                      <div className="flex flex-col sm:flex-row gap-4">
+
+                      <div className="flex flex-col gap-4 sm:flex-row">
                         <button
                           type="button"
                           onClick={() => setStep(1)}
-                          className="sm:w-1/3 py-4 bg-gray-50 border border-gray-200 text-[#0C211E] font-bold rounded-2xl hover:bg-gray-100 transition-colors"
+                          className="rounded-2xl border border-gray-200 bg-gray-50 py-4 font-bold text-[#0C211E] transition-colors hover:bg-gray-100 sm:w-1/3"
                         >
                           Zurück
                         </button>
@@ -620,25 +756,25 @@ export default function CheckoutContent() {
                           whileTap={{ scale: 0.99 }}
                           type="submit"
                           disabled={isProcessing}
-                          className="sm:w-2/3 flex-1 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 text-lg shadow-xl shadow-[#0C211E]/20"
+                          className="flex flex-1 items-center justify-center gap-3 rounded-2xl bg-[#0C211E] py-4 text-lg font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C] disabled:opacity-50 sm:w-2/3"
                         >
                           {isProcessing ? (
                             <>
-                              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                               Wird verarbeitet...
                             </>
                           ) : (
                             <>
-                              <Mail className="w-4 h-4" />
+                              <Mail className="h-4 w-4" />
                               Bestellung aufgeben {formatPriceDe(total)}
                             </>
                           )}
                         </motion.button>
                       </div>
                     </form>
-                    
+
                     {/* Back button */}
-                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
+                    <div className="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-400">
                       <button
                         type="button"
                         onClick={() => setStep(1)}
@@ -647,9 +783,9 @@ export default function CheckoutContent() {
                         ← Zurück zum Versand
                       </button>
                     </div>
-                    
-                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 py-2">
-                      <Lock className="w-4 h-4 text-[#4ECCA3]" />
+
+                    <div className="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-400">
+                      <Lock className="h-4 w-4 text-[#4ECCA3]" />
                       <span>Ihre Zahlungsdaten werden sicher verschlüsselt (SSL/TLS).</span>
                     </div>
                   </div>
@@ -657,16 +793,21 @@ export default function CheckoutContent() {
               )}
             </AnimatePresence>
           </div>
-          
+
           {/* Summary Sidebar */}
-          <div className="hidden lg:block lg:col-span-5 xl:col-span-4">
-            <div className="bg-white rounded-[2.5rem] shadow-[0_8px_40px_rgb(0,0,0,0.06)] border border-gray-100 p-8 sticky top-32">
-              <h3 className="font-bold text-[#0C211E] mb-6 text-2xl font-heading">Bestellübersicht</h3>
-              
-              <div className="space-y-4 mb-6 max-h-[350px] overflow-y-auto pr-2 scrollbar-hide">
+          <div className="hidden lg:col-span-5 lg:block xl:col-span-4">
+            <div className="sticky top-32 rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-[0_8px_40px_rgb(0,0,0,0.06)]">
+              <h3 className="mb-6 font-heading text-2xl font-bold text-[#0C211E]">
+                Bestellübersicht
+              </h3>
+
+              <div className="scrollbar-hide mb-6 max-h-[350px] space-y-4 overflow-y-auto pr-2">
                 {items.map((item) => (
-                  <div key={item.product.id} className="flex gap-4 p-3 bg-gray-50/50 rounded-2xl border border-gray-100">
-                    <div className="relative w-20 h-20 bg-white rounded-xl flex-shrink-0 border border-gray-100 overflow-hidden shadow-sm">
+                  <div
+                    key={item.product.id}
+                    className="flex gap-4 rounded-2xl border border-gray-100 bg-gray-50/50 p-3"
+                  >
+                    <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
                       <Image
                         src={item.product.images[0]}
                         alt={item.product.name.de}
@@ -676,12 +817,14 @@ export default function CheckoutContent() {
                         sizes="80px"
                       />
                     </div>
-                    <div className="flex-1 min-w-0 flex flex-col justify-center">
-                      <p className="text-sm font-bold text-[#0C211E] line-clamp-2 leading-snug mb-1">
+                    <div className="flex min-w-0 flex-1 flex-col justify-center">
+                      <p className="mb-1 line-clamp-2 text-sm font-bold leading-snug text-[#0C211E]">
                         {item.product.name.de}
                       </p>
-                      <div className="flex items-center justify-between mt-auto">
-                        <span className="text-xs font-bold text-gray-500 bg-white px-2 py-0.5 rounded-md border border-gray-200">Menge: {item.quantity}</span>
+                      <div className="mt-auto flex items-center justify-between">
+                        <span className="rounded-md border border-gray-200 bg-white px-2 py-0.5 text-xs font-bold text-gray-500">
+                          Menge: {item.quantity}
+                        </span>
                         <span className="text-sm font-black text-[#0C211E]">
                           {formatPriceDe(item.product.price * item.quantity)}
                         </span>
@@ -690,37 +833,41 @@ export default function CheckoutContent() {
                   </div>
                 ))}
               </div>
-              
-              <div className="border-t border-gray-100 pt-6 space-y-3">
+
+              <div className="space-y-3 border-t border-gray-100 pt-6">
                 {/* Promo Code Input */}
                 {!appliedPromo ? (
-                  <div className="flex gap-2 mb-4">
+                  <div className="mb-4 flex gap-2">
                     <input
                       data-testid="coupon-input"
                       type="text"
                       placeholder="Gutscheincode"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-[#4ECCA3] outline-none transition-all uppercase font-mono"
+                      className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 font-mono text-sm uppercase outline-none transition-all focus:border-[#4ECCA3]"
                     />
                     <button
                       data-testid="apply-coupon"
                       onClick={handleApplyPromo}
                       disabled={isApplyingPromo || !promoCode}
-                      className="px-4 py-2 bg-[#0C211E] text-white text-sm font-bold rounded-xl hover:bg-[#17423C] disabled:opacity-50 transition-all font-heading"
+                      className="rounded-xl bg-[#0C211E] px-4 py-2 font-heading text-sm font-bold text-white transition-all hover:bg-[#17423C] disabled:opacity-50"
                     >
                       {isApplyingPromo ? '...' : 'OK'}
                     </button>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl border border-green-100 mb-4">
+                  <div className="mb-4 flex items-center justify-between rounded-xl border border-green-100 bg-green-50 p-3">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-green-600 uppercase tracking-wider">Angewendet</span>
-                      <span className="text-sm font-bold text-green-700 font-mono">{appliedPromo.code}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-green-600">
+                        Angewendet
+                      </span>
+                      <span className="font-mono text-sm font-bold text-green-700">
+                        {appliedPromo.code}
+                      </span>
                     </div>
-                    <button 
+                    <button
                       onClick={removePromo}
-                      className="text-green-700 hover:text-green-900 text-xs font-bold"
+                      className="text-xs font-bold text-green-700 hover:text-green-900"
                     >
                       Entfernen
                     </button>
@@ -729,38 +876,50 @@ export default function CheckoutContent() {
 
                 <div className="flex justify-between text-[15px] font-medium">
                   <span className="text-gray-500">Zwischensumme</span>
-                  <span className="font-bold text-[#0C211E] tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
+                  <span className="whitespace-nowrap font-bold tabular-nums text-[#0C211E]">
+                    {formatPriceDe(subtotal)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-[15px] font-medium">
                   <span className="text-gray-500">Versand</span>
-                  <span className={shipping === 0 ? 'text-green-600 font-bold px-2 py-0.5 bg-green-50 rounded-md' : 'font-bold text-[#0C211E]'}>
+                  <span
+                    className={
+                      shipping === 0
+                        ? 'rounded-md bg-green-50 px-2 py-0.5 font-bold text-green-600'
+                        : 'font-bold text-[#0C211E]'
+                    }
+                  >
                     {shipping === 0 ? 'Kostenlos' : formatPriceDe(shipping)}
                   </span>
                 </div>
-                
+
                 {appliedPromo && (
                   <div className="flex justify-between text-[15px] font-medium text-green-600">
                     <span>Rabatt ({appliedPromo.code})</span>
-                    <span className="font-bold tabular-nums whitespace-nowrap">-{formatPriceDe(appliedPromo.discountAmount)}</span>
+                    <span className="whitespace-nowrap font-bold tabular-nums">
+                      -{formatPriceDe(appliedPromo.discountAmount)}
+                    </span>
                   </div>
                 )}
-               
-                <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between items-end">
-                  <span className="font-bold text-xl text-[#0C211E]">Gesamtsumme</span>
-                  <span className="font-black text-2xl sm:text-3xl tracking-tight text-[#0C211E] tabular-nums whitespace-nowrap">{formatPriceDe(total)}</span>
+
+                <div className="mt-4 flex items-end justify-between border-t border-gray-100 pt-4">
+                  <span className="text-xl font-bold text-[#0C211E]">Gesamtsumme</span>
+                  <span className="whitespace-nowrap text-2xl font-black tabular-nums tracking-tight text-[#0C211E] sm:text-3xl">
+                    {formatPriceDe(total)}
+                  </span>
                 </div>
-                <p className="text-[11px] font-bold text-gray-400 text-right uppercase tracking-widest mt-1">
+                <p className="mt-1 text-right text-[11px] font-bold uppercase tracking-widest text-gray-400">
                   Inkl. 19% MwSt.
                 </p>
               </div>
-              
-              <div className="mt-8 pt-6 border-t border-gray-100 space-y-3">
+
+              <div className="mt-8 space-y-3 border-t border-gray-100 pt-6">
                 <div className="flex items-center gap-3 text-sm font-bold text-gray-500">
-                  <Shield className="w-5 h-5 text-[#4ECCA3]" />
+                  <Shield className="h-5 w-5 text-[#4ECCA3]" />
                   <span>Sichere Zahlung mit SSL-Verschlüsselung</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm font-bold text-gray-500">
-                  <Truck className="w-5 h-5 text-[#4ECCA3]" />
+                  <Truck className="h-5 w-5 text-[#4ECCA3]" />
                   <span>Lieferzeit: 2-4 Werktage</span>
                 </div>
               </div>
@@ -771,21 +930,28 @@ export default function CheckoutContent() {
 
       {/* Mobile Sticky Summary */}
       {items.length > 0 && !orderComplete && (
-        <motion.div 
+        <motion.div
           initial={{ y: 100 }}
           animate={{ y: 0 }}
-          className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 shadow-[0_-10px_40px_rgba(0,0,0,0.06)]"
+          className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white/95 shadow-[0_-10px_40px_rgba(0,0,0,0.06)] backdrop-blur-xl lg:hidden"
         >
-          <button 
+          <button
             onClick={() => setShowMobileSummary(!showMobileSummary)}
-            className="w-full flex items-center justify-between p-4 bg-gray-50/50"
+            className="flex w-full items-center justify-between bg-gray-50/50 p-4"
           >
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#0C211E]">Bestellübersicht</span>
-              <span className="text-xs font-bold text-white bg-[#0C211E] px-2 py-0.5 rounded-full">{items.length}</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-[#0C211E]">
+                Bestellübersicht
+              </span>
+              <span className="rounded-full bg-[#0C211E] px-2 py-0.5 text-xs font-bold text-white">
+                {items.length}
+              </span>
             </div>
-            <motion.div animate={{ rotate: showMobileSummary ? 180 : 0 }} transition={{ duration: 0.2 }}>
-              <ChevronDown className="w-5 h-5 text-gray-500" />
+            <motion.div
+              animate={{ rotate: showMobileSummary ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ChevronDown className="h-5 w-5 text-gray-500" />
             </motion.div>
           </button>
 
@@ -797,24 +963,39 @@ export default function CheckoutContent() {
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden border-b border-gray-100 bg-white px-4"
               >
-                <div className="space-y-3 py-4 max-h-60 overflow-y-auto">
+                <div className="max-h-60 space-y-3 overflow-y-auto py-4">
                   {items.map((item) => (
-                    <div key={item.product.id} className="flex items-center justify-between text-sm py-2">
-                      <div className="flex items-center gap-3 flex-1 min-w-0 pr-4">
-                        <span className="w-6 h-6 rounded-md bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500 flex-shrink-0">{item.quantity}</span>
-                        <span className="font-bold text-[#0C211E] line-clamp-1">{item.product.name.de}</span>
+                    <div
+                      key={item.product.id}
+                      className="flex items-center justify-between py-2 text-sm"
+                    >
+                      <div className="flex min-w-0 flex-1 items-center gap-3 pr-4">
+                        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-gray-100 text-xs font-bold text-gray-500">
+                          {item.quantity}
+                        </span>
+                        <span className="line-clamp-1 font-bold text-[#0C211E]">
+                          {item.product.name.de}
+                        </span>
                       </div>
-                      <span className="font-black text-[#0C211E] tabular-nums whitespace-nowrap">{formatPriceDe(item.product.price * item.quantity)}</span>
+                      <span className="whitespace-nowrap font-black tabular-nums text-[#0C211E]">
+                        {formatPriceDe(item.product.price * item.quantity)}
+                      </span>
                     </div>
                   ))}
-                  
-                  <div className="flex justify-between text-sm pt-4 border-t border-gray-50 font-medium text-gray-500">
+
+                  <div className="flex justify-between border-t border-gray-50 pt-4 text-sm font-medium text-gray-500">
                     <span>Zwischensumme</span>
-                    <span className="text-[#0C211E] font-bold tabular-nums whitespace-nowrap">{formatPriceDe(subtotal)}</span>
+                    <span className="whitespace-nowrap font-bold tabular-nums text-[#0C211E]">
+                      {formatPriceDe(subtotal)}
+                    </span>
                   </div>
-                  <div className="flex justify-between text-sm pt-2 font-medium text-gray-500">
+                  <div className="flex justify-between pt-2 text-sm font-medium text-gray-500">
                     <span>Versand</span>
-                    <span className={shipping === 0 ? 'text-green-600 font-bold' : 'text-[#0C211E] font-bold'}>
+                    <span
+                      className={
+                        shipping === 0 ? 'font-bold text-green-600' : 'font-bold text-[#0C211E]'
+                      }
+                    >
                       {shipping === 0 ? 'Kostenlos' : formatPriceDe(shipping)}
                     </span>
                   </div>
@@ -823,28 +1004,36 @@ export default function CheckoutContent() {
             )}
           </AnimatePresence>
 
-          <div className="p-4 flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4 p-4">
             <div>
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Gesamtsumme</p>
-              <p className="text-xl sm:text-2xl font-black text-[#0C211E] tracking-tight tabular-nums whitespace-nowrap">{formatPriceDe(total)}</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400">
+                Gesamtsumme
+              </p>
+              <p className="whitespace-nowrap text-xl font-black tabular-nums tracking-tight text-[#0C211E] sm:text-2xl">
+                {formatPriceDe(total)}
+              </p>
             </div>
             {step === 1 ? (
-              <motion.button 
+              <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => document.querySelector('form')?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))}
-                className="flex-1 max-w-xs py-3.5 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] transition-colors shadow-xl shadow-[#0C211E]/20"
+                onClick={() =>
+                  document
+                    .querySelector('form')
+                    ?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+                }
+                className="max-w-xs flex-1 rounded-xl bg-[#0C211E] py-3.5 font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C]"
               >
                 Weiter zur Zahlung
               </motion.button>
             ) : (
-              <motion.button 
+              <motion.button
                 whileTap={{ scale: 0.95 }}
                 disabled={isProcessing}
-                className="flex-1 max-w-xs py-3.5 bg-[#0C211E] text-white font-bold rounded-xl hover:bg-[#17423C] transition-colors disabled:opacity-50 shadow-xl shadow-[#0C211E]/20"
+                className="max-w-xs flex-1 rounded-xl bg-[#0C211E] py-3.5 font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C] disabled:opacity-50"
               >
                 {isProcessing ? (
                   <span className="flex items-center justify-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   </span>
                 ) : (
                   'Zahlungspflichtig bestellen'
