@@ -55,7 +55,7 @@ Die Cocotte Ronde von Staub ist ein unverzichtbares Küchenwerkzeug für alle Li
     metaDescription: 'Staub Cocotte Ronde 24 cm aus emailliertem Gusseisen. Selbstschließende Tropfstruktur, induktionsgeeignet, Made in France. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Staub Cocotte Ronde — Cocotte 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'staub-cocotte-ronde-28cm',
@@ -91,7 +91,7 @@ Die 28-cm-Variante eigneten sich hervorragend für Gerichte für 4–6 Personen.
     metaDescription: 'Staub Cocotte Ronde 28 cm (5,2 L) aus emailliertem Gusseisen. Premium-Emaille, selbstschließende Tropfstruktur, induktionsgeeignet. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Staub Cocotte Ronde — Cocotte 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'le-creuset-signature-braeter-rund-26cm',
@@ -127,7 +127,7 @@ Ein wunderschöner Klassiker, der direkt vom Kochfeld stilvoll auf dem Tisch ser
     metaDescription: 'Le Creuset Signature runder Gusseisen-Bräter 26 cm (5,3 L). Hervorragende Hitzespeicherung, induktionsgeeignet, 30 Jahre Garantie. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Le Creuset Signature — Bräter rund 26 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'le-creuset-signature-braeter-rund-28cm',
@@ -163,7 +163,7 @@ Der größte Rundbräter der Signature-Serie — ideal für Festmähler und das 
     metaDescription: 'Le Creuset Signature runder Gusseisen-Bräter 28 cm (6,7 L) für 8–10 Personen. Premium Gusseisen, induktionsgeeignet, 30 Jahre Garantie. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Le Creuset Signature — Bräter rund 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'petromax-brater-ft6-28cm',
@@ -199,7 +199,7 @@ Der Petromax ft6 ist die ideale Wahl für alle, die Wert auf deutsche Qualität 
     metaDescription: 'Petromax Bräter ft6 28 cm aus emailliertem Gusseisen mit Duroplast-Griffen. PFAS-frei, induktionsgeeignet, Made in Germany. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Petromax Bräter ft6 — Bräter 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'chasseur-cocotte-ronde-24cm',
@@ -235,7 +235,7 @@ Die Chasseur Cocotte ist eine hervorragende Alternative für alle, die französi
     metaDescription: 'Chasseur Cocotte Ronde 24 cm (3,5 L) aus emailliertem Gusseisen. Französische Tradition, induktionsgeeignet, Made in France. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Chasseur Cocotte Ronde — Cocotte 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'petromax-brater-ft9-32cm',
@@ -272,7 +272,7 @@ Der Petromax ft9 ist die perfekte Wahl für große Runden. Ob Schmorbraten, Eint
     metaDescription: 'Petromax Bräter ft9 32 cm (8,2 L) aus emailliertem Gusseisen mit Duroplast-Griffen. Großvolumig, PFAS-frei, induktionsgeeignet. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Petromax Bräter ft9 — Bräter 32 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'staub-cocotte-ronde-20cm',
@@ -308,7 +308,7 @@ Die kleinste Cocotte Ronde von Staub ist perfekt für Paare, Singles oder als Be
     metaDescription: 'Staub Cocotte Ronde 20 cm (2,2 L) aus emailliertem Gusseisen. Kompakt, selbstschließende Tropfstruktur, induktionsgeeignet. Bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Staub Cocotte Ronde — Cocotte 20 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 ]
 

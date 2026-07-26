@@ -128,7 +128,7 @@ Qualität und Langlebigkeit im klassischen Design zum hervorragenden Preis-Leist
     metaDescription: 'Zwilling Twin Classic Kochtopf 20 cm (3,5 L) mit Sigma Classic Sandwichboden. Langlebiger Edelstahl 18/10, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Zwilling Twin Classic — Kochtopf 20 cm  Topfset 5-tlg',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'silit-silargan-elegance-line-stielkasserolle-16cm',
@@ -240,7 +240,7 @@ Ein wunderschöner Klassiker, der direkt vom Kochfeld stilvoll auf dem Tisch ser
     metaDescription: 'Le Creuset Signature runder Gusseisen-Bräter 24 cm (4,2 L) emailliert. Höchste Hitzespeicherung, induktionsgeeignet, 30 Jahre Garantie.',
     categorySlug: 'induktionstoepfe',
     folder: 'Le Creuset Signature — Bräter rund 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'wmf-fusiontec-mineral-pro-bratentopf-22cm',
