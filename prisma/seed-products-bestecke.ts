@@ -68,7 +68,7 @@ Das Premium-Besteck für besondere Momente am Tisch.`,
       'WMF Monde Bestechenset 68-teilig für 12 Personen - Cromargan®, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Monde Bestechenset 68-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -106,7 +106,7 @@ Das Premium-Besteck für den täglichen Gebrauch.`,
       'WMF Monde Bestechenset 30-teilig für 6 Personen - Cromargan®, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Monde Bestechenset 30-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -144,7 +144,7 @@ Die funktional-elegante Wahl für Familien und Feierlichkeiten.`,
       'WMF Function 4 Bestechenset 68-teilig für 12 Personen - Cromargan®, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Function 4 Bestechenset 68-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -181,7 +181,7 @@ Die funktional-elegante Wahl für den täglichen Gebrauch.`,
       'WMF Function 4 Bestechenset 30-teilig für 6 Personen - Cromargan®, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Function 4 Bestechenset 30-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -218,7 +218,7 @@ Das elegante Besteck für besondere Momente am Tisch.`,
       'Zwilling Spirit Bestechenset 68-teilig für 12 Personen - Edelstahl 18/10, Spirit Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Spirit Bestechenset 68-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -255,7 +255,7 @@ Das elegante Besteck für den täglichen Gebrauch.`,
       'Zwilling Spirit Bestechenset 30-teilig für 6 Personen - Edelstahl 18/10, Spirit Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Spirit Bestechenset 30-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -292,7 +292,7 @@ Das moderne Besteck für zeitgemäße Tischkultur.`,
       'Zwilling Now S Bestechenset 68-teilig für 12 Personen - Edelstahl 18/10, Now S Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Now S Bestechenset 68-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -330,7 +330,7 @@ Das moderne Einstiegs-Besteck für junge Haushalte.`,
       'Zwilling Now S Bestechenset 30-teilig für 6 Personen - Edelstahl 18/10, Now S, idealer Einstieg. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Now S Bestechenset 30-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -372,7 +372,7 @@ Die drei unverzichtbaren Messer für jede Küche.`,
       'WMF Monde Messerset 3-teilig - Kochmesser, Universalmesser, Schärfmesser. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Monde Messerset 3-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -409,7 +409,7 @@ Die drei unverzichtbaren Messer für anspruchsvolle Köche.`,
       'Zwilling Pro S Messerset 3-teilig - Friodur® Edelstahl, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Pro S Messerset 3-teilig',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 ]
 

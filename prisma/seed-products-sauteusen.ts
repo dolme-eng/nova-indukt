@@ -63,7 +63,7 @@ Die OPC-Serie ist die Premium-Auswahl für anspruchsvolle Kochenthusiasten.`,
       'Fissler OPC Sauteuse 24 cm aus Edelstahl 18/10 mit CookStar® Boden. Induktionsgeeignet, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
     folder: 'Fissler OPC Sauteuse - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -100,7 +100,7 @@ Die große OPC Sauteuse ist der perfekte Begleiter für anspruchsvolles Kochen i
       'Fissler OPC Sauteuse 28 cm aus Edelstahl 18/10, 3,6 L Volumen, CookStar® Boden. Induktionsgeeignet, Made in Germany.',
     categorySlug: 'sauteusen',
     folder: 'Fissler OPC Sauteuse - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -136,7 +136,7 @@ Die Function 4 Serie verbindet intelligente Funktionalität mit bewährter WMF-Q
       'WMF Function 4 Sauteuse 24 cm aus Cromargan® Edelstahl mit Function 4 Deckel. Induktionsgeeignet, Made in Germany.',
     categorySlug: 'sauteusen',
     folder: 'WMF Function 4 Sauteuse - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -173,7 +173,7 @@ Die große Function 4 Sauteuse ist die ideale Wahl für die Familienküche.`,
       'WMF Function 4 Sauteuse 28 cm, 3,6 L Volumen, mit Function 4 Deckel. Cromargan® Edelstahl, induktionsgeeignet.',
     categorySlug: 'sauteusen',
     folder: 'WMF Function 4 Sauteuse - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -210,7 +210,7 @@ Die Industry 5 Serie steht für höchste Qualitätsansprüche und europäische H
       'Demeyere Industry 5 Sauteuse 24 cm mit 5-Schicht-Technologie. 30 Jahre Garantie, Made in Belgium. Jetzt bei NOVA INDUKT.',
     categorySlug: 'sauteusen',
     folder: 'Demeyere Industry 5 Sauteuse - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -248,7 +248,7 @@ Die Industry 5 Sauteuse 28 cm verbindet belgische Handwerkskunst mit modernster 
       'Demeyere Industry 5 Sauteuse 28 cm mit 5-Schicht-Technologie, 3,8 L. 30 Jahre Garantie, Made in Belgium.',
     categorySlug: 'sauteusen',
     folder: 'Demeyere Industry 5 Sauteuse - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 ]
 

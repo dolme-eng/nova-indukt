@@ -62,7 +62,7 @@ Der ideale Handmixer für ambitionierte Hobby-Köche.`,
       'WMF KitchenLine Handmixer mit 400 Watt, 5 Geschwindigkeiten und Turbo-Funktion. Leistungsstark und ergonomisch. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF KitchenLine Handmixer',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -100,7 +100,7 @@ Professionelle Qualität für die heimische Küche.`,
       'WMF Profi Plus Stabmixer 600 Watt - Edelstahl, Made in Germany, spülmaschinengeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF Profi Plus Stabmixer',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -137,7 +137,7 @@ Fissler Qualität für alle Mixing-Aufgaben im Alltag.`,
       'Fissler Multi-Mixer Handmixer 350 Watt - Made in Germany, kompakt und leistungsstark. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Fissler Multi-Mixer Handmixer',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -174,7 +174,7 @@ Tefal Qualität für schnelle Mixing-Ergebnisse.`,
       'Tefal Blendforce Stabmixer 450 Watt mit Power Crisp-Technologie. Leistungsstark und einfach zu reinigen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Blendforce Stabmixer',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -211,7 +211,7 @@ Praktischer Wasserkocher für schnellen Tee oder Kaffee.`,
       'WMF KitchenLine Wasserkocher 1,2 L - 2400 Watt, Edelstahl und Glas, automatische Abschaltung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF KitchenLine Wasserkocher 1.2L',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -248,7 +248,7 @@ Der perfekte Wasserkocher für große Familien.`,
       'Tefal Maison Wasserkocher 1,7 L - 2400 Watt, Edelstahl-Design, für die ganze Familie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Maison Wasserkocher 1.7L',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -285,7 +285,7 @@ Der schnelle Weg zu knusprigen Sandwiches und Toast.`,
       'Tefal Snack Collection Sandwich-Maker - 800 Watt, Antihaft-Beschichtung, kompakt. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Snack Collection Sandwich-Maker',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -322,7 +322,7 @@ Genießen Sie Espresso-Qualität im eigenen Zuhause.`,
       'WMF Kapsel-Kaffee-Maschine - 15 bar, 1400W, Edelstahl-Design, kompakt und leistungsstark. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF Kapsel-Kaffee-Maschine',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 ]
 

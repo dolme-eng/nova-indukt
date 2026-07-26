@@ -67,7 +67,7 @@ Ein einfaches, aber unverzichtbares Utensil für jede Küche mit Antihaftpfannen
       'Tefal Pfannenschoner 26 cm aus Silikon - schützt Antihaftbeschichtung, spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Tefal Pfannenschoner - 26 cm',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -104,7 +104,7 @@ Ein einfaches, aber unverzichtbares Utensil für jede Küche mit Antihaftpfannen
       'Tefal Pfannenschoner 28 cm aus Silikon - schützt Antihaftbeschichtung, spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Tefal Pfannenschoner - 28 cm',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -141,7 +141,7 @@ Die bewährte Qualität von WMF auch beim Pfannenschutz.`,
       'WMF Pfannenschoner 26 cm aus Filz und Stoff - Made in Germany, schont Antihaftbeschichtung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'WMF Pfannenschoner - 26 cm',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -178,7 +178,7 @@ Die bewährte Qualität von WMF auch beim Pfannenschutz.`,
       'WMF Pfannenschoner 28 cm aus Filz und Stoff - Made in Germany, schont Antihaftbeschichtung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'WMF Pfannenschoner - 28 cm',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -215,7 +215,7 @@ Fissler - Markenqualität auch beim Pfannenschutz.`,
       'Fissler Pfannenschoner 26 cm aus Filz und Stoff - Made in Germany, schont Antihaftbeschichtung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Fissler Pfannenschoner - 26 cm',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -252,7 +252,7 @@ Fissler - Markenqualität auch beim Pfannenschutz.`,
       'Fissler Pfannenschoner 28 cm aus Filz und Stoff - Made in Germany, schont Antihaftbeschichtung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Fissler Pfannenschoner - 28 cm',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -293,7 +293,7 @@ Schwedisches Design trifft auf praktische Stauraumlösung.`,
       'Rivsalt Topfregal Klein mit 3 Stufen - schwedisches Design, Metall schwarz, platzsparend. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Rivsalt Topfregal Klein',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -330,7 +330,7 @@ Platz für die gesamte Pfannensammlung im schwedischen Design.`,
       'Rivsalt Topfregal Groß mit 4 Stufen - schwedisches Design, Metall schwarz, großzügig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Rivsalt Topfregal Gross',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -367,7 +367,7 @@ Die bewährte WMF-Qualität auch für die Stauraumlösung in der Küche.`,
       'WMF Topfregal Edelstahl 4-fach - Cromargan®, Made in Germany, hochwertig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'WMF Topfregal Edelstahl',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -404,7 +404,7 @@ Die praktische und günstige Lösung für mehr Ordnung in der Küche.`,
       'IKEA VARIERA Topfregal - 3 Stufen, Stahl, stapelbar, günstig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'IKEA VARIERA Topfregal',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 ]
 

@@ -52,7 +52,7 @@ const products = [
       'Staub Cocotte Fondue-Set 2,5 L aus Gusseisen mit Emaille. Französische Qualität, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Staub Cocotte Fondue - 2,5 L',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.png'],
   },
   {
     slug: 'le-creuset-fondue-set-20l',
@@ -106,7 +106,7 @@ const products = [
       'Zwilling Raclette-Set 8-teilig mit Granitium-Antihaftbeschichtung. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Zwilling Raclette - 8-teilig',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'fissler-fondue-set-18l',
@@ -133,7 +133,7 @@ const products = [
       'Fissler Fondue-Set 1,8 L aus Edelstahl. Made in Germany, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Fissler Fondue - 1,8 L',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'tefal-raclette-party-12-teilig',
@@ -160,7 +160,7 @@ const products = [
       'Tefal Raclette Party Set 12-teilig mit Granitium-Antihaftbeschichtung. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Tefal Raclette Party - 12-teilig',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'bugatti-raclette-8-teilig',
@@ -187,7 +187,7 @@ const products = [
       'Bugatti Raclette-Set 8-teilig mit Antihaftbeschichtung. Italienisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Bugatti Raclette - 8-teilig',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 ]
 

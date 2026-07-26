@@ -68,7 +68,7 @@ Die Cenit-Serie von Fissler steht für deutschen Qualitätsanspruch im tägliche
       'Fissler Cenit Auflaufform 26×18 cm mit Antihaftbeschichtung. Spülmaschinenfest, induktionsgeeignet. Hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Fissler Cenit Auflaufform - 26x18 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -106,7 +106,7 @@ Die große Version der Cenit-Serie - wenn mehr Platz für mehr Genuss benötigt 
       'Fissler Cenit Auflaufform 33×23 cm - großes Format mit Antihaftbeschichtung. Spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Fissler Cenit Auflaufform - 33x23 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -143,7 +143,7 @@ Die Profi Plus Serie von WMF steht für professionelle Qualität im heimischen B
       'WMF Profi Plus Backform-Set 3-teilig aus Edelstahl. Induktionsgeeignet, spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'WMF Profi Plus Backform-Set - 3-teilig',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -180,7 +180,7 @@ Ein unverzichtbares Küchenutensil für jede Bäckerin und jeden Bäcker.`,
       'WMF Profi Plus Kastenform 26 cm aus Edelstahl. Induktionsgeeignet, spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'WMF Profi Plus Kastenform - 26 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -217,7 +217,7 @@ Die Profi Plus Tarte-Form - für professionelle Ergebnisse zu Hause.`,
       'WMF Profi Plus Tarte-Form 28 cm aus Edelstahl mit abnehmbarem Boden. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'WMF Profi Plus Tarte-Form - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -255,7 +255,7 @@ Die Staub Cocotte - ein Küchenbegleiter fürs Leben, der mit der Zeit noch sch�
       'Staub Cocotte Oval 31×21 cm aus emailliertem Gusseisen. 4,2 L, ofenfest, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Staub Cocotte Oval - 31x21 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -293,7 +293,7 @@ Le Creuset - seit 1925 das Maß der Dinge in der französischen Kochkunst.`,
       'Le Creuset Signature Kastenform 23 cm aus emailliertem Gusseisen. 30 Jahre Garantie, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Le Creuset Signature Kastenform - 23 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -331,7 +331,7 @@ Die Tarte-Form von Le Creuset - für kulinarische Highlights im klassischen fran
       'Le Creuset Signature Tarte-Form 28 cm aus emailliertem Gusseisen. Abnehmbarer Boden, 30 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Le Creuset Signature Tarte-Form - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -369,7 +369,7 @@ Die DT6 vereint traditionelles Handwerk mit moderner Küchentechnik - für anspr
       'Petromax Dutch Oven DT6 Oval - 7 Liter Gusseisen, voreingebrannt, induktionsgeeignet. PFAS-frei, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Petromax Dutch Oven DT6 - Oval',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -407,7 +407,7 @@ Die kleine Cocotte für große Wirkung - für anspruchsvolle Einzelportionen.`,
       'Staub Cocotte Ronde 20 cm - kompakte Gusseisen-Cocotte, 2,2 L, Made in France. Induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Staub Cocotte Ronde - 20 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 ]
 

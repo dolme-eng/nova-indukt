@@ -53,7 +53,7 @@ Ein absoluter Preis-Leistungs-Sieger (Note 1,2) für alle, die ihr altes Lieblin
       'Universal-Adapterplatte für Induktion (24 cm) von Rosenstein & Söhne. Alu, Kupfer und Glas auf Induktion nutzen. Mit abnehmbarem Griff.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Rosenstein & Söhne - Universal-Adapterplatte Ø 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'rosenstein-soehne-universal-adapterplatte-20cm',
@@ -89,7 +89,7 @@ Hervorragendes Preis-Leistungs-Verhältnis für die alltäglichen kleinen Aufgab
       'Kompakte 20 cm Adapterplatte für Induktion. Ideal für Teekannen und kleine Töpfe. Ferromagnetischer Edelstahl mit Alukern.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Rosenstein & Söhne - Universal-Adapterplatte Ø 20 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'interkitchen-induktions-adapterplatte-20cm',
@@ -124,7 +124,7 @@ Hervorragendes Preis-Leistungs-Verhältnis für die alltäglichen kleinen Aufgab
       'Stabile INTERKITCHEN Induktions-Adapterplatte 20 cm. Extrem flaches Design ohne Griff für maximale Auflage und Hitzeverteilung.',
     categorySlug: 'induktions-zubehoer',
     folder: 'INTERKITCHEN - Induktions-Adapterplatte Ø 20 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'lukata-silikon-induktionskochfeld-schutzmatte',
@@ -160,7 +160,7 @@ Ein unverzichtbares Zubehör für alle, die ihr Glasfeld makellos erhalten wolle
       'Magnetische Silikon-Schutzmatte für Induktionskochfelder von Lukata. Schützt vor Kratzern, rutschfest, hitzebeständig bis 300°C.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Lukata - Silikon Induktionskochfeld-Schutzmatte (Magnétique)',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
   {
     slug: 'sallys-induktionsmatte-oval',
@@ -196,7 +196,7 @@ Bewährte Qualität für ein entspanntes und sicheres Kocherlebnis auf Induktion
       'Ovale Induktionsmatte von Sallys Welt. Schützt das Glasfeld vor Kratzern, hitzebeständig bis 240°C, rutschfest.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Sallys - Induktionsmatte Oval',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'dietrix-kochschutzmatten-induktion-set',
@@ -236,7 +236,7 @@ Schützen Sie Ihre teure Induktionsplatte effektiv und kochen Sie direkt auf den
       'Premium-Kochschutzmatten von Dietrix für Induktionsplatten. 4er-Set (2x 20cm, 2x 26cm). Rutschfest, spülmaschinenfest, hitzebeständig bis 240°C.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Dietrix  Induktionsschutz.de  Kochschutzmatten Set (4-tlg.)',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'dr-beckmann-glaskeramikreiniger-putzstein',
@@ -272,7 +272,7 @@ Die feste Paste löst selbst extremste Verkrustungen mühelos ohne jegliche Krat
       'Dr. Beckmann Putzstein für Glaskeramik- und Induktionsfelder. Entfernt Eingebranntes kratzfrei. Inklusive zweiseitigem Schwamm. Made in Germany.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Dr. Beckmann - Glaskeramik-Putzstein 250 g',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'ceraclen-3in1-reiniger-pfleger',
@@ -307,7 +307,7 @@ Die Profi-Pflege für Ihr Induktionsfeld, damit es auch nach Jahren noch aussieh
       'Ceraclen 3-in-1 Glaskeramikreiniger. Reinigt, poliert und schützt mit speziellem Hitzeschutzfilm. Testsieger auf Vergleich.org.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Ceraclen - 3 in 1 Reiniger & Pfleger',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'siemens-kochfeldreiniger-glaskeramik-induktion',
@@ -342,7 +342,7 @@ Vertrauen Sie dem Original des Herstellers für eine materialschonende, hocheffi
       'Original BSH Siemens & Bosch Spezialreiniger für Glaskeramik, Induktion und Edelstahl. Schonende Intensivreinigung ohne Kratzer.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Siemens - Kochfeldreiniger (Original)',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'waermeverteiler-platte-simmerring-induktionsherd',
@@ -377,7 +377,7 @@ Ideal für Schokolade, cremige Saucen und alle Gerichte, die eine absolut gleich
       'Hitzeverteiler-Platte & Simmerring (24 cm) für Induktion. Verhindert das Anbrennen von Milch, Saucen und Schokolade. Edelstahl.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Simmerring  Wärmeverteiler-Platte  Ø 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 ]
 

@@ -62,7 +62,7 @@ Die Fissler Cenit Serie überzeugt durch ihr modernes Design und erstklassige Ve
       'Fissler Cenit Grillpfanne 28x28 cm - Aluminium, 3-Schicht-Antihaftbeschichtung, gerillt, induktionsgeeignet. Hergestellt in Italien bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Fissler Cenit - Grillpfanne 28x28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'wmf-durado-grillpfanne-28x28cm',
@@ -101,7 +101,7 @@ WMF Durado steht für deutsche Qualität und langlebige Materialkombination - id
       'WMF Durado Grillpfanne 28x28 cm - Cromargan Edelstahl 18/10, Keramikbeschichtung, gerillt, induktionsgeeignet. Made in Germany bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'WMF Durado - Grillpfanne 28x28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'tefal-natural-on-induction-grillpfanne-26cm',
@@ -141,7 +141,7 @@ Tefal Natural On - natürliches Material, natürliche Geschmäcker, für alle In
       'Tefal Natural On Induction Grillpfanne 26 cm - Mineralia+ Antihaft, Thermo-Signal, PFAS-frei, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Tefal Natural On Induction - Grillpfanne 26 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'zwilling-summit-plus-grillpfanne-28cm',
@@ -180,7 +180,7 @@ Zwilling Summit+ - modernes Design trifft nachhaltige Materialwahl für die qual
       'Zwilling Summit+ Grillpfanne 28 cm - Keramik-Antihaftbeschichtung, PFAS-frei, stapelbar, induktionsgeeignet. Bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Zwilling Summit+ - Grillpfanne 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'fissler-opc-grillpfanne-28cm',
@@ -219,7 +219,7 @@ Die unbeschichtete Profi-Qualität für Köche, die Wert auf natürliche Aromen 
       'Fissler Original Profi Collection Grillpfanne 28 cm - Edelstahl 18/10 unbeschichtet, CookStar-Boden, induktionsgeeignet. Made in Germany bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Fissler Original Profi Collection - Grillpfanne 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'wmf-performance-grillpfanne-28cm',
@@ -258,7 +258,7 @@ WMF Performance - die Verbindung aus traditioneller deutscher Handwerkskunst und
       'WMF Performance Grillpfanne 28 cm - Edelstahl 18/10 unbeschichtet, TransTherm-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'WMF Performance - Grillpfanne 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 ]
 

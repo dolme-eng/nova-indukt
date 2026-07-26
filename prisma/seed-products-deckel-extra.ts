@@ -52,7 +52,7 @@ const products = [
       'WMF Professional Select Glasdeckel 20 cm. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'WMF Professional Select Deckel - 20 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'wmf-professional-select-deckel-24cm',
@@ -79,7 +79,7 @@ const products = [
       'WMF Professional Select Glasdeckel 24 cm. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'WMF Professional Select Deckel - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'fissler-vitavit-deckel-22cm',
@@ -106,7 +106,7 @@ const products = [
       'Fissler vitavit Glasdeckel 22 cm. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Fissler vitavit Deckel - 22 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'fissler-vitavit-deckel-26cm',
@@ -133,7 +133,7 @@ const products = [
       'Fissler vitavit Glasdeckel 26 cm. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Fissler vitavit Deckel - 26 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'zwilling-two-move-deckel-24cm',
@@ -160,7 +160,7 @@ const products = [
       'Zwilling Two Move Glasdeckel 24 cm. Spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Zwilling Two Move Deckel - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'zwilling-two-move-deckel-28cm',
@@ -187,7 +187,7 @@ const products = [
       'Zwilling Two Move Glasdeckel 28 cm. Spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Zwilling Two Move Deckel - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'demeyere-inducity-deckel-24cm',
@@ -214,7 +214,7 @@ const products = [
       'Demeyere Inducity Glasdeckel 24 cm. Premium-Qualität, Made in Belgium, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Demeyere Inducity Deckel - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
   {
     slug: 'stal-ersatzgriff-universal',
@@ -241,7 +241,7 @@ const products = [
       'Stal Universal-Ersatzgriff aus Edelstahl und Bakelit. Einfache Montage, robust. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Stal Universal-Ersatzgriff',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 ]
 

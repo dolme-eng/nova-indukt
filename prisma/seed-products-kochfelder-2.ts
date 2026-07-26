@@ -73,7 +73,7 @@ Das Bora Professional 3.0 ist kein Kochfeld - es ist eine Küchen-Revolution. Di
       'Bora Professional 3.0 PKFI3: 80 cm Induktionskochfeld mit integriertem Kochfeldabzug. Keine Dunstabzugshaube nötig. 700 m³/h, SCHOTT CERAN®, Made in Austria.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'Bora Professional 3.0 - PKFI3 - 80 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'ikea-tillreda-induktionskochfeld-tragbar-2-zonen',
@@ -124,7 +124,7 @@ Unschlagbarer Preis-Leistungs-Maßstab - das beliebteste portable Induktionskoch
       'IKEA TILLREDA tragbares 2-Zonen Induktionskochfeld. 79€, leicht, kompakt. Ideal für Camping, Studenten, Zweitküche. Standardsteckdose, Kindersicherung.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'IKEA TILLREDA - Tragbar 2 Zonen',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'amzchef-fym35-s16-doppel-induktionskochplatte',
@@ -176,7 +176,7 @@ Testsieger der Kategorie "Induktionskochfeld 2 Platten" - Welt.de Vergleich 2026
       'AMZCHEF FYM35-S16: Testsieger Welt.de 2026. 2-Zonen tragbare Induktionskochplatte, 3,5 kW, 6 Antirutschfüße, Timer, 10 Leistungsstufen. 114€.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'AMZCHEF FYM35-S16 - Doppel-Induktionskochplatte',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'miele-cs-7612-fl-smartline-induktionskochfeld-domino',
@@ -224,7 +224,7 @@ Für alle, die das Beste vom Besten möchten: Das Miele SmartLine-System ist die
       'Miele CS 7612 FL SmartLine: 38 cm Domino Induktionsmodul mit PowerFlex, M Sense, KeepWarm. Kombinierbar mit Wok & Teppanyaki-Modulen. Made in Germany.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'Miele CS 7612 FL - SmartLine - 38 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
   {
     slug: 'aeg-ikb6431axb-autarkes-induktionskochfeld-60cm',
@@ -278,7 +278,7 @@ Chefkoch.de Empfehlung 2026 - das Induktionskochfeld, das alles bietet, was man 
       'AEG IKB6431AXB: Chefkoch Empfehlung 2026. 60 cm Induktionskochfeld mit Power-Funktion (1L Wasser < 2 min), ovale Bräterzone, Hob2Hood, SCHOTT CERAN®.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'AEG IKB6431AXB - Autark - 60 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 ]
 

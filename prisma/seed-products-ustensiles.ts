@@ -225,7 +225,7 @@ Die Grillzange aus der WMF Profi Plus-Serie überzeugt durch ihre robuste Bauwei
       'WMF Profi Plus Grillzange 30 cm aus Cromargan® Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'WMF Profi Plus - Grillzange',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -268,7 +268,7 @@ Der Kochlöffel aus der Fissler Pure Collection besticht durch seine klaren Lini
       'Fissler Pure Collection Kochlöffel 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection - Kochlöffel',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -307,7 +307,7 @@ Die Schöpfkelle aus der Fissler Pure Collection besticht durch ihre klaren Lini
       'Fissler Pure Collection Schöpfkelle 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection - Schöpfkelle',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -346,7 +346,7 @@ Der Saucenheber aus der Fissler Pure Collection besticht durch seine funktionale
       'Fissler Pure Collection Saucenheber 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection - Saucenheber',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -385,7 +385,7 @@ Die Nudelkelle aus der Fissler Pure Collection überzeugt durch ihre funktionale
       'Fissler Pure Collection Nudelkelle 32 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection - Nudelkelle',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -429,7 +429,7 @@ Der Basting-Pinsel aus der Rösle Silicone-Serie besticht durch seine hochwertig
       'Rösle Silicone Basting Brush 28 cm aus Edelstahl und hitzebeständigem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone - Basting Brush',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -468,7 +468,7 @@ Der Spatel aus der Rösle Silicone-Serie überzeugt durch seine vielseitige Eins
       'Rösle Silicone Spatula 28 cm aus Edelstahl und flexiblem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone - Spatula',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -507,7 +507,7 @@ Der Kochlöffel aus der Rösle Silicone-Serie besticht durch seine hochwertige M
       'Rösle Silicone Cooking Spoon 28 cm aus Edelstahl und weichem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone - Cooking Spoon',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -547,7 +547,7 @@ Die Schöpfkelle aus der Rösle Silicone-Serie überzeugt durch ihre durchdachte
       'Rösle Silicone Ladle 28 cm aus Edelstahl und hitzebeständigem Silicone. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Silicone - Ladle',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -586,7 +586,7 @@ Der Wender aus der Rösle Edelstahl-Serie besticht durch seine robuste Bauweise 
       'Rösle Stainless Steel Turner 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Rösle Edelstahl - Turner',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -629,7 +629,7 @@ Die Küchenzange aus der Zwilling Now S-Serie besticht durch ihre hochwertige Ma
       'Zwilling Now S Küchenzange 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S - Küchenzange',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -668,7 +668,7 @@ Die Schaumkelle aus der Zwilling Now S-Serie überzeugt durch ihre funktionalen 
       'Zwilling Now S Schaumkelle 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S - Schaumkelle',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -707,7 +707,7 @@ Der Kochlöffel aus der Zwilling Now S-Serie besticht durch seine vielseitige Ei
       'Zwilling Now S Kochlöffel 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S - Kochlöffel',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   {
@@ -746,7 +746,7 @@ Der Schneebesen aus der Zwilling Now S-Serie überzeugt durch seine robuste Bauw
       'Zwilling Now S Schneebesen 28 cm mit Silikongriff. Spülmaschinenfest, Teil der Now S-Serie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Zwilling Now S - Schneebesen',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -828,7 +828,7 @@ Der Kartoffelstößel aus der Fissler Pure Collection besticht durch seine spezi
       'Fissler Pure Collection Kartoffelstößel 30 cm aus Edelstahl 18/10. Spülmaschinenfest, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'ustensiles',
     folder: 'Fissler Pure Collection - Kartoffelstößel',
-    imageFiles: ['1.jpg', '2.jpg'],
+    imageFiles: ['1.png', '2.png'],
   },
 ]
 

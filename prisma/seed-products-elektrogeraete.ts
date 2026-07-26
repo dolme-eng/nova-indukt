@@ -68,7 +68,7 @@ Der praktische Helfer für Teig, Sahne und mehr.`,
       'WMF Zeppelin Handmixer mit 300 Watt, 2 Stufen, Edelstahl. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF Zeppelin Handmixer',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -105,7 +105,7 @@ Der leistungsstarke Standmixer für tägliche Küchenarbeit.`,
       'WMF KitchenLine Standmixer 1,6 L mit 600 Watt - leistungsstark, hochwertig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF KitchenLine Standmixer',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -142,7 +142,7 @@ Der praktische Stabmixer für schnelle Küchenarbeit.`,
       'WMF Zeppelin Stabmixer mit 300 Watt und Edelstahl-Aufsatz. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF Zeppelin Stabmixer',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -179,7 +179,7 @@ Der elegante Wasserkocher für schnellen Tee und Kaffee.`,
       'WMF KitchenLine Wasserkocher 1,7 L mit 2400 Watt - Edelstahl, elegant. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'WMF KitchenLine Wasserkocher',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -217,7 +217,7 @@ Der Premium-Wasserkocher für anspruchsvolle Teeliebhaber.`,
       'Fissler Heat Memory Wasserkocher 1,5 L - Heat Memory, Temperaturhalt, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Fissler Heat Memory Wasserkocher',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -254,7 +254,7 @@ Für knusprige Waffeln zum Frühstück oder als Nachtisch.`,
       'Tefal Masterclass Waffeleisen mit Antihaft-Beschichtung und 1200 Watt. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Masterclass Waffeleisen',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -291,7 +291,7 @@ Der leistungsstarke Contactgrill für Indoor-Grillerlebnisse.`,
       'Tefal Masterclass Contactgrill mit 2000 Watt - beidseitig grillen, leistungsstark. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Masterclass Contactgrill',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -328,7 +328,7 @@ Der Pizzaofen für echte Pizzatalent zu Hause.`,
       'Tefal Ondine Pizzaofen mit Steinplatte - bis 400°C, 1600W, Edelstahl. Jetzt bei NOVA INDUKT.',
     categorySlug: 'elektrogeraete',
     folder: 'Tefal Ondine Pizzaofen',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 ]
 

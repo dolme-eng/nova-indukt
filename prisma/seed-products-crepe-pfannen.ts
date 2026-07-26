@@ -63,7 +63,7 @@ Die Mineral B Serie ist die klassische Wahl für Crêpe-Liebhaber weltweit.`,
       'de Buyer Mineral B Crêpe-Pfanne 24 cm mit Eisenbeschichtung. Made in France, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'crepe-pfannen',
     folder: 'de Buyer Mineral B Crêpe - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.png'],
   },
 
   {
@@ -100,7 +100,7 @@ Die 28 cm Variante ist die perfekte Wahl für alle, die mehr Platz benötigen.`,
       'de Buyer Mineral B Crêpe-Pfanne 28 cm mit Eisenbeschichtung. Groß, induktionsgeeignet, Made in France.',
     categorySlug: 'crepe-pfannen',
     folder: 'de Buyer Mineral B Crêpe - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.png'],
   },
 
   {
@@ -137,7 +137,7 @@ Die Copper Steel Serie steht für höchste französische Kochkunst.`,
       'Matfer Copper Steel Crêpe-Pfanne 24 cm mit Kupferkern. Made in France, induktionsgeeignet, professionell.',
     categorySlug: 'crepe-pfannen',
     folder: 'Matfer Copper Steel Crêpe - 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -174,7 +174,7 @@ Die Préférence Serie bietet Tefal-Qualität zum Einstiegspreis.`,
       'Tefal Préférence Crêpe-Pfanne 25 cm mit Antihaft und Thermo-Signal. Leicht, induktionsgeeignet, spülmaschinenfest.',
     categorySlug: 'crepe-pfannen',
     folder: 'Tefal Préférence Crêpe - 25 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.png'],
   },
 ]
 

@@ -70,7 +70,7 @@ Die Beschichtung entwickelt mit der Zeit eine natürliche Patina, was ein Zeiche
       'Tefal Eternal Mesh Bratpfanne 28 cm mit PTFE-Wabenstruktur, induktionsgeeignet, Testsieger FAZ 05/2026. Jetzt bei NOVA INDUKT kaufen.',
     categorySlug: 'induktionspfannen',
     folder: 'Tefal Eternal Mesh E49706 - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.jpeg'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.jpeg'],
   },
 
   {
@@ -109,7 +109,7 @@ Die Excellence-Serie verbindet Alltagstauglichkeit mit Tefals jahrzehntelanger A
       'Tefal Excellence Antihaftpfanne 28 cm mit Thermo-Spot, 3 L Volumen, induktionsgeeignet. Leicht und alltagstauglich - jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Tefal Excellence G2690632 - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 
   {
@@ -187,7 +187,7 @@ Die abnehmbare Griff-Funktion (Nowo-System) ermöglicht platzsparendes Verstauen
       'Woll Titanium Nowo Induktionspfanne 28 cm - Titan-Beschichtung, abnehmbarer Griff, backofengeeignet bis 260°C. Hergestellt in Deutschland.',
     categorySlug: 'induktionspfannen',
     folder: 'Woll Titanium Nowo 1528IL - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -231,7 +231,7 @@ Eine Pfanne, die Generationen übersteht - je mehr sie benutzt wird, desto besse
       'Lodge Logic Gusseisenpfanne 26 cm - pre-seasoned, induktionsgeeignet, Lifetime-Garantie. Hergestellt in den USA. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Lodge Logic Gusseisenpfanne L8SK3 - 26 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.png', '4.png'],
   },
 
   {
@@ -271,7 +271,7 @@ Die Staub-Pfanne ist eine Investition fürs Leben - sie wird mit jeder Benutzung
       'Staub France Gusseisenpfanne 26 cm mit mattschwarzer Emaille. Ofenfest, induktionsgeeignet, 5 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Staub Bratpfanne Gusseisen - 26 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -310,7 +310,7 @@ Die fp30 ist mehr als eine Pfanne - sie ist ein Kochpartner für das ganze Leben
       'Petromax Feuerpfanne fp30 30 cm - voreingebrannt, induktionsgeeignet, outdoor-tauglich. Hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Petromax Feuerpfanne fp30 - 30 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -354,7 +354,7 @@ Der ideale Wok für schnelle asiatische Gerichte auf dem Induktionsherd.`,
       'Tefal Jamie Oliver Wok 28 cm mit Thermo-Spot und Kapselboden. Testsieger Pfannenhelden. Leicht, spülmaschinengeeignet - bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Tefal Jamie Oliver Wokpfanne - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 
   {
@@ -394,7 +394,7 @@ Qualität made in Germany für professionelle Wok-Ergebnisse zu Hause.`,
       'Fissler Adamant Wok 32 cm - Platz 1 Testberichte.de, 6 L, Adamant-Beschichtung, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Fissler Adamant Wok - 32 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.png', '4.png'],
   },
 
   {
@@ -433,7 +433,7 @@ Der Woll Wok ist die stabile, langlebige Wahl für tägliches intensives Kochen.
       'Woll Concept Wok 30 cm - Edelstahl 18/10, Glasdeckel inklusive, Platz 2 Testberichte.de. Hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Woll Concept Wok 1030NC - 30 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 ]
 

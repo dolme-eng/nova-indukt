@@ -67,7 +67,7 @@ Das Air Control ist ein zuverlässiges Thermometer für alle, die Wert auf Genau
       'TFA Air Control Digital-Thermometer - kompaktes Design, LCD-Display, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
     folder: 'TFA Air Control Digital-Thermometer',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -104,7 +104,7 @@ Sichere Lebensmittel durch zuverlässige Temperaturkontrolle - das Pipet ist ein
       'TFA Pipet Kühlschrankthermometer - kompakt, zuverlässig, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
     folder: 'TFA Pipet Kühlschrankthermometer',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -142,7 +142,7 @@ Das Soehnle Digital-Küchenthermometer ist der zuverlässige Begleiter für alle
       'Soehnle Digital-Küchenthermometer mit Edelstahl-Spitze und Schnellanzeige. Induktionsgeeignet - jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Soehnle Digital-Küchenthermometer',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 
   {
@@ -179,7 +179,7 @@ Das Digoo Dual ist das Thermometer für anspruchsvolle Anwender, die höchste Pr
       'TFA Digoo Dual-Thermometer mit Dual-Sensor-Technologie und digitaler Anzeige. Induktionsgeeignet - jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-zubehoer',
     folder: 'TFA Digoo Dual-Thermometer',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png'],
   },
 ]
 

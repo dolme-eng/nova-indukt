@@ -61,7 +61,7 @@ Die ideale Pflege für Ihre Edelstahl-Küchengeräte.`,
       'WMF Edelstahl-Reiniger 250 ml - speziell für Edelstahl, entfernt Flecken, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'WMF Edelstahl-Reiniger 250ml',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -98,7 +98,7 @@ Die richtige Pflege für Ihre Fissler-Antihaftpfannen.`,
       'Fissler Antihaft-Reiniger 250 ml - speziell für Antihaft-Beschichtungen, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Fissler Antihaft-Reiniger 250ml',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -135,7 +135,7 @@ Pflegeprodukt für Ihre Ballarini-Antihaftpfannen.`,
       'Ballarini Reiniger für Antihaft 250 ml - italienische Qualität, schonende Reinigung für Antihaftpfannen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Ballarini Reiniger Antihaft 250ml',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -209,7 +209,7 @@ Der perfekte Begleiter für Sauberkeit am Grill.`,
       'Weber Grillreiniger 500 ml - Weber Original, entfernt Fett und Verschmutzungen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Weber Grillreiniger 500ml',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 
   {
@@ -246,7 +246,7 @@ Die perfekte Lösung für saubere Kochfelder.`,
       'Dr. Beckmann Herdreiniger 500 ml - speziell für Ceranfelder, kratzfreie Reinigung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Dr. Beckmann Herdreiniger 500ml',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.png'],
   },
 ]
 

@@ -63,7 +63,7 @@ Der perfekte Begleiter für die Grillpflege.`,
       'Weber Premium Grillreiniger 500 ml - Weber Original, zuverlässig. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Weber Premium Grillreiniger',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -137,7 +137,7 @@ Die schonende Reinigung für Ihre Antihaftpfannen.`,
       'WMF Antihaft-Reiniger 250 ml - Made in Germany, beschichtungsschonend. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'WMF Antihaft-Reiniger',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -174,7 +174,7 @@ Die perfekte Pflege für Ihre Edelstahlprodukte.`,
       'Fissler Edelstahl-Reiniger 250 ml - Made in Germany, poliert zu Hochglanz. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Fissler Edelstahl-Reiniger',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -248,7 +248,7 @@ Die schonende Reinigung für Ihre Le Creuset-Produkte.`,
       'Le Creuset Emaille-Reiniger 250 ml - Made in France, Emaille-spezifisch. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Le Creuset Emaille-Reiniger',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 ]
 

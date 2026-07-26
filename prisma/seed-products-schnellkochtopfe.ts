@@ -69,7 +69,7 @@ Die vitavit edition verbindet deutsche Ingenieurskunst mit höchster Kochkomfort
       'Fissler vitavit edition Schnellkochtopf 4,5 L aus Edelstahl 18/10 mit Sicomatic®-Verschluss. Made in Germany, 10 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
     folder: 'Fissler vitavit edition - 4,5 L',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 
   {
@@ -108,7 +108,7 @@ Das große Modell der vitavit edition Serie - für alle, die viel und schnell ko
       'Fissler vitavit edition Schnellkochtopf 6,5 L - Edelstahl 18/10, Sicomatic®-Verschluss, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
     folder: 'Fissler vitavit edition - 6,5 L',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 
   {
@@ -147,7 +147,7 @@ WMF steht für deutsche Qualität und langlebige Kochgeschirr - das Perfect Plus
       'WMF Perfect Plus Schnellkochtopf 4,5 L mit TransTherm®-Boden. Cromargan® Edelstahl 18/10, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
     folder: 'WMF Perfect Plus - 4,5 L',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 
   {
@@ -186,7 +186,7 @@ Das große Perfect Plus Modell - für anspruchsvolle Familienküche mit WMF-Qual
       'WMF Perfect Plus Schnellkochtopf 6,5 L - Cromargan® Edelstahl, TransTherm®-Boden, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
     folder: 'WMF Perfect Plus - 6,5 L',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 
   {
@@ -224,7 +224,7 @@ Kuhn Rikon steht für Schweizer Spitzenqualität - der Duromatic Top ist ein Gar
       'Kuhn Rikon Duromatic Top Schnellkochtopf 5,0 L - Edelstahl 18/10, Made in Switzerland, 5 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'schnellkochtopfe',
     folder: 'Kuhn Rikon Duromatic Top - 5,0 L',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
   },
 ]
 
