@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
@@ -20,7 +20,7 @@ export function ImageLightbox({
   isOpen,
   onClose,
   onNavigate,
-  productName
+  productName,
 }: ImageLightboxProps) {
   const [scale, setScale] = useState(1)
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -61,11 +61,11 @@ export function ImageLightbox({
   }, [isOpen, currentIndex, images.length, onClose, onNavigate])
 
   const handleZoomIn = () => {
-    setScale(prev => Math.min(prev + 0.5, 3))
+    setScale((prev) => Math.min(prev + 0.5, 3))
   }
 
   const handleZoomOut = () => {
-    setScale(prev => {
+    setScale((prev) => {
       const newScale = Math.max(prev - 0.5, 1)
       if (newScale === 1) setPosition({ x: 0, y: 0 })
       return newScale
@@ -83,7 +83,7 @@ export function ImageLightbox({
     if (isDragging && scale > 1) {
       setPosition({
         x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
+        y: e.clientY - dragStart.y,
       })
     }
   }
@@ -110,15 +110,15 @@ export function ImageLightbox({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
           onClick={onClose}
         >
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+            className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
           >
-            <X className="w-6 h-6" />
+            <X className="h-6 w-6" />
           </button>
 
           {/* Navigation Arrows */}
@@ -128,9 +128,9 @@ export function ImageLightbox({
                 e.stopPropagation()
                 onNavigate(currentIndex - 1)
               }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+              className="absolute left-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="h-6 w-6" />
             </button>
           )}
 
@@ -140,15 +140,15 @@ export function ImageLightbox({
                 e.stopPropagation()
                 onNavigate(currentIndex + 1)
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+              className="absolute right-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="h-6 w-6" />
             </button>
           )}
 
           {/* Main Image */}
           <motion.div
-            className="relative w-full h-full flex items-center justify-center cursor-move"
+            className="relative flex h-full w-full cursor-move items-center justify-center"
             onClick={(e) => e.stopPropagation()}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
@@ -160,37 +160,37 @@ export function ImageLightbox({
               animate={{
                 scale,
                 x: position.x,
-                y: position.y
+                y: position.y,
               }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="relative max-w-[90vw] max-h-[85vh]"
+              className="relative max-h-[85vh] max-w-[90vw]"
             >
               <Image
                 src={images[currentIndex]}
                 alt={`${productName} - ${currentIndex + 1}`}
                 width={1200}
                 height={1200}
-                className="object-contain max-w-[90vw] max-h-[85vh]"
+                className="max-h-[85vh] max-w-[90vw] object-contain"
                 draggable={false}
               />
             </motion.div>
           </motion.div>
 
           {/* Controls */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4">
+          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-4">
             {/* Zoom Controls */}
-            <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2">
+            <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
               <button
                 onClick={(e) => {
                   e.stopPropagation()
                   handleZoomOut()
                 }}
-                className="text-white hover:text-[#4ECCA3] transition-colors"
+                className="text-white transition-colors hover:text-[#4ECCA3]"
                 disabled={scale === 1}
               >
                 -
               </button>
-              <span className="text-white text-sm min-w-[60px] text-center">
+              <span className="min-w-[60px] text-center text-sm text-white">
                 {Math.round(scale * 100)}%
               </span>
               <button
@@ -198,22 +198,22 @@ export function ImageLightbox({
                   e.stopPropagation()
                   handleZoomIn()
                 }}
-                className="text-white hover:text-[#4ECCA3] transition-colors"
+                className="text-white transition-colors hover:text-[#4ECCA3]"
                 disabled={scale === 3}
               >
-                <ZoomIn className="w-4 h-4" />
+                <ZoomIn className="h-4 w-4" />
               </button>
             </div>
 
             {/* Image Counter */}
-            <div className="bg-white/10 rounded-full px-4 py-2 text-white text-sm">
+            <div className="rounded-full bg-white/10 px-4 py-2 text-sm text-white">
               {currentIndex + 1} / {images.length}
             </div>
           </div>
 
           {/* Thumbnail Strip */}
           {images.length > 1 && (
-            <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 max-w-[80vw] overflow-x-auto pb-2">
+            <div className="absolute bottom-20 left-1/2 flex max-w-[80vw] -translate-x-1/2 gap-2 overflow-x-auto pb-2">
               {images.map((img, idx) => (
                 <button
                   key={idx}
@@ -221,7 +221,7 @@ export function ImageLightbox({
                     e.stopPropagation()
                     onNavigate(idx)
                   }}
-                  className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
                     idx === currentIndex
                       ? 'border-[#4ECCA3] ring-2 ring-[#4ECCA3]/50'
                       : 'border-white/20 hover:border-white/50'
@@ -232,7 +232,7 @@ export function ImageLightbox({
                     alt={`Thumbnail ${idx + 1}`}
                     width={64}
                     height={64}
-                    className="object-cover w-full h-full"
+                    className="h-full w-full object-cover"
                   />
                 </button>
               ))}
@@ -240,7 +240,7 @@ export function ImageLightbox({
           )}
 
           {/* Instructions */}
-          <div className="absolute top-4 left-4 text-white/60 text-sm">
+          <div className="absolute left-4 top-4 text-sm text-white/60">
             <p>ESC zum Schließen • ← → zum Navigieren • Mausrad zum Zoomen</p>
           </div>
         </motion.div>

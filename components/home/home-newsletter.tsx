@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, memo } from 'react'
+import { useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
 
@@ -35,27 +35,27 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
   }
 
   return (
-    <section className="py-12 sm:py-20 bg-white relative overflow-hidden">
-      <div className="absolute right-0 top-0 w-1/3 aspect-square bg-nova-50 rounded-bl-[100px] -z-10" />
-      <div className="absolute left-0 bottom-0 w-1/4 aspect-square bg-gray-50 rounded-tr-[100px] -z-10" />
+    <section className="relative overflow-hidden bg-white py-12 sm:py-20">
+      <div className="absolute right-0 top-0 -z-10 aspect-square w-1/3 rounded-bl-[100px] bg-nova-50" />
+      <div className="absolute bottom-0 left-0 -z-10 aspect-square w-1/4 rounded-tr-[100px] bg-gray-50" />
 
       <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.98, y: 20 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-gray-900 rounded-[2.5rem] p-8 sm:p-14 lg:p-20 shadow-2xl relative overflow-hidden text-center max-w-5xl mx-auto border border-gray-800"
+          className="relative mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] border border-gray-800 bg-gray-900 p-8 text-center shadow-2xl sm:p-14 lg:p-20"
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-nova-500/20 blur-[120px] rounded-full pointer-events-none" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-nova-500/20 blur-[120px]" />
 
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/20 shadow-xl">
-              <Sparkles className="w-8 h-8 text-nova-400" />
+          <div className="relative z-10 mx-auto max-w-2xl">
+            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/20 bg-white/10 shadow-xl backdrop-blur-md">
+              <Sparkles className="h-8 w-8 text-nova-400" />
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 font-heading leading-tight">
+            <h2 className="mb-6 font-heading text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Werde Induktions-Experte
             </h2>
-            <p className="text-gray-300 mb-10 text-lg sm:text-xl font-light">
+            <p className="mb-10 text-lg font-light text-gray-300 sm:text-xl">
               Erhalten Sie 10% Rabatt auf Ihre erste Bestellung plus exklusive Angebote und Rezepte.
             </p>
 
@@ -63,13 +63,16 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-nova-500/20 border border-nova-500/30 text-nova-300 font-medium py-4 px-6 rounded-2xl inline-flex items-center gap-3 text-lg"
+                className="inline-flex items-center gap-3 rounded-2xl border border-nova-500/30 bg-nova-500/20 px-6 py-4 text-lg font-medium text-nova-300"
               >
-                <CheckCircle className="w-6 h-6" />
+                <CheckCircle className="h-6 w-6" />
                 Vielen Dank! Ihre Newsletter-Anmeldung ist bestätigt.
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+              <form
+                onSubmit={handleSubmit}
+                className="mx-auto flex max-w-xl flex-col gap-4 sm:flex-row"
+              >
                 <div className="relative flex-1">
                   <input
                     type="email"
@@ -78,7 +81,7 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
                     placeholder="Ihre E-Mail-Adresse"
                     required
                     disabled={status === 'loading'}
-                    className="w-full px-6 py-4 sm:py-5 bg-white/5 border border-white/20 rounded-2xl text-white placeholder:text-gray-400 focus:outline-none focus:border-nova-400 focus:bg-white/10 transition-all font-medium backdrop-blur-sm disabled:opacity-60"
+                    className="w-full rounded-2xl border border-white/20 bg-white/5 px-6 py-4 font-medium text-white backdrop-blur-sm transition-all placeholder:text-gray-400 focus:border-nova-400 focus:bg-white/10 focus:outline-none disabled:opacity-60 sm:py-5"
                   />
                 </div>
                 <motion.button
@@ -86,25 +89,28 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={status === 'loading'}
-                  className="px-8 py-4 sm:py-5 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors whitespace-nowrap shadow-lg shadow-[#0C211E]/20 text-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl bg-[#0C211E] px-8 py-4 text-lg font-bold text-white shadow-lg shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C] disabled:opacity-60 sm:py-5"
                 >
                   {status === 'loading' ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   ) : (
-                    <>Anmelden <ArrowRight className="w-5 h-5" /></>
+                    <>
+                      Anmelden <ArrowRight className="h-5 w-5" />
+                    </>
                   )}
                 </motion.button>
               </form>
             )}
 
             {status === 'error' && (
-              <p className="text-red-400 text-sm mt-4">
+              <p className="mt-4 text-sm text-red-400">
                 Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.
               </p>
             )}
 
-            <p className="text-xs text-gray-500 mt-6">
-              Durch die Anmeldung akzeptieren Sie unsere Datenschutzbestimmungen. Abmeldung jederzeit möglich.
+            <p className="mt-6 text-xs text-gray-500">
+              Durch die Anmeldung akzeptieren Sie unsere Datenschutzbestimmungen. Abmeldung
+              jederzeit möglich.
             </p>
           </div>
         </motion.div>

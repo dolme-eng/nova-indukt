@@ -6,6 +6,8 @@ import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react'
 import { ShareButtons } from './share-buttons'
 
+export const revalidate = 600
+
 export async function generateStaticParams() {
   const posts = await prisma.blogPost.findMany({
     where: { isPublished: true },

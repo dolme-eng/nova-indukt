@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
-import { Product, mapDbProductToUi } from '@/lib/data/products'
+import { mapDbProductToUi } from '@/lib/data/products'
 import { ProductContent } from './ProductContent'
 
 export const revalidate = 120

@@ -29,71 +29,93 @@ export default async function NotFound() {
   const bestsellers = await getBestsellers()
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center pt-24 pb-24 px-4 sm:px-6">
+    <div className="flex min-h-screen flex-col items-center bg-gray-50 px-4 pb-24 pt-24 sm:px-6">
       {/* 404 Hero */}
-      <div className="text-center max-w-2xl mx-auto mb-20 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#4ECCA3]/10 rounded-full blur-[100px] pointer-events-none" />
-        
-        <h1 className="text-[150px] font-black text-gray-200/50 tracking-tighter mb-4 leading-none font-heading relative z-10">404</h1>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0C211E] mb-6 font-heading tracking-tight relative z-10">
+      <div className="relative mx-auto mb-20 max-w-2xl text-center">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4ECCA3]/10 blur-[100px]" />
+
+        <h1 className="relative z-10 mb-4 font-heading text-[150px] font-black leading-none tracking-tighter text-gray-200/50">
+          404
+        </h1>
+        <h2 className="relative z-10 mb-6 font-heading text-3xl font-black tracking-tight text-[#0C211E] sm:text-4xl lg:text-5xl">
           Hier brennt nichts an...
         </h2>
-        <p className="text-gray-500 text-lg sm:text-xl mb-10 leading-relaxed relative z-10">
-          Aber die gesuchte Seite oder das Produkt scheint verschwunden zu sein. 
-          Vielleicht haben Sie sich vertippt oder der Artikel ist umgezogen.
+        <p className="relative z-10 mb-10 text-lg leading-relaxed text-gray-500 sm:text-xl">
+          Aber die gesuchte Seite oder das Produkt scheint verschwunden zu sein. Vielleicht haben
+          Sie sich vertippt oder der Artikel ist umgezogen.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-          <Link href="/suche" className="w-full sm:w-auto px-8 py-4 bg-white text-[#0C211E] border border-gray-200 font-bold rounded-2xl hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm flex items-center justify-center gap-2">
-            <Search className="w-5 h-5" /> Zur Produktsuche
+        <div className="relative z-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <Link
+            href="/suche"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-white px-8 py-4 font-bold text-[#0C211E] shadow-sm transition-all hover:border-gray-300 hover:bg-gray-50 sm:w-auto"
+          >
+            <Search className="h-5 w-5" /> Zur Produktsuche
           </Link>
-          <Link href="/" className="w-full sm:w-auto px-8 py-4 bg-[#0C211E] text-white font-bold rounded-2xl hover:bg-[#17423C] transition-colors shadow-xl shadow-[#0C211E]/20 flex items-center justify-center gap-2 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#4ECCA3]/0 via-[#4ECCA3]/20 to-[#4ECCA3]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            <Home className="w-5 h-5" /> Zurück zur Startseite
+          <Link
+            href="/"
+            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-[#0C211E] px-8 py-4 font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C] sm:w-auto"
+          >
+            <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-[#4ECCA3]/0 via-[#4ECCA3]/20 to-[#4ECCA3]/0 transition-transform duration-700 group-hover:translate-x-[100%]" />
+            <Home className="h-5 w-5" /> Zurück zur Startseite
           </Link>
         </div>
       </div>
 
       {/* Retention: Bestsellers */}
       {bestsellers.length > 0 && (
-        <div className="w-full max-w-7xl mx-auto border-t border-gray-200 pt-16">
-          <div className="flex items-center justify-between mb-10">
+        <div className="mx-auto w-full max-w-7xl border-t border-gray-200 pt-16">
+          <div className="mb-10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#4ECCA3]/20 flex items-center justify-center text-[#0C211E]">
-                <Sparkles className="w-5 h-5" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#4ECCA3]/20 text-[#0C211E]">
+                <Sparkles className="h-5 w-5" />
               </div>
-              <h3 className="text-2xl sm:text-3xl font-black text-[#0C211E] tracking-tight font-heading">Entdecken Sie unsere Bestseller</h3>
+              <h3 className="font-heading text-2xl font-black tracking-tight text-[#0C211E] sm:text-3xl">
+                Entdecken Sie unsere Bestseller
+              </h3>
             </div>
-            <Link href="/produkte" className="hidden sm:flex text-[#0C211E] font-bold items-center gap-2 hover:text-[#4ECCA3] transition-colors">
-              Gesamtes Sortiment <ArrowRight className="w-5 h-5" />
+            <Link
+              href="/produkte"
+              className="hidden items-center gap-2 font-bold text-[#0C211E] transition-colors hover:text-[#4ECCA3] sm:flex"
+            >
+              Gesamtes Sortiment <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+
+          <div className="grid grid-cols-2 gap-4 sm:gap-8 lg:grid-cols-4">
             {bestsellers.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-300 group flex flex-col h-full"
+                className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-2xl"
               >
-                <Link href={`/produkt/${product.slug}`} className="block relative aspect-square bg-gray-50 overflow-hidden p-4 sm:p-6">
+                <Link
+                  href={`/produkt/${product.slug}`}
+                  className="relative block aspect-square overflow-hidden bg-gray-50 p-4 sm:p-6"
+                >
                   <div className="absolute inset-0 bg-white" />
                   <Image
                     src={product.image}
                     alt={product.name.de}
                     fill
-                    className="object-contain p-6 group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-multiply"
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                    className="object-contain p-6 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110"
                   />
                 </Link>
-                <div className="p-5 flex-1 flex flex-col bg-white">
-                  <h4 className="font-bold text-gray-900 text-[13px] sm:text-base mb-2 line-clamp-2 group-hover:text-[#4ECCA3] transition-colors leading-snug flex-1">
+                <div className="flex flex-1 flex-col bg-white p-5">
+                  <h4 className="mb-2 line-clamp-2 flex-1 text-[13px] font-bold leading-snug text-gray-900 transition-colors group-hover:text-[#4ECCA3] sm:text-base">
                     {product.name.de}
                   </h4>
-                  <div className="mt-auto pt-3 sm:pt-4 relative border-t border-gray-50">
-                    <div className="flex items-end gap-1.5 sm:gap-2 mb-1">
-                      <span className="text-base sm:text-lg font-black text-emerald-600 tabular-nums whitespace-nowrap">{formatPriceDe(product.price)}</span>
+                  <div className="relative mt-auto border-t border-gray-50 pt-3 sm:pt-4">
+                    <div className="mb-1 flex items-end gap-1.5 sm:gap-2">
+                      <span className="whitespace-nowrap text-base font-black tabular-nums text-emerald-600 sm:text-lg">
+                        {formatPriceDe(product.price)}
+                      </span>
                     </div>
-                    <Link href={`/produkt/${product.slug}`} className="mt-3 w-full py-2.5 sm:py-3.5 bg-gray-50 border border-gray-200 text-gray-800 text-[13px] sm:text-sm font-bold rounded-[0.85rem] sm:rounded-xl group-hover:bg-[#0C211E] group-hover:text-white group-hover:border-[#0C211E] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
-                      <ArrowRight className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+                    <Link
+                      href={`/produkt/${product.slug}`}
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-[0.85rem] border border-gray-200 bg-gray-50 py-2.5 text-[13px] font-bold text-gray-800 shadow-sm transition-all duration-300 group-hover:border-[#0C211E] group-hover:bg-[#0C211E] group-hover:text-white sm:rounded-xl sm:py-3.5 sm:text-sm"
+                    >
+                      <ArrowRight className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
                       <span className="hidden sm:inline">Produkt ansehen</span>
                     </Link>
                   </div>

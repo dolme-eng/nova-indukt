@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { X, MapPin, Check, Loader2 } from 'lucide-react'
 
 interface Address {
@@ -42,13 +42,13 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof Address, string>> = {}
-    
+
     if (!formData.firstName.trim()) newErrors.firstName = 'Vorname ist erforderlich'
     if (!formData.lastName.trim()) newErrors.lastName = 'Nachname ist erforderlich'
     if (!formData.street.trim()) newErrors.street = 'Straße ist erforderlich'
     if (!formData.zipCode.trim()) newErrors.zipCode = 'PLZ ist erforderlich'
     if (!formData.city.trim()) newErrors.city = 'Stadt ist erforderlich'
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -64,20 +64,20 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={(e) => e.target === e.currentTarget && onCancel()}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl"
+        className="max-h-[90vh] w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#4ECCA3]/10 rounded-xl flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-[#4ECCA3]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4ECCA3]/10">
+              <MapPin className="h-5 w-5 text-[#4ECCA3]" />
             </div>
             <h2 className="text-lg font-bold text-gray-900">
               {address?.id ? 'Adresse bearbeiten' : 'Neue Adresse'}
@@ -85,89 +85,83 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
           </div>
           <button
             onClick={onCancel}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="rounded-full p-2 transition-colors hover:bg-gray-100"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="h-5 w-5 text-gray-500" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto max-h-[60vh]">
+        <form onSubmit={handleSubmit} className="max-h-[60vh] space-y-4 overflow-y-auto p-6">
           {/* First & Last Name */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Vorname *
-              </label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Vorname *</label>
               <input
                 type="text"
                 value={formData.firstName}
                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
+                className={`w-full rounded-xl border px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 ${
                   errors.firstName ? 'border-red-300' : 'border-gray-200'
                 }`}
                 placeholder="z.B. Max"
               />
-              {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+              {errors.firstName && <p className="mt-1 text-xs text-red-500">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nachname *
-              </label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Nachname *</label>
               <input
                 type="text"
                 value={formData.lastName}
                 onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
+                className={`w-full rounded-xl border px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 ${
                   errors.lastName ? 'border-red-300' : 'border-gray-200'
                 }`}
                 placeholder="z.B. Mustermann"
               />
-              {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
+              {errors.lastName && <p className="mt-1 text-xs text-red-500">{errors.lastName}</p>}
             </div>
           </div>
 
           {/* Company */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Firma (optional)
-            </label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Firma (optional)</label>
             <input
               type="text"
               value={formData.company || ''}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all border-gray-200`}
+              className={`w-full rounded-xl border border-gray-200 px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20`}
               placeholder="z.B. Muster GmbH"
             />
           </div>
 
           {/* Street */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               Straße und Hausnummer *
             </label>
             <input
               type="text"
               value={formData.street}
               onChange={(e) => setFormData({ ...formData, street: e.target.value })}
-              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
+              className={`w-full rounded-xl border px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 ${
                 errors.street ? 'border-red-300' : 'border-gray-200'
               }`}
               placeholder="z.B. Musterstraße 123"
             />
-            {errors.street && <p className="text-red-500 text-xs mt-1">{errors.street}</p>}
+            {errors.street && <p className="mt-1 text-xs text-red-500">{errors.street}</p>}
           </div>
 
           {/* Street 2 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               Adresszusatz (optional)
             </label>
             <input
               type="text"
               value={formData.street2 || ''}
               onChange={(e) => setFormData({ ...formData, street2: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all"
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
               placeholder="z.B. Etage 2, Wohnung 4"
             />
           </div>
@@ -175,46 +169,40 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
           {/* Zip Code & City */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                PLZ *
-              </label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">PLZ *</label>
               <input
                 type="text"
                 value={formData.zipCode}
                 onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
+                className={`w-full rounded-xl border px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 ${
                   errors.zipCode ? 'border-red-300' : 'border-gray-200'
                 }`}
                 placeholder="12345"
               />
-              {errors.zipCode && <p className="text-red-500 text-xs mt-1">{errors.zipCode}</p>}
+              {errors.zipCode && <p className="mt-1 text-xs text-red-500">{errors.zipCode}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Stadt *
-              </label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Stadt *</label>
               <input
                 type="text"
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all ${
+                className={`w-full rounded-xl border px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 ${
                   errors.city ? 'border-red-300' : 'border-gray-200'
                 }`}
                 placeholder="Musterstadt"
               />
-              {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
+              {errors.city && <p className="mt-1 text-xs text-red-500">{errors.city}</p>}
             </div>
           </div>
 
           {/* Country */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Land
-            </label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Land</label>
             <select
               value={formData.country}
               onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all bg-white"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
             >
               <option value="DE">Deutschland</option>
               <option value="AT">Österreich</option>
@@ -227,27 +215,27 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
           {/* Phone */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               Telefon (optional)
             </label>
             <input
               type="tel"
               value={formData.phone || ''}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 focus:border-[#4ECCA3] transition-all"
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
               placeholder="+49 123 456789"
             />
           </div>
 
           {/* Default Options */}
-          <div className="space-y-3 pt-2 border-t border-gray-100">
-            <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
-              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                formData.isDefault 
-                  ? 'bg-[#4ECCA3] border-[#4ECCA3]' 
-                  : 'border-gray-300'
-              }`}>
-                {formData.isDefault && <Check className="w-3 h-3 text-white" />}
+          <div className="space-y-3 border-t border-gray-100 pt-2">
+            <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 p-3 transition-colors hover:bg-gray-50">
+              <div
+                className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
+                  formData.isDefault ? 'border-[#4ECCA3] bg-[#4ECCA3]' : 'border-gray-300'
+                }`}
+              >
+                {formData.isDefault && <Check className="h-3 w-3 text-white" />}
               </div>
               <input
                 type="checkbox"
@@ -257,27 +245,29 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
               />
               <div>
                 <p className="font-medium text-gray-900">Standardadresse</p>
-                <p className="text-xs text-gray-500">Wird automatisch bei Bestellungen ausgewählt</p>
+                <p className="text-xs text-gray-500">
+                  Wird automatisch bei Bestellungen ausgewählt
+                </p>
               </div>
             </label>
           </div>
         </form>
 
         {/* Footer */}
-        <div className="flex gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50">
+        <div className="flex gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-white transition-colors"
+            className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 font-medium text-gray-700 transition-colors hover:bg-white"
           >
             Abbrechen
           </button>
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex-1 px-4 py-2.5 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
           >
-            {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+            {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
             {address?.id ? 'Speichern' : 'Hinzufügen'}
           </button>
         </div>

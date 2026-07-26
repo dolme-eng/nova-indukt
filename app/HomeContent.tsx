@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { ArrowRight, Star, ShoppingCart, Heart, Flame, BadgePercent, Award, Sparkles } from 'lucide-react'
+import { ArrowRight, Star, ShoppingCart, Heart, Flame, Award, Sparkles } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { Product, Category, BlogPost } from '@/lib/data/products'
@@ -27,12 +27,19 @@ const BlogPreview = dynamic(
 )
 const TestimonialsSection = dynamic(
   () => import('@/components/testimonials-section').then((m) => m.TestimonialsSection),
-  { loading: () => <div className="h-[420px] bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10" /> }
+  {
+    loading: () => <div className="h-[420px] bg-gradient-to-br from-[#4ECCA3]/5 to-[#4ECCA3]/10" />,
+  }
 )
 
 interface TestimonialData {
-  id: string; name: string; rating: number; comment: string
-  productName: string; createdAt: string; isVerified: boolean
+  id: string
+  name: string
+  rating: number
+  comment: string
+  productName: string
+  createdAt: string
+  isVerified: boolean
 }
 
 interface HomeContentProps {
@@ -41,33 +48,62 @@ interface HomeContentProps {
   initialBlogPosts: BlogPost[]
   initialTestimonials?: TestimonialData[]
   activePromotions?: {
-    id: string; name: string; discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
-    discountValue: number; productIds: string[]; categoryIds: string[]
-    isGlobal: boolean; badge: string | null; bannerText: string | null; highlightColor: string | null
+    id: string
+    name: string
+    discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
+    discountValue: number
+    productIds: string[]
+    categoryIds: string[]
+    isGlobal: boolean
+    badge: string | null
+    bannerText: string | null
+    highlightColor: string | null
   }[]
 }
 
-export function HomeContent({ initialProducts, initialCategories, initialBlogPosts, initialTestimonials = [], activePromotions = [] }: HomeContentProps) {
+export function HomeContent({
+  initialProducts,
+  initialCategories,
+  initialBlogPosts,
+  initialTestimonials = [],
+  activePromotions = [],
+}: HomeContentProps) {
   const sliderContainerRef = useRef<HTMLDivElement>(null)
 
   const flashDeals = useMemo(() => {
     const candidates = initialProducts.slice(0, 8)
-    const withPromo = candidates.map(p => {
-      const applicable = activePromotions.filter(promo =>
-        promo.isGlobal || promo.productIds.includes(p.id) || promo.categoryIds.includes(p.category)
-      )
-      if (applicable.length > 0) {
-        const best = applicable[0]
-        const value = Number(best.discountValue)
-        const discount = best.discountType === 'PERCENTAGE' ? Math.round(value) : Math.round((value / p.price) * 100)
-        return { ...p, discount, promoName: best.name, promoBadge: best.badge }
-      }
-      if (p.oldPrice && p.oldPrice > p.price) {
-        return { ...p, discount: Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100), promoName: null, promoBadge: null }
-      }
-      return null
-    }).filter((p): p is NonNullable<typeof p> => p !== null)
-    if (withPromo.length === 0) return initialProducts.slice(0, 4).map(p => ({ ...p, discount: 0, promoName: null, promoBadge: null }))
+    const withPromo = candidates
+      .map((p) => {
+        const applicable = activePromotions.filter(
+          (promo) =>
+            promo.isGlobal ||
+            promo.productIds.includes(p.id) ||
+            promo.categoryIds.includes(p.category)
+        )
+        if (applicable.length > 0) {
+          const best = applicable[0]
+          const value = Number(best.discountValue)
+          const discount =
+            best.discountType === 'PERCENTAGE'
+              ? Math.round(value)
+              : Math.round((value / p.price) * 100)
+          return { ...p, discount, promoName: best.name, promoBadge: best.badge }
+        }
+        if (p.oldPrice && p.oldPrice > p.price) {
+          return {
+            ...p,
+            discount: Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100),
+            promoName: null,
+            promoBadge: null,
+          }
+        }
+        return null
+      })
+      .filter((p): p is NonNullable<typeof p> => p !== null)
+    if (withPromo.length === 0)
+      return initialProducts
+        .slice(0, 4)
+        .map((p) => ({ ...p, discount: 0, promoName: null, promoBadge: null }))
     return withPromo.slice(0, 4)
   }, [initialProducts, activePromotions])
 
@@ -76,7 +112,10 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
     const catGroups = new Map<string, number>()
     for (const p of initialProducts) {
       const count = catGroups.get(p.category) ?? 0
-      if (count < 2) { list.push(p); catGroups.set(p.category, count + 1) }
+      if (count < 2) {
+        list.push(p)
+        catGroups.set(p.category, count + 1)
+      }
       if (list.length >= 16) break
     }
     return list
@@ -85,11 +124,16 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
   return (
     <div className="min-h-screen bg-gray-50/50 selection:bg-[#4ECCA3]/30">
       {/* Announcement Bar */}
-      <motion.div initial={{ y: -40 }} animate={{ y: 0 }} className="bg-nova-900 border-b border-nova-800 text-nova-100 py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide flex justify-center items-center">
+      <motion.div
+        initial={{ y: -40 }}
+        animate={{ y: 0 }}
+        className="flex items-center justify-center border-b border-nova-800 bg-nova-900 py-2.5 text-center text-xs font-medium tracking-wide text-nova-100 sm:text-sm"
+      >
         <span className="inline-flex items-center gap-3">
-          <Sparkles className="w-4 h-4 text-nova-400" />
-          Kostenlose Lieferung ab 500€ <span className="text-nova-600 px-2">•</span> 30 Tage Rückgabe <span className="text-nova-600 px-2">•</span> 2 Jahre Garantie
-          <Sparkles className="w-4 h-4 text-nova-400" />
+          <Sparkles className="h-4 w-4 text-nova-400" />
+          Kostenlose Lieferung ab 500€ <span className="px-2 text-nova-600">•</span> 30 Tage
+          Rückgabe <span className="px-2 text-nova-600">•</span> 2 Jahre Garantie
+          <Sparkles className="h-4 w-4 text-nova-400" />
         </span>
       </motion.div>
 
@@ -101,26 +145,57 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
       <div className="h-6 sm:h-12" />
 
       {/* Product Slider */}
-      <section className="py-4 pb-12 sm:py-8 bg-transparent overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 mb-8">
+      <section className="overflow-hidden bg-transparent py-4 pb-12 sm:py-8">
+        <div className="container mx-auto mb-8 px-4 sm:px-6">
           <div className="flex items-end justify-between">
-            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <span className="text-nova-500 font-semibold tracking-wider text-sm uppercase mb-2 block">Vorschau</span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 font-heading">Top-Produkte pro Kategorie</h2>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="mb-2 block text-sm font-semibold uppercase tracking-wider text-nova-500">
+                Vorschau
+              </span>
+              <h2 className="font-heading text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl">
+                Top-Produkte pro Kategorie
+              </h2>
             </motion.div>
-            <div className="hidden sm:flex items-center gap-2">
-              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: -344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm" aria-label="Vorherige Produkte">◀</button>
-              <button onClick={() => sliderContainerRef.current?.scrollBy({ left: 344, behavior: 'smooth' })} className="w-12 h-12 rounded-[1rem] bg-white border border-gray-100 flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm" aria-label="Nächste Produkte">▶</button>
+            <div className="hidden items-center gap-2 sm:flex">
+              <button
+                onClick={() =>
+                  sliderContainerRef.current?.scrollBy({ left: -344, behavior: 'smooth' })
+                }
+                className="flex h-12 w-12 items-center justify-center rounded-[1rem] border border-gray-100 bg-white shadow-sm transition-all hover:scale-105 hover:bg-gray-50 active:scale-95"
+                aria-label="Vorherige Produkte"
+              >
+                ◀
+              </button>
+              <button
+                onClick={() =>
+                  sliderContainerRef.current?.scrollBy({ left: 344, behavior: 'smooth' })
+                }
+                className="flex h-12 w-12 items-center justify-center rounded-[1rem] border border-gray-100 bg-white shadow-sm transition-all hover:scale-105 hover:bg-gray-50 active:scale-95"
+                aria-label="Nächste Produkte"
+              >
+                ▶
+              </button>
             </div>
           </div>
         </div>
-        <div ref={sliderContainerRef} className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-2 sm:gap-3 px-4 pb-4 pt-1 scrollbar-hide items-stretch" style={{ scrollbarWidth: 'none' }}>
+        <div
+          ref={sliderContainerRef}
+          className="scrollbar-hide flex snap-x snap-mandatory flex-nowrap items-stretch gap-2 overflow-x-auto px-4 pb-4 pt-1 sm:gap-3"
+          style={{ scrollbarWidth: 'none' }}
+        >
           {sliderProducts.map((product, index) => (
-            <div key={`slider-${product.id}`} className="w-[160px] sm:w-[240px] flex-shrink-0 snap-center sm:snap-start">
+            <div
+              key={`slider-${product.id}`}
+              className="w-[160px] flex-shrink-0 snap-center sm:w-[240px] sm:snap-start"
+            >
               <ProductCard product={product} index={index} />
             </div>
           ))}
-          <div className="w-2 sm:w-4 flex-shrink-0" />
+          <div className="w-2 flex-shrink-0 sm:w-4" />
         </div>
       </section>
 
@@ -128,29 +203,48 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
       <HomeCategoriesGrid categories={initialCategories} />
 
       {/* Flash Deals */}
-      <section className="py-10 sm:py-16 relative overflow-hidden">
+      <section className="relative overflow-hidden py-10 sm:py-16">
         <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F0] via-white to-[#F0FFF9]" />
         <div className="container relative z-10 mx-auto px-4 sm:px-6">
           <FlashDealsHeader />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-            {flashDeals.map((product, index) => <FlashDealCard key={product.id} product={product} index={index} />)}
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4">
+            {flashDeals.map((product, index) => (
+              <FlashDealCard key={product.id} product={product} index={index} />
+            ))}
           </div>
         </div>
       </section>
 
       {/* Bestsellers */}
-      <section className="py-10 sm:py-16 bg-white">
+      <section className="bg-white py-10 sm:py-16">
         <div className="container mx-auto px-4 sm:px-6">
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="text-center max-w-2xl mx-auto mb-16">
-            <div className="inline-flex items-center justify-center p-2 bg-nova-50 rounded-2xl mb-4"><Award className="w-6 h-6 text-nova-500" /></div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 font-heading mb-4 tracking-tight">Bestseller</h2>
-            <p className="text-gray-500 text-lg leading-relaxed">Unsere meistverkauften Produkte</p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="mx-auto mb-16 max-w-2xl text-center"
+          >
+            <div className="mb-4 inline-flex items-center justify-center rounded-2xl bg-nova-50 p-2">
+              <Award className="h-6 w-6 text-nova-500" />
+            </div>
+            <h2 className="mb-4 font-heading text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl md:text-5xl">
+              Bestseller
+            </h2>
+            <p className="text-lg leading-relaxed text-gray-500">Unsere meistverkauften Produkte</p>
           </motion.div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-4">
-            {initialProducts.slice(0, 12).map((product, index) => <ProductCard key={product.id} product={product} index={index} />)}
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6">
+            {initialProducts.slice(0, 12).map((product, index) => (
+              <ProductCard key={product.id} product={product} index={index} />
+            ))}
           </div>
           <div className="mt-16 text-center">
-            <Link href="/produkte"><MagneticButton><div className="px-8 py-4 bg-[#0C211E] text-white font-semibold rounded-2xl hover:bg-[#17423C] transition-colors shadow-xl shadow-[#0C211E]/20 inline-flex items-center gap-2 cursor-pointer">Alle Bestseller ansehen <ArrowRight className="w-5 h-5" /></div></MagneticButton></Link>
+            <Link href="/produkte">
+              <MagneticButton>
+                <div className="inline-flex cursor-pointer items-center gap-2 rounded-2xl bg-[#0C211E] px-8 py-4 font-semibold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C]">
+                  Alle Bestseller ansehen <ArrowRight className="h-5 w-5" />
+                </div>
+              </MagneticButton>
+            </Link>
           </div>
         </div>
       </section>
@@ -165,99 +259,127 @@ export function HomeContent({ initialProducts, initialCategories, initialBlogPos
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-const ProductCard = memo(function ProductCard({ product, index }: { product: Product; index: number }) {
+const ProductCard = memo(function ProductCard({
+  product,
+  index,
+}: {
+  product: Product
+  index: number
+}) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   const isLocal = (src: string) => src.startsWith('/images/products/')
   const inWishlist = isInWishlist(product.id)
 
-  const handleAddToCart = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1) }
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    addItem(product, 1)
+  }
   const handleWishlist = async (e: React.MouseEvent) => {
-    e.preventDefault(); e.stopPropagation()
-    await toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug })
+    e.preventDefault()
+    e.stopPropagation()
+    await toggleItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug,
+    })
   }
 
   return (
-    <Link href={`/produkt/${product.slug}`} className="block group h-full">
-      <TiltCard className="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-500 border border-gray-100/50 flex flex-col h-full relative group/card" tiltAmount={5} glowColor="rgba(78, 204, 163, 0.1)">
-        
+    <Link href={`/produkt/${product.slug}`} className="group block h-full">
+      <TiltCard
+        className="group/card relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-100/50 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] sm:rounded-2xl"
+        tiltAmount={5}
+        glowColor="rgba(78, 204, 163, 0.1)"
+      >
         {/* Image Section - Perfect Square */}
         <div className="relative aspect-square overflow-hidden bg-[#fdfdfd]">
-          <Image 
-            src={product.images[0]} 
-            alt={product.name.de} 
-            fill 
-            unoptimized={isLocal(product.images[0])} 
-            className="object-contain p-3 sm:p-5 transition-transform duration-700 ease-out group-hover:scale-110 mix-blend-multiply" 
-            sizes="(max-width: 640px) 50vw, 20vw" 
+          <Image
+            src={product.images[0]}
+            alt={product.name.de}
+            fill
+            className="object-contain p-3 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110 sm:p-5"
+            sizes="(max-width: 640px) 50vw, 20vw"
           />
-          
+
           {/* Glass Badges */}
-          <div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10">
+          <div className="absolute left-1.5 top-1.5 z-10 flex flex-col gap-1">
             {product.badges?.includes('premium') && (
-              <span className="px-1.5 py-0.5 bg-black/80 backdrop-blur-md text-white text-[8px] font-black rounded-md uppercase tracking-tighter border border-white/10">Premium</span>
+              <span className="rounded-md border border-white/10 bg-black/80 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
+                Premium
+              </span>
             )}
             {product.badges?.includes('bestseller') && (
-              <span className="px-1.5 py-0.5 bg-nova-500/90 backdrop-blur-md text-white text-[8px] font-black rounded-md uppercase tracking-tighter border border-white/10">Bestseller</span>
+              <span className="rounded-md border border-white/10 bg-nova-500/90 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
+                Bestseller
+              </span>
             )}
           </div>
 
           {/* Quick Actions Overlay */}
-          <div className="absolute inset-x-0 bottom-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/20 to-transparent hidden sm:block">
-            <button 
+          <div className="absolute inset-x-0 bottom-0 hidden translate-y-full bg-gradient-to-t from-black/20 to-transparent p-2 transition-transform duration-300 group-hover:translate-y-0 sm:block">
+            <button
               onClick={handleAddToCart}
-              className="w-full py-2 bg-white/95 backdrop-blur-md text-nova-900 text-[10px] font-black rounded-lg shadow-xl hover:bg-nova-900 hover:text-white transition-all flex items-center justify-center gap-1.5 active:scale-95"
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-white/95 py-2 text-[10px] font-black text-nova-900 shadow-xl backdrop-blur-md transition-all hover:bg-nova-900 hover:text-white active:scale-95"
             >
-              <ShoppingCart className="w-3 h-3" />
+              <ShoppingCart className="h-3 w-3" />
               In den Korb
             </button>
           </div>
 
-          <button 
-            onClick={handleWishlist} 
-            className={`absolute top-1.5 right-1.5 w-7 h-7 rounded-lg flex items-center justify-center backdrop-blur-md transition-all z-10 border ${
-              inWishlist 
-                ? 'bg-red-500 text-white border-red-400' 
-                : 'bg-white/70 border-white/50 text-gray-400 opacity-0 group-hover:opacity-100 hover:bg-white hover:text-red-500'
+          <button
+            onClick={handleWishlist}
+            className={`absolute right-1.5 top-1.5 z-10 flex h-7 w-7 items-center justify-center rounded-lg border backdrop-blur-md transition-all ${
+              inWishlist
+                ? 'border-red-400 bg-red-500 text-white'
+                : 'border-white/50 bg-white/70 text-gray-400 opacity-0 hover:bg-white hover:text-red-500 group-hover:opacity-100'
             }`}
           >
-            <Heart className={`w-3.5 h-3.5 ${inWishlist ? 'fill-current' : ''}`} />
+            <Heart className={`h-3.5 w-3.5 ${inWishlist ? 'fill-current' : ''}`} />
           </button>
         </div>
 
         {/* Info Section - Ultra Compact */}
-        <div className="p-2 sm:p-2.5 flex-1 flex flex-col justify-between bg-white">
+        <div className="flex flex-1 flex-col justify-between bg-white p-2 sm:p-2.5">
           <div className="min-w-0">
-            <h3 className="font-bold text-gray-900 text-[10px] sm:text-[12px] line-clamp-1 leading-tight mb-0.5 group-hover:text-nova-600 transition-colors">
+            <h3 className="mb-0.5 line-clamp-1 text-[10px] font-bold leading-tight text-gray-900 transition-colors group-hover:text-nova-600 sm:text-[12px]">
               {product.name.de}
             </h3>
             {/* Stars */}
-            <div className="flex items-center gap-0.5 mb-1">
-              {Array.from({length: 5}).map((_, i) => (
-                <Star key={i} className={`w-2.5 h-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
+            <div className="mb-1 flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-2.5 w-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+                />
               ))}
               {product.reviewCount > 0 && (
-                <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount}</span>
+                <span className="ml-0.5 text-[8px] font-semibold text-gray-400">
+                  {product.reviewCount}
+                </span>
               )}
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-xs sm:text-[14px] font-black text-nova-900 tabular-nums">
+              <span className="text-xs font-black tabular-nums text-nova-900 sm:text-[14px]">
                 {formatPriceDe(product.price)}
               </span>
               {product.oldPrice && (
-                <span className="text-[9px] font-bold text-gray-400 line-through tabular-nums">
+                <span className="text-[9px] font-bold tabular-nums text-gray-400 line-through">
                   {formatPriceDe(product.oldPrice)}
                 </span>
               )}
             </div>
           </div>
-          
+
           {/* Mobile Cart Button - Always visible but minimal */}
-          <button 
+          <button
             onClick={handleAddToCart}
-            className="mt-1.5 sm:hidden w-full py-1 bg-nova-50 text-nova-900 text-[9px] font-black rounded-md flex items-center justify-center gap-1 border border-nova-100"
+            className="mt-1.5 flex w-full items-center justify-center gap-1 rounded-md border border-nova-100 bg-nova-50 py-1 text-[9px] font-black text-nova-900 sm:hidden"
           >
-            <ShoppingCart className="w-2.5 h-2.5" />
+            <ShoppingCart className="h-2.5 w-2.5" />
             Korb
           </button>
         </div>
@@ -266,96 +388,129 @@ const ProductCard = memo(function ProductCard({ product, index }: { product: Pro
   )
 })
 
-type FlashProduct = Product & { discount: number; promoName: string | null; promoBadge: string | null }
+type FlashProduct = Product & {
+  discount: number
+  promoName: string | null
+  promoBadge: string | null
+}
 
-const FlashDealCard = memo(function FlashDealCard({ product, index }: { product: FlashProduct; index: number }) {
+const FlashDealCard = memo(function FlashDealCard({
+  product,
+  index,
+}: {
+  product: FlashProduct
+  index: number
+}) {
   const { isInWishlist, toggleItem } = useWishlist()
   const { addItem } = useCart()
   const isLocal = (src: string) => src.startsWith('/images/products/')
   const inWishlist = isInWishlist(product.id)
 
-  const handleWishlist = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); toggleItem({ id: product.id, name: product.name, price: product.price, image: product.images[0], slug: product.slug }) }
-  const handleAddToCart = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1) }
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    toggleItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug,
+    })
+  }
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    addItem(product, 1)
+  }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.95, y: 20 }} 
-      whileInView={{ opacity: 1, scale: 1, y: 0 }} 
-      viewport={{ once: true }} 
-      transition={{ delay: index * 0.1 }} 
-      className="group bg-white rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] transition-all duration-500 flex flex-col relative border border-gray-100"
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.03)] transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)]"
     >
-      <Link href={`/produkt/${product.slug}`} className="block relative aspect-square bg-[#fdfdfd] overflow-hidden">
-        <Image 
-          src={product.images[0]} 
-          alt={product.name.de} 
-          fill 
-          unoptimized={isLocal(product.images[0])} 
-          className="object-contain p-6 group-hover:scale-110 transition-transform duration-700 mix-blend-multiply" 
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" 
+      <Link
+        href={`/produkt/${product.slug}`}
+        className="relative block aspect-square overflow-hidden bg-[#fdfdfd]"
+      >
+        <Image
+          src={product.images[0]}
+          alt={product.name.de}
+          fill
+          className="object-contain p-6 mix-blend-multiply transition-transform duration-700 group-hover:scale-110"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        
+
         {product.discount > 0 && (
-          <div className="absolute top-2 left-2">
-            <span className="px-2 py-1 bg-red-600/90 backdrop-blur-md text-white text-[9px] font-black rounded-lg shadow-lg flex items-center gap-1 uppercase tracking-tighter border border-white/10">
-              <Flame className="w-3 h-3" />
+          <div className="absolute left-2 top-2">
+            <span className="flex items-center gap-1 rounded-lg border border-white/10 bg-red-600/90 px-2 py-1 text-[9px] font-black uppercase tracking-tighter text-white shadow-lg backdrop-blur-md">
+              <Flame className="h-3 w-3" />
               {product.promoBadge ?? `-${product.discount}%`}
             </span>
           </div>
         )}
-        
-        <div className="absolute top-2 right-2 z-10">
-          <button 
-            onClick={handleWishlist} 
-            className={`w-8 h-8 rounded-lg flex items-center justify-center backdrop-blur-md transition-all border ${
-              inWishlist ? 'bg-red-500 border-red-400 text-white' : 'bg-white/80 border-gray-100 text-gray-400 opacity-0 group-hover:opacity-100'
+
+        <div className="absolute right-2 top-2 z-10">
+          <button
+            onClick={handleWishlist}
+            className={`flex h-8 w-8 items-center justify-center rounded-lg border backdrop-blur-md transition-all ${
+              inWishlist
+                ? 'border-red-400 bg-red-500 text-white'
+                : 'border-gray-100 bg-white/80 text-gray-400 opacity-0 group-hover:opacity-100'
             }`}
           >
-            <Heart className={`w-4 h-4 ${inWishlist ? 'fill-current' : ''}`} />
+            <Heart className={`h-4 w-4 ${inWishlist ? 'fill-current' : ''}`} />
           </button>
         </div>
       </Link>
 
-        <div className="p-2 sm:p-3 flex-1 flex flex-col border-t border-gray-50">
-          <Link href={`/produkt/${product.slug}`} className="block mb-1">
-            <h3 className="font-bold text-gray-900 text-[11px] sm:text-sm line-clamp-1 group-hover:text-red-600 transition-colors leading-tight">
-              {product.name.de}
-            </h3>
-          </Link>
-          {/* Stars */}
-          <div className="flex items-center gap-0.5 mb-2">
-            {Array.from({length: 5}).map((_, i) => (
-              <Star key={i} className={`w-2.5 h-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} />
-            ))}
-            {product.reviewCount > 0 && (
-              <span className="text-[8px] text-gray-400 font-semibold ml-0.5">{product.reviewCount}</span>
-            )}
-          </div>
-        
+      <div className="flex flex-1 flex-col border-t border-gray-50 p-2 sm:p-3">
+        <Link href={`/produkt/${product.slug}`} className="mb-1 block">
+          <h3 className="line-clamp-1 text-[11px] font-bold leading-tight text-gray-900 transition-colors group-hover:text-red-600 sm:text-sm">
+            {product.name.de}
+          </h3>
+        </Link>
+        {/* Stars */}
+        <div className="mb-2 flex items-center gap-0.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              className={`h-2.5 w-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+            />
+          ))}
+          {product.reviewCount > 0 && (
+            <span className="ml-0.5 text-[8px] font-semibold text-gray-400">
+              {product.reviewCount}
+            </span>
+          )}
+        </div>
+
         <div className="mt-auto">
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-sm sm:text-lg font-black text-red-600 tabular-nums">
+          <div className="mb-2 flex items-baseline gap-1.5">
+            <span className="text-sm font-black tabular-nums text-red-600 sm:text-lg">
               {formatPriceDe(product.price)}
             </span>
             {product.oldPrice && (
-              <span className="text-[10px] font-bold text-gray-400 line-through tabular-nums">
+              <span className="text-[10px] font-bold tabular-nums text-gray-400 line-through">
                 {formatPriceDe(product.oldPrice)}
               </span>
             )}
           </div>
-          
+
           {/* Stock Indicator */}
           <div className="mb-2">
-            <div className="flex justify-between text-[8px] font-black mb-1 uppercase tracking-tighter">
-              <span className="text-red-600 animate-pulse">Heiß begehrt</span>
+            <div className="mb-1 flex justify-between text-[8px] font-black uppercase tracking-tighter">
+              <span className="animate-pulse text-red-600">Heiß begehrt</span>
             </div>
           </div>
 
-          <button 
-            onClick={handleAddToCart} 
-            className="w-full py-2 bg-nova-900 text-white text-[10px] font-black rounded-lg transition-all shadow-md hover:bg-black active:scale-95 flex items-center justify-center gap-1.5"
+          <button
+            onClick={handleAddToCart}
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-nova-900 py-2 text-[10px] font-black text-white shadow-md transition-all hover:bg-black active:scale-95"
           >
-            <ShoppingCart className="w-3 h-3" />
+            <ShoppingCart className="h-3 w-3" />
             <span>Jetzt sichern</span>
           </button>
         </div>
@@ -370,9 +525,14 @@ function FlashDealsHeader() {
   useEffect(() => {
     const update = () => {
       const now = new Date()
-      const end = new Date(now); end.setHours(23, 59, 59, 999)
+      const end = new Date(now)
+      end.setHours(23, 59, 59, 999)
       const diff = Math.max(0, end.getTime() - now.getTime())
-      setTimeLeft({ hours: Math.floor(diff / 3_600_000), minutes: Math.floor((diff % 3_600_000) / 60_000), seconds: Math.floor((diff % 60_000) / 1_000) })
+      setTimeLeft({
+        hours: Math.floor(diff / 3_600_000),
+        minutes: Math.floor((diff % 3_600_000) / 60_000),
+        seconds: Math.floor((diff % 60_000) / 1_000),
+      })
     }
     update()
     const t = setInterval(update, 1000)
@@ -382,21 +542,43 @@ function FlashDealsHeader() {
   const pad = (n: number) => String(n).padStart(2, '0')
 
   return (
-    <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="flex flex-col sm:flex-row items-center justify-between bg-white/80 backdrop-blur-md border border-white p-3 sm:p-4 rounded-2xl shadow-sm mb-6 gap-4">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      className="mb-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white bg-white/80 p-3 shadow-sm backdrop-blur-md sm:flex-row sm:p-4"
+    >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-orange-500 rounded-xl flex items-center justify-center shadow-red-500/10 shadow-lg">
-          <Flame className="w-5 h-5 text-white" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-orange-500 shadow-lg shadow-red-500/10">
+          <Flame className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h2 className="text-lg sm:text-xl font-black text-gray-900 font-heading flex items-center gap-2 uppercase tracking-tight">Flash Deals <span className="px-1.5 py-0.5 bg-red-50 text-red-600 text-[10px] font-black rounded-md uppercase tracking-tighter">Live</span></h2>
-          <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">Zeitlich begrenzt</p>
+          <h2 className="flex items-center gap-2 font-heading text-lg font-black uppercase tracking-tight text-gray-900 sm:text-xl">
+            Flash Deals{' '}
+            <span className="rounded-md bg-red-50 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tighter text-red-600">
+              Live
+            </span>
+          </h2>
+          <p className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+            Zeitlich begrenzt
+          </p>
         </div>
       </div>
-      <div className="flex gap-2 text-center shrink-0">
-        {([['Std', timeLeft.hours], ['Min', timeLeft.minutes], ['Sek', timeLeft.seconds]] as [string, number][]).map(([label, val]) => (
-          <div key={label} className="flex flex-col w-[44px]">
-            <span className="w-10 h-10 mx-auto bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center text-base font-bold text-gray-900 font-mono tabular-nums">{pad(val)}</span>
-            <span className="text-[8px] uppercase text-gray-400 font-bold mt-1 tracking-tighter">{label}</span>
+      <div className="flex shrink-0 gap-2 text-center">
+        {(
+          [
+            ['Std', timeLeft.hours],
+            ['Min', timeLeft.minutes],
+            ['Sek', timeLeft.seconds],
+          ] as [string, number][]
+        ).map(([label, val]) => (
+          <div key={label} className="flex w-[44px] flex-col">
+            <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg border border-gray-100 bg-gray-50 font-mono text-base font-bold tabular-nums text-gray-900">
+              {pad(val)}
+            </span>
+            <span className="mt-1 text-[8px] font-bold uppercase tracking-tighter text-gray-400">
+              {label}
+            </span>
           </div>
         ))}
       </div>
