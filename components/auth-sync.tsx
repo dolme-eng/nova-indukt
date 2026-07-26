@@ -1,33 +1,38 @@
-"use client"
+'use client'
 
-import { useEffect } from "react"
-import { useSession } from "next-auth/react"
-import { useAuth } from "@/lib/store/auth"
-import { mergeGuestCartOnLogin } from "@/app/actions/cart"
+import { useEffect, useRef } from 'react'
+import { useSession } from 'next-auth/react'
+import { useAuth } from '@/lib/store/auth'
+import { mergeGuestCartOnLogin } from '@/app/actions/cart'
 
 export function AuthSync() {
   const { data: session, status } = useSession()
-  const { setUser, setHydrated } = useAuth()
-  
+  const { setUser, setHydrated, user } = useAuth()
+  const syncedSessionRef = useRef<string | null>(null)
+
   useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      setUser({
-        id: session.user.id as string,
-        name: session.user.name as string,
-        email: session.user.email as string,
-        role: session.user.role as string
-      })
-      
-      // Merge guest cart on login
-      mergeGuestCartOnLogin()
-    } else if (status === "unauthenticated") {
-      setUser(null)
+    if (status === 'authenticated' && session?.user) {
+      const sessionKey = `${session.user.id}-${session.user.email}-${session.user.role}`
+      if (syncedSessionRef.current !== sessionKey) {
+        syncedSessionRef.current = sessionKey
+        setUser({
+          id: session.user.id as string,
+          name: session.user.name as string,
+          email: session.user.email as string,
+          role: session.user.role as string,
+        })
+        mergeGuestCartOnLogin()
+      }
+    } else if (status === 'unauthenticated') {
+      if (user !== null) {
+        setUser(null)
+      }
     }
-    
-    if (status !== "loading") {
+
+    if (status !== 'loading') {
       setHydrated()
     }
-  }, [session, status, setUser, setHydrated])
-  
+  }, [session, status])
+
   return null
 }
