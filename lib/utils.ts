@@ -13,5 +13,6 @@ export function formatDate(date: string, locale = 'de-DE'): string {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'Europe/Berlin',
   }).format(new Date(date))
 }
