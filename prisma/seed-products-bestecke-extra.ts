@@ -61,7 +61,7 @@ Investition in die höchste Besteckqualität für Generationen.`,
       'WMF Monde Essbesteck 68-teilig - Cromargan® Edelstahl, Made in Germany, für 12 Personen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Monde Essbesteck 68-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -98,7 +98,7 @@ Funktion trifft auf elegantes Design - Made in Germany.`,
       'WMF Function 4 Essbesteck 68-teilig - Cromargan® Edelstahl, Made in Germany, durchdachtes Design. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Function 4 Essbesteck 68-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -135,7 +135,7 @@ Zwilling Qualität für jeden Tag und festliche Anlässe.`,
       'Zwilling Spirit Essbesteck 68-teilig - Edelstahl 18/10, elegantes Design, für 12 Personen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Spirit Essbesteck 68-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -172,7 +172,7 @@ Modernes Design für den Alltag in der Küche.`,
       'Zwilling Now S Essbesteck 68-teilig - Edelstahl 18/10, modernes Design, für 12 Personen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Now S Essbesteck 68-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -211,7 +211,7 @@ Die Grundausstattung für jede ambitionierte Küche.`,
       'WMF Monde Messerset 5-teilig - Cromargan® Edelstahl, Made in Germany, 5 hochwertige Küchenmesser. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Monde Messerset 5-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -249,7 +249,7 @@ Professionelle Messer für anspruchsvolle Kochenthusiasten.`,
       'Zwilling Pro S Messerset 5-teilig - Friodur® Edelstahl, Made in Germany, professionelle Küchenmesser. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Zwilling Pro S Messerset 5-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -286,7 +286,7 @@ Schweizer Präzision für Ihren täglichen Gebrauch.`,
       'Victorinox Swiss Classic Besteck-Set 24-teilig - Schweizer Qualität, Edelstahl, für 4 Personen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'Victorinox Swiss Classic Besteck-Set 24-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -324,7 +324,7 @@ Ordnung und Übersicht in Ihrer Besteckschublade.`,
       'WMF Bestedeckhalter Edelstahl - Cromargan® Edelstahl, Made in Germany, für 24-teilige Besteck-Sets. Jetzt bei NOVA INDUKT.',
     categorySlug: 'bestecke',
     folder: 'WMF Bestedeckhalter Edelstahl',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 ]
 

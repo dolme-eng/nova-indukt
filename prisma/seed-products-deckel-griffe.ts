@@ -67,7 +67,7 @@ Der perfekte Ersatz oder Zusatz für Ihre Fissler OPC Sammlung.`,
       'Fissler OPC Glasdeckel 20 cm - hochwertiger Ersatzdeckel für OPC Pfannen. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Fissler OPC Glasdeckel - 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -104,7 +104,7 @@ Der perfekte Ersatz oder Zusatz für Ihre Fissler OPC Sammlung.`,
       'Fissler OPC Glasdeckel 24 cm - hochwertiger Ersatzdeckel für OPC Pfannen. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Fissler OPC Glasdeckel - 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -141,7 +141,7 @@ Der perfekte Ersatz oder Zusatz für Ihre Fissler OPC Sammlung.`,
       'Fissler OPC Glasdeckel 28 cm - hochwertiger Ersatzdeckel für OPC Pfannen. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Fissler OPC Glasdeckel - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -178,7 +178,7 @@ Der perfekte Ersatz oder Zusatz für Ihre Fissler OPC Sammlung.`,
       'Fissler OPC Glasdeckel 32 cm - hochwertiger Ersatzdeckel für OPC Pfannen. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Fissler OPC Glasdeckel - 32 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -219,7 +219,7 @@ Der perfekte Ersatz oder Zusatz für Ihre WMF Diadem Plus Sammlung.`,
       'WMF Diadem Plus Glasdeckel 16 cm - hochwertiger Ersatzdeckel. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'WMF Diadem Plus Glasdeckel - 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -256,7 +256,7 @@ Der perfekte Ersatz oder Zusatz für Ihre WMF Diadem Plus Sammlung.`,
       'WMF Diadem Plus Glasdeckel 20 cm - hochwertiger Ersatzdeckel. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'WMF Diadem Plus Glasdeckel - 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -293,7 +293,7 @@ Der perfekte Ersatz oder Zusatz für Ihre WMF Diadem Plus Sammlung.`,
       'WMF Diadem Plus Glasdeckel 24 cm - hochwertiger Ersatzdeckel. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'WMF Diadem Plus Glasdeckel - 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -330,7 +330,7 @@ Der perfekte Ersatz oder Zusatz für Ihre WMF Diadem Plus Sammlung.`,
       'WMF Diadem Plus Glasdeckel 28 cm - hochwertiger Ersatzdeckel. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'WMF Diadem Plus Glasdeckel - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -371,7 +371,7 @@ Der Premium-Ersatz für Ihre Demeyere Atlantis 7 Sammlung.`,
       'Demeyere Atlantis 7 Glasdeckel 24 cm - Premium-Ersatzdeckel. Spülmaschinenfest, made in Belgium. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Demeyere Atlantis 7 Glasdeckel - 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -408,7 +408,7 @@ Der Premium-Ersatz für Ihre Demeyere Atlantis 7 Sammlung.`,
       'Demeyere Atlantis 7 Glasdeckel 28 cm - Premium-Ersatzdeckel. Spülmaschinenfest, made in Belgium. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Demeyere Atlantis 7 Glasdeckel - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -449,7 +449,7 @@ Der perfekte Ersatz oder Zusatz für Ihre Zwilling Plus Sammlung.`,
       'Zwilling Plus Glasdeckel 16 cm - hochwertiger Ersatzdeckel. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Zwilling Plus Glasdeckel - 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -486,7 +486,7 @@ Der perfekte Ersatz oder Zusatz für Ihre Zwilling Plus Sammlung.`,
       'Zwilling Plus Glasdeckel 20 cm - hochwertiger Ersatzdeckel. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Zwilling Plus Glasdeckel - 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -523,7 +523,7 @@ Der perfekte Ersatz oder Zusatz für Ihre Zwilling Plus Sammlung.`,
       'Zwilling Plus Glasdeckel 24 cm - hochwertiger Ersatzdeckel. Spülmaschinenfest, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Zwilling Plus Glasdeckel - 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -564,7 +564,7 @@ Die Original-Fissler-Ersatzgriffe - für sicheren Halt und lange Lebensdauer.`,
       'Fissler Ersatzgriff-Set OPC - 2-teilig, Edelstahl, Made in Germany. Original Ersatzteile. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'Fissler Ersatzgriff-Set OPC',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -601,7 +601,7 @@ Die Original-WMF-Ersatzgriffe - für sicheren Halt und lange Lebensdauer.`,
       'WMF Ersatzgriff-Set Profi Plus - 2-teilig, Edelstahl, Made in Germany. Original Ersatzteile. Jetzt bei NOVA INDUKT.',
     categorySlug: 'deckel-griffe',
     folder: 'WMF Ersatzgriff-Set Profi Plus',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 ]
 

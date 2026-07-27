@@ -63,7 +63,7 @@ Le Creuset steht für französische Tradition und höchste Kochkunst - die Sprin
       'Le Creuset Signature Springform 24 cm - emailliertes Gusseisen, Made in France, 30 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Le Creuset Signature Springform - 24 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -101,7 +101,7 @@ Die Kasserolle ist ein unverzichtbares Werkzeug für alle, die französische Koc
       'Le Creuset Signature Kasserolle 20 cm - emailliertes Gusseisen, Made in France, 2,0 L. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Le Creuset Signature Kasserolle - 20 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -139,7 +139,7 @@ Die Cocotte Ronde ist ein Kochgerät für Generationen - sie wird mit jeder Benu
       'Staub Cocotte Ronde 32 cm - emailliertes Gusseisen, 7,0 L, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Staub Cocotte Ronde - 32 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -177,7 +177,7 @@ Die Cocotte Ronde 26 cm ist die perfekte Größe für den Alltag - groß genug f
       'Staub Cocotte Ronde 26 cm - emailliertes Gusseisen, 4,0 L, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Staub Cocotte Ronde - 26 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -215,7 +215,7 @@ Die Petromax Dutch Oven ft9 ist der zuverlässige Begleiter für Großverpflegun
       'Petromax Dutch Oven ft9 32 cm - emailliertes Gusseisen, 8,2 L, Duroplast-Griff. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Petromax Dutch Oven ft9 - 32 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -326,7 +326,7 @@ Die Petromax Dutch Oven ft6 ist der vielseitige Bräter für die Küche und das 
       'Petromax Dutch Oven ft6 28 cm - emailliertes Gusseisen, 5,3 L, PFAS-frei. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Petromax Dutch Oven ft6 - 28 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 ]
 

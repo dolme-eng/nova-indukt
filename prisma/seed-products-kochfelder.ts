@@ -59,7 +59,7 @@ Die perfekte Wahl für alle, die ein zuverlässiges, sicheres und langlebiges In
       'Bosch Serie 4 PIF64RBB5E autarkes 60 cm Induktionskochfeld. Testsieger Stiftung Warentest (2,0). Ovale Bräterzone, TouchSelect, PowerBoost. Made in Germany.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'Bosch PIF64RBB5E - Serie 4 - 60 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'siemens-iq700-ex645lyc1e-induktionskochfeld',
@@ -99,7 +99,7 @@ Ein absolutes Highlight für anspruchsvolle Hobbyköche, die modernste Flexibili
       'Siemens iQ700 EX645LYC1E Premium 60 cm Induktionskochfeld. varioInduction flexible Zonen, Bratsensor Plus, Dual lightSlider Steuerung, powerMove Plus. Made in Germany.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'Siemens EX645LYC1E - iQ700 - 60 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'siemens-iq300-eh801hfb1e-induktionskochfeld',
@@ -140,7 +140,7 @@ Luxuriöses Design und viel Platz zum Kochen für große Familien und kulinarisc
       'Siemens iQ300 EH801HFB1E flächenbündiges 80 cm Induktionskochfeld. Rahmenloses Design, Home Connect Smart Control, TouchSlider, Nudelstufe. Made in Germany.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'Siemens EH801HFB1E - iQ300 - 80 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'neff-t58tt20n0-flexinduction-induktionskochfeld',
@@ -182,7 +182,7 @@ Erleben Sie das intuitivste und spielerischste Kocherlebnis mit der legendären 
       'Neff T58TT20N0 80 cm Premium Induktionskochfeld. TwistPad magnetische Steuerung, FlexInduction, Wischschutzfunktion, Edelstahlrahmen. Made in Germany.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'Neff T58TT20N0 - TTT5820N - 80 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'siemens-iq700-ex975lxc1e-induktionskochfeld',
@@ -227,7 +227,7 @@ Das absolute Traum-Kochfeld für jede Luxus-Küche - unschlagbar in Platz, Leist
       'Siemens iQ700 EX975LXC1E Luxus 90 cm Induktionskochfeld. varioInduction Plus 3 Flexzonen, Bratsensor Plus, Home Connect, Dual lightSlider. Made in Germany.',
     categorySlug: 'induktionskochfelder-herde',
     folder: 'Siemens EX975LXC1E - iQ700 - 90 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 ]
 

@@ -68,7 +68,7 @@ Das Emma Fondue-Set - wo skandinavische Eleganz auf Genusskultur trifft.`,
       'Stelton Emma Fondue-Set 1,5 L aus Emaille und Edelstahl. Dänisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Stelton Emma Fondue-Set - 1,5 L',
-    imageFiles: ['1.jpg', '2.jpg', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -106,7 +106,7 @@ Das Apicio Set - für unkompliziertes Fondue-Vergnügen im Alltag.`,
       'Tefal Apicio Fondue-Set 1,2 L mit Antihaftbeschichtung. Spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Tefal Apicio Fondue-Set - 1,2 L',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -143,7 +143,7 @@ Das komplette Set für den perfekten Raclette-Abend mit Familie und Freunden.`,
       'Tefal Préférence Raclette-Set 8-teilig mit Granitium-Antihaftbeschichtung. Induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Tefal Préférence Raclette-Pfanne - 8-teilig',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -181,7 +181,7 @@ Das Bugatti Fondue-Set - wo italienische Lebensart auf erstklassige Kochkunst tr
       'Bugatti Fondue-Set 1,5 L mit Keramik-Heizkörper. Italienisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Bugatti Fondue-Set - 1,5 L',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -219,7 +219,7 @@ Das Spirit Fondue-Set - für großzügiges Fondue-Vergnügen in anspruchsvollem 
       'Zwilling Spirit Fondue-Set 2,0 L aus Edelstahl. Großes Volumen, spülmaschinenfest, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'Zwilling Spirit Fondue-Set - 2,0 L',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -257,7 +257,7 @@ Das de Buyer Raclette-Set - professionelle Qualität für den Raclette-Genuss zu
       'de Buyer Raclette-Set 8-teilig aus Stahl und Emaille. Professionelle Qualität, Made in France, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'fondues-raclette',
     folder: 'de Buyer Raclette-Pfanne - 8-teilig',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 ]
 

@@ -60,7 +60,7 @@ Das Kochmesser ist der unverzichtbare Allrounder in jeder Küche - von Gemüse b
       'Zwilling Four Star Kochmesser 20 cm aus Friodur® Edelstahl. Klassisches Profimesser, hergestellt in Solingen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Four Star Kochmesser - 20 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'zwilling-four-star-chefmesser-16cm',
@@ -95,7 +95,7 @@ Für alle, die ein zuverlässiges, handliches Messer für den täglichen Gebrauc
       'Zwilling Four Star Kochmesser 16 cm - Friodur® Edelstahl, kompakt, hergestellt in Solingen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Four Star Kochmesser - 16 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'miyabi-5000mcd-bunka-18cm',
@@ -131,7 +131,7 @@ Ein Messer für anspruchsvolle Köche, die Wert auf Geschichte und Qualität leg
       'Miyabi 5000MCD Bunka 18 cm - MicroCarbide MC63 Stahl, handgeschliffen in Seki/Japan. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Miyabi 5000MCD Bunka - 18 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'miyabi-kaizen-santoku-18cm',
@@ -166,7 +166,7 @@ Das Santoku ist die japanische Antwort auf das europäische Kochmesser - ideal f
       'Miyabi Kaizen Santoku 18 cm - CMV60 Stahl, hergestellt in Seki/Japan. Vielseitiges Universalmesser. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Miyabi Kaizen Santoku - 18 cm',
-    imageFiles: ['1.png', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'victorinox-fibrox-pro-santoku-18cm',
@@ -201,7 +201,7 @@ Ein ideales Einsteigermesser für alle, die Wert auf Qualität ohne Kompromisse 
       'Victorinox Fibrox Pro Santoku 18 cm - robust, spülmaschinenfest, Schweizer Qualität. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Victorinox Fibrox Pro Santoku - 18 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'bob-kramer-meiji-utility-messer-13cm',
@@ -236,7 +236,7 @@ Ein Messer für alle, die Wert auf handwerkliche Perfektion legen.`,
       'Bob Kramer Meiji Utility-Messer 13 cm - SG2 Stahl, handgeschliffen, präzise Schneidarbeiten. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Bob Kramer Meiji Utility - 13 cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
   {
     slug: 'twin-fin-ii-schaerfstahl',
@@ -307,7 +307,7 @@ Das ideale Set für alle, die ihre Küchenmesserausstattung komplettieren möcht
       'Victorinox Swiss Classic Messerset 6-teilig - Schweizer Qualität, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Victorinox Swiss Classic Messerset - 6-teilig',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 ]
 

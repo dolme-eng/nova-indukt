@@ -68,7 +68,7 @@ Das Pro S Kochmesser ist die Wahl von Profis weltweit und steht für höchste de
       'Zwilling Pro S Kochmesser 20 cm mit Friodur®-Klinge, hergestellt in Solingen. Ergonomischer Griff, professionelle Qualität. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Pro S - Kochmesser 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -106,7 +106,7 @@ Die größere Version des Pro S Kochmessers für alle, die mehr Klinge und mehr 
       'Zwilling Pro S Kochmesser 26 cm mit Friodur®-Klinge. Großes Profi-Messer, hergestellt in Solingen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Pro S - Kochmesser 26 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -144,7 +144,7 @@ Ein unverzichtbares Multitalent für jede Küche - weder zu groß noch zu klein.
       'Zwilling Pro S Utility-Messer 16 cm - vielseitiges Allzweckmesser mit Friodur®-Klinge. Hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Pro S - Utility-Messer 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -182,7 +182,7 @@ Das Schärfmesser ergänzt die Pro S-Serie als Werkzeug für feine, präzise Arb
       'Zwilling Pro S Schärfmesser 18 cm - schmale Friodur®-Klinge für präzise Schälarbeiten. Hergestellt in Solingen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Pro S - Schärfmesser 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -224,7 +224,7 @@ Das Miyabi 5000MCD Gyuto vereint traditionelle japanische Kunstfertigkeit mit mo
       'Miyabi 5000MCD Gyuto 20 cm mit MicroCarbide MC63-Stahl, 63 HRC. Dreilagig, handgeschliffen, Made in Seki/Japan. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Miyabi 5000MCD - Gyuto 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -262,7 +262,7 @@ Das Santoku ist die japanische Alternative zum Kochmesser und überzeugt durch s
       'Miyabi 5000MCD Santoku 18 cm mit MicroCarbide MC63-Stahl, 63 HRC. Dreilagig, Made in Seki/Japan. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Miyabi 5000MCD - Santoku 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -300,7 +300,7 @@ Die Birchwood-Serie vereint die Präzision japanischer Messerkunst mit der Wärm
       'Miyabi Birchwood Santoku 18 cm mit SG2 MicroCarbide-Stahl und Birkenholz-Griff. 61 HRC, Made in Seki/Japan. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Miyabi Birchwood - Santoku 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -342,7 +342,7 @@ Bob Kramer ist einer der renommiertesten Messermacher der Welt - sein Meiji-Koch
       'Bob Kramer Meiji Kochmesser 20 cm mit SG2-Stahl, handgeschliffen. Nach Bob Kramer Design, Made in Seki/Japan. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Bob Kramer Meiji - Kochmesser 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -380,7 +380,7 @@ Das Meiji Santoku ist die perfekte Wahl für alle, die westliches Design mit jap
       'Bob Kramer Meiji Santoku 18 cm mit SG2-Stahl, handgeschliffen. Nach Bob Kramer Design, Made in Seki/Japan. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Bob Kramer Meiji - Santoku 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -423,7 +423,7 @@ Victorinox steht für schweizer Qualität zum fairen Preis - ein Küchenmesser f
       'Victorinox Swiss Classic Kochmesser 20 cm - spülmaschinenfest, schweizer Qualität. Bestseller zum fairen Preis. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Victorinox Swiss Classic - Kochmesser 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -461,7 +461,7 @@ Ein unverzichtbares Messer für alle, die gerne frisches Brot backen und servier
       'Victorinox Swiss Classic Brotmesser 26 cm mit Sägeklinge. Schweizer Qualität, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Victorinox Swiss Classic - Brotmesser 26 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -499,7 +499,7 @@ Das Fibrox Pro ist das am weitesten verbreitete Profi-Kochmesser der Welt - zu R
       'Victorinox Fibrox Pro Kochmesser 20 cm mit Fibrox-Griff. Wahl der Profiköche, Schweizer Qualität. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Victorinox Fibrox Pro - Kochmesser 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -542,7 +542,7 @@ Das Spirit Messerset ist das perfekte Geschenk für alle, die eine hochwertige M
       'Zwilling Spirit Messerset 3-teilig mit Kochmesser, Universalmesser und Schärfmesser. Made in Germany, Friodur®-Klingen. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Spirit - Messerset 3-teilig',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -580,7 +580,7 @@ Das Miyabi Messerblock ist eine Investition in höchste Küchenqualität und ele
       'Miyabi 5000MCD Messerblock 7-teilig mit MicroCarbide MC63-Stahl und Ahornholz-Block. 63 HRC, Made in Seki/Japan. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Miyabi 5000MCD - Messerblock 7-teilig',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -619,7 +619,7 @@ Die magnetische Messerschiene ist die moderne Alternative zum Messerblock - hygi
       'Zwilling Magnetic Messerschiene 45 cm aus Edelstahl. Magnetisch, platzsparend, einfach zu montieren. Hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'messer',
     folder: 'Zwilling Magnetic - Messerschiene 45 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 ]
 

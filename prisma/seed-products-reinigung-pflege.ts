@@ -100,7 +100,7 @@ Die natürliche Pflege für Holzteile am Grill.`,
       'Weber Holzschutzöl 250 ml - pflegt Holzgriffe, Weber Original. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Weber Holzschutzöl',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {
@@ -211,7 +211,7 @@ Die natürliche Pflege für Ihre Antihaftpfannen aus Italien.`,
       'Ballarini Pflegeöl 250 ml - pflegt Antihaftbeschichtung, Italianisch. Jetzt bei NOVA INDUKT.',
     categorySlug: 'reinigung-pflege',
     folder: 'Ballarini Pflegeöl',
-    imageFiles: ['1.png'],
+    imageFiles: ['1.jpg'],
   },
 
   {

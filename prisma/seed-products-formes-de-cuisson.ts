@@ -255,7 +255,7 @@ Die Staub Cocotte - ein Küchenbegleiter fürs Leben, der mit der Zeit noch sch�
       'Staub Cocotte Oval 31×21 cm aus emailliertem Gusseisen. 4,2 L, ofenfest, Made in France. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Staub Cocotte Oval - 31x21 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -331,7 +331,7 @@ Die Tarte-Form von Le Creuset - für kulinarische Highlights im klassischen fran
       'Le Creuset Signature Tarte-Form 28 cm aus emailliertem Gusseisen. Abnehmbarer Boden, 30 Jahre Garantie. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Le Creuset Signature Tarte-Form - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -369,7 +369,7 @@ Die DT6 vereint traditionelles Handwerk mit moderner Küchentechnik - für anspr
       'Petromax Dutch Oven DT6 Oval - 7 Liter Gusseisen, voreingebrannt, induktionsgeeignet. PFAS-frei, Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Petromax Dutch Oven DT6 - Oval',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -407,7 +407,7 @@ Die kleine Cocotte für große Wirkung - für anspruchsvolle Einzelportionen.`,
       'Staub Cocotte Ronde 20 cm - kompakte Gusseisen-Cocotte, 2,2 L, Made in France. Induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'formes-de-cuisson',
     folder: 'Staub Cocotte Ronde - 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 ]
 

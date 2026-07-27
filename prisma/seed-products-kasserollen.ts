@@ -55,7 +55,7 @@ Die absolute Referenz unter den Stielkasserollen - langlebig, robust und thermis
       'Fissler Original Profi Collection Stielkasserolle 16 cm mit Metalldeckel (1,4 L). Edelstahl 18/10, CookStar-Boden, induktionsgeeignet. Made in Germany bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Fissler Original Profi Collection - Stielkasserolle 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'fissler-opc-stielkasserolle-18cm',
@@ -94,7 +94,7 @@ Die perfekte Kasserolle für anspruchsvolles Kochen - von Soßen über Risotto b
       'Fissler Original Profi Collection Stielkasserolle 18 cm (2,0 L). Edelstahl 18/10, CookStar-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Fissler Original Profi Collection - Stielkasserolle 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'fissler-adamant-stielkasserolle-18cm',
@@ -132,7 +132,7 @@ Die ideale Kasserolle für alle, die eine leichte, pflegeleichte und langlebige 
       'Fissler Adamant Stielkasserolle 18 cm (2,0 L) mit Glasdeckel. Adamant-Keramikbeschichtung, TransTherm-Boden, induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Fissler Adamant - Stielkasserolle 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'wmf-function4-stielkasserolle-16cm',
@@ -170,7 +170,7 @@ Die ideale Verbindung aus deutscher Ingenieurskunst und modernem Design für die
       'WMF Function 4 Stielkasserolle 16 cm (1,5 L). Cromargan-Edelstahl 18/10, TransTherm-Boden, Multifunktionsdeckel. Induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'WMF Function 4 - Stielkasserolle 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'wmf-comfort-line-stielkasserolle-16cm',
@@ -207,7 +207,7 @@ Die bewährte Qualitätskasserolle für den täglichen Gebrauch - solide, zuverl
       'WMF Comfort Line Stielkasserolle 16 cm (1,4 L). Cromargan-Edelstahl 18/10, TransTherm-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'WMF Comfort Line - Stielkasserolle 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'wmf-diadem-plus-stielkasserolle-16cm',
@@ -246,7 +246,7 @@ Die elegante Kasserolle für anspruchsvolles Kochen mit komfortabler Keramikbesc
       'WMF Diadem Plus Stielkasserolle 16 cm (1,5 L) mit Keramik-Innenbeschichtung. Cromargan-Edelstahl, TransTherm-Boden, induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'WMF Diadem Plus - Stielkasserolle 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'demeyere-essential-5-stielkasserolle-18cm',
@@ -284,7 +284,7 @@ Die erstklassige Kasserolle für anspruchsvolle Köche, die Wert auf gleichmäß
       'Demeyere Essential 5 Stielkasserolle 18 cm (2,2 L). 5-Schicht-Edelstahl, InductoSeal, induktionsgeeignet. 30 Jahre Garantie bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Demeyere Essential 5 - Stielkasserolle 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'demeyere-atlantis-7-stielkasserolle-20cm',
@@ -322,7 +322,7 @@ Die absolute "Rolls-Royce" unter den Induktionskasserollen für anspruchsvolle G
       'Demeyere Atlantis 7 Stielkasserolle 20 cm mit InductoSeal-Kupferboden und TriplInduc. Höchste Induktionseffizienz. 30 Jahre Garantie bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Demeyere Atlantis 7 - Stielkasserolle 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'zwilling-plus-stielkasserolle-18cm',
@@ -361,7 +361,7 @@ Qualität und Langlebigkeit im klassischen Design zum hervorragenden Preis-Leist
       'Zwilling Plus Stielkasserolle 18 cm (2,0 L) mit Sigma Classic Sandwichboden. 3-Ply Edelstahl 18/10, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Zwilling Plus - Stielkasserolle 18 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'silit-silargan-modesto-stielkasserolle-16cm',
@@ -399,7 +399,7 @@ Die perfekte Wahl für empfindliche Speisen und anspruchsvolle Allergiker, die k
       'Silit Silargan Modesto Stielkasserolle 16 cm (1,4 L) aus Silargan-Funktionskeramik. Nickelfrei, kratzfest, induktionsgeeignet. Hergestellt in Deutschland.',
     categorySlug: 'induktionstoepfe',
     folder: 'Silit Silargan Modesto - Stielkasserolle 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 ]
 

@@ -62,7 +62,7 @@ Praktische Lösung für die ordentliche Aufbewahrung Ihrer Induktionspfannen.`,
       'Fissler Topfregal Edelstahl 4-fach - stabile Pfannenaufbewahrung, platzsparend, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Fissler Topfregal Edelstahl 4-fach',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -99,7 +99,7 @@ Zwilling Qualität für die ordentliche Aufbewahrung Ihrer Kochgeschirre.`,
       'Zwilling Topfregal Edelstahl 3-fach - hochwertige Pfannenaufbewahrung von Zwilling. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Zwilling Topfregal Edelstahl 3-fach',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -136,7 +136,7 @@ Schwedisches Design trifft auf praktische Stauraumlösung.`,
       'Rivsalt Topfregal 5 Stufen - schwedisches Design, schwarzes Metall, 5 Ebenen für Pfannen und Töpfe. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Rivsalt Topfregal 5 Stufen',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -174,7 +174,7 @@ Einfache und wirkungsvolle Lösung zum Schutz Ihrer Pfannenbeschichtung.`,
       'WMF Pfannenschoner 30 cm aus Filz und Stoff - schützt Antihaftbeschichtung vor Kratzern. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'WMF Pfannenschoner 30cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -211,7 +211,7 @@ Die ideale Ergänzung zu Ihren Fissler-Pfannen.`,
       'Fissler Pfannenschoner 30 cm - hochwertiger Kratzschutz aus Filz und Stoff. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Fissler Pfannenschoner 30cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -248,7 +248,7 @@ Die langlebige Alternative zu Filz-Pfannenschonern.`,
       'Tefal Pfannenschoner 30 cm aus Silikon - spülmaschinenfest, langlebig, schützt Antihaftbeschichtung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'Tefal Pfannenschoner 30cm',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -285,7 +285,7 @@ Günstige und praktische Aufbewahrungslösung für Ihre Pfannen.`,
       'IKEA VARIERA Topfregal 2-fach - günstige und stabile Pfannenaufbewahrung aus Stahl. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'IKEA VARIERA Topfregal 2-fach',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 
   {
@@ -322,7 +322,7 @@ Hochwertige Aufbewahrungslösung von WMF für anspruchsvolle Kochenthusiasten.`,
       'WMF Topfregal Edelstahl 3-fach - Cromargan® Edelstahl, Made in Germany, elegante Pfannenaufbewahrung. Jetzt bei NOVA INDUKT.',
     categorySlug: 'pfannenschoner-topfregale',
     folder: 'WMF Topfregal Edelstahl 3-fach',
-    imageFiles: ['1.jpg', '2.png'],
+    imageFiles: ['1.jpg', '2.jpg'],
   },
 ]
 

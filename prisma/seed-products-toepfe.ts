@@ -57,7 +57,7 @@ Indestructible, lourd et thermiquement parfait - l'excellence absolue de Fissler
       'Fissler Original Profi Collection Kochtopf hoch 24 cm (6,3 L). Inox 18/10, CookStar-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Fissler Original Profi Collection - Kochtopf 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'demeyere-atlantis-7-kochtopf-20cm',
@@ -94,7 +94,7 @@ Die absolute "Rolls-Royce" unter den Induktionstöpfen für anspruchsvolle Gourm
       'Demeyere Atlantis 7 Kochtopf 20 cm mit InductoSeal-Kupferboden und TriplInduc. Höchste Induktionseffizienz. 30 Jahre Garantie bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Demeyere Atlantis 7 - Kochtopf 20 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'zwilling-twin-classic-kochtopf-20cm',
@@ -131,7 +131,7 @@ Qualität und Langlebigkeit im klassischen Design zum hervorragenden Preis-Leist
       'Zwilling Twin Classic Kochtopf 20 cm (3,5 L) mit Sigma Classic Sandwichboden. Langlebiger Edelstahl 18/10, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'Zwilling Twin Classic - Kochtopf 20 cm  Topfset 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'silit-silargan-elegance-line-stielkasserolle-16cm',
@@ -169,7 +169,7 @@ Die perfekte Wahl für empfindliche Speisen und anspruchsvolle Allergiker, die k
       'Silit Elegance Line 16 cm Stielkasserolle aus Silargan-Funktionskeramik. Nickelfrei, kratzfest, induktionsgeeignet. Hergestellt in Deutschland.',
     categorySlug: 'induktionstoepfe',
     folder: 'Silit Silargan Elegance Line - Stielkasserolle 16 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -210,7 +210,7 @@ Die ideale Verbindung aus deutscher Ingenieurskunst und modernem Design für die
       'WMF Function 4 Bratentopf 20 cm (2,5 L). Cromargan-Edelstahl 18/10, TransTherm-Boden, Multifunktionsdeckel. Induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'WMF Function 4 - Bratentopf 20 cm (individuel)',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'le-creuset-signature-braeter-rund-24cm',
@@ -247,7 +247,7 @@ Ein wunderschöner Klassiker, der direkt vom Kochfeld stilvoll auf dem Tisch ser
       'Le Creuset Signature runder Gusseisen-Bräter 24 cm (4,2 L) emailliert. Höchste Hitzespeicherung, induktionsgeeignet, 30 Jahre Garantie.',
     categorySlug: 'induktionstoepfe',
     folder: 'Le Creuset Signature - Bräter rund 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'wmf-fusiontec-mineral-pro-bratentopf-22cm',
@@ -284,7 +284,7 @@ Das modernste Material für grenzenlose Kochfreude und absolute Kratzfestigkeit.
       'WMF Fusiontec Mineral Pro Bratentopf 22 cm (3,1 L). Kratzfeste Funktionskeramik, induktionsoptimiert. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionstoepfe',
     folder: 'WMF Fusiontec Mineral Pro - Bratentopf 22 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'roesle-elegance-globe-topfset-14teilig',
@@ -324,7 +324,7 @@ Das ultimative "Rundum-Sorglos-Paket" für die komplette Küche mit bewährter R
       'Rösle Elegance Globe 14-teiliges Topfset für Induktion. Edelstahl 18/10 im modernen Globe-Design, Güteglasdeckel. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Rösle Elegance Globe - Topfset 14-tlg',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   // ══════════════════════════════════════════════════════════════
   // COMPLETE SETS (Ajoutés dans Töpfe)
@@ -370,7 +370,7 @@ Die perfekte Erstausstattung in Profi-Qualität für Ihr Induktionsfeld.`,
       'WMF Function 4 Topfset 5-teilig für Induktion. Cromargan-Edelstahl 18/10, Multifunktionsdeckel, TransTherm-Boden. Hergestellt in Deutschland.',
     categorySlug: 'induktions-sets',
     folder: 'WMF Function 4 - Topfset 5-teilig',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'fissler-intensa-topfset-5teilig',
@@ -419,7 +419,7 @@ Das intelligenteste und energieeffizienteste Topfset auf dem Markt - der verdien
       'Fissler Intensa 5-teiliges Topfset für Induktion. Note 1,9 Stiftung Warentest. CookStar-Boden, wärmeisolierte Griffe, stapelbar. Made in Germany.',
     categorySlug: 'induktions-sets',
     folder: 'Fissler Intensa - Bratentopf 20 cm  Topfset 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 ]
 

@@ -141,7 +141,7 @@ Tefal Natural On - natürliches Material, natürliche Geschmäcker, für alle In
       'Tefal Natural On Induction Grillpfanne 26 cm - Mineralia+ Antihaft, Thermo-Signal, PFAS-frei, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Tefal Natural On Induction - Grillpfanne 26 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'zwilling-summit-plus-grillpfanne-28cm',
@@ -180,7 +180,7 @@ Zwilling Summit+ - modernes Design trifft nachhaltige Materialwahl für die qual
       'Zwilling Summit+ Grillpfanne 28 cm - Keramik-Antihaftbeschichtung, PFAS-frei, stapelbar, induktionsgeeignet. Bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Zwilling Summit+ - Grillpfanne 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'fissler-opc-grillpfanne-28cm',
@@ -258,7 +258,7 @@ WMF Performance - die Verbindung aus traditioneller deutscher Handwerkskunst und
       'WMF Performance Grillpfanne 28 cm - Edelstahl 18/10 unbeschichtet, TransTherm-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'WMF Performance - Grillpfanne 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 ]
 

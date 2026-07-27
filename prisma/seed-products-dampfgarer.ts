@@ -55,7 +55,7 @@ Der Dämpfeinsatz ermöglicht sanftes Garen auf dem Induktionsherd und passt per
       'Fissler Original Profi Collection Dämpfeinsatz Ø 20 cm aus Edelstahl 18/10. Vitaminbewares Garen auf Induktion. Ofengeeignet bis 230°C. Made in Germany.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Fissler - Original Profi Collection Dämpfeinsatz Ø 20 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'fissler-opc-daempfeinsatz-24cm',
@@ -94,7 +94,7 @@ Der 24 cm Dämpfeinsatz eignet sich besonders gut für Familienportionen und gro
       'Fissler Original Profi Collection Dämpfeinsatz Ø 24 cm. Premium Edelstahl 18/10 für vitaminbewares Garen. Ofenfest, spülmaschinenfest. Made in Germany.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Fissler - Original Profi Collection Dämpfeinsatz Ø 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'zwilling-plus-daempfeinsatz-24cm',
@@ -131,7 +131,7 @@ Der Dämpfeinsatz von Zwilling bietet ein hervorragendes Preis-Leistungs-Verhäl
       'Zwilling Plus Dämpfeinsatz Ø 24 cm aus Edelstahl 18/10. Universell passend, mit seitlichen Griffen. Spülmaschinenfest, ideal für Induktion.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Zwilling - Plus Dämpfeinsatz Ø 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'wmf-compact-cuisine-dampfgareinsatz-24cm',
@@ -169,7 +169,7 @@ Der Compact Cuisine Dampfgareinsatz ist die perfekte Wahl für bewusstes Kochen.
       'WMF Compact Cuisine Dampfgareinsatz Ø 24 cm aus Cromargan® Edelstahl. Stapelbar, spülmaschinenfest. Perfekt für gesundes Garen auf Induktion.',
     categorySlug: 'induktions-zubehoer',
     folder: 'WMF - Compact Cuisine Dampfgareinsatz Ø 24 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'fissler-opc-daempfeinsatz-28cm',
@@ -209,7 +209,7 @@ Der 28 cm Dämpfeinsatz rundet die Fissler OPC-Kochsysteme ab und ermöglicht da
       'Fissler Original Profi Collection Dämpfeinsatz Ø 28 cm. Großes Format für Familien. Edelstahl 18/10, ofenfest, Made in Germany.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Fissler - Original Profi Collection Dämpfeinsatz Ø 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 ]
 

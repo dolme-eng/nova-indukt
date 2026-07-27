@@ -60,7 +60,7 @@ Das langlebigste Set auf dem Markt, das über Generationen hinweg Freude bereite
       'Fissler Original Profi Collection Topf-Set 5-teilig für Induktion. Inox 18/10, CookStar-Boden, Kaltmetallgriffe. Premium-Qualität Made in Germany.',
     categorySlug: 'induktions-sets',
     folder: 'Fissler Original Profi Collection - Topfset 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'fissler-intensa-topfset-5tlg',
@@ -105,7 +105,7 @@ Der innovative Testsieger für maximale Bequemlichkeit und Effizienz beim Kochen
       'Fissler Intensa Topfset 5-teilig für Induktion. Note 1,9 Stiftung Warentest. Wärmeisolierte Griffe, Deckelablage. Made in Germany bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Fissler Intensa - Topfset 5-tlg',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'wmf-function-4-topfset-5tlg',
@@ -149,7 +149,7 @@ Die perfekte Kombination aus durchdachtem Design und klassischer deutscher Marke
       'WMF Function 4 Topfset 5-teilig. Cromargan-Edelstahl 18/10, innovative 4-Positionen-Couvercles, TransTherm-Boden. Induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'WMF Function 4 - Topfset 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'wmf-gourmet-plus-topfset-5tlg',
@@ -193,7 +193,7 @@ Die Wahl für Ästheten, die ein elegantes, mattiertes Set in Profiqualität suc
       'WMF Gourmet Plus Topfset 5-teilig. Cromargan 18/10 mattiert, schwere Metalldeckel, TransTherm-Boden. Induktionsoptimiert. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'WMF Gourmet Plus - Topfset 5-tlg',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'demeyere-atlantis-7-basis-set-5tlg',
@@ -236,7 +236,7 @@ Die ultimative Investition für absolute Perfektion auf Ihrem Induktionskochfeld
       'Demeyere Atlantis 7 Basis-Set 5-teilig mit Kupferkern, TriplInduc-Technologie und Proline-Pfanne. 30 Jahre Garantie. Luxusklasse bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Demeyere Atlantis 7 - Basis-Set 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'le-creuset-3ply-plus-topfset-5tlg',
@@ -282,7 +282,7 @@ Herausragende Kochleistung und zeitlose Eleganz mit der Garantie von Le Creuset.
       'Le Creuset 3-ply PLUS Topfset 5-teilig für Induktion. Durchgehendes Dreischichtmaterial, exzellente Wärmeverteilung, 30 Jahre Garantie chez NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Le Creuset 3-ply PLUS - Topfset 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'zwilling-flow-topfset-5tlg',
@@ -325,7 +325,7 @@ Ein leichtes, schnelles und sehr schönes Allround-Set für das tägliche Kochen
       'Zwilling Flow Topfset 5-teilig. Satinierter Edelstahl 18/10, Sigma Classic Sandwichboden, Glasdeckel. Induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Zwilling Flow - Topfset 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
   {
     slug: 'silit-toskana-topfset-5tlg',
@@ -370,7 +370,7 @@ Das unschlagbare Preis-Leistungs-Verhältnis für den täglichen Induktionseinsa
       'Silit Toskana Topfset 5-teilig mit Silitherm-Boden. Hochwertiger Edelstahl, Glasdeckel, Preistipp im FAZ-Vergleich. Induktionsgeeignet bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Silit Toskana - Topfset 5-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'roesle-elegance-globe-topfset-10tlg',
@@ -418,7 +418,7 @@ Das perfekte All-in-One-Set für die anspruchsvolle Familienküche.`,
       'Rösle Elegance Globe 10-teiliges Kochgeschirr-Set mit Töpfen, Pfannen und Dämpfer. Induktionsgeeigneter Edelstahl. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Rösle Elegance Globe - Topfset 10-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
     slug: 'tefal-duetto-topfset-9tlg',
@@ -462,7 +462,7 @@ Das intelligenteste Einstiegsset für das komfortable Alltags-Kochen.`,
       'Tefal Duetto Topfset 9-teilig für Induktion. Edelstahl 18/10, Siebdeckel zum Abgießen. Praktisch und preiswert bei NOVA INDUKT.',
     categorySlug: 'induktions-sets',
     folder: 'Tefal Duetto - Topfset 9-tlg',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 ]
 

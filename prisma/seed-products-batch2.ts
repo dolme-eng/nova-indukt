@@ -69,7 +69,7 @@ Mit 4,1/5 Sternen bei über 832 Bewertungen eine zuverlässige Wahl für die tä
       'Zwilling Madura Plus 28 cm - Keramik-Antihaftbeschichtung, induktionsgeeignet, spülmaschinenfest. Jetzt bei NOVA INDUKT kaufen.',
     categorySlug: 'induktionspfannen',
     folder: 'Zwilling Madura Plus - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -110,7 +110,7 @@ Erhältlich in mehreren Größen (20–32 cm) für das komplette Kochgeschirr-Se
       'Berndes Vario Click Induction 28 cm - abnehmbarer Griff, backofengeeignet, stapelbar. Hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Berndes Vario Click Induction - 28 cm',
-    imageFiles: ['1.jpg', '2.jpg', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 
   {
@@ -151,7 +151,7 @@ Ausgezeichnetes Preis-Leistungs-Verhältnis in der Rösle-Premiumlinie.`,
       'Rösle Silence Pro 28 cm - lautlose Induktionspfanne, Edelstahl, ProPlex-Beschichtung. Made in Germany. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Rösle Silence Pro - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   {
@@ -190,7 +190,7 @@ Ideale Einstiegspfanne in die WMF-Qualitätswelt zu einem attraktiven Preis.`,
       'WMF Durado 28 cm - Cromargan® Edelstahl mit Keramikbeschichtung, backofengeeignet, induktionskompatibel. Hergestellt in Deutschland.',
     categorySlug: 'induktionspfannen',
     folder: 'WMF Durado - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -235,7 +235,7 @@ Die Permadur Advance eignet sich besonders für Hobbyköche, die eine robustere 
       'WMF Permadur Advance 28 cm - robuste Antihaftbeschichtung, dicker Induktionsboden, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'WMF Permadur Advance - 28 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 
   {
@@ -275,7 +275,7 @@ SKK - seit über 60 Jahren Synonym für handgefertigtes Premium-Kochgeschirr aus
       'SKK Titan Durit Resist 75264 26 cm - handgegossener Aluminiumguss, 3-Schicht-Beschichtung, hergestellt in Deutschland. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'SKK Titan Durit Resist 75264 - 26 cm',
-    imageFiles: ['1.png', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 
   {
@@ -317,7 +317,7 @@ Qualitätspfanne mit gutem Gewissen - die Öko-Wahl ohne Kompromisse bei der Lei
       'Woll Eco Lite QXR 24 cm - 100% recyceltes Aluminium, nickelfrei, hergestellt in Deutschland. Nachhaltig & leistungsstark - bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Woll Eco Lite QXR - 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -365,7 +365,7 @@ Diese Pfanne wird mit jeder Nutzung besser - die Oberfläche entwickelt sich zur
       'Fissler Crispy Steelux Premium 24 cm - unbeschichteter Edelstahl, CookStar®-Boden, induktionsgeeignet. Hergestellt in Deutschland. Jetzt kaufen.',
     categorySlug: 'induktionspfannen',
     folder: 'Fissler Crispy Steelux Premium - 24 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 
   {
@@ -406,7 +406,7 @@ Von professionellen Köchen und Food-Kritikern weltweit als "die beste Bratpfann
       'Demeyere Proline 7 28 cm - 7 Schichten, 4,8 mm Boden, induktionsgeeignet, 30 Jahre Garantie. Die beste Bratpfanne der Welt. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Demeyere Proline 7 - 28 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 
   // ══════════════════════════════════════════════════════════════
@@ -452,7 +452,7 @@ Dieselbe unübertroffene Lodge-Qualität wie das 26 cm Modell - jetzt mit noch m
       'Lodge Logic Gusseisenpfanne 30 cm - pre-seasoned, induktionsgeeignet, Lifetime-Garantie. Hergestellt in den USA. Jetzt bei NOVA INDUKT.',
     categorySlug: 'induktionspfannen',
     folder: 'Lodge Gusseisenpfanne L10SK3 - 30 cm',
-    imageFiles: ['1.jpg', '2.png', '3.png', '4.png'],
+    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
 ]
 
