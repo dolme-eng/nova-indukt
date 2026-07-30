@@ -92,7 +92,8 @@ export function Header() {
   // Auto-focus search input
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
-      setTimeout(() => searchInputRef.current?.focus(), 100)
+      const timer = setTimeout(() => searchInputRef.current?.focus(), 100)
+      return () => clearTimeout(timer)
     } else {
       setSearchQuery('')
     }
@@ -201,6 +202,8 @@ export function Header() {
                     {item.hasMega ? (
                       <button
                         onMouseEnter={() => setMegaMenuOpen(true)}
+                        onClick={() => setMegaMenuOpen(prev => !prev)}
+                        onKeyDown={(e) => { if (e.key === 'Escape') setMegaMenuOpen(false) }}
                         className={`group flex items-center gap-1 px-4 py-2 text-xs font-black transition-all duration-500 ease-[0.22,1,0.36,1] uppercase tracking-tight ${
                           isActive(item.href, item.alsoActiveFor) || megaMenuOpen
                             ? 'text-[#0C211E]'

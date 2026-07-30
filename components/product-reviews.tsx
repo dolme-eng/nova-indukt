@@ -57,7 +57,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   const [selectedRating, setSelectedRating] = useState(0)
   const [hoverRating, setHoverRating] = useState(0)
 
-  const fetchReviews = useCallback(async (pageNum = 1, reset = false) => {
+  const fetchReviews = useCallback(async (pageNum = 1, reset = false, signal?: AbortSignal) => {
     try {
       setIsLoading(true)
       const params = new URLSearchParams({
@@ -68,7 +68,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
       })
       if (filterRating) params.append('rating', filterRating.toString())
       
-      const response = await fetch(`/api/reviews?${params}`)
+      const response = await fetch(`/api/reviews?${params}`, { signal })
       if (!response.ok) throw new Error('Failed to fetch reviews')
       
       const data = await response.json()
@@ -77,6 +77,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
       setStats(data.stats)
       setHasMore(data.reviews.length === 10)
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return
       console.error('Error fetching reviews:', error)
     } finally {
       setIsLoading(false)
@@ -84,7 +85,9 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   }, [productId, filterRating])
 
   useEffect(() => {
-    fetchReviews(1, true)
+    const controller = new AbortController()
+    fetchReviews(1, true, controller.signal)
+    return () => controller.abort()
   }, [fetchReviews])
 
   const handleLoadMore = () => {

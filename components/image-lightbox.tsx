@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
@@ -26,6 +26,8 @@ export function ImageLightbox({
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   // Reset zoom when image changes
   useEffect(() => {
@@ -33,9 +35,13 @@ export function ImageLightbox({
     setPosition({ x: 0, y: 0 })
   }, [currentIndex])
 
-  // Handle keyboard navigation
+  // Handle keyboard navigation + focus trap
   useEffect(() => {
     if (!isOpen) return
+
+    const previousFocus = document.activeElement as HTMLElement
+
+    setTimeout(() => closeButtonRef.current?.focus(), 50)
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
@@ -48,6 +54,28 @@ export function ImageLightbox({
         case 'ArrowRight':
           if (currentIndex < images.length - 1) onNavigate(currentIndex + 1)
           break
+        case 'Tab': {
+          const container = containerRef.current
+          if (!container) return
+          const focusable = container.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+          if (focusable.length === 0) return
+          const first = focusable[0]
+          const last = focusable[focusable.length - 1]
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              e.preventDefault()
+              last.focus()
+            }
+          } else {
+            if (document.activeElement === last) {
+              e.preventDefault()
+              first.focus()
+            }
+          }
+          break
+        }
       }
     }
 
@@ -57,6 +85,7 @@ export function ImageLightbox({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = 'unset'
+      previousFocus?.focus()
     }
   }, [isOpen, currentIndex, images.length, onClose, onNavigate])
 
@@ -107,15 +136,21 @@ export function ImageLightbox({
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={containerRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Bildergalerie: ${productName}`}
           onClick={onClose}
         >
           {/* Close Button */}
           <button
+            ref={closeButtonRef}
             onClick={onClose}
+            aria-label="Galerie schließen"
             className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
           >
             <X className="h-6 w-6" />

@@ -8,9 +8,10 @@ interface AdminNavLinkProps {
   href: string
   icon: React.ReactNode
   label: string
+  onClick?: () => void
 }
 
-export function AdminNavLink({ href, icon, label }: AdminNavLinkProps) {
+export function AdminNavLink({ href, icon, label, onClick }: AdminNavLinkProps) {
   const pathname = usePathname()
   // Exact match for /admin dashboard, prefix match for sub-pages
   const isActive = href === '/admin' ? pathname === '/admin' : pathname.startsWith(href)
@@ -18,6 +19,7 @@ export function AdminNavLink({ href, icon, label }: AdminNavLinkProps) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`flex items-center justify-between px-4 py-2.5 rounded-xl transition-all group ${
         isActive
           ? 'bg-white/10 text-white'

@@ -175,6 +175,8 @@ model Order {
   @@index([orderNumber])
   @@index([status])
   @@index([paymentStatus])
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
 }
 
 model OrderItem {
@@ -243,6 +245,7 @@ model Review {
 
   @@index([productId])
   @@index([userId])
+  @@index([productId, isPublished, createdAt])
 }
 
 model ReviewHelpfulVote {

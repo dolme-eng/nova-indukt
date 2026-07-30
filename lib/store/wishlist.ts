@@ -66,8 +66,10 @@ export function useWishlist() {
     
     if (isAuthenticated && !hasSynced.current) {
       hasSynced.current = true
-      syncOnLogin()
-      fetchWishlistFromApi()
+      ;(async () => {
+        await syncOnLogin()
+        await fetchWishlistFromApi()
+      })()
     }
     if (!isAuthenticated) {
       hasSynced.current = false

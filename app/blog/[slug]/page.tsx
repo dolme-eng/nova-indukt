@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react'
 import { ShareButtons } from './share-buttons'
@@ -15,6 +16,10 @@ export async function generateStaticParams() {
   })
   return posts.map((p) => ({ slug: p.slug }))
 }
+
+const getBlogPostBySlug = cache(async (slug: string) => {
+  return prisma.blogPost.findUnique({ where: { slug } })
+})
 
 // Sanitize text for safe HTML rendering
 function escapeHtml(text: string): string {
@@ -33,9 +38,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const resolvedParams = await params
-  const post = await prisma.blogPost.findUnique({
-    where: { slug: resolvedParams.slug },
-  })
+  const post = await getBlogPostBySlug(resolvedParams.slug)
 
   if (!post) {
     return {
@@ -363,9 +366,7 @@ function renderContent(content: string): JSX.Element {
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params
-  const post = await prisma.blogPost.findUnique({
-    where: { slug: resolvedParams.slug },
-  })
+  const post = await getBlogPostBySlug(resolvedParams.slug)
 
   if (!post || !post.isPublished) {
     notFound()

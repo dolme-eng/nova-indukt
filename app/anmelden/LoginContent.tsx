@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -17,6 +17,7 @@ export function LoginContent() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const redirectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Check URL params for verification status
   useEffect(() => {
@@ -26,7 +27,8 @@ export function LoginContent() {
     if (verified === 'true') {
       setSuccess(true)
       setError('')
-      setTimeout(() => setSuccess(false), 5000)
+      const timer = setTimeout(() => setSuccess(false), 5000)
+      return () => { if (timer) clearTimeout(timer) }
     } else if (errorParam === 'invalid-token' || errorParam === 'invalid-or-expired-token') {
       setError(
         'Der Verifizierungslink ist ungültig oder abgelaufen. Bitte registrieren Sie sich erneut.'
@@ -35,6 +37,12 @@ export function LoginContent() {
       setError('E-Mail-Verifizierung fehlgeschlagen. Bitte versuchen Sie es erneut.')
     }
   }, [searchParams])
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimerRef.current) clearTimeout(redirectTimerRef.current)
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,7 +53,7 @@ export function LoginContent() {
 
     if (result) {
       setSuccess(true)
-      setTimeout(() => {
+      redirectTimerRef.current = setTimeout(() => {
         const rawRedirect = searchParams.get('redirect') || '/mein-konto'
         const redirectUrl =
           rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') ? rawRedirect : '/mein-konto'

@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -31,6 +32,55 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuProps) {
+  const drawerRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const drawer = drawerRef.current
+    const closeBtn = closeButtonRef.current
+    const previousFocus = document.activeElement as HTMLElement
+
+    if (closeBtn) closeBtn.focus()
+
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+        return
+      }
+      if (e.key === 'Tab' && drawer) {
+        const focusable = drawer.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = 'unset'
+      previousFocus?.focus()
+    }
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   return (
@@ -51,17 +101,22 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
 
       {/* Drawer */}
       <motion.div
+        ref={drawerRef}
         initial={{ x: '100%' }}
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
         transition={{ type: 'spring', damping: 28, stiffness: 200 }}
         data-testid="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation"
         className="absolute top-0 right-0 bottom-0 w-[90%] max-w-sm bg-white shadow-[auto] flex flex-col rounded-l-3xl overflow-hidden"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100 bg-gray-50/50 text-black">
           <Image src="/logo0.png" alt="NOVA INDUKT" width={140} height={42} className="h-7 sm:h-8 md:h-9 w-auto" unoptimized />
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             data-testid="mobile-menu-close-button"
             aria-label="Menü schließen"
