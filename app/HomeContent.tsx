@@ -259,13 +259,7 @@ export function HomeContent({
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-const ProductCard = memo(function ProductCard({
-  product,
-  index,
-}: {
-  product: Product
-  index: number
-}) {
+const ProductCard = memo(function ProductCard({ product }: { product: Product; index: number }) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   const isLocal = (src: string) => src?.startsWith('/images/products/') ?? false

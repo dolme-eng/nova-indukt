@@ -152,6 +152,7 @@ describe('createProductSchema', () => {
   })
 
   it('rejects missing nameDe', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { nameDe, ...rest } = validProduct
     expect(createProductSchema.safeParse(rest).success).toBe(false)
   })
@@ -219,11 +220,13 @@ describe('contactFormSchema', () => {
   })
 
   it('rejects missing firstName', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { firstName, ...rest } = validContact
     expect(contactFormSchema.safeParse(rest).success).toBe(false)
   })
 
   it('rejects missing email', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { email, ...rest } = validContact
     expect(contactFormSchema.safeParse(rest).success).toBe(false)
   })

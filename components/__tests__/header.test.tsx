@@ -5,6 +5,7 @@ import React from 'react'
 vi.mock('next/image', () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
     const { src, alt, ...rest } = props
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt || ''} {...rest} />
   },
 }))

@@ -32,7 +32,7 @@ vi.mock('@/lib/auth/auth.config', () => ({
 vi.mock('crypto', () => ({
   default: {
     randomBytes: (n: number) => ({
-      toString: (enc: string) => 'a'.repeat(n * 2),
+      toString: () => 'a'.repeat(n * 2),
     }),
   },
 }))
@@ -217,14 +217,14 @@ describe('POST /api/auth/forgot-password', () => {
   it('returns 429 when rate limited', async () => {
     mockRateLimit.mockResolvedValue({ success: false })
     const res = await forgotPOST(makeRequest({ email: 'max@test.de' }))
-    const json = await res.json()
+    await res.json()
     expect(res.status).toBe(429)
   })
 
   it('returns 500 on server error', async () => {
     mockPrisma.user.findUnique.mockRejectedValue(new Error('DB error'))
     const res = await forgotPOST(makeRequest({ email: 'max@test.de' }))
-    const json = await res.json()
+    await res.json()
     expect(res.status).toBe(500)
   })
 

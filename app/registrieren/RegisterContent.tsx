@@ -4,17 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  ArrowRight,
-  CheckCircle,
-  User,
-  XCircle,
-  Chrome,
-} from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, User, XCircle } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
 
 export function RegisterContent() {
@@ -72,27 +62,11 @@ export function RegisterContent() {
       } else {
         setError(result.error || 'Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.')
       }
-    } catch (err) {
+    } catch {
       setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleGoogleSignUp = async () => {
-    setError('')
-    setLoading(true)
-
-    // Simulate Google Sign Up
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Simulate successful Google registration flow
-    setSuccess(true)
-    setTimeout(() => {
-      router.push('/mein-konto')
-    }, 1000)
-
-    setLoading(false)
   }
 
   return (

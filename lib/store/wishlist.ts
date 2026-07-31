@@ -37,10 +37,11 @@ const useWishlistStore = create<WishlistStore>()(
     (set) => ({
       items: [],
       setItems: (items) => set({ items }),
-      addItemState: (item) => set((state) => {
-        if (state.items.find((i) => i.id === item.id)) return state
-        return { items: [...state.items, item] }
-      }),
+      addItemState: (item) =>
+        set((state) => {
+          if (state.items.find((i) => i.id === item.id)) return state
+          return { items: [...state.items, item] }
+        }),
       removeItemState: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
       clearState: () => set({ items: [] }),
     }),
@@ -53,7 +54,7 @@ const useWishlistStore = create<WishlistStore>()(
 export function useWishlist() {
   const [mounted, setMounted] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
-  
+
   const { items, setItems, addItemState, removeItemState, clearState } = useWishlistStore()
   const { status } = useSession()
   const isAuthenticated = status === 'authenticated'
@@ -63,7 +64,7 @@ export function useWishlist() {
   // Sync on login & hydration
   useEffect(() => {
     setMounted(true)
-    
+
     if (isAuthenticated && !hasSynced.current) {
       hasSynced.current = true
       ;(async () => {
@@ -74,6 +75,7 @@ export function useWishlist() {
     if (!isAuthenticated) {
       hasSynced.current = false
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   const fetchWishlistFromApi = async () => {
@@ -81,13 +83,15 @@ export function useWishlist() {
       const response = await fetch('/api/wishlist')
       if (response.ok) {
         const data: ApiWishlistItem[] = await response.json()
-        setItems(data.map(item => ({
-          id: item.id,
-          name: { de: item.name.de },
-          price: item.price,
-          image: item.image,
-          slug: item.slug,
-        })))
+        setItems(
+          data.map((item) => ({
+            id: item.id,
+            name: { de: item.name.de },
+            price: item.price,
+            image: item.image,
+            slug: item.slug,
+          }))
+        )
       }
     } catch (error) {
       console.error('Error fetching wishlist:', error)
@@ -109,13 +113,15 @@ export function useWishlist() {
       if (response.ok) {
         const data = await response.json()
         if (data.wishlist) {
-          setItems(data.wishlist.map((item: ApiWishlistItem) => ({
-            id: item.id,
-            name: { de: item.name.de },
-            price: item.price,
-            image: item.image,
-            slug: item.slug,
-          })))
+          setItems(
+            data.wishlist.map((item: ApiWishlistItem) => ({
+              id: item.id,
+              name: { de: item.name.de },
+              price: item.price,
+              image: item.image,
+              slug: item.slug,
+            }))
+          )
         }
       }
     } catch (error) {
@@ -151,34 +157,46 @@ export function useWishlist() {
     }
   }
 
-  const addItem = useCallback(async (item: WishlistItem) => {
-    addItemState(item)
-    if (isAuthenticated) {
-      await addItemToApi(item)
-    }
-    return true
-  }, [isAuthenticated, addItemState])
-
-  const removeItem = useCallback(async (id: string) => {
-    removeItemState(id)
-    if (isAuthenticated) {
-      await removeItemFromApi(id)
-    }
-  }, [isAuthenticated, removeItemState])
-
-  const isInWishlist = useCallback((id: string) => {
-    return items.some((i) => i.id === id)
-  }, [items])
-
-  const toggleItem = useCallback(async (item: WishlistItem) => {
-    if (isInWishlist(item.id)) {
-      await removeItem(item.id)
-      return false
-    } else {
-      await addItem(item)
+  const addItem = useCallback(
+    async (item: WishlistItem) => {
+      addItemState(item)
+      if (isAuthenticated) {
+        await addItemToApi(item)
+      }
       return true
-    }
-  }, [addItem, removeItem, isInWishlist])
+    },
+    [isAuthenticated, addItemState]
+  )
+
+  const removeItem = useCallback(
+    async (id: string) => {
+      removeItemState(id)
+      if (isAuthenticated) {
+        await removeItemFromApi(id)
+      }
+    },
+    [isAuthenticated, removeItemState]
+  )
+
+  const isInWishlist = useCallback(
+    (id: string) => {
+      return items.some((i) => i.id === id)
+    },
+    [items]
+  )
+
+  const toggleItem = useCallback(
+    async (item: WishlistItem) => {
+      if (isInWishlist(item.id)) {
+        await removeItem(item.id)
+        return false
+      } else {
+        await addItem(item)
+        return true
+      }
+    },
+    [addItem, removeItem, isInWishlist]
+  )
 
   const clearWishlist = useCallback(async () => {
     clearState()

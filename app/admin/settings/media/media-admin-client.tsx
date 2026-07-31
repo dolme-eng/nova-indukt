@@ -41,6 +41,7 @@ export function MediaAdminClient() {
 
   useEffect(() => {
     refresh()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [folder])
 
   async function onUpload(file: File) {

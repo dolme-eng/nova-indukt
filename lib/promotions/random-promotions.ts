@@ -158,7 +158,7 @@ async function createRandomPromotion(isWeekend: boolean): Promise<void> {
   const highlightColor = durationHours <= 24 ? '#E17055' : '#4ECCA3'
 
   // Create the promotion
-  const promotion = await prisma.promotion.create({
+  await prisma.promotion.create({
     data: {
       name,
       description: `Auto-generated ${isWeekend ? 'weekend' : 'flash'} deal`,

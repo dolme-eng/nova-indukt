@@ -150,6 +150,7 @@ export default function CustomersTable({ initialCustomers }: { initialCustomers:
                       <div className="flex items-center gap-4">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-slate-100 font-bold text-slate-600 shadow-sm ring-1 ring-slate-100">
                           {customer.image ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
                             <img
                               src={customer.image}
                               alt={customer.name || ''}

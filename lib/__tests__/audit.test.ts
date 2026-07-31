@@ -96,6 +96,7 @@ describe('auditLog', () => {
       ipAddress: null,
       userAgent: null,
     })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const callData = mockCreate.mock.calls[0][0] as any
     expect(callData.data.userId).toBeNull()
     expect(callData.data.ipAddress).toBeNull()

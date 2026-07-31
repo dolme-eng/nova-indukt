@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle, Chrome } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, XCircle } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
 
 export function LoginContent() {
@@ -67,27 +67,11 @@ export function LoginContent() {
       } else {
         setError('E-Mail oder Passwort ist falsch.')
       }
-    } catch (err) {
+    } catch {
       setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleGoogleSignIn = async () => {
-    setError('')
-    setLoading(true)
-
-    // Simulate Google Sign In
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Simulate successful Google authentication flow
-    setSuccess(true)
-    setTimeout(() => {
-      router.push('/mein-konto')
-    }, 1000)
-
-    setLoading(false)
   }
 
   return (

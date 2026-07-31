@@ -778,7 +778,7 @@ function AddressesTab() {
       if (!response.ok) throw new Error('Failed to delete address')
 
       await fetchAddresses()
-    } catch (err) {
+    } catch {
       setError('Adresse konnte nicht gelöscht werden')
     }
   }

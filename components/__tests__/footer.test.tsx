@@ -4,7 +4,7 @@ import { Footer } from '@/components/layout/footer'
 
 vi.mock('next/image', () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
-    // eslint-disable-next-line @next/next/no-img-element
+    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
     return <img {...props} />
   },
 }))

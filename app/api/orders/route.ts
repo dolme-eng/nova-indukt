@@ -1,31 +1,31 @@
-import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { auth } from "@/lib/auth"
-import { revalidatePath } from "next/cache"
-import { sendOrderConfirmationForOrder } from "@/lib/email/send"
-import { VAT_RATE_PERCENT, vatFromGross } from "@/lib/utils/vat"
-import { createOrderSchema, type OrderItemInput } from "@/lib/validations/order"
-import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
-import { auditLog } from "@/lib/admin/audit"
-import { calculateShipping } from "@/lib/constants/shop"
-import { applyPromotionsToProducts, validateCoupon, incrementPromotionUsage } from "@/lib/promotions"
-import { randomUUID } from "crypto"
-import { logError } from "@/lib/logger"
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
+import { revalidatePath } from 'next/cache'
+import { sendOrderConfirmationForOrder } from '@/lib/email/send'
+import { VAT_RATE_PERCENT, vatFromGross } from '@/lib/utils/vat'
+import { createOrderSchema, type OrderItemInput } from '@/lib/validations/order'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { auditLog } from '@/lib/admin/audit'
+import { calculateShipping } from '@/lib/constants/shop'
+import { applyPromotionsToProducts, validateCoupon } from '@/lib/promotions'
+import { randomUUID } from 'crypto'
+import { logError } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const rl = await rateLimit(createRateLimitKey(getIP(request), "orders:get"), { windowMs: 60_000, maxRequests: 20 })
-    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
-    
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'orders:get'), {
+      windowMs: 60_000,
+      maxRequests: 20,
+    })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+
     const orders = await prisma.order.findMany({
       where: { userId: session.user.id },
       include: {
@@ -33,39 +33,36 @@ export async function GET(request: NextRequest) {
           include: {
             product: {
               include: {
-                images: true
-              }
-            }
-          }
-        }
+                images: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
-        createdAt: "desc"
-      }
+        createdAt: 'desc',
+      },
     })
-    
+
     return NextResponse.json(
-      orders.map(order => ({
+      orders.map((order) => ({
         ...order,
         total: Number(order.total),
         subtotal: Number(order.subtotal),
         shippingCost: Number(order.shippingCost),
-        items: order.items.map(item => ({
+        items: order.items.map((item) => ({
           ...item,
           unitPrice: Number(item.unitPrice),
           product: {
             ...item.product,
-            price: Number(item.product.price)
-          }
-        }))
+            price: Number(item.product.price),
+          },
+        })),
       }))
     )
   } catch (error) {
-    logError("Error fetching orders:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch orders" },
-      { status: 500 }
-    )
+    logError('Error fetching orders:', error)
+    return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 })
   }
 }
 
@@ -74,7 +71,10 @@ export async function POST(request: NextRequest) {
   try {
     // Rate limit: 5 orders per minute per IP
     const ip = getIP(request)
-    const rl = await rateLimit(createRateLimitKey(ip, 'orders'), { windowMs: 60_000, maxRequests: 5 })
+    const rl = await rateLimit(createRateLimitKey(ip, 'orders'), {
+      windowMs: 60_000,
+      maxRequests: 5,
+    })
     if (!rl.success) {
       return NextResponse.json(
         { error: 'Zu viele Anfragen. Bitte warten Sie einen Moment.' },
@@ -104,44 +104,32 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const {
-      items,
-      shippingData,
-      paymentMethod,
-      discountAmount,
-      appliedPromoCode,
-    } = parsed.data
+    const { items, shippingData, appliedPromoCode } = parsed.data
     // ────────────────────────────────────────────────────────────────────────
 
     if (!items || items.length === 0) {
-      return NextResponse.json(
-        { error: "Cart is empty" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
     }
 
     // ── Verify product prices from database ─────────────────────────────────
-    const productIds = items.map(item => item.id)
+    const productIds = items.map((item) => item.id)
     const dbProducts = await prisma.product.findMany({
       where: { id: { in: productIds } },
-      select: { id: true, price: true, nameDe: true, isActive: true, categoryId: true }
+      select: { id: true, price: true, nameDe: true, isActive: true, categoryId: true },
     })
 
-    const dbProductMap = new Map(dbProducts.map(p => [p.id, p]))
+    const dbProductMap = new Map(dbProducts.map((p) => [p.id, p]))
     const serverItems: Array<OrderItemInput & { dbPrice: number }> = []
 
     // ── Fix N+1: single DB call for ALL promotions before the loop ───────────
     const promotionMap = await applyPromotionsToProducts(
-      dbProducts.map(p => ({ id: p.id, categoryId: p.categoryId, price: Number(p.price) }))
+      dbProducts.map((p) => ({ id: p.id, categoryId: p.categoryId, price: Number(p.price) }))
     )
 
     for (const item of items) {
       const dbProduct = dbProductMap.get(item.id)
       if (!dbProduct) {
-        return NextResponse.json(
-          { error: `Produkt ${item.name} nicht gefunden` },
-          { status: 404 }
-        )
+        return NextResponse.json({ error: `Produkt ${item.name} nicht gefunden` }, { status: 404 })
       }
       if (!dbProduct.isActive) {
         return NextResponse.json(
@@ -156,7 +144,7 @@ export async function POST(request: NextRequest) {
 
       serverItems.push({
         ...item,
-        dbPrice: discountedPrice
+        dbPrice: discountedPrice,
       })
     }
 
@@ -164,9 +152,9 @@ export async function POST(request: NextRequest) {
     const serverSubtotal = serverItems.reduce((sum, item) => {
       return sum + item.dbPrice * item.quantity
     }, 0)
-    
+
     const serverShipping = calculateShipping(serverSubtotal)
-    
+
     // VERIFY COUPON ON SERVER
     let serverDiscountAmount = 0
     let verifiedPromotionId: string | undefined
@@ -175,7 +163,7 @@ export async function POST(request: NextRequest) {
       const couponResult = await validateCoupon(appliedPromoCode, serverSubtotal)
       if (!couponResult.isValid) {
         return NextResponse.json(
-          { error: couponResult.error || "Gutschein ungültig" },
+          { error: couponResult.error || 'Gutschein ungültig' },
           { status: 400 }
         )
       }
@@ -188,7 +176,7 @@ export async function POST(request: NextRequest) {
 
     // 2. Generate collision-safe order number (UUID v4, no Date.now() race condition)
     const orderNumber = `NOV-${randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()}`
-    
+
     // 3. Create order in a transaction to include stock update
     const order = await prisma.$transaction(async (tx) => {
       // Create the order — using server-calculated totals
@@ -209,8 +197,8 @@ export async function POST(request: NextRequest) {
             country: shippingData.country,
           },
           paymentMethod: paymentMethod.toUpperCase() as import('@prisma/client').PaymentMethod,
-          status: "PENDING",
-          paymentStatus: "PENDING",
+          status: 'PENDING',
+          paymentStatus: 'PENDING',
           subtotal: serverSubtotal,
           shippingCost: serverShipping,
           discountAmount: serverDiscountAmount,
@@ -227,20 +215,20 @@ export async function POST(request: NextRequest) {
                 productSlug: item.slug || '',
                 vatRate: VAT_RATE_PERCENT,
               }
-            })
-          }
+            }),
+          },
         },
         include: {
           items: {
             include: {
               product: {
                 include: {
-                  images: true
-                }
-              }
-            }
-          }
-        }
+                  images: true,
+                },
+              },
+            },
+          },
+        },
       })
 
       // Increment promo usage if applicable
@@ -249,41 +237,41 @@ export async function POST(request: NextRequest) {
           where: { id: verifiedPromotionId },
           data: {
             usageCount: {
-              increment: 1
-            }
-          }
+              increment: 1,
+            },
+          },
         })
       }
 
       return newOrder
     })
-    
+
     // 4. Clear user's cart if logged in
     if (session?.user?.id) {
       await prisma.cartItem.deleteMany({
         where: {
           cart: {
-            userId: session.user.id
-          }
-        }
+            userId: session.user.id,
+          },
+        },
       })
     }
-    
+
     // Send order confirmation email
-    if (paymentMethod.toUpperCase() === "BANK_TRANSFER") {
+    if (paymentMethod.toUpperCase() === 'BANK_TRANSFER') {
       try {
         await sendOrderConfirmationForOrder(order.id)
       } catch (emailError) {
-        logError("Failed to send order confirmation email:", emailError)
+        logError('Failed to send order confirmation email:', emailError)
         // Continue - order is still created even if email fails
       }
     }
-    
-    revalidatePath("/mein-konto")
+
+    revalidatePath('/mein-konto')
 
     await auditLog({
-      action: "CREATE",
-      entityType: "Order",
+      action: 'CREATE',
+      entityType: 'Order',
       entityId: order.id,
       userId: session?.user?.id || null,
       newValues: {
@@ -294,27 +282,24 @@ export async function POST(request: NextRequest) {
         itemCount: order.items.length,
       },
       ipAddress: getIP(request),
-      userAgent: request.headers.get("user-agent"),
+      userAgent: request.headers.get('user-agent'),
     })
-    
+
     return NextResponse.json({
       ...order,
       total: Number(order.total),
       subtotal: Number(order.subtotal),
-      shippingCost: Number(order.shippingCost)
+      shippingCost: Number(order.shippingCost),
     })
   } catch (error) {
-    logError("Error creating order:", error)
-    if (error instanceof Error && error.message.startsWith("STOCK_INSUFFICIENT:")) {
-      const productName = error.message.replace("STOCK_INSUFFICIENT:", "")
+    logError('Error creating order:', error)
+    if (error instanceof Error && error.message.startsWith('STOCK_INSUFFICIENT:')) {
+      const productName = error.message.replace('STOCK_INSUFFICIENT:', '')
       return NextResponse.json(
         { error: `Nicht genügend Lagerbestand für ${productName}` },
         { status: 400 }
       )
     }
-    return NextResponse.json(
-      { error: "Failed to create order" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
   }
 }

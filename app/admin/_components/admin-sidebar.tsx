@@ -18,13 +18,7 @@ import {
 } from 'lucide-react'
 import { AdminNavLink } from './admin-nav-link'
 
-interface AdminSidebarProps {
-  userName?: string
-  userRole?: string
-  userInitial?: string
-}
-
-export function AdminSidebar(_props?: AdminSidebarProps) {
+export function AdminSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const sidebarRef = useRef<HTMLElement>(null)
 

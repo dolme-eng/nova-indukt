@@ -42,6 +42,7 @@ export function LogsAdminClient() {
 
   useEffect(() => {
     load(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) return <div className="text-sm text-slate-600">Laden...</div>

@@ -82,7 +82,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const formattedProduct = mapDbProductToUi(product)
 
   // Fetch related products from same category and reviews in parallel
-  const [relatedDb, reviews] = await Promise.all([
+  const [relatedDb] = await Promise.all([
     prisma.product.findMany({
       where: {
         categoryId: product.categoryId,

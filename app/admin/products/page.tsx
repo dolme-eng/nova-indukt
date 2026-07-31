@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Plus, Edit, Trash2, Eye, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react'
+import { Plus, Edit, Eye, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 export const dynamic = 'force-dynamic'

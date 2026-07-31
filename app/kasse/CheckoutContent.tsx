@@ -24,7 +24,7 @@ import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
 import type { BankDetails } from '@/lib/data/bank-details'
 
-import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD, calculateShipping } from '@/lib/constants/shop'
+import { calculateShipping } from '@/lib/constants/shop'
 
 // Type du code promo validé retourné par /api/coupons/validate
 interface AppliedPromo {
@@ -71,7 +71,6 @@ export default function CheckoutContent() {
     country: 'Deutschland',
   })
 
-  const [paymentMethod, setPaymentMethod] = useState<'bank_transfer'>('bank_transfer')
   const [contactEmail, setContactEmail] = useState('')
 
   // Promo code state
@@ -79,7 +78,7 @@ export default function CheckoutContent() {
   const [isApplyingPromo, setIsApplyingPromo] = useState(false)
   const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>(null)
 
-  const [orderId, setOrderId] = useState<string | null>(null)
+  const [, setOrderId] = useState<string | null>(null)
   const [orderNumber, setOrderNumber] = useState<string>('')
   const [bankDetails, setBankDetails] = useState<BankDetails>({
     holder: '',

@@ -2,10 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Star, ThumbsUp, User, CheckCircle, Flag, X,
-  Filter, Loader2
-} from 'lucide-react'
+import { Star, ThumbsUp, CheckCircle, Flag, X, Filter, Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 
 interface Review {
@@ -41,7 +38,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   const [stats, setStats] = useState<ReviewStats>({
     average: initialRating,
     count: initialCount,
-    distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+    distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
   })
   const [sortBy, setSortBy] = useState<'newest' | 'helpful' | 'highest' | 'lowest'>('newest')
   const [filterRating, setFilterRating] = useState<number | null>(null)
@@ -57,32 +54,35 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   const [selectedRating, setSelectedRating] = useState(0)
   const [hoverRating, setHoverRating] = useState(0)
 
-  const fetchReviews = useCallback(async (pageNum = 1, reset = false, signal?: AbortSignal) => {
-    try {
-      setIsLoading(true)
-      const params = new URLSearchParams({
-        productId,
-        page: pageNum.toString(),
-        limit: '10',
-        status: 'approved',
-      })
-      if (filterRating) params.append('rating', filterRating.toString())
-      
-      const response = await fetch(`/api/reviews?${params}`, { signal })
-      if (!response.ok) throw new Error('Failed to fetch reviews')
-      
-      const data = await response.json()
-      
-      setReviews(prev => reset ? data.reviews : [...prev, ...data.reviews])
-      setStats(data.stats)
-      setHasMore(data.reviews.length === 10)
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') return
-      console.error('Error fetching reviews:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [productId, filterRating])
+  const fetchReviews = useCallback(
+    async (pageNum = 1, reset = false, signal?: AbortSignal) => {
+      try {
+        setIsLoading(true)
+        const params = new URLSearchParams({
+          productId,
+          page: pageNum.toString(),
+          limit: '10',
+          status: 'approved',
+        })
+        if (filterRating) params.append('rating', filterRating.toString())
+
+        const response = await fetch(`/api/reviews?${params}`, { signal })
+        if (!response.ok) throw new Error('Failed to fetch reviews')
+
+        const data = await response.json()
+
+        setReviews((prev) => (reset ? data.reviews : [...prev, ...data.reviews]))
+        setStats(data.stats)
+        setHasMore(data.reviews.length === 10)
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return
+        console.error('Error fetching reviews:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [productId, filterRating]
+  )
 
   useEffect(() => {
     const controller = new AbortController()
@@ -98,16 +98,16 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
 
   const markHelpful = async (reviewId: string) => {
     if (helpfulReviews.includes(reviewId)) return
-    
+
     try {
       const response = await fetch(`/api/reviews?id=${reviewId}&action=helpful`, {
         method: 'PUT',
       })
       if (response.ok) {
         setHelpfulReviews([...helpfulReviews, reviewId])
-        setReviews(prev => prev.map(r => 
-          r.id === reviewId ? { ...r, helpful: r.helpful + 1 } : r
-        ))
+        setReviews((prev) =>
+          prev.map((r) => (r.id === reviewId ? { ...r, helpful: r.helpful + 1 } : r))
+        )
       }
     } catch (error) {
       console.error('Error marking helpful:', error)
@@ -117,10 +117,10 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   const handleSubmitReview = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!session?.user) return
-    
+
     setIsSubmitting(true)
     setSubmitError(null)
-    
+
     const formData = new FormData(e.currentTarget)
     const data = {
       productId,
@@ -129,20 +129,20 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
       content: formData.get('content') as string,
       wouldRecommend: formData.get('wouldRecommend') === 'on',
     }
-    
+
     try {
       const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-      
+
       const result = await response.json()
-      
+
       if (!response.ok) {
         throw new Error(result.error || 'Failed to submit review')
       }
-      
+
       setSubmitSuccess(true)
       setShowReviewForm(false)
       // Refresh reviews
@@ -156,11 +156,16 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
 
   const filteredReviews = [...reviews].sort((a, b) => {
     switch (sortBy) {
-      case 'newest': return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      case 'helpful': return b.helpful - a.helpful
-      case 'highest': return b.rating - a.rating
-      case 'lowest': return a.rating - b.rating
-      default: return 0
+      case 'newest':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      case 'helpful':
+        return b.helpful - a.helpful
+      case 'highest':
+        return b.rating - a.rating
+      case 'lowest':
+        return a.rating - b.rating
+      default:
+        return 0
     }
   })
 
@@ -171,22 +176,25 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
   }
 
   return (
-    <div data-testid="reviews-section" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-900 mb-8">Kundenbewertungen</h2>
+    <div
+      data-testid="reviews-section"
+      className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm md:p-8"
+    >
+      <h2 className="mb-8 text-2xl font-bold text-gray-900">Kundenbewertungen</h2>
 
       {/* Rating Overview */}
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
+      <div className="mb-8 grid gap-8 md:grid-cols-2">
         {/* Average Rating */}
         <div className="flex items-center gap-6">
           <div className="text-center">
             <div className="text-5xl font-bold text-gray-900">{stats.average.toFixed(1)}</div>
-            <div className="flex items-center gap-1 justify-center my-2">
+            <div className="my-2 flex items-center justify-center gap-1">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-5 h-5 ${
+                  className={`h-5 w-5 ${
                     i < Math.round(stats.average)
-                      ? 'text-amber-400 fill-amber-400'
+                      ? 'fill-amber-400 text-amber-400'
                       : 'text-gray-300'
                   }`}
                 />
@@ -200,7 +208,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
             {[5, 4, 3, 2, 1].map((rating) => {
               const count = stats.distribution[rating] || 0
               const percentage = stats.count > 0 ? (count / stats.count) * 100 : 0
-              
+
               return (
                 <button
                   key={rating}
@@ -209,15 +217,15 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     setPage(1)
                     fetchReviews(1, true)
                   }}
-                  className={`w-full flex items-center gap-3 text-sm ${
+                  className={`flex w-full items-center gap-3 text-sm ${
                     filterRating === rating ? 'opacity-100' : 'opacity-70 hover:opacity-100'
                   }`}
                 >
                   <span className="w-3">{rating}</span>
-                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
                     <div
-                      className="h-full bg-amber-400 rounded-full"
+                      className="h-full rounded-full bg-amber-400"
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
@@ -229,13 +237,15 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
         </div>
 
         {/* Write Review CTA */}
-        <div className="bg-gray-50 rounded-xl p-6 flex flex-col justify-center">
-          <h3 className="font-semibold text-gray-900 mb-2">Eigene Bewertung schreiben</h3>
-          <p className="text-gray-600 text-sm mb-4">Teilen Sie Ihre Erfahrungen mit diesem Produkt mit anderen Kunden.</p>
+        <div className="flex flex-col justify-center rounded-xl bg-gray-50 p-6">
+          <h3 className="mb-2 font-semibold text-gray-900">Eigene Bewertung schreiben</h3>
+          <p className="mb-4 text-sm text-gray-600">
+            Teilen Sie Ihre Erfahrungen mit diesem Produkt mit anderen Kunden.
+          </p>
           {session?.user ? (
-            <button 
+            <button
               onClick={() => setShowReviewForm(true)}
-              className="px-6 py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors"
+              className="rounded-xl bg-[#4ECCA3] px-6 py-3 font-medium text-white transition-colors hover:bg-[#3BA88A]"
             >
               Bewertung schreiben
             </button>
@@ -247,33 +257,36 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
 
       {/* Review Form Modal */}
       {showReviewForm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <motion.div 
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+            className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6"
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900">Bewertung schreiben</h3>
-              <button onClick={() => setShowReviewForm(false)} className="p-2 hover:bg-gray-100 rounded-full">
-                <X className="w-5 h-5" />
+              <button
+                onClick={() => setShowReviewForm(false)}
+                className="rounded-full p-2 hover:bg-gray-100"
+              >
+                <X className="h-5 w-5" />
               </button>
             </div>
-            
+
             {submitSuccess ? (
-              <div className="text-center py-8">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <p className="text-gray-900 font-medium">Vielen Dank für Ihre Bewertung!</p>
-                <p className="text-gray-500 text-sm mt-2">Sie wird nach Prüfung veröffentlicht.</p>
+              <div className="py-8 text-center">
+                <CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-500" />
+                <p className="font-medium text-gray-900">Vielen Dank für Ihre Bewertung!</p>
+                <p className="mt-2 text-sm text-gray-500">Sie wird nach Prüfung veröffentlicht.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmitReview} className="space-y-4">
                 {submitError && (
-                  <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">{submitError}</div>
+                  <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{submitError}</div>
                 )}
-                
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Bewertung</label>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">Bewertung</label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <label
@@ -283,53 +296,69 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                         onMouseLeave={() => setHoverRating(0)}
                         onClick={() => setSelectedRating(star)}
                       >
-                        <input type="radio" name="rating" value={star} required className="sr-only" checked={selectedRating === star} onChange={() => setSelectedRating(star)} />
-                        <Star className={`w-8 h-8 transition-colors ${
-                          star <= (hoverRating || selectedRating)
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-gray-300 hover:text-amber-300'
-                        }`} />
+                        <input
+                          type="radio"
+                          name="rating"
+                          value={star}
+                          required
+                          className="sr-only"
+                          checked={selectedRating === star}
+                          onChange={() => setSelectedRating(star)}
+                        />
+                        <Star
+                          className={`h-8 w-8 transition-colors ${
+                            star <= (hoverRating || selectedRating)
+                              ? 'fill-amber-400 text-amber-400'
+                              : 'text-gray-300 hover:text-amber-300'
+                          }`}
+                        />
                       </label>
                     ))}
                   </div>
                 </div>
-                
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Titel</label>
-                  <input 
-                    name="title" 
-                    required 
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Titel</label>
+                  <input
+                    name="title"
+                    required
                     minLength={3}
                     maxLength={100}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#4ECCA3]"
+                    className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-[#4ECCA3] focus:outline-none"
                     placeholder="Zusammenfassung Ihrer Erfahrung"
                   />
                 </div>
-                
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ihre Bewertung</label>
-                  <textarea 
-                    name="content" 
-                    required 
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    Ihre Bewertung
+                  </label>
+                  <textarea
+                    name="content"
+                    required
                     minLength={10}
                     maxLength={2000}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#4ECCA3] resize-none"
+                    className="w-full resize-none rounded-lg border border-gray-200 px-4 py-2 focus:border-[#4ECCA3] focus:outline-none"
                     placeholder="Was hat Ihnen gefallen oder nicht gefallen?"
                   />
                 </div>
-                
+
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" name="wouldRecommend" className="rounded border-gray-300" />
+                  <input
+                    type="checkbox"
+                    name="wouldRecommend"
+                    className="rounded border-gray-300"
+                  />
                   <span className="text-sm text-gray-700">Ich würde dieses Produkt empfehlen</span>
                 </label>
-                
-                <button 
-                  type="submit" 
+
+                <button
+                  type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] py-3 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
                 >
-                  {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
                   Bewertung absenden
                 </button>
               </form>
@@ -339,15 +368,15 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
       )}
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-gray-100">
+      <div className="mb-6 flex flex-wrap items-center gap-4 border-b border-gray-100 pb-6">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-500" />
+          <Filter className="h-4 w-4 text-gray-500" />
           <span className="text-sm text-gray-500">Sortieren nach:</span>
         </div>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-          className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#4ECCA3]"
+          className="rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-[#4ECCA3] focus:outline-none"
         >
           <option value="newest">Neueste zuerst</option>
           <option value="helpful">Hilfreichste</option>
@@ -358,10 +387,10 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
         {filterRating !== null && (
           <button
             onClick={clearFilters}
-            className="px-3 py-1 bg-amber-100 text-amber-700 text-sm rounded-full flex items-center gap-1"
+            className="flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-sm text-amber-700"
           >
             {filterRating} Sterne
-            <X className="w-3 h-3" />
+            <X className="h-3 w-3" />
           </button>
         )}
       </div>
@@ -369,8 +398,8 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
       {/* Reviews List */}
       <div className="space-y-6">
         {isLoading && reviews.length === 0 ? (
-          <div className="text-center py-8">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto text-gray-400" />
+          <div className="py-8 text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-400" />
           </div>
         ) : (
           <AnimatePresence mode="popLayout">
@@ -381,23 +410,24 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+                className="border-b border-gray-100 pb-6 last:border-0 last:pb-0"
               >
                 {/* Review Header */}
-                <div className="flex items-start justify-between mb-3">
+                <div className="mb-3 flex items-start justify-between">
                   <div className="flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`https://i.pravatar.cc/80?u=${review.id}`}
                       alt={review.user.displayName}
-                      className="w-10 h-10 rounded-full object-cover flex-shrink-0 ring-2 ring-white shadow-sm"
+                      className="h-10 w-10 flex-shrink-0 rounded-full object-cover shadow-sm ring-2 ring-white"
                       loading="lazy"
                     />
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-gray-900">{review.user.displayName}</span>
                         {review.verified && (
-                          <span className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-                            <CheckCircle className="w-3 h-3" />
+                          <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-xs text-green-600">
+                            <CheckCircle className="h-3 w-3" />
                             Verifizierter Kauf
                           </span>
                         )}
@@ -411,10 +441,8 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${
-                          i < review.rating
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-gray-300'
+                        className={`h-4 w-4 ${
+                          i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
                         }`}
                       />
                     ))}
@@ -423,14 +451,18 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
 
                 {/* Review Content */}
                 <div className="ml-[3.25rem]">
-                  <h4 className="font-semibold text-gray-900 mb-2">{review.title}</h4>
-                  <p className={`text-gray-600 ${expandedReview === review.id ? '' : 'line-clamp-3'}`}>
+                  <h4 className="mb-2 font-semibold text-gray-900">{review.title}</h4>
+                  <p
+                    className={`text-gray-600 ${expandedReview === review.id ? '' : 'line-clamp-3'}`}
+                  >
                     {review.content}
                   </p>
                   {review.content.length > 200 && (
                     <button
-                      onClick={() => setExpandedReview(expandedReview === review.id ? null : review.id)}
-                      className="text-[#4ECCA3] text-sm font-medium mt-2 hover:underline"
+                      onClick={() =>
+                        setExpandedReview(expandedReview === review.id ? null : review.id)
+                      }
+                      className="mt-2 text-sm font-medium text-[#4ECCA3] hover:underline"
                     >
                       {expandedReview === review.id ? 'Weniger anzeigen' : 'Weiterlesen'}
                     </button>
@@ -438,7 +470,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                 </div>
 
                 {/* Review Actions */}
-                <div className="flex items-center gap-4 mt-4">
+                <div className="mt-4 flex items-center gap-4">
                   <button
                     onClick={() => markHelpful(review.id)}
                     className={`flex items-center gap-1.5 text-sm ${
@@ -447,11 +479,13 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    <ThumbsUp className={`w-4 h-4 ${helpfulReviews.includes(review.id) ? 'fill-current' : ''}`} />
+                    <ThumbsUp
+                      className={`h-4 w-4 ${helpfulReviews.includes(review.id) ? 'fill-current' : ''}`}
+                    />
                     Hilfreich ({review.helpful})
                   </button>
                   <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
-                    <Flag className="w-4 h-4" />
+                    <Flag className="h-4 w-4" />
                     Melden
                   </button>
                 </div>
@@ -461,12 +495,12 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
         )}
 
         {!isLoading && filteredReviews.length === 0 && (
-          <div className="text-center py-8">
+          <div className="py-8 text-center">
             <p className="text-gray-500">Keine Bewertungen gefunden.</p>
             {filterRating !== null && (
               <button
                 onClick={clearFilters}
-                className="text-[#4ECCA3] font-medium mt-2 hover:underline"
+                className="mt-2 font-medium text-[#4ECCA3] hover:underline"
               >
                 Filter zurücksetzen
               </button>
@@ -477,10 +511,10 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
 
       {/* Load More */}
       {hasMore && !isLoading && (
-        <div className="text-center mt-8">
-          <button 
+        <div className="mt-8 text-center">
+          <button
             onClick={handleLoadMore}
-            className="px-6 py-3 border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+            className="rounded-xl border border-gray-200 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
           >
             Mehr laden
           </button>

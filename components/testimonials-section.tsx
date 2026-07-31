@@ -16,59 +16,6 @@ interface Testimonial {
   isVerified: boolean
 }
 
-const FALLBACK_TESTIMONIALS: Testimonial[] = [
-  {
-    id: 'fb-1',
-    name: 'Maria S.',
-    rating: 5,
-    comment:
-      'Die Induktionspfanne ist absolut erstklassig! Das Essen wird gleichmäßig erhitzt und die Reinigung ist ein Kinderspiel.',
-    productName: 'Premium Induktionspfanne',
-    createdAt: '2024-12-10T10:00:00Z',
-    isVerified: true,
-  },
-  {
-    id: 'fb-2',
-    name: 'Hans W.',
-    rating: 5,
-    comment:
-      'Das Topfset für meine neue Küche gekauft. Die Qualität ist hervorragend und sie sehen auch noch toll aus.',
-    productName: 'Premium Topfset',
-    createdAt: '2024-11-20T14:00:00Z',
-    isVerified: true,
-  },
-  {
-    id: 'fb-3',
-    name: 'Klaus M.',
-    rating: 4,
-    comment:
-      'Gute Produkte zu einem fairen Preis. Der Kundenservice war sehr hilfsbereit bei meinen Fragen.',
-    productName: '',
-    createdAt: '2024-10-15T09:00:00Z',
-    isVerified: true,
-  },
-  {
-    id: 'fb-4',
-    name: 'Anna B.',
-    rating: 5,
-    comment:
-      'Mein Dutch Oven ist jetzt mein Lieblingsteil in der Küche. Perfekt für Schmorgerichte und Brotbacken.',
-    productName: 'Dutch Oven',
-    createdAt: '2024-09-05T16:00:00Z',
-    isVerified: true,
-  },
-  {
-    id: 'fb-5',
-    name: 'Thomas K.',
-    rating: 5,
-    comment:
-      'Die Messer sind scharf und gut ausbalanciert. Endlich kann ich wie ein Profi schneiden!',
-    productName: 'Chef Messerset',
-    createdAt: '2024-08-18T11:00:00Z',
-    isVerified: true,
-  },
-]
-
 function renderStars(rating: number) {
   return Array.from({ length: 5 }).map((_, i) => (
     <Star
@@ -195,6 +142,7 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
                   className="flex w-[280px] flex-shrink-0 flex-col rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#4ECCA3]/10 sm:w-[380px] sm:p-8"
                 >
                   <div className="mb-5 flex items-center gap-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`https://i.pravatar.cc/96?u=${testimonial.id}`}
                       alt={testimonial.name}

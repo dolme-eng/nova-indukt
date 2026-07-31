@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { calculateDiscountedPrice } from '../promotions'
-import type { DiscountType } from '@prisma/client'
 
 describe('calculateDiscountedPrice', () => {
   describe('PERCENTAGE discount', () => {
@@ -12,8 +11,8 @@ describe('calculateDiscountedPrice', () => {
 
     it('applies 20% discount on 119 → 95.20', () => {
       const result = calculateDiscountedPrice(119, 'PERCENTAGE', 20)
-      expect(result.discountedPrice).toBe(95.20)
-      expect(result.discountAmount).toBe(23.80)
+      expect(result.discountedPrice).toBe(95.2)
+      expect(result.discountAmount).toBe(23.8)
     })
 
     it('applies 50% discount on 200 → 100', () => {

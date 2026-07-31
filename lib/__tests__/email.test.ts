@@ -59,11 +59,16 @@ vi.mock('@/lib/email/templates/password-reset', () => ({
   default: vi.fn(() => ({})),
 }))
 
-import { sendEmailWithRetry, sendOrderConfirmation, sendNewsletterConfirmationEmail } from '@/lib/email/send'
+import {
+  sendEmailWithRetry,
+  sendOrderConfirmation,
+  sendNewsletterConfirmationEmail,
+} from '@/lib/email/send'
 import { getResend } from '@/lib/email/resend'
 
 beforeEach(() => {
   vi.clearAllMocks()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vi.mocked(getResend).mockReturnValue(null as any)
 })
 

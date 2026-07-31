@@ -44,7 +44,12 @@ function memoryRateLimit(
 
   if (!existing || existing.resetTime < now) {
     memoryStore.set(identifier, { count: 1, resetTime: now + windowMs })
-    return { success: true, limit: maxRequests, remaining: maxRequests - 1, resetTime: now + windowMs }
+    return {
+      success: true,
+      limit: maxRequests,
+      remaining: maxRequests - 1,
+      resetTime: now + windowMs,
+    }
   }
 
   if (existing.count >= maxRequests) {
@@ -63,7 +68,7 @@ function memoryRateLimit(
 // ── Upstash Redis client (lazy init) ────────────────────────────────────────
 
 let _redis: Redis | null = null
-let _ratelimiters: Map<string, Ratelimit> = new Map()
+const _ratelimiters: Map<string, Ratelimit> = new Map()
 
 function getRedis(): Redis | null {
   if (_redis) return _redis

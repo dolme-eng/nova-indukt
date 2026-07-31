@@ -83,7 +83,7 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
 
       setReviews(reviews.map((r) => (r.id === id ? { ...r, isPublished: newPublishedState } : r)))
       toast.success(newPublishedState ? 'Bewertung veröffentlicht' : 'Bewertung ausgeblendet')
-    } catch (error) {
+    } catch {
       toast.error('Fehler bei der Aktualisierung')
     } finally {
       setIsLoading(null)
@@ -103,7 +103,7 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
 
       setReviews(reviews.filter((r) => r.id !== id))
       toast.success('Bewertung gelöscht')
-    } catch (error) {
+    } catch {
       toast.error('Fehler beim Löschen')
     } finally {
       setIsLoading(null)
@@ -183,6 +183,7 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 font-bold text-slate-600">
                       {review.user?.image ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                           src={review.user.image}
                           alt={review.user?.name || 'Kunde'}

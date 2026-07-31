@@ -32,6 +32,7 @@ export function AuthSync() {
     if (status !== 'loading') {
       setHydrated()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, status])
 
   return null

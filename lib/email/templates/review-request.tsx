@@ -47,11 +47,12 @@ export const ReviewRequestEmail = ({
             <Heading style={h2}>Wie gefällt Ihnen Ihre Bestellung?</Heading>
             <Text style={text}>Hallo {customerName},</Text>
             <Text style={text}>
-              Es ist nun eine Woche her, dass Sie Ihre Bestellung <strong>{orderNumber}</strong> erhalten haben.
+              Es ist nun eine Woche her, dass Sie Ihre Bestellung <strong>{orderNumber}</strong>{' '}
+              erhalten haben.
             </Text>
             <Text style={text}>
-              Wir hoffen, dass Sie mit Ihren Produkten zufrieden sind! Ihre Meinung ist uns wichtig – 
-              helfen Sie anderen Kunden bei ihrer Entscheidung und teilen Sie Ihre Erfahrung.
+              Wir hoffen, dass Sie mit Ihren Produkten zufrieden sind! Ihre Meinung ist uns wichtig
+              – helfen Sie anderen Kunden bei ihrer Entscheidung und teilen Sie Ihre Erfahrung.
             </Text>
           </Section>
 
@@ -60,11 +61,12 @@ export const ReviewRequestEmail = ({
           {/* Products */}
           <Section style={section}>
             <Heading style={h3}>Bewerten Sie Ihre Produkte:</Heading>
-            
+
             {items.map((item, index) => (
               <Section key={item.productId} style={productSection}>
                 <Row>
                   <Column>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={item.image || 'https://via.placeholder.com/80'}
                       alt={item.name}
@@ -75,10 +77,7 @@ export const ReviewRequestEmail = ({
                   </Column>
                   <Column style={productInfo}>
                     <Text style={productName}>{item.name}</Text>
-                    <Button
-                      href={item.reviewUrl}
-                      style={reviewButton}
-                    >
+                    <Button href={item.reviewUrl} style={reviewButton}>
                       Jetzt bewerten ⭐
                     </Button>
                   </Column>
@@ -93,7 +92,7 @@ export const ReviewRequestEmail = ({
           {/* Incentive */}
           <Section style={highlightSection}>
             <Text style={highlightText}>
-              🎁 <strong>Als Dankeschön</strong> erhalten Sie bei Ihrer nächsten Bestellung 
+              🎁 <strong>Als Dankeschön</strong> erhalten Sie bei Ihrer nächsten Bestellung
               <strong>10% Rabatt</strong> mit dem Code: <code style={code}>DANKE10</code>
             </Text>
           </Section>
@@ -109,7 +108,8 @@ export const ReviewRequestEmail = ({
               </Link>
             </Text>
             <Text style={footerText}>
-              Mit freundlichen Grüßen,<br />
+              Mit freundlichen Grüßen,
+              <br />
               Ihr NOVA INDUKT Team
             </Text>
           </Section>
