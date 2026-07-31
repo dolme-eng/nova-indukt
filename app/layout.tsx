@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { Suspense } from 'react'
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
 import { PromotionBanner } from '@/components/promotion-banner'
 import './globals.css'
@@ -161,7 +162,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Zum Hauptinhalt springen
         </a>
         <Providers>
-          <GoogleAnalytics />
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+          </Suspense>
           <AuthSync />
           <div className="hidden sm:block">
             <PromotionBanner />
