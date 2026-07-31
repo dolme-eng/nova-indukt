@@ -123,6 +123,7 @@ model Product {
   @@index([categoryId])
   @@index([slug])
   @@index([isActive])
+  @@index([price])
   @@index([ean])
   @@index([supplierSku])
 }
@@ -287,6 +288,7 @@ model ContactMessage {
   updatedAt DateTime      @updatedAt
 
   @@index([status])
+  @@index([email])
   @@index([createdAt])
 }
 
