@@ -47,6 +47,9 @@ export async function generateMetadata({
     title: 'Unsere Produkte | Premium Induktions-Kochgeschirr',
     description:
       'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
+    openGraph: {
+      url: '/produkte',
+    },
     alternates: {
       canonical: '/produkte',
     },
@@ -133,7 +136,13 @@ export default async function ProductsPage({
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
 
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-2 border-[#4ECCA3]/30 border-t-[#4ECCA3]" /></div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#4ECCA3]/30 border-t-[#4ECCA3]" />
+        </div>
+      }
+    >
       <ProductsContent
         initialProducts={formattedProducts}
         initialCategories={formattedCategories}

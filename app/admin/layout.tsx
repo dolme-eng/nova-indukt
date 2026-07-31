@@ -53,7 +53,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-black leading-none text-nova-900">{userName}</p>
                 <p className="mt-1 text-[10px] font-black uppercase tracking-wider text-nova-400">
-                  Super Administrator
+                  {session.user.role === 'ADMIN' ? 'Administrator' : session.user.role}
                 </p>
               </div>
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl border-2 border-nova-100 bg-nova-900 font-black text-nova-400 shadow-lg transition-transform group-hover:scale-105">
