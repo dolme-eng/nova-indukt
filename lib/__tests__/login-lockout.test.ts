@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-vi.mock('@upstash/redis', () => ({
-  Redis: vi.fn(() => null),
+vi.mock('@/lib/redis', () => ({
+  getRedis: vi.fn(() => null),
 }))
 
 import {

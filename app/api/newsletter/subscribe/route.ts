@@ -50,7 +50,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email, firstName, source } = result.data
+    const { email: rawEmail, firstName, source } = result.data
+    const email = rawEmail.toLowerCase()
 
     // Check if already subscribed
     const existing = await prisma.newsletterSubscriber.findUnique({

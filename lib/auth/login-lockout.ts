@@ -7,25 +7,12 @@
  * Uses Upstash Redis when available; falls back to in-memory for local dev.
  */
 
-import { Redis } from '@upstash/redis'
 import { logError } from '@/lib/logger'
+import { getRedis } from '@/lib/redis'
 
 const MAX_ATTEMPTS = 5
 const WINDOW_MS = 15 * 60 * 1000 // 15 minutes
 const LOCKOUT_MS = 30 * 60 * 1000 // 30 minutes lockout
-
-// ── Redis client (lazy init) ────────────────────────────────────────────────
-
-let _redis: Redis | null = null
-
-function getRedis(): Redis | null {
-  if (_redis) return _redis
-  const url = process.env.UPSTASH_REDIS_REST_URL
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return null
-  _redis = new Redis({ url, token })
-  return _redis
-}
 
 // ── In-memory fallback (dev local only) ─────────────────────────────────────
 
@@ -55,10 +42,11 @@ const KEY_ATTEMPTS = 'nova:login:attempts:'
 
 export async function isLockedOut(email: string): Promise<boolean> {
   const redis = getRedis()
+  const normalizedEmail = email.toLowerCase()
 
   if (redis) {
     try {
-      const locked = await redis.get<string>(KEY_PREFIX + email)
+      const locked = await redis.get<string>(KEY_PREFIX + normalizedEmail)
       return locked === 'locked'
     } catch (err) {
       logError('[login-lockout] Redis error in isLockedOut, falling back to memory:', err)
@@ -67,12 +55,12 @@ export async function isLockedOut(email: string): Promise<boolean> {
 
   // Fallback: in-memory
   memoryCleanup()
-  const entry = memoryAttempts.get(email)
+  const entry = memoryAttempts.get(normalizedEmail)
   if (!entry) return false
   const now = Date.now()
   if (entry.lockedUntil && entry.lockedUntil > now) return true
   if (entry.firstAttemptAt + WINDOW_MS < now) {
-    memoryAttempts.delete(email)
+    memoryAttempts.delete(normalizedEmail)
     return false
   }
   return false
@@ -81,10 +69,11 @@ export async function isLockedOut(email: string): Promise<boolean> {
 export async function recordFailedLogin(email: string): Promise<void> {
   const redis = getRedis()
   const now = Date.now()
+  const normalizedEmail = email.toLowerCase()
 
   if (redis) {
     try {
-      const key = KEY_ATTEMPTS + email
+      const key = KEY_ATTEMPTS + normalizedEmail
       const raw = await redis.get<{ count: number; firstAttemptAt: number }>(key)
 
       if (!raw || (raw.firstAttemptAt && now - raw.firstAttemptAt > WINDOW_MS)) {
@@ -96,7 +85,7 @@ export async function recordFailedLogin(email: string): Promise<void> {
       const count = (raw.count || 0) + 1
       if (count >= MAX_ATTEMPTS) {
         // Lock the account
-        await redis.set(KEY_PREFIX + email, 'locked', { ex: Math.ceil(LOCKOUT_MS / 1000) })
+        await redis.set(KEY_PREFIX + normalizedEmail, 'locked', { ex: Math.ceil(LOCKOUT_MS / 1000) })
       }
       await redis.set(
         key,
@@ -111,10 +100,10 @@ export async function recordFailedLogin(email: string): Promise<void> {
 
   // Fallback: in-memory
   memoryCleanup()
-  const entry = memoryAttempts.get(email)
+  const entry = memoryAttempts.get(normalizedEmail)
 
   if (!entry || entry.firstAttemptAt + WINDOW_MS < now) {
-    memoryAttempts.set(email, { count: 1, firstAttemptAt: now, lockedUntil: null })
+    memoryAttempts.set(normalizedEmail, { count: 1, firstAttemptAt: now, lockedUntil: null })
     return
   }
 
@@ -126,26 +115,28 @@ export async function recordFailedLogin(email: string): Promise<void> {
 
 export async function recordSuccessfulLogin(email: string): Promise<void> {
   const redis = getRedis()
+  const normalizedEmail = email.toLowerCase()
 
   if (redis) {
     try {
-      await redis.del(KEY_PREFIX + email)
-      await redis.del(KEY_ATTEMPTS + email)
+      await redis.del(KEY_PREFIX + normalizedEmail)
+      await redis.del(KEY_ATTEMPTS + normalizedEmail)
     } catch (err) {
       logError('[login-lockout] Redis error in recordSuccessfulLogin:', err)
     }
     return
   }
 
-  memoryAttempts.delete(email)
+  memoryAttempts.delete(normalizedEmail)
 }
 
 export async function getLoginLockoutInfo(email: string): Promise<{ remainingMs: number } | null> {
   const redis = getRedis()
+  const normalizedEmail = email.toLowerCase()
 
   if (redis) {
     try {
-      const ttl = await redis.pttl(KEY_PREFIX + email)
+      const ttl = await redis.pttl(KEY_PREFIX + normalizedEmail)
       if (ttl > 0) return { remainingMs: ttl }
     } catch (err) {
       logError('[login-lockout] Redis error in getLoginLockoutInfo, falling back to memory:', err)
@@ -153,11 +144,11 @@ export async function getLoginLockoutInfo(email: string): Promise<{ remainingMs:
   }
 
   // Fallback: in-memory
-  const entry = memoryAttempts.get(email)
+  const entry = memoryAttempts.get(normalizedEmail)
   if (!entry?.lockedUntil) return null
   const remainingMs = entry.lockedUntil - Date.now()
   if (remainingMs <= 0) {
-    memoryAttempts.delete(email)
+    memoryAttempts.delete(normalizedEmail)
     return null
   }
   return { remainingMs }

@@ -6,8 +6,8 @@ vi.mock('@upstash/ratelimit', () => ({
   },
 }))
 
-vi.mock('@upstash/redis', () => ({
-  Redis: vi.fn(),
+vi.mock('@/lib/redis', () => ({
+  getRedis: vi.fn(() => null),
 }))
 
 import { rateLimit, createRateLimitKey, getIP } from '@/lib/rate-limit'

@@ -14,8 +14,8 @@
  */
 
 import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
 import { logError } from '@/lib/logger'
+import { getRedis } from '@/lib/redis'
 
 // ── Fallback in-memory (dev local uniquement) ────────────────────────────────
 
@@ -68,19 +68,9 @@ function memoryRateLimit(
   }
 }
 
-// ── Upstash Redis client (lazy init) ────────────────────────────────────────
+// ── Ratelimiter cache ───────────────────────────────────────────────────────
 
-let _redis: Redis | null = null
 const _ratelimiters: Map<string, Ratelimit> = new Map()
-
-function getRedis(): Redis | null {
-  if (_redis) return _redis
-  const url = process.env.UPSTASH_REDIS_REST_URL
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return null
-  _redis = new Redis({ url, token })
-  return _redis
-}
 
 /**
  * Returns an Upstash Ratelimit configured with Sliding Window.

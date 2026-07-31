@@ -50,7 +50,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email } = result.data
+    const { email: rawEmail } = result.data
+    const email = rawEmail.toLowerCase()
 
     const existing = await prisma.newsletterSubscriber.findUnique({
       where: { email },
@@ -90,7 +91,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const email = searchParams.get('email')
+    const email = searchParams.get('email')?.toLowerCase()
 
     if (!email) {
       return new NextResponse(HTML_TEMPLATE, {
