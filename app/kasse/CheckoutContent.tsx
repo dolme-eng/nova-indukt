@@ -127,13 +127,13 @@ export default function CheckoutContent() {
   const handleShippingChange = (name: string, value: string) => {
     setShippingData((prev) => ({ ...prev, [name]: value }))
     if (shippingTouched[name]) {
-      const error = validateShippingField(name, value)
+      const error = validateShippingField(name as keyof ShippingFormErrors, value)
       setShippingErrors((prev) => ({ ...prev, [name]: error }))
     }
   }
 
   const getShippingInputClass = (name: string) => {
-    const hasError = shippingErrors[name] && shippingTouched[name]
+    const hasError = shippingErrors[name as keyof ShippingFormErrors] && shippingTouched[name]
     return `w-full rounded-xl border bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 ${
       hasError
         ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10'
