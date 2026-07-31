@@ -25,7 +25,6 @@ model Account {
   @@unique([provider, providerAccountId])
   @@index([userId])
 }
-
 // NOTE : Ce modèle est requis par @auth/prisma-adapter mais n'est JAMAIS peuplé
 // car la stratégie d'authentification est "jwt" (voir auth.config.ts).
 // Ne pas supprimer : le build Prisma en a besoin pour la compatibilité de l'adapter.
@@ -60,9 +59,6 @@ model User {
   reviewHelpfulVotes ReviewHelpfulVote[]
   sessions         Session[]
   wishlist         WishlistItem[]
-
-  @@index([email])
-  @@index([resetToken])
 }
 
 model VerificationToken {
@@ -84,7 +80,6 @@ model Category {
   createdAt   DateTime  @default(now())
   products    Product[]
 
-  @@index([slug])
   @@index([isActive])
 }
 
@@ -124,11 +119,8 @@ model Product {
   wishlistItems    WishlistItem[]
 
   @@index([categoryId])
-  @@index([slug])
   @@index([isActive])
   @@index([price])
-  @@index([ean])
-  @@index([supplierSku])
 }
 
 model ProductImage {
@@ -176,7 +168,6 @@ model Order {
   items           OrderItem[]
 
   @@index([userId])
-  @@index([orderNumber])
   @@index([status])
   @@index([paymentStatus])
   @@index([customerEmail])
@@ -276,7 +267,6 @@ model NewsletterSubscriber {
   unsubscribedAt DateTime?
   createdAt      DateTime  @default(now())
 
-  @@index([email])
   @@index([isActive])
 }
 
@@ -311,7 +301,6 @@ model BlogPost {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  @@index([slug])
   @@index([isPublished])
   @@index([category])
 }
@@ -368,11 +357,8 @@ model Cart {
   userId    String?    @unique
   sessionId String?    @unique
   createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  updatedAt   DateTime   @updatedAt
   items     CartItem[]
-
-  @@index([userId])
-  @@index([sessionId])
 }
 
 model CartItem {
@@ -386,7 +372,6 @@ model CartItem {
   product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
 
   @@unique([cartId, productId])
-  @@index([cartId])
   @@index([productId])
 }
 
@@ -407,7 +392,6 @@ model StaticPageContent {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([slug])
   @@index([isActive])
 }
 
