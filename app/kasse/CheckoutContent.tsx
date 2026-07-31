@@ -292,7 +292,7 @@ export default function CheckoutContent() {
     if (!result.success) {
       const fieldErrors: ShippingFormErrors = {}
       for (const issue of result.error.issues) {
-        const field = issue.path[0] as string
+        const field = issue.path[0] as keyof ShippingFormErrors
         if (!fieldErrors[field]) {
           fieldErrors[field] = issue.message
         }

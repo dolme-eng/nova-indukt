@@ -179,7 +179,7 @@ describe('SearchContent', () => {
   it('adds product to cart when add button clicked', async () => {
     const addItem = vi.fn()
     const cartModule = await import('@/lib/store/cart')
-    vi.mocked(cartModule.useCart).mockReturnValue({ addItem } as ReturnType<
+    vi.mocked(cartModule.useCart).mockReturnValue({ addItem } as unknown as ReturnType<
       typeof cartModule.useCart
     >)
     render(<SearchContent initialProducts={mockProducts} initialCategories={mockCategories} />)

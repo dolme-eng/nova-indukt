@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { COMPANY } from '@/lib/constants/company'
 import { contactFormSchema } from '@/lib/validations/contact'
+import type { z } from 'zod'
 
 type ContactFormErrors = Partial<Record<keyof z.infer<typeof contactFormSchema>, string>>
 
@@ -63,7 +64,7 @@ export function KontaktContent() {
     if (!result.success) {
       const fieldErrors: ContactFormErrors = {}
       for (const issue of result.error.issues) {
-        const field = issue.path[0] as string
+        const field = issue.path[0] as keyof ContactFormErrors
         if (!fieldErrors[field]) {
           fieldErrors[field] = issue.message
         }
