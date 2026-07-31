@@ -188,7 +188,7 @@ export function LoginContent() {
             <button
               data-testid="login-submit"
               type="submit"
-              disabled={loading || success}
+              disabled={loading}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0C211E] py-3 font-medium text-white transition-colors hover:bg-[#17423C] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
