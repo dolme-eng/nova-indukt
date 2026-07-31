@@ -4,7 +4,6 @@ import {
   Eye,
   Banknote,
   Truck,
-  Download,
   MoreVertical,
   CheckCircle2,
   Clock,
@@ -20,6 +19,7 @@ import { de } from 'date-fns/locale'
 import { Prisma, OrderStatus, PaymentStatus } from '@prisma/client'
 
 import { OrdersFilter } from './_components/orders-filter'
+import { CsvExportButton } from '../_components/csv-export-button'
 
 async function getOrders(search?: string, status?: string) {
   const where: Prisma.OrderWhereInput = {}
@@ -105,10 +105,19 @@ export default async function AdminOrdersPage({
             Verwalten und verfolgen Sie die Verkäufe ({orders.length} Bestellungen)
           </p>
         </div>
-        <button className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50">
-          <Download size={18} />
-          CSV Exportieren
-        </button>
+        <CsvExportButton
+          data={orders}
+          columns={[
+            { header: 'Bestellnummer', accessor: (r) => String(r.orderNumber) },
+            { header: 'Kunde', accessor: (r) => String(r.customerName || '') },
+            { header: 'E-Mail', accessor: (r) => String(r.customerEmail) },
+            { header: 'Datum', accessor: (r) => String(r.createdAt) },
+            { header: 'Status', accessor: (r) => String(r.status) },
+            { header: 'Zahlung', accessor: (r) => String(r.paymentStatus) },
+            { header: 'Betrag (EUR)', accessor: (r) => Number(r.total) },
+          ]}
+          filename={`bestellungen-export-${new Date().toISOString().slice(0, 10)}.csv`}
+        />
       </div>
 
       {/* Filters */}
@@ -136,26 +145,28 @@ export default async function AdminOrdersPage({
                   className="group cursor-pointer transition-colors hover:bg-slate-50/50"
                 >
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
+                    <Link href={`/admin/orders/${order.id}`} className="flex items-center gap-3">
                       <div className="rounded bg-slate-100 p-2 text-slate-500">
                         <Box size={16} />
                       </div>
                       <span className="font-bold text-slate-900">{order.orderNumber}</span>
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex flex-col">
+                    <Link href={`/admin/orders/${order.id}`} className="flex flex-col">
                       <span className="text-sm font-semibold text-slate-900">
                         {order.customerName}
                       </span>
                       <span className="text-xs text-slate-500">{order.customerEmail}</span>
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">
-                    {format(new Date(order.createdAt), 'dd MMM yyyy, HH:mm', { locale: de })}
+                    <Link href={`/admin/orders/${order.id}`} className="block">
+                      {format(new Date(order.createdAt), 'dd MMM yyyy, HH:mm', { locale: de })}
+                    </Link>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex flex-col gap-1">
+                    <Link href={`/admin/orders/${order.id}`} className="flex flex-col gap-1">
                       <span
                         className={`w-fit rounded-full px-2 py-0.5 text-[10px] font-bold ${paymentMap[order.paymentStatus].color}`}
                       >
@@ -165,20 +176,25 @@ export default async function AdminOrdersPage({
                         <Banknote size={10} />
                         {order.paymentMethod}
                       </span>
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold ${statusMap[order.status].color}`}
+                    <Link href={`/admin/orders/${order.id}`} className="block">
+                      <span
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold ${statusMap[order.status].color}`}
+                      >
+                        {statusMap[order.status].icon}
+                        {statusMap[order.status].label}
+                      </span>
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4">
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="block font-bold text-slate-900"
                     >
-                      {statusMap[order.status].icon}
-                      {statusMap[order.status].label}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="font-bold text-slate-900">
                       {Number(order.total).toFixed(2)} €
-                    </span>
+                    </Link>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
@@ -189,9 +205,6 @@ export default async function AdminOrdersPage({
                       >
                         <Eye size={18} />
                       </Link>
-                      <button className="rounded-lg p-2 text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-900">
-                        <MoreVertical size={18} />
-                      </button>
                     </div>
                   </td>
                 </tr>

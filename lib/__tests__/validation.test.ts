@@ -1,8 +1,20 @@
 import { describe, it, expect } from 'vitest'
-import { loginSchema, registerSchema, forgotPasswordSchema, resetPasswordSchema } from '@/lib/validations/auth'
-import { createProductSchema, productImageSchema, updateProductSchema } from '@/lib/validations/product'
+import {
+  loginSchema,
+  registerSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+} from '@/lib/validations/auth'
+import {
+  createProductSchema,
+  productImageSchema,
+  updateProductSchema,
+} from '@/lib/validations/product'
 import { contactFormSchema } from '@/lib/validations/contact'
-import { newsletterSubscribeSchema, newsletterUnsubscribeSchema } from '@/lib/validations/newsletter'
+import {
+  newsletterSubscribeSchema,
+  newsletterUnsubscribeSchema,
+} from '@/lib/validations/newsletter'
 
 // ─── Auth ──────────────────────────────────────────────────────────────────────
 
@@ -32,7 +44,7 @@ describe('registerSchema', () => {
   const validUser = {
     name: 'John Doe',
     email: 'john@example.com',
-    password: 'Strong1Pass',
+    password: 'Strong1Pass!',
   }
 
   it('accepts a valid registration', () => {
@@ -81,7 +93,7 @@ describe('forgotPasswordSchema', () => {
 })
 
 describe('resetPasswordSchema', () => {
-  const valid = { token: 'abc123', password: 'Strong1Pass' }
+  const valid = { token: 'abc123', password: 'Strong1Pass!' }
 
   it('accepts valid token and password', () => {
     expect(resetPasswordSchema.safeParse(valid).success).toBe(true)
@@ -100,7 +112,9 @@ describe('resetPasswordSchema', () => {
 
 describe('productImageSchema', () => {
   it('accepts a valid image object', () => {
-    expect(productImageSchema.safeParse({ url: 'https://example.com/img.jpg', alt: 'Photo' }).success).toBe(true)
+    expect(
+      productImageSchema.safeParse({ url: 'https://example.com/img.jpg', alt: 'Photo' }).success
+    ).toBe(true)
   })
 
   it('accepts image without alt', () => {
@@ -223,11 +237,15 @@ describe('contactFormSchema', () => {
   })
 
   it('rejects privacy not accepted', () => {
-    expect(contactFormSchema.safeParse({ ...validContact, privacyAccepted: false }).success).toBe(false)
+    expect(contactFormSchema.safeParse({ ...validContact, privacyAccepted: false }).success).toBe(
+      false
+    )
   })
 
   it('accepts optional phone', () => {
-    expect(contactFormSchema.safeParse({ ...validContact, phone: '+49 30 12345' }).success).toBe(true)
+    expect(contactFormSchema.safeParse({ ...validContact, phone: '+49 30 12345' }).success).toBe(
+      true
+    )
   })
 
   it('accepts null phone', () => {
@@ -252,7 +270,10 @@ describe('newsletterSubscribeSchema', () => {
   })
 
   it('accepts custom source', () => {
-    const result = newsletterSubscribeSchema.safeParse({ email: 'user@example.com', source: 'footer' })
+    const result = newsletterSubscribeSchema.safeParse({
+      email: 'user@example.com',
+      source: 'footer',
+    })
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data.source).toBe('footer')

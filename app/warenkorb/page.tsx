@@ -5,7 +5,8 @@ import { CartContent } from './CartContent'
 
 export const metadata: Metadata = {
   title: 'Warenkorb',
-  description: 'Überprüfen Sie Ihre ausgewählten Produkte im Warenkorb. Sichere Bezahlung, kostenloser Versand ab 500€.',
+  description:
+    'Überprüfen Sie Ihre ausgewählten Produkte im Warenkorb. Sichere Bezahlung, kostenloser Versand ab 500€.',
   keywords: ['Warenkorb', 'Einkauf', 'Bestellung', 'Kasse', 'NOVA INDUKT'],
   alternates: {
     canonical: '/warenkorb',
@@ -20,7 +21,7 @@ export default async function CartPage() {
   const products = await prisma.product.findMany({
     where: { isActive: true },
     include: { images: true },
-    take: 10 // Limiter pour les recommandations initiales
+    take: 10, // Limiter pour les recommandations initiales
   })
 
   const formattedProducts: Product[] = products.map((p) => ({
@@ -31,7 +32,7 @@ export default async function CartPage() {
     price: Number(p.price),
     oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
     images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map((img) => img.url),
-    rating: p.rating,
+    rating: Number(p.rating),
     reviewCount: p.reviewCount,
     badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
     description: { de: p.descriptionDe || '' },
@@ -42,7 +43,7 @@ export default async function CartPage() {
       weight: p.weightKg?.toString() || '',
       dishwasher: p.dishwasherSafe || false,
       induction: p.inductionSafe || false,
-    }
+    },
   }))
 
   return <CartContent recommendedProducts={formattedProducts} />

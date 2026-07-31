@@ -1,8 +1,8 @@
-import { NextAuthConfig } from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import { compare, hash } from "bcrypt-ts"
-import type { Role } from "@prisma/client"
-import type { JWT } from "next-auth/jwt"
+import { NextAuthConfig } from 'next-auth'
+import Credentials from 'next-auth/providers/credentials'
+import { compare, hash } from 'bcrypt-ts'
+import type { Role } from '@prisma/client'
+import type { JWT } from 'next-auth/jwt'
 
 // Verify password - supports both legacy bcrypt and new bcrypt-ts format
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
@@ -23,21 +23,21 @@ export async function hashPassword(password: string): Promise<string> {
 export const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize() {
         // Cette partie sera surchargée dans auth.ts
         return null
-      }
-    })
+      },
+    }),
   ],
   pages: {
-    signIn: "/anmelden",
-    signOut: "/",
-    error: "/anmelden"
+    signIn: '/anmelden',
+    signOut: '/',
+    error: '/anmelden',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -58,12 +58,12 @@ export const authConfig: NextAuthConfig = {
         session.user.role = typedToken.role
       }
       return session
-    }
+    },
   },
   session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60,
   },
-  basePath: "/api/auth",
-  trustHost: true
+  basePath: '/api/auth',
+  trustHost: process.env.NODE_ENV === 'development',
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { toast } from 'sonner'
 import { Save, X, Percent, Euro, Tag, Calendar, Package, Folder, Ticket } from 'lucide-react'
 
 interface Category {
@@ -69,7 +69,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [products, setProducts] = useState<Product[]>([])
-  
+
   const [formData, setFormData] = useState<PromotionFormData>({
     name: promotion?.name || '',
     description: promotion?.description || '',
@@ -80,11 +80,11 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
     isGlobal: promotion?.isGlobal || false,
     productIds: promotion?.productIds || [],
     categoryIds: promotion?.categoryIds || [],
-    startDate: promotion?.startDate 
-      ? new Date(promotion.startDate).toISOString().split('T')[0] 
+    startDate: promotion?.startDate
+      ? new Date(promotion.startDate).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0],
-    endDate: promotion?.endDate 
-      ? new Date(promotion.endDate).toISOString().split('T')[0] 
+    endDate: promotion?.endDate
+      ? new Date(promotion.endDate).toISOString().split('T')[0]
       : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     minOrderAmount: promotion?.minOrderAmount?.toString() || '',
     maxDiscount: promotion?.maxDiscount?.toString() || '',
@@ -92,7 +92,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
     badge: promotion?.badge || '-20%',
     bannerText: promotion?.bannerText || '',
     highlightColor: promotion?.highlightColor || '#4ECCA3',
-    isActive: promotion?.isActive ?? true
+    isActive: promotion?.isActive ?? true,
   })
 
   useEffect(() => {
@@ -129,9 +129,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
     setLoading(true)
 
     try {
-      const url = promotion?.id 
-        ? `/api/admin/promotions/${promotion.id}` 
-        : '/api/admin/promotions'
+      const url = promotion?.id ? `/api/admin/promotions/${promotion.id}` : '/api/admin/promotions'
       const method = promotion?.id ? 'PUT' : 'POST'
 
       const response = await fetch(url, {
@@ -143,19 +141,20 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
           discountValue: Number(formData.discountValue),
           minOrderAmount: formData.minOrderAmount ? Number(formData.minOrderAmount) : null,
           maxDiscount: formData.maxDiscount ? Number(formData.maxDiscount) : null,
-          usageLimit: formData.usageLimit ? Number(formData.usageLimit) : null
-        })
+          usageLimit: formData.usageLimit ? Number(formData.usageLimit) : null,
+        }),
       })
 
       if (response.ok) {
+        toast.success(promotion ? 'Aktion aktualisiert' : 'Aktion erstellt')
         router.push('/admin/promotions')
       } else {
         const error = await response.json()
-        alert(error.error || 'Ein Fehler ist aufgetreten')
+        toast.error(error.error || 'Ein Fehler ist aufgetreten')
       }
     } catch (error) {
       console.error('Error saving promotion:', error)
-      alert('Fehler beim Speichern')
+      toast.error('Fehler beim Speichern')
     } finally {
       setLoading(false)
     }
@@ -163,59 +162,56 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Basic Info */}
-      <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4">Allgemeine Informationen</h2>
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">Allgemeine Informationen</h2>
         <div className="space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col gap-4 md:flex-row">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-400 mb-1">Name der Aktion</label>
+              <label className="mb-1 block text-sm font-medium text-slate-600">
+                Name der Aktion
+              </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 placeholder="z.B. Flash Deal -20%"
               />
             </div>
             <div className="w-full md:w-1/3">
-               <label className="block text-sm font-medium text-gray-400 mb-1">Typ</label>
-               <div className="flex gap-2">
-                 <button
-                   type="button"
-                   onClick={() => setFormData({ ...formData, isCoupon: false })}
-                   className={`flex-1 px-4 py-2 rounded-lg border transition-all text-sm font-bold ${
-                     !formData.isCoupon
-                       ? 'bg-[#4ECCA3]/20 border-[#4ECCA3] text-[#4ECCA3]'
-                       : 'bg-[#1A1A1A] border-white/10 text-gray-400'
-                   }`}
-                 >
-                   Automatisch
-                 </button>
-                 <button
-                   type="button"
-                   onClick={() => setFormData({ ...formData, isCoupon: true })}
-                   className={`flex-1 px-4 py-2 rounded-lg border transition-all text-sm font-bold ${
-                     formData.isCoupon
-                       ? 'bg-[#4ECCA3]/20 border-[#4ECCA3] text-[#4ECCA3]'
-                       : 'bg-[#1A1A1A] border-white/10 text-gray-400'
-                   }`}
-                 >
-                   Gutschein
-                 </button>
-               </div>
+              <label className="mb-1 block text-sm font-medium text-slate-600">Typ</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isCoupon: false })}
+                  className={`flex-1 rounded-lg border px-4 py-2 text-sm font-bold transition-all ${
+                    !formData.isCoupon
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-slate-200 bg-slate-50 text-slate-500'
+                  }`}
+                >
+                  Automatisch
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isCoupon: true })}
+                  className={`flex-1 rounded-lg border px-4 py-2 text-sm font-bold transition-all ${
+                    formData.isCoupon
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-slate-200 bg-slate-50 text-slate-500'
+                  }`}
+                >
+                  Gutschein
+                </button>
+              </div>
             </div>
           </div>
 
           {formData.isCoupon && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl"
-            >
-              <label className="text-sm font-medium text-purple-400 mb-1 flex items-center gap-2">
-                <Ticket className="w-4 h-4" />
+            <div className="rounded-xl border border-purple-200 bg-purple-50 p-4">
+              <label className="mb-1 flex items-center gap-2 text-sm font-medium text-purple-700">
+                <Ticket className="h-4 w-4" />
                 Gutscheincode
               </label>
               <input
@@ -223,101 +219,105 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
                 value={formData.code}
                 onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                 required={formData.isCoupon}
-                className="w-full px-4 py-2 bg-[#1A1A1A] border border-purple-500/30 rounded-lg text-white focus:outline-none focus:border-purple-500 font-mono uppercase tracking-widest"
+                className="w-full rounded-lg border border-purple-200 bg-white px-4 py-2 font-mono uppercase tracking-widest text-slate-900 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                 placeholder="Z.B. SOMMER20"
               />
-              <p className="text-xs text-gray-500 mt-2">Kunden müssen diesen Code im Warenkorb/Checkout eingeben.</p>
-            </motion.div>
+              <p className="mt-2 text-xs text-slate-500">
+                Kunden müssen diesen Code im Warenkorb/Checkout eingeben.
+              </p>
+            </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Beschreibung</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Beschreibung</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={2}
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               placeholder="Beschreibung der Aktion..."
             />
           </div>
         </div>
       </div>
 
-      {/* Discount Settings */}
-      <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4">Rabatteinstellungen</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">Rabatteinstellungen</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Rabattart</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Rabattart</label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, discountType: 'PERCENTAGE' })}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-all ${
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2 transition-all ${
                   formData.discountType === 'PERCENTAGE'
-                    ? 'bg-[#4ECCA3]/20 border-[#4ECCA3] text-[#4ECCA3]'
-                    : 'bg-[#1A1A1A] border-white/10 text-gray-400'
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-slate-200 bg-slate-50 text-slate-500'
                 }`}
               >
-                <Percent className="w-4 h-4" />
+                <Percent className="h-4 w-4" />
                 Prozentsatz
               </button>
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, discountType: 'FIXED_AMOUNT' })}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-all ${
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2 transition-all ${
                   formData.discountType === 'FIXED_AMOUNT'
-                    ? 'bg-[#4ECCA3]/20 border-[#4ECCA3] text-[#4ECCA3]'
-                    : 'bg-[#1A1A1A] border-white/10 text-gray-400'
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-slate-200 bg-slate-50 text-slate-500'
                 }`}
               >
-                <Euro className="w-4 h-4" />
+                <Euro className="h-4 w-4" />
                 Fester Betrag
               </button>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
+            <label className="mb-1 block text-sm font-medium text-slate-600">
               Wert {formData.discountType === 'PERCENTAGE' ? '(%)' : '(€)'}
             </label>
             <input
               type="number"
               value={formData.discountValue}
-              onChange={(e) => setFormData({ ...formData, discountValue: e.target.value })} 
+              onChange={(e) => setFormData({ ...formData, discountValue: e.target.value })}
               required
               min="0"
               max={formData.discountType === 'PERCENTAGE' ? '100' : undefined}
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Mindestbestellwert (€)</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">
+              Mindestbestellwert (€)
+            </label>
             <input
               type="number"
               value={formData.minOrderAmount}
               onChange={(e) => setFormData({ ...formData, minOrderAmount: e.target.value })}
               min="0"
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               placeholder="Optional"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Maximaler Rabatt (€)</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">
+              Maximaler Rabatt (€)
+            </label>
             <input
               type="number"
               value={formData.maxDiscount}
               onChange={(e) => setFormData({ ...formData, maxDiscount: e.target.value })}
               min="0"
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               placeholder="Optional"
             />
           </div>
         </div>
       </div>
 
-      {/* Scope */}
-      <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4">Geltungsbereich</h2>
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">Geltungsbereich</h2>
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <input
@@ -325,52 +325,65 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
               id="isGlobal"
               checked={formData.isGlobal}
               onChange={(e) => setFormData({ ...formData, isGlobal: e.target.checked })}
-              className="w-4 h-4 rounded border-white/10 bg-[#1A1A1A] text-[#4ECCA3] focus:ring-[#4ECCA3]"
+              className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
             />
-            <label htmlFor="isGlobal" className="text-white">Auf alle Produkte anwenden (globale Aktion)</label>
+            <label htmlFor="isGlobal" className="text-slate-900">
+              Auf alle Produkte anwenden (globale Aktion)
+            </label>
           </div>
 
           {!formData.isGlobal && (
             <>
               <div>
-                <label className="text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
-                  <Folder className="w-4 h-4" />
+                <label className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-600">
+                  <Folder className="h-4 w-4" />
                   Betroffene Kategorien
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto p-2 bg-[#1A1A1A] rounded-lg border border-white/10">
+                <div className="grid max-h-40 grid-cols-2 gap-2 overflow-y-auto rounded-lg border border-slate-200 bg-slate-50 p-2 md:grid-cols-3">
                   {categories.map((category) => (
-                    <label key={category.id} className="flex items-center gap-2 p-2 hover:bg-white/5 rounded cursor-pointer">
+                    <label
+                      key={category.id}
+                      className="flex cursor-pointer items-center gap-2 rounded p-2 hover:bg-slate-100"
+                    >
                       <input
                         type="checkbox"
                         checked={formData.categoryIds.includes(category.id)}
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setFormData({ ...formData, categoryIds: [...formData.categoryIds, category.id] })
+                            setFormData({
+                              ...formData,
+                              categoryIds: [...formData.categoryIds, category.id],
+                            })
                           } else {
-                            setFormData({ ...formData, categoryIds: formData.categoryIds.filter((id: string) => id !== category.id) })
+                            setFormData({
+                              ...formData,
+                              categoryIds: formData.categoryIds.filter(
+                                (id: string) => id !== category.id
+                              ),
+                            })
                           }
                         }}
-                        className="w-4 h-4 rounded border-white/10 bg-[#2A2A2A] text-[#4ECCA3]"
+                        className="h-4 w-4 rounded border-slate-300 text-primary"
                       />
-                      <span className="text-sm text-gray-300">{category.nameDe}</span>
+                      <span className="text-sm text-slate-700">{category.nameDe}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
-                  <Package className="w-4 h-4" />
+                <label className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-600">
+                  <Package className="h-4 w-4" />
                   Spezifische Produkte
                 </label>
                 <select
                   multiple
                   value={formData.productIds}
                   onChange={(e) => {
-                    const selected = Array.from(e.target.selectedOptions).map(o => o.value)
+                    const selected = Array.from(e.target.selectedOptions).map((o) => o.value)
                     setFormData({ ...formData, productIds: selected })
                   }}
-                  className="w-full h-40 px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+                  className="h-40 w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
@@ -378,48 +391,49 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
                     </option>
                   ))}
                 </select>
-                <p className="text-xs text-gray-500 mt-1">Halten Sie Strg/Cmd gedrückt, um mehrere Produkte auszuwählen</p>
+                <p className="mt-1 text-xs text-slate-500">
+                  Halten Sie Strg/Cmd gedrückt, um mehrere Produkte auszuwählen
+                </p>
               </div>
             </>
           )}
         </div>
       </div>
 
-      {/* Duration */}
-      <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Calendar className="w-5 h-5" />
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900">
+          <Calendar className="h-5 w-5" />
           Dauer der Aktion
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Startdatum</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Startdatum</label>
             <input
               type="date"
               value={formData.startDate}
               onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
               required
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Enddatum</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Enddatum</label>
             <input
               type="date"
               value={formData.endDate}
               onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
               required
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Nutzungsgrenze</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Nutzungsgrenze</label>
             <input
               type="number"
               value={formData.usageLimit}
               onChange={(e) => setFormData({ ...formData, usageLimit: e.target.value })}
               min="0"
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               placeholder="Unbegrenzt"
             />
           </div>
@@ -429,77 +443,77 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
               id="isActive"
               checked={formData.isActive}
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="w-4 h-4 rounded border-white/10 bg-[#1A1A1A] text-[#4ECCA3] focus:ring-[#4ECCA3]"
+              className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
             />
-            <label htmlFor="isActive" className="text-white">Aktion aktiv</label>
+            <label htmlFor="isActive" className="text-slate-900">
+              Aktion aktiv
+            </label>
           </div>
         </div>
       </div>
 
-      {/* Display */}
-      <div className="bg-[#2A2A2A] rounded-xl p-6 border border-white/5">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Tag className="w-5 h-5" />
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900">
+          <Tag className="h-5 w-5" />
           Anzeige
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Badge (kurz)</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Badge (kurz)</label>
             <input
               type="text"
               value={formData.badge}
               onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               placeholder="z.B. -20%, FLASH, PROMO"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Akzentfarbe</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Akzentfarbe</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={formData.highlightColor}
                 onChange={(e) => setFormData({ ...formData, highlightColor: e.target.value })}
-                className="w-10 h-10 rounded-lg cursor-pointer"
+                className="h-10 w-10 cursor-pointer rounded-lg"
               />
               <input
                 type="text"
                 value={formData.highlightColor}
                 onChange={(e) => setFormData({ ...formData, highlightColor: e.target.value })}
-                className="flex-1 px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
+                className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-400 mb-1">Banner-Text</label>
+            <label className="mb-1 block text-sm font-medium text-slate-600">Banner-Text</label>
             <input
               type="text"
               value={formData.bannerText}
               onChange={(e) => setFormData({ ...formData, bannerText: e.target.value })}
-              className="w-full px-4 py-2 bg-[#1A1A1A] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4ECCA3]"
-              placeholder="z.B. ⚡ Flash Deal - Begrenzte Stückzahl!"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="z.B. Flash Deal - Begrenzte Stückzahl!"
             />
           </div>
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex justify-end gap-4">
         <button
           type="button"
           onClick={() => router.push('/admin/promotions')}
-          className="flex items-center gap-2 px-6 py-3 text-gray-400 hover:text-white transition-all"
+          className="flex items-center gap-2 px-6 py-3 text-slate-500 transition-all hover:text-slate-700"
         >
-          <X className="w-4 h-4" />
+          <X className="h-4 w-4" />
           Abbrechen
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2 px-6 py-3 bg-[#4ECCA3] text-[#1A1A1A] rounded-lg hover:bg-[#3DBB92] transition-all disabled:opacity-50"
+          className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-white transition-all hover:bg-primary/90 disabled:opacity-50"
         >
-          <Save className="w-4 h-4" />
-          {loading ? 'Speichern...' : (promotion ? 'Aktualisieren' : 'Aktion erstellen')}
+          <Save className="h-4 w-4" />
+          {loading ? 'Speichern...' : promotion ? 'Aktualisieren' : 'Aktion erstellen'}
         </button>
       </div>
     </form>

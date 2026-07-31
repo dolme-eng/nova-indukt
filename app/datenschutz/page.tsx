@@ -10,15 +10,19 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = 3600
+
 export default async function DatenschutzPage() {
   const db = await getStaticPageContent('datenschutz')
   if (db) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">{db.title}</h1>
-          <div className="bg-white rounded-2xl p-8 shadow-sm">
-            <div className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{db.content}</div>
+        <div className="container mx-auto max-w-4xl px-4">
+          <h1 className="mb-8 text-3xl font-bold text-gray-900">{db.title}</h1>
+          <div className="rounded-2xl bg-white p-8 shadow-sm">
+            <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
+              {db.content}
+            </div>
           </div>
         </div>
       </div>
@@ -26,46 +30,51 @@ export default async function DatenschutzPage() {
   }
   return (
     <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Datenschutzerklärung</h1>
-        
-        <div className="bg-white rounded-2xl p-8 shadow-sm space-y-8">
-          <p className="text-gray-600 text-sm">
-            Stand: 15. März 2026
-          </p>
+      <div className="container mx-auto max-w-4xl px-4">
+        <h1 className="mb-8 text-3xl font-bold text-gray-900">Datenschutzerklärung</h1>
+
+        <div className="space-y-8 rounded-2xl bg-white p-8 shadow-sm">
+          <p className="text-sm text-gray-600">Stand: 15. März 2026</p>
 
           {/* Einleitung */}
           <section>
-            <p className="text-gray-700 text-sm leading-relaxed">
-              Wir freuen uns über Ihr Interesse an unserem Online-Shop. Der Schutz Ihrer Privatsphäre ist für uns 
-              sehr wichtig. Nachstehend informieren wir Sie ausführlich über den Umgang mit Ihren Daten.
+            <p className="text-sm leading-relaxed text-gray-700">
+              Wir freuen uns über Ihr Interesse an unserem Online-Shop. Der Schutz Ihrer
+              Privatsphäre ist für uns sehr wichtig. Nachstehend informieren wir Sie ausführlich
+              über den Umgang mit Ihren Daten.
             </p>
           </section>
 
           {/* Verantwortlicher */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">1. Verantwortlicher und Datenschutzbeauftragter</h2>
-            <div className="space-y-2 text-gray-700 text-sm leading-relaxed">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              1. Verantwortlicher und Datenschutzbeauftragter
+            </h2>
+            <div className="space-y-2 text-sm leading-relaxed text-gray-700">
               <p className="font-medium">Verantwortlicher:</p>
               <p>{COMPANY.name}</p>
               <p>{COMPANY.street}</p>
-              <p>{COMPANY.zip} {COMPANY.city}</p>
+              <p>
+                {COMPANY.zip} {COMPANY.city}
+              </p>
               <p>Deutschland</p>
               <p className="mt-2">E-Mail: {COMPANY.email.datenschutz}</p>
               <p className="flex items-center gap-2">
-                WhatsApp-Kundenservice: 
-                <a 
-                  href={COMPANY.whatsapp.url} 
-                  target="_blank" 
+                WhatsApp-Kundenservice:
+                <a
+                  href={COMPANY.whatsapp.url}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-[#25D366] hover:underline font-bold"
+                  className="inline-flex items-center gap-1.5 font-bold text-[#25D366] hover:underline"
                 >
-                  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                Jetzt kontaktieren
-              </a>
-            </p>
-              
-              <p className="font-medium mt-4">Datenschutzbeauftragter:</p>
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                  </svg>
+                  Jetzt kontaktieren
+                </a>
+              </p>
+
+              <p className="mt-4 font-medium">Datenschutzbeauftragter:</p>
               <p>{COMPANY.legal.datenschutzbeauftragter}</p>
               <p>E-Mail: {COMPANY.email.datenschutz}</p>
             </div>
@@ -73,17 +82,20 @@ export default async function DatenschutzPage() {
 
           {/* Erhebung und Speicherung */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">2. Erhebung und Speicherung personenbezogener Daten sowie Art und Zweck der Verwendung</h2>
-            
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              2. Erhebung und Speicherung personenbezogener Daten sowie Art und Zweck der Verwendung
+            </h2>
+
             <div className="space-y-4">
-              <h3 className="font-medium text-gray-900 text-sm">a) Beim Besuch der Website</h3>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                Beim Aufrufen unserer Website werden durch den auf Ihrem Endgerät zum Einsatz kommenden Browser 
-                automatisch Informationen an den Server unserer Website gesendet. Diese Informationen werden 
-                temporär in einem sogenannten Logfile gespeichert. Folgende Informationen werden dabei ohne 
-                Ihr Zutun erfasst und bis zur automatisierten Löschung gespeichert:
+              <h3 className="text-sm font-medium text-gray-900">a) Beim Besuch der Website</h3>
+              <p className="text-sm leading-relaxed text-gray-700">
+                Beim Aufrufen unserer Website werden durch den auf Ihrem Endgerät zum Einsatz
+                kommenden Browser automatisch Informationen an den Server unserer Website gesendet.
+                Diese Informationen werden temporär in einem sogenannten Logfile gespeichert.
+                Folgende Informationen werden dabei ohne Ihr Zutun erfasst und bis zur
+                automatisierten Löschung gespeichert:
               </p>
-              <ul className="list-disc list-inside ml-4 text-gray-700 text-sm space-y-1">
+              <ul className="ml-4 list-inside list-disc space-y-1 text-sm text-gray-700">
                 <li>IP-Adresse des anfordernden Rechners</li>
                 <li>Datum und Uhrzeit des Zugriffs</li>
                 <li>Name und URL der abgerufenen Datei</li>
@@ -91,26 +103,28 @@ export default async function DatenschutzPage() {
                 <li>Verwendeter Browser und ggf. das Betriebssystem Ihres Rechners</li>
                 <li>Name Ihres Access-Providers</li>
               </ul>
-              <p className="text-gray-700 text-sm leading-relaxed">
+              <p className="text-sm leading-relaxed text-gray-700">
                 Die genannten Daten werden durch uns zu folgenden Zwecken verarbeitet:
               </p>
-              <ul className="list-disc list-inside ml-4 text-gray-700 text-sm space-y-1">
+              <ul className="ml-4 list-inside list-disc space-y-1 text-sm text-gray-700">
                 <li>Gewährleistung eines reibungslosen Verbindungsaufbaus der Website</li>
                 <li>Gewährleistung einer komfortablen Nutzung unserer Website</li>
                 <li>Auswertung der Systemsicherheit und -stabilität</li>
                 <li>Zu weiteren administrativen Zwecken</li>
               </ul>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                Rechtsgrundlage für die Datenverarbeitung ist Art. 6 Abs. 1 S. 1 lit. f DSGVO. Unser 
+              <p className="text-sm leading-relaxed text-gray-700">
+                Rechtsgrundlage für die Datenverarbeitung ist Art. 6 Abs. 1 S. 1 lit. f DSGVO. Unser
                 berechtigtes Interesse folgt aus oben aufgelisteten Zwecken zur Datenerhebung.
               </p>
 
-              <h3 className="font-medium text-gray-900 text-sm mt-4">b) Bei Bestellung oder Eröffnung eines Kundenkontos</h3>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                Bei Bestellung über unseren Internet-Shop oder Eröffnung eines Kundenkontos erheben wir 
-                folgende personenbezogene Daten:
+              <h3 className="mt-4 text-sm font-medium text-gray-900">
+                b) Bei Bestellung oder Eröffnung eines Kundenkontos
+              </h3>
+              <p className="text-sm leading-relaxed text-gray-700">
+                Bei Bestellung über unseren Internet-Shop oder Eröffnung eines Kundenkontos erheben
+                wir folgende personenbezogene Daten:
               </p>
-              <ul className="list-disc list-inside ml-4 text-gray-700 text-sm space-y-1">
+              <ul className="ml-4 list-inside list-disc space-y-1 text-sm text-gray-700">
                 <li>Anrede, Vorname, Nachname</li>
                 <li>Eine gültige E-Mail-Adresse</li>
                 <li>Rechnungs- und Lieferanschrift</li>
@@ -118,34 +132,42 @@ export default async function DatenschutzPage() {
                 <li>Bankverbindung/Zahlungsdaten</li>
                 <li>Bestelldaten (Artikel, Menge, Preis)</li>
               </ul>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                Die Erhebung dieser Daten erfolgt, um den Vertrag zu erfüllen (Art. 6 Abs. 1 S. 1 lit. b DSGVO) 
-                und Ihnen die gewünschten Produkte zu liefern.
+              <p className="text-sm leading-relaxed text-gray-700">
+                Die Erhebung dieser Daten erfolgt, um den Vertrag zu erfüllen (Art. 6 Abs. 1 S. 1
+                lit. b DSGVO) und Ihnen die gewünschten Produkte zu liefern.
               </p>
             </div>
           </section>
 
           {/* Weitergabe von Daten */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">3. Weitergabe von Daten</h2>
-            <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">3. Weitergabe von Daten</h2>
+            <div className="space-y-3 text-sm leading-relaxed text-gray-700">
               <p>
-                Eine Übermittlung Ihrer persönlichen Daten an Dritte zu anderen als den im Folgenden aufgeführten 
-                Zwecken findet nicht statt.
+                Eine Übermittlung Ihrer persönlichen Daten an Dritte zu anderen als den im Folgenden
+                aufgeführten Zwecken findet nicht statt.
               </p>
-              <p>
-                Wir geben Ihre persönlichen Daten nur an Dritte weiter, wenn:
-              </p>
-              <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Sie Ihre ausdrückliche Einwilligung dazu erteilt haben (Art. 6 Abs. 1 S. 1 lit. a DSGVO)</li>
-                <li>die Weitergabe zur Erfüllung von vertraglichen Pflichten erforderlich ist (Art. 6 Abs. 1 S. 1 lit. b DSGVO)</li>
-                <li>für die Weitergabe eine gesetzliche Verpflichtung besteht (Art. 6 Abs. 1 S. 1 lit. c DSGVO)</li>
-                <li>die Weitergabe zur Wahrung berechtigter Interessen erforderlich ist (Art. 6 Abs. 1 S. 1 lit. f DSGVO)</li>
+              <p>Wir geben Ihre persönlichen Daten nur an Dritte weiter, wenn:</p>
+              <ul className="ml-4 list-inside list-disc space-y-1">
+                <li>
+                  Sie Ihre ausdrückliche Einwilligung dazu erteilt haben (Art. 6 Abs. 1 S. 1 lit. a
+                  DSGVO)
+                </li>
+                <li>
+                  die Weitergabe zur Erfüllung von vertraglichen Pflichten erforderlich ist (Art. 6
+                  Abs. 1 S. 1 lit. b DSGVO)
+                </li>
+                <li>
+                  für die Weitergabe eine gesetzliche Verpflichtung besteht (Art. 6 Abs. 1 S. 1 lit.
+                  c DSGVO)
+                </li>
+                <li>
+                  die Weitergabe zur Wahrung berechtigter Interessen erforderlich ist (Art. 6 Abs. 1
+                  S. 1 lit. f DSGVO)
+                </li>
               </ul>
-              <p>
-                Empfänger personenbezogener Daten können sein:
-              </p>
-              <ul className="list-disc list-inside ml-4 space-y-1">
+              <p>Empfänger personenbezogener Daten können sein:</p>
+              <ul className="ml-4 list-inside list-disc space-y-1">
                 <li>Versanddienstleister (DHL, DPD, UPS) zur Zustellung der Ware</li>
                 <li>Bankinstitute zur Abwicklung von Überweisungen</li>
                 <li>Webhosting-Provider (zur technischen Bereitstellung der Website)</li>
@@ -156,60 +178,71 @@ export default async function DatenschutzPage() {
 
           {/* Cookies */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">4. Cookies</h2>
-            <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">4. Cookies</h2>
+            <div className="space-y-3 text-sm leading-relaxed text-gray-700">
               <p>
-                Wir setzen auf unserer Website Cookies ein. Cookies sind kleine Dateien, die Ihr Browser 
-                automatisch erstellt und die auf Ihrem Endgerät gespeichert werden.
+                Wir setzen auf unserer Website Cookies ein. Cookies sind kleine Dateien, die Ihr
+                Browser automatisch erstellt und die auf Ihrem Endgerät gespeichert werden.
               </p>
-              <p>
-                Wir verwenden folgende Cookie-Kategorien:
-              </p>
-              <ul className="list-disc list-inside ml-4 space-y-1">
-                <li><strong>Notwendige Cookies:</strong> Erforderlich für den Betrieb der Website (Warenkorb, Login)</li>
-                <li><strong>Analyse-Cookies:</strong> Statistische Auswertungen zur Optimierung (Google Analytics)</li>
-                <li><strong>Marketing-Cookies:</strong> Personalisierte Werbung (Facebook Pixel, Google Ads)</li>
+              <p>Wir verwenden folgende Cookie-Kategorien:</p>
+              <ul className="ml-4 list-inside list-disc space-y-1">
+                <li>
+                  <strong>Notwendige Cookies:</strong> Erforderlich für den Betrieb der Website
+                  (Warenkorb, Login)
+                </li>
+                <li>
+                  <strong>Analyse-Cookies:</strong> Statistische Auswertungen zur Optimierung
+                  (Google Analytics)
+                </li>
+                <li>
+                  <strong>Marketing-Cookies:</strong> Personalisierte Werbung (Facebook Pixel,
+                  Google Ads)
+                </li>
               </ul>
               <p>
-                Die genauen verwendeten Cookies und Ihre Einstellungsmöglichkeiten finden Sie in unserem 
-                Cookie-Banner und unter Einstellungen.
+                Die genauen verwendeten Cookies und Ihre Einstellungsmöglichkeiten finden Sie in
+                unserem Cookie-Banner und unter Einstellungen.
               </p>
             </div>
           </section>
 
           {/* Betroffenenrechte */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">5. Betroffenenrechte</h2>
-            <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">5. Betroffenenrechte</h2>
+            <div className="space-y-3 text-sm leading-relaxed text-gray-700">
               <p>Sie haben das Recht:</p>
-              <ul className="list-disc list-inside ml-4 space-y-2">
+              <ul className="ml-4 list-inside list-disc space-y-2">
                 <li>
-                  <strong>Auskunft (Art. 15 DSGVO):</strong> Über Ihre bei uns gespeicherten personenbezogenen 
-                  Daten einschließlich Herkunft, Empfänger und Zweck der Verarbeitung.
+                  <strong>Auskunft (Art. 15 DSGVO):</strong> Über Ihre bei uns gespeicherten
+                  personenbezogenen Daten einschließlich Herkunft, Empfänger und Zweck der
+                  Verarbeitung.
                 </li>
                 <li>
-                  <strong>Berichtigung (Art. 16 DSGVO):</strong> Unverzügliche Berichtigung unrichtiger Daten 
-                  oder Vervollständigung Ihrer bei uns gespeicherten Daten.
+                  <strong>Berichtigung (Art. 16 DSGVO):</strong> Unverzügliche Berichtigung
+                  unrichtiger Daten oder Vervollständigung Ihrer bei uns gespeicherten Daten.
                 </li>
                 <li>
-                  <strong>Löschung (Art. 17 DSGVO):</strong> Löschung Ihrer bei uns gespeicherten Daten, soweit 
-                  nicht die Verarbeitung zur Erfüllung einer rechtlichen Verpflichtung erforderlich ist.
+                  <strong>Löschung (Art. 17 DSGVO):</strong> Löschung Ihrer bei uns gespeicherten
+                  Daten, soweit nicht die Verarbeitung zur Erfüllung einer rechtlichen Verpflichtung
+                  erforderlich ist.
                 </li>
                 <li>
-                  <strong>Einschränkung (Art. 18 DSGVO):</strong> Einschränkung der Verarbeitung, wenn die 
-                  Richtigkeit der Daten bestritten wird oder die Verarbeitung unrechtmäßig ist.
+                  <strong>Einschränkung (Art. 18 DSGVO):</strong> Einschränkung der Verarbeitung,
+                  wenn die Richtigkeit der Daten bestritten wird oder die Verarbeitung unrechtmäßig
+                  ist.
                 </li>
                 <li>
-                  <strong>Datenübertragbarkeit (Art. 20 DSGVO):</strong> Erhalt Ihrer Daten in einem strukturierten, 
-                  gängigen und maschinenlesbaren Format.
+                  <strong>Datenübertragbarkeit (Art. 20 DSGVO):</strong> Erhalt Ihrer Daten in einem
+                  strukturierten, gängigen und maschinenlesbaren Format.
                 </li>
                 <li>
-                  <strong>Widerruf (Art. 7 Abs. 3 DSGVO):</strong> Ihre einmal erteilte Einwilligung jederzeit 
-                  gegenüber uns zu widerrufen.
+                  <strong>Widerruf (Art. 7 Abs. 3 DSGVO):</strong> Ihre einmal erteilte Einwilligung
+                  jederzeit gegenüber uns zu widerrufen.
                 </li>
                 <li>
-                  <strong>Beschwerde (Art. 77 DSGVO):</strong> Sich bei der Aufsichtsbehörde zu beschweren, 
-                  wenn Sie der Ansicht sind, dass die Verarbeitung gegen die DSGVO verstößt.
+                  <strong>Beschwerde (Art. 77 DSGVO):</strong> Sich bei der Aufsichtsbehörde zu
+                  beschweren, wenn Sie der Ansicht sind, dass die Verarbeitung gegen die DSGVO
+                  verstößt.
                 </li>
               </ul>
             </div>
@@ -217,13 +250,16 @@ export default async function DatenschutzPage() {
 
           {/* Widerrufsrecht bei Einwilligung */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">6. Widerrufsrecht bei Einwilligungen</h2>
-            <p className="text-gray-700 text-sm leading-relaxed">
-              Haben Sie uns eine Einwilligung erteilt, können Sie diese jederzeit mit Wirkung für die Zukunft 
-              widerrufen. Die Rechtmäßigkeit der aufgrund der Einwilligung bis zum Widerruf erfolgten Verarbeitung 
-              bleibt davon unberührt. Sie können den Widerruf über folgende Kanäle erklären:
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              6. Widerrufsrecht bei Einwilligungen
+            </h2>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Haben Sie uns eine Einwilligung erteilt, können Sie diese jederzeit mit Wirkung für
+              die Zukunft widerrufen. Die Rechtmäßigkeit der aufgrund der Einwilligung bis zum
+              Widerruf erfolgten Verarbeitung bleibt davon unberührt. Sie können den Widerruf über
+              folgende Kanäle erklären:
             </p>
-            <ul className="list-disc list-inside ml-4 text-gray-700 text-sm space-y-1 mt-2">
+            <ul className="ml-4 mt-2 list-inside list-disc space-y-1 text-sm text-gray-700">
               <li>E-Mail an: datenschutz@nova-indukt.de</li>
               <li>Post an die oben genannte Adresse</li>
               <li>Cookie-Einstellungen auf der Website anpassen</li>
@@ -232,71 +268,80 @@ export default async function DatenschutzPage() {
 
           {/* Datensicherheit */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">7. Datensicherheit</h2>
-            <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">7. Datensicherheit</h2>
+            <div className="space-y-3 text-sm leading-relaxed text-gray-700">
               <p>
-                Wir verwenden innerhalb des Website-Besuchs das verbreitete SSL-Verfahren (Secure Socket Layer) 
-                in Verbindung mit der jeweils höchsten Verschlüsselungsstufe, die von Ihrem Browser unterstützt wird.
+                Wir verwenden innerhalb des Website-Besuchs das verbreitete SSL-Verfahren (Secure
+                Socket Layer) in Verbindung mit der jeweils höchsten Verschlüsselungsstufe, die von
+                Ihrem Browser unterstützt wird.
               </p>
               <p>
-                Darüber hinaus setzen wir technische und organisatorische Sicherheitsmaßnahmen ein, um Ihre Daten 
-                gegen zufällige oder vorsätzliche Manipulationen, teilweisen oder vollständigen Verlust, Zerstörung 
-                oder gegen den unbefugten Zugriff Dritter zu schützen.
+                Darüber hinaus setzen wir technische und organisatorische Sicherheitsmaßnahmen ein,
+                um Ihre Daten gegen zufällige oder vorsätzliche Manipulationen, teilweisen oder
+                vollständigen Verlust, Zerstörung oder gegen den unbefugten Zugriff Dritter zu
+                schützen.
               </p>
             </div>
           </section>
 
           {/* Dauer der Speicherung */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">8. Dauer der Speicherung</h2>
-            <p className="text-gray-700 text-sm leading-relaxed">
-              Personenbezogene Daten werden gelöscht oder gesperrt, sobald der Zweck der Speicherung entfällt. 
-              Eine Speicherung kann darüber hinaus erfolgen, wenn dies durch den europäischen oder nationalen 
-              Gesetzgeber in unionsrechtlichen Verordnungen, Gesetzen oder sonstigen Vorschriften, denen der 
-              Verantwortliche unterliegt, vorgesehen wurde. Sperrung oder Löschung der Daten erfolgt auch, wenn 
-              eine durch die genannten Normen vorgeschriebene Speicherfrist abläuft, es sei denn, dass eine 
-              Erforderlichkeit zur weiteren Speicherung der Daten für einen Vertragsabschluss oder eine 
-              Vertragserfüllung besteht.
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">8. Dauer der Speicherung</h2>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Personenbezogene Daten werden gelöscht oder gesperrt, sobald der Zweck der Speicherung
+              entfällt. Eine Speicherung kann darüber hinaus erfolgen, wenn dies durch den
+              europäischen oder nationalen Gesetzgeber in unionsrechtlichen Verordnungen, Gesetzen
+              oder sonstigen Vorschriften, denen der Verantwortliche unterliegt, vorgesehen wurde.
+              Sperrung oder Löschung der Daten erfolgt auch, wenn eine durch die genannten Normen
+              vorgeschriebene Speicherfrist abläuft, es sei denn, dass eine Erforderlichkeit zur
+              weiteren Speicherung der Daten für einen Vertragsabschluss oder eine Vertragserfüllung
+              besteht.
             </p>
           </section>
 
           {/* Kontaktformular */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">9. Kontaktformular und E-Mail-Kontakt</h2>
-            <p className="text-gray-700 text-sm leading-relaxed">
-              Auf unserer Website ist ein Kontaktformular vorhanden, welches für die elektronische Kontaktaufnahme 
-              genutzt werden kann. Nehmen Sie dieses Angebot wahr, so werden die in der Eingabemaske eingegebenen 
-              Daten an uns übermittelt und gespeichert. Rechtsgrundlage für die Verarbeitung ist Art. 6 Abs. 1 
-              lit. f DSGVO. Die Verarbeitung der personenbezogenen Daten aus der Eingabemaske dient uns allein 
-              zur Bearbeitung der Kontaktaufnahme.
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              9. Kontaktformular und E-Mail-Kontakt
+            </h2>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Auf unserer Website ist ein Kontaktformular vorhanden, welches für die elektronische
+              Kontaktaufnahme genutzt werden kann. Nehmen Sie dieses Angebot wahr, so werden die in
+              der Eingabemaske eingegebenen Daten an uns übermittelt und gespeichert.
+              Rechtsgrundlage für die Verarbeitung ist Art. 6 Abs. 1 lit. f DSGVO. Die Verarbeitung
+              der personenbezogenen Daten aus der Eingabemaske dient uns allein zur Bearbeitung der
+              Kontaktaufnahme.
             </p>
           </section>
 
           {/* Newsletter */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">10. Newsletter</h2>
-            <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">10. Newsletter</h2>
+            <div className="space-y-3 text-sm leading-relaxed text-gray-700">
               <p>
-                Auf unserer Website besteht die Möglichkeit, einen kostenfreien Newsletter zu abonnieren. 
-                Dabei werden die von der Eingabemaske an uns übermittelten Daten übernommen. Für die 
-                Verarbeitung der Daten wird im Rahmen des Anmeldevorgangs Ihre Einwilligung eingeholt 
-                und auf diese Datenschutzerklärung verwiesen.
+                Auf unserer Website besteht die Möglichkeit, einen kostenfreien Newsletter zu
+                abonnieren. Dabei werden die von der Eingabemaske an uns übermittelten Daten
+                übernommen. Für die Verarbeitung der Daten wird im Rahmen des Anmeldevorgangs Ihre
+                Einwilligung eingeholt und auf diese Datenschutzerklärung verwiesen.
               </p>
               <p>
-                Rechtsgrundlage für die Verarbeitung der Daten nach Anmeldung zum Newsletter ist bei Vorliegen 
-                einer Einwilligung des Nutzers Art. 6 Abs. 1 lit. a DSGVO. Das Abonnement des Newsletters 
-                können Sie jederzeit über den Abmeldelink im Newsletter oder durch Nachricht an uns widerrufen.
+                Rechtsgrundlage für die Verarbeitung der Daten nach Anmeldung zum Newsletter ist bei
+                Vorliegen einer Einwilligung des Nutzers Art. 6 Abs. 1 lit. a DSGVO. Das Abonnement
+                des Newsletters können Sie jederzeit über den Abmeldelink im Newsletter oder durch
+                Nachricht an uns widerrufen.
               </p>
             </div>
           </section>
 
           {/* Änderung der Datenschutzerklärung */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">11. Änderung der Datenschutzerklärung</h2>
-            <p className="text-gray-700 text-sm leading-relaxed">
-              Wir behalten uns vor, diese Datenschutzerklärung anzupassen, damit sie stets den aktuellen 
-              rechtlichen Anforderungen entspricht oder um Änderungen unserer Leistungen in der 
-              Datenschutzerklärung umzusetzen. Für Ihren erneuten Besuch gilt dann die neue 
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              11. Änderung der Datenschutzerklärung
+            </h2>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Wir behalten uns vor, diese Datenschutzerklärung anzupassen, damit sie stets den
+              aktuellen rechtlichen Anforderungen entspricht oder um Änderungen unserer Leistungen
+              in der Datenschutzerklärung umzusetzen. Für Ihren erneuten Besuch gilt dann die neue
               Datenschutzerklärung.
             </p>
           </section>

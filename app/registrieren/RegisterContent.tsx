@@ -4,7 +4,17 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, User, XCircle, Chrome } from 'lucide-react'
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  CheckCircle,
+  User,
+  XCircle,
+  Chrome,
+} from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
 
 export function RegisterContent() {
@@ -16,7 +26,7 @@ export function RegisterContent() {
     password: '',
     confirmPassword: '',
     acceptTerms: false,
-    acceptNewsletter: false
+    acceptNewsletter: false,
   })
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
@@ -51,45 +61,51 @@ export function RegisterContent() {
 
     setLoading(true)
 
-    const result = await register(formData.name, formData.email, formData.password)
-    
-    if (result.success) {
-      setSuccess(true)
-      redirectTimerRef.current = setTimeout(() => {
-        router.push('/mein-konto')
-      }, 1000)
-    } else {
-      setError(result.error || 'Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+    try {
+      const result = await register(formData.name, formData.email, formData.password)
+
+      if (result.success) {
+        setSuccess(true)
+        redirectTimerRef.current = setTimeout(() => {
+          router.push('/mein-konto')
+        }, 1000)
+      } else {
+        setError(result.error || 'Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+      }
+    } catch (err) {
+      setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
+    } finally {
+      setLoading(false)
     }
-    
-    setLoading(false)
   }
 
   const handleGoogleSignUp = async () => {
     setError('')
     setLoading(true)
-    
+
     // Simulate Google Sign Up
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     // Simulate successful Google registration flow
     setSuccess(true)
     setTimeout(() => {
       router.push('/mein-konto')
     }, 1000)
-    
+
     setLoading(false)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
+      <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="mb-8 text-center">
           <Link href="/" className="text-2xl font-bold text-gray-900">
             NOVA INDUKT
           </Link>
-          <p className="mt-2 text-gray-600">Erstelle ein Konto für ein besseres Einkaufserlebnis.</p>
+          <p className="mt-2 text-gray-600">
+            Erstelle ein Konto für ein besseres Einkaufserlebnis.
+          </p>
         </div>
 
         {/* Register Form */}
@@ -97,19 +113,22 @@ export function RegisterContent() {
           data-testid="register-form"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-lg p-8"
+          className="rounded-2xl bg-white p-8 shadow-lg"
         >
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Registrieren</h1>
+          <h1 className="mb-6 text-2xl font-bold text-gray-900">Registrieren</h1>
 
-          {/* Google Sign Up Button */}
-          <button
-            onClick={handleGoogleSignUp}
-            disabled={loading}
-            className="w-full py-3 bg-white border-2 border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-colors flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed mb-4"
-          >
-            <Chrome className="w-5 h-5 text-blue-500" />
-            Mit Google registrieren
-          </button>
+          {/* Google Sign Up Button - Coming soon */}
+          <div className="relative mb-4">
+            <button
+              disabled
+              className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-gray-50 py-3 font-medium text-gray-400"
+            >
+              <span className="text-sm">Bald verfügbar</span>
+            </button>
+            <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-white px-2 text-[10px] text-gray-400">
+              Google Registrierung
+            </span>
+          </div>
 
           {/* Divider */}
           <div className="relative mb-6">
@@ -117,20 +136,23 @@ export function RegisterContent() {
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Oder mit E-Mail</span>
+              <span className="bg-white px-2 text-gray-500">Oder mit E-Mail</span>
             </div>
           </div>
 
           {error && (
-            <div data-testid="error-message" className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
-              <XCircle className="w-4 h-4" />
+            <div
+              data-testid="error-message"
+              className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600"
+            >
+              <XCircle className="h-4 w-4" />
               {error}
             </div>
           )}
 
           {success && (
-            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-600 text-sm">
-              <CheckCircle className="w-4 h-4" />
+            <div className="mb-4 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-600">
+              <CheckCircle className="h-4 w-4" />
               Konto erfolgreich erstellt!
             </div>
           )}
@@ -138,18 +160,16 @@ export function RegisterContent() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Name
-              </label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Name</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   data-testid="register-name"
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 transition-all"
+                  className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
                   placeholder="Max Mustermann"
                 />
               </div>
@@ -157,18 +177,16 @@ export function RegisterContent() {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                E-Mail-Adresse
-              </label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   data-testid="register-email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 transition-all"
+                  className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
                   placeholder="ihre@email.de"
                 />
               </div>
@@ -176,19 +194,17 @@ export function RegisterContent() {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Passwort
-              </label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Passwort</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   data-testid="register-password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
                   minLength={8}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 transition-all"
+                  className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-12 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
                   placeholder="••••••••"
                 />
                 <button
@@ -196,25 +212,25 @@ export function RegisterContent() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Passwort bestätigen
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   data-testid="register-confirm-password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 transition-all"
+                  className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
                   placeholder="••••••••"
                 />
               </div>
@@ -226,8 +242,8 @@ export function RegisterContent() {
                 type="checkbox"
                 id="terms"
                 checked={formData.acceptTerms}
-                onChange={(e) => setFormData({...formData, acceptTerms: e.target.checked})}
-                className="mt-1 w-4 h-4 text-[#4ECCA3] border-gray-300 rounded focus:ring-[#4ECCA3]"
+                onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-[#4ECCA3] focus:ring-[#4ECCA3]"
               />
               <label htmlFor="terms" className="text-sm text-gray-600">
                 Ich akzeptiere die Datenschutzbestimmungen und AGB.
@@ -240,8 +256,8 @@ export function RegisterContent() {
                 type="checkbox"
                 id="newsletter"
                 checked={formData.acceptNewsletter}
-                onChange={(e) => setFormData({...formData, acceptNewsletter: e.target.checked})}
-                className="mt-1 w-4 h-4 text-[#4ECCA3] border-gray-300 rounded focus:ring-[#4ECCA3]"
+                onChange={(e) => setFormData({ ...formData, acceptNewsletter: e.target.checked })}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-[#4ECCA3] focus:ring-[#4ECCA3]"
               />
               <label htmlFor="newsletter" className="text-sm text-gray-600">
                 Ich möchte den Newsletter abonnieren.
@@ -253,26 +269,23 @@ export function RegisterContent() {
               data-testid="register-submit"
               type="submit"
               disabled={loading || success}
-              className="w-full py-3 bg-[#0C211E] text-white font-medium rounded-xl hover:bg-[#17423C] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0C211E] py-3 font-medium text-white transition-colors hover:bg-[#17423C] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
               ) : (
                 <>
-                  Registrieren <ArrowRight className="w-4 h-4" />
+                  Registrieren <ArrowRight className="h-4 w-4" />
                 </>
               )}
             </button>
           </form>
 
           {/* Links */}
-          <div className="mt-6 pt-6 border-t border-gray-100">
+          <div className="mt-6 border-t border-gray-100 pt-6">
             <p className="text-center text-sm text-gray-600">
               Bereits ein Konto?{' '}
-              <Link 
-                href="/anmelden"
-                className="text-[#4ECCA3] font-medium hover:underline"
-              >
+              <Link href="/anmelden" className="font-medium text-[#4ECCA3] hover:underline">
                 Anmelden
               </Link>
             </p>

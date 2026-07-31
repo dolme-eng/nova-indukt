@@ -37,43 +37,54 @@ function formatEstimatedDelivery(): string {
   })
 }
 
-export async function sendEmailWithRetry(payload: Parameters<Resend['emails']['send']>[0], maxRetries = 3) {
+export async function sendEmailWithRetry(
+  payload: Parameters<Resend['emails']['send']>[0],
+  maxRetries = 3
+) {
   const resend = getResend()
   if (!resend) {
     console.warn('Resend client not available — skipping email send (RESEND_API_KEY missing?)')
-    return { data: null, error: { name: 'missing_api_key', message: 'Resend not configured', statusCode: null } }
-  }
-
-  let attempt = 0;
-  let lastError: Error | null = null;
-  
-  while (attempt < maxRetries) {
-    try {
-      const result = await resend.emails.send(payload);
-      if (result.error) {
-        // Retry on non-validation errors
-        const shouldRetry = result.error.name !== 'validation_error';
-        if (shouldRetry && attempt < maxRetries - 1) {
-          console.warn(`Resend API error (${result.error.message}). Retrying attempt ${attempt + 1}/${maxRetries}...`);
-          attempt++;
-          await new Promise(res => setTimeout(res, Math.pow(2, attempt) * 500));
-          continue;
-        }
-        return result;
-      }
-      return result;
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-      if (attempt < maxRetries - 1) {
-        console.warn(`Exception sending email. Retrying attempt ${attempt + 1}/${maxRetries}...`, error);
-        attempt++;
-        await new Promise(res => setTimeout(res, Math.pow(2, attempt) * 500));
-        continue;
-      }
-      break;
+    return {
+      data: null,
+      error: { name: 'missing_api_key', message: 'Resend not configured', statusCode: null },
     }
   }
-  return { data: null, error: lastError };
+
+  let attempt = 0
+  let lastError: Error | null = null
+
+  while (attempt < maxRetries) {
+    try {
+      const result = await resend.emails.send(payload)
+      if (result.error) {
+        // Retry on non-validation errors
+        const shouldRetry = result.error.name !== 'validation_error'
+        if (shouldRetry && attempt < maxRetries - 1) {
+          console.warn(
+            `Resend API error (${result.error.message}). Retrying attempt ${attempt + 1}/${maxRetries}...`
+          )
+          attempt++
+          await new Promise((res) => setTimeout(res, Math.pow(2, attempt) * 500))
+          continue
+        }
+        return result
+      }
+      return result
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error))
+      if (attempt < maxRetries - 1) {
+        console.warn(
+          `Exception sending email. Retrying attempt ${attempt + 1}/${maxRetries}...`,
+          error
+        )
+        attempt++
+        await new Promise((res) => setTimeout(res, Math.pow(2, attempt) * 500))
+        continue
+      }
+      break
+    }
+  }
+  return { data: null, error: lastError }
 }
 
 interface OrderItem {
@@ -107,6 +118,7 @@ interface SendOrderConfirmationParams {
   paymentMethod?: string
   shippingAddress: ShippingAddress
   estimatedDelivery: string
+  orderDate?: string
 }
 
 export async function sendOrderConfirmation(params: SendOrderConfirmationParams) {
@@ -115,7 +127,7 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
       OrderConfirmationEmail({
         orderNumber: params.orderNumber,
         customerName: params.customerName,
-        items: params.items.map(item => ({
+        items: params.items.map((item) => ({
           name: item.nameDe || item.name,
           quantity: item.quantity,
           price: item.price,
@@ -135,13 +147,14 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
           country: params.shippingAddress.country,
         },
         estimatedDelivery: params.estimatedDelivery,
+        orderDate: params.orderDate,
       })
     )
 
     // Generate PDF invoice
     const invoicePDF = generateInvoicePDF({
       orderNumber: params.orderNumber,
-      items: params.items.map(item => ({
+      items: params.items.map((item) => ({
         name: item.nameDe || item.name,
         quantity: item.quantity,
         price: item.price,
@@ -149,7 +162,7 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
       subtotal: params.subtotal,
       shipping: params.shipping,
       total: params.total,
-      createdAt: new Date(),
+      createdAt: params.orderDate ? new Date(params.orderDate) : new Date(),
     })
 
     const pdfBuffer = Buffer.from(invoicePDF.output('arraybuffer'))
@@ -200,7 +213,7 @@ export async function sendShippingNotification(params: SendShippingNotificationP
         trackingNumber: params.trackingNumber,
         carrier: params.carrier,
         trackingUrl: params.trackingUrl,
-        items: params.items.map(item => ({
+        items: params.items.map((item) => ({
           name: item.name,
           quantity: item.quantity,
         })),
@@ -254,11 +267,11 @@ export async function sendPaymentConfirmationEmail(order: OrderInput) {
   try {
     // Calculate totals using shared utility
     const totals = calculateOrderTotals(
-      order.items.map(item => ({ price: item.unitPrice, quantity: item.quantity })),
+      order.items.map((item) => ({ price: item.unitPrice, quantity: item.quantity })),
       order.shippingCost,
       order.total
     )
-    
+
     const html = await render(
       OrderConfirmationEmail({
         orderNumber: order.orderNumber,
@@ -274,9 +287,10 @@ export async function sendPaymentConfirmationEmail(order: OrderInput) {
         tax: totals.tax, // 19% MwSt
         total: totals.total,
         shippingAddress: (() => {
-          const addr = typeof order.shippingAddress === 'object' 
-            ? (order.shippingAddress as ShippingAddress)
-            : (JSON.parse(order.shippingAddress || '{}') as ShippingAddress);
+          const addr =
+            typeof order.shippingAddress === 'object'
+              ? (order.shippingAddress as ShippingAddress)
+              : (JSON.parse(order.shippingAddress || '{}') as ShippingAddress)
           return {
             name: addr.name || order.customerName,
             street: addr.street || '',
@@ -284,7 +298,7 @@ export async function sendPaymentConfirmationEmail(order: OrderInput) {
             postalCode: addr.postalCode || '',
             city: addr.city || '',
             country: addr.country || 'DE',
-          };
+          }
         })(),
         estimatedDelivery: formatEstimatedDelivery(),
       })
@@ -319,8 +333,8 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
           include: {
             product: {
               include: {
-                images: true
-              }
+                images: true,
+              },
             },
           },
         },
@@ -334,14 +348,14 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
       throw new Error('Order or recipient email not found')
     }
 
-    type DbOrder = typeof order;
-    type DbOrderItem = DbOrder['items'][0];
-    
+    type DbOrder = typeof order
+    type DbOrderItem = DbOrder['items'][0]
+
     const shippingAddr = order.shippingAddress as Record<string, string>
 
     // Calculate totals using shared utility
     const totals = calculateOrderTotals(
-      order.items.map(item => ({ price: Number(item.unitPrice), quantity: item.quantity })),
+      order.items.map((item) => ({ price: Number(item.unitPrice), quantity: item.quantity })),
       Number(order.shippingCost),
       Number(order.total),
       Number(order.subtotal)
@@ -376,6 +390,7 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
         country: shippingAddr?.country || 'DE',
       },
       estimatedDelivery,
+      orderDate: order.createdAt.toLocaleDateString('de-DE'),
     })
 
     return result
@@ -386,10 +401,7 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
 }
 
 // Newsletter confirmation email
-export async function sendNewsletterConfirmationEmail(
-  email: string,
-  firstName?: string
-) {
+export async function sendNewsletterConfirmationEmail(email: string, firstName?: string) {
   try {
     const unsubscribeUrl = `${SHOP_DOMAIN}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
 
@@ -474,7 +486,10 @@ export async function sendPasswordResetEmail(
   resetToken: string
 ) {
   try {
-    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de').replace(/\/+$/, '')
+    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de').replace(
+      /\/+$/,
+      ''
+    )
     const resetUrl = `${baseUrl}/passwort-zuruecksetzen?token=${resetToken}`
 
     const html = await render(

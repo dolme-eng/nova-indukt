@@ -1,10 +1,17 @@
-"use client"
+'use client'
 
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
-type UserRow = { id: string; email: string; name: string | null; role: "USER" | "ADMIN"; createdAt: string; emailVerified: string | null }
+type UserRow = {
+  id: string
+  email: string
+  name: string | null
+  role: 'USER' | 'ADMIN'
+  createdAt: string
+  emailVerified: string | null
+}
 
 export function UsersAdminClient() {
   const [users, setUsers] = useState<UserRow[]>([])
@@ -14,13 +21,13 @@ export function UsersAdminClient() {
   async function refresh() {
     setIsLoading(true)
     try {
-      const res = await fetch("/api/admin/users", { cache: "no-store" })
-      if (!res.ok) throw new Error("Failed to load users")
+      const res = await fetch('/api/admin/users', { cache: 'no-store' })
+      if (!res.ok) throw new Error('Failed to load users')
       const json = await res.json()
       const nextItems = Array.isArray(json?.items) ? json.items : []
       setUsers(nextItems)
     } catch (e: unknown) {
-      toast.error(e instanceof Error ? e.message : "Erreur")
+      toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
       setIsLoading(false)
     }
@@ -30,87 +37,106 @@ export function UsersAdminClient() {
     refresh()
   }, [])
 
-  async function setRole(id: string, role: "USER" | "ADMIN") {
+  async function setRole(id: string, role: 'USER' | 'ADMIN') {
+    if (
+      !confirm(
+        role === 'ADMIN'
+          ? 'Diesem Benutzer Admin-Rechte geben?'
+          : 'Admin-Rechte für diesen Benutzer entziehen?'
+      )
+    )
+      return
     setIsSaving(true)
     try {
       const res = await fetch(`/api/admin/users/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role }),
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || "Failed to update role")
-      toast.success("Rôle mis à jour")
+      if (!res.ok) throw new Error(json?.error || 'Failed to update role')
+      toast.success('Rolle aktualisiert')
       await refresh()
     } catch (e: unknown) {
-      toast.error(e instanceof Error ? e.message : "Erreur")
+      toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
       setIsSaving(false)
     }
   }
 
-  if (isLoading) return <div className="text-sm text-slate-600">Chargement…</div>
+  if (isLoading) return <div className="text-sm text-slate-600">Laden...</div>
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Utilisateurs</h1>
-          <p className="text-slate-600 mt-1">Créer/supprimer admins via changement de rôle (audit log inclus).</p>
+          <h1 className="text-2xl font-bold text-slate-900">Benutzer</h1>
+          <p className="mt-1 text-slate-600">
+            Admin-Rechte über Rollen verwalten (mit Audit-Protokoll).
+          </p>
         </div>
-        <Link href="/admin/settings" className="px-4 py-2 text-sm font-semibold border border-slate-200 rounded-lg bg-white hover:bg-slate-50">
-          Retour
+        <Link
+          href="/admin/settings"
+          className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+        >
+          Zurück
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-widest font-bold border-b border-slate-200">
-                <th className="px-6 py-4">Utilisateur</th>
-                <th className="px-6 py-4">Rôle</th>
-                <th className="px-6 py-4">Email vérifié</th>
-                <th className="px-6 py-4">Créé</th>
-                <th className="px-6 py-4 text-right">Action</th>
+              <tr className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                <th className="px-6 py-4">Benutzer</th>
+                <th className="px-6 py-4">Rolle</th>
+                <th className="px-6 py-4">E-Mail verifiziert</th>
+                <th className="px-6 py-4">Erstellt</th>
+                <th className="px-6 py-4 text-right">Aktion</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {users.map((u) => (
-                <tr key={u.id} className="hover:bg-slate-50/50 transition-colors">
+                <tr key={u.id} className="transition-colors hover:bg-slate-50/50">
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      <span className="font-bold text-slate-900">{u.name || "—"}</span>
+                      <span className="font-bold text-slate-900">{u.name || '—'}</span>
                       <span className="text-xs text-slate-500">{u.email}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`text-[10px] font-bold px-2 py-1 rounded-full ${
-                        u.role === "ADMIN" ? "bg-purple-50 text-purple-700" : "bg-blue-50 text-blue-700"
+                      className={`rounded-full px-2 py-1 text-[10px] font-bold ${
+                        u.role === 'ADMIN'
+                          ? 'bg-purple-50 text-purple-700'
+                          : 'bg-blue-50 text-blue-700'
                       }`}
                     >
                       {u.role}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">{u.emailVerified ? "Oui" : "Non"}</td>
-                  <td className="px-6 py-4 text-sm text-slate-600">{new Date(u.createdAt).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-sm text-slate-600">
+                    {u.emailVerified ? 'Ja' : 'Nein'}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600">
+                    {new Date(u.createdAt).toLocaleDateString()}
+                  </td>
                   <td className="px-6 py-4 text-right">
-                    {u.role === "ADMIN" ? (
+                    {u.role === 'ADMIN' ? (
                       <button
                         disabled={isSaving}
-                        onClick={() => setRole(u.id, "USER")}
-                        className="px-3 py-1.5 text-sm font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-60"
+                        onClick={() => setRole(u.id, 'USER')}
+                        className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold hover:bg-slate-50 disabled:opacity-60"
                       >
-                        Retirer admin
+                        Admin entfernen
                       </button>
                     ) : (
                       <button
                         disabled={isSaving}
-                        onClick={() => setRole(u.id, "ADMIN")}
-                        className="px-3 py-1.5 text-sm font-semibold rounded-lg bg-primary text-white hover:bg-primary/90 disabled:opacity-60"
+                        onClick={() => setRole(u.id, 'ADMIN')}
+                        className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-60"
                       >
-                        Rendre admin
+                        Admin machen
                       </button>
                     )}
                   </td>
@@ -119,7 +145,7 @@ export function UsersAdminClient() {
               {users.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-10 text-center text-slate-500">
-                    Aucun utilisateur.
+                    Keine Benutzer.
                   </td>
                 </tr>
               )}
@@ -130,4 +156,3 @@ export function UsersAdminClient() {
     </div>
   )
 }
-

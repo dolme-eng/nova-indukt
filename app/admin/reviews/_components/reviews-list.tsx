@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Star,
   CheckCircle2,
@@ -47,6 +47,27 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
     }))
   )
   const [isLoading, setIsLoading] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [ratingFilter, setRatingFilter] = useState<number | null>(null)
+  const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all')
+
+  const filteredReviews = useMemo(() => {
+    return reviews.filter((review) => {
+      const matchesSearch =
+        !searchQuery ||
+        review.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        review.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        review.user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        review.user?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        review.product.nameDe.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesRating = ratingFilter === null || review.rating === ratingFilter
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter === 'published' && review.isPublished) ||
+        (statusFilter === 'draft' && !review.isPublished)
+      return matchesSearch && matchesRating && matchesStatus
+    })
+  }, [reviews, searchQuery, ratingFilter, statusFilter])
 
   const togglePublish = async (id: string, currentlyPublished: boolean) => {
     setIsLoading(id)
@@ -98,24 +119,55 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
           <input
             type="text"
             placeholder="Bewertungen durchsuchen..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-primary"
           />
         </div>
         <div className="flex gap-2">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50">
+          <button
+            onClick={() =>
+              setRatingFilter(
+                ratingFilter === null ? 5 : ratingFilter <= 1 ? null : ratingFilter - 1
+              )
+            }
+            className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              ratingFilter !== null
+                ? 'border-amber-200 bg-amber-50 text-amber-700'
+                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+            }`}
+          >
             <Filter size={18} />
-            Bewertung
+            Bewertung{ratingFilter !== null ? `: ${ratingFilter}` : ''}
           </button>
-          <button className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50">
+          <button
+            onClick={() =>
+              setStatusFilter(
+                statusFilter === 'all'
+                  ? 'published'
+                  : statusFilter === 'published'
+                    ? 'draft'
+                    : 'all'
+              )
+            }
+            className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              statusFilter !== 'all'
+                ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+            }`}
+          >
             <Check size={18} />
             Status
+            {statusFilter !== 'all'
+              ? `: ${statusFilter === 'published' ? 'Online' : 'Entwurf'}`
+              : ''}
           </button>
         </div>
       </div>
 
       {/* Reviews Grid */}
       <div className="grid grid-cols-1 gap-6">
-        {reviews.map((review) => (
+        {filteredReviews.map((review) => (
           <div
             key={review.id}
             className={`overflow-hidden rounded-xl border bg-white shadow-sm transition-all ${
@@ -250,11 +302,19 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
           </div>
         ))}
 
-        {reviews.length === 0 && (
+        {filteredReviews.length === 0 && (
           <div className="rounded-xl border border-slate-200 bg-white p-12 text-center text-slate-500">
             <Star size={48} className="mx-auto mb-4 text-slate-200" />
-            <p className="text-lg font-medium">Keine Kundenbewertungen zum Moderieren.</p>
-            <p className="text-sm">Neue Bewertungen erscheinen hier zur Validierung.</p>
+            <p className="text-lg font-medium">
+              {searchQuery || ratingFilter !== null || statusFilter !== 'all'
+                ? 'Keine Bewertungen gefunden.'
+                : 'Keine Kundenbewertungen zum Moderieren.'}
+            </p>
+            <p className="text-sm">
+              {searchQuery || ratingFilter !== null || statusFilter !== 'all'
+                ? 'Versuchen Sie andere Filtereinstellungen.'
+                : 'Neue Bewertungen erscheinen hier zur Validierung.'}
+            </p>
           </div>
         )}
       </div>

@@ -1,17 +1,9 @@
-import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { z } from "zod"
-import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
-import { hashPassword } from "@/lib/auth/auth.config"
-import { logError } from "@/lib/logger"
-
-const resetPasswordSchema = z.object({
-  token: z.string().min(1, "Token ist erforderlich"),
-  password: z.string().min(8, "Passwort muss mindestens 8 Zeichen lang sein").max(100)
-    .regex(/[A-Z]/, "Passwort muss mindestens einen Großbuchstaben enthalten")
-    .regex(/[a-z]/, "Passwort muss mindestens einen Kleinbuchstaben enthalten")
-    .regex(/[0-9]/, "Passwort muss mindestens eine Zahl enthalten"),
-})
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { resetPasswordSchema } from '@/lib/validations/auth'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { hashPassword } from '@/lib/auth/auth.config'
+import { logError } from '@/lib/logger'
 
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 minutes
 const RATE_LIMIT_MAX = 5 // 5 attempts per 15 minutes per IP
@@ -28,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     if (!limitResult.success) {
       return NextResponse.json(
-        { error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
+        { error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' },
         { status: 429 }
       )
     }
@@ -39,7 +31,7 @@ export async function POST(request: NextRequest) {
     const result = resetPasswordSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: result.error.flatten() },
+        { error: 'Validation failed', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -52,10 +44,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Ungültiger oder abgelaufener Token" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Ungültiger oder abgelaufener Token' }, { status: 400 })
     }
 
     // Check token expiry
@@ -70,7 +59,7 @@ export async function POST(request: NextRequest) {
       })
 
       return NextResponse.json(
-        { error: "Token ist abgelaufen. Bitte fordern Sie ein neues Passwort an." },
+        { error: 'Token ist abgelaufen. Bitte fordern Sie ein neues Passwort an.' },
         { status: 400 }
       )
     }
@@ -89,14 +78,11 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json(
-      { success: true, message: "Passwort erfolgreich zurückgesetzt" },
+      { success: true, message: 'Passwort erfolgreich zurückgesetzt' },
       { status: 200 }
     )
   } catch (error) {
-    logError("Error in reset password:", error)
-    return NextResponse.json(
-      { error: "Ein Fehler ist aufgetreten" },
-      { status: 500 }
-    )
+    logError('Error in reset password:', error)
+    return NextResponse.json({ error: 'Ein Fehler ist aufgetreten' }, { status: 500 })
   }
 }

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { cache } from 'react'
+import React, { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react'
 import { ShareButtons } from './share-buttons'
@@ -182,9 +182,9 @@ function renderLink(text: string): React.ReactNode {
   return parts.length > 0 ? parts : renderInlineMarkdown(text)
 }
 
-function renderContent(content: string): JSX.Element {
+function renderContent(content: string): React.JSX.Element {
   const lines = content.split('\n')
-  const elements: JSX.Element[] = []
+  const elements: React.JSX.Element[] = []
   let i = 0
 
   while (i < lines.length) {

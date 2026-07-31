@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useEffect, useMemo, useState } from "react"
-import { toast } from "sonner"
+import { useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 export type SiteSettings = Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -13,12 +13,12 @@ export function useSiteSettings() {
   async function refresh() {
     setIsLoading(true)
     try {
-      const res = await fetch("/api/admin/settings", { cache: "no-store" })
-      if (!res.ok) throw new Error("Failed to load settings")
+      const res = await fetch('/api/admin/settings', { cache: 'no-store' })
+      if (!res.ok) throw new Error('Failed to load settings')
       const json = await res.json()
       setData(json?.data ?? {})
     } catch (e: unknown) {
-      toast.error(e instanceof Error ? e.message : "Erreur")
+      toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
       setIsLoading(false)
     }
@@ -27,20 +27,20 @@ export function useSiteSettings() {
   async function save(next: SiteSettings) {
     setIsSaving(true)
     try {
-      const res = await fetch("/api/admin/settings", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(next),
       })
       if (!res.ok) {
         const json = await res.json().catch(() => ({}))
-        throw new Error(json?.error || "Failed to save settings")
+        throw new Error(json?.error || 'Failed to save settings')
       }
       const json = await res.json()
       setData(json?.data ?? next)
-      toast.success("Paramètres enregistrés")
+      toast.success('Einstellungen gespeichert')
     } catch (e: unknown) {
-      toast.error(e instanceof Error ? e.message : "Erreur")
+      toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
       setIsSaving(false)
     }
@@ -53,4 +53,3 @@ export function useSiteSettings() {
   const helpers = useMemo(() => ({ refresh, save }), [])
   return { data, setData, isLoading, isSaving, ...helpers }
 }
-

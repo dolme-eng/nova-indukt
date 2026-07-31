@@ -28,7 +28,9 @@ export function LoginContent() {
       setSuccess(true)
       setError('')
       const timer = setTimeout(() => setSuccess(false), 5000)
-      return () => { if (timer) clearTimeout(timer) }
+      return () => {
+        if (timer) clearTimeout(timer)
+      }
     } else if (errorParam === 'invalid-token' || errorParam === 'invalid-or-expired-token') {
       setError(
         'Der Verifizierungslink ist ungültig oder abgelaufen. Bitte registrieren Sie sich erneut.'
@@ -49,21 +51,27 @@ export function LoginContent() {
     setError('')
     setLoading(true)
 
-    const result = await login(email, password)
+    try {
+      const result = await login(email, password)
 
-    if (result) {
-      setSuccess(true)
-      redirectTimerRef.current = setTimeout(() => {
-        const rawRedirect = searchParams.get('redirect') || '/mein-konto'
-        const redirectUrl =
-          rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') ? rawRedirect : '/mein-konto'
-        router.push(redirectUrl)
-      }, 1000)
-    } else {
-      setError('E-Mail oder Passwort ist falsch.')
+      if (result) {
+        setSuccess(true)
+        redirectTimerRef.current = setTimeout(() => {
+          const rawRedirect = searchParams.get('redirect') || '/mein-konto'
+          const redirectUrl =
+            rawRedirect.startsWith('/') && !rawRedirect.startsWith('//')
+              ? rawRedirect
+              : '/mein-konto'
+          router.push(redirectUrl)
+        }, 1000)
+      } else {
+        setError('E-Mail oder Passwort ist falsch.')
+      }
+    } catch (err) {
+      setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   const handleGoogleSignIn = async () => {
@@ -109,15 +117,18 @@ export function LoginContent() {
             </div>
           )}
 
-          {/* Google Sign In Button */}
-          <button
-            onClick={handleGoogleSignIn}
-            disabled={loading}
-            className="mb-4 flex w-full items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white py-3 font-medium text-gray-700 transition-colors hover:border-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Chrome className="h-5 w-5 text-blue-500" />
-            Mit Google anmelden
-          </button>
+          {/* Google Sign In Button - Coming soon */}
+          <div className="relative mb-4">
+            <button
+              disabled
+              className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-gray-50 py-3 font-medium text-gray-400"
+            >
+              <span className="text-sm">Bald verfügbar</span>
+            </button>
+            <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-white px-2 text-[10px] text-gray-400">
+              Google Anmeldung
+            </span>
+          </div>
 
           {/* Divider */}
           <div className="relative mb-6">

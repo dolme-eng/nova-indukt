@@ -10,7 +10,10 @@ export async function GET(req: NextRequest) {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
 
-    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:stats'), { windowMs: 60_000, maxRequests: 10 })
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:stats'), {
+      windowMs: 60_000,
+      maxRequests: 10,
+    })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const now = new Date()
@@ -33,54 +36,55 @@ export async function GET(req: NextRequest) {
     ] = await Promise.all([
       prisma.order.count(),
       prisma.order.count({
-        where: { createdAt: { gte: thirtyDaysAgo } }
+        where: { createdAt: { gte: thirtyDaysAgo } },
       }),
       prisma.order.aggregate({
         where: { status: { not: 'CANCELLED' } },
-        _sum: { total: true }
+        _sum: { total: true },
       }),
       prisma.order.findMany({
         take: 4,
         orderBy: { createdAt: 'desc' },
         select: {
+          id: true,
           orderNumber: true,
           customerName: true,
           status: true,
           total: true,
-          createdAt: true
-        }
+          createdAt: true,
+        },
       }),
       prisma.user.count({
-        where: { role: 'USER' }
+        where: { role: 'USER' },
       }),
       prisma.user.count({
         where: {
           role: 'USER',
-          createdAt: { gte: thirtyDaysAgo }
-        }
+          createdAt: { gte: thirtyDaysAgo },
+        },
       }),
       prisma.product.count({
-        where: { isActive: true }
+        where: { isActive: true },
       }),
       prisma.review.count({
         where: {
           isPublished: false,
-          createdAt: { gte: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000) }
-        }
+          createdAt: { gte: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000) },
+        },
       }),
       prisma.promotion.count({
         where: {
           isActive: true,
           startDate: { lte: now },
-          endDate: { gte: now }
-        }
+          endDate: { gte: now },
+        },
       }),
       prisma.promotion.count(),
       prisma.promotion.aggregate({
-        _sum: { usageCount: true }
+        _sum: { usageCount: true },
       }),
       prisma.newsletterSubscriber.count({
-        where: { isActive: true }
+        where: { isActive: true },
       }),
       prisma.auditLog.findMany({
         take: 5,
@@ -90,52 +94,52 @@ export async function GET(req: NextRequest) {
           action: true,
           entityType: true,
           entityId: true,
-          createdAt: true
-        }
-      })
+          createdAt: true,
+        },
+      }),
     ])
 
-    await auditLog({
-      action: "READ",
-      entityType: "Stats",
-      entityId: "dashboard",
+    auditLog({
+      action: 'READ',
+      entityType: 'Stats',
+      entityId: 'dashboard',
       userId: authz.session.user.id,
       newValues: { totalOrders, recentOrders, totalCustomers },
-      ipAddress: req.headers.get("x-forwarded-for"),
-      userAgent: req.headers.get("user-agent"),
-    })
+      ipAddress: req.headers.get('x-forwarded-for'),
+      userAgent: req.headers.get('user-agent'),
+    }).catch(() => {})
 
     const response = NextResponse.json({
       orders: {
         total: totalOrders,
         recent: recentOrders,
-        revenue: ordersRevenue._sum.total || 0
+        revenue: ordersRevenue._sum.total || 0,
       },
       customers: {
         total: totalCustomers,
-        new: newCustomers
+        new: newCustomers,
       },
       products: {
-        active: totalProducts
+        active: totalProducts,
       },
       reviews: {
-        pending: pendingReviews
+        pending: pendingReviews,
       },
       promotions: {
         active: activePromotions,
         total: totalPromotions,
-        usage: promotionUsage._sum.usageCount || 0
+        usage: promotionUsage._sum.usageCount || 0,
       },
       newsletter: {
-        subscribers: newsletterSubscribers
+        subscribers: newsletterSubscribers,
       },
       recentOrdersList,
-      recentActivity
+      recentActivity,
     })
-    response.headers.set("Cache-Control", "no-store")
+    response.headers.set('Cache-Control', 'no-store')
     return response
   } catch (error) {
-    logError("[STATS_GET]", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    logError('[STATS_GET]', error)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

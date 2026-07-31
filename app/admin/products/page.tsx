@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Eye, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
@@ -7,6 +6,7 @@ export const dynamic = 'force-dynamic'
 import Image from 'next/image'
 
 import { ProductsFilter } from './_components/products-filter'
+import { DeleteProductButton } from './_components/delete-product-button'
 
 async function getProducts(search?: string, category?: string) {
   const where: Prisma.ProductWhereInput = {}
@@ -160,12 +160,7 @@ export default async function AdminProductsPage({
                       >
                         <Edit size={18} />
                       </Link>
-                      <button
-                        className="rounded-lg p-2 text-slate-400 transition-all hover:bg-slate-100 hover:text-red-600"
-                        title="Löschen"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      <DeleteProductButton productId={product.id} productName={product.nameDe} />
                     </div>
                   </td>
                 </tr>

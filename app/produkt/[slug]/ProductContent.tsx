@@ -64,6 +64,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
   const [showWishlistToast, setShowWishlistToast] = useState(false)
   const [wishlistToastMessage, setWishlistToastMessage] = useState('')
   const [showStickyBar, setShowStickyBar] = useState(false)
+  const [showCartToast, setShowCartToast] = useState(false)
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   const infoRef = useRef<HTMLDivElement>(null)
@@ -162,7 +163,11 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               <motion.button
                 data-testid="add-to-cart-button"
                 whileTap={{ scale: 0.97 }}
-                onClick={() => addItem(product, 1)}
+                onClick={() => {
+                  addItem(product, 1)
+                  setShowCartToast(true)
+                  setTimeout(() => setShowCartToast(false), 2000)
+                }}
                 className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0C211E] px-4 text-sm font-bold text-white shadow-md sm:px-8"
               >
                 <ShoppingCart className="h-4 w-4" />
@@ -362,6 +367,17 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     {wishlistToastMessage}
                   </motion.div>
                 )}
+                {showCartToast && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-3 py-1.5 text-[10px] font-bold text-[#0C211E] shadow-lg"
+                  >
+                    <Check className="h-3 w-3" />
+                    Zum Warenkorb hinzugefügt
+                  </motion.div>
+                )}
               </AnimatePresence>
 
               <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 border-b border-gray-50 pb-2">
@@ -386,9 +402,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 </p>
               )}
 
-              <div className="mb-5 inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50/80 px-3 py-2.5 text-sm font-bold text-blue-800">
-                <span className="h-2 w-2 rounded-full bg-blue-500" />
-                Auf Anfrage
+              <div className="mb-5 inline-flex items-center gap-2 rounded-xl border border-green-200 bg-green-50/80 px-3 py-2.5 text-sm font-bold text-green-800">
+                <span className="h-2 w-2 rounded-full bg-green-500" />
+                Sofort lieferbar
               </div>
 
               <div className="flex gap-2">
@@ -416,7 +432,11 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   data-testid="add-to-cart-button"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  onClick={() => addItem(product, quantity)}
+                  onClick={() => {
+                    addItem(product, quantity)
+                    setShowCartToast(true)
+                    setTimeout(() => setShowCartToast(false), 2000)
+                  }}
                   className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#0C211E] text-sm font-bold text-white shadow-md transition-colors hover:bg-nova-900"
                 >
                   <ShoppingCart className="h-4 w-4" />
@@ -443,6 +463,8 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   type="button"
                   onClick={() => {
                     addItem(product, quantity)
+                    setShowCartToast(true)
+                    setTimeout(() => setShowCartToast(false), 2000)
                     window.location.href = '/kasse'
                   }}
                   className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-gray-100 text-sm font-bold text-[#0C211E] transition-colors hover:bg-gray-200"

@@ -7,8 +7,17 @@ import SearchContent from './SearchContent'
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Suchen`,
-    description: 'Finden Sie die besten NOVA INDUKT Produkte. Durchsuchen Sie unser Sortiment nach Induktionskochfelder, Zubehör und mehr.',
-    keywords: ['Suche', 'Produktsuche', 'NOVA INDUKT', 'Induktionskochfeld', 'Küchengeräte', 'Filter', 'Kategorien'],
+    description:
+      'Finden Sie die besten NOVA INDUKT Produkte. Durchsuchen Sie unser Sortiment nach Induktionskochfelder, Zubehör und mehr.',
+    keywords: [
+      'Suche',
+      'Produktsuche',
+      'NOVA INDUKT',
+      'Induktionskochfeld',
+      'Küchengeräte',
+      'Filter',
+      'Kategorien',
+    ],
     alternates: {
       canonical: '/suche',
     },
@@ -23,22 +32,22 @@ export default async function SuchePage() {
   const [products, categories] = await Promise.all([
     prisma.product.findMany({
       where: { isActive: true },
-      include: { images: true }
+      include: { images: true },
     }),
     prisma.category.findMany({
-      where: { isActive: true }
-    })
+      where: { isActive: true },
+    }),
   ])
 
-  const formattedProducts: Product[] = products.map(p => ({
+  const formattedProducts: Product[] = products.map((p) => ({
     id: p.id,
     slug: p.slug,
     name: { de: p.nameDe },
     category: p.categoryId,
     price: Number(p.price),
     oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
-    images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map(img => img.url),
-    rating: p.rating,
+    images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map((img) => img.url),
+    rating: Number(p.rating),
     reviewCount: p.reviewCount,
     badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
     description: { de: p.descriptionDe || '' },
@@ -51,26 +60,28 @@ export default async function SuchePage() {
       induction: p.inductionSafe || false,
     },
     brand: p.brand || undefined,
-    ean: p.ean || undefined
+    ean: p.ean || undefined,
   }))
 
-  const formattedCategories: Category[] = categories.map(c => ({
+  const formattedCategories: Category[] = categories.map((c) => ({
     id: c.id,
     slug: c.slug,
     name: { de: c.nameDe },
     image: c.image || '',
-    count: 0
+    count: 0,
   }))
 
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#4ECCA3]/30 border-t-[#4ECCA3] rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Laden...</p>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#4ECCA3]/30 border-t-[#4ECCA3]" />
+            <p className="text-gray-600">Laden...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <SearchContent initialProducts={formattedProducts} initialCategories={formattedCategories} />
     </Suspense>
   )

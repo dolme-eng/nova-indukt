@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 type AuditRow = {
   id: string
@@ -24,16 +24,16 @@ export function LogsAdminClient() {
     else setIsMoreLoading(true)
     try {
       const qs = new URLSearchParams()
-      qs.set("take", "50")
-      if (!first && cursor) qs.set("cursor", cursor)
-      const res = await fetch(`/api/admin/audit?${qs.toString()}`, { cache: "no-store" })
-      if (!res.ok) throw new Error("Failed to load audit logs")
+      qs.set('take', '50')
+      if (!first && cursor) qs.set('cursor', cursor)
+      const res = await fetch(`/api/admin/audit?${qs.toString()}`, { cache: 'no-store' })
+      if (!res.ok) throw new Error('Failed to load audit logs')
       const json = await res.json()
       const nextItems = Array.isArray(json?.items) ? json.items : []
       setItems((prev) => (first ? nextItems : [...prev, ...nextItems]))
       setCursor(json?.nextCursor ?? null)
     } catch (e: unknown) {
-      toast.error(e instanceof Error ? e.message : "Erreur")
+      toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
       if (first) setIsLoading(false)
       else setIsMoreLoading(false)
@@ -44,25 +44,28 @@ export function LogsAdminClient() {
     load(true)
   }, [])
 
-  if (isLoading) return <div className="text-sm text-slate-600">Chargement…</div>
+  if (isLoading) return <div className="text-sm text-slate-600">Laden...</div>
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Audit Trail</h1>
-          <p className="text-slate-600 mt-1">Qui a fait quoi, quand (actions admin).</p>
+          <p className="mt-1 text-slate-600">Wer hat was wann getan (Admin-Aktionen).</p>
         </div>
-        <Link href="/admin/settings" className="px-4 py-2 text-sm font-semibold border border-slate-200 rounded-lg bg-white hover:bg-slate-50">
-          Retour
+        <Link
+          href="/admin/settings"
+          className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+        >
+          Zurück
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-widest font-bold border-b border-slate-200">
+              <tr className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                 <th className="px-6 py-4">Date</th>
                 <th className="px-6 py-4">Action</th>
                 <th className="px-6 py-4">Entité</th>
@@ -71,21 +74,23 @@ export function LogsAdminClient() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {items.map((r) => (
-                <tr key={r.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-3 text-sm text-slate-700">{new Date(r.createdAt).toLocaleString()}</td>
+                <tr key={r.id} className="transition-colors hover:bg-slate-50/50">
+                  <td className="px-6 py-3 text-sm text-slate-700">
+                    {new Date(r.createdAt).toLocaleString()}
+                  </td>
                   <td className="px-6 py-3 text-sm font-semibold text-slate-900">{r.action}</td>
                   <td className="px-6 py-3 text-sm text-slate-700">
                     <span className="font-semibold">{r.entityType}</span>
                     <span className="text-slate-400"> · </span>
                     <span className="font-mono text-xs">{r.entityId}</span>
                   </td>
-                  <td className="px-6 py-3 text-sm text-slate-700">{r.userId || "—"}</td>
+                  <td className="px-6 py-3 text-sm text-slate-700">{r.userId || '—'}</td>
                 </tr>
               ))}
               {items.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-6 py-10 text-center text-slate-500">
-                    Aucun log.
+                    Keine Protokolle.
                   </td>
                 </tr>
               )}
@@ -98,12 +103,11 @@ export function LogsAdminClient() {
         <button
           disabled={!cursor || isMoreLoading}
           onClick={() => load(false)}
-          className="px-4 py-2 text-sm font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-60"
+          className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50 disabled:opacity-60"
         >
-          {isMoreLoading ? "Chargement..." : cursor ? "Charger plus" : "Fin"}
+          {isMoreLoading ? 'Laden...' : cursor ? 'Mehr laden' : 'Ende'}
         </button>
       </div>
     </div>
   )
 }
-

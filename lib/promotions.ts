@@ -1,5 +1,6 @@
 import { prisma } from './prisma'
 import { DiscountType } from '@prisma/client'
+import { unstable_cache } from 'next/cache'
 
 export interface AppliedPromotion {
   id: string
@@ -48,34 +49,33 @@ export function calculateDiscountedPrice(
 
   return {
     discountedPrice: Math.round(discountedPrice * 100) / 100,
-    discountAmount: Math.round(discountAmount * 100) / 100
+    discountAmount: Math.round(discountAmount * 100) / 100,
   }
 }
 
 /**
- * Récupère toutes les promotions actives valides
+ * Récupère toutes les promotions actives valides (cached 60s)
  */
-export async function getActivePromotions() {
-  const now = new Date()
+export const getActivePromotions = unstable_cache(
+  async () => {
+    const now = new Date()
 
-  // Prisma ne supporte pas la comparaison inter-colonnes dans un `where` standard.
-  // On récupère toutes les promos actives par date, puis on filtre le quota côté JS.
-  const promotions = await prisma.promotion.findMany({
-    where: {
-      isActive: true,
-      startDate: { lte: now },
-      endDate: { gte: now },
-    },
-    orderBy: {
-      discountValue: 'desc' // Prioritize bigger discounts
-    }
-  })
+    const promotions = await prisma.promotion.findMany({
+      where: {
+        isActive: true,
+        startDate: { lte: now },
+        endDate: { gte: now },
+      },
+      orderBy: {
+        discountValue: 'desc',
+      },
+    })
 
-  // Exclure les promotions dont le quota d'utilisation est atteint
-  return promotions.filter(
-    p => p.usageLimit === null || p.usageCount < p.usageLimit
-  )
-}
+    return promotions.filter((p) => p.usageLimit === null || p.usageCount < p.usageLimit)
+  },
+  ['active-promotions'],
+  { revalidate: 60, tags: ['promotions'] }
+)
 
 /**
  * Apply the best available promotion to a product
@@ -88,16 +88,16 @@ export async function applyBestPromotion(
   const promotions = await getActivePromotions()
 
   // Find applicable promotions for this product
-  const applicablePromotions = promotions.filter(promo => {
+  const applicablePromotions = promotions.filter((promo) => {
     // Global promotion applies to all
     if (promo.isGlobal) return true
-    
+
     // Check if product is directly included
     if (promo.productIds.includes(productId)) return true
-    
+
     // Check if category is included
     if (promo.categoryIds.includes(categoryId)) return true
-    
+
     return false
   })
 
@@ -107,7 +107,7 @@ export async function applyBestPromotion(
       discountedPrice: price,
       discountAmount: 0,
       discountPercentage: 0,
-      promotion: null
+      promotion: null,
     }
   }
 
@@ -134,8 +134,8 @@ export async function applyBestPromotion(
       discountValue: Number(bestPromotion.discountValue),
       badge: bestPromotion.badge,
       bannerText: bestPromotion.bannerText,
-      highlightColor: bestPromotion.highlightColor
-    }
+      highlightColor: bestPromotion.highlightColor,
+    },
   }
 }
 
@@ -150,7 +150,7 @@ export async function applyPromotionsToProducts(
 
   for (const product of products) {
     // Find applicable promotions
-    const applicablePromotions = promotions.filter(promo => {
+    const applicablePromotions = promotions.filter((promo) => {
       if (promo.isGlobal) return true
       if (promo.productIds.includes(product.id)) return true
       if (promo.categoryIds.includes(product.categoryId)) return true
@@ -163,7 +163,7 @@ export async function applyPromotionsToProducts(
         discountedPrice: product.price,
         discountAmount: 0,
         discountPercentage: 0,
-        promotion: null
+        promotion: null,
       })
       continue
     }
@@ -188,8 +188,8 @@ export async function applyPromotionsToProducts(
         discountValue: Number(bestPromotion.discountValue),
         badge: bestPromotion.badge,
         bannerText: bestPromotion.bannerText,
-        highlightColor: bestPromotion.highlightColor
-      }
+        highlightColor: bestPromotion.highlightColor,
+      },
     })
   }
 
@@ -204,9 +204,9 @@ export async function incrementPromotionUsage(promotionId: string): Promise<void
     where: { id: promotionId },
     data: {
       usageCount: {
-        increment: 1
-      }
-    }
+        increment: 1,
+      },
+    },
   })
 }
 
@@ -216,15 +216,15 @@ export async function incrementPromotionUsage(promotionId: string): Promise<void
 export async function validateCoupon(
   code: string,
   cartTotal: number
-): Promise<{ 
-  isValid: boolean; 
-  discountAmount: number; 
-  error?: string; 
-  promotionId?: string;
-  name?: string;
+): Promise<{
+  isValid: boolean
+  discountAmount: number
+  error?: string
+  promotionId?: string
+  name?: string
 }> {
   const now = new Date()
-  
+
   const promotion = await prisma.promotion.findFirst({
     where: {
       code: { equals: code, mode: 'insensitive' },
@@ -232,24 +232,32 @@ export async function validateCoupon(
       isCoupon: true,
       startDate: { lte: now },
       endDate: { gte: now },
-    }
+    },
   })
 
   if (!promotion) {
-    return { isValid: false, discountAmount: 0, error: 'Ungültiger oder abgelaufener Gutscheincode' }
+    return {
+      isValid: false,
+      discountAmount: 0,
+      error: 'Ungültiger oder abgelaufener Gutscheincode',
+    }
   }
 
   // Check usage limit
   if (promotion.usageLimit !== null && promotion.usageCount >= promotion.usageLimit) {
-    return { isValid: false, discountAmount: 0, error: 'Dieser Gutschein wurde bereits zu oft verwendet' }
+    return {
+      isValid: false,
+      discountAmount: 0,
+      error: 'Dieser Gutschein wurde bereits zu oft verwendet',
+    }
   }
 
   // Check min order amount
   if (promotion.minOrderAmount && cartTotal < Number(promotion.minOrderAmount)) {
-    return { 
-      isValid: false, 
-      discountAmount: 0, 
-      error: `Mindestbestellwert für diesen Gutschein ist ${Number(promotion.minOrderAmount).toFixed(2)} €` 
+    return {
+      isValid: false,
+      discountAmount: 0,
+      error: `Mindestbestellwert für diesen Gutschein ist ${Number(promotion.minOrderAmount).toFixed(2)} €`,
     }
   }
 
@@ -265,6 +273,6 @@ export async function validateCoupon(
     isValid: true,
     discountAmount,
     promotionId: promotion.id,
-    name: promotion.name
+    name: promotion.name,
   }
 }

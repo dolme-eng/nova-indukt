@@ -52,16 +52,16 @@ export default function EditPromotionPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#4ECCA3]"></div>
+      <div className="flex h-64 items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-t-2 border-[#4ECCA3]"></div>
       </div>
     )
   }
 
   if (!promotion) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-400">Promotion non trouvée</p>
+      <div className="py-12 text-center">
+        <p className="text-gray-400">Aktion nicht gefunden</p>
       </div>
     )
   }
@@ -69,10 +69,10 @@ export default function EditPromotionPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Modifier la promotion</h1>
-        <p className="text-gray-400 mt-1">Modifiez les paramètres de {promotion.name}</p>
+        <h1 className="text-2xl font-bold text-white">Aktion bearbeiten</h1>
+        <p className="mt-1 text-gray-400">Einstellungen von {promotion.name} ändern</p>
       </div>
-      
+
       <PromotionForm promotion={promotion} />
     </div>
   )

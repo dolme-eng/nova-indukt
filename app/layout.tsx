@@ -1,77 +1,92 @@
-import type { Metadata, Viewport } from "next"
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
+import type { Metadata, Viewport } from 'next'
+import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
 import { PromotionBanner } from '@/components/promotion-banner'
-import "./globals.css"
-import { Toaster } from "sonner"
-import { Header } from "@/components/layout/header"
-import { Footer } from "@/components/layout/footer"
-import { CookieConsent } from "@/components/cookie-consent"
-import { PageTransition } from "@/components/page-transition"
-import { CustomCursor } from "@/components/custom-cursor"
-import { ScrollToTop } from "@/components/layout/scroll-to-top"
-import { PreloadResources } from "./preload-resources"
-import { Providers } from "@/components/providers"
-import { AuthSync } from "@/components/auth-sync"
-import { SHOP_DOMAIN, SHOP_NAME, SUPPORT_EMAIL } from "@/lib/constants/shop"
+import './globals.css'
+import { Toaster } from 'sonner'
+import { Header } from '@/components/layout/header'
+import { Footer } from '@/components/layout/footer'
+import { CookieConsent } from '@/components/cookie-consent'
+import { PageTransition } from '@/components/page-transition'
+import { CustomCursor } from '@/components/custom-cursor'
+import { ScrollToTop } from '@/components/layout/scroll-to-top'
+import { PreloadResources } from './preload-resources'
+import { Providers } from '@/components/providers'
+import { AuthSync } from '@/components/auth-sync'
+import { GoogleAnalytics } from '@/components/google-analytics'
+import { SHOP_DOMAIN, SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
 
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 })
 
 const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
 })
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
   title: {
-    default: "NOVA INDUKT | Premium Induktions-Kochgeschirr aus Deutschland",
-    template: "%s | NOVA INDUKT"
+    default: 'NOVA INDUKT | Premium Induktions-Kochgeschirr aus Deutschland',
+    template: '%s | NOVA INDUKT',
   },
-  description: "Entdecken Sie erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche. Premium Pfannen, Töpfe und mehr.",
-  keywords: ["Induktion", "Kochgeschirr", "Pfannen", "Töpfe", "Premium", "Deutschland", "Küche", "Induktionskochfeld", "Edelstahl", "Antihaft", "SmartHeat"],
-  authors: [{ name: "NOVA INDUKT" }],
-  creator: "NOVA INDUKT",
-  publisher: "NOVA INDUKT",
-  metadataBase: new URL("https://nova-indukt.de"),
+  description:
+    'Entdecken Sie erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche. Premium Pfannen, Töpfe und mehr.',
+  keywords: [
+    'Induktion',
+    'Kochgeschirr',
+    'Pfannen',
+    'Töpfe',
+    'Premium',
+    'Deutschland',
+    'Küche',
+    'Induktionskochfeld',
+    'Edelstahl',
+    'Antihaft',
+    'SmartHeat',
+  ],
+  authors: [{ name: 'NOVA INDUKT' }],
+  creator: 'NOVA INDUKT',
+  publisher: 'NOVA INDUKT',
+  metadataBase: new URL('https://nova-indukt.de'),
   alternates: {
-    canonical: "/",
+    canonical: '/',
     languages: {
       'de-DE': '/',
     },
   },
   openGraph: {
-    type: "website",
-    locale: "de_DE",
-    url: "https://nova-indukt.de",
-    siteName: "NOVA INDUKT",
-    title: "NOVA INDUKT | Premium Induktions-Kochgeschirr",
-    description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision.",
+    type: 'website',
+    locale: 'de_DE',
+    url: 'https://nova-indukt.de',
+    siteName: 'NOVA INDUKT',
+    title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr',
+    description:
+      'Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision.',
     images: [
       {
-        url: "https://nova-indukt.de/og-image.png",
+        url: 'https://nova-indukt.de/og-image.png',
         width: 1200,
         height: 630,
-        alt: "NOVA INDUKT - Premium Induktions-Kochgeschirr",
+        alt: 'NOVA INDUKT - Premium Induktions-Kochgeschirr',
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    site: "@novaindukt",
-    creator: "@novaindukt",
-    title: "NOVA INDUKT | Premium Induktions-Kochgeschirr",
-    description: "Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität.",
-    images: ["/og-image.png"],
+    card: 'summary_large_image',
+    site: '@novaindukt',
+    creator: '@novaindukt',
+    title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr',
+    description: 'Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -88,54 +103,65 @@ export const metadata: Metadata = {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: "#4ECCA3",
-  width: "device-width",
+  themeColor: '#4ECCA3',
+  width: 'device-width',
   initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased min-h-screen bg-gray-50 text-gray-900">
+    <html
+      lang="de"
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
         {/* Kritische Ressourcen vorladen */}
         <PreloadResources />
-        
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": SHOP_NAME,
-          "url": SHOP_DOMAIN,
-          "logo": `${SHOP_DOMAIN}/logo0.png`,
-          "email": SUPPORT_EMAIL,
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "customer service",
-            "url": `${SHOP_DOMAIN}/kontakt`,
-            "areaServed": "DE",
-            "availableLanguage": "German"
-          },
-          // Adresse : renseigner NEXT_PUBLIC_COMPANY_ADDRESS_STREET, _CITY, _ZIP en prod
-          ...(process.env.NEXT_PUBLIC_COMPANY_ADDRESS_STREET ? {
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": process.env.NEXT_PUBLIC_COMPANY_ADDRESS_STREET,
-              "addressLocality": process.env.NEXT_PUBLIC_COMPANY_ADDRESS_CITY,
-              "postalCode": process.env.NEXT_PUBLIC_COMPANY_ADDRESS_ZIP,
-              "addressCountry": "DE"
-            }
-          } : {})
-        })}} />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: SHOP_NAME,
+              url: SHOP_DOMAIN,
+              logo: `${SHOP_DOMAIN}/logo0.png`,
+              email: SUPPORT_EMAIL,
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer service',
+                url: `${SHOP_DOMAIN}/kontakt`,
+                areaServed: 'DE',
+                availableLanguage: 'German',
+              },
+              // Adresse : renseigner NEXT_PUBLIC_COMPANY_ADDRESS_STREET, _CITY, _ZIP en prod
+              ...(process.env.NEXT_PUBLIC_COMPANY_ADDRESS_STREET
+                ? {
+                    address: {
+                      '@type': 'PostalAddress',
+                      streetAddress: process.env.NEXT_PUBLIC_COMPANY_ADDRESS_STREET,
+                      addressLocality: process.env.NEXT_PUBLIC_COMPANY_ADDRESS_CITY,
+                      postalCode: process.env.NEXT_PUBLIC_COMPANY_ADDRESS_ZIP,
+                      addressCountry: 'DE',
+                    },
+                  }
+                : {}),
+            }),
+          }}
+        />
         <a href="#main-content" className="skip-link">
           Zum Hauptinhalt springen
         </a>
         <Providers>
+          <GoogleAnalytics />
           <AuthSync />
           <div className="hidden sm:block">
             <PromotionBanner />
@@ -143,21 +169,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex min-h-screen flex-col">
             <Header />
             <main id="main-content" className="flex-1" aria-label="Hauptinhalt">
-              <PageTransition>
-                {children}
-              </PageTransition>
+              <PageTransition>{children}</PageTransition>
             </main>
             <Footer />
           </div>
         </Providers>
-        <Toaster 
-          position="bottom-right" 
+        <Toaster
+          position="bottom-right"
           toastOptions={{
             style: {
-              background: "#fff",
-              border: "1px solid #e5e7eb",
-              borderRadius: "12px",
-              padding: "16px",
+              background: '#fff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '12px',
+              padding: '16px',
             },
           }}
           richColors
@@ -170,4 +194,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-

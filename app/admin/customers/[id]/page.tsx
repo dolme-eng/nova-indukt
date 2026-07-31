@@ -1,40 +1,40 @@
-import React from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { 
-  ArrowLeft, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
-  ShoppingBag, 
-  Banknote, 
-  Clock, 
+import React from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import {
+  ArrowLeft,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  ShoppingBag,
+  Banknote,
+  Clock,
   ChevronRight,
   TrendingUp,
   Box,
   CheckCircle2,
-  Settings
-} from "lucide-react"
-import { prisma } from "@/lib/prisma"
+  Settings,
+} from 'lucide-react'
+import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic'
-import { format } from "date-fns"
-import { de } from "date-fns/locale"
-import { notFound } from "next/navigation"
+import { format } from 'date-fns'
+import { de } from 'date-fns/locale'
+import { notFound } from 'next/navigation'
 
 async function getCustomer(id: string) {
   const customer = await prisma.user.findUnique({
     where: { id },
     include: {
       orders: {
-        orderBy: { createdAt: "desc" },
-        include: { items: true }
+        orderBy: { createdAt: 'desc' },
+        include: { items: true },
       },
       addresses: true,
       _count: {
-        select: { orders: true, reviews: true, wishlist: true }
-      }
-    }
+        select: { orders: true, reviews: true, wishlist: true },
+      },
+    },
   })
   return customer
 }
@@ -49,116 +49,144 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
   const averageOrderValue = customer._count.orders > 0 ? totalSpent / customer._count.orders : 0
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="mx-auto max-w-6xl space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
-          <Link 
+          <Link
             href="/admin/customers"
-            className="p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+            className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-900"
           >
             <ArrowLeft size={20} />
           </Link>
           <div className="flex items-center gap-4">
-            <div className="h-14 w-14 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-bold border-2 border-white shadow-sm ring-1 ring-slate-200">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-slate-100 font-bold text-slate-600 shadow-sm ring-1 ring-slate-200">
               {customer.image ? (
-                <Image src={customer.image} alt={customer.name || ""} width={56} height={56} className="w-full h-full rounded-full object-cover" />
+                <Image
+                  src={customer.image}
+                  alt={customer.name || ''}
+                  width={56}
+                  height={56}
+                  className="h-full w-full rounded-full object-cover"
+                />
               ) : (
                 (customer.name?.charAt(0) || customer.email.charAt(0)).toUpperCase()
               )}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold text-slate-900">{customer.name || "Benutzer"}</h1>
-                {customer.role === "ADMIN" ? (
-                  <span className="px-2.5 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-bold rounded-full border border-purple-200 uppercase tracking-widest">Admin</span>
+                <h1 className="text-2xl font-bold text-slate-900">{customer.name || 'Benutzer'}</h1>
+                {customer.role === 'ADMIN' ? (
+                  <span className="rounded-full border border-purple-200 bg-purple-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-purple-700">
+                    Admin
+                  </span>
                 ) : (
-                  <span className="px-2.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full border border-blue-200 uppercase tracking-widest">Kunde</span>
+                  <span className="rounded-full border border-blue-200 bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-blue-700">
+                    Kunde
+                  </span>
                 )}
               </div>
-              <p className="text-slate-500 text-sm flex items-center gap-1 mt-1 font-medium">
-                Mitglied seit dem {format(new Date(customer.createdAt), "dd. MMMM yyyy", { locale: de })}
+              <p className="mt-1 flex items-center gap-1 text-sm font-medium text-slate-500">
+                Mitglied seit dem{' '}
+                {format(new Date(customer.createdAt), 'dd. MMMM yyyy', { locale: de })}
               </p>
             </div>
           </div>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-50 transition-colors shadow-sm">
+          <a
+            href={`mailto:${customer.email}`}
+            className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+          >
             <Mail size={18} />
             Kontaktieren
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-sm">
+          </a>
+          <Link
+            href={`/admin/customers`}
+            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary/90"
+          >
             <Settings size={18} />
-            Konto verwalten
-          </button>
+            Kundenverwaltung
+          </Link>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <StatItem 
-          label="Gesamtumsatz" 
-          value={`${totalSpent.toFixed(2)} €`} 
-          icon={<Banknote className="text-emerald-600" size={20} />} 
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+        <StatItem
+          label="Gesamtumsatz"
+          value={`${totalSpent.toFixed(2)} €`}
+          icon={<Banknote className="text-emerald-600" size={20} />}
           color="bg-emerald-50 border-emerald-100"
         />
-        <StatItem 
-          label="Bestellungen" 
-          value={customer._count.orders.toString()} 
-          icon={<ShoppingBag className="text-blue-600" size={20} />} 
+        <StatItem
+          label="Bestellungen"
+          value={customer._count.orders.toString()}
+          icon={<ShoppingBag className="text-blue-600" size={20} />}
           color="bg-blue-50 border-blue-100"
         />
-        <StatItem 
-          label="Ø Bestellwert" 
-          value={`${averageOrderValue.toFixed(2)} €`} 
-          icon={<TrendingUp className="text-orange-600" size={20} />} 
+        <StatItem
+          label="Ø Bestellwert"
+          value={`${averageOrderValue.toFixed(2)} €`}
+          icon={<TrendingUp className="text-orange-600" size={20} />}
           color="bg-orange-50 border-orange-100"
         />
-        <StatItem 
-          label="Bewertungen" 
-          value={customer._count.reviews.toString()} 
-          icon={<CheckCircle2 className="text-purple-600" size={20} />} 
+        <StatItem
+          label="Bewertungen"
+          value={customer._count.reviews.toString()}
+          icon={<CheckCircle2 className="text-purple-600" size={20} />}
           color="bg-purple-50 border-purple-100"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Main Column - Order History */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
+        <div className="space-y-6 lg:col-span-2">
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 p-6">
+              <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-900">
                 <Clock size={16} />
                 Bestellhistorie
               </h2>
             </div>
             <div className="divide-y divide-slate-100">
               {customer.orders.map((order) => (
-                <div key={order.id} className="p-6 hover:bg-slate-50/50 transition-colors group">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div key={order.id} className="group p-6 transition-colors hover:bg-slate-50/50">
+                  <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                     <div className="flex items-center gap-4">
-                      <div className="p-3 bg-slate-100 rounded-lg text-slate-500 group-hover:bg-white group-hover:text-primary transition-colors">
+                      <div className="rounded-lg bg-slate-100 p-3 text-slate-500 transition-colors group-hover:bg-white group-hover:text-primary">
                         <Box size={20} />
                       </div>
                       <div>
                         <p className="font-bold text-slate-900">{order.orderNumber}</p>
-                        <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-1 font-medium">
+                        <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-slate-500">
                           <Calendar size={12} />
-                          {format(new Date(order.createdAt), "dd. MMM yyyy", { locale: de })}
+                          {format(new Date(order.createdAt), 'dd. MMM yyyy', { locale: de })}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-6">
                       <div className="text-right">
-                        <p className="font-bold text-slate-900">{Number(order.total).toFixed(2)} €</p>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{order.items.length} Artikel</p>
+                        <p className="font-bold text-slate-900">
+                          {Number(order.total).toFixed(2)} €
+                        </p>
+                        <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                          {order.items.length} Artikel
+                        </p>
                       </div>
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border uppercase tracking-widest ${
-                        order.status === 'DELIVERED' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-blue-50 text-blue-700 border-blue-100'
-                      }`}>
+                      <span
+                        className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${
+                          order.status === 'DELIVERED'
+                            ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
+                            : 'border-blue-100 bg-blue-50 text-blue-700'
+                        }`}
+                      >
                         {order.status}
                       </span>
-                      <Link href={`/admin/orders/${order.id}`} className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-all">
+                      <Link
+                        href={`/admin/orders/${order.id}`}
+                        className="rounded-lg p-2 text-slate-400 transition-all hover:bg-slate-100 hover:text-primary"
+                      >
                         <ChevronRight size={18} />
                       </Link>
                     </div>
@@ -166,7 +194,7 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
                 </div>
               ))}
               {customer.orders.length === 0 && (
-                <div className="p-12 text-center text-slate-500 italic">
+                <div className="p-12 text-center italic text-slate-500">
                   Keine Bestellungen für diesen Kunden.
                 </div>
               )}
@@ -176,47 +204,57 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
 
         {/* Sidebar - Contact & Addresses */}
         <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-900">
               <Mail size={16} />
               Kontakt
             </h2>
             <div className="space-y-4">
-              <div className="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
+              <div className="flex items-center gap-3 rounded-lg border border-slate-100 bg-slate-50 p-3 text-sm text-slate-600">
                 <Mail size={18} className="text-slate-400" />
-                <span className="font-medium truncate">{customer.email}</span>
+                <span className="truncate font-medium">{customer.email}</span>
               </div>
-              <div className="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
+              <div className="flex items-center gap-3 rounded-lg border border-slate-100 bg-slate-50 p-3 text-sm text-slate-600">
                 <Phone size={18} className="text-slate-400" />
                 <span className="font-medium">Nicht angegeben</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-900">
               <MapPin size={16} />
               Adressen ({customer.addresses.length})
             </h2>
             <div className="space-y-6">
               {customer.addresses.map((address) => (
-                <div key={address.id} className="space-y-2 relative pb-4 last:pb-0 last:border-0 border-b border-slate-100">
+                <div
+                  key={address.id}
+                  className="relative space-y-2 border-b border-slate-100 pb-4 last:border-0 last:pb-0"
+                >
                   {address.isDefault && (
-                    <span className="absolute top-0 right-0 text-[8px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase tracking-widest border border-primary/20">
+                    <span className="absolute right-0 top-0 rounded border border-primary/20 bg-primary/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-widest text-primary">
                       Standard
                     </span>
                   )}
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">{address.type}</span>
-                  <p className="text-sm text-slate-600 leading-relaxed italic">
-                    {address.firstName} {address.lastName}<br />
-                    {address.street}<br />
-                    {address.zipCode} {address.city}<br />
+                  <span className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    {address.type}
+                  </span>
+                  <p className="text-sm italic leading-relaxed text-slate-600">
+                    {address.firstName} {address.lastName}
+                    <br />
+                    {address.street}
+                    <br />
+                    {address.zipCode} {address.city}
+                    <br />
                     {address.country}
                   </p>
                 </div>
               ))}
               {customer.addresses.length === 0 && (
-                <p className="text-sm text-slate-400 italic text-center py-4">Keine Adressen gespeichert.</p>
+                <p className="py-4 text-center text-sm italic text-slate-400">
+                  Keine Adressen gespeichert.
+                </p>
               )}
             </div>
           </div>
@@ -226,14 +264,26 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
   )
 }
 
-function StatItem({ label, value, icon, color }: { label: string, value: string, icon: React.ReactNode, color: string }) {
+function StatItem({
+  label,
+  value,
+  icon,
+  color,
+}: {
+  label: string
+  value: string
+  icon: React.ReactNode
+  color: string
+}) {
   return (
-    <div className={`p-6 rounded-xl border ${color} shadow-sm group hover:scale-[1.02] transition-transform`}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="p-2 bg-white rounded-lg shadow-sm">{icon}</div>
+    <div
+      className={`rounded-xl border p-6 ${color} group shadow-sm transition-transform hover:scale-[1.02]`}
+    >
+      <div className="mb-4 flex items-center justify-between">
+        <div className="rounded-lg bg-white p-2 shadow-sm">{icon}</div>
       </div>
-      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{label}</p>
-      <h3 className="text-xl font-black text-slate-900 mt-1">{value}</h3>
+      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{label}</p>
+      <h3 className="mt-1 text-xl font-black text-slate-900">{value}</h3>
     </div>
   )
 }

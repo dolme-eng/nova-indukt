@@ -42,6 +42,7 @@ interface OrderConfirmationEmailProps {
     country: string
   }
   estimatedDelivery: string
+  orderDate?: string
 }
 
 export const OrderConfirmationEmail = ({
@@ -55,6 +56,7 @@ export const OrderConfirmationEmail = ({
   paymentMethod,
   shippingAddress,
   estimatedDelivery,
+  orderDate,
 }: OrderConfirmationEmailProps) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('de-DE', {
@@ -81,8 +83,8 @@ export const OrderConfirmationEmail = ({
             <Heading style={h2}>Vielen Dank für Ihre Bestellung!</Heading>
             <Text style={text}>Hallo {customerName},</Text>
             <Text style={text}>
-              Wir haben Ihre Bestellung erhalten und bearbeiten diese umgehend.
-              Hier sind die Details zu Ihrer Bestellung:
+              Wir haben Ihre Bestellung erhalten und bearbeiten diese umgehend. Hier sind die
+              Details zu Ihrer Bestellung:
             </Text>
           </Section>
 
@@ -95,7 +97,7 @@ export const OrderConfirmationEmail = ({
               </Column>
               <Column>
                 <Text style={label}>Bestelldatum</Text>
-                <Text style={value}>{new Date().toLocaleDateString('de-DE')}</Text>
+                <Text style={value}>{orderDate || new Date().toLocaleDateString('de-DE')}</Text>
               </Column>
             </Row>
           </Section>
@@ -128,7 +130,9 @@ export const OrderConfirmationEmail = ({
             </Row>
             <Row style={totalRow}>
               <Column style={totalLabel}>Versand</Column>
-              <Column style={totalValue}>{shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}</Column>
+              <Column style={totalValue}>
+                {shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}
+              </Column>
             </Row>
             <Row style={totalRow}>
               <Column style={totalLabel}>MwSt. (19%)</Column>
@@ -192,7 +196,14 @@ export const OrderConfirmationEmail = ({
                 </Row>
               </Section>
               <Text style={smallText}>
-                Hinweis: Ihre Bestellung wird erst nach Zahlungseingang versendet.
+                Hinweis: Bitte überweisen Sie den Betrag innerhalb von 14 Tagen. Ihre Bestellung
+                wird erst nach Zahlungseingang versendet.
+              </Text>
+              <Text style={smallText}>
+                senden Sie den Zahlungsnachweis bitte an{' '}
+                <Link href={`mailto:${SUPPORT_EMAIL}`} style={link}>
+                  {SUPPORT_EMAIL}
+                </Link>
               </Text>
             </Section>
           )}
@@ -206,10 +217,7 @@ export const OrderConfirmationEmail = ({
 
           {/* CTA */}
           <Section style={ctaSection}>
-            <Button
-              href={`https://nova-indukt.de/mein-konto/orders`}
-              style={button}
-            >
+            <Button href={`https://nova-indukt.de/mein-konto/orders`} style={button}>
               Bestellung verfolgen
             </Button>
           </Section>

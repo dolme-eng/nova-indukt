@@ -10,7 +10,10 @@ import { logError } from '@/lib/logger'
 export async function GET(request: NextRequest) {
   try {
     const ip = getIP(request)
-    const { success } = await rateLimit(createRateLimitKey(ip, 'orders:track'), { windowMs: 60_000, maxRequests: 10 })
+    const { success } = await rateLimit(createRateLimitKey(ip, 'orders:track'), {
+      windowMs: 60_000,
+      maxRequests: 10,
+    })
     if (!success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const { searchParams } = new URL(request.url)
@@ -18,7 +21,10 @@ export async function GET(request: NextRequest) {
     const orderNumber = searchParams.get('orderNumber')
 
     if (!email || !orderNumber) {
-      return NextResponse.json({ error: 'E-Mail und Bestellnummer sind erforderlich.' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'E-Mail und Bestellnummer sind erforderlich.' },
+        { status: 400 }
+      )
     }
 
     const order = await prisma.order.findFirst({
@@ -31,6 +37,7 @@ export async function GET(request: NextRequest) {
         orderNumber: true,
         status: true,
         paymentStatus: true,
+        paymentMethod: true,
         total: true,
         createdAt: true,
         shippingAddress: true,
@@ -45,7 +52,10 @@ export async function GET(request: NextRequest) {
     })
 
     if (!order) {
-      return NextResponse.json({ error: 'Bestellung nicht gefunden. Bitte überprüfen Sie Ihre Angaben.' }, { status: 404 })
+      return NextResponse.json(
+        { error: 'Bestellung nicht gefunden. Bitte überprüfen Sie Ihre Angaben.' },
+        { status: 404 }
+      )
     }
 
     return NextResponse.json(order)

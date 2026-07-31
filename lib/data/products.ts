@@ -23,7 +23,7 @@ export function mapDbProductToUi(p: DbProduct): Product {
       .sort((a, b) => a.sortOrder - b.sortOrder)
       .map((img) => img.url)
       .filter((url): url is string => !!url),
-    rating: p.rating,
+    rating: Number(p.rating),
     reviewCount: p.reviewCount,
     badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
     description: { de: p.descriptionDe || '' },
