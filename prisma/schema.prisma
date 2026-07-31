@@ -23,6 +23,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 // NOTE : Ce modèle est requis par @auth/prisma-adapter mais n'est JAMAIS peuplé
@@ -34,6 +35,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -176,6 +179,7 @@ model Order {
   @@index([orderNumber])
   @@index([status])
   @@index([paymentStatus])
+  @@index([customerEmail])
   @@index([userId, createdAt])
   @@index([status, createdAt])
 }

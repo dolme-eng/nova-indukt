@@ -30,7 +30,6 @@ export default async function AdminNewsletterPage() {
             columns={[
               { header: 'E-Mail', accessor: (r) => String(r.email) },
               { header: 'Vorname', accessor: (r) => String(r.firstName || '') },
-              { header: 'Nachname', accessor: (r) => String(r.lastName || '') },
               { header: 'Quelle', accessor: (r) => String(r.source || 'Direkt') },
               { header: 'Aktiv', accessor: (r) => String(r.isActive ? 'Ja' : 'Nein') },
               { header: 'Registriert', accessor: (r) => String(r.createdAt) },
