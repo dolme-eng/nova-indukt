@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex min-h-screen bg-nova-50/50 selection:bg-nova-400/30">
-      <AdminSidebar userName={userName} userRole="Super Administrator" userInitial={userInitial} />
+      <AdminSidebar />
 
       {/* Main Content */}
       <div className="flex min-w-0 flex-1 flex-col">
