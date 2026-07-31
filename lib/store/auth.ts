@@ -3,6 +3,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { signIn, signOut } from 'next-auth/react'
+import { logError } from '@/lib/logger'
 
 interface User {
   id: string
@@ -47,7 +48,7 @@ export const useAuth = create<AuthState>()(
 
           return true
         } catch (error) {
-          console.error('Login error:', error)
+          logError('Login error:', error)
           return false
         }
       },
@@ -70,7 +71,7 @@ export const useAuth = create<AuthState>()(
           // User must verify their email first, then log in manually.
           return { success: true }
         } catch (error) {
-          console.error('Registration error:', error)
+          logError('Registration error:', error)
           return { success: false, error: 'Registrierung fehlgeschlagen' }
         }
       },

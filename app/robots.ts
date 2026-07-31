@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de').replace(/\/+$/, '')
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.vercel.app').replace(/\/+$/, '')
 
 export default function robots(): MetadataRoute.Robots {
   return {

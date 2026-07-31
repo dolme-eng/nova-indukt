@@ -14,7 +14,7 @@ import {
   Link,
 } from '@react-email/components'
 import * as React from 'react'
-import { SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
+import { SHOP_NAME, SHOP_DOMAIN, SUPPORT_EMAIL } from '@/lib/constants/shop'
 import { getBankDetailsSync } from '@/lib/data/bank-details'
 
 interface OrderItem {
@@ -217,7 +217,7 @@ export const OrderConfirmationEmail = ({
 
           {/* CTA */}
           <Section style={ctaSection}>
-            <Button href={`https://nova-indukt.de/mein-konto/orders`} style={button}>
+            <Button href={`${SHOP_DOMAIN}/mein-konto/orders`} style={button}>
               Bestellung verfolgen
             </Button>
           </Section>

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { logError } from '@/lib/logger'
 
 interface BlogPostData {
   id?: string
@@ -87,7 +88,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
       router.push('/admin/blog')
       router.refresh()
     } catch (error) {
-      console.error(error)
+      logError('Failed to save blog post', error)
       toast.error('Ein Fehler ist aufgetreten')
     } finally {
       setIsSubmitting(false)

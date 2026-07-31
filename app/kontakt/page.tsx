@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { KontaktContent } from './KontaktContent'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Kontakt',
@@ -11,9 +12,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Kontakt | NOVA INDUKT',
     description: 'Kontaktieren Sie NOVA INDUKT. Wir sind für Sie da!',
-    url: 'https://nova-indukt.de/kontakt',
+    url: `${SHOP_DOMAIN}/kontakt`,
     siteName: 'NOVA INDUKT',
-    images: [{ url: 'https://nova-indukt.de/og-image.png', width: 1200, height: 630, alt: 'NOVA INDUKT' }],
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT' }],
     type: 'website',
   },
 }

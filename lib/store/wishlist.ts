@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { logError } from '@/lib/logger'
 
 export interface WishlistItem {
   id: string
@@ -94,7 +95,7 @@ export function useWishlist() {
         )
       }
     } catch (error) {
-      console.error('Error fetching wishlist:', error)
+      logError('Error fetching wishlist:', error)
     }
   }
 
@@ -125,7 +126,7 @@ export function useWishlist() {
         }
       }
     } catch (error) {
-      console.error('Error syncing wishlist:', error)
+      logError('Error syncing wishlist:', error)
     } finally {
       setIsSyncing(false)
     }
@@ -140,7 +141,7 @@ export function useWishlist() {
       })
       return response.ok
     } catch (error) {
-      console.error('Error adding to wishlist API:', error)
+      logError('Error adding to wishlist API:', error)
       return false
     }
   }
@@ -152,7 +153,7 @@ export function useWishlist() {
       })
       return response.ok
     } catch (error) {
-      console.error('Error removing from wishlist API:', error)
+      logError('Error removing from wishlist API:', error)
       return false
     }
   }
@@ -204,7 +205,7 @@ export function useWishlist() {
       try {
         await fetch('/api/wishlist', { method: 'DELETE' })
       } catch (error) {
-        console.error('Error clearing wishlist:', error)
+        logError('Error clearing wishlist:', error)
       }
     }
   }, [isAuthenticated, clearState])

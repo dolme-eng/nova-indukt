@@ -11,6 +11,7 @@ import { prisma } from '../prisma'
 import { calculateOrderTotals } from '../utils/pricing'
 import { SHOP_DOMAIN } from '../constants/shop'
 import { generateInvoicePDF } from '../utils/invoice'
+import { logError, logWarn } from '@/lib/logger'
 
 export { FROM_EMAIL, FROM_NAME }
 
@@ -43,7 +44,7 @@ export async function sendEmailWithRetry(
 ) {
   const resend = getResend()
   if (!resend) {
-    console.warn('Resend client not available — skipping email send (RESEND_API_KEY missing?)')
+    logWarn('Resend client not available — skipping email send (RESEND_API_KEY missing?)')
     return {
       data: null,
       error: { name: 'missing_api_key', message: 'Resend not configured', statusCode: null },
@@ -60,7 +61,7 @@ export async function sendEmailWithRetry(
         // Retry on non-validation errors
         const shouldRetry = result.error.name !== 'validation_error'
         if (shouldRetry && attempt < maxRetries - 1) {
-          console.warn(
+          logWarn(
             `Resend API error (${result.error.message}). Retrying attempt ${attempt + 1}/${maxRetries}...`
           )
           attempt++
@@ -73,9 +74,8 @@ export async function sendEmailWithRetry(
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
       if (attempt < maxRetries - 1) {
-        console.warn(
-          `Exception sending email. Retrying attempt ${attempt + 1}/${maxRetries}...`,
-          error
+        logWarn(
+          `Exception sending email. Retrying attempt ${attempt + 1}/${maxRetries}...`
         )
         attempt++
         await new Promise((res) => setTimeout(res, Math.pow(2, attempt) * 500))
@@ -182,13 +182,13 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
     })
 
     if (result.error) {
-      console.error('Failed to send order confirmation email:', result.error)
+      logError('Failed to send order confirmation email:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending order confirmation:', error)
+    logError('Error sending order confirmation:', error)
     return { success: false, error }
   }
 }
@@ -234,13 +234,13 @@ export async function sendShippingNotification(params: SendShippingNotificationP
     })
 
     if (result.error) {
-      console.error('Failed to send shipping notification:', result.error)
+      logError('Failed to send shipping notification:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending shipping notification:', error)
+    logError('Error sending shipping notification:', error)
     return { success: false, error }
   }
 }
@@ -312,13 +312,13 @@ export async function sendPaymentConfirmationEmail(order: OrderInput) {
     })
 
     if (result.error) {
-      console.error('Failed to send payment confirmation email:', result.error)
+      logError('Failed to send payment confirmation email:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending payment confirmation:', error)
+    logError('Error sending payment confirmation:', error)
     return { success: false, error }
   }
 }
@@ -395,7 +395,7 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
 
     return result
   } catch (error) {
-    console.error('Error sending order confirmation for order:', error)
+    logError('Error sending order confirmation for order:', error)
     return { success: false, error }
   }
 }
@@ -421,13 +421,13 @@ export async function sendNewsletterConfirmationEmail(email: string, firstName?:
     })
 
     if (result.error) {
-      console.error('Failed to send newsletter confirmation email:', result.error)
+      logError('Failed to send newsletter confirmation email:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending newsletter confirmation email:', error)
+    logError('Error sending newsletter confirmation email:', error)
     return { success: false, error }
   }
 }
@@ -468,13 +468,13 @@ export async function sendContactNotificationEmail(
     })
 
     if (result.error) {
-      console.error('Failed to send contact notification email:', result.error)
+      logError('Failed to send contact notification email:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending contact notification email:', error)
+    logError('Error sending contact notification email:', error)
     return { success: false, error }
   }
 }
@@ -486,7 +486,7 @@ export async function sendPasswordResetEmail(
   resetToken: string
 ) {
   try {
-    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.de').replace(
+    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.vercel.app').replace(
       /\/+$/,
       ''
     )
@@ -508,13 +508,13 @@ export async function sendPasswordResetEmail(
     })
 
     if (result.error) {
-      console.error('Failed to send password reset email:', result.error)
+      logError('Failed to send password reset email:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending password reset email:', error)
+    logError('Error sending password reset email:', error)
     return { success: false, error }
   }
 }
@@ -545,13 +545,13 @@ export async function sendOrderCancellationEmail(
     })
 
     if (result.error) {
-      console.error('Failed to send order cancellation email:', result.error)
+      logError('Failed to send order cancellation email:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending order cancellation email:', error)
+    logError('Error sending order cancellation email:', error)
     return { success: false, error }
   }
 }

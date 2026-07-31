@@ -5,6 +5,7 @@ import { render } from '@react-email/render'
 import ShippingNotificationEmail from './templates/shipping-notification'
 import ReviewRequestEmail from './templates/review-request'
 import WelcomeEmail from './templates/welcome'
+import { logError } from '@/lib/logger'
 
 /**
  * Send shipping notification when order is marked as shipped
@@ -59,7 +60,7 @@ export async function sendShippingNotification(orderId: string, trackingInfo?: {
     }) ?? { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
 
     if (result.error) {
-      console.error('Failed to send shipping notification:', result.error)
+      logError('Failed to send shipping notification:', result.error)
       return { success: false, error: result.error }
     }
 
@@ -73,7 +74,7 @@ export async function sendShippingNotification(orderId: string, trackingInfo?: {
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending shipping notification:', error)
+    logError('Error sending shipping notification:', error)
     return { success: false, error }
   }
 }
@@ -177,14 +178,14 @@ export async function sendReviewRequests() {
 
         results.push({ orderId: typedOrder.id, success: true, id: result.data?.id })
       } catch (error) {
-        console.error(`Failed to send review request for order ${order.id}:`, error)
+        logError(`Failed to send review request for order ${order.id}:`, error)
         results.push({ orderId: order.id, success: false, error })
       }
     }
 
     return { success: true, sent: results.filter(r => r.success).length, results }
   } catch (error) {
-    console.error('Error in review request batch:', error)
+    logError('Error in review request batch:', error)
     return { success: false, error }
   }
 }
@@ -209,13 +210,13 @@ export async function sendWelcomeEmail(subscriberEmail: string, firstName?: stri
     }) ?? { data: null, error: null }
 
     if (result.error) {
-      console.error('Failed to send welcome email:', result.error)
+      logError('Failed to send welcome email:', result.error)
       return { success: false, error: result.error }
     }
 
     return { success: true, id: result.data?.id }
   } catch (error) {
-    console.error('Error sending welcome email:', error)
+    logError('Error sending welcome email:', error)
     return { success: false, error }
   }
 }

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Sparkles, Zap, Calendar, Tag, Package, ArrowLeft, Loader2 } from 'lucide-react'
+import { logError } from '@/lib/logger'
 
 interface Category {
   id: string
@@ -34,7 +35,7 @@ export default function AutoGeneratePromotionsPage() {
         setCategories(data)
       }
     } catch (error) {
-      console.error('Error fetching categories:', error)
+      logError('Error fetching categories:', error)
     }
   }
 
@@ -55,7 +56,7 @@ export default function AutoGeneratePromotionsPage() {
         toast.error(error.error || 'Ein Fehler ist aufgetreten')
       }
     } catch (error) {
-      console.error('Error generating promotions:', error)
+      logError('Error generating promotions:', error)
       toast.error('Fehler bei der Generierung')
     } finally {
       setLoading(false)

@@ -14,6 +14,7 @@ import {
   Link,
 } from '@react-email/components'
 import * as React from 'react'
+import { SUPPORT_EMAIL } from '@/lib/constants/shop'
 
 interface ReviewRequestEmailProps {
   orderNumber: string
@@ -103,8 +104,8 @@ export const ReviewRequestEmail = ({
           <Section style={footer}>
             <Text style={footerText}>
               Bei Fragen antworten Sie einfach auf diese E-Mail oder kontaktieren Sie uns unter{' '}
-              <Link href="mailto:support@nova-indukt.de" style={link}>
-                support@nova-indukt.de
+              <Link href={`mailto:${SUPPORT_EMAIL}`} style={link}>
+                {SUPPORT_EMAIL}
               </Link>
             </Text>
             <Text style={footerText}>

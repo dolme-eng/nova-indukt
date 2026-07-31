@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'NOVA INDUKT' }],
   creator: 'NOVA INDUKT',
   publisher: 'NOVA INDUKT',
-  metadataBase: new URL('https://nova-indukt.de'),
+  metadataBase: new URL(SHOP_DOMAIN),
   alternates: {
     canonical: '/',
     languages: {
@@ -67,14 +67,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'de_DE',
-    url: 'https://nova-indukt.de',
+    url: SHOP_DOMAIN,
     siteName: 'NOVA INDUKT',
     title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr',
     description:
       'Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität, Innovation und Präzision.',
     images: [
       {
-        url: 'https://nova-indukt.de/og-image.png',
+        url: `${SHOP_DOMAIN}/og-image.png`,
         width: 1200,
         height: 630,
         alt: 'NOVA INDUKT - Premium Induktions-Kochgeschirr',

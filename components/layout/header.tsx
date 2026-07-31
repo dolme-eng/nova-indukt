@@ -12,6 +12,7 @@ import { MegaMenu } from './header-mega-menu'
 import { SearchOverlay } from './header-search-overlay'
 import { CartDrawer } from './header-cart-drawer'
 import { MobileMenu } from './header-mobile-menu'
+import { logError } from '@/lib/logger'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -88,7 +89,7 @@ export function Header() {
         .then((res) => (res.ok ? res.json() : []))
         .then((data) => setSearchResults(data))
         .catch((err) => {
-          if (err?.name !== 'AbortError') console.error('Search error:', err)
+          if (err?.name !== 'AbortError') logError('Search error:', err)
         })
         .finally(() => setIsSearching(false))
     } else {

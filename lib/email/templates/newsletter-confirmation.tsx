@@ -1,4 +1,5 @@
 import { Html, Head, Preview, Body, Container, Section, Text, Link, Button, Hr } from '@react-email/components'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 interface NewsletterConfirmationEmailProps {
   firstName?: string
@@ -37,7 +38,7 @@ export default function NewsletterConfirmationEmail({
               <li style={listItem}>Erstzugriff auf neue Produkte</li>
             </ul>
 
-            <Button style={button} href="https://nova-indukt.de/produkte">
+            <Button style={button} href={`${SHOP_DOMAIN}/produkte`}>
               Jetzt Produkte entdecken
             </Button>
 
@@ -62,11 +63,11 @@ export default function NewsletterConfirmationEmail({
               © {new Date().getFullYear()} NOVA INDUKT. Alle Rechte vorbehalten.
             </Text>
             <Text style={footerText}>
-              <Link href="https://nova-indukt.de/datenschutz" style={footerLink}>
+              <Link href={`${SHOP_DOMAIN}/datenschutz`} style={footerLink}>
                 Datenschutz
               </Link>{' '}
               |{' '}
-              <Link href="https://nova-indukt.de/impressum" style={footerLink}>
+              <Link href={`${SHOP_DOMAIN}/impressum`} style={footerLink}>
                 Impressum
               </Link>
             </Text>

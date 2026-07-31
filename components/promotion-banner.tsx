@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Zap, Timer } from 'lucide-react'
 import Link from 'next/link'
+import { logError } from '@/lib/logger'
 
 interface Promotion {
   id: string
@@ -34,7 +35,7 @@ export function PromotionBanner() {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch promotion:', error)
+        logError('Failed to fetch promotion:', error)
       }
     }
 

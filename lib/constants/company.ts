@@ -28,7 +28,7 @@ export const COMPANY = {
     message: 'Hallo NOVA INDUKT Team,',
   },
 
-  website: process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://nova-indukt.de',
+  website: process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://nova-indukt.vercel.app',
 
   social: {
     facebook: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK || 'https://facebook.com/novaindukt',

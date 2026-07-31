@@ -17,6 +17,7 @@ import {
   Sparkles,
   Clock,
 } from 'lucide-react'
+import { logError } from '@/lib/logger'
 
 interface Promotion {
   id: string
@@ -55,7 +56,7 @@ export default function PromotionsPage() {
         setPromotions(data)
       }
     } catch (error) {
-      console.error('Error fetching promotions:', error)
+      logError('Error fetching promotions:', error)
     } finally {
       setLoading(false)
     }
@@ -73,7 +74,7 @@ export default function PromotionsPage() {
         setPromotions(promotions.filter((p) => p.id !== id))
       }
     } catch (error) {
-      console.error('Error deleting promotion:', error)
+      logError('Error deleting promotion:', error)
     }
   }
 
@@ -95,7 +96,7 @@ export default function PromotionsPage() {
         setPromotions(promotions.map((p) => (p.id === id ? { ...p, isActive: !currentStatus } : p)))
       }
     } catch (error) {
-      console.error('Error updating promotion:', error)
+      logError('Error updating promotion:', error)
     }
   }
 

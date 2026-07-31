@@ -12,6 +12,7 @@ import {
   Link,
 } from '@react-email/components'
 import * as React from 'react'
+import { SHOP_DOMAIN, SUPPORT_EMAIL } from '@/lib/constants/shop'
 
 interface WelcomeEmailProps {
   firstName: string
@@ -58,7 +59,7 @@ export const WelcomeEmail = ({
               <Text style={codeValue}>10% Rabatt auf Ihre erste Bestellung</Text>
             </Section>
             <Button
-              href="https://nova-indukt.de/produkte"
+              href={`${SHOP_DOMAIN}/produkte`}
               style={ctaButton}
             >
               Jetzt shoppen 🛒
@@ -123,8 +124,8 @@ export const WelcomeEmail = ({
               NOVA INDUKT GmbH · Industriestraße 123 · 12345 Berlin
             </Text>
             <Text style={footerText}>
-              <Link href="https://nova-indukt.de" style={link}>www.nova-indukt.de</Link> ·{' '}
-              <Link href="mailto:support@nova-indukt.de" style={link}>support@nova-indukt.de</Link>
+              <Link href={SHOP_DOMAIN} style={link}>{new URL(SHOP_DOMAIN).hostname}</Link> ·{' '}
+              <Link href={`mailto:${SUPPORT_EMAIL}`} style={link}>{SUPPORT_EMAIL}</Link>
             </Text>
           </Section>
         </Container>

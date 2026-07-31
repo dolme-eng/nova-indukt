@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { logWarn } from '@/lib/logger'
 
 // Lazy initialization: do NOT throw at module load time so Next.js build
 // (static page collection) doesn't fail when env vars are absent.
@@ -9,7 +10,7 @@ export function getResend(): Resend | null {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('RESEND_API_KEY is required in production')
     }
-    console.warn('RESEND_API_KEY not set - emails disabled')
+    logWarn('RESEND_API_KEY not set - emails disabled')
     return null
   }
   if (!_resend) {

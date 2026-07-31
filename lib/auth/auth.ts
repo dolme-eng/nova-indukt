@@ -3,6 +3,7 @@ import { authConfig, verifyPassword } from "./auth.config"
 import { prisma } from "@/lib/prisma"
 import Credentials from "next-auth/providers/credentials"
 import { isLockedOut, recordFailedLogin, recordSuccessfulLogin } from "./login-lockout"
+import { logError } from '@/lib/logger'
 
 const { handlers, auth, signOut, signIn } = NextAuth({
   ...authConfig,
@@ -54,7 +55,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
             role: user.role
           }
         } catch (error) {
-          console.error("Auth error in authorize:", error)
+          logError("Auth error in authorize:", error)
           return null
         }
       }

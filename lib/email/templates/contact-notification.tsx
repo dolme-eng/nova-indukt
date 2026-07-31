@@ -1,4 +1,5 @@
 import { Html, Head, Preview, Body, Container, Section, Text, Link, Hr, Row, Column } from '@react-email/components'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 interface ContactNotificationEmailProps {
   name: string
@@ -70,7 +71,7 @@ export default function ContactNotificationEmail({
             </Text>
 
             <Link
-              href={`https://nova-indukt.de/admin/contact/${messageId}`}
+              href={`${SHOP_DOMAIN}/admin/contact/${messageId}`}
               style={button}
             >
               Im Admin-Panel öffnen

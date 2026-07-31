@@ -1,4 +1,5 @@
 import { Html, Head, Preview, Body, Container, Section, Text, Link, Button, Hr } from '@react-email/components'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 interface EmailVerificationProps {
   firstName?: string
@@ -51,11 +52,11 @@ export default function EmailVerificationEmail({
               © {new Date().getFullYear()} NOVA INDUKT. Alle Rechte vorbehalten.
             </Text>
             <Text style={footerText}>
-              <Link href="https://nova-indukt.de/datenschutz" style={footerLink}>
+              <Link href={`${SHOP_DOMAIN}/datenschutz`} style={footerLink}>
                 Datenschutz
               </Link>{' '}
               |{' '}
-              <Link href="https://nova-indukt.de/impressum" style={footerLink}>
+              <Link href={`${SHOP_DOMAIN}/impressum`} style={footerLink}>
                 Impressum
               </Link>
             </Text>

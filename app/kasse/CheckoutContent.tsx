@@ -24,6 +24,7 @@ import { useAuth } from '@/lib/store/auth'
 import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
 import type { BankDetails } from '@/lib/data/bank-details'
+import { logError } from '@/lib/logger'
 
 import { calculateShipping } from '@/lib/constants/shop'
 
@@ -334,7 +335,7 @@ export default function CheckoutContent() {
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     } catch (error) {
-      console.error('Order error:', error)
+      logError('Order error:', error)
     } finally {
       setIsProcessing(false)
     }

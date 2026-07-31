@@ -25,9 +25,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Premium Induktions-Kochgeschirr | NOVA INDUKT',
     description: 'Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion.',
-    url: 'https://nova-indukt.de',
+    url: SHOP_DOMAIN,
     siteName: 'NOVA INDUKT',
-    images: [{ url: 'https://nova-indukt.de/og-image.png', width: 1200, height: 630, alt: 'NOVA INDUKT' }],
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT' }],
     type: 'website',
   },
 }

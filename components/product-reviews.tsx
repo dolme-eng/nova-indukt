@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ThumbsUp, CheckCircle, Flag, X, Filter, Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { logError } from '@/lib/logger'
 
 interface Review {
   id: string
@@ -76,7 +77,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
         setHasMore(data.reviews.length === 10)
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') return
-        console.error('Error fetching reviews:', error)
+        logError('Error fetching reviews:', error)
       } finally {
         setIsLoading(false)
       }
@@ -110,7 +111,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
         )
       }
     } catch (error) {
-      console.error('Error marking helpful:', error)
+      logError('Error marking helpful:', error)
     }
   }
 

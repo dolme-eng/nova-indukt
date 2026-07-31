@@ -4,6 +4,7 @@ import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { mapDbProductToUi } from '@/lib/data/products'
 import { ProductContent } from './ProductContent'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const revalidate = 120
 
@@ -54,7 +55,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `https://nova-indukt.de/produkt/${product.slug}`,
+        url: `${SHOP_DOMAIN}/produkt/${product.slug}`,
       siteName: 'NOVA INDUKT',
       type: 'website',
       images: mainImage ? [{ url: mainImage, alt: product.nameDe, width: 800, height: 600 }] : [],
@@ -105,12 +106,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://nova-indukt.de' },
+        { '@type': 'ListItem', position: 1, name: 'Startseite', item: SHOP_DOMAIN },
         {
           '@type': 'ListItem',
           position: 2,
           name: 'Produkte',
-          item: 'https://nova-indukt.de/produkte',
+          item: `${SHOP_DOMAIN}/produkte`,
         },
         { '@type': 'ListItem', position: 3, name: product.category?.nameDe || 'Produkt' },
       ],
@@ -132,11 +133,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       seller: {
         '@type': 'Organization',
         name: 'NOVA INDUKT',
-        url: 'https://nova-indukt.de',
+        url: SHOP_DOMAIN,
       },
       offers: {
         '@type': 'Offer',
-        url: `https://nova-indukt.de/produkt/${product.slug}`,
+      url: `${SHOP_DOMAIN}/produkt/${product.slug}`,
         priceCurrency: 'EUR',
         price: Number(product.price).toFixed(2),
         priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))

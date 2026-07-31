@@ -31,6 +31,7 @@ import { useCart } from '@/lib/store/cart'
 import { useWishlist, WishlistItem } from '@/lib/store/wishlist'
 import { formatPriceDe } from '@/lib/utils/vat'
 import { Product } from '@/lib/data/products'
+import { logError } from '@/lib/logger'
 
 interface Address {
   id?: string
@@ -90,7 +91,7 @@ export default function AccountPageClient() {
           setAddressesCount(addresses.length)
         }
       } catch (error) {
-        console.error('Error fetching counts:', error)
+        logError('Error fetching counts:', error)
       }
     }
 
@@ -455,7 +456,7 @@ function OrdersTab() {
         setOrders(data)
       } catch (err) {
         setError('Bestellungen konnten nicht geladen werden')
-        console.error(err)
+        logError('Failed to fetch orders', err)
       } finally {
         setLoading(false)
       }
@@ -738,7 +739,7 @@ function AddressesTab() {
       setAddresses(data)
     } catch (err) {
       setError('Adressen konnten nicht geladen werden')
-      console.error(err)
+      logError('Failed to fetch addresses', err)
     } finally {
       setIsLoading(false)
     }

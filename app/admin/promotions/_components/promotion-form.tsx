@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Save, X, Percent, Euro, Tag, Calendar, Package, Folder, Ticket } from 'lucide-react'
+import { logError } from '@/lib/logger'
 
 interface Category {
   id: string
@@ -108,7 +109,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
         setCategories(data)
       }
     } catch (error) {
-      console.error('Error fetching categories:', error)
+      logError('Error fetching categories:', error)
     }
   }
 
@@ -120,7 +121,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
         setProducts(data.products)
       }
     } catch (error) {
-      console.error('Error fetching products:', error)
+      logError('Error fetching products:', error)
     }
   }
 
@@ -153,7 +154,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
         toast.error(error.error || 'Ein Fehler ist aufgetreten')
       }
     } catch (error) {
-      console.error('Error saving promotion:', error)
+      logError('Error saving promotion:', error)
       toast.error('Fehler beim Speichern')
     } finally {
       setLoading(false)

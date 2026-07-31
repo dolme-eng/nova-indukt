@@ -86,7 +86,8 @@ describe('sendEmailWithRetry', () => {
   })
 
   it('warns when resend client is null', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const loggerModule = await import('@/lib/logger')
+    const warnSpy = vi.spyOn(loggerModule, 'logWarn').mockImplementation(() => {})
     await sendEmailWithRetry({
       from: 'test@test.com',
       to: 'a@b.com',

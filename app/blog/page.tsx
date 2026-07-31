@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import BlogContent from './BlogContent'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,9 +15,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Nova Magazin | NOVA INDUKT',
     description: 'Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.',
-    url: 'https://nova-indukt.de/blog',
+    url: `${SHOP_DOMAIN}/blog`,
     siteName: 'NOVA INDUKT',
-    images: [{ url: 'https://nova-indukt.de/og-image.png', width: 1200, height: 630, alt: 'NOVA INDUKT Blog' }],
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT Blog' }],
     type: 'website',
   },
 }

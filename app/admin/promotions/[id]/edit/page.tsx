@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import PromotionForm from '../../_components/promotion-form'
+import { logError } from '@/lib/logger'
 
 interface Promotion {
   id: string
@@ -45,7 +46,7 @@ export default function EditPromotionPage() {
         setPromotion(data)
       }
     } catch (error) {
-      console.error('Error fetching promotion:', error)
+      logError('Error fetching promotion:', error)
     } finally {
       setLoading(false)
     }

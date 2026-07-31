@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { ProductsContent } from './ProductsContent'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
@@ -132,16 +133,18 @@ export default async function ProductsPage({
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
 
   return (
-    <ProductsContent
-      initialProducts={formattedProducts}
-      initialCategories={formattedCategories}
-      activeCategory={categorySlug}
-      initialSearch={search}
-      initialPriceRange={[minPrice || 0, maxPrice || 2500]}
-      initialSort={sort}
-      currentPage={page}
-      totalPages={totalPages}
-      totalProducts={total}
-    />
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-2 border-[#4ECCA3]/30 border-t-[#4ECCA3]" /></div>}>
+      <ProductsContent
+        initialProducts={formattedProducts}
+        initialCategories={formattedCategories}
+        activeCategory={categorySlug}
+        initialSearch={search}
+        initialPriceRange={[minPrice || 0, maxPrice || 2500]}
+        initialSort={sort}
+        currentPage={page}
+        totalPages={totalPages}
+        totalProducts={total}
+      />
+    </Suspense>
   )
 }

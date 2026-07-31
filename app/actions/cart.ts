@@ -4,6 +4,13 @@ import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { cookies } from 'next/headers'
+import { logError } from '@/lib/logger'
+import { z } from 'zod'
+
+const addToCartSchema = z.object({
+  productId: z.string().min(1, 'Product ID is required').max(100),
+  quantity: z.number().int().min(1, 'Quantity must be at least 1').max(99, 'Maximum quantity is 99').default(1),
+})
 
 // Type pour les éléments du panier en cookie
 interface CartItemData {
@@ -126,23 +133,29 @@ async function getCartMeta() {
 
 // Add item to cart
 export async function addToCart(productId: string, quantity: number = 1) {
+  const parsed = addToCartSchema.safeParse({ productId, quantity })
+  if (!parsed.success) {
+    return { error: parsed.error.flatten().fieldErrors }
+  }
+  const { productId: validProductId, quantity: validQuantity } = parsed.data
+
   try {
     const cart = await getCartMeta()
 
     if (cart.type === 'db') {
-      const existingItem = cart.cart.items.find((item) => item.productId === productId)
+      const existingItem = cart.cart.items.find((item) => item.productId === validProductId)
 
       if (existingItem) {
         await prisma.cartItem.update({
           where: { id: existingItem.id },
-          data: { quantity: existingItem.quantity + quantity },
+          data: { quantity: existingItem.quantity + validQuantity },
         })
       } else {
         await prisma.cartItem.create({
           data: {
             cartId: cart.cart.id,
-            productId,
-            quantity,
+            productId: validProductId,
+            quantity: validQuantity,
           },
         })
       }
@@ -151,14 +164,14 @@ export async function addToCart(productId: string, quantity: number = 1) {
       const cookieStore = await cookies()
       const items: CartItemData[] = cart.items as CartItemData[]
 
-      const existingIndex = items.findIndex((item) => item.product.id === productId)
+      const existingIndex = items.findIndex((item) => item.product.id === validProductId)
 
       if (existingIndex >= 0) {
-        items[existingIndex].quantity += quantity
+        items[existingIndex].quantity += validQuantity
       } else {
         // We need to fetch the product to add it to the cookie cart
         const product = await prisma.product.findUnique({
-          where: { id: productId },
+          where: { id: validProductId },
           include: { images: true },
         })
 
@@ -175,7 +188,7 @@ export async function addToCart(productId: string, quantity: number = 1) {
             badges: product.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
             category: product.categoryId,
           }
-          items.push({ productId: product.id, product: cartProduct, quantity })
+          items.push({ productId: product.id, product: cartProduct, quantity: validQuantity })
         }
       }
 
@@ -190,7 +203,7 @@ export async function addToCart(productId: string, quantity: number = 1) {
     revalidatePath('/warenkorb')
     return { success: true }
   } catch (error) {
-    console.error('Error adding to cart:', error)
+    logError('Error adding to cart:', error)
     return { success: false, error: 'Failed to add item' }
   }
 }
@@ -239,7 +252,7 @@ export async function updateCartItem(productId: string, quantity: number) {
     revalidatePath('/warenkorb')
     return { success: true }
   } catch (error) {
-    console.error('Error updating cart:', error)
+    logError('Error updating cart:', error)
     return { success: false, error: 'Failed to update item' }
   }
 }
@@ -286,7 +299,7 @@ export async function getCartItems() {
       })
     }
   } catch (error) {
-    console.error('Error getting cart:', error)
+    logError('Error getting cart:', error)
     return []
   }
 }
@@ -309,7 +322,7 @@ export async function clearCart() {
     revalidatePath('/warenkorb')
     return { success: true }
   } catch (error) {
-    console.error('Error clearing cart:', error)
+    logError('Error clearing cart:', error)
     return { success: false, error: 'Failed to clear cart' }
   }
 }
@@ -372,6 +385,6 @@ export async function mergeGuestCartOnLogin() {
     // Clear guest cart cookie
     cookieStore.delete(CART_COOKIE)
   } catch (error) {
-    console.error('Error merging cart:', error)
+    logError('Error merging cart:', error)
   }
 }

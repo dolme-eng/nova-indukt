@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
+import { logError } from '@/lib/logger'
 
 interface Stats {
   orders: { total: number; recent: number; revenue: number }
@@ -62,7 +63,7 @@ export default function AdminDashboard() {
         setStats(data)
       }
     } catch (error) {
-      console.error('Error fetching stats:', error)
+      logError('Error fetching stats:', error)
     } finally {
       setLoading(false)
     }

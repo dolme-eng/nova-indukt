@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { logWarn } from '@/lib/logger'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -39,7 +40,7 @@ function createPrismaClient() {
   // If DATABASE_URL is not set, return no-op proxy immediately.
   // PrismaClient does NOT throw at construction — it throws at first query.
   if (!process.env.DATABASE_URL) {
-    console.warn('[prisma] DATABASE_URL not set — using no-op fallback (build time)')
+    logWarn('[prisma] DATABASE_URL not set — using no-op fallback (build time)')
     return noopProxy
   }
   return new PrismaClient()

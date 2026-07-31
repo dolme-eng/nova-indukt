@@ -13,6 +13,7 @@
 
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
+import { logError } from '@/lib/logger'
 
 // ── Fallback in-memory (dev local uniquement) ────────────────────────────────
 
@@ -150,7 +151,7 @@ export async function rateLimit(
     }
   } catch (err) {
     // On Redis error (timeout, connection), fail open to avoid blocking users
-    console.error('[rate-limit] Redis error, fail-open:', err)
+    logError('[rate-limit] Redis error, fail-open:', err)
     return { success: true, limit: maxRequests, remaining: 1, resetTime: Date.now() + windowMs }
   }
 }
@@ -159,9 +160,17 @@ export async function rateLimit(
 
 /** Extracts the real IP address from request headers */
 export function getIP(request: Request): string {
+  // In production behind Vercel/cloud proxy, only trust x-real-ip
+  // x-forwarded-for can be spoofed by clients
+  const realIp = request.headers.get('x-real-ip')
+  if (realIp) return realIp.trim().split(',')[0]
+
   const forwarded = request.headers.get('x-forwarded-for')
-  if (forwarded) return forwarded.split(',')[0].trim()
-  return request.headers.get('x-real-ip') ?? 'unknown'
+  if (forwarded) {
+    // Take only the first IP (the original client)
+    return forwarded.split(',')[0].trim()
+  }
+  return 'unknown'
 }
 
 /** Builds the rate-limit key: "<ip>:<route>" */
