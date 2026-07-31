@@ -55,7 +55,6 @@ export function LoginContent() {
       const result = await login(email, password)
 
       if (result) {
-        setSuccess(true)
         redirectTimerRef.current = setTimeout(() => {
           const rawRedirect = searchParams.get('redirect') || '/mein-konto'
           const redirectUrl =
