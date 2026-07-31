@@ -11,6 +11,7 @@ import { calculateShipping } from '@/lib/constants/shop'
 import { applyPromotionsToProducts, validateCoupon } from '@/lib/promotions'
 import { randomUUID } from 'crypto'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 export async function GET(request: NextRequest) {
   try {
@@ -69,6 +70,9 @@ export async function GET(request: NextRequest) {
 // Create new order
 export async function POST(request: NextRequest) {
   try {
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
     // Rate limit: 5 orders per minute per IP
     const ip = getIP(request)
     const rl = await rateLimit(createRateLimitKey(ip, 'orders'), {

@@ -4,6 +4,7 @@ import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendContactNotificationEmail } from '@/lib/email/send'
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 5 // 5 messages per hour per IP
@@ -17,6 +18,9 @@ const contactSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
     // Rate limiting
     const ip = getIP(request)
     const key = createRateLimitKey(ip, 'contact')

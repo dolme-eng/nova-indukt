@@ -4,6 +4,7 @@ import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendNewsletterConfirmationEmail } from "@/lib/email/send"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 subscriptions per hour per IP
@@ -16,6 +17,9 @@ const subscribeSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
     // Rate limiting
     const ip = getIP(request)
     const key = createRateLimitKey(ip, 'newsletter-subscribe')

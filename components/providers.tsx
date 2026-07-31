@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react"
 import { ReactNode } from "react"
+import { CsrfProvider } from "./csrf-provider"
 
 interface ProvidersProps {
   children: ReactNode
@@ -10,7 +11,9 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <SessionProvider refetchInterval={5 * 60}>
-      {children}
+      <CsrfProvider>
+        {children}
+      </CsrfProvider>
     </SessionProvider>
   )
 }

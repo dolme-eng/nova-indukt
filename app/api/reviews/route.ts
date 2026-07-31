@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 reviews per hour per IP
@@ -123,6 +124,9 @@ export async function GET(request: NextRequest) {
 // POST - Create a new review
 export async function POST(request: NextRequest) {
   try {
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
     const session = await auth()
     
     if (!session?.user?.id) {
