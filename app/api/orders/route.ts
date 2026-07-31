@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { items, shippingData, appliedPromoCode } = parsed.data
+    const { items, shippingData, appliedPromoCode, paymentMethod } = parsed.data
     // ────────────────────────────────────────────────────────────────────────
 
     if (!items || items.length === 0) {
