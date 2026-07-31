@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const syncSchema = z.object({
   localItems: z.array(z.object({
@@ -24,6 +25,9 @@ export async function POST(request: NextRequest) {
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), "wishlist:sync"), { windowMs: 60_000, maxRequests: 10 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
     
     const body = await request.json()
     const result = syncSchema.safeParse(body)

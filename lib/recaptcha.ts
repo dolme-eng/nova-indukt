@@ -59,7 +59,10 @@ export async function verifyRecaptcha(
     return null // success
   } catch (error) {
     logError('reCAPTCHA verification error:', error)
-    // Fail open — don't block users if Google API is unreachable
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json({ error: 'reCAPTCHA-Verifizierung fehlgeschlagen' }, { status: 403 })
+    }
+    // Fail open in dev — don't block developers if Google API is unreachable
     return null
   }
 }

@@ -151,7 +151,7 @@ export async function sendReviewRequests() {
               productId: item.productId,
               name: item.product?.nameDe || item.productName || 'Produkt',
               image: item.product?.images?.[0]?.url,
-              reviewUrl: `${process.env.NEXTAUTH_URL}/produkt/${item.product?.slug || ''}?review=true`,
+              reviewUrl: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL}/produkt/${item.product?.slug || ''}?review=true`,
             })),
           })
         )
@@ -198,7 +198,7 @@ export async function sendWelcomeEmail(subscriberEmail: string, firstName?: stri
     const html = await render(
       WelcomeEmail({
         firstName: firstName || 'Kunde',
-        unsubscribeUrl: `${process.env.NEXTAUTH_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(subscriberEmail)}`,
+        unsubscribeUrl: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(subscriberEmail)}`,
       })
     )
 

@@ -14,7 +14,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
           return null
         }
 
-        const email = credentials.email as string
+        const email = (credentials.email as string).toLowerCase()
 
         try {
           // Check brute-force lockout

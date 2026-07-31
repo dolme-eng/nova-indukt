@@ -24,7 +24,7 @@ export function CsrfProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!getCookie(CSRF_COOKIE_NAME)) {
       const token = generateToken()
-      document.cookie = `${CSRF_COOKIE_NAME}=${token}; Path=/; SameSite=Strict; Lax`
+      document.cookie = `${CSRF_COOKIE_NAME}=${token}; Path=/; SameSite=Strict; Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`
     }
   }, [])
 

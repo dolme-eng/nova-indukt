@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const wishlistItemSchema = z.object({
   productId: z.string(),
@@ -73,6 +74,9 @@ export async function POST(request: NextRequest) {
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), "wishlist:post"), { windowMs: 60_000, maxRequests: 20 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
     
     const body = await request.json()
     const result = wishlistItemSchema.safeParse(body)
@@ -167,6 +171,9 @@ export async function DELETE(request: NextRequest) {
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), "wishlist:delete"), { windowMs: 60_000, maxRequests: 20 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
     
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')

@@ -99,8 +99,9 @@ describe('verifyRecaptcha', () => {
     expect(body.error).toBe('reCAPTCHA-Verifizierung fehlgeschlagen')
   })
 
-  it('fails open when fetch throws (Google API unreachable)', async () => {
+  it('fails open when fetch throws (Google API unreachable) in dev', async () => {
     process.env.RECAPTCHA_SECRET_KEY = 'test-secret'
+    process.env.NODE_ENV = 'test'
 
     vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'))
 
@@ -109,6 +110,22 @@ describe('verifyRecaptcha', () => {
       'checkout'
     )
     expect(result).toBeNull()
+  })
+
+  it('fails closed when fetch throws in production', async () => {
+    process.env.RECAPTCHA_SECRET_KEY = 'test-secret'
+    process.env.NODE_ENV = 'production'
+
+    vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'))
+
+    const result = await verifyRecaptcha(
+      mockRequest({ 'x-recaptcha-token': 'valid-token' }),
+      'checkout'
+    )
+    expect(result).not.toBeNull()
+    expect(result!.status).toBe(403)
+
+    process.env.NODE_ENV = 'test'
   })
 
   it('sends remoteip when x-forwarded-for is present', async () => {
