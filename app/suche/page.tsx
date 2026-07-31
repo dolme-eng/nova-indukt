@@ -33,6 +33,7 @@ export default async function SuchePage() {
     prisma.product.findMany({
       where: { isActive: true },
       include: { images: true },
+      take: 100,
     }),
     prisma.category.findMany({
       where: { isActive: true },

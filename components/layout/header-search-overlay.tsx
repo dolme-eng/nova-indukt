@@ -212,7 +212,7 @@ export function SearchOverlay({
                 ))}
               </div>
               <Link
-                href="/produkte"
+                href={`/suche?q=${encodeURIComponent(searchQuery)}`}
                 onClick={onClose}
                 className="mt-8 inline-flex items-center gap-2 font-bold text-[#0C211E] transition-colors hover:text-[#4ECCA3]"
               >

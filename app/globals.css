@@ -34,7 +34,7 @@
   }
 
   html {
-    font-size: 12px;
+    font-size: 14px;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -45,7 +45,7 @@
 
   body {
     @apply bg-[#fdfdfd] text-gray-900 antialiased;
-    font-feature-settings: "cv02", "cv05", "cv11";
+    font-feature-settings: 'cv02', 'cv05', 'cv11';
     line-height: 1.35;
     letter-spacing: -0.01em;
   }
@@ -62,7 +62,7 @@
   .font-inter {
     font-family: var(--font-inter), system-ui, sans-serif;
   }
-  
+
   .font-heading {
     font-family: var(--font-space-grotesk), system-ui, sans-serif;
   }
@@ -77,16 +77,16 @@
   @media (pointer: coarse) {
     button:not([data-compact]),
     a:not([data-compact]),
-    [role="button"]:not([data-compact]) {
+    [role='button']:not([data-compact]) {
       min-height: 44px;
     }
   }
-  
+
   /* Skip-Link für Barrierefreiheit */
   .skip-link {
-    @apply absolute -top-10 left-4 z-[9999] bg-[#4ECCA3] text-white px-4 py-2 rounded-lg font-medium transition-all;
+    @apply absolute -top-10 left-4 z-[9999] rounded-lg bg-[#4ECCA3] px-4 py-2 font-medium text-white transition-all;
   }
-  
+
   .skip-link:focus {
     @apply top-4;
   }
@@ -116,6 +116,6 @@
     scrollbar-width: none;
   }
   .container-tight {
-    @apply mx-auto px-[var(--container-padding)] max-w-7xl;
+    @apply mx-auto max-w-7xl px-[var(--container-padding)];
   }
 }

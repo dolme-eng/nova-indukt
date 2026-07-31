@@ -102,7 +102,14 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
     if (typeof navigator !== 'undefined' && navigator.share) {
       void navigator.share({ title: product.name.de, url: window.location.href })
     } else if (typeof window !== 'undefined') {
-      void navigator.clipboard.writeText(window.location.href)
+      void navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          import('sonner').then(({ toast }) => toast.success('Link in die Zwischenablage kopiert'))
+        })
+        .catch(() => {
+          import('sonner').then(({ toast }) => toast.error('Kopieren fehlgeschlagen'))
+        })
     }
   }
 

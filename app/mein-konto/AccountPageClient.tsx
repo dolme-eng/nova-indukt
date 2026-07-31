@@ -520,9 +520,15 @@ function OrdersTab() {
           <Package className="h-8 w-8 text-gray-400 sm:h-10 sm:w-10" />
         </div>
         <h2 className="mb-2 text-lg font-bold text-gray-900 sm:text-xl">Keine Bestellungen</h2>
-        <p className="text-sm text-gray-600 sm:text-base">
+        <p className="mb-4 text-sm text-gray-600 sm:text-base">
           Du hast bisher noch keine Bestellungen getätigt.
         </p>
+        <a
+          href="/produkte"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#0C211E] px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#17423C]"
+        >
+          Jetzt einkaufen
+        </a>
       </div>
     )
   }

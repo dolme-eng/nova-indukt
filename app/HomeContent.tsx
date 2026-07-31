@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo, memo } from 'react'
+import { useRef, useMemo, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -10,7 +10,6 @@ import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { Product, Category, BlogPost } from '@/lib/data/products'
 import { TiltCard } from '@/components/animations'
-import { MagneticButton } from '@/components/magnetic-button'
 import { formatPriceDe } from '@/lib/utils/vat'
 import { HomeHero } from '@/components/home/home-hero'
 import { HomeTrustBar } from '@/components/home/home-trust-bar'
@@ -238,12 +237,11 @@ export function HomeContent({
             ))}
           </div>
           <div className="mt-16 text-center">
-            <Link href="/produkte">
-              <MagneticButton>
-                <div className="inline-flex cursor-pointer items-center gap-2 rounded-2xl bg-[#0C211E] px-8 py-4 font-semibold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C]">
-                  Alle Bestseller ansehen <ArrowRight className="h-5 w-5" />
-                </div>
-              </MagneticButton>
+            <Link
+              href="/produkte"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#0C211E] px-8 py-4 font-semibold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C]"
+            >
+              Alle Bestseller ansehen <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
         </div>
@@ -327,6 +325,7 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
 
           <button
             onClick={handleWishlist}
+            aria-label={inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen'}
             className={`absolute right-1.5 top-1.5 z-10 flex h-7 w-7 items-center justify-center rounded-lg border backdrop-blur-md transition-all ${
               inWishlist
                 ? 'border-red-400 bg-red-500 text-white'
@@ -498,7 +497,7 @@ const FlashDealCard = memo(function FlashDealCard({
           {/* Stock Indicator */}
           <div className="mb-2">
             <div className="mb-1 flex justify-between text-[8px] font-black uppercase tracking-tighter">
-              <span className="animate-pulse text-red-600">Heiß begehrt</span>
+              <span className="text-green-600">Auf Lager</span>
             </div>
           </div>
 
@@ -516,27 +515,6 @@ const FlashDealCard = memo(function FlashDealCard({
 })
 
 function FlashDealsHeader() {
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 })
-
-  useEffect(() => {
-    const update = () => {
-      const now = new Date()
-      const end = new Date(now)
-      end.setHours(23, 59, 59, 999)
-      const diff = Math.max(0, end.getTime() - now.getTime())
-      setTimeLeft({
-        hours: Math.floor(diff / 3_600_000),
-        minutes: Math.floor((diff % 3_600_000) / 60_000),
-        seconds: Math.floor((diff % 60_000) / 1_000),
-      })
-    }
-    update()
-    const t = setInterval(update, 1000)
-    return () => clearInterval(t)
-  }, [])
-
-  const pad = (n: number) => String(n).padStart(2, '0')
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -550,33 +528,12 @@ function FlashDealsHeader() {
         </div>
         <div>
           <h2 className="flex items-center gap-2 font-heading text-lg font-black uppercase tracking-tight text-gray-900 sm:text-xl">
-            Flash Deals{' '}
-            <span className="rounded-md bg-red-50 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tighter text-red-600">
-              Live
-            </span>
+            Angebote
           </h2>
           <p className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-            Zeitlich begrenzt
+            spare bis zu 43%
           </p>
         </div>
-      </div>
-      <div className="flex shrink-0 gap-2 text-center">
-        {(
-          [
-            ['Std', timeLeft.hours],
-            ['Min', timeLeft.minutes],
-            ['Sek', timeLeft.seconds],
-          ] as [string, number][]
-        ).map(([label, val]) => (
-          <div key={label} className="flex w-[44px] flex-col">
-            <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg border border-gray-100 bg-gray-50 font-mono text-base font-bold tabular-nums text-gray-900">
-              {pad(val)}
-            </span>
-            <span className="mt-1 text-[8px] font-bold uppercase tracking-tighter text-gray-400">
-              {label}
-            </span>
-          </div>
-        ))}
       </div>
     </motion.div>
   )

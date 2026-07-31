@@ -41,6 +41,8 @@ export default function CheckoutContent() {
   const { items, totalPrice, clearCart, isHydrated } = useCart()
   const { user, isAuthenticated } = useAuth()
   const mounted = useRef(false)
+  const shippingFormRef = useRef<HTMLFormElement>(null)
+  const paymentFormRef = useRef<HTMLFormElement>(null)
 
   // Guests are allowed — no forced redirect.
   // We track mount only to avoid SSR mismatches.
@@ -139,7 +141,15 @@ export default function CheckoutContent() {
     [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total]
   )
 
-  if (!isHydrated) return null
+  if (!isHydrated)
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#4ECCA3]/30 border-t-[#4ECCA3]" />
+          <p className="text-gray-600">Kasse wird geladen...</p>
+        </div>
+      </div>
+    )
 
   const handleApplyPromo = async () => {
     if (!promoCode) return
@@ -495,7 +505,7 @@ export default function CheckoutContent() {
                     </div>
                   )}
 
-                  <form onSubmit={handleShippingSubmit} className="space-y-5">
+                  <form ref={shippingFormRef} onSubmit={handleShippingSubmit} className="space-y-5">
                     <div className="grid gap-5 sm:grid-cols-2">
                       <div className="space-y-1">
                         <label
@@ -718,7 +728,7 @@ export default function CheckoutContent() {
                     </div>
 
                     {/* Bank Transfer Form */}
-                    <form onSubmit={handleBankTransfer} className="space-y-6">
+                    <form ref={paymentFormRef} onSubmit={handleBankTransfer} className="space-y-6">
                       <div className="space-y-5 rounded-2xl bg-[#0C211E] p-6">
                         <div className="space-y-3">
                           <label className="text-xs font-bold uppercase tracking-wider text-[#4ECCA3]">
@@ -1015,11 +1025,7 @@ export default function CheckoutContent() {
             {step === 1 ? (
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() =>
-                  document
-                    .querySelector('form')
-                    ?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
-                }
+                onClick={() => shippingFormRef.current?.requestSubmit()}
                 className="max-w-xs flex-1 rounded-xl bg-[#0C211E] py-3.5 font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C]"
               >
                 Weiter zur Zahlung
@@ -1028,6 +1034,7 @@ export default function CheckoutContent() {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 disabled={isProcessing}
+                onClick={() => paymentFormRef.current?.requestSubmit()}
                 className="max-w-xs flex-1 rounded-xl bg-[#0C211E] py-3.5 font-bold text-white shadow-xl shadow-[#0C211E]/20 transition-colors hover:bg-[#17423C] disabled:opacity-50"
               >
                 {isProcessing ? (

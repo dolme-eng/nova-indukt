@@ -5,10 +5,7 @@ import { useDebounce } from '@/lib/hooks/use-debounce'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  Search, ShoppingCart, User, Menu,
-  ChevronDown, Truck, Sparkles, Tag,
-} from 'lucide-react'
+import { Search, ShoppingCart, User, Menu, ChevronDown, Truck, Sparkles, Tag } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MegaMenu } from './header-mega-menu'
@@ -43,7 +40,7 @@ import { COMPANY } from '@/lib/constants/company'
 const WHATSAPP_URL = `${COMPANY.whatsapp.url}?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt.`
 
 const WhatsAppIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-[#25D366]">
+  <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-[#25D366]">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
   </svg>
 )
@@ -52,7 +49,14 @@ const WhatsAppIcon = () => (
 
 export function Header() {
   const pathname = usePathname()
-  const { totalItems, items, removeItem, updateQuantity, totalPrice, isHydrated: isCartHydrated } = useCart()
+  const {
+    totalItems,
+    items,
+    removeItem,
+    updateQuantity,
+    totalPrice,
+    isHydrated: isCartHydrated,
+  } = useCart()
 
   // UI state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -78,10 +82,14 @@ export function Header() {
     const controller = new AbortController()
     if (debouncedSearch.trim().length >= 2) {
       setIsSearching(true)
-      fetch(`/api/products/search?q=${encodeURIComponent(debouncedSearch)}`, { signal: controller.signal })
-        .then(res => res.ok ? res.json() : [])
-        .then(data => setSearchResults(data))
-        .catch(err => { if (err?.name !== 'AbortError') console.error('Search error:', err) })
+      fetch(`/api/products/search?q=${encodeURIComponent(debouncedSearch)}`, {
+        signal: controller.signal,
+      })
+        .then((res) => (res.ok ? res.json() : []))
+        .then((data) => setSearchResults(data))
+        .catch((err) => {
+          if (err?.name !== 'AbortError') console.error('Search error:', err)
+        })
         .finally(() => setIsSearching(false))
     } else {
       setSearchResults([])
@@ -109,7 +117,9 @@ export function Header() {
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset'
-    return () => { document.body.style.overflow = 'unset' }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
   }, [mobileMenuOpen])
 
   // Close mega menu on outside click
@@ -127,7 +137,10 @@ export function Header() {
 
   const isActive = (href: string, alsoActiveFor?: string[]) => {
     if (pathname === href || pathname.startsWith(href + '/')) return true
-    return alsoActiveFor?.some(prefix => pathname === prefix || pathname.startsWith(prefix + '/')) ?? false
+    return (
+      alsoActiveFor?.some((prefix) => pathname === prefix || pathname.startsWith(prefix + '/')) ??
+      false
+    )
   }
 
   // ── Render ───────────────────────────────────────────────────────────────────
@@ -135,17 +148,20 @@ export function Header() {
   return (
     <>
       {/* ── Top Bar ─────────────────────────────────────────────────────────── */}
-      <div className="bg-[#0C211E] text-white text-[9px] sm:text-2xs py-1.5 hidden md:block border-b border-[#17423C]">
-        <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between font-bold tracking-wider uppercase">
-          <div className="flex items-center gap-8 text-[#9FE1CD]">
-            <span className="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-              <Truck className="w-3.5 h-3.5 text-[#4ECCA3]" />Kostenlose Lieferung ab 500 €
+      <div className="border-b border-[#17423C] bg-[#0C211E] py-1.5 text-[9px] text-white sm:text-2xs">
+        <div className="container mx-auto flex items-center justify-between px-4 font-bold uppercase tracking-wider sm:px-6">
+          <div className="flex items-center gap-4 text-[#9FE1CD] sm:gap-8">
+            <span className="flex cursor-default items-center gap-1.5 transition-colors hover:text-white sm:gap-2">
+              <Truck className="h-3.5 w-3.5 text-[#4ECCA3]" />
+              <span className="hidden sm:inline">Kostenlose Lieferung ab 500 €</span>
+              <span className="sm:hidden">Gratis ab 500€</span>
             </span>
-            <span className="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-              <Sparkles className="w-3.5 h-3.5 text-[#4ECCA3]" />2 Jahre Garantie
+            <span className="hidden cursor-default items-center gap-2 transition-colors hover:text-white sm:flex">
+              <Sparkles className="h-3.5 w-3.5 text-[#4ECCA3]" />2 Jahre Garantie
             </span>
-            <span className="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-              <Tag className="w-3.5 h-3.5 text-[#4ECCA3]" />Inkl. 19% MwSt.
+            <span className="hidden cursor-default items-center gap-2 transition-colors hover:text-white md:flex">
+              <Tag className="h-3.5 w-3.5 text-[#4ECCA3]" />
+              Inkl. 19% MwSt.
             </span>
           </div>
           <div className="flex items-center gap-5 text-[#9FE1CD]">
@@ -153,12 +169,12 @@ export function Header() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 hover:text-white transition-colors"
+              className="flex items-center gap-2 transition-colors hover:text-white"
             >
               <WhatsAppIcon />
               Kundenservice
             </a>
-            <span className="w-px h-3 bg-[#236456]" />
+            <span className="h-3 w-px bg-[#236456]" />
             <span className="text-[#6FD2B4]">Mo–Fr 9–18 Uhr</span>
           </div>
         </div>
@@ -167,17 +183,16 @@ export function Header() {
       {/* ── Main Header ─────────────────────────────────────────────────────── */}
       <header
         data-testid="site-header"
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${
+        className={`sticky left-0 right-0 top-0 z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${
           scrolled
-            ? 'bg-white/80 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-gray-100/50 py-1'
-            : 'bg-white border-b border-gray-50 py-1.5 sm:py-2.5'
+            ? 'border-b border-gray-100/50 bg-white/80 py-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] backdrop-blur-md'
+            : 'border-b border-gray-50 bg-white py-1.5 sm:py-2.5'
         }`}
       >
         <div className="container mx-auto px-3 sm:px-4 md:px-6">
-          <div className="flex items-center justify-between relative" ref={megaRef}>
-
+          <div className="relative flex items-center justify-between" ref={megaRef}>
             {/* Logo */}
-            <Link href="/" data-testid="site-logo" className="flex-shrink-0 group relative z-10">
+            <Link href="/" data-testid="site-logo" className="group relative z-10 flex-shrink-0">
               <Image
                 src="/logo0.png"
                 alt="NOVA INDUKT"
@@ -194,17 +209,19 @@ export function Header() {
             {/* Desktop Navigation */}
             <nav
               data-testid="main-navigation"
-              className="hidden lg:flex items-center justify-center absolute inset-0 pointer-events-none"
+              className="pointer-events-none absolute inset-0 hidden items-center justify-center lg:flex"
             >
-              <div className="flex items-center gap-1.5 pointer-events-auto">
+              <div className="pointer-events-auto flex items-center gap-1.5">
                 {navItems.map((item) => (
                   <div key={item.href} className="relative z-10">
                     {item.hasMega ? (
                       <button
                         onMouseEnter={() => setMegaMenuOpen(true)}
-                        onClick={() => setMegaMenuOpen(prev => !prev)}
-                        onKeyDown={(e) => { if (e.key === 'Escape') setMegaMenuOpen(false) }}
-                        className={`group flex items-center gap-1 px-4 py-2 text-xs font-black transition-all duration-500 ease-[0.22,1,0.36,1] uppercase tracking-tight ${
+                        onClick={() => setMegaMenuOpen((prev) => !prev)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Escape') setMegaMenuOpen(false)
+                        }}
+                        className={`group flex items-center gap-1 px-4 py-2 text-xs font-black uppercase tracking-tight transition-all duration-500 ease-[0.22,1,0.36,1] ${
                           isActive(item.href, item.alsoActiveFor) || megaMenuOpen
                             ? 'text-[#0C211E]'
                             : 'text-gray-600 hover:text-gray-900'
@@ -212,7 +229,7 @@ export function Header() {
                       >
                         {item.label}
                         <ChevronDown
-                          className={`w-3 h-3 transition-transform duration-500 ease-[0.22,1,0.36,1] ${
+                          className={`h-3 w-3 transition-transform duration-500 ease-[0.22,1,0.36,1] ${
                             megaMenuOpen
                               ? 'rotate-180 text-[#0C211E]'
                               : 'text-gray-400 group-hover:text-gray-600'
@@ -222,7 +239,7 @@ export function Header() {
                     ) : (
                       <Link
                         href={item.href}
-                        className={`block px-4 py-2 text-xs font-black transition-all duration-500 ease-[0.22,1,0.36,1] uppercase tracking-tight ${
+                        className={`block px-4 py-2 text-xs font-black uppercase tracking-tight transition-all duration-500 ease-[0.22,1,0.36,1] ${
                           isActive(item.href, item.alsoActiveFor)
                             ? 'text-[#0C211E]'
                             : 'text-gray-500 hover:text-gray-900'
@@ -246,31 +263,31 @@ export function Header() {
             </nav>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-1 sm:gap-2 relative z-10">
+            <div className="relative z-10 flex items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setSearchOpen(true)}
                 data-testid="search-button"
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all relative group"
+                className="group relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100/60 hover:text-[#0C211E]"
                 aria-label="Suchen"
               >
-                <Search className="w-5 h-5 transition-transform group-hover:scale-110" />
+                <Search className="h-5 w-5 transition-transform group-hover:scale-110" />
               </button>
 
               <Link
                 href="/mein-konto"
-                className="hidden md:flex min-w-[44px] min-h-[44px] items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all group"
+                className="group hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100/60 hover:text-[#0C211E] md:flex"
                 aria-label="Mein Konto"
               >
-                <User className="w-5 h-5 transition-transform group-hover:scale-110" />
+                <User className="h-5 w-5 transition-transform group-hover:scale-110" />
               </Link>
 
               <button
                 onClick={() => setCartDrawerOpen(true)}
                 data-testid="cart-button"
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all relative group"
+                className="group relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100/60 hover:text-[#0C211E]"
                 aria-label="Warenkorb"
               >
-                <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
+                <ShoppingCart className="h-5 w-5 transition-transform group-hover:scale-110" />
                 <AnimatePresence>
                   {isCartHydrated && totalItems > 0 && (
                     <motion.span
@@ -278,7 +295,7 @@ export function Header() {
                       animate={{ scale: 1 }}
                       exit={{ scale: 0 }}
                       data-testid="cart-count"
-                      className="absolute top-0.5 right-0.5 w-5 h-5 bg-[#4ECCA3] text-gray-900 text-[10px] font-black tracking-tighter rounded-full flex items-center justify-center shadow-sm shadow-[#4ECCA3]/40 border-2 border-white pointer-events-none"
+                      className="pointer-events-none absolute right-0.5 top-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-[#4ECCA3] text-[10px] font-black tracking-tighter text-gray-900 shadow-sm shadow-[#4ECCA3]/40"
                     >
                       {totalItems > 99 ? '99+' : totalItems}
                     </motion.span>
@@ -289,7 +306,7 @@ export function Header() {
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 data-testid="mobile-menu-button"
-                className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-gray-600 hover:text-[#0C211E] hover:bg-gray-100/60 transition-all group"
+                className="group flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100/60 hover:text-[#0C211E] lg:hidden"
                 aria-label="Menü"
               >
                 <AnimatePresence mode="wait">
@@ -301,8 +318,18 @@ export function Header() {
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      <svg
+                        className="h-6 w-6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
                       </svg>
                     </motion.div>
                   ) : (
@@ -313,7 +340,7 @@ export function Header() {
                       exit={{ rotate: -90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <Menu className="w-6 h-6" />
+                      <Menu className="h-6 w-6" />
                     </motion.div>
                   )}
                 </AnimatePresence>

@@ -16,7 +16,7 @@ export function LoginContent() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [verifiedSuccess, setVerifiedSuccess] = useState(false)
   const redirectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Check URL params for verification status
@@ -25,9 +25,9 @@ export function LoginContent() {
     const errorParam = searchParams.get('error')
 
     if (verified === 'true') {
-      setSuccess(true)
+      setVerifiedSuccess(true)
       setError('')
-      const timer = setTimeout(() => setSuccess(false), 5000)
+      const timer = setTimeout(() => setVerifiedSuccess(false), 5000)
       return () => {
         if (timer) clearTimeout(timer)
       }
@@ -94,7 +94,7 @@ export function LoginContent() {
         >
           <h1 className="mb-6 text-2xl font-bold text-gray-900">Anmelden</h1>
 
-          {success && (
+          {verifiedSuccess && (
             <div className="mb-4 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-600">
               <CheckCircle className="h-4 w-4" />
               E-Mail erfolgreich verifiziert! Sie können sich jetzt anmelden.
@@ -131,13 +131,6 @@ export function LoginContent() {
             >
               <XCircle className="h-4 w-4" />
               {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="mb-4 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-600">
-              <CheckCircle className="h-4 w-4" />
-              Erfolgreich angemeldet!
             </div>
           )}
 

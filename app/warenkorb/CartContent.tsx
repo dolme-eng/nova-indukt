@@ -397,7 +397,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
 
                 <div className="mb-4 space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold uppercase tracking-tight">
-                    <span className="text-gray-400">Netto</span>
+                    <span className="text-gray-400">Zwischensumme</span>
                     <span data-testid="cart-subtotal" className="tabular-nums text-gray-900">
                       {formatPriceDe(subtotal)}
                     </span>
