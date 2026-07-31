@@ -17,6 +17,7 @@ import {
   BookOpen,
 } from 'lucide-react'
 import { AdminNavLink } from './admin-nav-link'
+import { adminSignOut } from './admin-sign-out'
 
 export function AdminSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -165,13 +166,7 @@ export function AdminSidebar() {
         </nav>
 
         <div className="border-t border-white/5 p-4">
-          <form
-            action={async () => {
-              'use server'
-              const { signOut } = await import('@/lib/auth')
-              await signOut({ redirectTo: '/' })
-            }}
-          >
+          <form action={adminSignOut}>
             <button
               type="submit"
               className="group flex w-full items-center gap-3 rounded-xl px-4 py-3 text-nova-300/70 transition-all hover:bg-white/5 hover:text-white"
