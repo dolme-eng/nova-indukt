@@ -187,7 +187,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
 
       <nav
         aria-label="Breadcrumb"
-        className="sticky top-[60px] z-[40] border-b border-gray-100 bg-white/80 backdrop-blur-md lg:top-[76px]"
+        className="sticky top-[72px] z-[40] border-b border-gray-100 bg-white/80 backdrop-blur-md lg:top-[88px]"
       >
         <div className={SHELL}>
           <div className="flex items-center gap-2 py-2 text-[10px] font-medium tracking-wide sm:py-2.5 sm:text-xs">

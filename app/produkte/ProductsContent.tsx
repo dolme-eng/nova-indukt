@@ -26,6 +26,7 @@ import { formatPriceDe } from '@/lib/utils/vat'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { TiltCard } from '@/components/animations'
+import { DualRangeSlider } from '@/components/ui/dual-range-slider'
 
 const PRICE_FILTER_MAX = 2500
 
@@ -215,7 +216,7 @@ export function ProductsContent({
       className="min-h-screen bg-gray-50/50 pb-10 selection:bg-[#4ECCA3]/30 sm:pb-16"
     >
       {/* Breadcrumbs */}
-      <nav className="sticky top-[60px] z-[40] border-b border-gray-100 bg-white/80 backdrop-blur-md lg:top-[76px]">
+      <nav className="sticky top-[72px] z-[40] border-b border-gray-100 bg-white/80 backdrop-blur-md lg:top-[88px]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center gap-2 py-2 text-[10px] font-medium tracking-wide sm:text-xs">
             <Link href="/" className="text-gray-400 transition-colors hover:text-[#4ECCA3]">
@@ -308,27 +309,13 @@ export function ProductsContent({
                     Preisbereich
                   </h3>
                   <div className="px-2">
-                    <div className="relative mb-6 h-2 rounded-full bg-gray-100">
-                      <div
-                        className="absolute bottom-0 left-0 top-0 rounded-full bg-[#4ECCA3]"
-                        style={{ width: `${(priceRange[1] / PRICE_FILTER_MAX) * 100}%` }}
-                      />
-                      <input
-                        type="range"
-                        min="0"
-                        max={PRICE_FILTER_MAX}
-                        step="50"
-                        value={priceRange[1]}
-                        onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                        className="absolute inset-0 w-full cursor-pointer opacity-0"
-                      />
-                      <div
-                        className="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full border-2 border-[#4ECCA3] bg-white shadow-md transition-all"
-                        style={{
-                          left: `calc(${(priceRange[1] / PRICE_FILTER_MAX) * 100}% - 10px)`,
-                        }}
-                      />
-                    </div>
+                    <DualRangeSlider
+                      min={0}
+                      max={PRICE_FILTER_MAX}
+                      step={50}
+                      value={priceRange}
+                      onChange={setPriceRange}
+                    />
                     <div className="flex items-center gap-1.5">
                       <input
                         data-testid="price-filter-min"
@@ -445,29 +432,14 @@ export function ProductsContent({
                           Preisbereich
                         </h3>
                         <div className="px-2">
-                          <div className="relative mb-6 h-2 rounded-full bg-gray-100">
-                            <div
-                              className="absolute bottom-0 left-0 top-0 rounded-full bg-[#4ECCA3]"
-                              style={{ width: `${(priceRange[1] / PRICE_FILTER_MAX) * 100}%` }}
-                            />
-                            <input
-                              type="range"
-                              min="0"
-                              max={PRICE_FILTER_MAX}
-                              step="50"
-                              value={priceRange[1]}
-                              onChange={(e) =>
-                                setPriceRange([priceRange[0], parseInt(e.target.value)])
-                              }
-                              className="absolute inset-0 w-full cursor-pointer opacity-0"
-                            />
-                            <div
-                              className="pointer-events-none absolute top-1/2 h-6 w-6 -translate-y-1/2 rounded-full border-4 border-[#4ECCA3] bg-white shadow-lg transition-all"
-                              style={{
-                                left: `calc(${(priceRange[1] / PRICE_FILTER_MAX) * 100}% - 12px)`,
-                              }}
-                            />
-                          </div>
+                          <DualRangeSlider
+                            min={0}
+                            max={PRICE_FILTER_MAX}
+                            step={50}
+                            value={priceRange}
+                            onChange={setPriceRange}
+                            className="mb-6"
+                          />
                           <div className="flex items-center justify-between gap-2">
                             <input
                               data-testid="price-filter-min"

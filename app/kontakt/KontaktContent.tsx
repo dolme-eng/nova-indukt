@@ -15,6 +15,16 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { COMPANY } from '@/lib/constants/company'
+import { z } from 'zod'
+
+const contactSchema = z.object({
+  name: z.string().min(1, 'Name ist erforderlich').max(100),
+  email: z.string().min(1, 'E-Mail ist erforderlich').email('Ungültige E-Mail-Adresse'),
+  subject: z.string().min(1, 'Betreff ist erforderlich').max(200),
+  message: z.string().min(10, 'Nachricht muss mindestens 10 Zeichen lang sein').max(5000),
+})
+
+type ContactFormErrors = Partial<Record<keyof z.infer<typeof contactSchema>, string>>
 
 export function KontaktContent() {
   const [formData, setFormData] = useState({
@@ -26,11 +36,51 @@ export function KontaktContent() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [errors, setErrors] = useState<ContactFormErrors>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  const validateField = (name: string, value: string) => {
+    const result = contactSchema.safeParse({ ...formData, [name]: value })
+    if (!result.success) {
+      const fieldError = result.error.issues.find((i) => i.path[0] === name)
+      return fieldError?.message || ''
+    }
+    return ''
+  }
+
+  const handleBlur = (name: string, value: string) => {
+    setTouched((prev) => ({ ...prev, [name]: true }))
+    const error = validateField(name, value)
+    setErrors((prev) => ({ ...prev, [name]: error }))
+  }
+
+  const handleChange = (name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    if (touched[name]) {
+      const error = validateField(name, value)
+      setErrors((prev) => ({ ...prev, [name]: error }))
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
     setError(null)
+
+    const result = contactSchema.safeParse(formData)
+    if (!result.success) {
+      const fieldErrors: ContactFormErrors = {}
+      for (const issue of result.error.issues) {
+        const field = issue.path[0] as string
+        if (!fieldErrors[field]) {
+          fieldErrors[field] = issue.message
+        }
+      }
+      setErrors(fieldErrors)
+      setTouched({ name: true, email: true, subject: true, message: true })
+      return
+    }
+
+    setIsSubmitting(true)
 
     try {
       const response = await fetch('/api/contact', {
@@ -236,9 +286,21 @@ export function KontaktContent() {
                           type="text"
                           required
                           value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          onChange={(e) => handleChange('name', e.target.value)}
+                          onBlur={() => handleBlur('name', formData.name)}
+                          aria-invalid={!!errors.name}
+                          aria-describedby={errors.name ? 'contact-name-error' : undefined}
+                          className={`w-full rounded-xl border bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 ${
+                            errors.name && touched.name
+                              ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10'
+                              : 'border-transparent focus:border-[#4ECCA3]'
+                          }`}
                         />
+                        {errors.name && touched.name && (
+                          <p id="contact-name-error" className="ml-1 text-xs text-red-500">
+                            {errors.name}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label
@@ -252,9 +314,21 @@ export function KontaktContent() {
                           type="email"
                           required
                           value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          onChange={(e) => handleChange('email', e.target.value)}
+                          onBlur={() => handleBlur('email', formData.email)}
+                          aria-invalid={!!errors.email}
+                          aria-describedby={errors.email ? 'contact-email-error' : undefined}
+                          className={`w-full rounded-xl border bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 ${
+                            errors.email && touched.email
+                              ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10'
+                              : 'border-transparent focus:border-[#4ECCA3]'
+                          }`}
                         />
+                        {errors.email && touched.email && (
+                          <p id="contact-email-error" className="ml-1 text-xs text-red-500">
+                            {errors.email}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -269,9 +343,21 @@ export function KontaktContent() {
                         type="text"
                         required
                         value={formData.subject}
-                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                        onChange={(e) => handleChange('subject', e.target.value)}
+                        onBlur={() => handleBlur('subject', formData.subject)}
+                        aria-invalid={!!errors.subject}
+                        aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
+                        className={`w-full rounded-xl border bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 ${
+                          errors.subject && touched.subject
+                            ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10'
+                            : 'border-transparent focus:border-[#4ECCA3]'
+                        }`}
                       />
+                      {errors.subject && touched.subject && (
+                        <p id="contact-subject-error" className="ml-1 text-xs text-red-500">
+                          {errors.subject}
+                        </p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <label
@@ -284,10 +370,22 @@ export function KontaktContent() {
                         id="contact-message"
                         required
                         value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        onChange={(e) => handleChange('message', e.target.value)}
+                        onBlur={() => handleBlur('message', formData.message)}
+                        aria-invalid={!!errors.message}
+                        aria-describedby={errors.message ? 'contact-message-error' : undefined}
                         rows={6}
-                        className="w-full resize-none rounded-xl border border-transparent bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                        className={`w-full resize-none rounded-xl border bg-gray-50 px-5 py-4 font-medium text-[#0C211E] outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 ${
+                          errors.message && touched.message
+                            ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10'
+                            : 'border-transparent focus:border-[#4ECCA3]'
+                        }`}
                       />
+                      {errors.message && touched.message && (
+                        <p id="contact-message-error" className="ml-1 text-xs text-red-500">
+                          {errors.message}
+                        </p>
+                      )}
                     </div>
                     {error && (
                       <div
