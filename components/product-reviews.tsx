@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ThumbsUp, CheckCircle, Flag, X, Filter, Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { logError } from '@/lib/logger'
+import { useRecaptcha } from '@/hooks/use-recaptcha'
 
 interface Review {
   id: string
@@ -35,6 +36,7 @@ interface ProductReviewsProps {
 
 export function ProductReviews({ productId, initialRating, initialCount }: ProductReviewsProps) {
   const { data: session } = useSession()
+  const { execute } = useRecaptcha()
   const [reviews, setReviews] = useState<Review[]>([])
   const [stats, setStats] = useState<ReviewStats>({
     average: initialRating,
@@ -132,9 +134,14 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
     }
 
     try {
+      const recaptchaToken = await execute('review')
+
       const response = await fetch('/api/reviews', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(recaptchaToken ? { 'x-recaptcha-token': recaptchaToken } : {}),
+        },
         body: JSON.stringify(data),
       })
 

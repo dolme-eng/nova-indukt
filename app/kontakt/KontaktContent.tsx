@@ -16,11 +16,13 @@ import {
 } from 'lucide-react'
 import { COMPANY } from '@/lib/constants/company'
 import { contactFormSchema } from '@/lib/validations/contact'
+import { useRecaptcha } from '@/hooks/use-recaptcha'
 import type { z } from 'zod'
 
 type ContactFormErrors = Partial<Record<keyof z.infer<typeof contactFormSchema>, string>>
 
 export function KontaktContent() {
+  const { execute } = useRecaptcha()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -77,9 +79,14 @@ export function KontaktContent() {
     setIsSubmitting(true)
 
     try {
+      const recaptchaToken = await execute('contact')
+
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(recaptchaToken ? { 'x-recaptcha-token': recaptchaToken } : {}),
+        },
         body: JSON.stringify(formData),
       })
 

@@ -44,12 +44,12 @@ const nextConfig = {
     // 'unsafe-inline' which is the standard Next.js CSP pattern.
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client",
+      "script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client https://www.google.com https://www.gstatic.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self' https://nova-indukt.de https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com",
-      "frame-src 'self' https://accounts.google.com",
+      "connect-src 'self' https://nova-indukt.de https://api.resend.com https://api.cloudinary.com https://res.cloudinary.com https://www.google.com https://www.gstatic.com",
+      "frame-src 'self' https://accounts.google.com https://www.google.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

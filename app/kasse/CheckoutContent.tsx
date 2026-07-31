@@ -25,6 +25,7 @@ import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
 import type { BankDetails } from '@/lib/data/bank-details'
 import { logError } from '@/lib/logger'
+import { useRecaptcha } from '@/hooks/use-recaptcha'
 
 import { calculateShipping } from '@/lib/constants/shop'
 
@@ -76,6 +77,7 @@ export default function CheckoutContent() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
   const [showMobileSummary, setShowMobileSummary] = useState(false)
+  const { execute } = useRecaptcha()
   const [shippingErrors, setShippingErrors] = useState<ShippingFormErrors>({})
   const [shippingTouched, setShippingTouched] = useState<Record<string, boolean>>({})
 
@@ -166,9 +168,14 @@ export default function CheckoutContent() {
           total,
         }
 
+        const recaptchaToken = await execute('checkout')
+
         const response = await fetch('/api/orders', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(recaptchaToken ? { 'x-recaptcha-token': recaptchaToken } : {}),
+          },
           body: JSON.stringify(orderData),
         })
 
@@ -187,7 +194,7 @@ export default function CheckoutContent() {
         return null
       }
     },
-    [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total]
+    [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total, execute]
   )
 
   if (!isHydrated)

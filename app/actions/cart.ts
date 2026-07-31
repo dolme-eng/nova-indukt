@@ -9,25 +9,18 @@ import { z } from 'zod'
 
 const addToCartSchema = z.object({
   productId: z.string().min(1, 'Product ID is required').max(100),
-  quantity: z.number().int().min(1, 'Quantity must be at least 1').max(99, 'Maximum quantity is 99').default(1),
+  quantity: z
+    .number()
+    .int()
+    .min(1, 'Quantity must be at least 1')
+    .max(99, 'Maximum quantity is 99')
+    .default(1),
 })
 
-// Type pour les éléments du panier en cookie
-interface CartItemData {
+// Lightweight cookie entry — only IDs + quantities (no product objects)
+interface CartCookieItem {
   productId: string
   quantity: number
-  product: {
-    id: string
-    slug: string
-    name: { de: string }
-    price: number
-    oldPrice?: number
-    images: string[]
-    rating: number
-    reviewCount: number
-    badges?: ('premium' | 'bestseller' | 'new')[]
-    category: string
-  }
 }
 
 const CART_COOKIE = 'nova-cart'
@@ -78,7 +71,7 @@ async function getCart() {
   } else {
     // Guest user - use cookie cart
     const cartCookie = cookieStore.get(CART_COOKIE)
-    let items: CartItemData[] = []
+    let items: CartCookieItem[] = []
     if (cartCookie) {
       try {
         items = JSON.parse(cartCookie.value)
@@ -119,7 +112,7 @@ async function getCartMeta() {
     return { type: 'db' as const, cart }
   } else {
     const cartCookie = cookieStore.get(CART_COOKIE)
-    let items: CartItemData[] = []
+    let items: CartCookieItem[] = []
     if (cartCookie) {
       try {
         items = JSON.parse(cartCookie.value)
@@ -160,36 +153,16 @@ export async function addToCart(productId: string, quantity: number = 1) {
         })
       }
     } else {
-      // Cookie cart for guests
+      // Cookie cart for guests — store only IDs (product details hydrated on read)
       const cookieStore = await cookies()
-      const items: CartItemData[] = cart.items as CartItemData[]
+      const items: CartCookieItem[] = cart.items as CartCookieItem[]
 
-      const existingIndex = items.findIndex((item) => item.product.id === validProductId)
+      const existingIndex = items.findIndex((item) => item.productId === validProductId)
 
       if (existingIndex >= 0) {
         items[existingIndex].quantity += validQuantity
       } else {
-        // We need to fetch the product to add it to the cookie cart
-        const product = await prisma.product.findUnique({
-          where: { id: validProductId },
-          include: { images: true },
-        })
-
-        if (product) {
-          const cartProduct: CartItemData['product'] = {
-            id: product.id,
-            slug: product.slug,
-            name: { de: product.nameDe },
-            price: Number(product.price),
-            oldPrice: product.oldPrice ? Number(product.oldPrice) : undefined,
-            images: product.images.map((img) => img.url),
-            rating: Number(product.rating),
-            reviewCount: product.reviewCount,
-            badges: product.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
-            category: product.categoryId,
-          }
-          items.push({ productId: product.id, product: cartProduct, quantity: validQuantity })
-        }
+        items.push({ productId: validProductId, quantity: validQuantity })
       }
 
       cookieStore.set(CART_COOKIE, JSON.stringify(items), {
@@ -233,9 +206,9 @@ export async function updateCartItem(productId: string, quantity: number) {
       let items = cart.items
 
       if (quantity <= 0) {
-        items = items.filter((item) => item.product.id !== productId)
+        items = items.filter((item) => item.productId !== productId)
       } else {
-        const index = items.findIndex((item) => item.product.id === productId)
+        const index = items.findIndex((item) => item.productId === productId)
         if (index >= 0) {
           items[index].quantity = quantity
         }
@@ -277,9 +250,9 @@ export async function getCartItems() {
         quantity: item.quantity,
       }))
     } else {
-      // For cookie cart, fetch product details
+      // Cookie cart — hydrate product details from DB
       const items = cart.items
-      const productIds = items.map((item) => item.product.id)
+      const productIds = items.map((item) => item.productId)
 
       const products = await prisma.product.findMany({
         where: { id: { in: productIds } },
@@ -287,9 +260,9 @@ export async function getCartItems() {
       })
 
       return items.map((item) => {
-        const product = products.find((p) => p.id === item.product.id)
+        const product = products.find((p) => p.id === item.productId)
         return {
-          id: product?.id || item.product.id,
+          id: item.productId,
           name: { de: product?.nameDe || 'Produkt' },
           price: Number(product?.price || 0),
           image: product?.images?.[0]?.url || '',
@@ -338,7 +311,7 @@ export async function mergeGuestCartOnLogin() {
 
     if (!cartCookie) return
 
-    let guestItems: CartItemData[] = []
+    let guestItems: CartCookieItem[] = []
     try {
       guestItems = JSON.parse(cartCookie.value)
     } catch {
@@ -363,7 +336,7 @@ export async function mergeGuestCartOnLogin() {
     // Merge items in a transaction
     await prisma.$transaction(async (tx) => {
       for (const guestItem of guestItems) {
-        const existingItem = cart!.items.find((item) => item.productId === guestItem.product.id)
+        const existingItem = cart!.items.find((item) => item.productId === guestItem.productId)
 
         if (existingItem) {
           await tx.cartItem.update({

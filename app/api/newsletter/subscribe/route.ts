@@ -1,24 +1,28 @@
-import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { z } from "zod"
-import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
-import { sendNewsletterConfirmationEmail } from "@/lib/email/send"
-import { logError } from "@/lib/logger"
-import { validateCsrfToken } from "@/lib/csrf"
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { z } from 'zod'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { sendNewsletterConfirmationEmail } from '@/lib/email/send'
+import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 subscriptions per hour per IP
 
 const subscribeSchema = z.object({
-  email: z.string().email("Ungültige E-Mail-Adresse"),
+  email: z.string().email('Ungültige E-Mail-Adresse'),
   firstName: z.string().optional(),
-  source: z.string().default("homepage"),
+  source: z.string().default('homepage'),
 })
 
 export async function POST(request: NextRequest) {
   try {
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
+
+    const recaptchaError = await verifyRecaptcha(request, 'newsletter_subscribe')
+    if (recaptchaError) return recaptchaError
 
     // Rate limiting
     const ip = getIP(request)
@@ -27,40 +31,37 @@ export async function POST(request: NextRequest) {
       windowMs: RATE_LIMIT_WINDOW,
       maxRequests: RATE_LIMIT_MAX,
     })
-    
+
     if (!limitResult.success) {
       return NextResponse.json(
-        { error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
+        { error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' },
         { status: 429 }
       )
     }
-    
+
     const body = await request.json()
-    
+
     // Validation
     const result = subscribeSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: result.error.flatten() },
+        { error: 'Validation failed', details: result.error.flatten() },
         { status: 400 }
       )
     }
-    
+
     const { email, firstName, source } = result.data
-    
+
     // Check if already subscribed
     const existing = await prisma.newsletterSubscriber.findUnique({
-      where: { email }
+      where: { email },
     })
-    
+
     if (existing) {
       if (existing.isActive) {
-        return NextResponse.json(
-          { error: "Diese E-Mail ist bereits angemeldet" },
-          { status: 409 }
-        )
+        return NextResponse.json({ error: 'Diese E-Mail ist bereits angemeldet' }, { status: 409 })
       }
-      
+
       // Reactivate subscription
       const updated = await prisma.newsletterSubscriber.update({
         where: { email },
@@ -69,19 +70,19 @@ export async function POST(request: NextRequest) {
           unsubscribedAt: null,
           firstName: firstName || existing.firstName,
           source: source || existing.source,
-        }
+        },
       })
-      
+
       return NextResponse.json(
-        { 
-          success: true, 
-          message: "Newsletter-Anmeldung reaktiviert",
-          id: updated.id 
+        {
+          success: true,
+          message: 'Newsletter-Anmeldung reaktiviert',
+          id: updated.id,
         },
         { status: 200 }
       )
     }
-    
+
     // Create new subscription
     const subscriber = await prisma.newsletterSubscriber.create({
       data: {
@@ -89,30 +90,27 @@ export async function POST(request: NextRequest) {
         firstName,
         source,
         isActive: true,
-      }
+      },
     })
 
     // Send confirmation email (non-blocking)
     try {
       await sendNewsletterConfirmationEmail(email, firstName)
     } catch (emailError) {
-      logError("Failed to send newsletter confirmation email:", emailError)
+      logError('Failed to send newsletter confirmation email:', emailError)
       // Continue - subscription is still created even if email fails
     }
 
     return NextResponse.json(
       {
         success: true,
-        message: "Erfolgreich zum Newsletter angemeldet",
-        id: subscriber.id
+        message: 'Erfolgreich zum Newsletter angemeldet',
+        id: subscriber.id,
       },
       { status: 201 }
     )
   } catch (error) {
-    logError("Error subscribing to newsletter:", error)
-    return NextResponse.json(
-      { error: "Anmeldung fehlgeschlagen" },
-      { status: 500 }
-    )
+    logError('Error subscribing to newsletter:', error)
+    return NextResponse.json({ error: 'Anmeldung fehlgeschlagen' }, { status: 500 })
   }
 }

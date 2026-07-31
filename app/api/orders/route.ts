@@ -12,6 +12,7 @@ import { applyPromotionsToProducts, validateCoupon } from '@/lib/promotions'
 import { randomUUID } from 'crypto'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 export async function GET(request: NextRequest) {
   try {
@@ -72,6 +73,9 @@ export async function POST(request: NextRequest) {
   try {
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
+
+    const recaptchaError = await verifyRecaptcha(request, 'checkout')
+    if (recaptchaError) return recaptchaError
 
     // Rate limit: 5 orders per minute per IP
     const ip = getIP(request)

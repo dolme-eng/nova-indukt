@@ -1,25 +1,29 @@
-import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { z } from "zod"
-import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { z } from 'zod'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { sendContactNotificationEmail } from '@/lib/email/send'
-import { logError } from "@/lib/logger"
-import { validateCsrfToken } from "@/lib/csrf"
+import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 5 // 5 messages per hour per IP
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Name muss mindestens 2 Zeichen haben"),
-  email: z.string().email("Ungültige E-Mail-Adresse"),
-  subject: z.string().min(3, "Betreff muss mindestens 3 Zeichen haben"),
-  message: z.string().min(10, "Nachricht muss mindestens 10 Zeichen haben"),
+  name: z.string().min(2, 'Name muss mindestens 2 Zeichen haben'),
+  email: z.string().email('Ungültige E-Mail-Adresse'),
+  subject: z.string().min(3, 'Betreff muss mindestens 3 Zeichen haben'),
+  message: z.string().min(10, 'Nachricht muss mindestens 10 Zeichen haben'),
 })
 
 export async function POST(request: NextRequest) {
   try {
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
+
+    const recaptchaError = await verifyRecaptcha(request, 'contact')
+    if (recaptchaError) return recaptchaError
 
     // Rate limiting
     const ip = getIP(request)
@@ -28,27 +32,27 @@ export async function POST(request: NextRequest) {
       windowMs: RATE_LIMIT_WINDOW,
       maxRequests: RATE_LIMIT_MAX,
     })
-    
+
     if (!limitResult.success) {
       return NextResponse.json(
-        { error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
+        { error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' },
         { status: 429 }
       )
     }
-    
+
     const body = await request.json()
-    
+
     // Validation
     const result = contactSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: result.error.flatten() },
+        { error: 'Validation failed', details: result.error.flatten() },
         { status: 400 }
       )
     }
-    
+
     const { name, email, subject, message } = result.data
-    
+
     // Save to database
     const contactMessage = await prisma.contactMessage.create({
       data: {
@@ -56,7 +60,7 @@ export async function POST(request: NextRequest) {
         email,
         subject,
         message,
-        status: "NEW",
+        status: 'NEW',
       },
     })
 
@@ -76,26 +80,20 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { 
-        success: true, 
-        message: "Nachricht erfolgreich gesendet",
-        id: contactMessage.id 
+      {
+        success: true,
+        message: 'Nachricht erfolgreich gesendet',
+        id: contactMessage.id,
       },
       { status: 201 }
     )
   } catch (error) {
-    logError("Error sending contact message:", error)
-    return NextResponse.json(
-      { error: "Failed to send message" },
-      { status: 500 }
-    )
+    logError('Error sending contact message:', error)
+    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })
   }
 }
 
 // Get all contact messages - ADMIN ONLY (désactivé temporairement)
 export async function GET() {
-  return NextResponse.json(
-    { error: "Admin access required" },
-    { status: 403 }
-  )
+  return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
 }

@@ -3,8 +3,10 @@
 import { useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
+import { useRecaptcha } from '@/hooks/use-recaptcha'
 
 export const HomeNewsletter = memo(function HomeNewsletter() {
+  const { execute } = useRecaptcha()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
@@ -14,9 +16,14 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
 
     setStatus('loading')
     try {
+      const recaptchaToken = await execute('newsletter_subscribe')
+
       const response = await fetch('/api/newsletter/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(recaptchaToken ? { 'x-recaptcha-token': recaptchaToken } : {}),
+        },
         body: JSON.stringify({ email, source: 'homepage' }),
       })
 
