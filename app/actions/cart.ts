@@ -347,7 +347,7 @@ export async function mergeGuestCartOnLogin() {
           await tx.cartItem.create({
             data: {
               cartId: cart!.id,
-              productId: guestItem.product.id,
+              productId: guestItem.productId,
               quantity: guestItem.quantity,
             },
           })
