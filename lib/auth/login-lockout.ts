@@ -8,6 +8,7 @@
  */
 
 import { Redis } from '@upstash/redis'
+import { logError } from '@/lib/logger'
 
 const MAX_ATTEMPTS = 5
 const WINDOW_MS = 15 * 60 * 1000 // 15 minutes
@@ -59,8 +60,8 @@ export async function isLockedOut(email: string): Promise<boolean> {
     try {
       const locked = await redis.get<string>(KEY_PREFIX + email)
       return locked === 'locked'
-    } catch {
-      return false
+    } catch (err) {
+      logError('[login-lockout] Redis error in isLockedOut, falling back to memory:', err)
     }
   }
 
@@ -97,11 +98,15 @@ export async function recordFailedLogin(email: string): Promise<void> {
         // Lock the account
         await redis.set(KEY_PREFIX + email, 'locked', { ex: Math.ceil(LOCKOUT_MS / 1000) })
       }
-      await redis.set(key, { count, firstAttemptAt: raw.firstAttemptAt }, { ex: Math.ceil(WINDOW_MS / 1000) })
-    } catch {
-      // Redis error — fail open
+      await redis.set(
+        key,
+        { count, firstAttemptAt: raw.firstAttemptAt },
+        { ex: Math.ceil(WINDOW_MS / 1000) }
+      )
+      return
+    } catch (err) {
+      logError('[login-lockout] Redis error in recordFailedLogin, falling back to memory:', err)
     }
-    return
   }
 
   // Fallback: in-memory
@@ -126,8 +131,8 @@ export async function recordSuccessfulLogin(email: string): Promise<void> {
     try {
       await redis.del(KEY_PREFIX + email)
       await redis.del(KEY_ATTEMPTS + email)
-    } catch {
-      // fail open
+    } catch (err) {
+      logError('[login-lockout] Redis error in recordSuccessfulLogin:', err)
     }
     return
   }
@@ -142,10 +147,9 @@ export async function getLoginLockoutInfo(email: string): Promise<{ remainingMs:
     try {
       const ttl = await redis.pttl(KEY_PREFIX + email)
       if (ttl > 0) return { remainingMs: ttl }
-    } catch {
-      // fall through
+    } catch (err) {
+      logError('[login-lockout] Redis error in getLoginLockoutInfo, falling back to memory:', err)
     }
-    return null
   }
 
   // Fallback: in-memory

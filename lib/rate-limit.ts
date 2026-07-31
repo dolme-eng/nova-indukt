@@ -5,8 +5,10 @@
  *   UPSTASH_REDIS_REST_URL   — URL REST de votre base Redis Upstash
  *   UPSTASH_REDIS_REST_TOKEN — Token d'authentification Upstash
  *
- * Si ces variables sont absentes (dev local sans Redis), on bascule
- * automatiquement sur un fallback in-memory LRU pour ne pas bloquer le dev.
+ * Si ces variables sont absentes :
+ *   - En dev local → fallback in-memory (suffisant pour un seul process)
+ *   - En production → fail closed (bloque les requêtes) car le fallback
+ *     in-memory est inutile en serverless (pas de partage entre instances)
  *
  * Docs : https://upstash.com/docs/redis/sdks/ratelimit-ts/overview
  */
@@ -137,7 +139,13 @@ export async function rateLimit(
   const limiter = getRatelimiter(maxRequests, windowSeconds)
 
   if (!limiter) {
-    // Fallback in-memory synchrone
+    // No Redis configured:
+    // - In dev: use in-memory fallback (single process, sufficient)
+    // - In production: fail closed (in-memory is useless in serverless)
+    if (process.env.NODE_ENV === 'production') {
+      logError('[rate-limit] Redis not configured in production — failing closed')
+      return { success: false, limit: maxRequests, remaining: 0, resetTime: Date.now() + windowMs }
+    }
     return memoryRateLimit(identifier, windowMs, maxRequests)
   }
 
@@ -150,8 +158,11 @@ export async function rateLimit(
       resetTime: Number(reset),
     }
   } catch (err) {
-    // On Redis error (timeout, connection), fail open to avoid blocking users
-    logError('[rate-limit] Redis error, fail-open:', err)
+    // On Redis error, fail closed in production to prevent abuse
+    logError('[rate-limit] Redis error, failing closed:', err)
+    if (process.env.NODE_ENV === 'production') {
+      return { success: false, limit: maxRequests, remaining: 0, resetTime: Date.now() + windowMs }
+    }
     return { success: true, limit: maxRequests, remaining: 1, resetTime: Date.now() + windowMs }
   }
 }
