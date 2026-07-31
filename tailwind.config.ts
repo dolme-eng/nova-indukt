@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -10,85 +9,85 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: "1rem",
+      padding: '1rem',
       screens: {
-        "2xl": "1280px", // Reduced from 1400px for tighter feel
+        '2xl': '1280px', // Reduced from 1400px for tighter feel
       },
     },
     extend: {
       colors: {
         // NOVA INDUKT Brand Colors
         nova: {
-          DEFAULT: "#4ECCA3",
-          dark: "#3BA88A",
-          light: "#7DDEC3",
-          50: "#E6F9F3",
-          100: "#CFF0E6",
-          200: "#9FE1CD",
-          300: "#6FD2B4",
-          400: "#4ECCA3",
-          500: "#3BA88A",
-          600: "#2F8670",
-          700: "#236456",
-          800: "#17423C",
-          900: "#0C211E",
+          DEFAULT: '#4ECCA3',
+          dark: '#3BA88A',
+          light: '#7DDEC3',
+          50: '#E6F9F3',
+          100: '#CFF0E6',
+          200: '#9FE1CD',
+          300: '#6FD2B4',
+          400: '#4ECCA3',
+          500: '#3BA88A',
+          600: '#2F8670',
+          700: '#236456',
+          800: '#17423C',
+          900: '#0C211E',
         },
         // Semantic colors
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: "#4ECCA3",
-          foreground: "#FFFFFF",
+          DEFAULT: '#4ECCA3',
+          foreground: '#FFFFFF',
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
         destructive: {
-          DEFAULT: "#E17055",
-          foreground: "#FFFFFF",
+          DEFAULT: '#E17055',
+          foreground: '#FFFFFF',
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
-          DEFAULT: "#4ECCA3",
-          foreground: "#FFFFFF",
+          DEFAULT: '#4ECCA3',
+          foreground: '#FFFFFF',
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
         // Text colors
-        anthracite: "#2D3436",
-        steel: "#636E72",
-        "light-steel": "#B2BEC3",
+        anthracite: '#2D3436',
+        steel: '#636E72',
+        'light-steel': '#B2BEC3',
         // Status colors
-        success: "#00B894",
-        warning: "#FDCB6E",
-        error: "#E17055",
+        success: '#00B894',
+        warning: '#FDCB6E',
+        error: '#E17055',
       },
       borderRadius: {
-        lg: "0.75rem",
-        md: "0.5rem",
-        sm: "0.25rem",
+        lg: '0.75rem',
+        md: '0.5rem',
+        sm: '0.25rem',
       },
       fontSize: {
         '3xs': ['9px', '1.2'],
         '2xs': ['10px', '1.2'],
-        'xs': ['11px', '1.3'],
-        'sm': ['12px', '1.4'],
-        'base': ['13px', '1.5'],
-        'lg': ['14px', '1.5'],
-        'xl': ['15px', '1.4'],
+        xs: ['11px', '1.3'],
+        sm: ['12px', '1.4'],
+        base: ['13px', '1.5'],
+        lg: ['14px', '1.5'],
+        xl: ['15px', '1.4'],
         '2xl': ['16px', '1.3'],
         '3xl': ['18px', '1.2'],
       },
@@ -98,18 +97,18 @@ module.exports = {
         mono: ['JetBrains Mono', 'monospace'],
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },

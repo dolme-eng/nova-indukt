@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
+import { z } from 'zod'
 import {
   ChevronRight,
   Check,
@@ -25,6 +26,19 @@ import { formatPriceDe } from '@/lib/utils/vat'
 import type { BankDetails } from '@/lib/data/bank-details'
 
 import { calculateShipping } from '@/lib/constants/shop'
+
+const shippingSchema = z.object({
+  firstName: z.string().min(1, 'Vorname ist erforderlich').max(100),
+  lastName: z.string().min(1, 'Nachname ist erforderlich').max(100),
+  email: z.string().min(1, 'E-Mail ist erforderlich').email('Ungültige E-Mail-Adresse'),
+  phone: z.string().max(50).optional().or(z.literal('')),
+  address: z.string().min(1, 'Adresse ist erforderlich').max(200),
+  zipCode: z.string().min(1, 'PLZ ist erforderlich').max(20),
+  city: z.string().min(1, 'Stadt ist erforderlich').max(100),
+  country: z.string().min(1, 'Land ist erforderlich'),
+})
+
+type ShippingFormErrors = Partial<Record<keyof z.infer<typeof shippingSchema>, string>>
 
 // Type du code promo validé retourné par /api/coupons/validate
 interface AppliedPromo {
@@ -61,6 +75,8 @@ export default function CheckoutContent() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
   const [showMobileSummary, setShowMobileSummary] = useState(false)
+  const [shippingErrors, setShippingErrors] = useState<ShippingFormErrors>({})
+  const [shippingTouched, setShippingTouched] = useState<Record<string, boolean>>({})
 
   const [shippingData, setShippingData] = useState({
     firstName: user?.name?.split(' ')[0] ?? '',
@@ -92,6 +108,38 @@ export default function CheckoutContent() {
   const shipping = calculateShipping(subtotal)
   const discountAmount = appliedPromo ? appliedPromo.discountAmount : 0
   const total = Math.max(0, subtotal + shipping - discountAmount)
+
+  const validateShippingField = (name: string, value: string) => {
+    const result = shippingSchema.safeParse({ ...shippingData, [name]: value })
+    if (!result.success) {
+      const fieldError = result.error.issues.find((i) => i.path[0] === name)
+      return fieldError?.message || ''
+    }
+    return ''
+  }
+
+  const handleShippingBlur = (name: string, value: string) => {
+    setShippingTouched((prev) => ({ ...prev, [name]: true }))
+    const error = validateShippingField(name, value)
+    setShippingErrors((prev) => ({ ...prev, [name]: error }))
+  }
+
+  const handleShippingChange = (name: string, value: string) => {
+    setShippingData((prev) => ({ ...prev, [name]: value }))
+    if (shippingTouched[name]) {
+      const error = validateShippingField(name, value)
+      setShippingErrors((prev) => ({ ...prev, [name]: error }))
+    }
+  }
+
+  const getShippingInputClass = (name: string) => {
+    const hasError = shippingErrors[name] && shippingTouched[name]
+    return `w-full rounded-xl border bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 ${
+      hasError
+        ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10'
+        : 'border-transparent focus:border-[#4ECCA3]'
+    }`
+  }
 
   const createOrder = useCallback(
     async (currentPaymentMethod: string, overrideEmail?: string) => {
@@ -239,6 +287,30 @@ export default function CheckoutContent() {
 
   const handleShippingSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    const result = shippingSchema.safeParse(shippingData)
+    if (!result.success) {
+      const fieldErrors: ShippingFormErrors = {}
+      for (const issue of result.error.issues) {
+        const field = issue.path[0] as string
+        if (!fieldErrors[field]) {
+          fieldErrors[field] = issue.message
+        }
+      }
+      setShippingErrors(fieldErrors)
+      setShippingTouched({
+        firstName: true,
+        lastName: true,
+        email: true,
+        address: true,
+        zipCode: true,
+        city: true,
+        country: true,
+      })
+      return
+    }
+
+    setShippingErrors({})
     setStep(2)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -520,11 +592,19 @@ export default function CheckoutContent() {
                           type="text"
                           required
                           value={shippingData.firstName}
-                          onChange={(e) =>
-                            setShippingData({ ...shippingData, firstName: e.target.value })
+                          onChange={(e) => handleShippingChange('firstName', e.target.value)}
+                          onBlur={() => handleShippingBlur('firstName', shippingData.firstName)}
+                          aria-invalid={!!shippingErrors.firstName}
+                          aria-describedby={
+                            shippingErrors.firstName ? 'shipping-firstName-error' : undefined
                           }
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          className={getShippingInputClass('firstName')}
                         />
+                        {shippingErrors.firstName && shippingTouched.firstName && (
+                          <p id="shipping-firstName-error" className="ml-1 text-xs text-red-500">
+                            {shippingErrors.firstName}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-1">
                         <label
@@ -539,11 +619,19 @@ export default function CheckoutContent() {
                           type="text"
                           required
                           value={shippingData.lastName}
-                          onChange={(e) =>
-                            setShippingData({ ...shippingData, lastName: e.target.value })
+                          onChange={(e) => handleShippingChange('lastName', e.target.value)}
+                          onBlur={() => handleShippingBlur('lastName', shippingData.lastName)}
+                          aria-invalid={!!shippingErrors.lastName}
+                          aria-describedby={
+                            shippingErrors.lastName ? 'shipping-lastName-error' : undefined
                           }
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          className={getShippingInputClass('lastName')}
                         />
+                        {shippingErrors.lastName && shippingTouched.lastName && (
+                          <p id="shipping-lastName-error" className="ml-1 text-xs text-red-500">
+                            {shippingErrors.lastName}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -561,11 +649,19 @@ export default function CheckoutContent() {
                           type="email"
                           required
                           value={shippingData.email}
-                          onChange={(e) =>
-                            setShippingData({ ...shippingData, email: e.target.value })
+                          onChange={(e) => handleShippingChange('email', e.target.value)}
+                          onBlur={() => handleShippingBlur('email', shippingData.email)}
+                          aria-invalid={!!shippingErrors.email}
+                          aria-describedby={
+                            shippingErrors.email ? 'shipping-email-error' : undefined
                           }
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          className={getShippingInputClass('email')}
                         />
+                        {shippingErrors.email && shippingTouched.email && (
+                          <p id="shipping-email-error" className="ml-1 text-xs text-red-500">
+                            {shippingErrors.email}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-1">
                         <label
@@ -579,10 +675,9 @@ export default function CheckoutContent() {
                           data-testid="shipping-phone"
                           type="tel"
                           value={shippingData.phone}
-                          onChange={(e) =>
-                            setShippingData({ ...shippingData, phone: e.target.value })
-                          }
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          onChange={(e) => handleShippingChange('phone', e.target.value)}
+                          onBlur={() => handleShippingBlur('phone', shippingData.phone)}
+                          className={getShippingInputClass('phone')}
                           placeholder="+49 "
                         />
                       </div>
@@ -601,11 +696,19 @@ export default function CheckoutContent() {
                         type="text"
                         required
                         value={shippingData.address}
-                        onChange={(e) =>
-                          setShippingData({ ...shippingData, address: e.target.value })
+                        onChange={(e) => handleShippingChange('address', e.target.value)}
+                        onBlur={() => handleShippingBlur('address', shippingData.address)}
+                        aria-invalid={!!shippingErrors.address}
+                        aria-describedby={
+                          shippingErrors.address ? 'shipping-address-error' : undefined
                         }
-                        className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                        className={getShippingInputClass('address')}
                       />
+                      {shippingErrors.address && shippingTouched.address && (
+                        <p id="shipping-address-error" className="ml-1 text-xs text-red-500">
+                          {shippingErrors.address}
+                        </p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-3 gap-5">
@@ -622,11 +725,19 @@ export default function CheckoutContent() {
                           type="text"
                           required
                           value={shippingData.zipCode}
-                          onChange={(e) =>
-                            setShippingData({ ...shippingData, zipCode: e.target.value })
+                          onChange={(e) => handleShippingChange('zipCode', e.target.value)}
+                          onBlur={() => handleShippingBlur('zipCode', shippingData.zipCode)}
+                          aria-invalid={!!shippingErrors.zipCode}
+                          aria-describedby={
+                            shippingErrors.zipCode ? 'shipping-zip-error' : undefined
                           }
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          className={getShippingInputClass('zipCode')}
                         />
+                        {shippingErrors.zipCode && shippingTouched.zipCode && (
+                          <p id="shipping-zip-error" className="ml-1 text-xs text-red-500">
+                            {shippingErrors.zipCode}
+                          </p>
+                        )}
                       </div>
                       <div className="col-span-2 space-y-1">
                         <label
@@ -641,11 +752,17 @@ export default function CheckoutContent() {
                           type="text"
                           required
                           value={shippingData.city}
-                          onChange={(e) =>
-                            setShippingData({ ...shippingData, city: e.target.value })
-                          }
-                          className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          onChange={(e) => handleShippingChange('city', e.target.value)}
+                          onBlur={() => handleShippingBlur('city', shippingData.city)}
+                          aria-invalid={!!shippingErrors.city}
+                          aria-describedby={shippingErrors.city ? 'shipping-city-error' : undefined}
+                          className={getShippingInputClass('city')}
                         />
+                        {shippingErrors.city && shippingTouched.city && (
+                          <p id="shipping-city-error" className="ml-1 text-xs text-red-500">
+                            {shippingErrors.city}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -660,10 +777,14 @@ export default function CheckoutContent() {
                         <select
                           id="shipping-country"
                           value={shippingData.country}
-                          onChange={(e) =>
-                            setShippingData({ ...shippingData, country: e.target.value })
-                          }
-                          className="w-full appearance-none rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-bold text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                          onChange={(e) => handleShippingChange('country', e.target.value)}
+                          onBlur={() => handleShippingBlur('country', shippingData.country)}
+                          aria-invalid={!!shippingErrors.country}
+                          className={`w-full appearance-none rounded-xl border bg-gray-50 px-5 py-3.5 font-bold text-[#0C211E] outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 ${
+                            shippingErrors.country && shippingTouched.country
+                              ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10'
+                              : 'border-transparent focus:border-[#4ECCA3]'
+                          }`}
                         >
                           <option value="Deutschland">Deutschland</option>
                           <option value="Österreich">Österreich</option>

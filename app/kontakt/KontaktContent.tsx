@@ -15,16 +15,9 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { COMPANY } from '@/lib/constants/company'
-import { z } from 'zod'
+import { contactFormSchema } from '@/lib/validations/contact'
 
-const contactSchema = z.object({
-  name: z.string().min(1, 'Name ist erforderlich').max(100),
-  email: z.string().min(1, 'E-Mail ist erforderlich').email('Ungültige E-Mail-Adresse'),
-  subject: z.string().min(1, 'Betreff ist erforderlich').max(200),
-  message: z.string().min(10, 'Nachricht muss mindestens 10 Zeichen lang sein').max(5000),
-})
-
-type ContactFormErrors = Partial<Record<keyof z.infer<typeof contactSchema>, string>>
+type ContactFormErrors = Partial<Record<keyof z.infer<typeof contactFormSchema>, string>>
 
 export function KontaktContent() {
   const [formData, setFormData] = useState({
@@ -40,7 +33,7 @@ export function KontaktContent() {
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
   const validateField = (name: string, value: string) => {
-    const result = contactSchema.safeParse({ ...formData, [name]: value })
+    const result = contactFormSchema.safeParse({ ...formData, [name]: value })
     if (!result.success) {
       const fieldError = result.error.issues.find((i) => i.path[0] === name)
       return fieldError?.message || ''
@@ -66,7 +59,7 @@ export function KontaktContent() {
     e.preventDefault()
     setError(null)
 
-    const result = contactSchema.safeParse(formData)
+    const result = contactFormSchema.safeParse(formData)
     if (!result.success) {
       const fieldErrors: ContactFormErrors = {}
       for (const issue of result.error.issues) {

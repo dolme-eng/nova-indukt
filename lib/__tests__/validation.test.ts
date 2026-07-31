@@ -207,21 +207,19 @@ describe('updateProductSchema', () => {
 
 describe('contactFormSchema', () => {
   const validContact = {
-    firstName: 'Jane',
-    lastName: 'Doe',
+    name: 'Jane Doe',
     email: 'jane@example.com',
     subject: 'Question',
     message: 'This is a test message that is long enough.',
-    privacyAccepted: true,
   }
 
   it('accepts a valid contact form', () => {
     expect(contactFormSchema.safeParse(validContact).success).toBe(true)
   })
 
-  it('rejects missing firstName', () => {
+  it('rejects missing name', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { firstName, ...rest } = validContact
+    const { name, ...rest } = validContact
     expect(contactFormSchema.safeParse(rest).success).toBe(false)
   })
 
@@ -239,20 +237,10 @@ describe('contactFormSchema', () => {
     expect(contactFormSchema.safeParse({ ...validContact, message: 'Hi' }).success).toBe(false)
   })
 
-  it('rejects privacy not accepted', () => {
-    expect(contactFormSchema.safeParse({ ...validContact, privacyAccepted: false }).success).toBe(
-      false
-    )
-  })
-
-  it('accepts optional phone', () => {
-    expect(contactFormSchema.safeParse({ ...validContact, phone: '+49 30 12345' }).success).toBe(
-      true
-    )
-  })
-
-  it('accepts null phone', () => {
-    expect(contactFormSchema.safeParse({ ...validContact, phone: null }).success).toBe(true)
+  it('rejects missing subject', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { subject, ...rest } = validContact
+    expect(contactFormSchema.safeParse(rest).success).toBe(false)
   })
 })
 
