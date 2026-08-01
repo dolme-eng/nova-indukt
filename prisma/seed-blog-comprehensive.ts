@@ -10,8 +10,9 @@ const prisma = new PrismaClient()
 const blogSeedData = [
   {
     slug: 'induktionskochfeld-ratgeber-2024',
-    titleDe: 'Induktionskochfeld Ratgeber 2024: Der ultimative Leitfaden für den perfekten Kauf',
-    excerptDe: 'Alles was Sie über Induktionskochfelder wissen müssen — von der Technik über die Installation bis hin zur richtigen Pflege. Unser umfassender Ratgeber hilft Ihnen bei der richtigen Entscheidung.',
+    titleDe: 'Induktionskochfeld Ratgeber 2026: Der ultimative Leitfaden für den perfekten Kauf',
+    excerptDe:
+      'Alles was Sie über Induktionskochfelder wissen müssen — von der Technik über die Installation bis hin zur richtigen Pflege. Unser umfassender Ratgeber hilft Ihnen bei der richtigen Entscheidung.',
     contentDe: `## Warum ein Induktionskochfeld?
 
 Induktionskochfelder gelten als die Zukunft der Küchentechnik. Sie bieten **bis zu 90 % Wirkungsgrad**, was sie deutlich effizienter als herkömmliche Ceranfelder oder Gasherde macht. Doch warum genau lohnt sich die Investition?
@@ -118,12 +119,13 @@ Besuchen Sie unseren **Online-Shop** für weitere Informationen und Beratung dur
     author: 'Dr. Koch',
     readTime: '12 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-01-15'),
+    publishedAt: new Date('2026-01-15'),
   },
   {
     slug: 'beste-induktionspfannen-vergleich',
-    titleDe: 'Die besten Induktionspfannen im Vergleich: Unsere Top 10 für 2024',
-    excerptDe: 'Wir haben 10 hochwertige Induktionspfannen getestet — vom Profi-Modell bis zum Preis-Leistungs-Sieger. Finden Sie die perfekte Pfanne für Ihre Küche.',
+    titleDe: 'Die besten Induktionspfannen im Vergleich: Unsere Top 10 für 2026',
+    excerptDe:
+      'Wir haben 10 hochwertige Induktionspfannen getestet — vom Profi-Modell bis zum Preis-Leistungs-Sieger. Finden Sie die perfekte Pfanne für Ihre Küche.',
     contentDe: `## Wie wir getestet haben
 
 Für unseren großen Induktionspfannen-Vergleich haben wir **10 Modelle verschiedener Preisklassen** unter die Lupe genommen. Getestet wurde auf einem aktuellen Induktionskochfeld der Marke Bosch mit Flex-Zone.
@@ -256,12 +258,13 @@ Für die meisten Hobbyköche empfehlen wir die **WMF Profi Select** als Testsieg
     author: 'Chef Marcus',
     readTime: '15 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-02-01'),
+    publishedAt: new Date('2026-02-01'),
   },
   {
     slug: 'induktion-vs-gas-vergleich-technik',
     titleDe: 'Induktion vs. Gas: Was ist wirklich besser? Ein technischer Vergleich',
-    excerptDe: 'Induktion und Gas — beide Technologien haben ihre Vor- und Nachteile. Wir liefern den wissenschaftlich fundierten Vergleich für die Entscheidung in Ihrer Küche.',
+    excerptDe:
+      'Induktion und Gas — beide Technologien haben ihre Vor- und Nachteile. Wir liefern den wissenschaftlich fundierten Vergleich für die Entscheidung in Ihrer Küche.',
     contentDe: `## Die Grundlagen der Technologien
 
 ### Wie funktioniert Induktion?
@@ -369,12 +372,13 @@ Für den **modernen Haushalt** ist Induktion die klar bessere Wahl. Sie ist effi
     author: 'Dr. Koch',
     readTime: '14 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-02-15'),
+    publishedAt: new Date('2026-02-15'),
   },
   {
     slug: 'induktionskochfeld-pflege-wartung',
     titleDe: 'So bleibt Ihr Induktionskochfeld jahrelang wie neu: Pflege und Wartung',
-    excerptDe: 'Mit der richtigen Pflege hält Ihr Induktionskochfeld Jahrzehnte. Unsere Experten zeigen Ihnen die besten Methoden für tägliche Reinigung und Langzeitpflege.',
+    excerptDe:
+      'Mit der richtigen Pflege hält Ihr Induktionskochfeld Jahrzehnte. Unsere Experten zeigen Ihnen die besten Methoden für tägliche Reinigung und Langzeitpflege.',
     contentDe: `## Warum die richtige Pflege so wichtig ist
 
 Ein Induktionskochfeld ist eine **Investition in die Zukunft**. Moderne Kochfelder halten bei richtiger Pflege 15–20 Jahre. Die glatte Glaskeramikoberfläche sieht zwar robust aus, reagiert aber empfindlich auf falsche Reinigungsmittel und mechanische Belastung.
@@ -510,12 +514,13 @@ Die richtige Pflege ist **einfach und lohnt sich**. Mit wenigen Minuten Aufwand 
     author: 'NOVA Team',
     readTime: '10 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-03-01'),
+    publishedAt: new Date('2026-03-01'),
   },
   {
     slug: 'energiesparen-induktion-stromkosten',
     titleDe: 'Energiesparen mit Induktion: So reduzieren Sie Ihre Stromkosten',
-    excerptDe: 'Induktion ist effizient — aber wie können Sie noch mehr einsparen? Praktische Tipps für den sparsamen Umgang mit Ihrem Induktionskochfeld.',
+    excerptDe:
+      'Induktion ist effizient — aber wie können Sie noch mehr einsparen? Praktische Tipps für den sparsamen Umgang mit Ihrem Induktionskochfeld.',
     contentDe: `## Der Energieverbrauch im Vergleich
 
 Bevor wir über Sparpotenzial sprechen, verstehen wir die Grundlagen: **Induktion ist bereits die effizienteste Kochtechnologie**. Mit einem Wirkungsgrad von 85–90% schlägt sie Ceranfelder (60–70%) und Gasherde (40–55%).
@@ -635,12 +640,13 @@ Induktion ist bereits die **effizienteste Kochtechnologie**. Mit den richtigen T
     author: 'Dr. Koch',
     readTime: '11 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-03-15'),
+    publishedAt: new Date('2026-03-15'),
   },
   {
     slug: 'induktionskochfeld-reinigen-tipps',
     titleDe: 'Induktionskochfeld reinigen: Die besten Tipps und Tricks',
-    excerptDe: 'Von der täglichen Reinigung bis zu hartnäckigen Einbrennungen — so halten Sie Ihr Induktionskochfeld in Schuss.',
+    excerptDe:
+      'Von der täglichen Reinigung bis zu hartnäckigen Einbrennungen — so halten Sie Ihr Induktionskochfeld in Schuss.',
     contentDe: `## Warum ist Induktion besonders einfach zu reinigen?
 
 Ein großer Vorteil von Induktion: Die **Glasfläche bleibt kühl**. Es gibt keine heißen Platten, an denen Verschmutzungen einbrennen. Trotzdem gibt es richtige und falsche Methoden für die Reinigung.
@@ -786,12 +792,13 @@ Die Reinigung eines Induktionskochfelds ist **kinderleicht** — wenn Sie die ri
     author: 'Chef Marcus',
     readTime: '9 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-04-01'),
+    publishedAt: new Date('2026-04-01'),
   },
   {
     slug: 'welche-pfannen-eignen-sich-fuer-induktion',
     titleDe: 'Welche Pfannen eignen sich für Induktion? Der große Kompatibilitäts-Check',
-    excerptDe: 'Nicht jede Pfanne funktioniert auf Induktion. Erfahren Sie, worauf Sie achten müssen und welche Materialien die besten sind.',
+    excerptDe:
+      'Nicht jede Pfanne funktioniert auf Induktion. Erfahren Sie, worauf Sie achten müssen und welche Materialien die besten sind.',
     contentDe: `## Das Prinzip der Induktion
 
 Um zu verstehen, welche Pfannen auf Induktion funktionieren, müssen wir das **Grundprinzip** verstehen:
@@ -964,12 +971,13 @@ Besuchen Sie unseren **Online-Shop** für eine große Auswahl an induktionsgeeig
     author: 'Dr. Koch',
     readTime: '13 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-04-15'),
+    publishedAt: new Date('2026-04-15'),
   },
   {
     slug: 'sicherheit-induktionskochfelder',
     titleDe: 'Sicherheit bei Induktionskochfeldern: Was Sie wissen müssen',
-    excerptDe: 'Induktion gilt als sicherste Kochtechnologie — aber wie sicher ist sie wirklich? Wir klären über Risiken, Schutzmaßnahmen und richtige Nutzung auf.',
+    excerptDe:
+      'Induktion gilt als sicherste Kochtechnologie — aber wie sicher ist sie wirklich? Wir klären über Risiken, Schutzmaßnahmen und richtige Nutzung auf.',
     contentDe: `## Induktion: Die sicherste Kochtechnologie
 
 Induktionskochfelder gelten als **die sichersten Kochgeräte** auf dem Markt. Die Reasons sind einleuchtend: Keine offene Flamme, keine heiße Glasfläche und automatische Abschaltung. Doch wie sicher ist die Technologie wirklich?
@@ -1114,12 +1122,13 @@ Induktionskochfelder sind die **sicherste Kochtechnologie** auf dem Markt. Mit d
     author: 'Dr. Koch',
     readTime: '12 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-05-01'),
+    publishedAt: new Date('2026-05-01'),
   },
   {
     slug: 'induktion-kochen-rezepte-einsteiger',
     titleDe: 'Induktion kochen: 5 Rezepte für Einsteiger — schnelle Küche auf dem neuen Herd',
-    excerptDe: 'Erste Schritte mit dem Induktionskochfeld? Diese 5 einfachen Rezepte helfen Ihnen, die Technik zu meistern und gleichzeitig lecker zu kochen.',
+    excerptDe:
+      'Erste Schritte mit dem Induktionskochfeld? Diese 5 einfachen Rezepte helfen Ihnen, die Technik zu meistern und gleichzeitig lecker zu kochen.',
     contentDe: `## Willkommen bei der Induktionsküche!
 
 Ihr neues Induktionskochfeld ist installiert und Sie wollen es ausprobieren? Perfekt! Diese **5 einfachen Rezepte** helfen Ihnen, die Technik zu verstehen und dabei kulinarische Highlights zu kreieren.
@@ -1267,12 +1276,13 @@ Diese 5 Rezepte zeigen: **Induktion macht das Kochen einfacher, schneller und si
     author: 'Chef Marcus',
     readTime: '10 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-05-15'),
+    publishedAt: new Date('2026-05-15'),
   },
   {
     slug: 'zukunft-kochtechnologie-smarte-induktionskochfelder',
     titleDe: 'Die Zukunft der Kochtechnologie: Smarte Induktionskochfelder',
-    excerptDe: 'Smart Home trifft Küche: Intelligente Induktionskochfelder revolutionieren das Kochen. Von App-Steuerung über KI-Rezepte bis hin zur Vernetzung — was kommt als Nächstes?',
+    excerptDe:
+      'Smart Home trifft Küche: Intelligente Induktionskochfelder revolutionieren das Kochen. Von App-Steuerung über KI-Rezepte bis hin zur Vernetzung — was kommt als Nächstes?',
     contentDe: `## Die smarte Küche ist Realität
 
 Wir stehen am Anfang einer **Revolution in der Küchentechnik**. Smarte Induktionskochfelder verbinden Kochkunst mit modernster Technologie. Was vor ein paar Jahren noch nach Science-Fiction klang, ist heute Realität: Kochfelder, die sich per App steuern lassen, Kochvorgänge automatisieren und sogar Rezepte vorschlagen.
@@ -1449,7 +1459,7 @@ Die Frage ist nicht **ob**, sondern **wann** Sie auf smarte Induktion umsteigen 
     author: 'Dr. Koch',
     readTime: '14 Min.',
     isPublished: true,
-    publishedAt: new Date('2024-06-01'),
+    publishedAt: new Date('2026-06-01'),
   },
 ]
 
@@ -1490,10 +1500,13 @@ async function main() {
   // Summary
   console.log('📊 Article Summary:')
   console.log('─'.repeat(70))
-  const categories = blogSeedData.reduce((acc, post) => {
-    acc[post.category] = (acc[post.category] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
+  const categories = blogSeedData.reduce(
+    (acc, post) => {
+      acc[post.category] = (acc[post.category] || 0) + 1
+      return acc
+    },
+    {} as Record<string, number>
+  )
 
   for (const [category, amount] of Object.entries(categories)) {
     console.log(`   ${category}: ${amount} article(s)`)
@@ -1502,11 +1515,13 @@ async function main() {
   console.log()
   console.log('📅 Published dates range:')
   console.log(`   First: ${blogSeedData[0].publishedAt.toISOString().split('T')[0]}`)
-  console.log(`   Last:  ${blogSeedData[blogSeedData.length - 1].publishedAt.toISOString().split('T')[0]}`)
+  console.log(
+    `   Last:  ${blogSeedData[blogSeedData.length - 1].publishedAt.toISOString().split('T')[0]}`
+  )
   console.log()
   console.log('✍️  Authors:')
-  const authors = [...new Set(blogSeedData.map(p => p.author))]
-  authors.forEach(a => console.log(`   - ${a}`))
+  const authors = [...new Set(blogSeedData.map((p) => p.author))]
+  authors.forEach((a) => console.log(`   - ${a}`))
 }
 
 main()

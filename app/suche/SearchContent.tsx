@@ -47,7 +47,8 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
       const matchesSearch =
         searchQuery === '' ||
         product.name.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.de.toLowerCase().includes(searchQuery.toLowerCase())
+        product.description.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (product.brand && product.brand.toLowerCase().includes(searchQuery.toLowerCase()))
 
       const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
       const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1]
@@ -325,7 +326,9 @@ function ProductCard({
                   className={`h-3.5 w-3.5 ${i < Math.floor(product.rating) ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`}
                 />
               ))}
-              <span className="ml-1 text-xs text-gray-500">({product.reviewCount})</span>
+              {product.reviewCount > 0 && (
+                <span className="ml-1 text-xs text-gray-500">({product.reviewCount})</span>
+              )}
             </div>
           )}
           <h3

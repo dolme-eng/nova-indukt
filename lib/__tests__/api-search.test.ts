@@ -49,7 +49,7 @@ describe('GET /api/products/search', () => {
 
     expect(res.status).toBe(200)
     expect(data).toHaveLength(1)
-    expect(data[0].name.de).toBe('Bratpfanne 28cm')
+    expect(data[0].nameDe).toBe('Bratpfanne 28cm')
     expect(data[0].price).toBe(8999)
     expect(data[0].slug).toBe('bratpfanne-28')
   })

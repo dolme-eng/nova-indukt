@@ -86,6 +86,7 @@ export default async function ProductsPage({
             { nameDe: { contains: search, mode: 'insensitive' } },
             { descriptionDe: { contains: search, mode: 'insensitive' } },
             { brand: { contains: search, mode: 'insensitive' } },
+            { category: { nameDe: { contains: search, mode: 'insensitive' } } },
           ],
         }
       : {}),

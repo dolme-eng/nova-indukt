@@ -300,7 +300,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-4 text-sm font-medium text-[#6FD2B4]">
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4" /> SSL-secured
+              <ShieldCheck className="h-4 w-4" /> SSL-verschlüsselt
             </span>
             <span>
               Alle Preise inkl. gesetzl. MwSt. zzgl.{' '}

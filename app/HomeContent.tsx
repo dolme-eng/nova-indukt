@@ -153,7 +153,7 @@ export function HomeContent({
               viewport={{ once: true }}
             >
               <span className="mb-2 block text-sm font-semibold uppercase tracking-wider text-nova-500">
-                Vorschau
+                Entdecken
               </span>
               <h2 className="font-heading text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl">
                 Top-Produkte pro Kategorie

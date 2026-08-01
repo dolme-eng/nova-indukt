@@ -2,10 +2,18 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  ChevronRight, ChevronDown, Search, HelpCircle,
-  Package, Truck, RotateCcw, ShieldCheck, Shield, MessageCircle, ArrowLeft
+import { motion } from 'framer-motion'
+import {
+  ChevronRight,
+  Search,
+  HelpCircle,
+  Package,
+  Truck,
+  RotateCcw,
+  ShieldCheck,
+  Shield,
+  MessageCircle,
+  ArrowLeft,
 } from 'lucide-react'
 import { COMPANY } from '@/lib/constants/company'
 
@@ -17,9 +25,10 @@ interface FAQItem {
   category: string
 }
 
-export function FAQContent(props: { items?: Array<{ id: string; question: string; answer: string; category: string }> }) {
+export function FAQContent(props: {
+  items?: Array<{ id: string; question: string; answer: string; category: string }>
+}) {
   const [searchQuery, setSearchQuery] = useState('')
-  const [openItems, setOpenItems] = useState<string[]>(['shipping-1'])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const categories = [
@@ -35,45 +44,49 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
     {
       id: 'shipping-1',
       question: 'Wie lange dauert der Versand?',
-      answer: 'Die Lieferung erfolgt in der Regel innerhalb von 1-3 Werktagen per DHL oder DPD Express.',
+      answer:
+        'Die Lieferung erfolgt in der Regel innerhalb von 1-3 Werktagen per DHL oder DPD Express.',
       icon: Truck,
-      category: 'shipping'
+      category: 'shipping',
     },
     {
       id: 'payment-1',
       question: 'Welche Zahlungsmethoden werden akzeptiert?',
-      answer: 'Wir akzeptieren ausschließlich Zahlung per Banküberweisung. Die Zahlungsinformationen erhalten Sie nach der Bestellung per E-Mail.',
+      answer:
+        'Wir akzeptieren ausschließlich Zahlung per Banküberweisung. Die Zahlungsinformationen erhalten Sie nach der Bestellung per E-Mail.',
       icon: ShieldCheck,
-      category: 'payment'
+      category: 'payment',
     },
     {
       id: 'returns-1',
       question: 'Wie kann ich einen Artikel zurückgeben?',
-      answer: 'Sie können Artikel innerhalb von 30 Tagen kostenlos an uns zurücksenden. Kontaktieren Sie hierfür einfach unseren Kundenservice.',
+      answer:
+        'Sie können Artikel innerhalb von 30 Tagen kostenlos an uns zurücksenden. Kontaktieren Sie hierfür einfach unseren Kundenservice.',
       icon: RotateCcw,
-      category: 'returns'
+      category: 'returns',
     },
     {
       id: 'warranty-1',
       question: 'Wie lange ist die Garantiezeit?',
       answer: 'Wir gewähren auf alle unsere Nova Premium Produkte eine Garantie von 2 Jahren.',
       icon: Shield,
-      category: 'warranty'
+      category: 'warranty',
     },
     {
       id: 'product-1',
       question: 'Sind die Produkte für alle Induktionsherde geeignet?',
-      answer: 'Ja, unsere Produkte sind speziell für die höchste Effizienz auf allen modernen Induktionskochfeldern optimiert.',
+      answer:
+        'Ja, unsere Produkte sind speziell für die höchste Effizienz auf allen modernen Induktionskochfeldern optimiert.',
       icon: Package,
-      category: 'product'
+      category: 'product',
     },
     {
       id: 'support-1',
       question: 'Wie erreiche ich den Kundenservice?',
       answer: `Sie erreichen uns per E-Mail unter ${COMPANY.email.support} oder über unser Kontaktformular.`,
       icon: MessageCircle,
-      category: 'support'
-    }
+      category: 'support',
+    },
   ]
 
   const iconByCategory: Record<string, typeof HelpCircle> = {
@@ -85,26 +98,20 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
     support: MessageCircle,
   }
 
-  const faqItems: FAQItem[] = (props.items && props.items.length > 0)
-    ? props.items.map((i) => ({
-        id: i.id,
-        question: i.question,
-        answer: i.answer,
-        category: i.category || 'support',
-        icon: iconByCategory[i.category] || HelpCircle,
-      }))
-    : fallbackItems
+  const faqItems: FAQItem[] =
+    props.items && props.items.length > 0
+      ? props.items.map((i) => ({
+          id: i.id,
+          question: i.question,
+          answer: i.answer,
+          category: i.category || 'support',
+          icon: iconByCategory[i.category] || HelpCircle,
+        }))
+      : fallbackItems
 
-  const toggleItem = (id: string) => {
-    setOpenItems(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    )
-  }
-
-  const filteredItems = faqItems.filter(item => {
-    const matchesSearch = searchQuery === '' || 
+  const filteredItems = faqItems.filter((item) => {
+    const matchesSearch =
+      searchQuery === '' ||
       item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.answer.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === null || item.category === selectedCategory
@@ -114,46 +121,53 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Breadcrumbs */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-2 py-3 text-sm">
-            <Link href="/" className="flex items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors lg:hidden">
-              <ArrowLeft className="w-4 h-4" />
+            <Link
+              href="/"
+              className="flex items-center gap-1 text-gray-500 transition-colors hover:text-gray-900 lg:hidden"
+            >
+              <ArrowLeft className="h-4 w-4" />
               <span>Startseite</span>
             </Link>
-            <div className="hidden lg:flex items-center gap-2">
-              <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">Startseite</Link>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-900 font-medium">FAQ</span>
+            <div className="hidden items-center gap-2 lg:flex">
+              <Link href="/" className="text-gray-500 transition-colors hover:text-gray-900">
+                Startseite
+              </Link>
+              <ChevronRight className="h-4 w-4 text-gray-400" />
+              <span className="font-medium text-gray-900">FAQ</span>
             </div>
           </div>
         </div>
       </nav>
 
       <div className="container mx-auto px-4 py-4 sm:py-6 lg:py-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 sm:mb-8">Häufig gestellte Fragen</h1>
-          
+        <div className="mx-auto max-w-3xl">
+          <h1 className="mb-4 text-2xl font-bold text-gray-900 sm:mb-8 sm:text-3xl lg:text-4xl">
+            Häufig gestellte Fragen
+          </h1>
+
           {/* Search */}
           <div className="relative mb-6 sm:mb-8">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Fragen durchsuchen..."
-              className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 text-sm sm:text-base"
+              className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-12 pr-4 text-sm focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 sm:text-base"
             />
           </div>
 
           {/* Categories */}
-          <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
+          <div className="mb-6 flex flex-wrap gap-2 sm:mb-8">
             <button
               onClick={() => setSelectedCategory(null)}
-              className={`px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
-                selectedCategory === null 
-                  ? 'bg-[#4ECCA3] text-white' 
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+              className={`rounded-full px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
+                selectedCategory === null
+                  ? 'bg-[#4ECCA3] text-white'
+                  : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-100'
               }`}
             >
               Alle
@@ -162,62 +176,64 @@ export function FAQContent(props: { items?: Array<{ id: string; question: string
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 sm:gap-2 ${
-                  selectedCategory === cat.id 
-                    ? 'bg-[#4ECCA3] text-white' 
-                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-medium transition-colors sm:gap-2 sm:px-4 sm:text-sm ${
+                  selectedCategory === cat.id
+                    ? 'bg-[#4ECCA3] text-white'
+                    : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <cat.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">{cat.label}</span>
-                <span className="sm:hidden">{cat.label}</span>
+                <cat.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span>{cat.label}</span>
               </button>
             ))}
           </div>
 
-          {/* FAQ Items */}
+          {/* FAQ Items — native details/summary for SEO */}
           <div className="space-y-3 sm:space-y-4">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, index) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-xl sm:rounded-2xl shadow-sm overflow-hidden border border-gray-100"
+                transition={{ delay: index * 0.05 }}
               >
-                <button
-                  onClick={() => toggleItem(item.id)}
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-3 sm:gap-4 text-left"
+                <details
+                  className="group overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all open:border-[#4ECCA3]/20 open:shadow-md sm:rounded-2xl"
+                  open={index === 0}
                 >
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#4ECCA3]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#4ECCA3]" />
-                  </div>
-                  <span className="flex-1 font-medium text-gray-900 text-sm sm:text-base pr-2">{item.question}</span>
-                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ${openItems.includes(item.id) ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {openItems.includes(item.id) && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
+                  <summary className="flex cursor-pointer select-none list-none items-center gap-3 px-4 py-3 marker:hidden sm:gap-4 sm:px-6 sm:py-4 [&::-webkit-details-marker]:hidden">
+                    <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#4ECCA3]/10 sm:h-10 sm:w-10">
+                      <item.icon className="h-4 w-4 text-[#4ECCA3] sm:h-5 sm:w-5" />
+                    </div>
+                    <span className="flex-1 pr-2 text-sm font-medium text-gray-900 sm:text-base">
+                      {item.question}
+                    </span>
+                    <svg
+                      className="h-5 w-5 flex-shrink-0 text-gray-400 transition-transform duration-200 group-open:rotate-180"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
                     >
-                      <div className="px-4 sm:px-6 pb-3 sm:pb-4 pl-14 sm:pl-20">
-                        <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{item.answer}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <div className="px-4 pb-3 pl-14 sm:px-6 sm:pb-4 sm:pl-20">
+                    <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
+                      {item.answer}
+                    </p>
+                  </div>
+                </details>
               </motion.div>
             ))}
           </div>
 
           {filteredItems.length === 0 && (
-            <div className="text-center py-12">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <HelpCircle className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
+            <div className="py-12 text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 sm:h-16 sm:w-16">
+                <HelpCircle className="h-7 w-7 text-gray-400 sm:h-8 sm:w-8" />
               </div>
-              <p className="text-gray-600 text-sm sm:text-base">Keine Ergebnisse gefunden</p>
+              <p className="text-sm text-gray-600 sm:text-base">Keine Ergebnisse gefunden</p>
             </div>
           )}
         </div>

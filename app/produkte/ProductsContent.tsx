@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -68,8 +68,21 @@ export function ProductsContent({
   const [showFilters, setShowFilters] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
 
-  // Sync filters with URL (reset to page 1)
+  // Track previous filter values to detect real filter changes
+  const prevFiltersRef = useRef({ selectedCategory, debouncedSearchQuery, priceRange, sortBy })
+
+  // Sync filters with URL (reset to page 1 only when filters actually change)
   useEffect(() => {
+    const prev = prevFiltersRef.current
+    const filtersChanged =
+      prev.selectedCategory !== selectedCategory ||
+      prev.debouncedSearchQuery !== debouncedSearchQuery ||
+      prev.priceRange[0] !== priceRange[0] ||
+      prev.priceRange[1] !== priceRange[1] ||
+      prev.sortBy !== sortBy
+
+    prevFiltersRef.current = { selectedCategory, debouncedSearchQuery, priceRange, sortBy }
+
     const params = new URLSearchParams(searchParams.toString())
 
     if (selectedCategory) params.set('kategorie', selectedCategory)
@@ -87,8 +100,8 @@ export function ProductsContent({
     if (sortBy !== 'newest') params.set('sort', sortBy)
     else params.delete('sort')
 
-    // Réinitialiser à la page 1 quand les filtres changent
-    params.delete('page')
+    // Reset to page 1 only when filters change (not on page navigation)
+    if (filtersChanged) params.delete('page')
 
     const newQuery = params.toString()
     const currentQuery = searchParams.toString()
@@ -727,7 +740,7 @@ export function ProductsContent({
                                             />
                                           ))}
                                           <span className="ml-0.5 text-[8px] font-semibold text-gray-400">
-                                            {product.reviewCount > 0 ? product.reviewCount : 0}
+                                            {product.reviewCount > 0 ? product.reviewCount : ''}
                                           </span>
                                         </div>
                                         <div className="flex items-center gap-1.5">
@@ -823,9 +836,10 @@ export function ProductsContent({
                                             />
                                           ))}
                                           <span className="ml-1 text-xs font-semibold text-gray-400">
-                                            {product.rating.toFixed(1)} (
-                                            {product.reviewCount > 0 ? product.reviewCount : 0}{' '}
-                                            Bewertungen)
+                                            {product.rating.toFixed(1)}
+                                            {product.reviewCount > 0
+                                              ? ` (${product.reviewCount} Bewertungen)`
+                                              : ''}
                                           </span>
                                         </div>
                                       </div>

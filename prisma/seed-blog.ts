@@ -12,7 +12,8 @@ const blogSeedData = [
   {
     slug: 'pfanne-kaufratgeber',
     titleDe: 'Der ultimative Induktions-Pfannen-Kaufratgeber',
-    excerptDe: 'Worauf Sie beim Kauf von Pfannen für Ihr Induktionskochfeld unbedingt achten sollten.',
+    excerptDe:
+      'Worauf Sie beim Kauf von Pfannen für Ihr Induktionskochfeld unbedingt achten sollten.',
     contentDe: `## Warum Induktionspfannen besondere Anforderungen haben
 
 Nicht jede Pfanne ist für Induktionsherde geeignet. Das Kochfeld erzeugt ein elektromagnetisches Wechselfeld, das nur in ferromagnetischen Materialien Wärme erzeugt. Das bedeutet: Nur Pfannen mit einem magnetischen Boden funktionieren auf Induktion.
@@ -48,12 +49,13 @@ Für den täglichen Einsatz empfehlen wir eine hochwertige Edelstahlpfanne mit S
     author: 'Nova Team',
     readTime: '8 min',
     isPublished: true,
-    publishedAt: new Date('2024-03-15'),
+    publishedAt: new Date('2026-03-15'),
   },
   {
     slug: 'induktion-vs-gas',
     titleDe: 'Induktion vs. Gas: Was ist wirklich besser?',
-    excerptDe: 'Ein detaillierter Vergleich der beiden beliebtesten Kochtechnologien in der modernen Küche.',
+    excerptDe:
+      'Ein detaillierter Vergleich der beiden beliebtesten Kochtechnologien in der modernen Küche.',
     contentDe: `## Die ewige Küchendebatte
 
 Kaum eine Frage beschäftigt Hobbyköche und Profis gleichermaßen so sehr: Induktion oder Gas? Beide Systeme haben überzeugte Anhänger — und beide haben tatsächlich klare Stärken und Schwächen.
@@ -99,7 +101,7 @@ Für den modernen Haushalts-Koch ist **Induktion die bessere Wahl**: effizienter
     author: 'Dr. Koch',
     readTime: '12 min',
     isPublished: true,
-    publishedAt: new Date('2024-03-10'),
+    publishedAt: new Date('2026-03-10'),
   },
   {
     slug: 'kochfeld-pflege',
@@ -149,7 +151,7 @@ Mit dieser einfachen Routine bleibt Ihr NOVA INDUKT Kochfeld jahrelang in bestem
     author: 'Nova Team',
     readTime: '5 min',
     isPublished: true,
-    publishedAt: new Date('2024-03-05'),
+    publishedAt: new Date('2026-03-05'),
   },
 ]
 

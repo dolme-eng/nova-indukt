@@ -56,6 +56,7 @@ export default async function SuchePage({
     where.OR = [
       { nameDe: { contains: q, mode: 'insensitive' } },
       { descriptionDe: { contains: q, mode: 'insensitive' } },
+      { brand: { contains: q, mode: 'insensitive' } },
       { category: { nameDe: { contains: q, mode: 'insensitive' } } },
     ]
   }

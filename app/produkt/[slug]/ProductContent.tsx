@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import type { LucideIcon } from 'lucide-react'
 import {
   Star,
@@ -409,11 +411,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 </p>
               )}
 
-              <div className="mb-5 inline-flex items-center gap-2 rounded-xl border border-green-200 bg-green-50/80 px-3 py-2.5 text-sm font-bold text-green-800">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                Sofort lieferbar
-              </div>
-
               <div className="flex gap-2">
                 <div className="flex h-11 shrink-0 items-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50 sm:w-32">
                   <button
@@ -577,8 +574,8 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">
                       Produktdetails
                     </h2>
-                    <div className="mb-10 max-w-4xl whitespace-pre-line text-base leading-relaxed text-gray-600 xl:text-lg">
-                      {product.description.de}
+                    <div className="prose prose-gray prose-headings:font-heading prose-headings:text-[#0C211E] prose-bold:font-bold prose-li:marker:text-[#4ECCA3] mb-10 max-w-4xl max-w-none text-base leading-relaxed text-gray-600 xl:text-lg">
+                      <Markdown remarkPlugins={[remarkGfm]}>{product.description.de}</Markdown>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                       {[
@@ -673,8 +670,8 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               id: 'description',
               label: 'Beschreibung',
               content: (
-                <div className="space-y-4 text-sm leading-relaxed text-gray-600">
-                  <p>{product.description.de}</p>
+                <div className="prose prose-gray prose-li:marker:text-[#4ECCA3] max-w-none space-y-4 text-sm leading-relaxed text-gray-600">
+                  <Markdown remarkPlugins={[remarkGfm]}>{product.description.de}</Markdown>
                   <div className="grid gap-2">
                     {[
                       { icon: Zap, t: 'SmartHeat', d: 'Gleichmäßige Hitze.' },
