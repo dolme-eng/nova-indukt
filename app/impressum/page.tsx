@@ -14,9 +14,7 @@ export const metadata: Metadata = {
     description: 'Impressum und gesetzliche Anbieterkennzeichnung von NOVA INDUKT GmbH',
     url: `${SHOP_DOMAIN}/impressum`,
     siteName: 'NOVA INDUKT',
-    images: [
-      { url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT' },
-    ],
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT' }],
     type: 'website',
   },
 }
@@ -68,6 +66,12 @@ export default async function ImpressumPage() {
           <section>
             <h2 className="mb-4 text-xl font-semibold text-gray-900">Kontakt</h2>
             <div className="space-y-2 text-gray-700">
+              <p>
+                Telefon:{' '}
+                <a href={`tel:${COMPANY.phone.numberRaw}`} className="hover:text-[#4ECCA3]">
+                  {COMPANY.phone.number}
+                </a>
+              </p>
               <p className="flex items-center gap-2">
                 WhatsApp-Kundenservice:
                 <a

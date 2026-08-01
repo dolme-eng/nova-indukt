@@ -115,7 +115,9 @@ export default async function RueckgabePage() {
             <div className="mt-4 space-y-2 text-sm text-gray-600">
               <p>• Bitte beilegen Sie eine Kopie der Rechnung oder Lieferschein</p>
               <p>• Verwenden Sie wenn möglich die Originalverpackung</p>
-              <p>• Senden Sie die Ware ausreichend frankiert</p>
+              <p>
+                • Senden Sie die Ware an unsere Rücksendeadresse (Frankatur obliegt dem Verkäufer)
+              </p>
             </div>
           </div>
 

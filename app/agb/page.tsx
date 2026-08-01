@@ -155,9 +155,14 @@ export default async function AGBPage() {
             <div className="space-y-3 text-sm leading-relaxed text-gray-700">
               <p>
                 (1) Verbraucher haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen
-                diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag,
-                an dem Sie oder ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die
-                Waren in Besitz genommen haben.
+                diesen Vertrag zu widerrufen. Wir gewähren Ihnen freiwillig ein erweitertes
+                Rückgaberecht von 30 Tagen (siehe
+                <a href="/rueckgabe" className="mx-1 text-[#4ECCA3] hover:underline">
+                  /rueckgabe
+                </a>
+                ). Die gesetzliche Widerrufsfrist beträgt vierzehn Tage ab dem Tag, an dem Sie oder
+                ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die Waren in Besitz
+                genommen haben.
               </p>
               <p>
                 (2) Die Einzelheiten zum Widerrufsrecht finden Sie in unserer Widerrufsbelehrung
