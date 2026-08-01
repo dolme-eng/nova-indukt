@@ -82,8 +82,8 @@ export default function AccountPageClient() {
         ])
 
         if (ordersRes.ok) {
-          const orders = await ordersRes.json()
-          setOrdersCount(orders.length)
+          const data = await ordersRes.json()
+          setOrdersCount(data.pagination?.totalCount ?? data.orders?.length ?? 0)
         }
 
         if (addressesRes.ok) {
@@ -453,7 +453,7 @@ function OrdersTab() {
           throw new Error('Failed to fetch orders')
         }
         const data = await response.json()
-        setOrders(data)
+        setOrders(data.orders ?? data)
       } catch (err) {
         setError('Bestellungen konnten nicht geladen werden')
         logError('Failed to fetch orders', err)

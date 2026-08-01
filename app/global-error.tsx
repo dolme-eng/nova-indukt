@@ -1,11 +1,19 @@
 'use client'
 
+import { useEffect } from 'react'
+import { logError } from '@/lib/logger'
+
 export default function GlobalError({
+  error,
   reset,
 }: {
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  useEffect(() => {
+    logError('Global error (root layout crash):', error)
+  }, [error])
+
   return (
     <html lang="de">
       <body>
@@ -15,71 +23,53 @@ export default function GlobalError({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
+            fontFamily: 'system-ui, sans-serif',
             backgroundColor: '#f9fafb',
-            padding: '1rem',
           }}
         >
           <div
             style={{
-              maxWidth: '28rem',
-              width: '100%',
+              maxWidth: '400px',
               textAlign: 'center',
+              padding: '48px',
               backgroundColor: 'white',
-              borderRadius: '1.5rem',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              padding: '2rem',
+              borderRadius: '16px',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
             }}
           >
-            <div
-              style={{
-                width: '5rem',
-                height: '5rem',
-                backgroundColor: '#fef2f2',
-                borderRadius: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1.5rem',
-              }}
-            >
-              <span style={{ fontSize: '2.5rem' }}>⚠️</span>
-            </div>
-            <h1
-              style={{
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                color: '#111827',
-                marginBottom: '1rem',
-              }}
-            >
+            <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '12px' }}>
               Etwas ist schief gelaufen
             </h1>
-            <p
-              style={{
-                color: '#6b7280',
-                marginBottom: '2rem',
-                lineHeight: 1.6,
-              }}
-            >
+            <p style={{ color: '#6b7280', marginBottom: '24px' }}>
               Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.
             </p>
             <button
               onClick={() => reset()}
               style={{
-                width: '100%',
-                padding: '1rem',
+                padding: '12px 24px',
                 backgroundColor: '#0C211E',
                 color: 'white',
-                fontWeight: 700,
-                borderRadius: '1rem',
                 border: 'none',
+                borderRadius: '12px',
                 cursor: 'pointer',
-                fontSize: '1rem',
+                fontWeight: 'bold',
+                fontSize: '14px',
               }}
             >
               Erneut versuchen
             </button>
+            {error.digest && (
+              <p
+                style={{
+                  marginTop: '16px',
+                  fontSize: '10px',
+                  color: '#9ca3af',
+                  fontFamily: 'monospace',
+                }}
+              >
+                Error ID: {error.digest}
+              </p>
+            )}
           </div>
         </div>
       </body>

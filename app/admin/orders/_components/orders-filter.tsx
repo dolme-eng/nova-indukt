@@ -17,6 +17,8 @@ export function OrdersFilter() {
   // Update URL when filters change
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
+    params.delete('page')
+
     if (debouncedSearch) params.set('q', debouncedSearch)
     else params.delete('q')
 

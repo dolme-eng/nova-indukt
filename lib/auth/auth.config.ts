@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { compare, hash } from 'bcrypt-ts'
 import type { Role } from '@prisma/client'
 import type { JWT } from 'next-auth/jwt'
+import { prisma } from '@/lib/prisma'
 
 // Verify password - supports both legacy bcrypt and new bcrypt-ts format
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
@@ -46,7 +47,25 @@ export const authConfig: NextAuthConfig = {
         // Il est correctement typé grâce à l'augmentation dans types/next-auth.d.ts
         token.role = (user as { role: Role }).role
         token.id = user.id
+        token.tokenVersion = (user as unknown as { tokenVersion: number }).tokenVersion ?? 0
       }
+
+      // Validate tokenVersion against DB (reject stale JWTs after password reset)
+      if (token.id && token.tokenVersion !== undefined) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { tokenVersion: true },
+          })
+          if (dbUser && dbUser.tokenVersion !== token.tokenVersion) {
+            // Token has been invalidated (password was reset)
+            return {} as JWT
+          }
+        } catch {
+          // On DB error, allow the token (fail open for availability)
+        }
+      }
+
       return token
     },
     async session({ session, token }) {

@@ -1,8 +1,8 @@
-import NextAuth from "next-auth"
-import { authConfig, verifyPassword } from "./auth.config"
-import { prisma } from "@/lib/prisma"
-import Credentials from "next-auth/providers/credentials"
-import { isLockedOut, recordFailedLogin, recordSuccessfulLogin } from "./login-lockout"
+import NextAuth from 'next-auth'
+import { authConfig, verifyPassword } from './auth.config'
+import { prisma } from '@/lib/prisma'
+import Credentials from 'next-auth/providers/credentials'
+import { isLockedOut, recordFailedLogin, recordSuccessfulLogin } from './login-lockout'
 import { logError } from '@/lib/logger'
 
 const { handlers, auth, signOut, signIn } = NextAuth({
@@ -23,7 +23,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
           }
 
           const user = await prisma.user.findUnique({
-            where: { email }
+            where: { email },
           })
 
           if (!user || !user.password) {
@@ -31,10 +31,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
             return null
           }
 
-          const isValid = await verifyPassword(
-            credentials.password as string,
-            user.password
-          )
+          const isValid = await verifyPassword(credentials.password as string, user.password)
 
           if (!isValid) {
             await recordFailedLogin(email)
@@ -52,15 +49,16 @@ const { handlers, auth, signOut, signIn } = NextAuth({
             id: user.id,
             email: user.email,
             name: user.name,
-            role: user.role
+            role: user.role,
+            tokenVersion: user.tokenVersion,
           }
         } catch (error) {
-          logError("Auth error in authorize:", error)
+          logError('Auth error in authorize:', error)
           return null
         }
-      }
-    })
-  ]
+      },
+    }),
+  ],
 })
 
 export { handlers, auth, signOut, signIn }
@@ -70,7 +68,7 @@ export { auth as getServerSession }
 
 export async function getCurrentUser() {
   const session = await auth()
-  
+
   if (!session?.user?.id) {
     return null
   }
@@ -81,10 +79,10 @@ export async function getCurrentUser() {
       addresses: true,
       wishlist: {
         include: {
-          product: true
-        }
-      }
-    }
+          product: true,
+        },
+      },
+    },
   })
 
   return user
@@ -92,10 +90,10 @@ export async function getCurrentUser() {
 
 export async function requireAuth() {
   const session = await auth()
-  
+
   if (!session?.user) {
-    throw new Error("Unauthorized")
+    throw new Error('Unauthorized')
   }
-  
+
   return session
 }

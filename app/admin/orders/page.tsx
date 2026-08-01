@@ -10,6 +10,8 @@ import {
   XCircle,
   RefreshCcw,
   Box,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic'
@@ -20,7 +22,9 @@ import { Prisma, OrderStatus, PaymentStatus } from '@prisma/client'
 import { OrdersFilter } from './_components/orders-filter'
 import { CsvExportButton } from '../_components/csv-export-button'
 
-async function getOrders(search?: string, status?: string) {
+const PAGE_SIZE = 50
+
+async function getOrders(search?: string, status?: string, page: number = 1) {
   const where: Prisma.OrderWhereInput = {}
 
   if (status) {
@@ -35,13 +39,20 @@ async function getOrders(search?: string, status?: string) {
     ]
   }
 
-  return await prisma.order.findMany({
-    where,
-    orderBy: { createdAt: 'desc' },
-    include: {
-      items: true,
-    },
-  })
+  const skip = (page - 1) * PAGE_SIZE
+
+  const [orders, totalCount] = await Promise.all([
+    prisma.order.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      include: { items: true },
+      skip,
+      take: PAGE_SIZE,
+    }),
+    prisma.order.count({ where }),
+  ])
+
+  return { orders, totalCount, totalPages: Math.ceil(totalCount / PAGE_SIZE) }
 }
 
 const statusMap: Record<OrderStatus, { label: string; color: string; icon: React.ReactNode }> = {
@@ -89,10 +100,15 @@ const paymentMap: Record<PaymentStatus, { label: string; color: string }> = {
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; status?: string }>
+  searchParams: Promise<{ q?: string; status?: string; page?: string }>
 }) {
   const resolvedParams = await searchParams
-  const orders = await getOrders(resolvedParams.q, resolvedParams.status)
+  const page = Math.max(1, parseInt(resolvedParams.page || '1', 10))
+  const { orders, totalCount, totalPages } = await getOrders(
+    resolvedParams.q,
+    resolvedParams.status,
+    page
+  )
 
   return (
     <div className="space-y-6">
@@ -101,7 +117,7 @@ export default async function AdminOrdersPage({
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Bestellungen</h1>
           <p className="text-sm text-slate-500">
-            Verwalten und verfolgen Sie die Verkäufe ({orders.length} Bestellungen)
+            Verwalten und verfolgen Sie die Verkäufe ({totalCount} Bestellungen)
           </p>
         </div>
         <CsvExportButton
@@ -222,6 +238,35 @@ export default async function AdminOrdersPage({
           </table>
         </div>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
+          <p className="text-sm text-slate-500">
+            Seite {page} von {totalPages}
+          </p>
+          <div className="flex gap-2">
+            {page > 1 && (
+              <Link
+                href={`/admin/orders?page=${page - 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}`}
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                <ChevronLeft size={16} />
+                Zurück
+              </Link>
+            )}
+            {page < totalPages && (
+              <Link
+                href={`/admin/orders?page=${page + 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}`}
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                Weiter
+                <ChevronRight size={16} />
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

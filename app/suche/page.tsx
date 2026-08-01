@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { Product, Category } from '@/lib/data/products'
+import { mapDbProductToUi } from '@/lib/data/products'
 import SearchContent from './SearchContent'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,48 +30,72 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function SuchePage() {
+export default async function SuchePage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    q?: string
+    category?: string
+    priceMin?: string
+    priceMax?: string
+    sort?: string
+  }>
+}) {
+  const params = await searchParams
+  const q = params.q?.trim() || ''
+  const category = params.category || ''
+  const priceMin = params.priceMin ? parseFloat(params.priceMin) : undefined
+  const priceMax = params.priceMax ? parseFloat(params.priceMax) : undefined
+  const sort = params.sort || 'relevance'
+
+  const where: Prisma.ProductWhereInput = {
+    isActive: true,
+  }
+
+  if (q.length >= 2) {
+    where.OR = [
+      { nameDe: { contains: q, mode: 'insensitive' } },
+      { descriptionDe: { contains: q, mode: 'insensitive' } },
+      { category: { nameDe: { contains: q, mode: 'insensitive' } } },
+    ]
+  }
+
+  if (category) {
+    where.categoryId = category
+  }
+
+  if (priceMin !== undefined || priceMax !== undefined) {
+    where.price = {}
+    if (priceMin !== undefined) where.price.gte = priceMin
+    if (priceMax !== undefined) where.price.lte = priceMax
+  }
+
+  let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: 'desc' }
+  if (sort === 'price-asc') orderBy = { price: 'asc' }
+  else if (sort === 'price-desc') orderBy = { price: 'desc' }
+  else if (sort === 'rating') orderBy = { rating: 'desc' }
+
   const [products, categories] = await Promise.all([
     prisma.product.findMany({
-      where: { isActive: true },
+      where,
       include: { images: true },
-      take: 100,
+      orderBy,
+      take: 200,
     }),
     prisma.category.findMany({
       where: { isActive: true },
+      include: { _count: { select: { products: true } } },
     }),
   ])
 
-  const formattedProducts: Product[] = products.map((p) => ({
-    id: p.id,
-    slug: p.slug,
-    name: { de: p.nameDe },
-    category: p.categoryId,
-    price: Number(p.price),
-    oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
-    images: p.images.sort((a, b) => a.sortOrder - b.sortOrder).map((img) => img.url),
-    rating: Number(p.rating),
-    reviewCount: p.reviewCount,
-    badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,
-    description: { de: p.descriptionDe || '' },
-    shortDescription: { de: p.shortDescription || '' },
-    specs: {
-      material: p.material || '',
-      dimensions: p.dimensions || '',
-      weight: p.weightKg?.toString() || '',
-      dishwasher: p.dishwasherSafe || false,
-      induction: p.inductionSafe || false,
-    },
-    brand: p.brand || undefined,
-    ean: p.ean || undefined,
-  }))
+  const formattedProducts: Product[] = products.map(mapDbProductToUi)
 
   const formattedCategories: Category[] = categories.map((c) => ({
     id: c.id,
     slug: c.slug,
     name: { de: c.nameDe },
     image: c.image || '',
-    count: 0,
+    count: c._count.products,
   }))
 
   return (

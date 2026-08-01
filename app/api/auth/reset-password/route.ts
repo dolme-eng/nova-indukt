@@ -67,13 +67,14 @@ export async function POST(request: NextRequest) {
     // Hash new password
     const hashedPassword = await hashPassword(password)
 
-    // Update user password and clear reset token
+    // Update user password, clear reset token, and invalidate existing JWTs
     await prisma.user.update({
       where: { id: user.id },
       data: {
         password: hashedPassword,
         resetToken: null,
         resetTokenExpiry: null,
+        tokenVersion: { increment: 1 },
       },
     })
 

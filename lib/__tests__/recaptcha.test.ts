@@ -101,7 +101,7 @@ describe('verifyRecaptcha', () => {
 
   it('fails open when fetch throws (Google API unreachable) in dev', async () => {
     process.env.RECAPTCHA_SECRET_KEY = 'test-secret'
-    process.env.NODE_ENV = 'test'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'test', writable: true })
 
     vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'))
 
@@ -114,7 +114,7 @@ describe('verifyRecaptcha', () => {
 
   it('fails closed when fetch throws in production', async () => {
     process.env.RECAPTCHA_SECRET_KEY = 'test-secret'
-    process.env.NODE_ENV = 'production'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
 
     vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'))
 
@@ -125,7 +125,7 @@ describe('verifyRecaptcha', () => {
     expect(result).not.toBeNull()
     expect(result!.status).toBe(403)
 
-    process.env.NODE_ENV = 'test'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'test', writable: true })
   })
 
   it('sends remoteip when x-forwarded-for is present', async () => {
@@ -151,7 +151,8 @@ describe('verifyRecaptcha', () => {
     const result = await verifyRecaptcha(req, 'contact')
     expect(result).toBeNull()
 
-    const body = fetchSpy.mock.calls[0][1].body as URLSearchParams
+    const call = fetchSpy.mock.calls[0]
+    const body = (call?.[1] as { body?: URLSearchParams })?.body as URLSearchParams
     expect(body.get('remoteip')).toBe('1.2.3.4')
   })
 })

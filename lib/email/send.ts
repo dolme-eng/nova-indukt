@@ -12,6 +12,7 @@ import { calculateOrderTotals } from '../utils/pricing'
 import { SHOP_DOMAIN } from '../constants/shop'
 import { generateInvoicePDF } from '../utils/invoice'
 import { logError, logWarn } from '@/lib/logger'
+import { createUnsubscribeToken } from '@/lib/unsubscribe-token'
 
 export { FROM_EMAIL, FROM_NAME }
 
@@ -74,9 +75,7 @@ export async function sendEmailWithRetry(
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
       if (attempt < maxRetries - 1) {
-        logWarn(
-          `Exception sending email. Retrying attempt ${attempt + 1}/${maxRetries}...`
-        )
+        logWarn(`Exception sending email. Retrying attempt ${attempt + 1}/${maxRetries}...`)
         attempt++
         await new Promise((res) => setTimeout(res, Math.pow(2, attempt) * 500))
         continue
@@ -403,7 +402,8 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
 // Newsletter confirmation email
 export async function sendNewsletterConfirmationEmail(email: string, firstName?: string) {
   try {
-    const unsubscribeUrl = `${SHOP_DOMAIN}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
+    const unsubscribeToken = createUnsubscribeToken(email)
+    const unsubscribeUrl = `${SHOP_DOMAIN}/api/newsletter/unsubscribe?${unsubscribeToken}`
 
     const html = await render(
       NewsletterConfirmationEmail({

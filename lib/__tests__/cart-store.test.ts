@@ -8,6 +8,14 @@ vi.mock('@/app/actions/cart', () => ({
   clearCart: vi.fn(async () => ({ success: true })),
 }))
 
+vi.mock('@/app/actions/cart-hydration', () => ({
+  getProductsForHydration: vi.fn(async () => []),
+}))
+
+vi.mock('@/lib/logger', () => ({
+  logError: vi.fn(),
+}))
+
 import { useCartStore } from '@/lib/store/cart'
 import type { Product } from '@/lib/data/products'
 

@@ -28,26 +28,38 @@ export async function GET(request: NextRequest) {
     })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
-    const orders = await prisma.order.findMany({
-      where: { userId: session.user.id },
-      include: {
-        items: {
-          include: {
-            product: {
-              include: {
-                images: true,
+    const url = new URL(request.url)
+    const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10))
+    const limit = Math.min(50, Math.max(1, parseInt(url.searchParams.get('limit') || '20', 10)))
+    const skip = (page - 1) * limit
+
+    const [orders, totalCount] = await Promise.all([
+      prisma.order.findMany({
+        where: { userId: session.user.id },
+        include: {
+          items: {
+            include: {
+              product: {
+                include: {
+                  images: true,
+                },
               },
             },
           },
         },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip,
+        take: limit,
+      }),
+      prisma.order.count({
+        where: { userId: session.user.id },
+      }),
+    ])
 
-    return NextResponse.json(
-      orders.map((order) => ({
+    return NextResponse.json({
+      orders: orders.map((order) => ({
         ...order,
         total: Number(order.total),
         subtotal: Number(order.subtotal),
@@ -60,8 +72,14 @@ export async function GET(request: NextRequest) {
             price: Number(item.product.price),
           },
         })),
-      }))
-    )
+      })),
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+      },
+    })
   } catch (error) {
     logError('Error fetching orders:', error)
     return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 })

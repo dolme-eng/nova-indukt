@@ -52,6 +52,7 @@ model User {
   resetTokenExpiry DateTime?
   verificationToken       String?        @unique
   verificationTokenExpiry DateTime?
+  tokenVersion            Int            @default(0)
   accounts         Account[]
   addresses        Address[]
   orders           Order[]
@@ -121,6 +122,8 @@ model Product {
   @@index([categoryId])
   @@index([isActive])
   @@index([price])
+  @@index([isActive, createdAt])
+  @@index([isActive, categoryId])
 }
 
 model ProductImage {

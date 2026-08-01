@@ -35,9 +35,15 @@ export function CookieConsent() {
       const timer = setTimeout(() => setIsVisible(true), 1000)
       return () => clearTimeout(timer)
     } else {
-      const parsed = JSON.parse(savedConsent)
-      setPreferences(parsed)
-      applyConsentChoices(parsed)
+      try {
+        const parsed = JSON.parse(savedConsent)
+        setPreferences(parsed)
+        applyConsentChoices(parsed)
+      } catch {
+        localStorage.removeItem('cookie-consent')
+        const timer = setTimeout(() => setIsVisible(true), 1000)
+        return () => clearTimeout(timer)
+      }
     }
   }, [])
 
@@ -294,8 +300,12 @@ export function CookieConsent() {
 export function useCookieConsent() {
   const [consent, setConsent] = useState<CookieConsent | null>(null)
   useEffect(() => {
-    const saved = localStorage.getItem('cookie-consent')
-    if (saved) setConsent(JSON.parse(saved))
+    try {
+      const saved = localStorage.getItem('cookie-consent')
+      if (saved) setConsent(JSON.parse(saved))
+    } catch {
+      localStorage.removeItem('cookie-consent')
+    }
   }, [])
   return {
     hasConsent: !!consent,

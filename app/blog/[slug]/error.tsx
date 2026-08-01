@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { logError } from '@/lib/logger'
 
 export default function BlogPostError({
   error,
@@ -10,7 +11,7 @@ export default function BlogPostError({
   reset: () => void
 }) {
   useEffect(() => {
-    console.error('Route error:', error)
+    logError('Page error', error)
   }, [error])
 
   return (
@@ -21,7 +22,7 @@ export default function BlogPostError({
       </p>
       <button
         onClick={reset}
-        className="rounded-xl bg-[#4ECCA3] px-6 py-3 font-semibold text-white hover:bg-[#3BA88A] transition-colors"
+        className="rounded-xl bg-[#4ECCA3] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#3BA88A]"
       >
         Erneut versuchen
       </button>

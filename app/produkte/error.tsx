@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { logError } from '@/lib/logger'
 
 export default function ProdukteError({
   error,
@@ -10,7 +11,7 @@ export default function ProdukteError({
   reset: () => void
 }) {
   useEffect(() => {
-    console.error('Produkte error:', error)
+    logError('Page error', error)
   }, [error])
 
   return (

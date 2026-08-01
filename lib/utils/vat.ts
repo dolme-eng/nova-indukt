@@ -70,11 +70,7 @@ export function formatPriceDe(value: number): string {
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: 'EUR',
-  }).format(value).replace(/\s/g, '\u00A0')
+  })
+    .format(value)
+    .replace(/\s/g, '\u00A0')
 }
-
-/** @deprecated Utiliser formatPriceDe à la place (identique). */
-export const formatDeEuro = formatPriceDe
-
-/** @deprecated Utiliser VAT_RATE_PERCENT à la place. */
-export const DEFAULT_DE_VAT_PERCENT = VAT_RATE_PERCENT

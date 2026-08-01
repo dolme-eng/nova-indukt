@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { createUnsubscribeToken } from '@/lib/unsubscribe-token'
 
 vi.mock('@/lib/prisma', () => ({
   prisma: {
@@ -35,7 +36,7 @@ function makePostRequest(body: unknown) {
 
 function makeGetRequest(email?: string) {
   const url = email
-    ? `https://example.com/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
+    ? `https://example.com/api/newsletter/unsubscribe?${createUnsubscribeToken(email)}`
     : 'https://example.com/api/newsletter/unsubscribe'
   return new NextRequest(new Request(url, { method: 'GET' }))
 }

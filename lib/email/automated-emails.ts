@@ -6,16 +6,20 @@ import ShippingNotificationEmail from './templates/shipping-notification'
 import ReviewRequestEmail from './templates/review-request'
 import WelcomeEmail from './templates/welcome'
 import { logError } from '@/lib/logger'
+import { createUnsubscribeToken } from '@/lib/unsubscribe-token'
 
 /**
  * Send shipping notification when order is marked as shipped
  * Called when admin (or automation) updates order status to SHIPPED
  */
-export async function sendShippingNotification(orderId: string, trackingInfo?: {
-  trackingNumber: string
-  carrier: string
-  trackingUrl: string
-}) {
+export async function sendShippingNotification(
+  orderId: string,
+  trackingInfo?: {
+    trackingNumber: string
+    carrier: string
+    trackingUrl: string
+  }
+) {
   try {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
@@ -42,22 +46,26 @@ export async function sendShippingNotification(orderId: string, trackingInfo?: {
         trackingNumber: trackingInfo?.trackingNumber || '',
         carrier: trackingInfo?.carrier || 'DHL',
         trackingUrl: trackingInfo?.trackingUrl || '#',
-        items: order.items.map(item => ({
+        items: order.items.map((item) => ({
           name: item.productName || item.product?.nameDe || 'Produkt',
           quantity: item.quantity,
         })),
-        shippingAddress: typeof order.shippingAddress === 'object'
-          ? order.shippingAddress
-          : JSON.parse((order.shippingAddress as string) || '{}'),
+        shippingAddress:
+          typeof order.shippingAddress === 'object'
+            ? order.shippingAddress
+            : JSON.parse((order.shippingAddress as string) || '{}'),
       })
     )
 
-    const result = await getResend()?.emails.send({
+    const result = (await getResend()?.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: recipientEmail,
       subject: `Ihre Bestellung wurde versandt! - ${order.orderNumber}`,
       html,
-    }) ?? { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
+    })) ?? {
+      data: null,
+      error: { name: 'resend_not_configured', message: 'Resend not configured' },
+    }
 
     if (result.error) {
       logError('Failed to send shipping notification:', result.error)
@@ -87,7 +95,7 @@ export async function sendReviewRequests() {
   try {
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-    
+
     const oneDayAgo = new Date()
     oneDayAgo.setDate(oneDayAgo.getDate() - 1)
 
@@ -127,12 +135,12 @@ export async function sendReviewRequests() {
           include: {
             product: {
               include: {
-                images: true,
-              },
-            },
-          },
-        },
-        user: true,
+                images: true
+              }
+            }
+          }
+        }
+        user: true
       }
     }>
 
@@ -156,12 +164,12 @@ export async function sendReviewRequests() {
           })
         )
 
-        const result = await getResend()?.emails.send({
+        const result = (await getResend()?.emails.send({
           from: `${FROM_NAME} <${FROM_EMAIL}>`,
           to: typedOrder.user.email,
           subject: `Wie gefällt Ihnen Ihre Bestellung ${typedOrder.orderNumber}?`,
           html,
-        }) ?? { data: null, error: null }
+        })) ?? { data: null, error: null }
 
         if (result.error) {
           results.push({ orderId: typedOrder.id, success: false, error: result.error })
@@ -183,7 +191,7 @@ export async function sendReviewRequests() {
       }
     }
 
-    return { success: true, sent: results.filter(r => r.success).length, results }
+    return { success: true, sent: results.filter((r) => r.success).length, results }
   } catch (error) {
     logError('Error in review request batch:', error)
     return { success: false, error }
@@ -198,16 +206,16 @@ export async function sendWelcomeEmail(subscriberEmail: string, firstName?: stri
     const html = await render(
       WelcomeEmail({
         firstName: firstName || 'Kunde',
-        unsubscribeUrl: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(subscriberEmail)}`,
+        unsubscribeUrl: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL}/api/newsletter/unsubscribe?${createUnsubscribeToken(subscriberEmail)}`,
       })
     )
 
-    const result = await getResend()?.emails.send({
+    const result = (await getResend()?.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: subscriberEmail,
       subject: 'Willkommen bei NOVA INDUKT! Ihr 10% Rabatt wartet auf Sie',
       html,
-    }) ?? { data: null, error: null }
+    })) ?? { data: null, error: null }
 
     if (result.error) {
       logError('Failed to send welcome email:', result.error)

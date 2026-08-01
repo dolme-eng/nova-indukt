@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
+import { verifyUnsubscribeToken } from '@/lib/unsubscribe-token'
 
 const unsubscribeSchema = z.object({
   email: z.string().email('Ungültige E-Mail-Adresse'),
@@ -91,17 +92,13 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const email = searchParams.get('email')?.toLowerCase()
+    const email = verifyUnsubscribeToken(
+      searchParams.get('email'),
+      searchParams.get('expires'),
+      searchParams.get('sig')
+    )
 
     if (!email) {
-      return new NextResponse(HTML_TEMPLATE, {
-        status: 200,
-        headers: { 'Content-Type': 'text/html; charset=utf-8' },
-      })
-    }
-
-    const result = unsubscribeSchema.safeParse({ email })
-    if (!result.success) {
       return new NextResponse(HTML_TEMPLATE, {
         status: 200,
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
