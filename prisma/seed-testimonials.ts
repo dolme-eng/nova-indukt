@@ -11,7 +11,8 @@ const testimonials = [
     productSlug: 'fissler-adamant-plus-bratpfanne-24cm',
     rating: 5,
     title: 'Absolut erstklassig!',
-    content: 'Die Induktionspfanne ist absolut erstklassig! Das Essen wird gleichmäßig erhitzt und die Reinigung ist ein Kinderspiel. Kann ich nur empfehlen.',
+    content:
+      'Die Induktionspfanne ist absolut erstklassig! Das Essen wird gleichmäßig erhitzt und die Reinigung ist ein Kinderspiel. Kann ich nur empfehlen.',
     userName: 'Maria Schmidt',
     isVerified: true,
   },
@@ -19,7 +20,8 @@ const testimonials = [
     productSlug: 'fissler-original-profi-collection-topfset-5tlg',
     rating: 5,
     title: 'Hervorragende Qualität!',
-    content: 'Habe das Topfset für meine neue Küche gekauft. Die Qualität ist hervorragend und sie sehen auch noch toll aus. Schnelle Lieferung!',
+    content:
+      'Habe das Topfset für meine neue Küche gekauft. Die Qualität ist hervorragend und sie sehen auch noch toll aus. Schnelle Lieferung!',
     userName: 'Hans Weber',
     isVerified: true,
   },
@@ -27,7 +29,8 @@ const testimonials = [
     productSlug: null as string | null,
     rating: 4,
     title: 'Gute Produkte, fairer Preis',
-    content: 'Gute Produkte zu einem fairen Preis. Der Kundenservice war sehr hilfsbereit bei meinen Fragen zur Induktionstechnologie.',
+    content:
+      'Gute Produkte zu einem fairen Preis. Der Kundenservice war sehr hilfsbereit bei meinen Fragen zur Induktionstechnologie.',
     userName: 'Klaus Müller',
     isVerified: true,
   },
@@ -35,7 +38,8 @@ const testimonials = [
     productSlug: 'petromax-dutch-oven-dt6-oval',
     rating: 5,
     title: 'Mein Lieblingsteil in der Küche',
-    content: 'Mein Dutch Oven ist jetzt mein Lieblingsteil in der Küche. Perfekt für Schmorgerichte und Brotbacken.',
+    content:
+      'Mein Dutch Oven ist jetzt mein Lieblingsteil in der Küche. Perfekt für Schmorgerichte und Brotbacken.',
     userName: 'Anna Bauer',
     isVerified: true,
   },
@@ -43,7 +47,8 @@ const testimonials = [
     productSlug: 'zwilling-pro-s-messerset-3-teilig',
     rating: 5,
     title: 'Endlich wie ein Profi schneiden!',
-    content: 'Die Messer sind scharf und gut ausbalanciert. Endlich kann ich wie ein Profi schneiden!',
+    content:
+      'Die Messer sind scharf und gut ausbalanciert. Endlich kann ich wie ein Profi schneiden!',
     userName: 'Thomas Klein',
     isVerified: true,
   },
@@ -52,19 +57,7 @@ const testimonials = [
 async function main() {
   console.log('🌱 NOVA INDUKT — Seed Testimonials (5 avis)')
 
-  // Find or create a system user for anonymous reviews
-  let systemUser = await prisma.user.findFirst({ where: { email: 'system@nova-indukt.de' } })
-  if (!systemUser) {
-    systemUser = await prisma.user.create({
-      data: {
-        email: 'system@nova-indukt.de',
-        name: 'NOVA INDUKT Kunde',
-        role: 'USER',
-      },
-    })
-    console.log('  ✓ System-Benutzer erstellt')
-  }
-
+  // Create or find a user for each testimonial (so names differ on homepage)
   let created = 0
   for (const t of testimonials) {
     // Find product by slug
@@ -96,10 +89,24 @@ async function main() {
       continue
     }
 
+    // Find or create a user with the testimonial's name
+    const slugName = t.userName.toLowerCase().replace(/\s+/g, '-')
+    const userEmail = `${slugName}@nova-testimonials.de`
+    let user = await prisma.user.findUnique({ where: { email: userEmail } })
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email: userEmail,
+          name: t.userName,
+          role: 'USER',
+        },
+      })
+    }
+
     await prisma.review.create({
       data: {
         productId,
-        userId: systemUser.id,
+        userId: user.id,
         rating: t.rating,
         title: t.title,
         content: t.content,
