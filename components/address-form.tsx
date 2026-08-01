@@ -96,8 +96,9 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
           {/* First & Last Name */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Vorname *</label>
+              <label htmlFor="firstName" className="mb-1 block text-sm font-medium text-gray-700">Vorname *</label>
               <input
+                id="firstName"
                 type="text"
                 value={formData.firstName}
                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
@@ -109,8 +110,9 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
               {errors.firstName && <p className="mt-1 text-xs text-red-500">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Nachname *</label>
+              <label htmlFor="lastName" className="mb-1 block text-sm font-medium text-gray-700">Nachname *</label>
               <input
+                id="lastName"
                 type="text"
                 value={formData.lastName}
                 onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
@@ -125,22 +127,24 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
           {/* Company */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Firma (optional)</label>
+            <label htmlFor="company" className="mb-1 block text-sm font-medium text-gray-700">Firma (optional)</label>
             <input
+              id="company"
               type="text"
               value={formData.company || ''}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              className={`w-full rounded-xl border border-gray-200 px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20`}
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
               placeholder="z.B. Muster GmbH"
             />
           </div>
 
           {/* Street */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label htmlFor="street" className="mb-1 block text-sm font-medium text-gray-700">
               Straße und Hausnummer *
             </label>
             <input
+              id="street"
               type="text"
               value={formData.street}
               onChange={(e) => setFormData({ ...formData, street: e.target.value })}
@@ -154,10 +158,11 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
           {/* Street 2 */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label htmlFor="street2" className="mb-1 block text-sm font-medium text-gray-700">
               Adresszusatz (optional)
             </label>
             <input
+              id="street2"
               type="text"
               value={formData.street2 || ''}
               onChange={(e) => setFormData({ ...formData, street2: e.target.value })}
@@ -169,8 +174,9 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
           {/* Zip Code & City */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">PLZ *</label>
+              <label htmlFor="zipCode" className="mb-1 block text-sm font-medium text-gray-700">PLZ *</label>
               <input
+                id="zipCode"
                 type="text"
                 value={formData.zipCode}
                 onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
@@ -182,8 +188,9 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
               {errors.zipCode && <p className="mt-1 text-xs text-red-500">{errors.zipCode}</p>}
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Stadt *</label>
+              <label htmlFor="city" className="mb-1 block text-sm font-medium text-gray-700">Stadt *</label>
               <input
+                id="city"
                 type="text"
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
@@ -198,8 +205,9 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
           {/* Country */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Land</label>
+            <label htmlFor="country" className="mb-1 block text-sm font-medium text-gray-700">Land</label>
             <select
+              id="country"
               value={formData.country}
               onChange={(e) => setFormData({ ...formData, country: e.target.value })}
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 transition-all focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20"
@@ -215,10 +223,11 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
           {/* Phone */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label htmlFor="phone" className="mb-1 block text-sm font-medium text-gray-700">
               Telefon (optional)
             </label>
             <input
+              id="phone"
               type="tel"
               value={formData.phone || ''}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -229,7 +238,7 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
 
           {/* Default Options */}
           <div className="space-y-3 border-t border-gray-100 pt-2">
-            <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 p-3 transition-colors hover:bg-gray-50">
+            <label htmlFor="isDefault" className="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 p-3 transition-colors hover:bg-gray-50">
               <div
                 className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
                   formData.isDefault ? 'border-[#4ECCA3] bg-[#4ECCA3]' : 'border-gray-300'
@@ -238,6 +247,7 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
                 {formData.isDefault && <Check className="h-3 w-3 text-white" />}
               </div>
               <input
+                id="isDefault"
                 type="checkbox"
                 checked={formData.isDefault}
                 onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
@@ -263,7 +273,7 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
             Abbrechen
           </button>
           <button
-            onClick={handleSubmit}
+            type="submit"
             disabled={isSubmitting}
             className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
           >

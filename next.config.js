@@ -17,7 +17,9 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {},
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
   compress: true,
   poweredByHeader: false,
   async headers() {

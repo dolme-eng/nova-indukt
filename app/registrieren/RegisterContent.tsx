@@ -134,10 +134,11 @@ export function RegisterContent() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Name</label>
+              <label htmlFor="register-name" className="mb-1 block text-sm font-medium text-gray-700">Name</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="register-name"
                   data-testid="register-name"
                   type="text"
                   value={formData.name}
@@ -151,10 +152,11 @@ export function RegisterContent() {
 
             {/* Email */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
+              <label htmlFor="register-email" className="mb-1 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="register-email"
                   data-testid="register-email"
                   type="email"
                   value={formData.email}
@@ -168,10 +170,11 @@ export function RegisterContent() {
 
             {/* Password */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Passwort</label>
+              <label htmlFor="register-password" className="mb-1 block text-sm font-medium text-gray-700">Passwort</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="register-password"
                   data-testid="register-password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
@@ -183,6 +186,7 @@ export function RegisterContent() {
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
@@ -193,12 +197,13 @@ export function RegisterContent() {
 
             {/* Confirm Password */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label htmlFor="register-confirm-password" className="mb-1 block text-sm font-medium text-gray-700">
                 Passwort bestätigen
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="register-confirm-password"
                   data-testid="register-confirm-password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.confirmPassword}
