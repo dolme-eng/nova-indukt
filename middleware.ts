@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth'
 import { NextResponse } from 'next/server'
-import { authConfig } from '@/lib/auth/auth.config'
+import { middlewareAuthConfig } from '@/lib/auth/middleware.config'
 import type { Role } from '@prisma/client'
 
-const { auth } = NextAuth(authConfig)
+const { auth } = NextAuth(middlewareAuthConfig)
 
 /** Check if a pathname is safe for use as a redirect target (relative, no protocol). */
 function isSafeRedirect(path: string): boolean {
