@@ -860,7 +860,10 @@ export default function CheckoutContent() {
                     <form ref={paymentFormRef} onSubmit={handleBankTransfer} className="space-y-6">
                       <div className="space-y-5 rounded-2xl bg-[#0C211E] p-6">
                         <div className="space-y-3">
-                          <label className="text-xs font-bold uppercase tracking-wider text-[#4ECCA3]">
+                          <label
+                            htmlFor="bank-transfer-email"
+                            className="text-xs font-bold uppercase tracking-wider text-[#4ECCA3]"
+                          >
                             E-Mail für Rechnung
                           </label>
                           <p className="text-sm leading-relaxed text-white/70">
@@ -870,6 +873,7 @@ export default function CheckoutContent() {
                           <div className="relative">
                             <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                             <input
+                              id="bank-transfer-email"
                               type="email"
                               required
                               value={contactEmail || shippingData.email}
@@ -976,7 +980,11 @@ export default function CheckoutContent() {
                 {/* Promo Code Input */}
                 {!appliedPromo ? (
                   <div className="mb-4 flex gap-2">
+                    <label htmlFor="coupon-input" className="sr-only">
+                      Gutscheincode
+                    </label>
                     <input
+                      id="coupon-input"
                       data-testid="coupon-input"
                       type="text"
                       placeholder="Gutscheincode"

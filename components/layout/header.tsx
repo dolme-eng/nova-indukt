@@ -309,6 +309,7 @@ export function Header() {
                 data-testid="mobile-menu-button"
                 className="group flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100/60 hover:text-[#0C211E] lg:hidden"
                 aria-label="Menü"
+                aria-expanded={mobileMenuOpen}
               >
                 <AnimatePresence mode="wait">
                   {mobileMenuOpen ? (

@@ -12,29 +12,32 @@ const heroSlides = [
     image: '/images/hero/Die-Zukunft-der-Induktion.webp',
     tag: 'Innovation 2026',
     title: 'Präzision in jeder Facette',
-    subtitle: 'Entdecken Sie die neue Generation des Induktionskochens. Deutsche Ingenieurskunst trifft auf zeitloses Design.',
+    subtitle:
+      'Entdecken Sie die neue Generation des Induktionskochens. Deutsche Ingenieurskunst trifft auf zeitloses Design.',
     primaryBtn: 'Kollektion ansehen',
     secondaryBtn: 'Technologie',
-    color: 'from-nova-500/20'
+    color: 'from-nova-500/20',
   },
   {
     image: '/images/hero/Professionelle-Topfsets.webp',
     tag: 'Premium Serie',
     title: 'Meisterstücke für Ihre Küche',
-    subtitle: 'Vom Profi-Set bis zum Einzelstück – Kochgeschirr, das Maßstäbe in Wärmeleitfähigkeit und Langlebigkeit setzt.',
+    subtitle:
+      'Vom Profi-Set bis zum Einzelstück – Kochgeschirr, das Maßstäbe in Wärmeleitfähigkeit und Langlebigkeit setzt.',
     primaryBtn: 'Topfsets entdecken',
     secondaryBtn: 'Pfannen',
-    color: 'from-amber-500/10'
+    color: 'from-amber-500/10',
   },
   {
     image: '/images/hero/Smarte-Küchentechnologie.webp',
     tag: 'Smarte Küche',
     title: 'Intelligenz, die man schmeckt',
-    subtitle: 'Gleichmäßige Hitzeverteilung und reaktionsschnelle Temperaturkontrolle für perfekte Ergebnisse, jedes Mal.',
+    subtitle:
+      'Gleichmäßige Hitzeverteilung und reaktionsschnelle Temperaturkontrolle für perfekte Ergebnisse, jedes Mal.',
     primaryBtn: 'Smart Kochen',
     secondaryBtn: 'Zubehör',
-    color: 'from-blue-500/10'
-  }
+    color: 'from-blue-500/10',
+  },
 ]
 
 const blurPlaceholder =
@@ -43,8 +46,10 @@ const blurPlaceholder =
 export const HomeHero = memo(function HomeHero() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
+    if (isPaused) return
     const duration = 6000
     const interval = 100
     const step = (interval / duration) * 100
@@ -60,10 +65,10 @@ export const HomeHero = memo(function HomeHero() {
     }, interval)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [isPaused])
 
   return (
-    <section className="relative h-[65vh] sm:h-[75vh] lg:h-[85vh] min-h-[500px] overflow-hidden bg-[#050A09] selection:bg-nova-400/30">
+    <section className="relative h-[65vh] min-h-[500px] overflow-hidden bg-[#050A09] selection:bg-nova-400/30 sm:h-[75vh] lg:h-[85vh]">
       {/* Background Slides */}
       <AnimatePresence mode="sync">
         <motion.div
@@ -78,50 +83,56 @@ export const HomeHero = memo(function HomeHero() {
             src={heroSlides[currentSlide].image}
             alt={heroSlides[currentSlide].title}
             fill
-            className="object-cover object-center scale-[1.05] animate-ken-burns"
+            className="animate-ken-burns scale-[1.05] object-cover object-center"
             priority
             sizes="100vw"
             placeholder="blur"
             blurDataURL={blurPlaceholder}
           />
           {/* Advanced Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-10" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80 z-10" />
-          <div className={`absolute inset-0 bg-gradient-to-tr ${heroSlides[currentSlide].color} to-transparent mix-blend-overlay z-10`} />
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/30 via-transparent to-black/80" />
+          <div
+            className={`absolute inset-0 bg-gradient-to-tr ${heroSlides[currentSlide].color} z-10 to-transparent mix-blend-overlay`}
+          />
         </motion.div>
       </AnimatePresence>
 
       {/* Floating Decorative Elements */}
-      <div className="absolute top-20 right-[10%] z-20 hidden lg:block">
+      <div className="absolute right-[10%] top-20 z-20 hidden lg:block">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 1 }}
-          className="p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl space-y-4 max-w-[240px]"
+          className="max-w-[240px] space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-nova-400/20 flex items-center justify-center border border-nova-400/30">
-              <ShieldCheck className="w-5 h-5 text-nova-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-nova-400/30 bg-nova-400/20">
+              <ShieldCheck className="h-5 w-5 text-nova-400" />
             </div>
             <div>
-              <p className="text-white font-bold text-sm tracking-tight">German Quality</p>
-              <p className="text-nova-300/60 text-[10px] uppercase font-black tracking-widest">Zertifiziert</p>
+              <p className="text-sm font-bold tracking-tight text-white">Deutsche Qualität</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-nova-300/60">
+                Zertifiziert
+              </p>
             </div>
           </div>
-          <div className="h-px bg-white/10 w-full" />
+          <div className="h-px w-full bg-white/10" />
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-400/20 flex items-center justify-center border border-blue-400/30">
-              <Zap className="w-5 h-5 text-blue-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/20">
+              <Zap className="h-5 w-5 text-blue-400" />
             </div>
             <div>
-              <p className="text-white font-bold text-sm tracking-tight">Eco Energy</p>
-              <p className="text-blue-300/60 text-[10px] uppercase font-black tracking-widest">-30% Power</p>
+              <p className="text-sm font-bold tracking-tight text-white">Umweltfreundlich</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-blue-300/60">
+                -30% Power
+              </p>
             </div>
           </div>
         </motion.div>
       </div>
 
-      <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center">
+      <div className="container relative z-30 mx-auto flex h-full flex-col justify-center px-6">
         <div className="max-w-3xl">
           <AnimatePresence mode="wait">
             <motion.div
@@ -136,9 +147,9 @@ export const HomeHero = memo(function HomeHero() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 bg-nova-400/10 backdrop-blur-md border border-nova-400/30 text-nova-400 rounded-full text-[10px] sm:text-xs font-black tracking-[0.2em] uppercase"
+                className="mb-6 inline-flex items-center gap-2 rounded-full border border-nova-400/30 bg-nova-400/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-nova-400 backdrop-blur-md sm:text-xs"
               >
-                <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                <Sparkles className="h-3.5 w-3.5 animate-pulse" />
                 {heroSlides[currentSlide].tag}
               </motion.div>
 
@@ -147,15 +158,17 @@ export const HomeHero = memo(function HomeHero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-4xl sm:text-6xl lg:text-7xl font-black text-white mb-6 font-heading leading-[1.05] tracking-tighter"
+                className="mb-6 font-heading text-4xl font-black leading-[1.05] tracking-tighter text-white sm:text-6xl lg:text-7xl"
               >
                 {heroSlides[currentSlide].title.split(' ').map((word, i) => (
-                  <span key={i} className="inline-block mr-[0.2em]">
+                  <span key={i} className="mr-[0.2em] inline-block">
                     {word === 'Präzision' || word === 'Intelligenz' ? (
-                      <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-nova-400/50">
+                      <span className="bg-gradient-to-b from-white via-white to-nova-400/50 bg-clip-text text-transparent">
                         {word}
                       </span>
-                    ) : word}
+                    ) : (
+                      word
+                    )}
                   </span>
                 ))}
               </motion.h1>
@@ -165,7 +178,7 @@ export const HomeHero = memo(function HomeHero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-sm sm:text-lg text-gray-300/90 mb-10 max-w-xl font-medium leading-relaxed"
+                className="mb-10 max-w-xl text-sm font-medium leading-relaxed text-gray-300/90 sm:text-lg"
               >
                 {heroSlides[currentSlide].subtitle}
               </motion.p>
@@ -175,20 +188,20 @@ export const HomeHero = memo(function HomeHero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="flex flex-wrap gap-4 items-center"
+                className="flex flex-wrap items-center gap-4"
               >
                 <Link href="/produkte">
                   <MagneticButton>
-                    <div className="px-8 py-4 bg-[#4ECCA3] hover:bg-[#3BA88A] text-[#0C211E] text-xs sm:text-sm font-black rounded-xl flex items-center justify-center gap-2.5 transition-all shadow-xl shadow-[#4ECCA3]/30 group/btn">
+                    <div className="group/btn flex items-center justify-center gap-2.5 rounded-xl bg-[#4ECCA3] px-8 py-4 text-xs font-black text-[#0C211E] shadow-xl shadow-[#4ECCA3]/30 transition-all hover:bg-[#3BA88A] sm:text-sm">
                       {heroSlides[currentSlide].primaryBtn}
-                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                     </div>
                   </MagneticButton>
                 </Link>
 
                 <Link href="/technologie">
-                  <div className="px-8 py-4 bg-white/5 backdrop-blur-xl hover:bg-white/10 border border-white/10 text-white text-xs sm:text-sm font-black rounded-xl flex items-center justify-center gap-2.5 transition-all group/btn2">
-                    <Eye className="w-4 h-4 opacity-50 group-hover/btn2:opacity-100 transition-opacity" />
+                  <div className="group/btn2 flex items-center justify-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-xs font-black text-white backdrop-blur-xl transition-all hover:bg-white/10 sm:text-sm">
+                    <Eye className="h-4 w-4 opacity-50 transition-opacity group-hover/btn2:opacity-100" />
                     {heroSlides[currentSlide].secondaryBtn}
                   </div>
                 </Link>
@@ -199,7 +212,7 @@ export const HomeHero = memo(function HomeHero() {
       </div>
 
       {/* Progress Line Navigation */}
-      <div className="absolute bottom-10 left-6 right-6 lg:left-12 lg:right-auto lg:w-[400px] z-40">
+      <div className="absolute bottom-10 left-6 right-6 z-40 lg:left-12 lg:right-auto lg:w-[400px]">
         <div className="grid grid-cols-3 gap-4">
           {heroSlides.map((slide, i) => (
             <button
@@ -208,40 +221,71 @@ export const HomeHero = memo(function HomeHero() {
                 setCurrentSlide(i)
                 setProgress(0)
               }}
+              aria-label={`Folie ${i + 1}: ${slide.tag}`}
+              aria-current={i === currentSlide ? 'true' : undefined}
               className="group relative pt-4 text-left"
             >
-              <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+              <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
                 <motion.div
                   className="h-full bg-nova-400"
                   initial={{ width: 0 }}
-                  animate={{ 
-                    width: i === currentSlide ? `${progress}%` : i < currentSlide ? '100%' : '0%' 
+                  animate={{
+                    width: i === currentSlide ? `${progress}%` : i < currentSlide ? '100%' : '0%',
                   }}
                   transition={{ duration: 0.1 }}
                 />
               </div>
               <div className="mt-2 flex flex-col">
-                <span className={`text-[10px] font-black tracking-widest uppercase transition-colors ${i === currentSlide ? 'text-nova-400' : 'text-white/40'}`}>
+                <span
+                  className={`text-[10px] font-black uppercase tracking-widest transition-colors ${i === currentSlide ? 'text-nova-400' : 'text-white/40'}`}
+                >
                   0{i + 1}
                 </span>
-                <span className={`text-[10px] font-bold truncate transition-colors hidden sm:block ${i === currentSlide ? 'text-white' : 'text-white/20'}`}>
+                <span
+                  className={`hidden truncate text-[10px] font-bold transition-colors sm:block ${i === currentSlide ? 'text-white' : 'text-white/20'}`}
+                >
                   {slide.tag}
                 </span>
               </div>
             </button>
           ))}
         </div>
+        <button
+          onClick={() => setIsPaused((p) => !p)}
+          aria-label={isPaused ? 'Animation fortsetzen' : 'Animation pausieren'}
+          className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white/60 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white lg:hidden"
+        >
+          {isPaused ? (
+            <>
+              <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              Weiter
+            </>
+          ) : (
+            <>
+              <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+              Pause
+            </>
+          )}
+        </button>
       </div>
 
       {/* Side Aesthetics */}
-      <div className="absolute top-0 right-0 h-full w-px bg-gradient-to-b from-transparent via-white/10 to-transparent hidden lg:block" />
-      <div className="absolute top-1/4 -right-20 w-40 h-40 bg-nova-400/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -left-20 w-40 h-40 bg-blue-400/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute right-0 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-white/10 to-transparent lg:block" />
+      <div className="pointer-events-none absolute -right-20 top-1/4 h-40 w-40 rounded-full bg-nova-400/10 blur-[100px]" />
+      <div className="pointer-events-none absolute -left-20 bottom-1/4 h-40 w-40 rounded-full bg-blue-400/10 blur-[100px]" />
 
       <style jsx global>{`
         @keyframes ken-burns {
-          0% { transform: scale(1.05); }
-          100% { transform: scale(1.15); }
+          0% {
+            transform: scale(1.05);
+          }
+          100% {
+            transform: scale(1.15);
+          }
         }
         .animate-ken-burns {
           animation: ken-burns 20s linear infinite alternate;

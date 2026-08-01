@@ -173,7 +173,12 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                             selectedImage === index ? 'border-[#4ECCA3]' : 'border-gray-200'
                           }`}
                         >
-                          <Image src={img} alt="" fill className="object-cover" />
+                          <Image
+                            src={img}
+                            alt={`${product.name.de} — Miniaturbild ${selectedImage + 1}`}
+                            fill
+                            className="object-cover"
+                          />
                         </button>
                       ))}
                     </div>

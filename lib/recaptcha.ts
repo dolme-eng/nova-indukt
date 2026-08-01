@@ -19,7 +19,13 @@ export async function verifyRecaptcha(
   expectedAction: string
 ): Promise<NextResponse | null> {
   const secret = process.env.RECAPTCHA_SECRET_KEY
-  if (!secret) return null // gracefully skip if not configured
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      logError('reCAPTCHA_SECRET_KEY not configured in production — blocking request')
+      return NextResponse.json({ error: 'Sicherheitsdienst nicht konfiguriert' }, { status: 503 })
+    }
+    return null // gracefully skip in dev only
+  }
 
   const token = request.headers.get('x-recaptcha-token')
   if (!token) {

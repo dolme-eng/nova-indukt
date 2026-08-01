@@ -81,7 +81,11 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
                 className="mx-auto flex max-w-xl flex-col gap-4 sm:flex-row"
               >
                 <div className="relative flex-1">
+                  <label htmlFor="newsletter-email" className="sr-only">
+                    E-Mail-Adresse
+                  </label>
                   <input
+                    id="newsletter-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
