@@ -6,6 +6,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { deleteImage } from "@/lib/cloudinary"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const mediaAssetSchema = z.object({
   publicId: z.string().min(1),
@@ -45,6 +46,9 @@ export async function POST(req: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:media:post"), { windowMs: 60_000, maxRequests: 15 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
@@ -103,6 +107,9 @@ export async function DELETE(req: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:media:delete"), { windowMs: 60_000, maxRequests: 15 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })

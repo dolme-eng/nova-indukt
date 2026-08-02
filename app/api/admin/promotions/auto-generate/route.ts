@@ -5,6 +5,7 @@ import { DiscountType } from '@prisma/client'
 import { autoGeneratePromotionSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 // POST - Automatisch Promotions generieren
 export async function POST(request: NextRequest) {
@@ -16,6 +17,9 @@ export async function POST(request: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const body = await request.json()
     const parsed = autoGeneratePromotionSchema.safeParse(body)

@@ -155,7 +155,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     src={product.images[0]}
                     alt={product.name.de}
                     fill
-                    unoptimized={isLocalProductImage(product.images[0])}
                     className="object-cover p-0.5 mix-blend-multiply"
                     sizes="44px"
                   />
@@ -243,7 +242,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 alt={product.name.de}
                 fill
                 priority
-                unoptimized={isLocalProductImage(product.images[selectedImage])}
                 className="origin-[var(--x,50%)_var(--y,50%)] object-contain p-4 mix-blend-multiply transition-transform duration-200 ease-out group-hover:scale-[2.2] sm:p-6 lg:p-8"
                 sizes="(max-width: 1023px) 100vw, 50vw"
               />
@@ -292,7 +290,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                       src={img}
                       alt={`${product.name.de} ${index + 1}`}
                       fill
-                      unoptimized={isLocalProductImage(img)}
                       className="object-contain p-2 mix-blend-multiply"
                       sizes="80px"
                     />
@@ -536,7 +533,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
         {/* Desktop: onglets pleine largeur */}
         <section className="mt-8 hidden w-full lg:mt-12 lg:block xl:mt-14">
           <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm">
-            <div className="flex flex-wrap justify-center gap-4 border-b border-gray-100 px-4 py-2 sm:gap-8 xl:gap-12">
+            <div className="flex flex-wrap justify-center gap-4 border-b border-gray-100 px-4 py-2 sm:gap-8 xl:gap-12" role="tablist">
               {[
                 { id: 'description' as const, label: 'Beschreibung' },
                 { id: 'specs' as const, label: 'Technische Daten' },
@@ -545,6 +542,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 <button
                   key={tab.id}
                   type="button"
+                  role="tab"
+                  id={`tab-${tab.id}`}
+                  aria-selected={activeTab === tab.id}
+                  aria-controls={`panel-${tab.id}`}
                   data-testid={tab.id === 'reviews' ? 'reviews-tab' : undefined}
                   onClick={() => setActiveTab(tab.id)}
                   className={`relative py-4 text-sm font-bold transition-colors sm:text-base ${
@@ -566,6 +567,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 {activeTab === 'description' && (
                   <motion.div
                     key="d"
+                    role="tabpanel"
+                    id="panel-description"
+                    aria-labelledby="tab-description"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -607,6 +611,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 {activeTab === 'specs' && (
                   <motion.div
                     key="s"
+                    role="tabpanel"
+                    id="panel-specs"
+                    aria-labelledby="tab-specs"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -646,6 +653,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                 {activeTab === 'reviews' && (
                   <motion.div
                     key="r"
+                    role="tabpanel"
+                    id="panel-reviews"
+                    aria-labelledby="tab-reviews"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -740,6 +750,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
             >
               <button
                 type="button"
+                id={`accordion-btn-${section.id}`}
+                aria-expanded={expandedAccordion === section.id}
+                aria-controls={`accordion-panel-${section.id}`}
                 data-testid={section.id === 'reviews' ? 'reviews-accordion' : undefined}
                 onClick={() =>
                   setExpandedAccordion(expandedAccordion === section.id ? null : section.id)
@@ -754,6 +767,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               <AnimatePresence>
                 {expandedAccordion === section.id && (
                   <motion.div
+                    id={`accordion-panel-${section.id}`}
+                    role="region"
+                    aria-labelledby={`accordion-btn-${section.id}`}
                     initial={{ height: 0 }}
                     animate={{ height: 'auto' }}
                     exit={{ height: 0 }}
@@ -789,7 +805,6 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                           src={item.images[0]}
                           alt={item.name.de}
                           fill
-                          unoptimized={isLocalProductImage(item.images[0])}
                           className="object-contain p-3 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110 sm:p-5"
                           sizes="(max-width: 640px) 45vw, 22vw"
                         />

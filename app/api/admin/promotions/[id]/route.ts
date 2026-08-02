@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { updatePromotionAdminSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 // GET - Récupérer une promotion spécifique
 export async function GET(
@@ -41,6 +42,9 @@ export async function PUT(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const { id } = await params
     const body = await request.json()
@@ -93,6 +97,9 @@ export async function DELETE(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const { id } = await params
     const before = await prisma.promotion.findUnique({ where: { id } })

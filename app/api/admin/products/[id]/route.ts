@@ -6,6 +6,7 @@ import { updateProductSchema } from "@/lib/validations/admin"
 import type { Prisma } from "@prisma/client"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 export async function PATCH(
   req: NextRequest,
@@ -14,6 +15,9 @@ export async function PATCH(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const ip = getIP(req)
     const { success } = await rateLimit(createRateLimitKey(ip, "admin:products:id"), { windowMs: 60_000, maxRequests: 15 })
@@ -76,6 +80,9 @@ export async function DELETE(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const ip = getIP(req)
     const { success } = await rateLimit(createRateLimitKey(ip, "admin:products:id"), { windowMs: 60_000, maxRequests: 15 })

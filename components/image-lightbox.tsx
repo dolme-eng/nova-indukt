@@ -163,6 +163,7 @@ export function ImageLightbox({
                 e.stopPropagation()
                 onNavigate(currentIndex - 1)
               }}
+              aria-label="Vorheriges Bild"
               className="absolute left-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -175,6 +176,7 @@ export function ImageLightbox({
                 e.stopPropagation()
                 onNavigate(currentIndex + 1)
               }}
+              aria-label="Nächstes Bild"
               className="absolute right-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
             >
               <ChevronRight className="h-6 w-6" />
@@ -220,6 +222,7 @@ export function ImageLightbox({
                   e.stopPropagation()
                   handleZoomOut()
                 }}
+                aria-label="Verkleinern"
                 className="text-white transition-colors hover:text-[#4ECCA3]"
                 disabled={scale === 1}
               >
@@ -233,6 +236,7 @@ export function ImageLightbox({
                   e.stopPropagation()
                   handleZoomIn()
                 }}
+                aria-label="Vergrößern"
                 className="text-white transition-colors hover:text-[#4ECCA3]"
                 disabled={scale === 3}
               >

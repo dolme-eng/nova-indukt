@@ -3,11 +3,15 @@ import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin/require-admin'
 import { auditLog } from '@/lib/admin/audit'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const { id } = await params
     const body = await request.json()
@@ -49,6 +53,9 @@ export async function DELETE(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const { id } = await params
 

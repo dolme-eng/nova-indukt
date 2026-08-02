@@ -954,7 +954,6 @@ export default function CheckoutContent() {
                         src={item.product.images[0]}
                         alt={item.product.name.de}
                         fill
-                        unoptimized={isLocalProductImage(item.product.images[0])}
                         className="object-contain p-2 mix-blend-multiply"
                         sizes="80px"
                       />

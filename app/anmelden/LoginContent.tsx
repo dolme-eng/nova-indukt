@@ -136,10 +136,11 @@ export function LoginContent() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
+              <label htmlFor="login-email" className="mb-1 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="login-email"
                   data-testid="login-email"
                   type="email"
                   value={email}
@@ -154,7 +155,7 @@ export function LoginContent() {
             {/* Password */}
             <div>
               <div className="mb-1 flex items-center justify-between">
-                <label className="block text-sm font-medium text-gray-700">Passwort</label>
+                <label htmlFor="login-password" className="block text-sm font-medium text-gray-700">Passwort</label>
                 <Link
                   href="/passwort-vergessen"
                   className="text-sm text-[#4ECCA3] hover:text-[#3BA88A] hover:underline"
@@ -165,6 +166,7 @@ export function LoginContent() {
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="login-password"
                   data-testid="login-password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
@@ -176,6 +178,7 @@ export function LoginContent() {
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >

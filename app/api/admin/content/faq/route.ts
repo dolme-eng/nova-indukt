@@ -5,6 +5,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { createFaqSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 export async function GET(req: NextRequest) {
   const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq'), { windowMs: 60_000, maxRequests: 30 })
@@ -29,6 +30,9 @@ export async function POST(req: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const body = await req.json()
     const parsed = createFaqSchema.safeParse(body)

@@ -6,11 +6,15 @@ import { createProductSchema } from "@/lib/validations/product"
 import type { ProductImageInput } from "@/lib/validations/product"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 export async function POST(req: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:products"), { windowMs: 60_000, maxRequests: 10 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })

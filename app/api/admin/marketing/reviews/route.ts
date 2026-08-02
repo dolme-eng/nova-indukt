@@ -5,6 +5,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const marketingReviewSchema = z.discriminatedUnion('action', [
   z.object({
@@ -25,6 +26,9 @@ export async function PATCH(req: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const body = await req.json()
     const parsed = marketingReviewSchema.safeParse(body)
@@ -111,6 +115,9 @@ export async function DELETE(req: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const { searchParams } = new URL(req.url)
     const id = searchParams.get("id")

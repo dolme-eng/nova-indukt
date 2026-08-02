@@ -5,6 +5,7 @@ import { auditLog } from "@/lib/admin/audit"
 import type { Prisma } from "@prisma/client"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const KEY = "site"
 
@@ -57,6 +58,9 @@ export async function PUT(req: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const body = await req.json()
     const validation = validateSettings(body)

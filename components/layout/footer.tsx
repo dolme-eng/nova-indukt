@@ -92,7 +92,6 @@ export function Footer() {
                 height={36}
                 className="h-8 w-auto opacity-80 brightness-0 invert transition-opacity hover:opacity-100"
                 style={{ width: 'auto', height: 'auto' }}
-                unoptimized
               />
             </Link>
             <p className="mb-6 pe-4 text-sm font-medium leading-relaxed text-[#9FE1CD]">

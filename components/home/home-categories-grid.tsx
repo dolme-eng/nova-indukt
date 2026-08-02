@@ -68,7 +68,6 @@ export const HomeCategoriesGrid = memo(function HomeCategoriesGrid({ categories 
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    unoptimized
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500" />
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">

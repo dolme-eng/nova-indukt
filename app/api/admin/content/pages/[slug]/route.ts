@@ -5,6 +5,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { updateStaticPageSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ slug: string }> }) {
   const rl = await rateLimit(createRateLimitKey(getIP(_req), 'admin:content:pages:slug'), { windowMs: 60_000, maxRequests: 30 })
@@ -29,6 +30,9 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ slug: s
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const { slug } = await context.params
     const before = await prisma.staticPageContent.findUnique({ where: { slug } })

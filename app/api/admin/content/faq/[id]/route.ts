@@ -5,6 +5,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { updateFaqSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:put'), { windowMs: 60_000, maxRequests: 15 })
@@ -12,6 +13,9 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const { id } = await context.params
     const before = await prisma.faqItem.findUnique({ where: { id } })
@@ -55,6 +59,9 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const { id } = await context.params
     const before = await prisma.faqItem.findUnique({ where: { id } })

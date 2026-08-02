@@ -5,6 +5,7 @@ import { auditLog } from "@/lib/admin/audit"
 import { updateBlogPostSchema } from "@/lib/validations/admin"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 export async function PUT(
   request: NextRequest,
@@ -15,6 +16,9 @@ export async function PUT(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const { id } = await params
 
@@ -79,6 +83,9 @@ export async function DELETE(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const { id } = await params
 

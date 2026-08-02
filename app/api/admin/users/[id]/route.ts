@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const updateUserRoleSchema = z.object({
   role: z.enum(["USER", "ADMIN"]),
@@ -14,6 +15,9 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
 
     const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:users:update"), { windowMs: 60_000, maxRequests: 20 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })

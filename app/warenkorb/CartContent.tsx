@@ -194,7 +194,6 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                           src={item.product.images[0]}
                           alt={item.product.name.de}
                           fill
-                          unoptimized={isLocalProductImage(item.product.images[0])}
                           className="object-contain p-2 mix-blend-multiply transition-transform duration-500 hover:scale-110"
                           sizes="(max-width: 640px) 96px, 128px"
                         />
@@ -329,7 +328,6 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                               src={item.images[0]}
                               alt={item.name.de}
                               fill
-                              unoptimized={isLocalProductImage(item.images[0])}
                               className="object-contain p-2 mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
                               sizes="64px"
                             />

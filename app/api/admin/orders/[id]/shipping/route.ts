@@ -8,6 +8,7 @@ import { render } from "@react-email/render"
 import type { OrderStatus } from "@prisma/client"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 const shippingUpdateSchema = z.object({
   status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']).optional(),
@@ -22,6 +23,9 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+  const csrfError = validateCsrfToken(req)
+  if (csrfError) return csrfError
 
   try {
     const { id } = await context.params

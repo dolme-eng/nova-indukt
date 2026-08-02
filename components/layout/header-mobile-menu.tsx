@@ -120,7 +120,6 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
             width={140}
             height={42}
             className="h-7 w-auto sm:h-8 md:h-9"
-            unoptimized
           />
           <button
             ref={closeButtonRef}

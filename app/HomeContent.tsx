@@ -293,7 +293,6 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
             src={product.images[0]}
             alt={product.name.de}
             fill
-            unoptimized={isLocal(product.images[0])}
             className="object-contain p-3 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110 sm:p-5"
             sizes="(max-width: 640px) 50vw, 20vw"
           />
@@ -433,7 +432,6 @@ const FlashDealCard = memo(function FlashDealCard({
           src={product.images[0]}
           alt={product.name.de}
           fill
-          unoptimized={isLocal(product.images[0])}
           className="object-contain p-6 mix-blend-multiply transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />

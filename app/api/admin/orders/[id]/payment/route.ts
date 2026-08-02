@@ -5,6 +5,8 @@ import { auditLog } from '@/lib/admin/audit'
 import { logError } from '@/lib/logger'
 import { sendPaymentConfirmationEmail } from '@/lib/email/send'
 import { revalidatePath } from 'next/cache'
+import { validateCsrfToken } from '@/lib/csrf'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
 interface ShippingAddress {
   name: string
@@ -22,6 +24,12 @@ interface ShippingAddress {
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const authz = await requireAdmin()
   if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+  const csrfError = validateCsrfToken(request)
+  if (csrfError) return csrfError
+
+  const rl = await rateLimit(createRateLimitKey(getIP(request), 'payment:update'), { windowMs: 60_000, maxRequests: 20 })
+  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
   try {
     const { id } = await params

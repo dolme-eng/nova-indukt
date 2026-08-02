@@ -4,6 +4,7 @@ import { auditLog } from '@/lib/admin/audit'
 import { uploadImage } from '@/lib/cloudinary'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
 const MAX_SIZE = 10 * 1024 * 1024
@@ -12,6 +13,9 @@ export async function POST(request: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return new NextResponse('Unauthorized', { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:upload'), {
       windowMs: 60_000,

@@ -97,7 +97,6 @@ export default async function NotFound() {
                     src={product.image}
                     alt={product.name.de}
                     fill
-                    unoptimized={product.image.startsWith('/images/products/')}
                     sizes="(max-width: 640px) 50vw, 25vw"
                     className="object-contain p-6 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110"
                   />

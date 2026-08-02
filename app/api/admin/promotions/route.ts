@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { createPromotionAdminSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 // GET - Liste toutes les promotions
 export async function GET(req: NextRequest) {
@@ -35,6 +36,9 @@ export async function POST(request: NextRequest) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const body = await request.json()
     const parsed = createPromotionAdminSchema.safeParse(body)
