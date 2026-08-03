@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import TechnologieContent from './TechnologieContent'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'Technologie',
   description: 'Entdecken Sie die innovative NOVA INDUKT Technologie. SmartHeat™, EcoPower, SafetyGuard Pro und mehr für das perfekte Kocherlebnis.',

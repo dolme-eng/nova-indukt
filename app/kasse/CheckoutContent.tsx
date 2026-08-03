@@ -512,6 +512,7 @@ export default function CheckoutContent() {
                 <div key={s.id} className="flex flex-1 items-center last:flex-none">
                   <div className="relative z-10 flex flex-col items-center">
                     <div
+                      aria-current={isActive ? 'step' : undefined}
                       className={`flex h-8 w-8 items-center justify-center rounded-xl font-bold transition-all duration-300 ${
                         isActive
                           ? 'scale-110 bg-[#0C211E] text-white shadow-lg shadow-[#0C211E]/10'
@@ -1082,6 +1083,7 @@ export default function CheckoutContent() {
         >
           <button
             onClick={() => setShowMobileSummary(!showMobileSummary)}
+            aria-expanded={showMobileSummary}
             className="flex w-full items-center justify-between bg-gray-50/50 p-4"
           >
             <div className="flex items-center gap-2">

@@ -674,17 +674,17 @@ export function ProductsContent({
                                       {/* Glass Badges */}
                                       <div className="absolute left-1.5 top-1.5 z-10 flex flex-col gap-1 sm:left-2 sm:top-2">
                                         {product.badges?.includes('premium') && (
-                                          <span className="rounded-md border border-white/10 bg-black/80 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
+                                          <span className="rounded-md border border-white/10 bg-black/80 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
                                             Premium
                                           </span>
                                         )}
                                         {product.badges?.includes('bestseller') && (
-                                          <span className="rounded-md border border-white/10 bg-nova-500/90 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
+                                          <span className="rounded-md border border-white/10 bg-nova-500/90 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
                                             Bestseller
                                           </span>
                                         )}
                                         {product.oldPrice && (
-                                          <span className="rounded-md border border-white/10 bg-red-500/90 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
+                                          <span className="rounded-md border border-white/10 bg-red-500/90 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
                                             -
                                             {Math.round(
                                               (1 - product.price / product.oldPrice) * 100
@@ -739,7 +739,7 @@ export function ProductsContent({
                                               className={`h-2.5 w-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
                                             />
                                           ))}
-                                          <span className="ml-0.5 text-[8px] font-semibold text-gray-400">
+                                          <span className="ml-0.5 text-[10px] font-semibold text-gray-400">
                                             {product.reviewCount > 0 ? product.reviewCount : ''}
                                           </span>
                                         </div>

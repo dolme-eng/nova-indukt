@@ -300,12 +300,12 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
           {/* Glass Badges */}
           <div className="absolute left-1.5 top-1.5 z-10 flex flex-col gap-1">
             {product.badges?.includes('premium') && (
-              <span className="rounded-md border border-white/10 bg-black/80 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
+              <span className="rounded-md border border-white/10 bg-black/80 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
                 Premium
               </span>
             )}
             {product.badges?.includes('bestseller') && (
-              <span className="rounded-md border border-white/10 bg-nova-500/90 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
+              <span className="rounded-md border border-white/10 bg-nova-500/90 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tighter text-white backdrop-blur-md">
                 Bestseller
               </span>
             )}
@@ -350,7 +350,7 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
                 />
               ))}
               {product.reviewCount > 0 && (
-                <span className="ml-0.5 text-[8px] font-semibold text-gray-400">
+                <span className="ml-0.5 text-[10px] font-semibold text-gray-400">
                   {product.reviewCount}
                 </span>
               )}
@@ -474,7 +474,7 @@ const FlashDealCard = memo(function FlashDealCard({
             />
           ))}
           {product.reviewCount > 0 && (
-            <span className="ml-0.5 text-[8px] font-semibold text-gray-400">
+            <span className="ml-0.5 text-[10px] font-semibold text-gray-400">
               {product.reviewCount}
             </span>
           )}
@@ -494,7 +494,7 @@ const FlashDealCard = memo(function FlashDealCard({
 
           {/* Stock Indicator */}
           <div className="mb-2">
-            <div className="mb-1 flex justify-between text-[8px] font-black uppercase tracking-tighter">
+            <div className="mb-1 flex justify-between text-[10px] font-black uppercase tracking-tighter">
               <span className="text-green-600">Auf Lager</span>
             </div>
           </div>

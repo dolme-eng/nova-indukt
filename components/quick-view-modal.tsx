@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -10,6 +10,7 @@ import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { formatPriceDe } from '@/lib/utils/vat'
 import { toast } from 'sonner'
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
 
 interface QuickViewModalProps {
   product: Product | null
@@ -24,61 +25,12 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
   const { toggleItem, isInWishlist } = useWishlist()
   const [isAdded, setIsAdded] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
-  const previousFocusRef = useRef<HTMLElement | null>(null)
 
-  // Focus trap
-  useEffect(() => {
-    if (isOpen) {
-      previousFocusRef.current = document.activeElement as HTMLElement
-      // Focus the modal after animation
-      const timer = setTimeout(() => {
-        modalRef.current?.focus()
-      }, 100)
-      return () => clearTimeout(timer)
-    } else {
-      // Restore focus when closing
-      previousFocusRef.current?.focus()
-    }
-  }, [isOpen])
-
-  // Escape key handler
-  useEffect(() => {
-    if (!isOpen) return
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose()
-        return
-      }
-      // Focus trap: Tab cycles within modal
-      if (e.key === 'Tab' && modalRef.current) {
-        const focusable = modalRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )
-        if (focusable.length === 0) return
-        const first = focusable[0]
-        const last = focusable[focusable.length - 1]
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault()
-          last.focus()
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault()
-          first.focus()
-        }
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
-
-  // Lock body scroll when open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-      return () => {
-        document.body.style.overflow = ''
-      }
-    }
-  }, [isOpen])
+  const { containerRef } = useFocusTrap<HTMLDivElement>({
+    isOpen,
+    onClose,
+    initialFocusRef: modalRef as React.RefObject<HTMLDivElement>,
+  })
 
   if (!product) return null
 
@@ -98,7 +50,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
 
           {/* Modal */}
           <motion.div
-            ref={modalRef}
+            ref={containerRef}
             role="dialog"
             aria-modal="true"
             aria-label={product.name.de}

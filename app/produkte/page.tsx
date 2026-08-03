@@ -125,11 +125,13 @@ export default async function ProductsPage({
     prisma.product.count({ where }),
     prisma.category
       .findMany({
-        where: { isActive: true },
+        where: {
+          isActive: true,
+          products: { some: { isActive: true } },
+        },
         include: { _count: { select: { products: true } } },
         orderBy: { sortOrder: 'asc' },
-      })
-      .then((cats) => cats.filter((c) => c._count.products > 0)),
+      }),
   ])
 
   const formattedProducts: Product[] = products.map(mapDbProductToUi)

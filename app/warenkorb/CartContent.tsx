@@ -212,6 +212,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                           <button
                             data-testid="remove-cart-item"
                             onClick={() => handleRemoveItem(item.product.id)}
+                            aria-label="Artikel entfernen"
                             className="hidden rounded-lg p-2 text-gray-400 transition-all hover:bg-red-50 hover:text-red-500 sm:flex"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -280,8 +281,8 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                           <button
                             data-testid="remove-cart-item-mobile"
                             onClick={() => handleRemoveItem(item.product.id)}
+                            aria-label="Artikel entfernen"
                             className="rounded-lg border border-gray-100 bg-white p-2 text-red-500 transition-colors hover:bg-red-50 sm:hidden"
-                            title="Entfernen"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>

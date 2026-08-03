@@ -96,6 +96,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     prisma.review.findMany({
       where: { productId: product.id, isPublished: true },
       orderBy: { createdAt: 'desc' },
+      take: 50,
     }),
   ])
 

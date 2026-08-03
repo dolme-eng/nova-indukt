@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Wrench } from 'lucide-react'
 import { COMPANY } from '@/lib/constants/company'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'Wartungsarbeiten',
   description: 'NOVA INDUKT ist gerade in Wartung. Wir kommen schnellstmöglich zurück.',

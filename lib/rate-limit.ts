@@ -161,14 +161,20 @@ export async function rateLimit(
 
 /** Extracts the real IP address from request headers */
 export function getIP(request: Request): string {
-  // In production behind Vercel/cloud proxy, only trust x-real-ip
+  // In production, only trust x-real-ip set by trusted proxy (Vercel)
   // x-forwarded-for can be spoofed by clients
+  if (process.env.NODE_ENV === 'production') {
+    const realIp = request.headers.get('x-real-ip')
+    if (realIp) return realIp.trim().split(',')[0]
+    return 'unknown'
+  }
+
+  // Development: allow x-forwarded-for for local testing
   const realIp = request.headers.get('x-real-ip')
   if (realIp) return realIp.trim().split(',')[0]
 
   const forwarded = request.headers.get('x-forwarded-for')
   if (forwarded) {
-    // Take only the first IP (the original client)
     return forwarded.split(',')[0].trim()
   }
   return 'unknown'

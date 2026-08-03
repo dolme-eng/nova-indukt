@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { KontaktContent } from './KontaktContent'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'Kontakt',
   description: 'Kontaktieren Sie NOVA INDUKT. Wir sind für Sie da! Kundenservice, Beratung, Bestellungen. Rufen Sie uns an, schreiben Sie uns oder besuchen Sie uns vor Ort.',

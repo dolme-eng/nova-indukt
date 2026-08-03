@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { verifyUnsubscribeToken } from '@/lib/unsubscribe-token'
+import { validateCsrfToken } from '@/lib/csrf'
 
 const unsubscribeSchema = z.object({
   email: z.string().email('Ungültige E-Mail-Adresse'),
@@ -40,6 +41,9 @@ export async function POST(request: NextRequest) {
       maxRequests: 5,
     })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const body = await request.json()
 

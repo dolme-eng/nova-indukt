@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import AboutContent from './AboutContent'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'Über uns',
   description: 'Lernen Sie NOVA INDUKT kennen - Ihr Spezialist für Premium Induktions-Kochgeschirr aus Deutschland',

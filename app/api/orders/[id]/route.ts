@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendOrderCancellationEmail } from "@/lib/email/send"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 export async function GET(
   request: NextRequest,
@@ -95,6 +96,9 @@ export async function PATCH(
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), "orders:cancel"), { windowMs: 60_000, maxRequests: 5 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
     
     const body = await request.json()
     const { action } = body

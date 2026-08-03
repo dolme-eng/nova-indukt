@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { FAQContent } from './FAQContent'
 import { getFaqItems } from '@/lib/content/static'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'FAQ - Häufig gestellte Fragen',
   description:

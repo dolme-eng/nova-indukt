@@ -60,10 +60,12 @@ export default async function Page() {
       }),
       prisma.category
         .findMany({
-          where: { isActive: true },
+          where: {
+            isActive: true,
+            products: { some: { isActive: true } },
+          },
           include: { _count: { select: { products: true } } },
-        })
-        .then((cats) => cats.filter((c) => c._count.products > 0)),
+        }),
       getActivePromotions(),
       // Latest 3 published blog posts for the home page section
       prisma.blogPost.findMany({

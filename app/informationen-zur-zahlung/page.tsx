@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { getBankDetails } from '@/lib/data/bank-details'
 import { COMPANY } from '@/lib/constants/company'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'Zahlungsinformationen',
   description: 'Zahlungsinformationen und Bankverbindung für Ihre Bestellung bei NOVA INDUKT',
