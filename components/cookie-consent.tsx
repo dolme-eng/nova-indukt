@@ -99,6 +99,7 @@ export function CookieConsent() {
         onClick={openSettings}
         className="fixed bottom-4 left-4 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg transition-colors hover:bg-gray-800"
         title="Cookie-Einstellungen"
+        aria-label="Cookie-Einstellungen"
       >
         <Cookie className="h-5 w-5" />
       </button>

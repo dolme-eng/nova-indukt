@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { ArrowRight, Star, ShoppingCart, Heart, Flame, Award, Sparkles } from 'lucide-react'
+import { ArrowRight, Star, ShoppingCart, Heart, Flame, Award, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { Product, Category, BlogPost } from '@/lib/data/products'
@@ -167,7 +167,7 @@ export function HomeContent({
                 className="flex h-12 w-12 items-center justify-center rounded-[1rem] border border-gray-100 bg-white shadow-sm transition-all hover:scale-105 hover:bg-gray-50 active:scale-95"
                 aria-label="Vorherige Produkte"
               >
-                ◀
+                <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={() =>
@@ -176,7 +176,7 @@ export function HomeContent({
                 className="flex h-12 w-12 items-center justify-center rounded-[1rem] border border-gray-100 bg-white shadow-sm transition-all hover:scale-105 hover:bg-gray-50 active:scale-95"
                 aria-label="Nächste Produkte"
               >
-                ▶
+                <ChevronRight className="h-5 w-5" />
               </button>
             </div>
           </div>

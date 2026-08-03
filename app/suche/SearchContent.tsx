@@ -94,6 +94,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
+                  aria-label="Suche löschen"
                   className="absolute right-4 top-1/2 -translate-y-1/2"
                 >
                   <X className="h-5 w-5 text-gray-400" />
