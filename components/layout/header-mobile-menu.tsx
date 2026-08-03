@@ -107,6 +107,7 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
         exit={{ x: '100%' }}
         transition={{ type: 'spring', damping: 28, stiffness: 200 }}
         data-testid="mobile-menu"
+        id="mobile-menu-panel"
         role="dialog"
         aria-modal="true"
         aria-label="Navigation"
