@@ -15,6 +15,7 @@ const testimonials = [
       'Die Induktionspfanne ist absolut erstklassig! Das Essen wird gleichmäßig erhitzt und die Reinigung ist ein Kinderspiel. Kann ich nur empfehlen.',
     userName: 'Maria Schmidt',
     isVerified: true,
+    createdAt: new Date('2026-06-12T09:30:00Z'),
   },
   {
     productSlug: 'fissler-original-profi-collection-topfset-5tlg',
@@ -24,6 +25,7 @@ const testimonials = [
       'Habe das Topfset für meine neue Küche gekauft. Die Qualität ist hervorragend und sie sehen auch noch toll aus. Schnelle Lieferung!',
     userName: 'Hans Weber',
     isVerified: true,
+    createdAt: new Date('2026-04-03T14:15:00Z'),
   },
   {
     productSlug: null as string | null,
@@ -33,6 +35,7 @@ const testimonials = [
       'Gute Produkte zu einem fairen Preis. Der Kundenservice war sehr hilfsbereit bei meinen Fragen zur Induktionstechnologie.',
     userName: 'Klaus Müller',
     isVerified: true,
+    createdAt: new Date('2026-07-21T11:45:00Z'),
   },
   {
     productSlug: 'petromax-dutch-oven-dt6-oval',
@@ -42,6 +45,7 @@ const testimonials = [
       'Mein Dutch Oven ist jetzt mein Lieblingsteil in der Küche. Perfekt für Schmorgerichte und Brotbacken.',
     userName: 'Anna Bauer',
     isVerified: true,
+    createdAt: new Date('2025-12-08T16:00:00Z'),
   },
   {
     productSlug: 'zwilling-pro-s-messerset-3-teilig',
@@ -51,6 +55,7 @@ const testimonials = [
       'Die Messer sind scharf und gut ausbalanciert. Endlich kann ich wie ein Profi schneiden!',
     userName: 'Thomas Klein',
     isVerified: true,
+    createdAt: new Date('2026-02-17T08:20:00Z'),
   },
 ]
 
@@ -85,7 +90,16 @@ async function main() {
       where: { productId, content: t.content },
     })
     if (existing) {
-      console.log(`  → "${t.userName}" existiert bereits — überspringe`)
+      // Update createdAt if it exists but has wrong date
+      if (existing.createdAt.getTime() !== t.createdAt.getTime()) {
+        await prisma.review.update({
+          where: { id: existing.id },
+          data: { createdAt: t.createdAt },
+        })
+        console.log(`  ↻ "${t.userName}" — Datum aktualisiert → ${t.createdAt.toISOString().slice(0, 10)}`)
+      } else {
+        console.log(`  → "${t.userName}" existiert bereits — überspringe`)
+      }
       continue
     }
 
@@ -112,6 +126,7 @@ async function main() {
         content: t.content,
         isVerified: t.isVerified,
         isPublished: true,
+        createdAt: t.createdAt,
       },
     })
 
