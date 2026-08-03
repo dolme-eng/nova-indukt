@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import {
   Save,
   X,
@@ -306,8 +307,7 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
 
             {formData.image && (
               <div className="relative aspect-video overflow-hidden rounded-lg border border-slate-200">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={formData.image} alt="Vorschau" className="h-full w-full object-cover" />
+                <Image src={formData.image} alt="Vorschau" fill className="h-full w-full object-cover" />
                 <button
                   type="button"
                   onClick={() => setFormData((prev) => ({ ...prev, image: '' }))}
