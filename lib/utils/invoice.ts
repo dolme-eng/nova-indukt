@@ -20,8 +20,6 @@ interface InvoiceData {
 
 export function generateInvoicePDF(data: InvoiceData): jsPDF {
   const doc = new jsPDF()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const pageWidth = doc.internal.pageSize.getWidth()
 
   // Header
   doc.setFontSize(24)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, memo } from 'react'
+import { useState, useEffect, useRef, memo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
 import { useRecaptcha } from '@/hooks/use-recaptcha'
@@ -9,6 +9,13 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
   const { execute } = useRecaptcha()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,14 +37,14 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
       if (response.ok) {
         setStatus('success')
         setEmail('')
-        setTimeout(() => setStatus('idle'), 5000)
+        timerRef.current = setTimeout(() => setStatus('idle'), 5000)
       } else {
         setStatus('error')
-        setTimeout(() => setStatus('idle'), 3000)
+        timerRef.current = setTimeout(() => setStatus('idle'), 3000)
       }
     } catch {
       setStatus('error')
-      setTimeout(() => setStatus('idle'), 3000)
+      timerRef.current = setTimeout(() => setStatus('idle'), 3000)
     }
   }
 

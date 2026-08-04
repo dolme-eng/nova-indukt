@@ -24,8 +24,8 @@ export async function auditLog(params: {
         userAgent: params.userAgent || null,
       },
     })
-  } catch {
-    // audit must never break business actions
+  } catch (error) {
+    console.error('[audit] Failed to write audit log:', error)
   }
 }
 

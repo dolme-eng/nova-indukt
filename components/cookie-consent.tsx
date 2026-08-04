@@ -91,6 +91,9 @@ export function CookieConsent() {
 
   useEffect(() => {
     window.openCookieSettings = openSettings
+    return () => {
+      delete window.openCookieSettings
+    }
   }, [])
 
   if (!isVisible) {

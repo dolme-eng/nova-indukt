@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
 export function CustomCursor() {
@@ -112,22 +112,25 @@ export function CustomCursor() {
       />
 
       {/* Cursor text label */}
-      {cursorText && (
-        <motion.div
-          className="pointer-events-none fixed left-0 top-0 z-[9997] rounded-full bg-[#4ECCA3] px-3 py-1 text-xs font-medium text-white"
-          style={{
-            x: cursorXSpring,
-            y: cursorYSpring,
-            translateX: '-50%',
-            translateY: '-150%',
-          }}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-        >
-          {cursorText}
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {cursorText && (
+          <motion.div
+            key="cursor-text"
+            className="pointer-events-none fixed left-0 top-0 z-[9997] rounded-full bg-[#4ECCA3] px-3 py-1 text-xs font-medium text-white"
+            style={{
+              x: cursorXSpring,
+              y: cursorYSpring,
+              translateX: '-50%',
+              translateY: '-150%',
+            }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+          >
+            {cursorText}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

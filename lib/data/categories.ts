@@ -73,7 +73,7 @@ export const categoriesConfig: CategoryConfig[] = [
     id: 'cat-ustensiles',
     slug: 'ustensiles',
     nameDe: 'Küchenutensilien',
-    descriptionDe: 'Kochlöffel, Schöpfkellen, Zangen undurtheres Kochbesteck für die Induktionsküche',
+    descriptionDe: 'Kochlöffel, Schöpfkellen, Zangen und weiteres Kochbesteck für die Induktionsküche',
     image: '/images/Kategorien/ustensiles.jpg',
     sortOrder: 7,
     isActive: true,

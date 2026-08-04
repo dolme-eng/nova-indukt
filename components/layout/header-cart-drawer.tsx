@@ -30,7 +30,6 @@ export function CartDrawer({
   updateQuantity,
 }: CartDrawerProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const drawerContainerRef = useRef<HTMLDivElement>(null)
 
   const { containerRef } = useFocusTrap<HTMLDivElement>({
     isOpen,
