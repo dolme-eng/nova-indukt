@@ -38,7 +38,8 @@ export async function generateMetadata({
 
   if (!product) return {}
 
-  const title = product.metaTitle || `${product.nameDe} | Premium Induktions-Kochgeschirr`
+  const title = (product.metaTitle || `${product.nameDe} | Premium Induktions-Kochgeschirr`)
+    .replace(/\s*\|\s*NOVA\s*INDUKT\s*$/i, '')
   const description =
     product.metaDescription ||
     product.shortDescription ||

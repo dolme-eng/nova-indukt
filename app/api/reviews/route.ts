@@ -263,6 +263,10 @@ export async function PUT(request: NextRequest) {
       )
     }
 
+    // CSRF protection
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
     const { searchParams } = new URL(request.url)
     const reviewId = searchParams.get('id')
     const action = searchParams.get('action')

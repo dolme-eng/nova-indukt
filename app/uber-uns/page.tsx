@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/uber-uns',
   },
+  openGraph: {
+    title: 'Über uns | NOVA INDUKT',
+    description: 'Lernen Sie NOVA INDUKT kennen - Ihr Spezialist für Premium Induktions-Kochgeschirr aus Deutschland',
+    url: '/uber-uns',
+  },
 }
 
 export default function UberUnsPage() {

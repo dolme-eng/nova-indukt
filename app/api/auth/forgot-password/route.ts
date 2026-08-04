@@ -5,6 +5,8 @@ import crypto from "crypto"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendPasswordResetEmail } from "@/lib/email/send"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
+import { verifyRecaptcha } from "@/lib/recaptcha"
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Ungültige E-Mail-Adresse"),
@@ -28,6 +30,18 @@ export async function POST(request: NextRequest) {
         { error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
         { status: 429 }
       )
+    }
+
+    // CSRF protection
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) {
+      return csrfError
+    }
+
+    // reCAPTCHA verification
+    const captchaError = await verifyRecaptcha(request, 'forgot_password')
+    if (captchaError) {
+      return captchaError
     }
 
     const body = await request.json()

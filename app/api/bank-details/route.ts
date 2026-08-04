@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getBankDetails } from '@/lib/data/bank-details'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { logError } from '@/lib/logger'
 
 /**
  * Public endpoint — returns current bank details for checkout display.
@@ -16,7 +17,8 @@ export async function GET(request: NextRequest) {
 
     const data = await getBankDetails()
     return NextResponse.json(data)
-  } catch {
+  } catch (error) {
+    logError('Error fetching bank details:', error)
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

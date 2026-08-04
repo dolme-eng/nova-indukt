@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
+  openGraph: {
+    title: 'Wunschliste | NOVA INDUKT',
+    description: 'Ihre persönliche Wunschliste bei NOVA INDUKT. Speichern Sie Ihre Lieblingsprodukte und kaufen Sie sie später.',
+    url: '/wunschliste',
+  },
 }
 
 export default function WishlistPage() {

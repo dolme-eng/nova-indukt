@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/agb',
   },
+  openGraph: {
+    title: 'AGB - Allgemeine Geschäftsbedingungen | NOVA INDUKT',
+    description: 'Allgemeine Geschäftsbedingungen der NOVA INDUKT GmbH',
+    url: '/agb',
+  },
 }
 
 export const revalidate = 3600

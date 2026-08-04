@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/lieferung',
   },
+  openGraph: {
+    title: 'Lieferung & Versand | NOVA INDUKT',
+    description: 'Informationen zur Lieferung und zum Versand von NOVA INDUKT Produkten. Schneller Versand innerhalb Deutschlands.',
+    url: '/lieferung',
+  },
 }
 
 export const revalidate = 3600

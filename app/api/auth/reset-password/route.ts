@@ -4,6 +4,7 @@ import { resetPasswordSchema } from '@/lib/validations/auth'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { hashPassword } from '@/lib/auth/auth.config'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 minutes
 const RATE_LIMIT_MAX = 5 // 5 attempts per 15 minutes per IP
@@ -24,6 +25,10 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       )
     }
+
+    // CSRF protection
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const body = await request.json()
 

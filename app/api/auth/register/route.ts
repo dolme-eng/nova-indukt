@@ -8,6 +8,8 @@ import { sendEmailWithRetry, FROM_EMAIL, FROM_NAME } from '@/lib/email/send'
 import EmailVerificationEmail from '@/lib/email/templates/email-verification'
 import { render } from '@react-email/render'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 /**
  * API Route de registration.
@@ -26,6 +28,18 @@ export async function POST(request: NextRequest) {
         { success: false, error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' },
         { status: 429 }
       )
+    }
+
+    // CSRF protection
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) {
+      return csrfError
+    }
+
+    // reCAPTCHA verification
+    const captchaError = await verifyRecaptcha(request, 'register')
+    if (captchaError) {
+      return captchaError
     }
 
     const body = await request.json()

@@ -44,7 +44,6 @@ export async function GET(
       ...product,
       price: Number(product.price),
       oldPrice: product.oldPrice ? Number(product.oldPrice) : null,
-      costPrice: product.costPrice ? Number(product.costPrice) : null,
       reviews: product.reviews.map(review => ({
         ...review,
         rating: Number(review.rating)

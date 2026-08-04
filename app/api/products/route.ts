@@ -79,7 +79,6 @@ export async function GET(request: NextRequest) {
         ...product,
         price: Number(product.price),
         oldPrice: product.oldPrice ? Number(product.oldPrice) : null,
-        costPrice: product.costPrice ? Number(product.costPrice) : null
       })),
       pagination: {
         page,

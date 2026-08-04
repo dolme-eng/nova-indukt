@@ -7,6 +7,7 @@ import { requireAdmin } from '@/lib/admin/require-admin'
 import { auditLog } from '@/lib/admin/audit'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 export async function GET(request: NextRequest) {
   try {
@@ -90,6 +91,10 @@ export async function POST(request: NextRequest) {
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), 'promotions:create'), { windowMs: 60_000, maxRequests: 10 })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+
+    // CSRF protection
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const body = await request.json()
     const validationResult = createPromotionSchema.safeParse(body)

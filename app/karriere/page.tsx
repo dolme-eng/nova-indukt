@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/karriere',
   },
+  openGraph: {
+    title: 'Karriere bei NOVA INDUKT',
+    description: 'Werden Sie Teil des NOVA INDUKT Teams. Entdecken Sie aktuelle Stellenangebote in der Premium-Küchenzubehör Branche.',
+    url: '/karriere',
+  },
 }
 
 export default function KarrierePage() {

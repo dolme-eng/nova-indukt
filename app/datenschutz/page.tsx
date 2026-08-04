@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/datenschutz',
   },
+  openGraph: {
+    title: 'Datenschutzerklärung | NOVA INDUKT',
+    description: 'Datenschutzerklärung der NOVA INDUKT GmbH gemäß DSGVO',
+    url: '/datenschutz',
+  },
 }
 
 export const revalidate = 3600

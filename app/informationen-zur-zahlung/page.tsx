@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/informationen-zur-zahlung',
   },
+  openGraph: {
+    title: 'Zahlungsinformationen | NOVA INDUKT',
+    description: 'Zahlungsinformationen und Bankverbindung für Ihre Bestellung bei NOVA INDUKT',
+    url: '/informationen-zur-zahlung',
+  },
 }
 
 export default async function ZahlungsinformationenPage() {

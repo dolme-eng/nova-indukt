@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/widerruf',
   },
+  openGraph: {
+    title: 'Widerrufsrecht | NOVA INDUKT',
+    description: 'Widerrufsbelehrung und Widerrufsformular der NOVA INDUKT GmbH',
+    url: '/widerruf',
+  },
 }
 
 export default async function WiderrufPage() {

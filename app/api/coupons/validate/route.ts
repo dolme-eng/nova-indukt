@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
+import { validateCsrfToken } from '@/lib/csrf'
 
 const validateCouponSchema = z.object({
   code: z.string().min(1, 'Code ist erforderlich').max(50),
@@ -23,6 +24,10 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       )
     }
+
+    // CSRF protection
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
 
     const body = await request.json()
 

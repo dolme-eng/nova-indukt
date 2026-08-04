@@ -14,6 +14,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  openGraph: {
+    title: 'Technologie | NOVA INDUKT',
+    description: 'Entdecken Sie die innovative NOVA INDUKT Technologie. SmartHeat™, EcoPower, SafetyGuard Pro und mehr für das perfekte Kocherlebnis.',
+    url: '/technologie',
+  },
 }
 
 export default function TechnologiePage() {

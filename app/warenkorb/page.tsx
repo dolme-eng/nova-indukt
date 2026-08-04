@@ -15,6 +15,11 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
+  openGraph: {
+    title: 'Warenkorb | NOVA INDUKT',
+    description: 'Überprüfen Sie Ihre ausgewählten Produkte im Warenkorb. Sichere Bezahlung, kostenloser Versand ab 500€.',
+    url: '/warenkorb',
+  },
 }
 
 export default async function CartPage() {

@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/rueckgabe',
   },
+  openGraph: {
+    title: 'Rückgabe & Widerruf | NOVA INDUKT',
+    description: 'Informationen zur Rückgabe und zum Widerrufsrecht bei NOVA INDUKT. 30 Tage Rückgaberecht für alle Produkte.',
+    url: '/rueckgabe',
+  },
 }
 
 export const revalidate = 3600
