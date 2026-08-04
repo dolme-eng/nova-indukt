@@ -215,7 +215,8 @@ export async function incrementPromotionUsage(promotionId: string): Promise<void
  */
 export async function validateCoupon(
   code: string,
-  cartTotal: number
+  cartTotal: number,
+  cartItems?: Array<{ productId: string; categoryId?: string }>
 ): Promise<{
   isValid: boolean
   discountAmount: number
@@ -258,6 +259,32 @@ export async function validateCoupon(
       isValid: false,
       discountAmount: 0,
       error: `Mindestbestellwert für diesen Gutschein ist ${Number(promotion.minOrderAmount).toFixed(2)} €`,
+    }
+  }
+
+  // Check product restrictions
+  if (cartItems && promotion.productIds.length > 0) {
+    const hasMatchingProduct = cartItems.some((item) => promotion.productIds.includes(item.productId))
+    if (!hasMatchingProduct) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        error: 'Dieser Gutschein gilt nur für bestimmte Produkte',
+      }
+    }
+  }
+
+  // Check category restrictions
+  if (cartItems && promotion.categoryIds.length > 0) {
+    const hasMatchingCategory = cartItems.some(
+      (item) => item.categoryId && promotion.categoryIds.includes(item.categoryId)
+    )
+    if (!hasMatchingCategory) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        error: 'Dieser Gutschein gilt nur für bestimmte Kategorien',
+      }
     }
   }
 

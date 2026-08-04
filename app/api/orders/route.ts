@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
     })
 
     const dbProductMap = new Map(dbProducts.map((p) => [p.id, p]))
-    const serverItems: Array<OrderItemInput & { dbPrice: number }> = []
+    const serverItems: Array<OrderItemInput & { dbPrice: number; dbProductName: string; dbProductSlug: string }> = []
 
     // ── Fix N+1: single DB call for ALL promotions before the loop ───────────
     const promotionMap = await applyPromotionsToProducts(
@@ -171,6 +171,8 @@ export async function POST(request: NextRequest) {
       serverItems.push({
         ...item,
         dbPrice: discountedPrice,
+        dbProductName: dbProduct.nameDe,
+        dbProductSlug: dbProduct.slug,
       })
     }
 
@@ -186,7 +188,11 @@ export async function POST(request: NextRequest) {
     let verifiedPromotionId: string | undefined
 
     if (appliedPromoCode) {
-      const couponResult = await validateCoupon(appliedPromoCode, serverSubtotal)
+      const couponCartItems = serverItems.map((item) => {
+        const dbProduct = dbProductMap.get(item.id)
+        return { productId: item.id, categoryId: dbProduct?.categoryId }
+      })
+      const couponResult = await validateCoupon(appliedPromoCode, serverSubtotal, couponCartItems)
       if (!couponResult.isValid) {
         return NextResponse.json(
           { error: couponResult.error || 'Gutschein ungültig' },
@@ -236,9 +242,9 @@ export async function POST(request: NextRequest) {
               return {
                 productId: item.id,
                 quantity: item.quantity,
-                unitPrice: item.dbPrice, // C7 FIX: Use discounted DB price
-                productName: item.name,
-                productSlug: item.slug || '',
+                unitPrice: item.dbPrice,
+                productName: item.dbProductName,
+                productSlug: item.dbProductSlug,
                 vatRate: VAT_RATE_PERCENT,
               }
             }),

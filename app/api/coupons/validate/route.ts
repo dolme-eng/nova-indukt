@@ -8,6 +8,10 @@ import { validateCsrfToken } from '@/lib/csrf'
 const validateCouponSchema = z.object({
   code: z.string().min(1, 'Code ist erforderlich').max(50),
   amount: z.number().positive('Betrag muss positiv sein'),
+  items: z.array(z.object({
+    id: z.string(),
+    categoryId: z.string().optional(),
+  })).optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -40,7 +44,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { code, amount } = parsed.data
+    const { code, amount, items } = parsed.data
 
     const promo = await prisma.promotion.findFirst({
       where: {
@@ -67,6 +71,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ 
         error: `Mindestbestellwert von ${Number(promo.minOrderAmount).toFixed(2)}€ nicht erreicht` 
       }, { status: 400 })
+    }
+
+    // Check product restrictions
+    if (items && promo.productIds.length > 0) {
+      const hasMatchingProduct = items.some((item) => promo.productIds.includes(item.id))
+      if (!hasMatchingProduct) {
+        return NextResponse.json({ error: 'Dieser Gutschein gilt nur für bestimmte Produkte' }, { status: 400 })
+      }
+    }
+
+    // Check category restrictions
+    if (items && promo.categoryIds.length > 0) {
+      const hasMatchingCategory = items.some(
+        (item) => item.categoryId && promo.categoryIds.includes(item.categoryId)
+      )
+      if (!hasMatchingCategory) {
+        return NextResponse.json({ error: 'Dieser Gutschein gilt nur für bestimmte Kategorien' }, { status: 400 })
+      }
     }
 
     // Calculate discount

@@ -67,7 +67,7 @@ export async function sendShippingNotification(
       error: { name: 'resend_not_configured', message: 'Resend not configured' },
     }
 
-    if (result.error) {
+    if (result.error || !result.data) {
       logError('Failed to send shipping notification:', result.error)
       return { success: false, error: result.error }
     }
@@ -169,9 +169,9 @@ export async function sendReviewRequests() {
           to: typedOrder.user.email,
           subject: `Wie gefällt Ihnen Ihre Bestellung ${typedOrder.orderNumber}?`,
           html,
-        })) ?? { data: null, error: null }
+        })) ?? { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
 
-        if (result.error) {
+        if (result.error || !result.data) {
           results.push({ orderId: typedOrder.id, success: false, error: result.error })
           continue
         }
@@ -215,9 +215,9 @@ export async function sendWelcomeEmail(subscriberEmail: string, firstName?: stri
       to: subscriberEmail,
       subject: 'Willkommen bei NOVA INDUKT! Ihr 10% Rabatt wartet auf Sie',
       html,
-    })) ?? { data: null, error: null }
+    })) ?? { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
 
-    if (result.error) {
+    if (result.error || !result.data) {
       logError('Failed to send welcome email:', result.error)
       return { success: false, error: result.error }
     }

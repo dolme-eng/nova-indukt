@@ -65,7 +65,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
           productId,
           page: pageNum.toString(),
           limit: '10',
-          status: 'approved',
+          published: 'true',
         })
         if (filterRating) params.append('rating', filterRating.toString())
 

@@ -41,7 +41,7 @@ export function DeleteBlogButton({ postId, postTitle }: DeleteBlogButtonProps) {
     <button
       onClick={handleDelete}
       disabled={isPending}
-      title={confirming ? 'Klicken Sie erneut zum Bestätigen' : 'Supprimer'}
+      title={confirming ? 'Klicken Sie erneut zum Bestätigen' : 'Löschen'}
       className={`p-2 rounded-lg transition-all disabled:opacity-50 ${
         confirming
           ? 'bg-red-600 text-white scale-105'

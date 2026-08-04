@@ -14,7 +14,7 @@ const shippingUpdateSchema = z.object({
   status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']).optional(),
   trackingNumber: z.string().max(100).optional().nullable(),
   carrier: z.string().max(50).optional(),
-  trackingUrl: z.string().url().optional().nullable(),
+  trackingUrl: z.string().url().or(z.literal('')).transform(v => v || null).optional().nullable(),
   sendEmail: z.boolean().default(false),
 })
 

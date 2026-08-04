@@ -8,6 +8,39 @@ import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
+export async function GET(req: NextRequest) {
+  try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
+
+    const { searchParams } = new URL(req.url)
+    const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10) || 100, 500)
+
+    const products = await prisma.product.findMany({
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        nameDe: true,
+        slug: true,
+        price: true,
+        isActive: true,
+        categoryId: true,
+        images: {
+          where: { isMain: true },
+          take: 1,
+          select: { url: true },
+        },
+      },
+    })
+
+    return NextResponse.json(products)
+  } catch (error) {
+    logError("[PRODUCTS_GET]", error)
+    return new NextResponse("Internal error", { status: 500 })
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const authz = await requireAdmin()

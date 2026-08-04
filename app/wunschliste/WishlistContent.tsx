@@ -166,9 +166,7 @@ export default function WishlistContent() {
                         </h3>
                       </Link>
                       <div className="flex items-center gap-1 mt-2">
-                        <span className="text-xs sm:text-sm text-amber-500">★</span>
-                        <span className="text-xs sm:text-sm text-gray-600">5.0</span>
-                        <span className="text-xs text-gray-400">(Exzellent)</span>
+                        <span className="text-xs text-gray-400">Wunschliste</span>
                       </div>
                       <p className="text-base sm:text-lg font-semibold text-[#4ECCA3] mt-2 tabular-nums whitespace-nowrap">
                         {formatPriceDe(item.price)}
