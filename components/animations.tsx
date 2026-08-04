@@ -17,6 +17,7 @@ export function TiltCard({
   glowColor = 'rgba(78, 204, 163, 0.3)',
 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const prefersReducedMotion = useReducedMotion()
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -29,7 +30,7 @@ export function TiltCard({
   const rotateY = useTransform(xSpring, [-0.5, 0.5], [-tiltAmount, tiltAmount])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return
+    if (prefersReducedMotion || !ref.current) return
 
     const rect = ref.current.getBoundingClientRect()
     const width = rect.width
@@ -54,12 +55,12 @@ export function TiltCard({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{
+      style={prefersReducedMotion ? undefined : {
         rotateX,
         rotateY,
         transformStyle: 'preserve-3d',
       }}
-      whileHover={{
+      whileHover={prefersReducedMotion ? undefined : {
         boxShadow: `0 25px 50px -12px ${glowColor}`,
         y: -8,
         scale: 1.02,

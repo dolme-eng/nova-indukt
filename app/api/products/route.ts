@@ -37,9 +37,11 @@ export async function GET(request: NextRequest) {
     }
     
     if (minPrice || maxPrice) {
+      const gte = minPrice ? parseFloat(minPrice) : undefined
+      const lte = maxPrice ? parseFloat(maxPrice) : undefined
       where.price = {
-        ...(minPrice ? { gte: parseFloat(minPrice) } : {}),
-        ...(maxPrice ? { lte: parseFloat(maxPrice) } : {}),
+        ...(gte !== undefined && !isNaN(gte) ? { gte } : {}),
+        ...(lte !== undefined && !isNaN(lte) ? { lte } : {}),
       }
     }
     

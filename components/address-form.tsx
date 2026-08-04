@@ -273,8 +273,9 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
             Abbrechen
           </button>
           <button
-            type="submit"
+            type="button"
             disabled={isSubmitting}
+            onClick={handleSubmit}
             className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
           >
             {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -7,11 +7,15 @@
 
 import crypto from 'crypto'
 
-const SECRET = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'fallback-dev-secret'
+const SECRET = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET
+if (!SECRET && process.env.NODE_ENV === 'production') {
+  throw new Error('AUTH_SECRET or NEXTAUTH_SECRET must be set in production')
+}
+const SIGNING_SECRET = SECRET || 'fallback-dev-secret'
 const EXPIRY_MS = 365 * 24 * 60 * 60 * 1000 // 1 year (emails are long-lived)
 
 function sign(data: string): string {
-  return crypto.createHmac('sha256', SECRET).update(data).digest('hex').slice(0, 16)
+  return crypto.createHmac('sha256', SIGNING_SECRET).update(data).digest('hex').slice(0, 16)
 }
 
 /**

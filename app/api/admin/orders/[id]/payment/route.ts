@@ -50,7 +50,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             },
           },
         },
-        user: true,
+        user: { select: { email: true, name: true } },
       },
     })
 

@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const productId = searchParams.get('productId')
     const published = searchParams.get('published') !== 'false'
     const limit = Math.min(Math.max(parseInt(searchParams.get('limit') || '10', 10) || 10, 1), 50)
-    const page = parseInt(searchParams.get('page') || '1')
+    const page = Math.max(parseInt(searchParams.get('page') || '1', 10) || 1, 1)
 
     if (!productId) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 })
@@ -94,7 +94,6 @@ export async function GET(request: NextRequest) {
         createdAt: r.createdAt,
         user: r.user
           ? {
-              id: r.user.id,
               name: r.user.name,
               displayName: r.user.name ? r.user.name.charAt(0) + '****' : 'Kunde',
             }

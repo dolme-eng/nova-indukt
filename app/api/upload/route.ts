@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth"
 import { uploadImage, deleteImage } from "@/lib/cloudinary"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
+import { validateCsrfToken } from "@/lib/csrf"
 
 // POST - Upload image
 export async function POST(request: NextRequest) {
@@ -91,6 +92,9 @@ export async function DELETE(request: NextRequest) {
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), "upload:delete"), { windowMs: 60_000, maxRequests: 15 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
     
     const { searchParams } = new URL(request.url)
     const publicId = searchParams.get('id')
