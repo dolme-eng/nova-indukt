@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
 
     const rl = await rateLimit(createRateLimitKey(getIP(request), "upload:post"), { windowMs: 60_000, maxRequests: 15 })
     if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
-    
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
     const formData = await request.formData()
     const file = formData.get('file') as File
     const folder = (formData.get('folder') as string) || 'nova-indukt/uploads'
