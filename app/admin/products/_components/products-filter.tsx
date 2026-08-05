@@ -2,13 +2,24 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { Search, ArrowUpDown, X } from 'lucide-react'
+import { Search, ArrowUpDown, X, ChevronUp, ChevronDown } from 'lucide-react'
 import { useDebounce } from '@/lib/hooks/use-debounce'
 
 interface Category {
   id: string
   nameDe: string
 }
+
+type SortOption = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'newest' | 'oldest'
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'newest', label: 'Neueste zuerst' },
+  { value: 'oldest', label: 'Älteste zuerst' },
+  { value: 'name-asc', label: 'Name A-Z' },
+  { value: 'name-desc', label: 'Name Z-A' },
+  { value: 'price-asc', label: 'Preis aufsteigend' },
+  { value: 'price-desc', label: 'Preis absteigend' },
+]
 
 export function ProductsFilter({ categories }: { categories: Category[] }) {
   const router = useRouter()
@@ -17,6 +28,8 @@ export function ProductsFilter({ categories }: { categories: Category[] }) {
 
   const [search, setSearch] = useState(searchParams.get('q') || '')
   const [category, setCategory] = useState(searchParams.get('category') || '')
+  const [sort, setSort] = useState<SortOption>((searchParams.get('sort') as SortOption) || 'newest')
+  const [showSort, setShowSort] = useState(false)
   const debouncedSearch = useDebounce(search, 400)
 
   useEffect(() => {
@@ -27,8 +40,11 @@ export function ProductsFilter({ categories }: { categories: Category[] }) {
     if (category) params.set('category', category)
     else params.delete('category')
 
+    if (sort && sort !== 'newest') params.set('sort', sort)
+    else params.delete('sort')
+
     router.push(`${pathname}?${params.toString()}`)
-  }, [debouncedSearch, category, pathname, router, searchParams])
+  }, [debouncedSearch, category, sort, pathname, router, searchParams])
 
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row">
@@ -63,10 +79,42 @@ export function ProductsFilter({ categories }: { categories: Category[] }) {
             </option>
           ))}
         </select>
-        <button className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50">
-          <ArrowUpDown size={18} />
-          <span className="hidden sm:inline">Sortieren</span>
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowSort(!showSort)}
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
+          >
+            <ArrowUpDown size={18} />
+            <span className="hidden sm:inline">Sortieren</span>
+          </button>
+          {showSort && (
+            <div className="absolute right-0 top-full z-10 mt-1 w-48 rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+              {SORT_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => {
+                    setSort(option.value)
+                    setShowSort(false)
+                  }}
+                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-slate-50 ${
+                    sort === option.value ? 'font-medium text-primary' : 'text-slate-600'
+                  }`}
+                >
+                  {sort === option.value && (
+                    <span className="text-primary">
+                      {option.value.includes('desc') ? (
+                        <ChevronDown size={14} />
+                      ) : (
+                        <ChevronUp size={14} />
+                      )}
+                    </span>
+                  )}
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

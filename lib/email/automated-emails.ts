@@ -5,8 +5,36 @@ import { render } from '@react-email/render'
 import ShippingNotificationEmail from './templates/shipping-notification'
 import ReviewRequestEmail from './templates/review-request'
 import WelcomeEmail from './templates/welcome'
+import NewOrderNotificationEmail from './templates/new-order-notification'
 import { logError } from '@/lib/logger'
 import { createUnsubscribeToken } from '@/lib/unsubscribe-token'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
+
+async function sendWithRetry(
+  payload: { from: string; to: string; subject: string; html: string },
+  maxRetries = 3
+) {
+  const resend = getResend()
+  if (!resend) {
+    return { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
+  }
+  let attempt = 0
+  let lastError: unknown = null
+  while (attempt < maxRetries) {
+    try {
+      const result = await resend.emails.send(payload)
+      if (!result.error && result.data) return result
+      lastError = result.error
+    } catch (err) {
+      lastError = err
+    }
+    attempt++
+    if (attempt < maxRetries) {
+      await new Promise((r) => setTimeout(r, 1000 * attempt))
+    }
+  }
+  return { data: null, error: lastError }
+}
 
 /**
  * Send shipping notification when order is marked as shipped
@@ -57,15 +85,12 @@ export async function sendShippingNotification(
       })
     )
 
-    const result = (await getResend()?.emails.send({
+    const result = await sendWithRetry({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: recipientEmail,
       subject: `Ihre Bestellung wurde versandt! - ${order.orderNumber}`,
       html,
-    })) ?? {
-      data: null,
-      error: { name: 'resend_not_configured', message: 'Resend not configured' },
-    }
+    })
 
     if (result.error || !result.data) {
       logError('Failed to send shipping notification:', result.error)
@@ -164,12 +189,12 @@ export async function sendReviewRequests() {
           })
         )
 
-        const result = (await getResend()?.emails.send({
+        const result = await sendWithRetry({
           from: `${FROM_NAME} <${FROM_EMAIL}>`,
           to: typedOrder.user.email,
           subject: `Wie gefällt Ihnen Ihre Bestellung ${typedOrder.orderNumber}?`,
           html,
-        })) ?? { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
+        })
 
         if (result.error || !result.data) {
           results.push({ orderId: typedOrder.id, success: false, error: result.error })
@@ -225,6 +250,57 @@ export async function sendWelcomeEmail(subscriberEmail: string, firstName?: stri
     return { success: true, id: result.data?.id }
   } catch (error) {
     logError('Error sending welcome email:', error)
+    return { success: false, error }
+  }
+}
+
+/**
+ * Send admin notification when a new order is placed
+ */
+export async function sendNewOrderNotification(orderId: string) {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: { items: true },
+    })
+
+    if (!order) {
+      throw new Error('Order not found')
+    }
+
+    const adminEmail = process.env.ADMIN_EMAIL || process.env.CONTACT_EMAIL
+    if (!adminEmail) {
+      logError('No admin email configured for order notification')
+      return { success: false, error: 'No admin email configured' }
+    }
+
+    const html = await render(
+      NewOrderNotificationEmail({
+        orderNumber: order.orderNumber,
+        customerName: order.customerName || 'Gast',
+        customerEmail: order.customerEmail,
+        total: Number(order.total),
+        itemCount: order.items.length,
+        paymentMethod: order.paymentMethod,
+        orderId: order.id,
+      })
+    )
+
+    const result = await sendWithRetry({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
+      to: adminEmail,
+      subject: `Neue Bestellung ${order.orderNumber} — ${Number(order.total).toFixed(2)}€`,
+      html,
+    })
+
+    if (result.error || !result.data) {
+      logError('Failed to send new order notification:', result.error)
+      return { success: false, error: result.error }
+    }
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    logError('Error sending new order notification:', error)
     return { success: false, error }
   }
 }

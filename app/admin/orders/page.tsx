@@ -24,7 +24,7 @@ import { CsvExportButton } from '../_components/csv-export-button'
 
 const PAGE_SIZE = 50
 
-async function getOrders(search?: string, status?: string, page: number = 1) {
+async function getOrders(search?: string, status?: string, page: number = 1, dateFrom?: string, dateTo?: string) {
   const where: Prisma.OrderWhereInput = {}
 
   if (status) {
@@ -37,6 +37,18 @@ async function getOrders(search?: string, status?: string, page: number = 1) {
       { customerName: { contains: search, mode: 'insensitive' } },
       { customerEmail: { contains: search, mode: 'insensitive' } },
     ]
+  }
+
+  if (dateFrom || dateTo) {
+    where.createdAt = {}
+    if (dateFrom) {
+      where.createdAt.gte = new Date(dateFrom)
+    }
+    if (dateTo) {
+      const toDate = new Date(dateTo)
+      toDate.setHours(23, 59, 59, 999)
+      where.createdAt.lte = toDate
+    }
   }
 
   const skip = (page - 1) * PAGE_SIZE
@@ -100,14 +112,16 @@ const paymentMap: Record<PaymentStatus, { label: string; color: string }> = {
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; status?: string; page?: string }>
+  searchParams: Promise<{ q?: string; status?: string; page?: string; dateFrom?: string; dateTo?: string }>
 }) {
   const resolvedParams = await searchParams
   const page = Math.max(1, parseInt(resolvedParams.page || '1', 10))
   const { orders, totalCount, totalPages } = await getOrders(
     resolvedParams.q,
     resolvedParams.status,
-    page
+    page,
+    resolvedParams.dateFrom,
+    resolvedParams.dateTo
   )
 
   return (
@@ -248,7 +262,7 @@ export default async function AdminOrdersPage({
           <div className="flex gap-2">
             {page > 1 && (
               <Link
-                href={`/admin/orders?page=${page - 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}`}
+                href={`/admin/orders?page=${page - 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}${resolvedParams.dateFrom ? `&dateFrom=${resolvedParams.dateFrom}` : ''}${resolvedParams.dateTo ? `&dateTo=${resolvedParams.dateTo}` : ''}`}
                 className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
               >
                 <ChevronLeft size={16} />
@@ -257,7 +271,7 @@ export default async function AdminOrdersPage({
             )}
             {page < totalPages && (
               <Link
-                href={`/admin/orders?page=${page + 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}`}
+                href={`/admin/orders?page=${page + 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}${resolvedParams.dateFrom ? `&dateFrom=${resolvedParams.dateFrom}` : ''}${resolvedParams.dateTo ? `&dateTo=${resolvedParams.dateTo}` : ''}`}
                 className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
               >
                 Weiter

@@ -159,7 +159,7 @@ export function CookieConsent() {
                       </div>
                     </div>
                     <button
-                      onClick={() => setIsVisible(false)}
+                      onClick={acceptNecessary}
                       className="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 transition-colors hover:bg-gray-100"
                       aria-label="Schließen"
                     >

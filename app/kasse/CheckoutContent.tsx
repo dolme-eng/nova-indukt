@@ -215,7 +215,14 @@ export default function CheckoutContent() {
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: promoCode, amount: subtotal }),
+        body: JSON.stringify({
+          code: promoCode,
+          amount: subtotal,
+          items: items.map((item) => ({
+            id: item.product.id,
+            categoryId: item.product.category,
+          })),
+        }),
       })
 
       const data = await response.json()
@@ -350,8 +357,7 @@ export default function CheckoutContent() {
 
   const steps = [
     { id: 1, label: 'Versand', icon: Truck },
-    { id: 2, label: 'Zahlung', icon: ShieldCheck },
-    { id: 3, label: 'Bestätigung', icon: Check },
+    { id: 2, label: 'Bestellung', icon: Check },
   ]
 
   if (orderComplete) {

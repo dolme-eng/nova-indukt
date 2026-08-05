@@ -57,7 +57,7 @@ export function RegisterContent() {
       if (result.success) {
         setSuccess(true)
         redirectTimerRef.current = setTimeout(() => {
-          router.push('/mein-konto')
+          router.push('/anmelden?registered=1')
         }, 3000)
       } else {
         setError(result.error || 'Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.')

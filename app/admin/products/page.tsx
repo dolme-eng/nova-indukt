@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { ProductsFilter } from './_components/products-filter'
 import { DeleteProductButton } from './_components/delete-product-button'
 
-async function getProducts(search?: string, category?: string) {
+async function getProducts(search?: string, category?: string, sort?: string) {
   const where: Prisma.ProductWhereInput = {}
 
   if (category) {
@@ -22,6 +22,27 @@ async function getProducts(search?: string, category?: string) {
     ]
   }
 
+  let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: 'desc' }
+  if (sort) {
+    switch (sort) {
+      case 'name-asc':
+        orderBy = { nameDe: 'asc' }
+        break
+      case 'name-desc':
+        orderBy = { nameDe: 'desc' }
+        break
+      case 'price-asc':
+        orderBy = { price: 'asc' }
+        break
+      case 'price-desc':
+        orderBy = { price: 'desc' }
+        break
+      case 'oldest':
+        orderBy = { createdAt: 'asc' }
+        break
+    }
+  }
+
   return await prisma.product.findMany({
     where,
     include: {
@@ -31,7 +52,7 @@ async function getProducts(search?: string, category?: string) {
         take: 1,
       },
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy,
   })
 }
 
@@ -44,11 +65,11 @@ async function getCategories() {
 export default async function AdminProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; category?: string }>
+  searchParams: Promise<{ q?: string; category?: string; sort?: string }>
 }) {
   const resolvedParams = await searchParams
   const [products, categories] = await Promise.all([
-    getProducts(resolvedParams.q, resolvedParams.category),
+    getProducts(resolvedParams.q, resolvedParams.category, resolvedParams.sort),
     getCategories(),
   ])
 

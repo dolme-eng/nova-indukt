@@ -139,12 +139,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       },
       offers: {
         '@type': 'Offer',
-      url: `${SHOP_DOMAIN}/produkt/${product.slug}`,
+        url: `${SHOP_DOMAIN}/produkt/${product.slug}`,
         priceCurrency: 'EUR',
         price: Number(product.price).toFixed(2),
         priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
           .toISOString()
           .split('T')[0],
+        availability: 'https://schema.org/InStock',
+        itemCondition: 'https://schema.org/NewCondition',
       },
       ...(product.reviewCount > 0
         ? {

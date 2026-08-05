@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { sendOrderConfirmationForOrder } from '@/lib/email/send'
+import { sendNewOrderNotification } from '@/lib/email/automated-emails'
 import { VAT_RATE_PERCENT, vatFromGross } from '@/lib/utils/vat'
 import { createOrderSchema, type OrderItemInput } from '@/lib/validations/order'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
@@ -141,7 +142,7 @@ export async function POST(request: NextRequest) {
     const productIds = items.map((item) => item.id)
     const dbProducts = await prisma.product.findMany({
       where: { id: { in: productIds } },
-      select: { id: true, price: true, nameDe: true, isActive: true, categoryId: true },
+      select: { id: true, price: true, nameDe: true, isActive: true, categoryId: true, slug: true },
     })
 
     const dbProductMap = new Map(dbProducts.map((p) => [p.id, p]))
@@ -299,6 +300,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Notify admin of new order
+    try {
+      await sendNewOrderNotification(order.id)
+    } catch (notifyError) {
+      logError('Failed to send new order notification:', notifyError)
+    }
+
     revalidatePath('/mein-konto')
 
     await auditLog({
@@ -325,13 +333,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logError('Error creating order:', error)
-    if (error instanceof Error && error.message.startsWith('STOCK_INSUFFICIENT:')) {
-      const productName = error.message.replace('STOCK_INSUFFICIENT:', '')
-      return NextResponse.json(
-        { error: `Nicht genügend Lagerbestand für ${productName}` },
-        { status: 400 }
-      )
-    }
     return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
   }
 }
