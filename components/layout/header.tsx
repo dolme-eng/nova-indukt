@@ -220,7 +220,16 @@ export function Header() {
                         onClick={() => setMegaMenuOpen((prev) => !prev)}
                         onKeyDown={(e) => {
                           if (e.key === 'Escape') setMegaMenuOpen(false)
+                          if (e.key === 'ArrowDown' && megaMenuOpen) {
+                            e.preventDefault()
+                            const panel = document.querySelector('[data-testid="mega-menu-dropdown"]')
+                            const first = panel?.querySelector<HTMLElement>('a, button, [tabindex]')
+                            first?.focus()
+                          }
                         }}
+                        aria-expanded={megaMenuOpen}
+                        aria-haspopup="true"
+                        aria-controls="mega-menu-panel"
                         className={`group flex items-center gap-1 px-4 py-2 text-xs font-black uppercase tracking-tight transition-all duration-500 ease-[0.22,1,0.36,1] ${
                           isActive(item.href, item.alsoActiveFor) || megaMenuOpen
                             ? 'text-[#0C211E]'

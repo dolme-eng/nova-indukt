@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, Quote, MessageSquare } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
@@ -142,13 +143,15 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
                   className="flex w-[280px] flex-shrink-0 flex-col rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#4ECCA3]/10 sm:w-[380px] sm:p-8"
                 >
                   <div className="mb-5 flex items-center gap-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`https://i.pravatar.cc/96?u=${testimonial.id}`}
-                      alt={testimonial.name}
-                      className="h-12 w-12 flex-shrink-0 rounded-full object-cover shadow-sm ring-2 ring-white"
-                      loading="lazy"
-                    />
+                    <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full shadow-sm ring-2 ring-white">
+                      <Image
+                        src={`https://i.pravatar.cc/96?u=${testimonial.id}`}
+                        alt={testimonial.name}
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-base font-bold tracking-tight text-gray-900">
                         {testimonial.name}

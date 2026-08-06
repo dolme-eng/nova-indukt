@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Flame, Sparkles, ChefHat, ArrowRight, Shield, Heart } from 'lucide-react'
 
@@ -45,6 +46,53 @@ interface MegaMenuProps {
 }
 
 export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps) {
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+        return
+      }
+
+      if (e.key === 'Tab' && panelRef.current) {
+        const focusableSelector =
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        const focusable = Array.from(
+          panelRef.current.querySelectorAll<HTMLElement>(focusableSelector)
+        )
+        if (focusable.length === 0) return
+
+        const first = focusable[0]
+        const last = focusable.at(-1)
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last?.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first?.focus()
+        }
+      }
+    },
+    [onClose]
+  )
+
+  useEffect(() => {
+    const panel = panelRef.current
+    if (!panel) return
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    const firstFocusable = panel.querySelector<HTMLElement>('a[href], button, [tabindex]')
+    firstFocusable?.focus()
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
+
   return (
     <>
       {/* Backdrop */}
@@ -59,6 +107,10 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
 
       {/* Panel */}
       <motion.div
+        ref={panelRef}
+        id="mega-menu-panel"
+        role="menu"
+        aria-label="Produktnavigation"
         initial={{ opacity: 0, y: -10, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -10, scale: 0.98 }}
@@ -81,7 +133,7 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * idx }}
                 >
-                  <Link href={dept.href} onClick={onClose} className="group block">
+                  <Link href={dept.href} onClick={onClose} className="group block" role="menuitem">
                     <h3 className="mb-5 flex items-center gap-2.5 border-b border-gray-100 pb-3 font-bold text-gray-900 transition-colors group-hover:text-[#4ECCA3]">
                       <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#4ECCA3]/10 transition-colors group-hover:bg-[#4ECCA3]/20">
                         {dept.icon}
@@ -117,6 +169,7 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
                   <Link
                     href="/produkte"
                     onClick={onClose}
+                    role="menuitem"
                     className="group/link mt-2 inline-flex items-center gap-2 text-sm font-bold text-white transition-colors hover:text-[#4ECCA3]"
                   >
                     Jetzt entdecken{' '}
@@ -132,6 +185,7 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
             <Link
               href="/produkte"
               onClick={onClose}
+              role="menuitem"
               className="group flex items-center gap-2 text-sm font-bold text-gray-900 transition-colors hover:text-[#4ECCA3]"
             >
               Alle Produkte ansehen

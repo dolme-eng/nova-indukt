@@ -479,13 +479,15 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                 {/* Review Header */}
                 <div className="mb-3 flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`https://i.pravatar.cc/80?u=${review.id}`}
-                      alt={review.user.displayName}
-                      className="h-10 w-10 flex-shrink-0 rounded-full object-cover shadow-sm ring-2 ring-white"
-                      loading="lazy"
-                    />
+                    <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full shadow-sm ring-2 ring-white">
+                      <Image
+                        src={`https://i.pravatar.cc/80?u=${review.id}`}
+                        alt={review.user.displayName}
+                        fill
+                        className="object-cover"
+                        sizes="40px"
+                      />
+                    </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-gray-900">{review.user.displayName}</span>
