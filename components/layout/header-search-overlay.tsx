@@ -147,7 +147,7 @@ export function SearchOverlay({
       {/* Search bar */}
       <div className="container mx-auto flex items-center justify-between border-b border-gray-100 px-4 py-6">
         <div className="relative mx-auto flex max-w-4xl flex-1 items-center">
-          <Search className="absolute left-4 h-6 w-6 text-gray-400" />
+          <Search className="absolute left-4 h-6 w-6 text-gray-400" aria-hidden="true" />
           <input
             data-testid="search-input"
             ref={inputRef}
@@ -158,7 +158,7 @@ export function SearchOverlay({
             className="w-full rounded-2xl border border-transparent bg-gray-50/50 px-14 py-5 font-heading text-xl font-bold text-gray-900 outline-none transition-all placeholder:text-gray-400 hover:bg-gray-50 focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 md:text-2xl"
           />
           <div className="absolute right-4 flex items-center gap-2">
-            {isSearching && <Loader2 className="h-5 w-5 animate-spin text-[#4ECCA3]" />}
+            {isSearching && <Loader2 className="h-5 w-5 animate-spin text-[#4ECCA3]" aria-hidden="true" />}
             {searchQuery && (
               <button
                 onClick={() => onQueryChange('')}
@@ -188,13 +188,13 @@ export function SearchOverlay({
                 <>
                   <div className="col-span-full mb-4 flex items-center justify-between">
                     <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-400">
-                      <Clock className="h-3.5 w-3.5" /> Zuletzt gesucht
+                      <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Zuletzt gesucht
                     </p>
                     <button
                       onClick={clearAll}
                       className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-600"
                     >
-                      <Trash2 className="h-3 w-3" /> Löschen
+                      <Trash2 className="h-3 w-3" aria-hidden="true" /> Löschen
                     </button>
                   </div>
                   {recentSearches.map((term) => (
@@ -203,7 +203,7 @@ export function SearchOverlay({
                       onClick={() => handleQueryChange(term)}
                       className="flex items-center gap-2 rounded-xl border border-gray-100 bg-gray-50 px-5 py-3 text-left text-sm font-bold text-gray-700 transition-colors hover:bg-gray-100"
                     >
-                      <Clock className="h-3.5 w-3.5 text-gray-400" /> {term}
+                      <Clock className="h-3.5 w-3.5 text-gray-400" aria-hidden="true" /> {term}
                     </button>
                   ))}
                   <div className="col-span-full mb-4 mt-4">
@@ -226,7 +226,7 @@ export function SearchOverlay({
                   onClick={() => onQueryChange(term)}
                   className="flex items-center gap-2 rounded-xl border border-gray-100 bg-gray-50 px-5 py-3 text-left text-sm font-bold text-gray-700 transition-colors hover:bg-gray-100"
                 >
-                  <Search className="h-3.5 w-3.5 text-gray-400" /> {term}
+                  <Search className="h-3.5 w-3.5 text-gray-400" aria-hidden="true" /> {term}
                 </button>
               ))}
             </div>

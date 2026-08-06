@@ -6,6 +6,7 @@ import React, { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react'
 import { ShareButtons } from './share-buttons'
+import { safeJsonLd } from '@/lib/utils/json-ld'
 
 export const revalidate = 600
 
@@ -411,7 +412,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
       />
       <article className="min-h-screen bg-gray-50">
         {/* Hero */}

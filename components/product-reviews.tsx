@@ -332,6 +332,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
               <button
                 onClick={() => setShowReviewForm(false)}
                 className="rounded-full p-2 hover:bg-gray-100"
+                aria-label="Bewertungsformular schließen"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -550,7 +551,15 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     />
                     Hilfreich ({review.helpful})
                   </button>
-                  <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
+                  <button
+                    onClick={async () => {
+                      try {
+                        await fetch(`/api/reviews?id=${review.id}&action=report`, { method: 'PUT' })
+                      } catch {}
+                    }}
+                    className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
+                    aria-label={`Bewertung von ${review.user.displayName} melden`}
+                  >
                     <Flag className="h-4 w-4" />
                     Melden
                   </button>

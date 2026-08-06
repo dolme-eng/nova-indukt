@@ -137,6 +137,7 @@ export function CartDrawer({
                             alt={item.product.name.de}
                             fill
                             className="object-contain p-2 mix-blend-multiply transition-transform group-hover:scale-110"
+                            sizes="96px"
                           />
                         </Link>
 

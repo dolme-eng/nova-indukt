@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { mapDbProductToUi } from '@/lib/data/products'
 import { ProductContent } from './ProductContent'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
+import { safeJsonLd } from '@/lib/utils/json-ld'
 
 export const revalidate = 120
 
@@ -166,7 +167,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(sd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(sd) }}
         />
       ))}
       <ProductContent product={formattedProduct} relatedProducts={relatedProducts} />

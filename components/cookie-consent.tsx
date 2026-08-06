@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Cookie, Shield, Settings, Check } from 'lucide-react'
@@ -89,6 +89,39 @@ export function CookieConsent() {
     setIsVisible(true)
   }
 
+  const bannerRef = useRef<HTMLDivElement>(null)
+
+  const handleBannerKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !bannerRef.current) return
+
+      const focusableSelector =
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      const focusable = Array.from(
+        bannerRef.current.querySelectorAll<HTMLElement>(focusableSelector)
+      )
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable.at(-1)
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last?.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first?.focus()
+      }
+    },
+    []
+  )
+
+  useEffect(() => {
+    if (!isVisible || !bannerRef.current) return
+    document.addEventListener('keydown', handleBannerKeyDown)
+    return () => document.removeEventListener('keydown', handleBannerKeyDown)
+  }, [isVisible, handleBannerKeyDown])
+
   useEffect(() => {
     window.openCookieSettings = openSettings
     return () => {
@@ -119,7 +152,7 @@ export function CookieConsent() {
           className="fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4 lg:p-4"
         >
           <div className="mx-auto max-w-4xl lg:max-w-xl xl:max-w-lg">
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl sm:rounded-2xl">
+            <div ref={bannerRef} className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl sm:rounded-2xl">
               {!showDetails ? (
                 <div className="p-4 sm:p-5 lg:p-4">
                   <div className="flex items-start gap-3 sm:gap-3">

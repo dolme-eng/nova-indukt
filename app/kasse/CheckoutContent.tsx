@@ -892,7 +892,7 @@ export default function CheckoutContent() {
                         </div>
                       </div>
 
-                      <div className="flex flex-col gap-4 sm:flex-row">
+                      <div className={`flex flex-col gap-4 sm:flex-row ${isProcessing ? 'pointer-events-none opacity-60' : ''}`}>
                         <button
                           type="button"
                           onClick={() => setStep(1)}

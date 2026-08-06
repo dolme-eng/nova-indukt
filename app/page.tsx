@@ -13,6 +13,7 @@ import { logError } from '@/lib/logger'
 import { getActivePromotions } from '@/lib/promotions'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
 import { HomeContent } from './HomeContent'
+import { safeJsonLd } from '@/lib/utils/json-ld'
 
 // Revalidate every 5 minutes — use revalidatePath('/') in admin actions for on-demand invalidation
 export const revalidate = 300
@@ -168,7 +169,7 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
       />
       <HomeContent
         initialProducts={formattedProducts}

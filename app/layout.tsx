@@ -15,6 +15,7 @@ import { Providers } from '@/components/providers'
 import { AuthSync } from '@/components/auth-sync'
 import { GoogleAnalytics } from '@/components/google-analytics'
 import { SHOP_DOMAIN, SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
+import { safeJsonLd } from '@/lib/utils/json-ld'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -129,7 +130,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: safeJsonLd({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: SHOP_NAME,

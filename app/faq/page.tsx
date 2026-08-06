@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { FAQContent } from './FAQContent'
 import { getFaqItems } from '@/lib/content/static'
+import { safeJsonLd } from '@/lib/utils/json-ld'
 
 export const revalidate = 3600
 
@@ -40,7 +41,7 @@ export default async function FAQPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqStructuredData) }}
       />
       <FAQContent
         items={dbItems.map((i) => ({
