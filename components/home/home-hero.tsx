@@ -68,7 +68,7 @@ export const HomeHero = memo(function HomeHero() {
   }, [isPaused])
 
   return (
-    <section className="relative h-[65vh] min-h-[500px] overflow-hidden bg-[#050A09] selection:bg-nova-400/30 sm:h-[75vh] lg:h-[85vh]">
+    <section aria-label="Willkommen bei NOVA INDUKT" className="relative h-[65vh] min-h-[500px] overflow-hidden bg-[#050A09] selection:bg-nova-400/30 sm:h-[75vh] lg:h-[85vh]">
       {/* Background Slides */}
       <AnimatePresence mode="sync">
         <motion.div

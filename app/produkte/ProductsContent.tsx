@@ -698,6 +698,7 @@ export function ProductsContent({
                                       <div className="absolute inset-x-0 bottom-0 hidden translate-y-full bg-gradient-to-t from-black/20 to-transparent p-2 transition-transform duration-300 group-hover:translate-y-0 sm:block">
                                         <button
                                           onClick={(e) => handleAddToCart(e, product)}
+                                          aria-label={`${product.name.de} in den Warenkorb legen`}
                                           className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-white/95 py-2 text-[10px] font-black text-nova-900 shadow-xl backdrop-blur-md transition-all hover:bg-nova-900 hover:text-white"
                                         >
                                           <ShoppingCart className="h-3 w-3" />
@@ -761,6 +762,7 @@ export function ProductsContent({
                                       {/* Mobile Cart Button */}
                                       <button
                                         onClick={(e) => handleAddToCart(e, product)}
+                                        aria-label={`${product.name.de} in den Warenkorb legen`}
                                         className="mt-1.5 flex w-full items-center justify-center gap-1 rounded-md border border-nova-100 bg-nova-50 py-1 text-[9px] font-black text-nova-900 sm:hidden"
                                       >
                                         <ShoppingCart className="h-2.5 w-2.5" />
@@ -878,6 +880,7 @@ export function ProductsContent({
                                           <button
                                             data-testid="add-to-cart-button"
                                             onClick={(e) => handleAddToCart(e, product)}
+                                            aria-label={`${product.name.de} in den Warenkorb legen`}
                                             className="flex h-9 flex-1 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 text-[13px] font-bold text-gray-800 shadow-sm transition-colors hover:bg-gray-100 sm:h-12 sm:flex-initial sm:rounded-xl sm:border-transparent sm:bg-[#0C211E] sm:px-6 sm:text-sm sm:text-white sm:hover:bg-[#17423C]"
                                           >
                                             <ShoppingCart className="h-4 w-4" />

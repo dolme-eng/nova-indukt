@@ -9,12 +9,10 @@ const globalForPrisma = globalThis as unknown as {
 const noopProxy = new Proxy({} as PrismaClient, {
   get(_, prop) {
     if (prop === '$connect' || prop === '$disconnect') return () => Promise.resolve()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (prop === '$transaction') return (fns: any[]) => Promise.all(fns.map((fn: any) => fn?.()))
+    if (prop === '$transaction') return (fns: Array<() => Promise<unknown>>) => Promise.all(fns.map((fn) => fn?.()))
     if (prop === '$extends') return () => noopProxy
     if (prop === Symbol.toStringTag) return 'PrismaClient'
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return new Proxy({} as any, {
+    return new Proxy({} as object, {
       get(_m, method) {
         if (typeof method === 'symbol') return undefined
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

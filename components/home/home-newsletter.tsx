@@ -9,6 +9,7 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
   const { execute } = useRecaptcha()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -39,17 +40,26 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
         setEmail('')
         timerRef.current = setTimeout(() => setStatus('idle'), 5000)
       } else {
+        const body = await response.json().catch(() => ({}))
+        if (response.status === 409) {
+          setErrorMessage('Diese E-Mail-Adresse ist bereits angemeldet.')
+        } else if (response.status === 429) {
+          setErrorMessage('Zu viele Versuche. Bitte warten Sie einen Moment.')
+        } else {
+          setErrorMessage(body.error || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
+        }
         setStatus('error')
-        timerRef.current = setTimeout(() => setStatus('idle'), 3000)
+        timerRef.current = setTimeout(() => setStatus('idle'), 5000)
       }
     } catch {
+      setErrorMessage('Netzwerkfehler. Bitte prüfen Sie Ihre Verbindung.')
       setStatus('error')
-      timerRef.current = setTimeout(() => setStatus('idle'), 3000)
+      timerRef.current = setTimeout(() => setStatus('idle'), 5000)
     }
   }
 
   return (
-    <section className="relative overflow-hidden bg-white py-12 sm:py-20">
+    <section aria-label="Newsletter" className="relative overflow-hidden bg-white py-12 sm:py-20">
       <div className="absolute right-0 top-0 -z-10 aspect-square w-1/3 rounded-bl-[100px] bg-nova-50" />
       <div className="absolute bottom-0 left-0 -z-10 aspect-square w-1/4 rounded-tr-[100px] bg-gray-50" />
 
@@ -122,7 +132,7 @@ export const HomeNewsletter = memo(function HomeNewsletter() {
 
             {status === 'error' && (
               <p className="mt-4 text-sm text-red-400">
-                Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.
+                {errorMessage || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'}
               </p>
             )}
 

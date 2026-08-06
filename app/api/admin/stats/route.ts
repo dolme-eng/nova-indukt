@@ -5,6 +5,9 @@ import { auditLog } from '@/lib/admin/audit'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 
+const CACHE_TTL = 30_000
+let statsCache: { data: unknown; timestamp: number } | null = null
+
 export async function GET(req: NextRequest) {
   try {
     const authz = await requireAdmin()
@@ -15,6 +18,10 @@ export async function GET(req: NextRequest) {
       maxRequests: 10,
     })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+
+    if (statsCache && Date.now() - statsCache.timestamp < CACHE_TTL) {
+      return NextResponse.json(statsCache.data)
+    }
 
     const now = new Date()
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
@@ -109,7 +116,7 @@ export async function GET(req: NextRequest) {
       userAgent: req.headers.get('user-agent'),
     }).catch(() => {})
 
-    const response = NextResponse.json({
+    const responseData = {
       orders: {
         total: totalOrders,
         recent: recentOrders,
@@ -135,7 +142,11 @@ export async function GET(req: NextRequest) {
       },
       recentOrdersList,
       recentActivity,
-    })
+    }
+
+    statsCache = { data: responseData, timestamp: Date.now() }
+
+    const response = NextResponse.json(responseData)
     response.headers.set('Cache-Control', 'no-store')
     return response
   } catch (error) {

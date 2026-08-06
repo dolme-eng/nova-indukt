@@ -1,9 +1,20 @@
 import { Suspense } from 'react'
-import { ProductsContent } from './ProductsContent'
+import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { Product, Category, mapDbProductToUi, mapDbCategoryToUi } from '@/lib/data/products'
+
+const ProductsContent = dynamic(
+  () => import('./ProductsContent').then((m) => m.ProductsContent),
+  {
+    loading: () => (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#4ECCA3]/30 border-t-[#4ECCA3]" />
+      </div>
+    ),
+  }
+)
 
 export const revalidate = 120
 

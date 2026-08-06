@@ -30,7 +30,7 @@ const TRUST_ITEMS = [
 
 export const HomeTrustBar = memo(function HomeTrustBar() {
   return (
-    <section className="relative z-20 -mt-6 max-w-7xl mx-auto px-4">
+    <section aria-label="Vertrauensbeweise" className="relative z-20 -mt-6 max-w-7xl mx-auto px-4">
       <motion.div
         initial="hidden"
         whileInView="visible"

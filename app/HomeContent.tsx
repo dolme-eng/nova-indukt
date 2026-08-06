@@ -144,7 +144,7 @@ export function HomeContent({
       <div className="h-6 sm:h-12" />
 
       {/* Product Slider */}
-      <section className="overflow-hidden bg-transparent py-4 pb-12 sm:py-8">
+      <section aria-label="Beliebte Produkte" className="overflow-hidden bg-transparent py-4 pb-12 sm:py-8">
         <div className="container mx-auto mb-8 px-4 sm:px-6">
           <div className="flex items-end justify-between">
             <motion.div
@@ -202,7 +202,7 @@ export function HomeContent({
       <HomeCategoriesGrid categories={initialCategories} />
 
       {/* Flash Deals */}
-      <section className="relative overflow-hidden py-10 sm:py-16">
+      <section aria-label="Aktuelle Angebote" className="relative overflow-hidden py-10 sm:py-16">
         <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F0] via-white to-[#F0FFF9]" />
         <div className="container relative z-10 mx-auto px-4 sm:px-6">
           <FlashDealsHeader />
@@ -215,7 +215,7 @@ export function HomeContent({
       </section>
 
       {/* Bestsellers */}
-      <section className="bg-white py-10 sm:py-16">
+      <section aria-label="Bestseller" className="bg-white py-10 sm:py-16">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}

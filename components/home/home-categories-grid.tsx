@@ -24,7 +24,7 @@ export const HomeCategoriesGrid = memo(function HomeCategoriesGrid({ categories 
   if (categories.length === 0) return null
 
   return (
-    <section className="py-8 sm:py-14 bg-gray-50/50">
+    <section aria-label="Produktkategorien" className="py-8 sm:py-14 bg-gray-50/50">
       <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
