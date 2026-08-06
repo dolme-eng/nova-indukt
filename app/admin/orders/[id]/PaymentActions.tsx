@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { CreditCard, CheckCircle, XCircle, RotateCcw } from 'lucide-react'
 
-type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED'
+type PaymentStatus = 'PENDING' | 'AUTHORIZED' | 'PAID' | 'FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED'
 
 const paymentLabels: Record<string, string> = {
   PENDING: 'Ausstehend',
@@ -46,8 +46,7 @@ export function PaymentActions(props: {
     }
   }
 
-  if (props.paymentMethod !== 'BANK_TRANSFER') return null
-
+  // Show payment actions for all payment methods
   const paidDate = props.paidAt
     ? new Date(props.paidAt).toLocaleDateString('de-DE', {
         day: '2-digit',

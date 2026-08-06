@@ -52,24 +52,35 @@ export default function ContactTable({ initialMessages }: { initialMessages: Con
 
   async function updateStatus(id: string, status: string) {
     try {
-      await fetch(`/api/admin/contact/${id}`, {
+      const res = await fetch(`/api/admin/contact/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data?.error || 'Status konnte nicht aktualisiert werden')
+      }
       setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, status } : m)))
-    } catch {
-      /* ignore */
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Fehler beim Aktualisieren des Status'
+      // eslint-disable-next-line no-alert
+      alert(msg)
     }
   }
 
   async function deleteMessage(id: string) {
     if (!confirm('Nachricht wirklich löschen?')) return
     try {
-      await fetch(`/api/admin/contact/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/admin/contact/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data?.error || 'Nachricht konnte nicht gelöscht werden')
+      }
       setMessages((prev) => prev.filter((m) => m.id !== id))
-    } catch {
-      /* ignore */
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Fehler beim Löschen'
+      alert(msg)
     }
   }
 

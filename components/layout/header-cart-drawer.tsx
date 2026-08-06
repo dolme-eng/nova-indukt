@@ -133,7 +133,7 @@ export function CartDrawer({
                           className="group relative h-24 w-24 flex-shrink-0 rounded-2xl border border-gray-50 bg-gray-50 p-2 transition-colors hover:border-[#4ECCA3]"
                         >
                           <Image
-                            src={item.product.images[0]}
+                            src={item.product.images[0] || '/images/placeholder-product.jpg'}
                             alt={item.product.name.de}
                             fill
                             className="object-contain p-2 mix-blend-multiply transition-transform group-hover:scale-110"

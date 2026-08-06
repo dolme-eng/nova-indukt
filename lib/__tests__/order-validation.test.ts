@@ -6,7 +6,6 @@ describe('orderItemSchema', () => {
     const result = orderItemSchema.safeParse({
       id: 'clx1234567890abcdefg',
       quantity: 2,
-      price: 29.99,
       name: 'Test Product',
       slug: 'test-product',
     })
@@ -17,7 +16,6 @@ describe('orderItemSchema', () => {
     const result = orderItemSchema.safeParse({
       id: 'clx1234567890abcdefg',
       quantity: 1,
-      price: 19.99,
       name: 'Test Product',
     })
     expect(result.success).toBe(true)
@@ -27,7 +25,6 @@ describe('orderItemSchema', () => {
     const result = orderItemSchema.safeParse({
       id: 'clx1234567890abcdefg',
       quantity: 0,
-      price: 29.99,
       name: 'Test Product',
     })
     expect(result.success).toBe(false)
@@ -37,17 +34,6 @@ describe('orderItemSchema', () => {
     const result = orderItemSchema.safeParse({
       id: 'clx1234567890abcdefg',
       quantity: -1,
-      price: 29.99,
-      name: 'Test Product',
-    })
-    expect(result.success).toBe(false)
-  })
-
-  it('rejects negative price', () => {
-    const result = orderItemSchema.safeParse({
-      id: 'clx1234567890abcdefg',
-      quantity: 1,
-      price: -5,
       name: 'Test Product',
     })
     expect(result.success).toBe(false)
@@ -57,7 +43,6 @@ describe('orderItemSchema', () => {
     const result = orderItemSchema.safeParse({
       id: 'clx1234567890abcdefg',
       quantity: 1,
-      price: 10,
       name: '',
     })
     expect(result.success).toBe(false)
@@ -67,7 +52,6 @@ describe('orderItemSchema', () => {
     const result = orderItemSchema.safeParse({
       id: 'not-a-cuid',
       quantity: 1,
-      price: 10,
       name: 'Test',
     })
     expect(result.success).toBe(false)
@@ -181,7 +165,6 @@ describe('createOrderSchema', () => {
       {
         id: 'clx1234567890abcdefg',
         quantity: 2,
-        price: 99.99,
         name: 'Induktionskochfeld',
       },
     ],

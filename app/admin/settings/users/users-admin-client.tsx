@@ -17,15 +17,24 @@ export function UsersAdminClient() {
   const [users, setUsers] = useState<UserRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
   async function refresh() {
     setIsLoading(true)
     try {
-      const res = await fetch('/api/admin/users', { cache: 'no-store' })
-      if (!res.ok) throw new Error('Failed to load users')
-      const json = await res.json()
-      const nextItems = Array.isArray(json?.items) ? json.items : []
+      const [usersRes, sessionRes] = await Promise.all([
+        fetch('/api/admin/users', { cache: 'no-store' }),
+        fetch('/api/auth/session'),
+      ])
+      if (!usersRes.ok) throw new Error('Failed to load users')
+      const usersJson = await usersRes.json()
+      const nextItems = Array.isArray(usersJson?.items) ? usersJson.items : []
       setUsers(nextItems)
+
+      const sessionJson = await sessionRes.json()
+      if (sessionJson?.user?.id) {
+        setCurrentUserId(sessionJson.user.id)
+      }
     } catch (e: unknown) {
       toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
@@ -38,6 +47,20 @@ export function UsersAdminClient() {
   }, [])
 
   async function setRole(id: string, role: 'USER' | 'ADMIN') {
+    // Prevent self-demotion
+    if (id === currentUserId && role === 'USER') {
+      toast.error('Sie können Ihre eigene Admin-Berechtigung nicht entziehen.')
+      return
+    }
+
+    // Count current admins before demoting
+    if (role === 'USER') {
+      const adminCount = users.filter((u) => u.role === 'ADMIN').length
+      if (adminCount <= 1) {
+        toast.error('Es muss mindestens ein Admin vorhanden bleiben.')
+        return
+      }
+    }
     if (
       !confirm(
         role === 'ADMIN'

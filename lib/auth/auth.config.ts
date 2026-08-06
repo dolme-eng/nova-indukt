@@ -62,7 +62,11 @@ export const authConfig: NextAuthConfig = {
             return {} as JWT
           }
         } catch {
-          // On DB error, allow the token (fail open for availability)
+          // Fail CLOSED in production: reject token if DB is unreachable
+          if (process.env.NODE_ENV === 'production') {
+            return {} as JWT
+          }
+          // In development, allow the token for availability
         }
       }
 
@@ -84,5 +88,5 @@ export const authConfig: NextAuthConfig = {
     maxAge: 30 * 24 * 60 * 60,
   },
   basePath: '/api/auth',
-  trustHost: process.env.NODE_ENV === 'development',
+  trustHost: process.env.TRUST_HOST === 'true',
 }

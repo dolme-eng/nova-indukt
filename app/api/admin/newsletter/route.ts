@@ -22,11 +22,12 @@ export async function DELETE(req: NextRequest) {
 
     await prisma.newsletterSubscriber.delete({ where: { id } })
 
-    await auditLog('newsletter:delete', {
-      userId: authz.userId,
-      targetType: 'newsletter',
-      targetId: id,
-      details: { email: subscriber.email },
+    await auditLog({
+      action: 'DELETE',
+      entityType: 'NewsletterSubscriber',
+      entityId: id,
+      userId: authz.session.user.id,
+      newValues: { email: subscriber.email },
     })
 
     return NextResponse.json({ success: true })

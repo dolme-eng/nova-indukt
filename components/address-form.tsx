@@ -261,27 +261,26 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
               </div>
             </label>
           </div>
-        </form>
 
-        {/* Footer */}
-        <div className="flex gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 font-medium text-gray-700 transition-colors hover:bg-white"
-          >
-            Abbrechen
-          </button>
-          <button
-            type="button"
-            disabled={isSubmitting}
-            onClick={handleSubmit}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
-          >
-            {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-            {address?.id ? 'Speichern' : 'Hinzufügen'}
-          </button>
-        </div>
+          {/* Footer — inside form so type="submit" works */}
+          <div className="flex gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 font-medium text-gray-700 transition-colors hover:bg-white"
+            >
+              Abbrechen
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
+            >
+              {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+              {address?.id ? 'Speichern' : 'Hinzufügen'}
+            </button>
+          </div>
+        </form>
       </motion.div>
     </motion.div>
   )

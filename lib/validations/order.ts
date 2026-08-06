@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
 // Schéma pour un item de commande
+// NOTE: price is NOT accepted from the client — server recalculates from DB
 export const orderItemSchema = z.object({
   id: z.string().cuid('Invalid product ID'),
   quantity: z.number().int().positive('Quantity must be at least 1'),
-  price: z.number().positive('Price must be positive'),
   name: z.string().min(1, 'Product name is required'),
   slug: z.string().optional(),
 })
@@ -23,6 +23,7 @@ export const shippingDataSchema = z.object({
 })
 
 // Schéma pour la création d'une commande
+// NOTE: subtotal, shipping, total are accepted but server recalculates independently
 export const createOrderSchema = z.object({
   items: z.array(orderItemSchema).min(1, 'At least one item is required'),
   shippingData: shippingDataSchema,

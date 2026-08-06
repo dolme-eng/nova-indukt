@@ -5,6 +5,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    env: {
+      CSRF_DISABLED: 'true',
+    },
     exclude: ['tests/e2e/**', 'node_modules/**'],
     environmentMatchGlobs: [
       ['components/__tests__/**', 'jsdom'],

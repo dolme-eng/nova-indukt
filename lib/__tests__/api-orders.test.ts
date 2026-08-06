@@ -82,7 +82,6 @@ function makeValidBody(overrides?: Record<string, unknown>) {
       {
         id: 'clx1234567890abcdefg',
         quantity: 1,
-        price: 49.99,
         name: 'Bratpfanne',
         slug: 'bratpfanne',
       },
@@ -221,8 +220,8 @@ describe('POST /api/orders', () => {
 
     const body = makeValidBody({
       items: [
-        { id: 'clx1234567890abcdefg', quantity: 1, price: 10.00, name: 'Bratpfanne' },
-        { id: 'clx1234567890abcdefx', quantity: 2, price: 20.00, name: 'Produkt B' },
+        { id: 'clx1234567890abcdefg', quantity: 1, name: 'Bratpfanne' },
+        { id: 'clx1234567890abcdefx', quantity: 2, name: 'Produkt B' },
       ],
       subtotal: 55.00,
       shipping: 9.99,

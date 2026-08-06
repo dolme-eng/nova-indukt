@@ -136,7 +136,7 @@ export default async function AdminProductsPage({
                   </td>
                   <td className="px-6 py-4">
                     <span className="rounded-md bg-slate-100 px-2 py-1 text-sm text-slate-600">
-                      {product.category.nameDe}
+                      {product.category?.nameDe ?? 'Keine Kategorie'}
                     </span>
                   </td>
                   <td className="px-6 py-4">

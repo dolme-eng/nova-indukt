@@ -191,7 +191,7 @@ export function SearchOverlay({
                   >
                     <div className="relative aspect-square bg-gray-50 p-4">
                       <Image
-                        src={product.images[0].url}
+                        src={product.images[0]?.url || '/images/placeholder-product.jpg'}
                         alt={product.nameDe}
                         fill
                         className="object-contain p-6 mix-blend-multiply transition-transform duration-500 group-hover:scale-110"

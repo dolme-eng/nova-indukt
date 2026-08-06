@@ -46,5 +46,5 @@ export const middlewareAuthConfig: NextAuthConfig = {
     maxAge: 30 * 24 * 60 * 60,
   },
   basePath: '/api/auth',
-  trustHost: process.env.NODE_ENV === 'development',
+  trustHost: process.env.TRUST_HOST === 'true',
 }
