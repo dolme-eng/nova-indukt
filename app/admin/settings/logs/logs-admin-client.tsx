@@ -27,7 +27,7 @@ export function LogsAdminClient() {
       qs.set('take', '50')
       if (!first && cursor) qs.set('cursor', cursor)
       const res = await fetch(`/api/admin/audit?${qs.toString()}`, { cache: 'no-store' })
-      if (!res.ok) throw new Error('Failed to load audit logs')
+      if (!res.ok) throw new Error('Protokolle konnten nicht geladen werden')
       const json = await res.json()
       const nextItems = Array.isArray(json?.items) ? json.items : []
       setItems((prev) => (first ? nextItems : [...prev, ...nextItems]))

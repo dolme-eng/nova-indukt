@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Plus, Edit, Eye, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react'
+import { Plus, Edit, Eye, Image as ImageIcon, CheckCircle2, XCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 export const dynamic = 'force-dynamic'
@@ -8,7 +8,9 @@ import Image from 'next/image'
 import { ProductsFilter } from './_components/products-filter'
 import { DeleteProductButton } from './_components/delete-product-button'
 
-async function getProducts(search?: string, category?: string, sort?: string) {
+const PAGE_SIZE = 50
+
+async function getProducts(search?: string, category?: string, sort?: string, page: number = 1) {
   const where: Prisma.ProductWhereInput = {}
 
   if (category) {
@@ -43,17 +45,26 @@ async function getProducts(search?: string, category?: string, sort?: string) {
     }
   }
 
-  return await prisma.product.findMany({
-    where,
-    include: {
-      category: true,
-      images: {
-        where: { isMain: true },
-        take: 1,
+  const skip = (page - 1) * PAGE_SIZE
+
+  const [products, totalCount] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      include: {
+        category: true,
+        images: {
+          where: { isMain: true },
+          take: 1,
+        },
       },
-    },
-    orderBy,
-  })
+      orderBy,
+      skip,
+      take: PAGE_SIZE,
+    }),
+    prisma.product.count({ where }),
+  ])
+
+  return { products, totalCount, totalPages: Math.ceil(totalCount / PAGE_SIZE) }
 }
 
 async function getCategories() {
@@ -65,13 +76,25 @@ async function getCategories() {
 export default async function AdminProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; category?: string; sort?: string }>
+  searchParams: Promise<{ q?: string; category?: string; sort?: string; page?: string }>
 }) {
   const resolvedParams = await searchParams
-  const [products, categories] = await Promise.all([
-    getProducts(resolvedParams.q, resolvedParams.category, resolvedParams.sort),
+  const page = Math.max(1, parseInt(resolvedParams.page || '1', 10))
+  const [result, categories] = await Promise.all([
+    getProducts(resolvedParams.q, resolvedParams.category, resolvedParams.sort, page),
     getCategories(),
   ])
+  const { products, totalCount, totalPages } = result
+
+  const buildPageUrl = (p: number) => {
+    const params = new URLSearchParams()
+    if (resolvedParams.q) params.set('q', resolvedParams.q)
+    if (resolvedParams.category) params.set('category', resolvedParams.category)
+    if (resolvedParams.sort) params.set('sort', resolvedParams.sort)
+    if (p > 1) params.set('page', p.toString())
+    const qs = params.toString()
+    return `/admin/products${qs ? `?${qs}` : ''}`
+  }
 
   return (
     <div className="space-y-6">
@@ -80,7 +103,7 @@ export default async function AdminProductsPage({
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Produkte</h1>
           <p className="text-sm text-slate-500">
-            Verwalten Sie Ihren Produktkatalog ({products.length} Artikel)
+            Verwalten Sie Ihren Produktkatalog ({totalCount} Artikel)
           </p>
         </div>
         <Link
@@ -197,6 +220,35 @@ export default async function AdminProductsPage({
           </table>
         </div>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
+          <p className="text-sm text-slate-500">
+            Seite {page} von {totalPages}
+          </p>
+          <div className="flex gap-2">
+            {page > 1 && (
+              <Link
+                href={buildPageUrl(page - 1)}
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                <ChevronLeft size={16} />
+                Zurück
+              </Link>
+            )}
+            {page < totalPages && (
+              <Link
+                href={buildPageUrl(page + 1)}
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                Weiter
+                <ChevronRight size={16} />
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

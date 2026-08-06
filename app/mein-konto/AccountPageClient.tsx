@@ -450,7 +450,7 @@ function OrdersTab() {
       try {
         const response = await fetch('/api/orders')
         if (!response.ok) {
-          throw new Error('Failed to fetch orders')
+          throw new Error('Bestellungen konnten nicht geladen werden')
         }
         const data = await response.json()
         setOrders(data.orders ?? data)
@@ -734,7 +734,7 @@ function AddressesTab() {
     try {
       setIsLoading(true)
       const response = await fetch('/api/addresses')
-      if (!response.ok) throw new Error('Failed to fetch addresses')
+      if (!response.ok) throw new Error('Adressen konnten nicht geladen werden')
       const data = await response.json()
       setAddresses(data)
     } catch (err) {
@@ -782,7 +782,7 @@ function AddressesTab() {
         method: 'DELETE',
       })
 
-      if (!response.ok) throw new Error('Failed to delete address')
+      if (!response.ok) throw new Error('Adresse konnte nicht gelöscht werden')
 
       await fetchAddresses()
     } catch {

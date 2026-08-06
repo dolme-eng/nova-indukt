@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ThumbsUp, CheckCircle, Flag, X, Filter, Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -183,6 +183,58 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
     fetchReviews(1, true)
   }
 
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!showReviewForm) return
+    const modal = modalRef.current
+    if (!modal) return
+
+    const previouslyFocused = document.activeElement as HTMLElement
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const getFocusable = () =>
+      Array.from(modal.querySelectorAll<HTMLElement>(focusableSelector))
+
+    const firstFocusable = () => getFocusable()[0]
+    const lastFocusable = () => getFocusable().at(-1)
+
+    setTimeout(() => firstFocusable()?.focus(), 50)
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setShowReviewForm(false)
+        return
+      }
+
+      if (e.key !== 'Tab') return
+
+      const focusable = getFocusable()
+      if (focusable.length === 0) return
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusable()) {
+          e.preventDefault()
+          lastFocusable()?.focus()
+        }
+      } else {
+        if (document.activeElement === lastFocusable()) {
+          e.preventDefault()
+          firstFocusable()?.focus()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      previouslyFocused?.focus()
+    }
+  }, [showReviewForm])
+
   return (
     <div
       data-testid="reviews-section"
@@ -267,6 +319,10 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
       {showReviewForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <motion.div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Bewertung schreiben"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6"

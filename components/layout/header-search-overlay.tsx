@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Search, X, Loader2, ArrowRight, Clock, Trash2 } from 'lucide-react'
 import { formatPriceDe } from '@/lib/utils/vat'
@@ -82,8 +82,63 @@ export function SearchOverlay({
     setRecentSearches([])
   }, [])
 
+  const overlayRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const overlay = overlayRef.current
+    if (!overlay) return
+
+    const previouslyFocused = document.activeElement as HTMLElement
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const getFocusable = () =>
+      Array.from(overlay.querySelectorAll<HTMLElement>(focusableSelector))
+
+    const firstFocusable = () => getFocusable()[0]
+    const lastFocusable = () => getFocusable().at(-1)
+
+    firstFocusable()?.focus()
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+        return
+      }
+
+      if (e.key !== 'Tab') return
+
+      const focusable = getFocusable()
+      if (focusable.length === 0) return
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusable()) {
+          e.preventDefault()
+          lastFocusable()?.focus()
+        }
+      } else {
+        if (document.activeElement === lastFocusable()) {
+          e.preventDefault()
+          firstFocusable()?.focus()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      previouslyFocused?.focus()
+    }
+  }, [onClose])
+
   return (
     <motion.div
+      ref={overlayRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Produktsuche"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

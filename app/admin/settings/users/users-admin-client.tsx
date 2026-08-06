@@ -26,7 +26,7 @@ export function UsersAdminClient() {
         fetch('/api/admin/users', { cache: 'no-store' }),
         fetch('/api/auth/session'),
       ])
-      if (!usersRes.ok) throw new Error('Failed to load users')
+      if (!usersRes.ok) throw new Error('Benutzer konnten nicht geladen werden')
       const usersJson = await usersRes.json()
       const nextItems = Array.isArray(usersJson?.items) ? usersJson.items : []
       setUsers(nextItems)

@@ -29,7 +29,7 @@ export function MediaAdminClient() {
       const qs = new URLSearchParams()
       if (folder) qs.set('folder', folder)
       const res = await fetch(`/api/admin/media?${qs.toString()}`, { cache: 'no-store' })
-      if (!res.ok) throw new Error('Failed to load media')
+      if (!res.ok) throw new Error('Medien konnten nicht geladen werden')
       const json = await res.json()
       setItems(Array.isArray(json) ? json : [])
     } catch (e: unknown) {
@@ -52,7 +52,7 @@ export function MediaAdminClient() {
       form.append('folder', folder)
       const res = await fetch('/api/upload', { method: 'POST', body: form })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Upload failed')
+      if (!res.ok) throw new Error(json?.error || 'Upload fehlgeschlagen')
 
       const img = json?.image
       await fetch('/api/admin/media', {
@@ -68,7 +68,7 @@ export function MediaAdminClient() {
           folder,
         }),
       })
-      toast.success('Upload OK')
+      toast.success('Hochgeladen')
       await refresh()
     } catch (e: unknown) {
       toast.error(e instanceof Error ? e.message : 'Fehler')
@@ -84,7 +84,7 @@ export function MediaAdminClient() {
         method: 'DELETE',
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Delete failed')
+      if (!res.ok) throw new Error(json?.error || 'Löschen fehlgeschlagen')
       toast.success('Gelöscht')
       await refresh()
     } catch (e: unknown) {

@@ -75,7 +75,7 @@ export function ContentAdminClient() {
         const res = await fetch(`/api/admin/content/pages/${encodeURIComponent(selectedSlug)}`, {
           cache: 'no-store',
         })
-        if (!res.ok) throw new Error('Failed to load page')
+        if (!res.ok) throw new Error('Seite konnte nicht geladen werden')
         const json = await res.json()
         setPageDraft(json)
       } catch (e: unknown) {
@@ -102,7 +102,7 @@ export function ContentAdminClient() {
           isActive: pageDraft.isActive,
         }),
       })
-      if (!res.ok) throw new Error('Failed to save page')
+      if (!res.ok) throw new Error('Seite konnte nicht gespeichert werden')
       toast.success('Seite gespeichert')
       await refresh()
     } catch (e: unknown) {
@@ -121,7 +121,7 @@ export function ContentAdminClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug: newPage.slug, title: newPage.title, content: '' }),
       })
-      if (!res.ok) throw new Error('Failed to create page')
+      if (!res.ok) throw new Error('Seite konnte nicht erstellt werden')
       toast.success('Seite erstellt')
       setNewPage({ slug: '', title: '' })
       await refresh()
@@ -147,7 +147,7 @@ export function ContentAdminClient() {
           isActive: true,
         }),
       })
-      if (!res.ok) throw new Error('Failed to create FAQ')
+      if (!res.ok) throw new Error('FAQ konnte nicht erstellt werden')
       toast.success('FAQ hinzugefügt')
       setNewFaq({ category: 'support', question: '', answer: '' })
       await refresh()
@@ -166,7 +166,7 @@ export function ContentAdminClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(patch),
       })
-      if (!res.ok) throw new Error('Failed to update FAQ')
+      if (!res.ok) throw new Error('FAQ konnte nicht aktualisiert werden')
       await refresh()
     } catch (e: unknown) {
       toast.error(e instanceof Error ? e.message : 'Fehler')
@@ -180,7 +180,7 @@ export function ContentAdminClient() {
     setIsSaving(true)
     try {
       const res = await fetch(`/api/admin/content/faq/${id}`, { method: 'DELETE' })
-      if (!res.ok) throw new Error('Failed to delete FAQ')
+      if (!res.ok) throw new Error('FAQ konnte nicht gelöscht werden')
       toast.success('FAQ gelöscht')
       await refresh()
     } catch (e: unknown) {

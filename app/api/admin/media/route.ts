@@ -122,7 +122,16 @@ export async function DELETE(req: NextRequest) {
     if (before) {
       await prisma.mediaAsset.delete({ where: { publicId } })
     }
-    await deleteImage(publicId)
+
+    try {
+      await deleteImage(publicId)
+    } catch (cloudErr) {
+      if (before) {
+        await prisma.mediaAsset.create({ data: before })
+      }
+      logError("[MEDIA_DELETE_CLOUDINARY_ROLLBACK]", cloudErr)
+      return NextResponse.json({ error: "Cloudinary-Löschfehlgeschlagen, Medium wiederhergestellt" }, { status: 500 })
+    }
 
     if (before) {
       await auditLog({
