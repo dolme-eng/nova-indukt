@@ -30,13 +30,13 @@ export async function GET(
 
     const [reviews, totalReviews] = await Promise.all([
       prisma.review.findMany({
-        where: { productId: product.id, isVisible: true },
+        where: { productId: product.id, isPublished: true },
         include: { user: { select: { name: true, image: true } } },
         orderBy: { createdAt: 'desc' },
         take: 20
       }),
       prisma.review.count({
-        where: { productId: product.id, isVisible: true }
+        where: { productId: product.id, isPublished: true }
       })
     ])
     
