@@ -128,7 +128,7 @@ describe('GET /api/reviews', () => {
     const res = await GET(makeGetRequest('https://example.com/api/reviews'))
     expect(res.status).toBe(400)
     const data = await res.json()
-    expect(data.error).toBe('Product ID is required')
+    expect(data.error).toBe('Produkt-ID erforderlich')
   })
 
   it('returns 200 with reviews and stats', async () => {
@@ -223,7 +223,7 @@ describe('POST /api/reviews', () => {
     const res = await POST(makePostRequest(badReview))
     expect(res.status).toBe(400)
     const data = await res.json()
-    expect(data.error).toBe('Validation failed')
+    expect(data.error).toBe('Validierung fehlgeschlagen')
   })
 
   it('returns 404 when product not found', async () => {

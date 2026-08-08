@@ -114,7 +114,7 @@ export async function GET(req: NextRequest) {
       newValues: { totalOrders, recentOrders, totalCustomers },
       ipAddress: req.headers.get('x-forwarded-for'),
       userAgent: req.headers.get('user-agent'),
-    }).catch(() => {})
+    }).catch((err) => logError('[STATS_AUDIT]', err))
 
     const responseData = {
       orders: {

@@ -88,6 +88,7 @@ export default function BlogContent({ initialPosts }: BlogContentProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Artikel durchsuchen..."
+                aria-label="Blog durchsuchen"
                 className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#4ECCA3] focus:ring-2 focus:ring-[#4ECCA3]/20 text-sm sm:text-base"
               />
             </div>

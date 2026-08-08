@@ -106,10 +106,11 @@ export default function OrderTrackingPage() {
         <form onSubmit={handleSearch} className="mb-8 rounded-2xl bg-white p-6 shadow-sm">
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
+              <label htmlFor="tracking-email" className="mb-1 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="tracking-email"
                   type="email"
                   required
                   value={email}
@@ -120,10 +121,11 @@ export default function OrderTrackingPage() {
               </div>
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Bestellnummer</label>
+              <label htmlFor="tracking-order" className="mb-1 block text-sm font-medium text-gray-700">Bestellnummer</label>
               <div className="relative">
                 <Package className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="tracking-order"
                   type="text"
                   required
                   value={orderNumber}

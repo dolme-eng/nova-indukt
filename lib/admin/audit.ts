@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@prisma/client"
+import { logError } from "@/lib/logger"
 
 export async function auditLog(params: {
   action: string
@@ -25,7 +26,7 @@ export async function auditLog(params: {
       },
     })
   } catch (error) {
-    console.error('[audit] Failed to write audit log:', error)
+    logError('[audit] Failed to write audit log:', error)
   }
 }
 

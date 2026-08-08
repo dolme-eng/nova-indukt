@@ -12,6 +12,7 @@ vi.mock('@/lib/prisma', () => ({
   prisma: {
     product: {
       findMany: vi.fn(),
+      count: vi.fn(),
       create: vi.fn(),
     },
     promotion: {
@@ -109,10 +110,11 @@ describe('Admin API Routes', () => {
     it('returns products (200)', async () => {
       const products = [{ id: 'p1', nameDe: 'Krug', slug: 'krug', price: 29.99, isActive: true, categoryId: 'c1', images: [] }]
       vi.mocked(prisma.product.findMany).mockResolvedValue(products as any)
+      vi.mocked(prisma.product.count).mockResolvedValue(1)
       const res = await productsGET(makeGetRequest())
       const data = await res.json()
       expect(res.status).toBe(200)
-      expect(data).toEqual(products)
+      expect(data.products).toEqual(products)
     })
 
     it('returns 500 on database error', async () => {
@@ -151,7 +153,7 @@ describe('Admin API Routes', () => {
       const res = await productsPOST(makePostRequest('https://example.com/api/admin/products', {}))
       const body = await res.json()
       expect(res.status).toBe(400)
-      expect(body.error).toBe('Validation failed')
+      expect(body.error).toBe('Validierung fehlgeschlagen')
       expect(body.details).toEqual({ nameDe: ['Required'] })
     })
 

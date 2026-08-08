@@ -19,21 +19,20 @@ const shippingUpdateSchema = z.object({
 })
 
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:orders:shipping'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
-
-  const csrfError = validateCsrfToken(req)
-  if (csrfError) return csrfError
-
   try {
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:orders:shipping'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(req)
+    if (csrfError) return csrfError
     const { id } = await context.params
     const order = await prisma.order.findUnique({
       where: { id },
       include: { items: true },
     })
-    if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 })
+    if (!order) return NextResponse.json({ error: "Nicht gefunden" }, { status: 404 })
 
     const body = await req.json()
     const parsed = shippingUpdateSchema.safeParse(body)
@@ -129,7 +128,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     return NextResponse.json(next)
   } catch (error) {
     logError("[SHIPPING_PATCH]", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }
 

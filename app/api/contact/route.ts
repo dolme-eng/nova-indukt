@@ -6,6 +6,7 @@ import { sendContactNotificationEmail } from '@/lib/email/send'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
+import { stripHtml } from '@/lib/utils/sanitize'
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 5 // 5 messages per hour per IP
@@ -46,13 +47,15 @@ export async function POST(request: NextRequest) {
     const result = contactSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation failed', details: result.error.flatten() },
+        { error: 'Validierung fehlgeschlagen' },
         { status: 400 }
       )
     }
 
-    const { name, email: rawEmail, subject, message } = result.data
+    const { name: rawName, email: rawEmail, subject, message: rawMessage } = result.data
     const email = rawEmail.toLowerCase()
+    const name = stripHtml(rawName)
+    const message = stripHtml(rawMessage)
 
     // Save to database
     const contactMessage = await prisma.contactMessage.create({
@@ -75,9 +78,8 @@ export async function POST(request: NextRequest) {
         contactMessage.id,
         contactMessage.createdAt
       )
-    } catch {
-      // Continue - message is still saved even if email fails
-      // Email errors should be logged by the email service
+    } catch (emailErr) {
+      logError('[CONTACT_EMAIL]', emailErr)
     }
 
     return NextResponse.json(
@@ -90,11 +92,11 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     logError('Error sending contact message:', error)
-    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })
+    return NextResponse.json({ error: 'Nachricht konnte nicht gesendet werden' }, { status: 500 })
   }
 }
 
 // Get all contact messages - ADMIN ONLY (désactivé temporairement)
 export async function GET() {
-  return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
+  return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 })
 }

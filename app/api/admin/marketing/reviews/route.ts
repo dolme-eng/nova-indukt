@@ -21,11 +21,12 @@ const marketingReviewSchema = z.discriminatedUnion('action', [
 ])
 
 export async function PATCH(req: NextRequest) {
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
   const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:patch'), { windowMs: 60_000, maxRequests: 15 })
   if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
-    const authz = await requireAdmin()
-    if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError
@@ -44,26 +45,31 @@ export async function PATCH(req: NextRequest) {
     if (action === "toggle-publish") {
       const { isPublished } = parsed.data
       const before = await prisma.review.findUnique({ where: { id } })
-      const review = await prisma.review.update({
-        where: { id },
-        data: { isPublished }
-      })
 
-      const publishedReviews = await prisma.review.findMany({
-        where: { productId: review.productId, isPublished: true },
-        select: { rating: true }
-      })
+      const review = await prisma.$transaction(async (tx) => {
+        const updated = await tx.review.update({
+          where: { id },
+          data: { isPublished }
+        })
 
-      const avgRating = publishedReviews.length > 0
-        ? publishedReviews.reduce((sum, r) => sum + r.rating, 0) / publishedReviews.length
-        : 0
+        const publishedReviews = await tx.review.findMany({
+          where: { productId: updated.productId, isPublished: true },
+          select: { rating: true }
+        })
 
-      await prisma.product.update({
-        where: { id: review.productId },
-        data: {
-          reviewCount: publishedReviews.length,
-          rating: Math.round(avgRating * 10) / 10
-        }
+        const avgRating = publishedReviews.length > 0
+          ? publishedReviews.reduce((sum, r) => sum + r.rating, 0) / publishedReviews.length
+          : 0
+
+        await tx.product.update({
+          where: { id: updated.productId },
+          data: {
+            reviewCount: publishedReviews.length,
+            rating: Math.round(avgRating * 10) / 10
+          }
+        })
+
+        return updated
       })
 
       await auditLog({
@@ -102,26 +108,27 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json(review)
     }
 
-    return new NextResponse("Invalid action", { status: 400 })
+    return NextResponse.json({ error: "Ungültige Aktion" }, { status: 400 })
   } catch (error) {
     logError("[MARKETING_PATCH]", error)
-    return new NextResponse("Internal error", { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }
 
 export async function DELETE(req: NextRequest) {
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
   const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:delete'), { windowMs: 60_000, maxRequests: 15 })
   if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
-    const authz = await requireAdmin()
-    if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError
 
     const { searchParams } = new URL(req.url)
     const id = searchParams.get("id")
-    if (!id) return new NextResponse("Missing ID", { status: 400 })
+    if (!id) return NextResponse.json({ error: "ID erforderlich" }, { status: 400 })
 
     const before = await prisma.review.findUnique({ where: { id } })
     await prisma.review.delete({ where: { id } })
@@ -139,6 +146,6 @@ export async function DELETE(req: NextRequest) {
     return new NextResponse(null, { status: 204 })
   } catch (error) {
     logError("[MARKETING_DELETE]", error)
-    return new NextResponse("Internal error", { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }

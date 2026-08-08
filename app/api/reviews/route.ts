@@ -6,6 +6,7 @@ import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
+import { stripHtml } from '@/lib/utils/sanitize'
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 reviews per hour per IP
@@ -20,6 +21,9 @@ const reviewSchema = z.object({
 // GET - Fetch reviews for a product
 export async function GET(request: NextRequest) {
   try {
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'reviews:get'), { windowMs: 60_000, maxRequests: 60 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')
     const published = searchParams.get('published') !== 'false'
@@ -27,7 +31,7 @@ export async function GET(request: NextRequest) {
     const page = Math.max(parseInt(searchParams.get('page') || '1', 10) || 1, 1)
 
     if (!productId) {
-      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 })
+      return NextResponse.json({ error: 'Produkt-ID erforderlich' }, { status: 400 })
     }
 
     const skip = (page - 1) * limit
@@ -83,7 +87,7 @@ export async function GET(request: NextRequest) {
       distribution[stat.rating as 1 | 2 | 3 | 4 | 5] = stat._count.rating
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       reviews: reviews.map((r) => ({
         id: r.id,
         rating: r.rating,
@@ -111,9 +115,11 @@ export async function GET(request: NextRequest) {
         distribution,
       },
     })
+    response.headers.set('Cache-Control', 'private, no-store')
+    return response
   } catch (error) {
     logError('Error fetching reviews:', error)
-    return NextResponse.json({ error: 'Failed to fetch reviews' }, { status: 500 })
+    return NextResponse.json({ error: 'Bewertungen konnten nicht geladen werden' }, { status: 500 })
   }
 }
 
@@ -152,12 +158,14 @@ export async function POST(request: NextRequest) {
 
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation failed', details: result.error.flatten() },
+        { error: 'Validierung fehlgeschlagen' },
         { status: 400 }
       )
     }
 
-    const { productId, rating, title, content } = result.data
+    const { productId, rating, title: rawTitle, content: rawContent } = result.data
+    const title = stripHtml(rawTitle)
+    const content = stripHtml(rawContent)
 
     // Check if product exists
     const product = await prisma.product.findUnique({
@@ -165,7 +173,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!product) {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Produkt nicht gefunden' }, { status: 404 })
     }
 
     // Check if user already reviewed this product
@@ -239,7 +247,7 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     logError('Error creating review:', error)
-    return NextResponse.json({ error: 'Failed to create review' }, { status: 500 })
+    return NextResponse.json({ error: 'Bewertung konnte nicht erstellt werden' }, { status: 500 })
   }
 }
 

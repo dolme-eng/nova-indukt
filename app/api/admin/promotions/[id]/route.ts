@@ -12,17 +12,18 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:get'), { windowMs: 60_000, maxRequests: 30 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:get'), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const { id } = await params
     const promotion = await prisma.promotion.findUnique({ where: { id } })
 
     if (!promotion) {
-      return NextResponse.json({ error: 'Promotion not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Aktion nicht gefunden' }, { status: 404 })
     }
 
     return NextResponse.json(promotion)
@@ -37,11 +38,12 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:put'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:put'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
@@ -57,7 +59,7 @@ export async function PUT(
     }
 
     const before = await prisma.promotion.findUnique({ where: { id } })
-    if (!before) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    if (!before) return NextResponse.json({ error: 'Nicht gefunden' }, { status: 404 })
 
     const data = parsed.data
     const promotion = await prisma.promotion.update({
@@ -92,18 +94,19 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:delete'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:delete'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
 
     const { id } = await params
     const before = await prisma.promotion.findUnique({ where: { id } })
-    if (!before) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    if (!before) return NextResponse.json({ error: 'Nicht gefunden' }, { status: 404 })
 
     await prisma.promotion.delete({ where: { id } })
 

@@ -8,11 +8,12 @@ import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:put'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:put'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError
@@ -54,11 +55,12 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
 }
 
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:delete'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:faq:delete'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError

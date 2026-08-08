@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     const result = resetPasswordSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation failed', details: result.error.flatten() },
+        { error: 'Validierung fehlgeschlagen' },
         { status: 400 }
       )
     }

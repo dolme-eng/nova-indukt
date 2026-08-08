@@ -16,7 +16,7 @@ export async function GET(
     
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 401 }
       )
     }
@@ -41,14 +41,14 @@ export async function GET(
     
     if (!order) {
       return NextResponse.json(
-        { error: "Order not found" },
+        { error: "Bestellung nicht gefunden" },
         { status: 404 }
       )
     }
     
     if (order.userId !== session.user.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 403 }
       )
     }
@@ -69,8 +69,8 @@ export async function GET(
     })
   } catch (error) {
     logError("Error fetching order:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch order" },
+      return NextResponse.json(
+        { error: "Bestellung konnte nicht geladen werden" },
       { status: 500 }
     )
   }
@@ -89,7 +89,7 @@ export async function PATCH(
     
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 401 }
       )
     }
@@ -126,7 +126,7 @@ export async function PATCH(
     
     if (order.userId !== session.user.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 403 }
       )
     }
@@ -163,7 +163,7 @@ export async function PATCH(
   } catch (error) {
     logError("Error cancelling order:", error)
     return NextResponse.json(
-      { error: "Failed to cancel order" },
+      { error: "Bestellung konnte nicht storniert werden" },
       { status: 500 }
     )
   }

@@ -260,7 +260,6 @@ export function HomeContent({
 const ProductCard = memo(function ProductCard({ product }: { product: Product; index: number }) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
-  const isLocal = (src: string) => src?.startsWith('/images/products/') ?? false
   const inWishlist = isInWishlist(product.id)
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -396,7 +395,6 @@ const FlashDealCard = memo(function FlashDealCard({
 }) {
   const { isInWishlist, toggleItem } = useWishlist()
   const { addItem } = useCart()
-  const isLocal = (src: string) => src?.startsWith('/images/products/') ?? false
   const inWishlist = isInWishlist(product.id)
 
   const handleWishlist = (e: React.MouseEvent) => {

@@ -135,7 +135,7 @@ describe('GET /api/wishlist', () => {
 
     expect(res.status).toBe(500)
     const data = await res.json()
-    expect(data.error).toBe('Failed to fetch wishlist')
+    expect(data.error).toBe('Synchronisation fehlgeschlagen')
   })
 })
 
@@ -194,7 +194,7 @@ describe('POST /api/wishlist', () => {
 
     expect(res.status).toBe(400)
     const data = await res.json()
-    expect(data.error).toBe('Validation failed')
+    expect(data.error).toBe('Validierung fehlgeschlagen')
   })
 
   it('returns 404 when product not found', async () => {
@@ -204,7 +204,7 @@ describe('POST /api/wishlist', () => {
 
     expect(res.status).toBe(404)
     const data = await res.json()
-    expect(data.error).toBe('Product not found')
+    expect(data.error).toBe('Produkt nicht gefunden')
   })
 
   it('returns 409 when product already in wishlist', async () => {
@@ -218,7 +218,7 @@ describe('POST /api/wishlist', () => {
 
     expect(res.status).toBe(409)
     const data = await res.json()
-    expect(data.error).toBe('Product already in wishlist')
+    expect(data.error).toBe('Produkt bereits auf der Wunschliste')
   })
 
   it('returns 201 on successful add', async () => {
@@ -248,7 +248,7 @@ describe('POST /api/wishlist', () => {
 
     expect(res.status).toBe(500)
     const data = await res.json()
-    expect(data.error).toBe('Failed to add to wishlist')
+    expect(data.error).toBe('Hinzufügen fehlgeschlagen')
   })
 })
 
@@ -323,6 +323,6 @@ describe('DELETE /api/wishlist', () => {
 
     expect(res.status).toBe(500)
     const data = await res.json()
-    expect(data.error).toBe('Failed to remove from wishlist')
+    expect(data.error).toBe('Entfernen fehlgeschlagen')
   })
 })

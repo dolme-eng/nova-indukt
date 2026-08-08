@@ -22,16 +22,15 @@ interface ShippingAddress {
  * Used to mark bank transfer orders as PAID after confirming receipt.
  */
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
-
-  const csrfError = validateCsrfToken(request)
-  if (csrfError) return csrfError
-
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'payment:update'), { windowMs: 60_000, maxRequests: 20 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
-
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'payment:update'), { windowMs: 60_000, maxRequests: 20 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
     const { id } = await params
     const body = await request.json()
     const { paymentStatus } = body

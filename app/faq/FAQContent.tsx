@@ -156,6 +156,7 @@ export function FAQContent(props: {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Fragen durchsuchen..."
+              aria-label="FAQ durchsuchen"
               className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-12 pr-4 text-sm focus:border-[#4ECCA3] focus:outline-none focus:ring-2 focus:ring-[#4ECCA3]/20 sm:text-base"
             />
           </div>

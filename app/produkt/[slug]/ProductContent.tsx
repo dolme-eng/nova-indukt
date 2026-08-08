@@ -57,7 +57,6 @@ interface ProductContentProps {
 }
 
 export function ProductContent({ product, relatedProducts }: ProductContentProps) {
-  const isLocalProductImage = (src: string) => src?.startsWith('/images/products/') ?? false
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [quantity, setQuantity] = useState(1)

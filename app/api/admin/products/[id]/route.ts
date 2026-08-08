@@ -37,23 +37,27 @@ export async function PATCH(
     const { images, ...productData } = parsed.data
     const before = await prisma.product.findUnique({ where: { id } })
 
-    const product = await prisma.product.update({
-      where: { id },
-      data: productData as Prisma.ProductUpdateInput,
-    })
-
-    if (images && Array.isArray(images)) {
-      await prisma.productImage.deleteMany({ where: { productId: id } })
-      await prisma.productImage.createMany({
-        data: images.map((img, index) => ({
-          productId: id,
-          url: img.url,
-          alt: img.alt || productData.nameDe || '',
-          sortOrder: index,
-          isMain: index === 0,
-        }))
+    const product = await prisma.$transaction(async (tx) => {
+      const updated = await tx.product.update({
+        where: { id },
+        data: productData as Prisma.ProductUpdateInput,
       })
-    }
+
+      if (images && Array.isArray(images)) {
+        await tx.productImage.deleteMany({ where: { productId: id } })
+        await tx.productImage.createMany({
+          data: images.map((img, index) => ({
+            productId: id,
+            url: img.url,
+            alt: img.alt || productData.nameDe || '',
+            sortOrder: index,
+            isMain: index === 0,
+          }))
+        })
+      }
+
+      return updated
+    })
 
     await auditLog({
       action: "UPDATE",
@@ -69,7 +73,7 @@ export async function PATCH(
     return NextResponse.json(product)
   } catch (error) {
     logError("[PRODUCT_PATCH]", error)
-    return new NextResponse("Internal error", { status: 500 })
+    return NextResponse.json({ error: 'Interner Fehler' }, { status: 500 })
   }
 }
 
@@ -106,6 +110,6 @@ export async function DELETE(
     return new NextResponse(null, { status: 204 })
   } catch (error) {
     logError("[PRODUCT_DELETE]", error)
-    return new NextResponse("Internal error", { status: 500 })
+    return NextResponse.json({ error: 'Interner Fehler' }, { status: 500 })
   }
 }

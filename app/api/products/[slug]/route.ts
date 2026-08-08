@@ -17,37 +17,38 @@ export async function GET(
       where: { slug },
       include: {
         category: true,
-        images: true,
-        reviews: {
-          include: {
-            user: {
-              select: {
-                name: true
-              }
-            }
-          },
-          orderBy: {
-            createdAt: "desc"
-          }
-        }
+        images: true
       }
     })
     
     if (!product) {
       return NextResponse.json(
-        { error: "Product not found" },
+        { error: "Produkt nicht gefunden" },
         { status: 404 }
       )
     }
+
+    const [reviews, totalReviews] = await Promise.all([
+      prisma.review.findMany({
+        where: { productId: product.id, isVisible: true },
+        include: { user: { select: { name: true, image: true } } },
+        orderBy: { createdAt: 'desc' },
+        take: 20
+      }),
+      prisma.review.count({
+        where: { productId: product.id, isVisible: true }
+      })
+    ])
     
     const response = NextResponse.json({
       ...product,
       price: Number(product.price),
       oldPrice: product.oldPrice ? Number(product.oldPrice) : null,
-      reviews: product.reviews.map(review => ({
+      reviews: reviews.map(review => ({
         ...review,
         rating: Number(review.rating)
-      }))
+      })),
+      totalReviews
     })
     response.headers.set("Cache-Control", "public, s-maxage=120, stale-while-revalidate=600")
     return response

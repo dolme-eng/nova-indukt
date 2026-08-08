@@ -24,7 +24,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     const { id } = await context.params
     const before = await prisma.user.findUnique({ where: { id } })
-    if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 })
+    if (!before) return NextResponse.json({ error: "Nicht gefunden" }, { status: 404 })
 
     const body = await req.json()
     const parsed = updateUserRoleSchema.safeParse(body)
@@ -39,7 +39,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     // Prevent self-demotion from ADMIN (basic safety)
     if (before.id === authz.session.user.id && before.role === "ADMIN" && role !== "ADMIN") {
-      return NextResponse.json({ error: "You cannot remove your own admin role." }, { status: 400 })
+      return NextResponse.json({ error: "Sie können Ihre eigene Admin-Berechtigung nicht entziehen." }, { status: 400 })
     }
 
     const user = await prisma.user.update({

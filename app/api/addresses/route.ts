@@ -29,7 +29,7 @@ export async function GET() {
     
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 401 }
       )
     }
@@ -42,7 +42,9 @@ export async function GET() {
       ],
     })
     
-    return NextResponse.json(addresses)
+    const response = NextResponse.json(addresses)
+    response.headers.set('Cache-Control', 'private, no-store')
+    return response
   } catch (error) {
     logError("Error fetching addresses:", error)
     return NextResponse.json(
@@ -59,7 +61,7 @@ export async function POST(request: NextRequest) {
     
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 401 }
       )
     }
@@ -75,7 +77,7 @@ export async function POST(request: NextRequest) {
     
     if (!result.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: result.error.flatten() },
+        { error: "Validierung fehlgeschlagen" },
         { status: 400 }
       )
     }
@@ -90,20 +92,21 @@ export async function POST(request: NextRequest) {
     const isFirstAddress = existingCount === 0
     const shouldBeDefault = data.isDefault || isFirstAddress
 
-    // If setting as default, unset other defaults
-    if (shouldBeDefault && !isFirstAddress) {
-      await prisma.address.updateMany({
-        where: { userId: session.user.id, isDefault: true },
-        data: { isDefault: false },
+    const address = await prisma.$transaction(async (tx) => {
+      if (shouldBeDefault && !isFirstAddress) {
+        await tx.address.updateMany({
+          where: { userId: session.user.id, isDefault: true },
+          data: { isDefault: false },
+        })
+      }
+
+      return tx.address.create({
+        data: {
+          ...data,
+          userId: session.user.id,
+          isDefault: shouldBeDefault,
+        },
       })
-    }
-    
-    const address = await prisma.address.create({
-      data: {
-        ...data,
-        userId: session.user.id,
-        isDefault: shouldBeDefault,
-      },
     })
     
     return NextResponse.json(address, { status: 201 })
@@ -123,7 +126,7 @@ export async function PUT(request: NextRequest) {
     
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 401 }
       )
     }
@@ -161,7 +164,7 @@ export async function PUT(request: NextRequest) {
     
     if (!result.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: result.error.flatten() },
+        { error: "Validierung fehlgeschlagen" },
         { status: 400 }
       )
     }
@@ -202,7 +205,7 @@ export async function DELETE(request: NextRequest) {
     
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Nicht autorisiert" },
         { status: 401 }
       )
     }
@@ -235,26 +238,27 @@ export async function DELETE(request: NextRequest) {
       )
     }
     
-    await prisma.address.delete({
-      where: { id: addressId }
-    })
-    
-    // If this was a default, set another as default if any remain
-    if (existingAddress.isDefault) {
-      const remaining = await prisma.address.findFirst({
-        where: { userId: session.user.id },
-        orderBy: { createdAt: 'asc' }
+    await prisma.$transaction(async (tx) => {
+      await tx.address.delete({
+        where: { id: addressId }
       })
-      
-      if (remaining) {
-        await prisma.address.update({
-          where: { id: remaining.id },
-          data: {
-            isDefault: true,
-          }
+
+      if (existingAddress.isDefault) {
+        const remaining = await tx.address.findFirst({
+          where: { userId: session.user.id },
+          orderBy: { createdAt: 'asc' }
         })
+
+        if (remaining) {
+          await tx.address.update({
+            where: { id: remaining.id },
+            data: {
+              isDefault: true,
+            }
+          })
+        }
       }
-    }
+    })
     
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
       }),
     ])
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       orders: orders.map((order) => ({
         ...order,
         total: Number(order.total),
@@ -81,6 +81,8 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(totalCount / limit),
       },
     })
+    response.headers.set('Cache-Control', 'private, no-store')
+    return response
   } catch (error) {
     logError('Error fetching orders:', error)
     return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 })

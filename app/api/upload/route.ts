@@ -26,11 +26,15 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData()
     const file = formData.get('file') as File
+    const ALLOWED_FOLDERS = ['nova-indukt/uploads', 'nova-indukt/products', 'nova-indukt/banners']
     const folder = (formData.get('folder') as string) || 'nova-indukt/uploads'
+    if (!ALLOWED_FOLDERS.includes(folder)) {
+      return NextResponse.json({ error: 'Ungültiger Ordner' }, { status: 400 })
+    }
     
     if (!file) {
       return NextResponse.json(
-        { error: "No file provided" },
+        { error: "Keine Datei angegeben" },
         { status: 400 }
       )
     }
@@ -39,7 +43,7 @@ export async function POST(request: NextRequest) {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: "Invalid file type. Allowed: JPG, PNG, WebP, GIF" },
+        { error: "Ungültiger Dateityp. Erlaubt: JPG, PNG, WebP, GIF" },
         { status: 400 }
       )
     }
@@ -48,7 +52,7 @@ export async function POST(request: NextRequest) {
     const maxSize = 10 * 1024 * 1024
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: "File too large. Maximum size is 10MB" },
+        { error: "Datei zu groß. Maximale Größe ist 10MB" },
         { status: 400 }
       )
     }

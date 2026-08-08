@@ -8,7 +8,7 @@ import { validateCsrfToken } from '@/lib/csrf'
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+    if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
@@ -18,11 +18,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const { status } = body
 
     if (!['NEW', 'IN_PROGRESS', 'RESOLVED', 'SPAM'].includes(status)) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+      return NextResponse.json({ error: 'Ungültiger Status' }, { status: 400 })
     }
 
     const existing = await prisma.contactMessage.findUnique({ where: { id } })
-    if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    if (!existing) return NextResponse.json({ error: 'Nicht gefunden' }, { status: 404 })
 
     const updated = await prisma.contactMessage.update({
       where: { id },
@@ -37,12 +37,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       oldValues: { status: existing.status },
       newValues: { status },
       ipAddress: request.headers.get('x-forwarded-for'),
-    }).catch(() => {})
+    }).catch((err) => logError('[CONTACT_UPDATE_AUDIT]', err))
 
     return NextResponse.json({ data: updated })
   } catch (error) {
     logError('Error updating contact message:', error)
-    return NextResponse.json({ error: 'Failed to update' }, { status: 500 })
+    return NextResponse.json({ error: 'Aktualisierung fehlgeschlagen' }, { status: 500 })
   }
 }
 
@@ -52,7 +52,7 @@ export async function DELETE(
 ) {
   try {
     const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+    if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
@@ -60,7 +60,7 @@ export async function DELETE(
     const { id } = await params
 
     const existing = await prisma.contactMessage.findUnique({ where: { id } })
-    if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    if (!existing) return NextResponse.json({ error: 'Nicht gefunden' }, { status: 404 })
 
     await prisma.contactMessage.delete({ where: { id } })
 
@@ -71,11 +71,11 @@ export async function DELETE(
       userId: authz.session.user.id,
       oldValues: { name: existing.name, email: existing.email, subject: existing.subject },
       ipAddress: request.headers.get('x-forwarded-for'),
-    }).catch(() => {})
+    }).catch((err) => logError('[CONTACT_DELETE_AUDIT]', err))
 
     return NextResponse.json({ success: true })
   } catch (error) {
     logError('Error deleting contact message:', error)
-    return NextResponse.json({ error: 'Failed to delete' }, { status: 500 })
+    return NextResponse.json({ error: 'Löschen fehlgeschlagen' }, { status: 500 })
   }
 }

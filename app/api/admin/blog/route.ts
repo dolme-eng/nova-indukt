@@ -8,11 +8,12 @@ import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
 export async function POST(request: NextRequest) {
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
   const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:post'), { windowMs: 60_000, maxRequests: 15 })
   if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
-    const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError

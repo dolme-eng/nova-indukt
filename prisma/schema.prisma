@@ -60,6 +60,8 @@ model User {
   reviewHelpfulVotes ReviewHelpfulVote[]
   sessions         Session[]
   wishlist         WishlistItem[]
+  cart             Cart?
+  contactMessages  ContactMessage[]
 }
 
 model VerificationToken {
@@ -281,6 +283,7 @@ model ContactMessage {
   message   String
   status    ContactStatus @default(NEW)
   userId    String?
+  user      User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
@@ -362,6 +365,7 @@ model Cart {
   createdAt DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   items     CartItem[]
+  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model CartItem {

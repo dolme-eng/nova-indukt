@@ -60,6 +60,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(formattedResults)
   } catch (error) {
     logError('[SEARCH_API_ERROR]', error)
-    return new NextResponse('Internal error', { status: 500 })
+    return NextResponse.json({ error: 'Interner Fehler' }, { status: 500 })
   }
 }

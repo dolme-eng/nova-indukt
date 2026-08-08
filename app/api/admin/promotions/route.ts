@@ -9,11 +9,11 @@ import { validateCsrfToken } from '@/lib/csrf'
 
 // GET - Liste toutes les promotions
 export async function GET(req: NextRequest) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:promotions'), { windowMs: 60_000, maxRequests: 30 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:promotions'), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const promotions = await prisma.promotion.findMany({
       orderBy: { createdAt: 'desc' }
@@ -31,11 +31,11 @@ export async function GET(req: NextRequest) {
 
 // POST - Créer une nouvelle promotion
 export async function POST(request: NextRequest) {
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:post'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:post'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError

@@ -35,7 +35,7 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     })
     
-    return NextResponse.json(
+    const response = NextResponse.json(
       wishlistItems.map(item => ({
         id: item.product.id,
         wishlistItemId: item.id,
@@ -51,10 +51,12 @@ export async function GET() {
         addedAt: item.createdAt,
       }))
     )
+    response.headers.set('Cache-Control', 'private, no-store')
+    return response
   } catch (error) {
     logError("Error fetching wishlist:", error)
     return NextResponse.json(
-      { error: "Failed to fetch wishlist" },
+      { error: "Synchronisation fehlgeschlagen" },
       { status: 500 }
     )
   }
@@ -83,7 +85,7 @@ export async function POST(request: NextRequest) {
     
     if (!result.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: result.error.flatten() },
+        { error: "Validierung fehlgeschlagen" },
         { status: 400 }
       )
     }
@@ -97,7 +99,7 @@ export async function POST(request: NextRequest) {
     
     if (!product) {
       return NextResponse.json(
-        { error: "Product not found" },
+        { error: "Produkt nicht gefunden" },
         { status: 404 }
       )
     }
@@ -114,7 +116,7 @@ export async function POST(request: NextRequest) {
     
     if (existing) {
       return NextResponse.json(
-        { error: "Product already in wishlist" },
+        { error: "Produkt bereits auf der Wunschliste" },
         { status: 409 }
       )
     }
@@ -151,7 +153,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logError("Error adding to wishlist:", error)
     return NextResponse.json(
-      { error: "Failed to add to wishlist" },
+      { error: "Hinzufügen fehlgeschlagen" },
       { status: 500 }
     )
   }
@@ -203,7 +205,7 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     logError("Error removing from wishlist:", error)
     return NextResponse.json(
-      { error: "Failed to remove from wishlist" },
+      { error: "Entfernen fehlgeschlagen" },
       { status: 500 }
     )
   }

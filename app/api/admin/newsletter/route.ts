@@ -9,7 +9,7 @@ import { validateCsrfToken } from '@/lib/csrf'
 export async function DELETE(req: NextRequest) {
   try {
     const authz = await requireAdmin()
-    if (!authz.ok) return new NextResponse('Unauthorized', { status: authz.status })
+    if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError
@@ -43,6 +43,6 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ success: true })
   } catch (error) {
     logError('[NEWSLETTER_DELETE]', error)
-    return new NextResponse('Internal error', { status: 500 })
+    return NextResponse.json({ error: 'Interner Fehler' }, { status: 500 })
   }
 }

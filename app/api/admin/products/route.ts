@@ -11,40 +11,52 @@ import { validateCsrfToken } from "@/lib/csrf"
 export async function GET(req: NextRequest) {
   try {
     const authz = await requireAdmin()
-    if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
 
     const { searchParams } = new URL(req.url)
     const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10) || 100, 500)
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1)
+    const skip = (page - 1) * limit
 
-    const products = await prisma.product.findMany({
-      take: limit,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        nameDe: true,
-        slug: true,
-        price: true,
-        isActive: true,
-        categoryId: true,
-        images: {
-          where: { isMain: true },
-          take: 1,
-          select: { url: true },
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        take: limit,
+        skip,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          nameDe: true,
+          slug: true,
+          price: true,
+          isActive: true,
+          categoryId: true,
+          images: {
+            where: { isMain: true },
+            take: 1,
+            select: { url: true },
+          },
         },
-      },
-    })
+      }),
+      prisma.product.count(),
+    ])
 
-    return NextResponse.json(products)
+    return NextResponse.json({
+      products,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      total,
+    })
   } catch (error) {
     logError("[PRODUCTS_GET]", error)
-    return new NextResponse("Internal error", { status: 500 })
+    return NextResponse.json({ error: 'Interner Fehler' }, { status: 500 })
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const authz = await requireAdmin()
-    if (!authz.ok) return new NextResponse("Unauthorized", { status: authz.status })
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError
@@ -59,7 +71,7 @@ export async function POST(req: NextRequest) {
     if (!validationResult.success) {
       return NextResponse.json(
         { 
-          error: 'Validation failed', 
+          error: 'Validierung fehlgeschlagen', 
           details: validationResult.error.flatten().fieldErrors 
         },
         { status: 400 }
@@ -130,6 +142,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(product)
   } catch (error) {
     logError("[PRODUCTS_POST]", error)
-    return new NextResponse("Internal error", { status: 500 })
+    return NextResponse.json({ error: 'Interner Fehler' }, { status: 500 })
   }
 }

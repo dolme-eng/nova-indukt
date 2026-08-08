@@ -38,11 +38,11 @@ function validateSettings(data: unknown): { ok: boolean; error?: string } {
 }
 
 export async function GET(req: NextRequest) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings'), { windowMs: 60_000, maxRequests: 30 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
-    const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings'), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const cfg = await prisma.appConfig.findUnique({ where: { key: KEY } })
     return NextResponse.json({ key: KEY, data: cfg?.data ?? {} })
@@ -53,11 +53,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings:put'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
-    const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings:put'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError

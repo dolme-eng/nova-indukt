@@ -11,11 +11,12 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:put'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:put'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
@@ -78,11 +79,12 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:delete'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:delete'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError

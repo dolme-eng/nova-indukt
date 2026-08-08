@@ -8,11 +8,11 @@ import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
 export async function GET(req: NextRequest) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:pages'), { windowMs: 60_000, maxRequests: 30 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
-    const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:pages'), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const pages = await prisma.staticPageContent.findMany({
       orderBy: { updatedAt: "desc" },
@@ -26,11 +26,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:pages:post'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+  const authz = await requireAdmin()
+  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
-    const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:pages:post'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError

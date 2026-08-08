@@ -8,7 +8,7 @@ export default defineConfig({
     env: {
       CSRF_DISABLED: 'true',
     },
-    exclude: ['tests/e2e/**', 'node_modules/**'],
+    exclude: ['tests/e2e/**', 'node_modules/**', '_bak_corrupt/**', '_old_nm/**'],
     environmentMatchGlobs: [
       ['components/__tests__/**', 'jsdom'],
       ['app/**/__tests__/**', 'jsdom'],

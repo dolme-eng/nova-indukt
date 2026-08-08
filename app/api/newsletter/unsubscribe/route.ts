@@ -5,6 +5,7 @@ import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { verifyUnsubscribeToken } from '@/lib/unsubscribe-token'
 import { validateCsrfToken } from '@/lib/csrf'
+import { auth } from '@/lib/auth'
 
 const unsubscribeSchema = z.object({
   email: z.string().email('Ungültige E-Mail-Adresse'),
@@ -45,18 +46,28 @@ export async function POST(request: NextRequest) {
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
 
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 })
+    }
+
     const body = await request.json()
 
     const result = unsubscribeSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation failed', details: result.error.flatten() },
+        { error: 'Validierung fehlgeschlagen' },
         { status: 400 }
       )
     }
 
     const { email: rawEmail } = result.data
     const email = rawEmail.toLowerCase()
+
+    const userEmail = session.user.email?.toLowerCase()
+    if (email !== userEmail && session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 403 })
+    }
 
     const existing = await prisma.newsletterSubscriber.findUnique({
       where: { email },

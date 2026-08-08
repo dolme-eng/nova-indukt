@@ -52,8 +52,6 @@ interface AppliedPromo {
 }
 
 export default function CheckoutContent() {
-  const isLocalProductImage = (src: string) => src?.startsWith('/images/products/') ?? false
-
   const { items, totalPrice, clearCart, isHydrated } = useCart()
   const { user, isAuthenticated } = useAuth()
   const mounted = useRef(false)

@@ -339,6 +339,7 @@ export function ProductsContent({
                         onChange={(e) =>
                           setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])
                         }
+                        aria-label="Mindestpreis"
                         className="w-16 rounded-lg border border-gray-200 bg-gray-50 px-1 py-1.5 text-center text-xs font-bold text-gray-700"
                       />
                       <span className="text-xs text-gray-400">-</span>
@@ -354,6 +355,7 @@ export function ProductsContent({
                             parseInt(e.target.value) || PRICE_FILTER_MAX,
                           ])
                         }
+                        aria-label="Höchstpreis"
                         className="w-16 rounded-lg border border-gray-200 bg-gray-50 px-1 py-1.5 text-center text-xs font-bold text-gray-700"
                       />
                       <span className="text-xs text-gray-400">€</span>
@@ -523,6 +525,7 @@ export function ProductsContent({
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Produkte suchen..."
+                      aria-label="Produkte suchen"
                       className="w-full rounded-2xl border border-transparent bg-gray-50 py-3.5 pl-14 pr-12 font-medium text-gray-700 outline-none transition-all placeholder:text-gray-400 focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
                     />
                     {(searchQuery || isSyncing) && (
@@ -547,6 +550,7 @@ export function ProductsContent({
                         data-testid="sort-select"
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
+                        aria-label="Produkte sortieren"
                         className="w-full cursor-pointer appearance-none rounded-2xl border border-gray-100 bg-gray-50 py-3.5 pl-5 pr-10 text-sm font-bold text-gray-700 outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10 sm:w-[200px]"
                       >
                         <option value="newest">Neueste</option>

@@ -10,6 +10,7 @@ import { render } from '@react-email/render'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
+import { stripHtml } from '@/lib/utils/sanitize'
 
 /**
  * API Route de registration.
@@ -63,7 +64,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: message }, { status: 400 })
     }
 
-    const { name, email, password } = parsed.data
+    const { name: rawName, email, password } = parsed.data
+    const name = stripHtml(rawName)
 
     // Check if user exists
     const existingUser = await prisma.user.findUnique({

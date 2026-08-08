@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import { AlertCircle, ArrowLeft, RotateCcw } from "lucide-react"
 import Link from "next/link"
+import { logError } from "@/lib/logger"
 
 export default function Error({
   error,
@@ -12,7 +13,7 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    console.error(error)
+    logError('Client error:', error)
   }, [error])
 
   return (

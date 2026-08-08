@@ -12,7 +12,7 @@ const MAX_SIZE = 10 * 1024 * 1024
 export async function POST(request: NextRequest) {
   try {
     const authz = await requireAdmin()
-    if (!authz.ok) return new NextResponse('Unauthorized', { status: authz.status })
+    if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError

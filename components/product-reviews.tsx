@@ -389,6 +389,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     required
                     minLength={3}
                     maxLength={100}
+                    aria-label="Bewertungstitel"
                     className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-[#4ECCA3] focus:outline-none"
                     placeholder="Zusammenfassung Ihrer Erfahrung"
                   />
@@ -404,6 +405,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     minLength={10}
                     maxLength={2000}
                     rows={4}
+                    aria-label="Ihre Bewertung"
                     className="w-full resize-none rounded-lg border border-gray-200 px-4 py-2 focus:border-[#4ECCA3] focus:outline-none"
                     placeholder="Was hat Ihnen gefallen oder nicht gefallen?"
                   />
@@ -441,6 +443,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+          aria-label="Bewertungen sortieren"
           className="rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-[#4ECCA3] focus:outline-none"
         >
           <option value="newest">Neueste zuerst</option>

@@ -89,6 +89,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Produkte suchen..."
+                aria-label="Produkte suchen"
                 className="w-full rounded-xl border border-gray-200 bg-gray-100 py-3 pl-12 pr-4 transition-colors focus:border-[#4ECCA3] focus:outline-none"
               />
               {searchQuery && (
@@ -173,6 +174,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                       type="number"
                       value={priceRange[0]}
                       onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                      aria-label="Minimaler Preis"
                       className="w-20 rounded-lg bg-gray-100 px-3 py-2 text-sm"
                     />
                     <span className="text-gray-400">-</span>
@@ -180,6 +182,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                       type="number"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      aria-label="Maximaler Preis"
                       className="w-20 rounded-lg bg-gray-100 px-3 py-2 text-sm"
                     />
                     <span className="text-gray-400">€</span>
@@ -190,6 +193,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                     max={maxPrice}
                     value={priceRange[1]}
                     onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                    aria-label="Preisbereich"
                     className="w-full"
                   />
                 </div>
@@ -210,6 +214,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
+                  aria-label="Suchergebnisse sortieren"
                   className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm focus:border-[#4ECCA3] focus:outline-none"
                 >
                   <option value="relevance">Relevanz</option>

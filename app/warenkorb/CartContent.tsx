@@ -29,7 +29,6 @@ export interface CartContentProps {
 }
 
 export function CartContent({ recommendedProducts = [] }: CartContentProps) {
-  const isLocalProductImage = (src: string) => src?.startsWith('/images/products/') ?? false
   const router = useRouter()
   const { items, totalItems, totalPrice, updateQuantity, removeItem, isHydrated } = useCart()
   const [removingItem, setRemovingItem] = useState<string | null>(null)
@@ -254,6 +253,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                               type="text"
                               readOnly
                               value={item.quantity}
+                              aria-label="Menge"
                               className="w-full flex-1 bg-transparent text-center text-sm font-bold text-[#0C211E] outline-none sm:text-base"
                             />
                             <button
