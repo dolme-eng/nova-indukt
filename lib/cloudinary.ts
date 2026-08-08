@@ -55,7 +55,7 @@ export async function uploadImage(
 
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
-      fileToUpload,
+      fileToUpload as string,
       {
         folder,
         resource_type: 'image',
