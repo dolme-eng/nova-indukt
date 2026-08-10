@@ -42,20 +42,22 @@ export async function uploadImage(
   options: Record<string, string | number | boolean | undefined> = {}
 ): Promise<UploadResult> {
   ensureConfigured()
-  let fileToUpload: string | Buffer = file
+
+  let fileToUpload: string
   if (Buffer.isBuffer(file)) {
-    // Detect MIME type from magic bytes
     const mime = file[0] === 0xFF && file[1] === 0xD8 ? 'image/jpeg'
       : file[0] === 0x89 && file[1] === 0x50 ? 'image/png'
       : file[0] === 0x52 && file[1] === 0x49 ? 'image/webp'
       : file[0] === 0x47 && file[1] === 0x49 ? 'image/gif'
       : 'image/png'
     fileToUpload = `data:${mime};base64,${file.toString('base64')}`
+  } else {
+    fileToUpload = file
   }
 
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
-      fileToUpload as string,
+      fileToUpload,
       {
         folder,
         resource_type: 'image',

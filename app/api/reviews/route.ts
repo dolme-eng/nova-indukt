@@ -21,7 +21,7 @@ const reviewSchema = z.object({
 // GET - Fetch reviews for a product
 export async function GET(request: NextRequest) {
   try {
-    const rl = await rateLimit(createRateLimitKey(getIP(request), 'reviews:get'), { windowMs: 60_000, maxRequests: 60 })
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'reviews:get'), { windowMs: 60_000, maxRequests: 120 })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const { searchParams } = new URL(request.url)
