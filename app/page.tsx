@@ -19,17 +19,29 @@ import { safeJsonLd } from '@/lib/utils/json-ld'
 export const revalidate = 300
 
 export const metadata: Metadata = {
-  title: 'Premium Induktions-Kochgeschirr',
+  title: 'Premium Induktions-Kochgeschirr aus Deutschland',
   description:
     'Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche.',
   keywords: ['Induktion', 'Kochgeschirr', 'Pfannen', 'Töpfe', 'Premium', 'Deutschland', 'Küche', 'Induktionskochfeld'],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Premium Induktions-Kochgeschirr | NOVA INDUKT',
-    description: 'Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion.',
+    title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr aus Deutschland',
+    description: 'Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion. Deutsche Qualität, Innovation und Präzision.',
     url: SHOP_DOMAIN,
     siteName: 'NOVA INDUKT',
-    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT' }],
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT - Premium Induktions-Kochgeschirr' }],
     type: 'website',
+    locale: 'de_DE',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@novaindukt',
+    creator: '@novaindukt',
+    title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr',
+    description: 'Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität.',
+    images: [`${SHOP_DOMAIN}/og-image.png`],
   },
 }
 
