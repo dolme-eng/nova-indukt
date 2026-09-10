@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { FAQContent } from './FAQContent'
 import { getFaqItems } from '@/lib/content/static'
 import { safeJsonLd } from '@/lib/utils/json-ld'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const revalidate = 3600
 
@@ -11,13 +12,14 @@ export const metadata: Metadata = {
     'Finden Sie Antworten auf häufig gestellte Fragen zu Versand, Zahlung, Rückgabe, Garantie und Produkten von NOVA INDUKT.',
   keywords: ['FAQ', 'Hilfe', 'Fragen', 'Antworten', 'Kundenservice', 'NOVA INDUKT'],
   alternates: {
-    canonical: '/faq',
+    canonical: `${SHOP_DOMAIN}/faq`,
   },
   openGraph: {
     title: 'FAQ - Häufig gestellte Fragen | NOVA INDUKT',
     description:
       'Finden Sie Antworten auf häufig gestellte Fragen zu Versand, Zahlung, Rückgabe, Garantie und Produkten von NOVA INDUKT.',
-    url: '/faq',
+    url: `${SHOP_DOMAIN}/faq`,
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'FAQ | NOVA INDUKT' }],
   },
 }
 

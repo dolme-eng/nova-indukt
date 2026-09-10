@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { Product, Category, mapDbProductToUi, mapDbCategoryToUi } from '@/lib/data/products'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 const ProductsContent = dynamic(
   () => import('./ProductsContent').then((m) => m.ProductsContent),
@@ -35,10 +36,18 @@ export async function generateMetadata({
     })
     if (category) {
       return {
-        title: `${category.nameDe} | Premium Induktions-Kochgeschirr`,
+        title: `${category.nameDe} | Premium Induktions-Kochgeschirr | NOVA INDUKT`,
         description: `Entdecken Sie unsere Auswahl an ${category.nameDe}. Premium-Qualität von NOVA INDUKT für höchste Ansprüche.`,
+        openGraph: {
+          title: `${category.nameDe} | NOVA INDUKT`,
+          description: `Premium-Qualität: ${category.nameDe}`,
+          url: `${SHOP_DOMAIN}/produkte?kategorie=${categorySlug}`,
+          images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: `${category.nameDe} | NOVA INDUKT` }],
+          type: 'website',
+          locale: 'de_DE',
+        },
         alternates: {
-          canonical: `/produkte?kategorie=${categorySlug}`,
+          canonical: `${SHOP_DOMAIN}/produkte?kategorie=${categorySlug}`,
         },
       }
     }
@@ -55,14 +64,27 @@ export async function generateMetadata({
   }
 
   return {
-    title: 'Unsere Produkte | Premium Induktions-Kochgeschirr',
+    title: 'Unsere Produkte | Premium Induktions-Kochgeschirr | NOVA INDUKT',
     description:
       'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
     openGraph: {
-      url: '/produkte',
+      title: 'Unsere Produkte | NOVA INDUKT',
+      description: 'Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör.',
+      url: `${SHOP_DOMAIN}/produkte`,
+      siteName: 'NOVA INDUKT',
+      images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT Produkte' }],
+      type: 'website',
+      locale: 'de_DE',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@novaindukt',
+      title: 'Unsere Produkte | NOVA INDUKT',
+      description: 'Premium-Sortiment an Induktions-Kochgeschirr und Küchenzubehör.',
+      images: [`${SHOP_DOMAIN}/og-image.png`],
     },
     alternates: {
-      canonical: '/produkte',
+      canonical: `${SHOP_DOMAIN}/produkte`,
     },
   }
 }

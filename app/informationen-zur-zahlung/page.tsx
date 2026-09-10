@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getBankDetails } from '@/lib/data/bank-details'
 import { COMPANY } from '@/lib/constants/company'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const revalidate = 3600
 
@@ -8,12 +9,12 @@ export const metadata: Metadata = {
   title: 'Zahlungsinformationen',
   description: 'Zahlungsinformationen und Bankverbindung für Ihre Bestellung bei NOVA INDUKT',
   alternates: {
-    canonical: '/informationen-zur-zahlung',
+    canonical: `${SHOP_DOMAIN}/informationen-zur-zahlung`,
   },
   openGraph: {
     title: 'Zahlungsinformationen | NOVA INDUKT',
     description: 'Zahlungsinformationen und Bankverbindung für Ihre Bestellung bei NOVA INDUKT',
-    url: '/informationen-zur-zahlung',
+    url: `${SHOP_DOMAIN}/informationen-zur-zahlung`,
   },
 }
 

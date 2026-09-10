@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import WishlistContent from './WishlistContent'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Wunschliste',
   description: 'Ihre persönliche Wunschliste bei NOVA INDUKT. Speichern Sie Ihre Lieblingsprodukte und kaufen Sie sie später.',
   keywords: ['Wunschliste', 'Merkliste', 'Favoriten', 'NOVA INDUKT', 'Induktionskochfeld'],
   alternates: {
-    canonical: '/wunschliste',
+    canonical: `${SHOP_DOMAIN}/wunschliste`,
   },
   robots: {
     index: false,
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Wunschliste | NOVA INDUKT',
     description: 'Ihre persönliche Wunschliste bei NOVA INDUKT. Speichern Sie Ihre Lieblingsprodukte und kaufen Sie sie später.',
-    url: '/wunschliste',
+    url: `${SHOP_DOMAIN}/wunschliste`,
   },
 }
 

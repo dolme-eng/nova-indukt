@@ -52,7 +52,7 @@ export async function generateMetadata({
     description,
     keywords: product.metaTitle?.split(',') || [product.nameDe, 'Induktion', 'Kochgeschirr'],
     alternates: {
-      canonical: `/produkt/${product.slug}`,
+      canonical: `${SHOP_DOMAIN}/produkt/${product.slug}`,
     },
     openGraph: {
       title,

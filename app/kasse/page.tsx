@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 const CheckoutContent = dynamic(() => import('./CheckoutContent'), {
   loading: () => (
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   description: 'Sichere Bezahlung und schnelle Lieferung Ihrer NOVA INDUKT Bestellung. Versandkostenfrei ab 500€.',
   keywords: ['Kasse', 'Bestellung', 'Bezahlung', 'Versand', 'NOVA INDUKT', 'Einkauf'],
   alternates: {
-    canonical: '/kasse',
+    canonical: `${SHOP_DOMAIN}/kasse`,
   },
   robots: {
     index: false,

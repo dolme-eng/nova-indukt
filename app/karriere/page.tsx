@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { COMPANY } from '@/lib/constants/company'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const revalidate = 3600
 
@@ -8,12 +9,12 @@ export const metadata: Metadata = {
   description:
     'Werden Sie Teil des NOVA INDUKT Teams. Entdecken Sie aktuelle Stellenangebote in der Premium-Küchenzubehör Branche.',
   alternates: {
-    canonical: '/karriere',
+    canonical: `${SHOP_DOMAIN}/karriere`,
   },
   openGraph: {
     title: 'Karriere bei NOVA INDUKT',
     description: 'Werden Sie Teil des NOVA INDUKT Teams. Entdecken Sie aktuelle Stellenangebote in der Premium-Küchenzubehör Branche.',
-    url: '/karriere',
+    url: `${SHOP_DOMAIN}/karriere`,
   },
 }
 

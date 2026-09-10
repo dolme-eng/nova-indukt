@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Impressum',
   description: 'Impressum und gesetzliche Anbieterkennzeichnung von NOVA INDUKT GmbH',
   alternates: {
-    canonical: '/impressum',
+    canonical: `${SHOP_DOMAIN}/impressum`,
   },
   openGraph: {
     title: 'Impressum | NOVA INDUKT',

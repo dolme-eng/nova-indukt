@@ -1,17 +1,18 @@
 import type { Metadata } from 'next'
 import { getStaticPageContent } from '@/lib/content/static'
 import { COMPANY } from '@/lib/constants/company'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Datenschutzerklärung',
   description: 'Datenschutzerklärung der NOVA INDUKT GmbH gemäß DSGVO',
   alternates: {
-    canonical: '/datenschutz',
+    canonical: `${SHOP_DOMAIN}/datenschutz`,
   },
   openGraph: {
     title: 'Datenschutzerklärung | NOVA INDUKT',
     description: 'Datenschutzerklärung der NOVA INDUKT GmbH gemäß DSGVO',
-    url: '/datenschutz',
+    url: `${SHOP_DOMAIN}/datenschutz`,
   },
 }
 

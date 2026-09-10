@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Product } from '@/lib/data/products'
 import { CartContent } from './CartContent'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Warenkorb',
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
     'Überprüfen Sie Ihre ausgewählten Produkte im Warenkorb. Sichere Bezahlung, kostenloser Versand ab 500€.',
   keywords: ['Warenkorb', 'Einkauf', 'Bestellung', 'Kasse', 'NOVA INDUKT'],
   alternates: {
-    canonical: '/warenkorb',
+    canonical: `${SHOP_DOMAIN}/warenkorb`,
   },
   robots: {
     index: false,
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Warenkorb | NOVA INDUKT',
     description: 'Überprüfen Sie Ihre ausgewählten Produkte im Warenkorb. Sichere Bezahlung, kostenloser Versand ab 500€.',
-    url: '/warenkorb',
+    url: `${SHOP_DOMAIN}/warenkorb`,
   },
 }
 

@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { LoginContent } from './LoginContent'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Anmelden',
   description: 'Melden Sie sich bei Ihrem NOVA INDUKT Kundenkonto an. Greifen Sie auf Ihre Bestellungen, Wunschliste und Kontoeinstellungen zu.',
   keywords: ['Anmelden', 'Login', 'Kundenkonto', 'NOVA INDUKT', 'Authentifizierung'],
   alternates: {
-    canonical: '/anmelden',
+    canonical: `${SHOP_DOMAIN}/anmelden`,
   },
   robots: {
     index: false,

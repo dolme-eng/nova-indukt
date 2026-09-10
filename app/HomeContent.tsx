@@ -314,6 +314,7 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
           <div className="absolute inset-x-0 bottom-0 hidden translate-y-full bg-gradient-to-t from-black/20 to-transparent p-2 transition-transform duration-300 group-hover:translate-y-0 sm:block">
             <button
               onClick={handleAddToCart}
+              aria-label={`${product.name.de} in den Warenkorb legen`}
               className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-white/95 py-2 text-[10px] font-black text-nova-900 shadow-xl backdrop-blur-md transition-all hover:bg-nova-900 hover:text-white active:scale-95"
             >
               <ShoppingCart className="h-3 w-3" />
@@ -369,6 +370,7 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
           {/* Mobile Cart Button - Always visible but minimal */}
           <button
             onClick={handleAddToCart}
+            aria-label={`${product.name.de} in den Warenkorb legen`}
             className="mt-1.5 flex w-full items-center justify-center gap-1 rounded-md border border-nova-100 bg-nova-50 py-1 text-[9px] font-black text-nova-900 sm:hidden"
           >
             <ShoppingCart className="h-2.5 w-2.5" />
@@ -446,6 +448,7 @@ const FlashDealCard = memo(function FlashDealCard({
         <div className="absolute right-2 top-2 z-10">
           <button
             onClick={handleWishlist}
+            aria-label={inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen'}
             className={`flex h-8 w-8 items-center justify-center rounded-lg border backdrop-blur-md transition-all ${
               inWishlist
                 ? 'border-red-400 bg-red-500 text-white'
@@ -499,6 +502,7 @@ const FlashDealCard = memo(function FlashDealCard({
 
           <button
             onClick={handleAddToCart}
+            aria-label={`${product.name.de} in den Warenkorb legen`}
             className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-nova-900 py-2 text-[10px] font-black text-white shadow-md transition-all hover:bg-black active:scale-95"
           >
             <ShoppingCart className="h-3 w-3" />

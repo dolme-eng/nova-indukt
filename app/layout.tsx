@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   publisher: 'NOVA INDUKT',
   metadataBase: new URL(SHOP_DOMAIN),
   alternates: {
-    canonical: '/',
+    canonical: SHOP_DOMAIN,
     languages: {
       'de-DE': '/',
     },

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.',
   keywords: ['Blog', 'Magazin', 'Rezepte', 'Küche', 'Induktion', 'NOVA INDUKT'],
   alternates: {
-    canonical: '/blog',
+    canonical: `${SHOP_DOMAIN}/blog`,
   },
   openGraph: {
     title: 'Nova Magazin | NOVA INDUKT',

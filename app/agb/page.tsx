@@ -2,18 +2,19 @@ import type { Metadata } from 'next'
 import { getStaticPageContent } from '@/lib/content/static'
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants/shop'
 import { COMPANY } from '@/lib/constants/company'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 import { formatPriceDe } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'AGB - Allgemeine Geschäftsbedingungen',
   description: 'Allgemeine Geschäftsbedingungen der NOVA INDUKT GmbH',
   alternates: {
-    canonical: '/agb',
+    canonical: `${SHOP_DOMAIN}/agb`,
   },
   openGraph: {
     title: 'AGB - Allgemeine Geschäftsbedingungen | NOVA INDUKT',
     description: 'Allgemeine Geschäftsbedingungen der NOVA INDUKT GmbH',
-    url: '/agb',
+    url: `${SHOP_DOMAIN}/agb`,
   },
 }
 

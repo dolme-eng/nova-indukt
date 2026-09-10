@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { RotateCcw, CheckCircle, Clock, Mail } from 'lucide-react'
 import { getStaticPageContent } from '@/lib/content/static'
 import { COMPANY } from '@/lib/constants/company'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Rückgabe & Widerruf',
@@ -10,12 +11,12 @@ export const metadata: Metadata = {
     'Informationen zur Rückgabe und zum Widerrufsrecht bei NOVA INDUKT. 30 Tage Rückgaberecht für alle Produkte.',
   keywords: ['Rückgabe', 'Widerruf', 'Rückgaberecht', 'NOVA INDUKT', 'Retoure'],
   alternates: {
-    canonical: '/rueckgabe',
+    canonical: `${SHOP_DOMAIN}/rueckgabe`,
   },
   openGraph: {
     title: 'Rückgabe & Widerruf | NOVA INDUKT',
     description: 'Informationen zur Rückgabe und zum Widerrufsrecht bei NOVA INDUKT. 30 Tage Rückgaberecht für alle Produkte.',
-    url: '/rueckgabe',
+    url: `${SHOP_DOMAIN}/rueckgabe`,
   },
 }
 

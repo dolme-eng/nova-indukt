@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/client'
 import { Product, Category } from '@/lib/data/products'
 import { mapDbProductToUi } from '@/lib/data/products'
 import SearchContent from './SearchContent'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -21,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       'Kategorien',
     ],
     alternates: {
-      canonical: '/suche',
+      canonical: `${SHOP_DOMAIN}/suche`,
     },
     robots: {
       index: false,

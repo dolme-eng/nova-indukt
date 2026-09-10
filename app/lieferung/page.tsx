@@ -4,6 +4,7 @@ import { Truck, CheckCircle, Clock, Euro } from 'lucide-react'
 import { getStaticPageContent } from '@/lib/content/static'
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants/shop'
 import { formatPriceDe } from '@/lib/utils'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Lieferung & Versand',
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
     'Informationen zur Lieferung und zum Versand von NOVA INDUKT Produkten. Schneller Versand innerhalb Deutschlands.',
   keywords: ['Lieferung', 'Versand', 'Lieferzeit', 'NOVA INDUKT', 'Versandkosten'],
   alternates: {
-    canonical: '/lieferung',
+    canonical: `${SHOP_DOMAIN}/lieferung`,
   },
   openGraph: {
     title: 'Lieferung & Versand | NOVA INDUKT',
     description: 'Informationen zur Lieferung und zum Versand von NOVA INDUKT Produkten. Schneller Versand innerhalb Deutschlands.',
-    url: '/lieferung',
+    url: `${SHOP_DOMAIN}/lieferung`,
   },
 }
 

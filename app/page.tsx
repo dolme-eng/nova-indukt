@@ -19,12 +19,12 @@ import { safeJsonLd } from '@/lib/utils/json-ld'
 export const revalidate = 300
 
 export const metadata: Metadata = {
-  title: 'Premium Induktions-Kochgeschirr aus Deutschland',
+  title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr aus Deutschland',
   description:
     'Entdecken Sie erstklassiges Kochgeschirr und Accessoires für Induktion. Deutsche Qualität, Innovation und Präzision für Ihre Küche.',
   keywords: ['Induktion', 'Kochgeschirr', 'Pfannen', 'Töpfe', 'Premium', 'Deutschland', 'Küche', 'Induktionskochfeld'],
   alternates: {
-    canonical: '/',
+    canonical: SHOP_DOMAIN,
   },
   openGraph: {
     title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr aus Deutschland',
@@ -161,28 +161,40 @@ export default async function Page() {
 
   const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    url: SHOP_DOMAIN,
-    name: 'NOVA INDUKT',
-    description: 'Premium Induktions-Kochgeschirr aus Deutschland',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${SHOP_DOMAIN}/suche?suche={search_term_string}`,
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      url: SHOP_DOMAIN,
+      name: 'NOVA INDUKT',
+      description: 'Premium Induktions-Kochgeschirr aus Deutschland',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${SHOP_DOMAIN}/suche?suche={search_term_string}`,
+        },
+        'query-input': 'required name=search_term_string',
       },
-      'query-input': 'required name=search_term_string',
     },
-  }
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Startseite', item: SHOP_DOMAIN },
+      ],
+    },
+  ]
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
-      />
+      {structuredData.map((sd, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(sd) }}
+        />
+      ))}
       <HomeContent
         initialProducts={formattedProducts}
         initialCategories={formattedCategories}

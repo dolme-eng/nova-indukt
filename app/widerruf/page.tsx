@@ -2,17 +2,18 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getStaticPageContent } from '@/lib/content/static'
 import { COMPANY } from '@/lib/constants/company'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const metadata: Metadata = {
   title: 'Widerrufsrecht',
   description: 'Widerrufsbelehrung und Widerrufsformular der NOVA INDUKT GmbH',
   alternates: {
-    canonical: '/widerruf',
+    canonical: `${SHOP_DOMAIN}/widerruf`,
   },
   openGraph: {
     title: 'Widerrufsrecht | NOVA INDUKT',
     description: 'Widerrufsbelehrung und Widerrufsformular der NOVA INDUKT GmbH',
-    url: '/widerruf',
+    url: `${SHOP_DOMAIN}/widerruf`,
   },
 }
 
