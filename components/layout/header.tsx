@@ -108,9 +108,18 @@ export function Header() {
     }
   }, [searchOpen])
 
-  // Scroll detection
+  // Scroll detection (throttled with requestAnimationFrame)
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
+    let ticking = false
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20)
+          ticking = false
+        })
+        ticking = true
+      }
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])

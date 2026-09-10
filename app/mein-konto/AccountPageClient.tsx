@@ -688,7 +688,7 @@ function WishlistTab({
             className="group overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm sm:rounded-2xl"
           >
             <div className="relative aspect-[4/3] bg-gray-100">
-              <Image src={item.image} alt={item.name.de} fill className="object-cover" />
+              <Image src={item.image} alt={item.name.de} fill sizes="(max-width: 640px) 50vw, 200px" className="object-cover" />
               <button
                 onClick={async () => await onRemove(item.id)}
                 className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 opacity-100 shadow-lg transition-opacity hover:bg-red-50 sm:opacity-0 sm:group-hover:opacity-100"

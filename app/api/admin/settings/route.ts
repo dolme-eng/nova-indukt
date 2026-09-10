@@ -38,9 +38,10 @@ function validateSettings(data: unknown): { ok: boolean; error?: string } {
 }
 
 export async function GET(req: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
     const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings'), { windowMs: 60_000, maxRequests: 30 })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
@@ -48,14 +49,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ key: KEY, data: cfg?.data ?? {} })
   } catch (error) {
     logError("[SETTINGS_GET]", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }
 
 export async function PUT(req: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
     const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:settings:put'), { windowMs: 60_000, maxRequests: 15 })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
@@ -94,7 +95,7 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ key: KEY, data: cfg.data })
   } catch (error) {
     logError("[SETTINGS_PUT]", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }
 

@@ -8,9 +8,10 @@ import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
 export async function GET(req: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
     const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:pages'), { windowMs: 60_000, maxRequests: 30 })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
@@ -21,14 +22,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(pages)
   } catch (error) {
     logError("[PAGES_GET]", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }
 
 export async function POST(req: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
     const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:content:pages:post'), { windowMs: 60_000, maxRequests: 15 })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
@@ -59,7 +60,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(page)
   } catch (error) {
     logError("[PAGES_POST]", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }
 

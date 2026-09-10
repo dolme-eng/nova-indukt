@@ -8,12 +8,12 @@ import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
 export async function POST(request: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Unauthorized" }, { status: authz.status })
-
-  const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:post'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:blog:post'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
@@ -56,6 +56,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(post)
   } catch (error) {
     logError("Error creating blog post:", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ error: "Interner Fehler" }, { status: 500 })
   }
 }

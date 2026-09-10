@@ -170,6 +170,7 @@ export async function sendReviewRequests() {
     }>
 
     const results = []
+    const successfulOrderIds: string[] = []
 
     for (const order of orders) {
       const typedOrder = order as OrderWithProduct
@@ -201,19 +202,20 @@ export async function sendReviewRequests() {
           continue
         }
 
-        // M18 FIX: Mark review email as sent
-        await prisma.order.update({
-          where: { id: typedOrder.id },
-          data: {
-            reviewEmailSentAt: new Date(),
-          },
-        })
-
+        successfulOrderIds.push(typedOrder.id)
         results.push({ orderId: typedOrder.id, success: true, id: result.data?.id })
       } catch (error) {
         logError(`Failed to send review request for order ${order.id}:`, error)
         results.push({ orderId: order.id, success: false, error })
       }
+    }
+
+    // Batch update all successfully sent orders (single query instead of N queries)
+    if (successfulOrderIds.length > 0) {
+      await prisma.order.updateMany({
+        where: { id: { in: successfulOrderIds } },
+        data: { reviewEmailSentAt: new Date() },
+      })
     }
 
     return { success: true, sent: results.filter((r) => r.success).length, results }

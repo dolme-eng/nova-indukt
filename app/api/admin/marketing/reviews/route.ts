@@ -21,12 +21,12 @@ const marketingReviewSchema = z.discriminatedUnion('action', [
 ])
 
 export async function PATCH(req: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
-
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:patch'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:patch'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError
@@ -116,12 +116,12 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const authz = await requireAdmin()
-  if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
-
-  const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:delete'), { windowMs: 60_000, maxRequests: 15 })
-  if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:marketing:reviews:delete'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError

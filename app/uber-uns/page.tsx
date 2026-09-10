@@ -1,5 +1,10 @@
 import type { Metadata } from 'next'
-import AboutContent from './AboutContent'
+import dynamic from 'next/dynamic'
+
+const AboutContent = dynamic(
+  () => import('./AboutContent'),
+  { ssr: false }
+)
 
 export const revalidate = 3600
 

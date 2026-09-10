@@ -315,6 +315,7 @@ function ProductCard({
             src={product.images[0]}
             alt={product.name.de}
             fill
+            sizes="(max-width: 640px) 40vw, (max-width: 1024px) 48px, 33vw"
             className="object-contain p-4 mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
           />
           {product.badges?.includes('premium') && (
