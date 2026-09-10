@@ -1,10 +1,5 @@
 import type { Metadata } from 'next'
-import dynamic from 'next/dynamic'
-
-const TechnologieContent = dynamic(
-  () => import('./TechnologieContent'),
-  { ssr: false }
-)
+import TechnologieContent from './TechnologieContent'
 
 export const revalidate = 3600
 
