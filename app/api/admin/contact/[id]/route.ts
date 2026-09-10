@@ -4,11 +4,15 @@ import { requireAdmin } from '@/lib/admin/require-admin'
 import { auditLog } from '@/lib/admin/audit'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:contact:update'), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
@@ -53,6 +57,9 @@ export async function DELETE(
   try {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:contact:delete'), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError

@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkAndCreateRandomPromotion, cleanupExpiredPromotions } from '@/lib/promotions/random-promotions'
 import { logError } from '@/lib/logger'
+import crypto from 'crypto'
 
 // API Route: Check and create random promotions
 // Should be called by a cron job (e.g., Vercel Cron, GitHub Actions)
 // 
 // Cron: 0 9 * * * (Every day at 9 AM)
 // Or: Every 30 minutes (30 * * * *) for more frequent checks
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     // Verify cron secret — mandatory in all environments (fail closed)
     const authHeader = request.headers.get('authorization')
@@ -21,7 +22,15 @@ export async function GET(request: NextRequest) {
       )
     }
     
-    if (authHeader !== `Bearer ${cronSecret}`) {
+    // Timing-safe Bearer comparison
+    const expected = `Bearer ${cronSecret}`
+    if (!authHeader || authHeader.length !== expected.length) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+    if (!crypto.timingSafeEqual(Buffer.from(authHeader), Buffer.from(expected))) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

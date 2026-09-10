@@ -5,6 +5,7 @@ import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { hashPassword } from '@/lib/auth/auth.config'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
+import { getRedis } from '@/lib/redis'
 
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 minutes
 const RATE_LIMIT_MAX = 5 // 5 attempts per 15 minutes per IP
@@ -82,6 +83,12 @@ export async function POST(request: NextRequest) {
         tokenVersion: { increment: 1 },
       },
     })
+
+    // Invalidate middleware tokenVersion cache in Redis
+    const redis = getRedis()
+    if (redis) {
+      await redis.del(`nova:tv:${user.id}`).catch(() => {})
+    }
 
     return NextResponse.json(
       { success: true, message: 'Passwort erfolgreich zurückgesetzt' },

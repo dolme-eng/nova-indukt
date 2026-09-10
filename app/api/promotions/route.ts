@@ -11,6 +11,9 @@ import { validateCsrfToken } from '@/lib/csrf'
 
 export async function GET(request: NextRequest) {
   try {
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'promotions:list'), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')
     const categoryId = searchParams.get('categoryId')

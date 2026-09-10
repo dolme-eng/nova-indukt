@@ -153,7 +153,8 @@ export async function rateLimit(
     if (process.env.NODE_ENV === 'production') {
       return { success: false, limit: maxRequests, remaining: 0, resetTime: Date.now() + windowMs }
     }
-    return { success: true, limit: maxRequests, remaining: 1, resetTime: Date.now() + windowMs }
+    // In dev, fall back to in-memory rate limiting
+    return memoryRateLimit(identifier, windowMs, maxRequests)
   }
 }
 
