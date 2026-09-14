@@ -162,21 +162,29 @@ export function useWishlist() {
     async (item: WishlistItem) => {
       addItemState(item)
       if (isAuthenticated) {
-        await addItemToApi(item)
+        const ok = await addItemToApi(item)
+        if (!ok) {
+          removeItemState(item.id)
+          return false
+        }
       }
       return true
     },
-    [isAuthenticated, addItemState]
+    [isAuthenticated, addItemState, removeItemState]
   )
 
   const removeItem = useCallback(
     async (id: string) => {
+      const previousItems = items
       removeItemState(id)
       if (isAuthenticated) {
-        await removeItemFromApi(id)
+        const ok = await removeItemFromApi(id)
+        if (!ok) {
+          setItems(previousItems)
+        }
       }
     },
-    [isAuthenticated, removeItemState]
+    [isAuthenticated, removeItemState, items, setItems]
   )
 
   const isInWishlist = useCallback(

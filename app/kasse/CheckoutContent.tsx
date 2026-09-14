@@ -33,7 +33,7 @@ const shippingSchema = z.object({
   firstName: z.string().min(1, 'Vorname ist erforderlich').max(100),
   lastName: z.string().min(1, 'Nachname ist erforderlich').max(100),
   email: z.string().min(1, 'E-Mail ist erforderlich').email('Ungültige E-Mail-Adresse'),
-  phone: z.string().max(50).optional().or(z.literal('')),
+  phone: z.string().max(50).regex(/^[\d\s\-+()]+$/, 'Ungültige Telefonnummer').optional().or(z.literal('')),
   address: z.string().min(1, 'Adresse ist erforderlich').max(200),
   zipCode: z.string().min(1, 'PLZ ist erforderlich').max(20),
   city: z.string().min(1, 'Stadt ist erforderlich').max(100),
@@ -332,7 +332,8 @@ export default function CheckoutContent() {
   const handleBankTransfer = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!contactEmail || !contactEmail.includes('@')) {
+    const effectiveEmail = contactEmail || shippingData.email
+    if (!effectiveEmail || !effectiveEmail.includes('@')) {
       toast.error('Bitte geben Sie eine gültige E-Mail-Adresse ein')
       return
     }
@@ -340,7 +341,7 @@ export default function CheckoutContent() {
     setIsProcessing(true)
 
     try {
-      const order = await createOrder('BANK_TRANSFER', contactEmail)
+      const order = await createOrder('BANK_TRANSFER', effectiveEmail)
       if (order) {
         setOrderComplete(true)
         clearCart()

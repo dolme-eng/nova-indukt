@@ -110,9 +110,12 @@ export function ImageLightbox({
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isDragging && scale > 1) {
+      const maxDrag = (scale - 1) * 200
+      const rawX = e.clientX - dragStart.x
+      const rawY = e.clientY - dragStart.y
       setPosition({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y,
+        x: Math.max(-maxDrag, Math.min(maxDrag, rawX)),
+        y: Math.max(-maxDrag, Math.min(maxDrag, rawY)),
       })
     }
   }

@@ -73,9 +73,10 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
     dishwasherSafe: initialData?.dishwasherSafe ?? false,
     inductionSafe: initialData?.inductionSafe ?? true,
     images:
-      initialData?.images?.map((img: string | { url: string }) =>
-        typeof img === 'string' ? img : img.url
-      ) || [],
+      initialData?.images?.map((img: string | { url: string }) => {
+        if (typeof img === 'string') return { url: img, alt: '' }
+        return { url: img.url, alt: '' }
+      }) || [],
   })
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -360,12 +361,12 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
               <Section title="Produktbilder">
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                    {formData.images.map((imgUrl: string, index: number) => (
+                    {formData.images.map((img: { url: string; alt: string }, index: number) => (
                       <div
                         key={index}
                         className="group relative aspect-square overflow-hidden rounded-xl border border-slate-200 bg-slate-100"
                       >
-                        <Image src={imgUrl} alt="Produkt" fill className="object-cover" />
+                        <Image src={img.url} alt={img.alt || 'Produkt'} fill className="object-cover" />
                         <button
                           type="button"
                           onClick={() => {
@@ -409,7 +410,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                               })
                               const data = await res.json()
                               if (data.url) {
-                                newImages.push(data.url)
+                                newImages.push({ url: data.url, alt: '' })
                               }
                             } catch {
                               toast.error(`Upload fehlgeschlagen für ${file.name}`)

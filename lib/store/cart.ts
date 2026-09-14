@@ -53,6 +53,7 @@ export const useCartStore = create<CartState>()(
 
       addItem: (product, quantity = 1) => {
         const { items } = get()
+        const previousItems = items
         const existingItem = items.find((item) => item.product.id === product.id)
 
         if (existingItem) {
@@ -67,9 +68,10 @@ export const useCartStore = create<CartState>()(
           set({ items: [...items, { product, quantity }] })
         }
 
-        addToCart(product.id, quantity).catch((err) =>
+        addToCart(product.id, quantity).catch((err) => {
           logError('Failed to sync cart item addition:', err)
-        )
+          set({ items: previousItems })
+        })
       },
 
       removeItem: (productId) => {

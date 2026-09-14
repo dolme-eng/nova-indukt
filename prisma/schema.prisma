@@ -161,6 +161,8 @@ model Order {
   paidAt          DateTime?
   status          OrderStatus   @default(PENDING)
   trackingNumber  String?
+  carrier         String?
+  trackingUrl     String?
   shippedAt       DateTime?
   deliveredAt     DateTime?
   customerNote    String?

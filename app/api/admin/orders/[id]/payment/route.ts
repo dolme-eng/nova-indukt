@@ -57,6 +57,20 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ error: 'Bestellung nicht gefunden' }, { status: 404 })
     }
 
+    const validPaymentTransitions: Record<string, string[]> = {
+      PENDING: ['PAID', 'FAILED'],
+      FAILED: ['PAID'],
+      PAID: ['REFUNDED'],
+      REFUNDED: [],
+    }
+
+    if (!validPaymentTransitions[order.paymentStatus]?.includes(paymentStatus)) {
+      return NextResponse.json(
+        { error: `Ungültiger Zahlungsstatusübergang: ${order.paymentStatus} → ${paymentStatus}` },
+        { status: 400 }
+      )
+    }
+
     const previousPaymentStatus = order.paymentStatus
 
     const updatedOrder = await prisma.order.update({

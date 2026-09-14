@@ -7,10 +7,7 @@ import { sendPasswordResetEmail } from "@/lib/email/send"
 import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 import { verifyRecaptcha } from "@/lib/recaptcha"
-
-const forgotPasswordSchema = z.object({
-  email: z.string().email("Ungültige E-Mail-Adresse"),
-})
+import { forgotPasswordSchema } from "@/lib/validations/auth"
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 attempts per hour per IP

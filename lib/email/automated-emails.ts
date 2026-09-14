@@ -25,6 +25,9 @@ async function sendWithRetry(
       const result = await resend.emails.send(payload)
       if (!result.error && result.data) return result
       lastError = result.error
+      if (result.error && 'statusCode' in result.error && typeof result.error.statusCode === 'number' && result.error.statusCode >= 400 && result.error.statusCode < 500) {
+        break
+      }
     } catch (err) {
       lastError = err
     }
@@ -237,12 +240,12 @@ export async function sendWelcomeEmail(subscriberEmail: string, firstName?: stri
       })
     )
 
-    const result = (await getResend()?.emails.send({
+    const result = await sendWithRetry({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: subscriberEmail,
       subject: 'Willkommen bei NOVA INDUKT! Ihr 10% Rabatt wartet auf Sie',
       html,
-    })) ?? { data: null, error: { name: 'resend_not_configured', message: 'Resend not configured' } }
+    })
 
     if (result.error || !result.data) {
       logError('Failed to send welcome email:', result.error)

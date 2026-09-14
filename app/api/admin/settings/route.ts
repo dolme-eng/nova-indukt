@@ -21,6 +21,9 @@ function validateSettings(data: unknown): { ok: boolean; error?: string } {
   function walk(obj: Record<string, unknown>, depth: number): string | null {
     if (depth > 2) return 'Settings nesting too deep (max 2 levels)'
     for (const [k, v] of Object.entries(obj)) {
+      if (k === '__proto__' || k === 'constructor' || k === 'prototype') {
+        return `Forbidden key: "${k}"`
+      }
       if (k.length > 100) return `Key "${k.slice(0, 30)}..." too long (max 100)`
       if (typeof v === 'string' && v.length > 500) {
         return `Value for "${k}" too long (max 500 chars)`

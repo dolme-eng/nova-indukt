@@ -237,10 +237,10 @@ export function DashboardContent({ stats }: { stats: DashboardStats }) {
             {stats.recentActivity && stats.recentActivity.length > 0 ? (
               stats.recentActivity.slice(0, activityLimit).map((log) => {
                 let icon = <Clock className="text-nova-400" size={16} />
-                if (log.entityType === 'ORDER')
+                if (log.entityType === 'Order')
                   icon = <Banknote className="text-nova-400" size={16} />
-                if (log.entityType === 'USER') icon = <User className="text-nova-400" size={16} />
-                if (log.entityType === 'PRODUCT')
+                if (log.entityType === 'User') icon = <User className="text-nova-400" size={16} />
+                if (log.entityType === 'Product')
                   icon = <Package className="text-nova-400" size={16} />
 
                 const diffMs = Date.now() - new Date(log.createdAt).getTime()

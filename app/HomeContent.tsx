@@ -85,7 +85,9 @@ export function HomeContent({
           const discount =
             best.discountType === 'PERCENTAGE'
               ? Math.round(value)
-              : Math.round((value / p.price) * 100)
+              : p.price > 0
+                ? Math.round((value / p.price) * 100)
+                : 0
           return { ...p, discount, promoName: best.name, promoBadge: best.badge }
         }
         if (p.oldPrice && p.oldPrice > p.price) {
@@ -162,7 +164,7 @@ export function HomeContent({
             <div className="hidden items-center gap-2 sm:flex">
               <button
                 onClick={() =>
-                  sliderContainerRef.current?.scrollBy({ left: -344, behavior: 'smooth' })
+                  sliderContainerRef.current?.scrollBy({ left: -252, behavior: 'smooth' })
                 }
                 className="flex h-12 w-12 items-center justify-center rounded-[1rem] border border-gray-100 bg-white shadow-sm transition-all hover:scale-105 hover:bg-gray-50 active:scale-95"
                 aria-label="Vorherige Produkte"
@@ -171,7 +173,7 @@ export function HomeContent({
               </button>
               <button
                 onClick={() =>
-                  sliderContainerRef.current?.scrollBy({ left: 344, behavior: 'smooth' })
+                  sliderContainerRef.current?.scrollBy({ left: 252, behavior: 'smooth' })
                 }
                 className="flex h-12 w-12 items-center justify-center rounded-[1rem] border border-gray-100 bg-white shadow-sm transition-all hover:scale-105 hover:bg-gray-50 active:scale-95"
                 aria-label="Nächste Produkte"
@@ -399,10 +401,10 @@ const FlashDealCard = memo(function FlashDealCard({
   const { addItem } = useCart()
   const inWishlist = isInWishlist(product.id)
 
-  const handleWishlist = (e: React.MouseEvent) => {
+  const handleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toggleItem({
+    await toggleItem({
       id: product.id,
       name: product.name,
       price: product.price,

@@ -133,6 +133,21 @@ export async function DELETE(req: NextRequest) {
     const before = await prisma.review.findUnique({ where: { id } })
     await prisma.review.delete({ where: { id } })
 
+    if (before?.productId) {
+      const stats = await prisma.review.aggregate({
+        where: { productId: before.productId },
+        _avg: { rating: true },
+        _count: { rating: true },
+      })
+      await prisma.product.update({
+        where: { id: before.productId },
+        data: {
+          rating: stats._avg.rating ?? 0,
+          reviewCount: stats._count.rating,
+        },
+      })
+    }
+
     await auditLog({
       action: "DELETE",
       entityType: "Review",

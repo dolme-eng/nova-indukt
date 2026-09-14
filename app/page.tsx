@@ -124,15 +124,17 @@ export default async function Page() {
       category: p.category || '',
       author: p.author,
     }))
-    testimonials = dbReviews.map((r) => ({
-      id: r.id,
-      name: r.user?.name ?? 'Kunde',
-      rating: r.rating,
-      comment: r.content,
-      productName: r.product.nameDe,
-      createdAt: r.createdAt.toISOString(),
-      isVerified: r.isVerified,
-    }))
+    testimonials = dbReviews
+      .filter((r) => r.product)
+      .map((r) => ({
+        id: r.id,
+        name: r.user?.name ?? 'Kunde',
+        rating: r.rating,
+        comment: r.content,
+        productName: r.product!.nameDe,
+        createdAt: r.createdAt.toISOString(),
+        isVerified: r.isVerified,
+      }))
   } catch (err) {
     logError('Database connection failed, using static fallback', err)
     categories = categoriesConfig.map((c) => ({

@@ -87,11 +87,15 @@ export function Header() {
         signal: controller.signal,
       })
         .then((res) => (res.ok ? res.json() : []))
-        .then((data) => setSearchResults(data))
+        .then((data) => {
+          if (!controller.signal.aborted) setSearchResults(data)
+        })
         .catch((err) => {
           if (err?.name !== 'AbortError') logError('Search error:', err)
         })
-        .finally(() => setIsSearching(false))
+        .finally(() => {
+          if (!controller.signal.aborted) setIsSearching(false)
+        })
     } else {
       setSearchResults([])
     }

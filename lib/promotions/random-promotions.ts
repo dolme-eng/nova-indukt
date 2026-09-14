@@ -141,7 +141,11 @@ async function createRandomPromotion(isWeekend: boolean): Promise<void> {
     if (products.length > 0) {
       // Pick 3-10 random products
       const numProducts = randomInt(3, Math.min(10, products.length))
-      const shuffled = products.sort(() => 0.5 - Math.random())
+      const shuffled = [...products]
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = randomInt(0, i)
+        ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+      }
       productIds = shuffled.slice(0, numProducts).map((p) => p.id)
     }
   }
@@ -203,33 +207,6 @@ export async function getActivePromotionsForProduct(
   })
 
   return promotions
-}
-
-/**
- * Calculate discounted price
- */
-export function calculateDiscountedPrice(
-  originalPrice: number,
-  discountType: string,
-  discountValue: number,
-  maxDiscount?: number | null
-): { price: number; discount: number } {
-  let discount = 0
-
-  if (discountType === 'PERCENTAGE') {
-    discount = originalPrice * (discountValue / 100)
-  } else {
-    discount = discountValue
-  }
-
-  // Apply max discount cap if set
-  if (maxDiscount && discount > maxDiscount) {
-    discount = maxDiscount
-  }
-
-  const price = Math.max(0, originalPrice - discount)
-
-  return { price, discount }
 }
 
 /**

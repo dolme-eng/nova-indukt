@@ -50,16 +50,20 @@ export function useRecaptcha() {
           if (window.grecaptcha?.ready) {
             window.grecaptcha.ready(resolve)
           } else {
+            let settled = false
             const check = setInterval(() => {
-              if (window.grecaptcha?.ready) {
+              if (window.grecaptcha?.ready && !settled) {
+                settled = true
                 clearInterval(check)
                 window.grecaptcha.ready(resolve)
               }
             }, 100)
-            // Timeout after 5s
             setTimeout(() => {
-              clearInterval(check)
-              resolve()
+              if (!settled) {
+                settled = true
+                clearInterval(check)
+                resolve()
+              }
             }, 5000)
           }
         })

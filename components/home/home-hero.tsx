@@ -222,7 +222,7 @@ export const HomeHero = memo(function HomeHero() {
                 setProgress(0)
               }}
               aria-label={`Folie ${i + 1}: ${slide.tag}`}
-              aria-current={i === currentSlide ? 'true' : undefined}
+              aria-current={i === currentSlide ? 'step' : undefined}
               className="group relative pt-4 text-left"
             >
               <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">

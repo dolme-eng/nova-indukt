@@ -33,7 +33,7 @@ interface TestimonialsSectionProps {
 export function TestimonialsSection({ initialTestimonials }: TestimonialsSectionProps) {
   const router = useRouter()
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials ?? [])
-  const [loading, setLoading] = useState(!initialTestimonials)
+  const [loading, setLoading] = useState(initialTestimonials === undefined)
 
   useEffect(() => {
     if (initialTestimonials && initialTestimonials.length > 0) return

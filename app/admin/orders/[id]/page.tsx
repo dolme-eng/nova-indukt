@@ -273,12 +273,18 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                 </div>
                 <div>
                   <p className="font-bold text-slate-900">{order.customerName}</p>
-                  <Link
-                    href={`/admin/customers/${order.userId}`}
-                    className="text-xs font-bold uppercase tracking-tighter text-primary hover:underline"
-                  >
-                    Kundenprofil ansehen
-                  </Link>
+                  {order.userId ? (
+                    <Link
+                      href={`/admin/customers/${order.userId}`}
+                      className="text-xs font-bold uppercase tracking-tighter text-primary hover:underline"
+                    >
+                      Kundenprofil ansehen
+                    </Link>
+                  ) : (
+                    <span className="text-xs font-bold uppercase tracking-tighter text-slate-400">
+                      Gastbestellung
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="space-y-3">

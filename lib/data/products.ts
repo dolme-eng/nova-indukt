@@ -19,10 +19,13 @@ export function mapDbProductToUi(p: DbProduct): Product {
     category: p.categoryId,
     price: Number(p.price),
     oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
-    images: [...p.images]
-      .sort((a, b) => a.sortOrder - b.sortOrder)
-      .map((img) => img.url)
-      .filter((url): url is string => !!url),
+    images: (() => {
+      const imgs = [...p.images]
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map((img) => img.url)
+        .filter((url): url is string => !!url)
+      return imgs.length > 0 ? imgs : ['/placeholder.svg']
+    })(),
     rating: Number(p.rating),
     reviewCount: p.reviewCount,
     badges: p.badges as ('premium' | 'bestseller' | 'new')[] | undefined,

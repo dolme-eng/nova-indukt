@@ -23,8 +23,8 @@ export function CsvExportButton({
     const rows = data.map((row) =>
       columns.map((c) => {
         const val = c.accessor(row)
-        const str = String(val ?? '')
-        return str.includes(',') || str.includes('"') || str.includes('\n')
+        const str = String(val ?? '').replace(/\r?\n/g, ' ')
+        return str.includes(',') || str.includes('"')
           ? `"${str.replace(/"/g, '""')}"`
           : str
       })

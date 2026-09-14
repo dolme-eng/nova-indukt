@@ -60,6 +60,9 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [quantity, setQuantity] = useState(1)
+
+  const safeImages = product.images.length > 0 ? product.images : ['/placeholder.svg']
+  const currentImage = safeImages[selectedImage] ?? safeImages[0]
   const [activeTab, setActiveTab] = useState<'description' | 'specs' | 'reviews'>('description')
   const [expandedAccordion, setExpandedAccordion] = useState<string | null>('description')
   const [showWishlistToast, setShowWishlistToast] = useState(false)
@@ -237,7 +240,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               }}
             >
               <Image
-                src={product.images[selectedImage]}
+                src={currentImage}
                 alt={product.name.de}
                 fill
                 priority
@@ -422,7 +425,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   </span>
                   <button
                     type="button"
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => setQuantity(Math.min(quantity + 1, 99))}
                     className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white"
                   >
                     <Plus className="h-3 w-3" />
@@ -834,7 +837,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
         )}
 
         <ImageLightbox
-          images={product.images}
+          images={safeImages}
           currentIndex={selectedImage}
           isOpen={lightboxOpen}
           onClose={() => setLightboxOpen(false)}

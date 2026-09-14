@@ -120,7 +120,7 @@ export async function applyBestPromotion(
     bestPromotion.maxDiscount ? Number(bestPromotion.maxDiscount) : null
   )
 
-  const discountPercentage = Math.round((discountAmount / price) * 100)
+  const discountPercentage = price > 0 ? Math.round((discountAmount / price) * 100) : 0
 
   return {
     originalPrice: price,
@@ -200,6 +200,10 @@ export async function applyPromotionsToProducts(
  * Incrémente le compteur d'utilisation d'une promotion
  */
 export async function incrementPromotionUsage(promotionId: string): Promise<void> {
+  const promotion = await prisma.promotion.findUnique({ where: { id: promotionId } })
+  if (!promotion) return
+  if (promotion.usageLimit !== null && promotion.usageCount >= promotion.usageLimit) return
+
   await prisma.promotion.update({
     where: { id: promotionId },
     data: {

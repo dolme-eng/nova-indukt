@@ -41,9 +41,25 @@ export const createPromotionSchema = promotionBaseSchema.refine(data => {
 
 export type CreatePromotionInput = z.infer<typeof createPromotionSchema>
 
-// Schéma pour la mise à jour d'une promotion (sans refinements pour permettre partial)
+// Schéma pour la mise à jour d'une promotion (validations manuelles pour partial)
 export const updatePromotionSchema = promotionBaseSchema.partial().extend({
   id: z.string().cuid(),
+}).refine(data => {
+  if (data.discountType === 'PERCENTAGE' && data.discountValue !== undefined && data.discountValue > 100) {
+    return false
+  }
+  return true
+}, {
+  message: 'Percentage discount cannot exceed 100%',
+  path: ['discountValue']
+}).refine(data => {
+  if (data.startDate !== undefined && data.endDate !== undefined) {
+    return data.endDate > data.startDate
+  }
+  return true
+}, {
+  message: 'End date must be after start date',
+  path: ['endDate']
 })
 
 export type UpdatePromotionInput = z.infer<typeof updatePromotionSchema>

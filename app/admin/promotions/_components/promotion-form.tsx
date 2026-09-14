@@ -412,6 +412,7 @@ export default function PromotionForm({ promotion }: PromotionFormProps) {
             <input
               type="date"
               value={formData.startDate}
+              min={new Date().toISOString().split('T')[0]}
               onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
               required
               className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"

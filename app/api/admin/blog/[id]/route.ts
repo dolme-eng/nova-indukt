@@ -48,11 +48,11 @@ export async function PUT(
         slug: data.slug,
         contentDe: data.contentDe,
         isPublished: data.isPublished,
-        excerptDe: data.excerptDe ?? null,
-        image: data.image ?? null,
-        category: data.category ?? null,
-        author: data.author ?? undefined,
-        readTime: data.readTime != null ? String(data.readTime) : null,
+        excerptDe: data.excerptDe !== undefined ? data.excerptDe : currentPost.excerptDe,
+        image: data.image !== undefined ? data.image : currentPost.image,
+        category: data.category !== undefined ? data.category : currentPost.category,
+        author: data.author !== undefined ? data.author : currentPost.author,
+        readTime: data.readTime != null ? String(data.readTime) : currentPost.readTime,
         publishedAt,
       }
     })

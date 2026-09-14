@@ -6,6 +6,7 @@ import { updatePromotionAdminSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
+import { revalidateTag } from 'next/cache'
 
 // GET - Récupérer une promotion spécifique
 export async function GET(
@@ -82,6 +83,8 @@ export async function PUT(
       userAgent: request.headers.get('user-agent'),
     })
 
+    revalidateTag('promotions')
+
     return NextResponse.json(promotion)
   } catch (error) {
     logError('Error updating promotion:', error)
@@ -109,6 +112,8 @@ export async function DELETE(
     if (!before) return NextResponse.json({ error: 'Nicht gefunden' }, { status: 404 })
 
     await prisma.promotion.delete({ where: { id } })
+
+    revalidateTag('promotions')
 
     await auditLog({
       action: 'DELETE',

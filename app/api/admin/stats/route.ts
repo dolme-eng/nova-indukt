@@ -46,7 +46,10 @@ export async function GET(req: NextRequest) {
         where: { createdAt: { gte: thirtyDaysAgo } },
       }),
       prisma.order.aggregate({
-        where: { status: { not: 'CANCELLED' } },
+        where: {
+          status: { not: 'CANCELLED' },
+          createdAt: { gte: thirtyDaysAgo },
+        },
         _sum: { total: true },
       }),
       prisma.order.findMany({

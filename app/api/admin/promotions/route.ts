@@ -6,6 +6,7 @@ import { createPromotionAdminSchema } from '@/lib/validations/admin'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
+import { revalidateTag } from 'next/cache'
 
 // GET - Liste toutes les promotions
 export async function GET(req: NextRequest) {
@@ -68,6 +69,8 @@ export async function POST(request: NextRequest) {
       ipAddress: request.headers.get('x-forwarded-for'),
       userAgent: request.headers.get('user-agent'),
     })
+
+    revalidateTag('promotions')
 
     return NextResponse.json(promotion)
   } catch (error) {

@@ -58,7 +58,14 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   let currentY = tableTop + 10
   doc.setFont('helvetica', 'normal')
 
+  const pageHeight = 297
+  const margin = 30
+
   data.items.forEach((item) => {
+    if (currentY > pageHeight - margin) {
+      doc.addPage()
+      currentY = 20
+    }
     doc.text(item.name, 20, currentY)
     doc.text(item.quantity.toString(), 125, currentY)
     doc.text(formatPriceDe(item.price), 140, currentY)
@@ -68,6 +75,10 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
 
   // Summary
   currentY += 10
+  if (currentY > pageHeight - 80) {
+    doc.addPage()
+    currentY = 20
+  }
   doc.setFont('helvetica', 'normal')
   doc.text('Zwischensumme:', 120, currentY)
   doc.text(formatPriceDe(data.subtotal), 170, currentY)
@@ -83,6 +94,10 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
 
   // Bank details
   currentY += 30
+  if (currentY > pageHeight - 60) {
+    doc.addPage()
+    currentY = 20
+  }
   doc.setFont('helvetica', 'bold')
   doc.text('Zahlungsinformationen', 20, currentY)
   doc.setFont('helvetica', 'normal')
@@ -91,11 +106,12 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   doc.text(`BIC: ${BANK_TRANSFER.bic}`, 20, currentY + 30)
   doc.text(`Verwendungszweck: ${data.orderNumber}`, 20, currentY + 40)
 
-  // Footer
+  // Footer on last page
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
-  doc.text('Vielen Dank für Ihre Bestellung!', 20, 280)
-  doc.text(`${COMPANY.name} | ${COMPANY.street} | ${COMPANY.zip} ${COMPANY.city}`, 20, 285)
+  const footerY = pageHeight - 15
+  doc.text('Vielen Dank für Ihre Bestellung!', 20, footerY)
+  doc.text(`${COMPANY.name} | ${COMPANY.street} | ${COMPANY.zip} ${COMPANY.city}`, 20, footerY + 5)
 
   return doc
 }

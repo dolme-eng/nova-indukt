@@ -45,11 +45,29 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     const { status, trackingNumber, carrier, trackingUrl, sendEmail } = parsed.data
 
+    const validTransitions: Record<string, string[]> = {
+      PENDING: ['PROCESSING', 'CANCELLED'],
+      PROCESSING: ['SHIPPED', 'CANCELLED'],
+      SHIPPED: ['DELIVERED'],
+      DELIVERED: [],
+      CANCELLED: [],
+      REFUNDED: [],
+    }
+
+    if (status && !validTransitions[order.status]?.includes(status)) {
+      return NextResponse.json(
+        { error: `Ungültiger Statusübergang: ${order.status} → ${status}` },
+        { status: 400 }
+      )
+    }
+
     const next = await prisma.order.update({
       where: { id },
       data: {
         status: status as OrderStatus,
         trackingNumber: trackingNumber ?? undefined,
+        carrier: carrier ?? undefined,
+        trackingUrl: trackingUrl ?? undefined,
         shippedAt: status === "SHIPPED" ? new Date() : undefined,
         deliveredAt: status === "DELIVERED" ? new Date() : undefined,
       },

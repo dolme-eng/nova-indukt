@@ -150,12 +150,7 @@ export function ProductsContent({
     return pages
   }, [currentPage, totalPages])
 
-  // Loading court pour le changement de vue (grid/list) - sans skeleton complet
-  useEffect(() => {
-    setIsLoading(true)
-    const t = setTimeout(() => setIsLoading(false), 200)
-    return () => clearTimeout(t)
-  }, [viewMode])
+  // Supprimé : flash skeleton inutile au changement de vue
 
   // Empêcher le scroll du body quand le menu des filtres (budget/catégories) est ouvert sur mobile
   useEffect(() => {
