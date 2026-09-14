@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       userAgent: request.headers.get('user-agent'),
     })
 
-    revalidateTag('promotions')
+    revalidateTag('promotions', 'default')
 
     return NextResponse.json(promotion)
   } catch (error) {

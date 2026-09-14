@@ -46,7 +46,7 @@ export const middlewareAuthConfig: NextAuthConfig = {
           const storedVersion = await redis.get(`nova:tv:${token.id}`)
           if (storedVersion !== null && Number(storedVersion) !== (token.tokenVersion ?? 0)) {
             // tokenVersion mismatch — token has been revoked (e.g. password reset)
-            return {} as Record<string, unknown>
+            return null
           }
         }
       }

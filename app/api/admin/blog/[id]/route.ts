@@ -51,7 +51,7 @@ export async function PUT(
         excerptDe: data.excerptDe !== undefined ? data.excerptDe : currentPost.excerptDe,
         image: data.image !== undefined ? data.image : currentPost.image,
         category: data.category !== undefined ? data.category : currentPost.category,
-        author: data.author !== undefined ? data.author : currentPost.author,
+        author: data.author ?? currentPost.author,
         readTime: data.readTime != null ? String(data.readTime) : currentPost.readTime,
         publishedAt,
       }

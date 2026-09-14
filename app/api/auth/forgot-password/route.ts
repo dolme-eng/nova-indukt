@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { z } from "zod"
 import crypto from "crypto"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendPasswordResetEmail } from "@/lib/email/send"

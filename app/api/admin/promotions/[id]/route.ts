@@ -83,7 +83,7 @@ export async function PUT(
       userAgent: request.headers.get('user-agent'),
     })
 
-    revalidateTag('promotions')
+    revalidateTag('promotions', 'default')
 
     return NextResponse.json(promotion)
   } catch (error) {
@@ -113,7 +113,7 @@ export async function DELETE(
 
     await prisma.promotion.delete({ where: { id } })
 
-    revalidateTag('promotions')
+    revalidateTag('promotions', 'default')
 
     await auditLog({
       action: 'DELETE',
