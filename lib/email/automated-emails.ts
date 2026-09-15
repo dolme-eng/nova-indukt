@@ -8,7 +8,6 @@ import WelcomeEmail from './templates/welcome'
 import NewOrderNotificationEmail from './templates/new-order-notification'
 import { logError } from '@/lib/logger'
 import { createUnsubscribeToken } from '@/lib/unsubscribe-token'
-import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 async function sendWithRetry(
   payload: { from: string; to: string; subject: string; html: string },

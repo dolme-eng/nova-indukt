@@ -8,7 +8,7 @@ import {
   removeFromCart as removeFromServerCart,
   clearCart as clearServerCart,
 } from '@/app/actions/cart'
-import { getProductsForHydration, type HydratedProduct } from '@/app/actions/cart-hydration'
+import { getProductsForHydration } from '@/app/actions/cart-hydration'
 import { logError } from '@/lib/logger'
 
 export interface CartItem {
@@ -182,7 +182,7 @@ export const useCartStore = create<CartState>()(
           localStorage.removeItem(name)
         },
       },
-      onRehydrateStorage: (state) => {
+      onRehydrateStorage: () => {
         return () => {
           // After localStorage hydration, fetch fresh product data from DB
           const cartState = useCartStore.getState()

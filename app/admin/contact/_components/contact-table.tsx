@@ -64,7 +64,6 @@ export default function ContactTable({ initialMessages }: { initialMessages: Con
       setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, status } : m)))
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Fehler beim Aktualisieren des Status'
-      // eslint-disable-next-line no-alert
       alert(msg)
     }
   }

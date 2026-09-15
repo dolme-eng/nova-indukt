@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { RotateCcw, CheckCircle, Clock, Mail } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import { getStaticPageContent } from '@/lib/content/static'
 import { COMPANY } from '@/lib/constants/company'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'

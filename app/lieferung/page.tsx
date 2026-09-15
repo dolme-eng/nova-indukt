@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Truck, CheckCircle, Clock, Euro } from 'lucide-react'
+import { Truck, CheckCircle, Clock } from 'lucide-react'
 import { getStaticPageContent } from '@/lib/content/static'
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants/shop'
 import { formatPriceDe } from '@/lib/utils'
