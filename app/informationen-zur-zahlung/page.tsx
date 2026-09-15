@@ -20,6 +20,10 @@ export const metadata: Metadata = {
 
 export default async function ZahlungsinformationenPage() {
   const bank = await getBankDetails()
+  const isBankConfigured =
+    bank.iban !== 'DE00 0000 0000 0000 0000 00' &&
+    bank.bic !== 'XXXXXXXXXXXXXXX' &&
+    bank.bankName !== 'Bank nicht konfiguriert'
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -42,34 +46,47 @@ export default async function ZahlungsinformationenPage() {
             </p>
 
             {/* Bank details card */}
-            <div className="mb-6 rounded-xl border-l-4 border-[#4ECCA3] bg-[#4ECCA3]/5 p-6">
-              <h4 className="mb-4 font-bold text-gray-900">Bankverbindung</h4>
-              <div className="space-y-3 text-sm">
-                {bank.bankName && (
+            {isBankConfigured ? (
+              <div className="mb-6 rounded-xl border-l-4 border-[#4ECCA3] bg-[#4ECCA3]/5 p-6">
+                <h4 className="mb-4 font-bold text-gray-900">Bankverbindung</h4>
+                <div className="space-y-3 text-sm">
+                  {bank.bankName && (
+                    <p>
+                      <span className="font-semibold">Bank:</span> {bank.bankName}
+                    </p>
+                  )}
                   <p>
-                    <span className="font-semibold">Bank:</span> {bank.bankName}
+                    <span className="font-semibold">IBAN:</span>{' '}
+                    <span className="font-mono">{bank.iban}</span>
                   </p>
-                )}
-                <p>
-                  <span className="font-semibold">IBAN:</span>{' '}
-                  <span className="font-mono">{bank.iban}</span>
-                </p>
-                <p>
-                  <span className="font-semibold">BIC:</span>{' '}
-                  <span className="font-mono">{bank.bic}</span>
-                </p>
-                <p>
-                  <span className="font-semibold">Kontoinhaber:</span> {bank.holder}
-                </p>
-                <p>
-                  <span className="font-semibold">Verwendungszweck:</span> Ihr Name + Bestellnummer
-                </p>
-                <p>
-                  <span className="font-semibold">Überweisungsart:</span>{' '}
-                  <span className="font-bold text-[#8B0000]">SOFORTÜBERWEISUNG</span>
+                  <p>
+                    <span className="font-semibold">BIC:</span>{' '}
+                    <span className="font-mono">{bank.bic}</span>
+                  </p>
+                  <p>
+                    <span className="font-semibold">Kontoinhaber:</span> {bank.holder}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Verwendungszweck:</span> Ihr Name + Bestellnummer
+                  </p>
+                  <p>
+                    <span className="font-semibold">Überweisungsart:</span>{' '}
+                    <span className="font-bold text-[#8B0000]">SOFORTÜBERWEISUNG</span>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="mb-6 rounded-xl border-l-4 border-yellow-500 bg-yellow-50 p-6">
+                <p className="text-sm text-gray-700">
+                  Die Bankverbindung wird Ihnen nach der Bestellung per E-Mail mitgeteilt. Bei Fragen
+                  kontaktieren Sie uns unter{' '}
+                  <a href={`mailto:${COMPANY.email.support}`} className="font-semibold text-[#4ECCA3] hover:underline">
+                    {COMPANY.email.support}
+                  </a>
+                  {' '}oder per Telefon.
                 </p>
               </div>
-            </div>
+            )}
 
             {/* Important notice */}
             <div className="mb-6 rounded-xl border-l-4 border-yellow-500 bg-yellow-50 p-6">
