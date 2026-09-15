@@ -200,18 +200,21 @@ export async function applyPromotionsToProducts(
  * Incrémente le compteur d'utilisation d'une promotion
  */
 export async function incrementPromotionUsage(promotionId: string): Promise<void> {
-  const promotion = await prisma.promotion.findUnique({ where: { id: promotionId } })
+  const promotion = await prisma.promotion.findUnique({ where: { id: promotionId }, select: { usageLimit: true } })
   if (!promotion) return
-  if (promotion.usageLimit !== null && promotion.usageCount >= promotion.usageLimit) return
 
-  await prisma.promotion.update({
-    where: { id: promotionId },
-    data: {
-      usageCount: {
-        increment: 1,
-      },
-    },
-  })
+  if (promotion.usageLimit !== null) {
+    const result = await prisma.promotion.updateMany({
+      where: { id: promotionId, usageCount: { lt: promotion.usageLimit } },
+      data: { usageCount: { increment: 1 } },
+    })
+    if (result.count === 0) return
+  } else {
+    await prisma.promotion.update({
+      where: { id: promotionId },
+      data: { usageCount: { increment: 1 } },
+    })
+  }
 }
 
 /**

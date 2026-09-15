@@ -4,7 +4,7 @@ import { z } from 'zod'
 // NOTE: price is NOT accepted from the client — server recalculates from DB
 export const orderItemSchema = z.object({
   id: z.string().cuid('Invalid product ID'),
-  quantity: z.number().int().positive('Quantity must be at least 1'),
+  quantity: z.number().int().positive('Quantity must be at least 1').max(99, 'Quantity must be at most 99'),
   name: z.string().min(1, 'Product name is required'),
   slug: z.string().optional(),
 })

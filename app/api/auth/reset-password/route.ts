@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await hashPassword(password)
 
     // Update user password, clear reset token, and invalidate existing JWTs
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
         password: hashedPassword,
@@ -84,10 +84,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Invalidate middleware tokenVersion cache in Redis
+    // Update middleware tokenVersion cache in Redis (do not del — keep key for revocation check)
     const redis = getRedis()
     if (redis) {
-      await redis.del(`nova:tv:${user.id}`).catch(() => {})
+      await redis
+        .set(`nova:tv:${user.id}`, String(updatedUser.tokenVersion), { ex: 30 * 24 * 3600 })
+        .catch(() => {})
     }
 
     return NextResponse.json(

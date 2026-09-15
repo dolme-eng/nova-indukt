@@ -129,12 +129,9 @@ export async function rateLimit(
   const limiter = getRatelimiter(maxRequests, windowSeconds)
 
   if (!limiter) {
-    // No Redis configured:
-    // - In dev: use in-memory fallback (single process, sufficient)
-    // - In production: fail closed (in-memory is useless in serverless)
+    // No Redis configured: fallback to in-memory (non-distributed in serverless, but better than DoS)
     if (process.env.NODE_ENV === 'production') {
-      logError('[rate-limit] Redis not configured in production — failing closed')
-      return { success: false, limit: maxRequests, remaining: 0, resetTime: Date.now() + windowMs }
+      logError('[rate-limit] Redis not configured in production — falling back to memory')
     }
     return memoryRateLimit(identifier, windowMs, maxRequests)
   }
@@ -148,12 +145,7 @@ export async function rateLimit(
       resetTime: Number(reset),
     }
   } catch (err) {
-    // On Redis error, fail closed in production to prevent abuse
-    logError('[rate-limit] Redis error, failing closed:', err)
-    if (process.env.NODE_ENV === 'production') {
-      return { success: false, limit: maxRequests, remaining: 0, resetTime: Date.now() + windowMs }
-    }
-    // In dev, fall back to in-memory rate limiting
+    logError('[rate-limit] Redis error, falling back to memory:', err)
     return memoryRateLimit(identifier, windowMs, maxRequests)
   }
 }
@@ -162,22 +154,14 @@ export async function rateLimit(
 
 /** Extracts the real IP address from request headers */
 export function getIP(request: Request): string {
-  // In production, only trust x-real-ip set by trusted proxy (Vercel)
-  // x-forwarded-for can be spoofed by clients
-  if (process.env.NODE_ENV === 'production') {
-    const realIp = request.headers.get('x-real-ip')
-    if (realIp) return realIp.trim().split(',')[0]
-    return 'unknown'
-  }
+  // Trust x-forwarded-for when behind Vercel's trusted proxy (first entry is real client IP)
+  // Fallback to x-real-ip for other deployments
+  const forwarded = request.headers.get('x-forwarded-for')
+  if (forwarded) return forwarded.split(',')[0].trim()
 
-  // Development: allow x-forwarded-for for local testing
   const realIp = request.headers.get('x-real-ip')
   if (realIp) return realIp.trim().split(',')[0]
 
-  const forwarded = request.headers.get('x-forwarded-for')
-  if (forwarded) {
-    return forwarded.split(',')[0].trim()
-  }
   return 'unknown'
 }
 

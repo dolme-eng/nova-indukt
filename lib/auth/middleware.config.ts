@@ -48,6 +48,9 @@ export const middlewareAuthConfig: NextAuthConfig = {
             // tokenVersion mismatch — token has been revoked (e.g. password reset)
             return null
           }
+        } else if (process.env.NODE_ENV === 'production') {
+          // Redis must be configured in production for revocation to work — fail closed
+          return null
         }
       }
 

@@ -34,7 +34,7 @@ export function CsrfProvider({ children }: { children: React.ReactNode }) {
       const method =
         init?.method?.toUpperCase() || (input instanceof Request ? input.method : 'GET')
 
-      if (method !== 'GET' && method !== 'HEAD' && !url.startsWith('/api/auth')) {
+      if (method !== 'GET' && method !== 'HEAD') {
         const token = getCookie(CSRF_COOKIE_NAME)
         if (token) {
           init = init || {}

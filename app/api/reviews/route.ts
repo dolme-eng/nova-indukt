@@ -12,8 +12,8 @@ const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 reviews per hour per IP
 
 const reviewSchema = z.object({
-  productId: z.string(),
-  rating: z.number().min(1).max(5),
+  productId: z.string().cuid('Invalid product ID'),
+  rating: z.number().int().min(1).max(5),
   title: z.string().min(3).max(100),
   content: z.string().min(10).max(2000),
 })

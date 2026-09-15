@@ -266,16 +266,24 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      // Increment promo usage if applicable
+      // Increment promo usage atomically (avoid race exceeding usageLimit)
       if (verifiedPromotionId) {
-        await tx.promotion.update({
+        const promo = await tx.promotion.findUnique({
           where: { id: verifiedPromotionId },
-          data: {
-            usageCount: {
-              increment: 1,
-            },
-          },
+          select: { usageLimit: true },
         })
+        if (promo?.usageLimit !== null && promo?.usageLimit !== undefined) {
+          const result = await tx.promotion.updateMany({
+            where: { id: verifiedPromotionId, usageCount: { lt: promo.usageLimit } },
+            data: { usageCount: { increment: 1 } },
+          })
+          if (result.count === 0) throw new Error('Promotion usage limit reached')
+        } else {
+          await tx.promotion.update({
+            where: { id: verifiedPromotionId },
+            data: { usageCount: { increment: 1 } },
+          })
+        }
       }
 
       return newOrder

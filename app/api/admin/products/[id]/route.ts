@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { prisma } from "@/lib/prisma"
 import { updateProductSchema } from "@/lib/validations/admin"
-import type { Prisma } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
@@ -109,6 +109,12 @@ export async function DELETE(
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
+      return NextResponse.json(
+        { error: 'Produkt kann nicht gelöscht werden — es wird noch in Bestellungen oder Warenkörben verwendet' },
+        { status: 409 }
+      )
+    }
     logError("[PRODUCT_DELETE]", error)
     return NextResponse.json({ error: 'Interner Fehler' }, { status: 500 })
   }
