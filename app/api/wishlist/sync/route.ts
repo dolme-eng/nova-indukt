@@ -8,8 +8,8 @@ import { validateCsrfToken } from "@/lib/csrf"
 
 const syncSchema = z.object({
   localItems: z.array(z.object({
-    id: z.string(),
-  })),
+    id: z.string().cuid('Invalid product ID'),
+  })).max(100),
 })
 
 export async function POST(request: NextRequest) {

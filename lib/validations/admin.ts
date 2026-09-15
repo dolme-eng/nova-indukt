@@ -26,8 +26,8 @@ export const createPromotionAdminSchema = z.object({
   discountType: z.enum(['PERCENTAGE', 'FIXED_AMOUNT']),
   discountValue: z.number().positive('Rabattwert muss positiv sein'),
   isGlobal: z.boolean().default(false),
-  productIds: z.array(z.string()).default([]),
-  categoryIds: z.array(z.string()).default([]),
+  productIds: z.array(z.string().cuid()).max(100).default([]),
+  categoryIds: z.array(z.string().cuid()).max(50).default([]),
   startDate: z.string().datetime().or(z.date()),
   endDate: z.string().datetime().or(z.date()),
   minOrderAmount: z.number().nonnegative().optional().nullable(),
@@ -35,9 +35,14 @@ export const createPromotionAdminSchema = z.object({
   usageLimit: z.number().int().positive().optional().nullable(),
   badge: z.string().max(50).optional().nullable(),
   bannerText: z.string().max(200).optional().nullable(),
-  highlightColor: z.string().max(20).optional().nullable(),
+  highlightColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid hex color').optional().nullable(),
   isActive: z.boolean().default(true),
-})
+}).refine(data => {
+  if (data.discountType === 'PERCENTAGE' && data.discountValue > 100) return false
+  return true
+}, { message: 'Percentage discount cannot exceed 100%', path: ['discountValue'] }).refine(data => {
+  return new Date(data.endDate) > new Date(data.startDate)
+}, { message: 'End date must be after start date', path: ['endDate'] })
 
 export const updatePromotionAdminSchema = createPromotionAdminSchema.partial()
 
@@ -45,7 +50,7 @@ export const autoGeneratePromotionSchema = z.object({
   type: z.enum(['flash', 'weekend', 'clearance', 'new-arrival']),
   discountPercent: z.number().int().min(1, 'Mindestens 1%').max(90, 'Maximal 90%'),
   durationDays: z.number().int().min(1, 'Mindestens 1 Tag').max(30, 'Maximal 30 Tage'),
-  categoryIds: z.array(z.string()).optional().default([]),
+  categoryIds: z.array(z.string().cuid()).max(50).optional().default([]),
   productCount: z.number().int().min(1).max(100).optional().default(10),
 })
 
@@ -60,7 +65,7 @@ export const updateProductSchema = z.object({
   price: z.number().positive('Preis muss positiv sein'),
   oldPrice: z.number().positive().optional().nullable(),
   costPrice: z.number().nonnegative().optional().nullable(),
-  categoryId: z.string().min(1, 'Kategorie ist erforderlich'),
+  categoryId: z.string().cuid('Invalid category ID'),
   isActive: z.boolean().default(true),
   weightKg: z.number().nonnegative().optional().nullable(),
   brand: z.string().max(100).optional().nullable(),
@@ -71,7 +76,7 @@ export const updateProductSchema = z.object({
   images: z.array(z.object({
     url: z.string().url(),
     alt: z.string().max(200).optional(),
-  })).optional(),
+  })).max(20).optional(),
 })
 
 // ── Orders (Shipping) ──────────────────────────────────────────────────────

@@ -9,9 +9,9 @@ const validateCouponSchema = z.object({
   code: z.string().min(1, 'Code ist erforderlich').max(50),
   amount: z.number().positive('Betrag muss positiv sein'),
   items: z.array(z.object({
-    id: z.string(),
-    categoryId: z.string().optional(),
-  })).optional(),
+    id: z.string().cuid('Invalid product ID'),
+    categoryId: z.string().cuid().optional(),
+  })).max(100).optional(),
 })
 
 export async function POST(request: NextRequest) {

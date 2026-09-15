@@ -7,7 +7,7 @@ import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
 const wishlistItemSchema = z.object({
-  productId: z.string(),
+  productId: z.string().cuid('Invalid product ID'),
 })
 
 // GET - Fetch user's wishlist

@@ -20,10 +20,11 @@ const shippingUpdateSchema = z.object({
 
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:orders:shipping'), { windowMs: 60_000, maxRequests: 15 })
-    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
+
+    const rl = await rateLimit(createRateLimitKey(getIP(req), 'admin:orders:shipping'), { windowMs: 60_000, maxRequests: 15 })
+    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const csrfError = validateCsrfToken(req)
     if (csrfError) return csrfError

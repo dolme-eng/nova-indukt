@@ -13,6 +13,9 @@ export async function GET(req: NextRequest) {
     const authz = await requireAdmin()
     if (!authz.ok) return NextResponse.json({ error: "Nicht autorisiert" }, { status: authz.status })
 
+    const rl = await rateLimit(createRateLimitKey(getIP(req), "admin:products:get"), { windowMs: 60_000, maxRequests: 30 })
+    if (!rl.success) return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 })
+
     const { searchParams } = new URL(req.url)
     const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10) || 100, 500)
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1)

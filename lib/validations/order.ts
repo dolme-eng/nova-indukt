@@ -25,7 +25,7 @@ export const shippingDataSchema = z.object({
 // Schéma pour la création d'une commande
 // NOTE: subtotal, shipping, total are accepted but server recalculates independently
 export const createOrderSchema = z.object({
-  items: z.array(orderItemSchema).min(1, 'At least one item is required'),
+  items: z.array(orderItemSchema).min(1, 'At least one item is required').max(50),
   shippingData: shippingDataSchema,
   paymentMethod: z.enum(['BANK_TRANSFER']),
   subtotal: z.number().positive('Subtotal must be positive'),

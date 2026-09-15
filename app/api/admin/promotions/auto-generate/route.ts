@@ -10,13 +10,14 @@ import { validateCsrfToken } from '@/lib/csrf'
 // POST - Automatisch Promotions generieren
 export async function POST(request: NextRequest) {
   try {
+    const authz = await requireAdmin()
+    if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
+
     const rl = await rateLimit(createRateLimitKey(getIP(request), 'admin:promotions:auto-generate'), {
       windowMs: 60_000,
       maxRequests: 5,
     })
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
-    const authz = await requireAdmin()
-    if (!authz.ok) return NextResponse.json({ error: 'Unauthorized' }, { status: authz.status })
 
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError

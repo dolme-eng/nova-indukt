@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sendReviewRequests } from '@/lib/email/automated-emails'
 import { logError } from '@/lib/logger'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import crypto from 'crypto'
 
 /**
  * POST: Send review request emails
@@ -14,11 +15,27 @@ export async function POST(request: NextRequest) {
   const { success } = await rateLimit(createRateLimitKey(ip, 'cron:review-requests'), { windowMs: 60_000, maxRequests: 5 })
   if (!success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
   try {
-    // Verify cron secret — OBLIGATOIRE en production
+    // Verify cron secret — mandatory in all environments (fail closed)
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET
-    
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+
+    if (!cronSecret) {
+      logError('CRON_SECRET is not configured. Rejecting request.')
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      )
+    }
+
+    // Timing-safe Bearer comparison
+    const expected = `Bearer ${cronSecret}`
+    if (!authHeader || authHeader.length !== expected.length) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+    if (!crypto.timingSafeEqual(Buffer.from(authHeader), Buffer.from(expected))) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

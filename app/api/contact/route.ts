@@ -52,9 +52,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { name: rawName, email: rawEmail, subject, message: rawMessage } = result.data
+    const { name: rawName, email: rawEmail, subject: rawSubject, message: rawMessage } = result.data
     const email = rawEmail.toLowerCase()
     const name = stripHtml(rawName)
+    const subject = stripHtml(rawSubject)
     const message = stripHtml(rawMessage)
 
     // Save to database
