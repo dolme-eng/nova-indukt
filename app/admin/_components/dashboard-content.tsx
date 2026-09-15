@@ -21,8 +21,8 @@ import Link from 'next/link'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 interface DashboardStats {
-  orders: { total: number; recent: number; revenue: number }
-  customers: { total: number; new: number }
+  orders: { total: number; recent: number; revenue: number; revenuePrev?: number; recentPrev?: number }
+  customers: { total: number; new: number; newPrev?: number }
   products: { active: number }
   reviews: { pending: number }
   promotions: { active: number; total: number; usage: number }
@@ -46,6 +46,18 @@ interface DashboardStats {
 
 export function DashboardContent({ stats }: { stats: DashboardStats }) {
   const [activityLimit, setActivityLimit] = useState(5)
+
+  const formatMoM = (current: number, prev?: number) => {
+    if (prev === undefined || prev === null) return `${current} diesen Monat`
+    if (prev === 0) return current > 0 ? `+${current} vs Vormonat` : '— vs Vormonat'
+    const pct = Math.round(((current - prev) / Math.abs(prev)) * 100)
+    const sign = pct > 0 ? '+' : ''
+    return `${sign}${pct}% vs Vormonat`
+  }
+  const isMoMPositive = (current: number, prev?: number) => {
+    if (prev === undefined || prev === null) return true
+    return current >= prev
+  }
 
   const getStatusTranslation = (status: string) => {
     const map: Record<string, string> = {
@@ -98,22 +110,22 @@ export function DashboardContent({ stats }: { stats: DashboardStats }) {
         <StatCard
           title="Umsatz"
           value={formatPriceDe(stats.orders.revenue)}
-          change={`${stats.orders.recent} diesen Monat`}
-          isPositive={true}
+          change={formatMoM(stats.orders.revenue, stats.orders.revenuePrev)}
+          isPositive={isMoMPositive(stats.orders.revenue, stats.orders.revenuePrev)}
           icon={<TrendingUp className="text-nova-400" size={24} />}
         />
         <StatCard
           title="Bestellungen"
           value={stats.orders.total.toString()}
-          change={`${stats.orders.recent} diesen Monat`}
-          isPositive={true}
+          change={formatMoM(stats.orders.recent, stats.orders.recentPrev)}
+          isPositive={isMoMPositive(stats.orders.recent, stats.orders.recentPrev)}
           icon={<ShoppingCart className="text-nova-400" size={24} />}
         />
         <StatCard
           title="Kunden"
           value={stats.customers.total.toString()}
-          change={`+${stats.customers.new} diesen Monat`}
-          isPositive={true}
+          change={formatMoM(stats.customers.new, stats.customers.newPrev)}
+          isPositive={isMoMPositive(stats.customers.new, stats.customers.newPrev)}
           icon={<Users className="text-nova-400" size={24} />}
         />
         <StatCard

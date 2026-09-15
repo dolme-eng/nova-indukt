@@ -53,7 +53,7 @@ async function getOrders(search?: string, status?: string, page: number = 1, dat
 
   const skip = (page - 1) * PAGE_SIZE
 
-  const [orders, totalCount] = await Promise.all([
+  const [orders, totalCount, allOrders] = await Promise.all([
     prisma.order.findMany({
       where,
       orderBy: { createdAt: 'desc' },
@@ -62,9 +62,22 @@ async function getOrders(search?: string, status?: string, page: number = 1, dat
       take: PAGE_SIZE,
     }),
     prisma.order.count({ where }),
+    prisma.order.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      select: {
+        orderNumber: true,
+        customerName: true,
+        customerEmail: true,
+        createdAt: true,
+        status: true,
+        paymentStatus: true,
+        total: true,
+      },
+    }),
   ])
 
-  return { orders, totalCount, totalPages: Math.ceil(totalCount / PAGE_SIZE) }
+  return { orders, totalCount, totalPages: Math.ceil(totalCount / PAGE_SIZE), allOrders }
 }
 
 const statusMap: Record<OrderStatus, { label: string; color: string; icon: React.ReactNode }> = {
@@ -116,7 +129,7 @@ export default async function AdminOrdersPage({
 }) {
   const resolvedParams = await searchParams
   const page = Math.max(1, parseInt(resolvedParams.page || '1', 10))
-  const { orders, totalCount, totalPages } = await getOrders(
+  const { orders, totalCount, totalPages, allOrders } = await getOrders(
     resolvedParams.q,
     resolvedParams.status,
     page,
@@ -135,7 +148,7 @@ export default async function AdminOrdersPage({
           </p>
         </div>
         <CsvExportButton
-          data={orders}
+          data={allOrders as unknown as Record<string, unknown>[]}
           columns={[
             { header: 'Bestellnummer', accessor: (r) => String(r.orderNumber) },
             { header: 'Kunde', accessor: (r) => String(r.customerName || '') },
@@ -146,6 +159,7 @@ export default async function AdminOrdersPage({
             { header: 'Betrag (EUR)', accessor: (r) => Number(r.total) },
           ]}
           filename={`bestellungen-export-${new Date().toISOString().slice(0, 10)}.csv`}
+          label={`CSV Exportieren (${totalCount})`}
         />
       </div>
 

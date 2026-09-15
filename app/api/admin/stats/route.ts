@@ -25,11 +25,15 @@ export async function GET(req: NextRequest) {
 
     const now = new Date()
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+    const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000)
 
     const [
       totalOrders,
       recentOrders,
       ordersRevenue,
+      prevOrdersRevenue,
+      prevRecentOrders,
+      prevNewCustomers,
       recentOrdersList,
       totalCustomers,
       newCustomers,
@@ -51,6 +55,19 @@ export async function GET(req: NextRequest) {
           createdAt: { gte: thirtyDaysAgo },
         },
         _sum: { total: true },
+      }),
+      prisma.order.aggregate({
+        where: {
+          status: { not: 'CANCELLED' },
+          createdAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo },
+        },
+        _sum: { total: true },
+      }),
+      prisma.order.count({
+        where: { createdAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo } },
+      }),
+      prisma.user.count({
+        where: { role: 'USER', createdAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo } },
       }),
       prisma.order.findMany({
         take: 4,
@@ -123,11 +140,14 @@ export async function GET(req: NextRequest) {
       orders: {
         total: totalOrders,
         recent: recentOrders,
-        revenue: ordersRevenue._sum.total || 0,
+        revenue: Number(ordersRevenue._sum.total || 0),
+        revenuePrev: Number(prevOrdersRevenue._sum.total || 0),
+        recentPrev: prevRecentOrders,
       },
       customers: {
         total: totalCustomers,
         new: newCustomers,
+        newPrev: prevNewCustomers,
       },
       products: {
         active: totalProducts,
