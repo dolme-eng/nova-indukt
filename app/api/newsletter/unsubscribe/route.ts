@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { verifyUnsubscribeToken } from '@/lib/unsubscribe-token'
 import { validateCsrfToken } from '@/lib/csrf'
 import { auth } from '@/lib/auth'
-
-const unsubscribeSchema = z.object({
-  email: z.string().email('Ungültige E-Mail-Adresse'),
-})
+import { newsletterUnsubscribeSchema } from '@/lib/validations/newsletter'
 
 const HTML_TEMPLATE = `<!DOCTYPE html>
 <html lang="de">
@@ -53,7 +49,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
 
-    const result = unsubscribeSchema.safeParse(body)
+    const result = newsletterUnsubscribeSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
         { error: 'Validierung fehlgeschlagen' },

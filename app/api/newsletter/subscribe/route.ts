@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { sendNewsletterConfirmationEmail } from '@/lib/email/send'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
+import { newsletterSubscribeSchema } from '@/lib/validations/newsletter'
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 3 // 3 subscriptions per hour per IP
-
-const subscribeSchema = z.object({
-  email: z.string().email('Ungültige E-Mail-Adresse'),
-  firstName: z.string().optional(),
-  source: z.string().default('homepage'),
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,7 +36,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
 
     // Validation
-    const result = subscribeSchema.safeParse(body)
+    const result = newsletterSubscribeSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
         { error: 'Validierung fehlgeschlagen' },

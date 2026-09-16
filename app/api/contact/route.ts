@@ -1,22 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { sendContactNotificationEmail } from '@/lib/email/send'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
 import { stripHtml } from '@/lib/utils/sanitize'
+import { contactFormSchema } from '@/lib/validations/contact'
 
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 5 // 5 messages per hour per IP
-
-const contactSchema = z.object({
-  name: z.string().min(2, 'Name muss mindestens 2 Zeichen haben'),
-  email: z.string().email('Ungültige E-Mail-Adresse'),
-  subject: z.string().min(3, 'Betreff muss mindestens 3 Zeichen haben'),
-  message: z.string().min(10, 'Nachricht muss mindestens 10 Zeichen haben'),
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,7 +37,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
 
     // Validation
-    const result = contactSchema.safeParse(body)
+    const result = contactFormSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
         { error: 'Validierung fehlgeschlagen' },

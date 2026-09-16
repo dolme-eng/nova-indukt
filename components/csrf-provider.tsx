@@ -30,7 +30,6 @@ export function CsrfProvider({ children }: { children: React.ReactNode }) {
 
     const originalFetch = window.fetch
     window.fetch = function (input, init) {
-      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : ''
       const method =
         init?.method?.toUpperCase() || (input instanceof Request ? input.method : 'GET')
 
