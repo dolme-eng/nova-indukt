@@ -53,7 +53,9 @@ export default async function RueckgabePage() {
                 <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
                 <p>
                   Sie haben das Recht, binnen <strong>30 Tagen</strong> ohne Angabe von Gründen
-                  diesen Vertrag zu widerrufen.
+                  diesen Vertrag zu widerrufen. NOVA INDUKT gewährt Ihnen freiwillig ein
+                  erweitertes Rückgaberecht von 30 Tagen anstelle der gesetzlichen Frist von
+                  vierzehn Tagen.
                 </p>
               </div>
               <div className="flex items-start gap-3">

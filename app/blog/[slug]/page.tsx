@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react'
 import { ShareButtons } from './share-buttons'
 import { safeJsonLd } from '@/lib/utils/json-ld'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 export const revalidate = 600
 
@@ -54,7 +55,7 @@ export async function generateMetadata({
     title: `${title} | Blog`,
     description,
     alternates: {
-      canonical: `/blog/${resolvedParams.slug}`,
+      canonical: `${SHOP_DOMAIN}/blog/${resolvedParams.slug}`,
     },
     openGraph: {
       title,
@@ -450,11 +451,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <div className="mb-8 flex flex-wrap items-center gap-6 text-sm text-gray-500">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  {new Date(post.publishedAt || post.createdAt).toLocaleDateString('de-DE', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                  <time dateTime={(post.publishedAt || post.createdAt).toISOString()}>
+                    {new Date(post.publishedAt || post.createdAt).toLocaleDateString('de-DE', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock className="h-4 w-4" />

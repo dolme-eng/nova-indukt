@@ -5,6 +5,7 @@ import { getStaticPageContent } from '@/lib/content/static'
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants/shop'
 import { formatPriceDe } from '@/lib/utils'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
+import { COMPANY } from '@/lib/constants/company'
 
 export const metadata: Metadata = {
   title: 'Lieferung & Versand',
@@ -146,7 +147,10 @@ export default async function LieferungPage() {
               <Link href="/kontakt" className="font-semibold text-[#4ECCA3] hover:underline">
                 Kontaktformular
               </Link>{' '}
-              oder per WhatsApp.
+              oder per{' '}
+              <a href={COMPANY.whatsapp.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#4ECCA3] hover:underline">
+                WhatsApp
+              </a>.
             </p>
           </div>
         </div>

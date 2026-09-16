@@ -58,7 +58,7 @@ export async function generateMetadata({
       title: `Suche: "${search}"`,
       description: `Suchergebnisse für "${search}" im NOVA INDUKT Shop. Finden Sie das perfekte Induktions-Kochgeschirr.`,
       alternates: {
-        canonical: '/suche',
+        canonical: `${SHOP_DOMAIN}/produkte?suche=${encodeURIComponent(search)}`,
       },
     }
   }

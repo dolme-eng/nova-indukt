@@ -132,7 +132,7 @@ export default async function WiderrufPage() {
             </p>
 
             <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 bg-gray-50">
-              <form className="space-y-4">
+              <div className="space-y-4" role="region" aria-label="Muster-Widerrufsformular">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">An</label>
@@ -202,7 +202,7 @@ export default async function WiderrufPage() {
                     senden. Alternativ können Sie uns Ihren Widerruf auch per E-Mail an widerruf@nova-indukt.de 
                     mitteilen.
                 </div>
-              </form>
+              </div>
             </div>
           </div>
 

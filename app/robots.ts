@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.vercel.app').replace(/\/+$/, '')
+const BASE_URL = SHOP_DOMAIN
 
 export default function robots(): MetadataRoute.Robots {
   return {

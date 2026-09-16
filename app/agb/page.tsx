@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { getStaticPageContent } from '@/lib/content/static'
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants/shop'
 import { COMPANY } from '@/lib/constants/company'
@@ -163,9 +164,9 @@ export default async function AGBPage() {
                 (1) Verbraucher haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen
                 diesen Vertrag zu widerrufen. Wir gewähren Ihnen freiwillig ein erweitertes
                 Rückgaberecht von 30 Tagen (siehe
-                <a href="/rueckgabe" className="mx-1 text-[#4ECCA3] hover:underline">
+                <Link href="/rueckgabe" className="mx-1 text-[#4ECCA3] hover:underline">
                   /rueckgabe
-                </a>
+                </Link>
                 ). Die gesetzliche Widerrufsfrist beträgt vierzehn Tage ab dem Tag, an dem Sie oder
                 ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die Waren in Besitz
                 genommen haben.
@@ -173,9 +174,9 @@ export default async function AGBPage() {
               <p>
                 (2) Die Einzelheiten zum Widerrufsrecht finden Sie in unserer Widerrufsbelehrung
                 unter
-                <a href="/widerruf" className="ml-1 text-[#4ECCA3] hover:underline">
+                <Link href="/widerruf" className="ml-1 text-[#4ECCA3] hover:underline">
                   /widerruf
-                </a>
+                </Link>
                 .
               </p>
             </div>
@@ -240,9 +241,9 @@ export default async function AGBPage() {
               </p>
               <p>
                 (2) Einzelheiten zum Datenschutz finden Sie in unserer Datenschutzerklärung unter
-                <a href="/datenschutz" className="ml-1 text-[#4ECCA3] hover:underline">
+                <Link href="/datenschutz" className="ml-1 text-[#4ECCA3] hover:underline">
                   /datenschutz
-                </a>
+                </Link>
                 .
               </p>
             </div>

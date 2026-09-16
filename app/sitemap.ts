@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.vercel.app').replace(/\/+$/, '')
+const BASE_URL = SHOP_DOMAIN
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes (always included)
