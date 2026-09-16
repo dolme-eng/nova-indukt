@@ -8,11 +8,13 @@ import { Mail, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { useRecaptcha } from '@/hooks/use-recaptcha'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const { execute } = useRecaptcha()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,9 +27,13 @@ export default function ForgotPasswordPage() {
     setIsLoading(true)
 
     try {
+      const recaptchaToken = await execute('forgot_password')
       const response = await fetch('/api/auth/forgot-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(recaptchaToken ? { 'x-recaptcha-token': recaptchaToken } : {}),
+        },
         body: JSON.stringify({ email }),
       })
 

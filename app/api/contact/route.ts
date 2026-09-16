@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const result = contactFormSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validierung fehlgeschlagen' },
+        { error: 'Validierung fehlgeschlagen', details: result.error.flatten().fieldErrors },
         { status: 400 }
       )
     }

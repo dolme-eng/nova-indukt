@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, User, XCircle } from 'lucide-react'
 import { useAuth } from '@/lib/store/auth'
+import { useRecaptcha } from '@/hooks/use-recaptcha'
 
 export function RegisterContent() {
   const router = useRouter()
   const { register } = useAuth()
+  const { execute } = useRecaptcha()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -44,6 +46,26 @@ export function RegisterContent() {
       return
     }
 
+    if (!/[A-Z]/.test(formData.password)) {
+      setError('Passwort muss mindestens einen Großbuchstaben enthalten.')
+      return
+    }
+
+    if (!/[a-z]/.test(formData.password)) {
+      setError('Passwort muss mindestens einen Kleinbuchstaben enthalten.')
+      return
+    }
+
+    if (!/[0-9]/.test(formData.password)) {
+      setError('Passwort muss mindestens eine Ziffer enthalten.')
+      return
+    }
+
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+      setError('Passwort muss mindestens ein Sonderzeichen enthalten.')
+      return
+    }
+
     if (!formData.acceptTerms) {
       setError('Bitte akzeptieren Sie die Datenschutzbestimmungen.')
       return
@@ -52,7 +74,8 @@ export function RegisterContent() {
     setLoading(true)
 
     try {
-      const result = await register(formData.name, formData.email, formData.password)
+      const recaptchaToken = await execute('register')
+      const result = await register(formData.name, formData.email, formData.password, recaptchaToken)
 
       if (result.success) {
         setSuccess(true)

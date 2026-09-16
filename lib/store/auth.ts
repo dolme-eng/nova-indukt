@@ -20,7 +20,8 @@ interface AuthState {
   register: (
     name: string,
     email: string,
-    password: string
+    password: string,
+    recaptchaToken?: string | null
   ) => Promise<{ success: boolean; error?: string }>
   logout: () => void
   setHydrated: () => void
@@ -53,11 +54,14 @@ export const useAuth = create<AuthState>()(
         }
       },
 
-      register: async (name: string, email: string, password: string) => {
+      register: async (name: string, email: string, password: string, recaptchaToken?: string | null) => {
         try {
           const response = await fetch('/api/auth/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              ...(recaptchaToken ? { 'x-recaptcha-token': recaptchaToken } : {}),
+            },
             body: JSON.stringify({ name, email, password }),
           })
 

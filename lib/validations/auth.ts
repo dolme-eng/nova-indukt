@@ -1,41 +1,37 @@
 import { z } from 'zod'
 
-// Schéma pour l'inscription
 export const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name too long'),
-  email: z.string().email('Invalid email address'),
+  name: z.string().min(2, 'Name muss mindestens 2 Zeichen lang sein').max(100, 'Name ist zu lang'),
+  email: z.string().email('Ungültige E-Mail-Adresse'),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(100, 'Password too long')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number')
-    .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character'),
+    .min(8, 'Passwort muss mindestens 8 Zeichen lang sein')
+    .max(100, 'Passwort ist zu lang')
+    .regex(/[A-Z]/, 'Passwort muss mindestens einen Großbuchstaben enthalten')
+    .regex(/[a-z]/, 'Passwort muss mindestens einen Kleinbuchstaben enthalten')
+    .regex(/[0-9]/, 'Passwort muss mindestens eine Ziffer enthalten')
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Passwort muss mindestens ein Sonderzeichen enthalten'),
 })
 
-// Schéma pour la connexion
 export const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email('Ungültige E-Mail-Adresse'),
+  password: z.string().min(1, 'Passwort ist erforderlich'),
 })
 
-// Schéma pour la demande de réinitialisation de mot de passe
 export const forgotPasswordSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.string().email('Ungültige E-Mail-Adresse'),
 })
 
-// Schéma pour la réinitialisation de mot de passe
 export const resetPasswordSchema = z.object({
-  token: z.string().min(1, 'Token is required'),
+  token: z.string().min(1, 'Token ist erforderlich'),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters')
+    .min(8, 'Passwort muss mindestens 8 Zeichen lang sein')
     .max(100)
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number')
-    .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character'),
+    .regex(/[A-Z]/, 'Passwort muss mindestens einen Großbuchstaben enthalten')
+    .regex(/[a-z]/, 'Passwort muss mindestens einen Kleinbuchstaben enthalten')
+    .regex(/[0-9]/, 'Passwort muss mindestens eine Ziffer enthalten')
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Passwort muss mindestens ein Sonderzeichen enthalten'),
 })
 
 export type RegisterInput = z.infer<typeof registerSchema>
