@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
       entityId: asset.id,
       userId: authz.session.user.id,
       newValues: asset,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 
@@ -119,18 +119,16 @@ export async function DELETE(req: NextRequest) {
     if (!publicId) return NextResponse.json({ error: "publicId required" }, { status: 400 })
 
     const before = await prisma.mediaAsset.findUnique({ where: { publicId } })
-    if (before) {
-      await prisma.mediaAsset.delete({ where: { publicId } })
-    }
 
     try {
       await deleteImage(publicId)
     } catch (cloudErr) {
-      if (before) {
-        await prisma.mediaAsset.create({ data: before })
-      }
-      logError("[MEDIA_DELETE_CLOUDINARY_ROLLBACK]", cloudErr)
-      return NextResponse.json({ error: "Cloudinary-Löschfehlgeschlagen, Medium wiederhergestellt" }, { status: 500 })
+      logError("[MEDIA_DELETE_CLOUDINARY]", cloudErr)
+      return NextResponse.json({ error: "Cloudinary-Löschfehlgeschlagen" }, { status: 500 })
+    }
+
+    if (before) {
+      await prisma.mediaAsset.delete({ where: { publicId } })
     }
 
     if (before) {
@@ -140,7 +138,7 @@ export async function DELETE(req: NextRequest) {
         entityId: before.id,
         userId: authz.session.user.id,
         oldValues: before,
-        ipAddress: req.headers.get("x-forwarded-for"),
+        ipAddress: getIP(req),
         userAgent: req.headers.get("user-agent"),
       })
     }

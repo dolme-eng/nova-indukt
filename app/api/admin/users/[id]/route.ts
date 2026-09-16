@@ -55,7 +55,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       userId: authz.session.user.id,
       oldValues: { role: before.role },
       newValues: { role: user.role },
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 

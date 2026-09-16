@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       entityId: promotion.id,
       userId: authz.session.user.id,
       newValues: promotion,
-      ipAddress: request.headers.get('x-forwarded-for'),
+      ipAddress: getIP(request),
       userAgent: request.headers.get('user-agent'),
     })
 

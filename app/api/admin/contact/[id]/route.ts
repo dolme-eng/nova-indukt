@@ -40,7 +40,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       userId: authz.session.user.id,
       oldValues: { status: existing.status },
       newValues: { status },
-      ipAddress: request.headers.get('x-forwarded-for'),
+      ipAddress: getIP(request),
     }).catch((err) => logError('[CONTACT_UPDATE_AUDIT]', err))
 
     return NextResponse.json({ data: updated })
@@ -77,7 +77,7 @@ export async function DELETE(
       entityId: id,
       userId: authz.session.user.id,
       oldValues: { name: existing.name, email: existing.email, subject: existing.subject },
-      ipAddress: request.headers.get('x-forwarded-for'),
+      ipAddress: getIP(request),
     }).catch((err) => logError('[CONTACT_DELETE_AUDIT]', err))
 
     return NextResponse.json({ success: true })

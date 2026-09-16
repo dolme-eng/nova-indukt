@@ -64,7 +64,7 @@ export async function PUT(
       userId: authz.session.user.id,
       oldValues: currentPost,
       newValues: post,
-      ipAddress: request.headers.get("x-forwarded-for"),
+      ipAddress: getIP(request),
       userAgent: request.headers.get("user-agent"),
     })
 
@@ -102,7 +102,7 @@ export async function DELETE(
       entityId: id,
       userId: authz.session.user.id,
       oldValues: post,
-      ipAddress: request.headers.get("x-forwarded-for"),
+      ipAddress: getIP(request),
       userAgent: request.headers.get("user-agent"),
     })
 

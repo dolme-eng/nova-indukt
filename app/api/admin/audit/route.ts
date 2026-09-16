@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
-import { auditLog } from "@/lib/admin/audit"
 import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { logError } from "@/lib/logger"
 
@@ -29,16 +28,6 @@ export async function GET(req: NextRequest) {
         userId: true,
         createdAt: true,
       },
-    })
-
-    await auditLog({
-      action: "READ",
-      entityType: "AuditLog",
-      entityId: "list",
-      userId: authz.session.user.id,
-      newValues: { count: items.length, take, hasCursor: !!cursor },
-      ipAddress: req.headers.get("x-forwarded-for"),
-      userAgent: req.headers.get("user-agent"),
     })
 
     const response = NextResponse.json({

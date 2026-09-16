@@ -132,6 +132,15 @@ export async function addToCart(productId: string, quantity: number = 1) {
   }
   const { productId: validProductId, quantity: validQuantity } = parsed.data
 
+  // Verify product exists and is active
+  const product = await prisma.product.findUnique({
+    where: { id: validProductId },
+    select: { isActive: true },
+  })
+  if (!product || !product.isActive) {
+    return { error: 'Produkt nicht gefunden oder nicht verfügbar' }
+  }
+
   try {
     const cart = await getCartMeta()
 

@@ -91,7 +91,7 @@ export async function PUT(req: NextRequest) {
       userId: authz.session.user.id,
       oldValues: before?.data ?? null,
       newValues: cfg.data,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 

@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       entityId: item.id,
       userId: authz.session.user.id,
       newValues: item,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 

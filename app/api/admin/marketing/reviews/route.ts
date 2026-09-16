@@ -79,7 +79,7 @@ export async function PATCH(req: NextRequest) {
         userId: authz.session.user.id,
         oldValues: { isPublished: before?.isPublished },
         newValues: { isPublished },
-        ipAddress: req.headers.get("x-forwarded-for"),
+        ipAddress: getIP(req),
         userAgent: req.headers.get("user-agent"),
       })
 
@@ -101,7 +101,7 @@ export async function PATCH(req: NextRequest) {
         userId: authz.session.user.id,
         oldValues: { isVerified: before?.isVerified },
         newValues: { isVerified },
-        ipAddress: req.headers.get("x-forwarded-for"),
+        ipAddress: getIP(req),
         userAgent: req.headers.get("user-agent"),
       })
 
@@ -154,7 +154,7 @@ export async function DELETE(req: NextRequest) {
       entityId: id,
       userId: authz.session.user.id,
       oldValues: before,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 

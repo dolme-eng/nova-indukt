@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       entityId: page.id,
       userId: authz.session.user.id,
       newValues: page,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 

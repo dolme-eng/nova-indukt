@@ -43,7 +43,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
       userId: authz.session.user.id,
       oldValues: before,
       newValues: item,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 
@@ -77,7 +77,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
       entityId: before.id,
       userId: authz.session.user.id,
       oldValues: before,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 

@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         format: result.format,
         size: result.bytes,
       },
-      ipAddress: request.headers.get('x-forwarded-for'),
+      ipAddress: getIP(request),
       userAgent: request.headers.get('user-agent'),
     })
 

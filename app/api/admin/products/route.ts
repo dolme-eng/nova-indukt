@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
       entityId: product.id,
       userId: authz.session.user.id,
       newValues: { slug: product.slug, nameDe: product.nameDe, price: product.price },
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 

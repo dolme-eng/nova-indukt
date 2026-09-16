@@ -120,7 +120,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       userId: authz.session.user.id,
       oldValues: { paymentStatus: previousPaymentStatus },
       newValues: { paymentStatus },
-      ipAddress: request.headers.get('x-forwarded-for'),
+      ipAddress: getIP(request),
       userAgent: request.headers.get('user-agent'),
     })
 

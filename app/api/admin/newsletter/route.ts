@@ -36,7 +36,7 @@ export async function DELETE(req: NextRequest) {
       entityId: id,
       userId: authz.session.user.id,
       oldValues: { email: subscriber.email },
-      ipAddress: req.headers.get('x-forwarded-for'),
+      ipAddress: getIP(req),
       userAgent: req.headers.get('user-agent'),
     })
 

@@ -66,7 +66,7 @@ export async function PATCH(
       userId: authz.session.user.id,
       oldValues: before,
       newValues: product,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 
@@ -103,7 +103,7 @@ export async function DELETE(
       entityId: id,
       userId: authz.session.user.id,
       oldValues: before,
-      ipAddress: req.headers.get("x-forwarded-for"),
+      ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
 
