@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
         },
         price: Number(item.product.price),
         oldPrice: item.product.oldPrice ? Number(item.product.oldPrice) : null,
-        image: item.product.images.find(img => img.isMain)?.url || item.product.images[0]?.url,
+        image: item.product.images.find(img => img.isMain)?.url || item.product.images[0]?.url || '/placeholder.svg',
         slug: item.product.slug,
         category: item.product.category?.nameDe,
         addedAt: item.createdAt,

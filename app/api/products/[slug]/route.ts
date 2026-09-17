@@ -20,8 +20,9 @@ export async function GET(
         images: true
       }
     })
-    
-    if (!product) {
+
+    // Inactive/hidden products must not be enumerable via public API
+    if (!product || !product.isActive) {
       return NextResponse.json(
         { error: "Produkt nicht gefunden" },
         { status: 404 }
@@ -40,8 +41,12 @@ export async function GET(
       })
     ])
     
+    // Strip internal fields (costPrice, supplierSku) — never expose to public
+    const { costPrice, supplierSku, ...publicProduct } = product
+    void costPrice
+    void supplierSku
     const response = NextResponse.json({
-      ...product,
+      ...publicProduct,
       price: Number(product.price),
       oldPrice: product.oldPrice ? Number(product.oldPrice) : null,
       reviews: reviews.map(review => ({

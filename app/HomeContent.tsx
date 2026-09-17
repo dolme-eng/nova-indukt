@@ -276,7 +276,7 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.images[0],
+      image: product.images[0] || '/placeholder.svg',
       slug: product.slug,
     })
   }
@@ -291,7 +291,7 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
         {/* Image Section - Perfect Square */}
         <div className="relative aspect-square overflow-hidden bg-[#fdfdfd]">
           <Image
-            src={product.images[0]}
+            src={product.images[0] || '/placeholder.svg'}
             alt={product.name.de}
             fill
             className="object-contain p-3 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110 sm:p-5"
@@ -408,7 +408,7 @@ const FlashDealCard = memo(function FlashDealCard({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.images[0],
+      image: product.images[0] || '/placeholder.svg',
       slug: product.slug,
     })
   }
@@ -431,7 +431,7 @@ const FlashDealCard = memo(function FlashDealCard({
         className="relative block aspect-square overflow-hidden bg-[#fdfdfd]"
       >
         <Image
-          src={product.images[0]}
+          src={product.images[0] || '/placeholder.svg'}
           alt={product.name.de}
           fill
           className="object-contain p-6 mix-blend-multiply transition-transform duration-700 group-hover:scale-110"

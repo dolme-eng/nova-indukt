@@ -957,7 +957,7 @@ export default function CheckoutContent() {
                   >
                     <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
                       <Image
-                        src={item.product.images[0]}
+                        src={item.product.images[0] || '/placeholder.svg'}
                         alt={item.product.name.de}
                         fill
                         className="object-contain p-2 mix-blend-multiply"

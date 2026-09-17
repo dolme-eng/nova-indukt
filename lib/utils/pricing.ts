@@ -15,32 +15,38 @@ export interface PricingItem {
  * Calculate order totals from a list of TTC-priced items.
  *
  * - `subtotal` = sum of (unitPrice × quantity) — already TTC
- * - `tax`      = TVA extraite du subtotal TTC (correct: subtotal − subtotal/1.19)
- * - `total`    = subtotal + shipping (TVA is already included in subtotal)
+ * - `discount` = coupon/promo reduction (TTC) — reduces taxable base
+ * - `tax`      = TVA extraite du NET TTC (subtotal + shipping − discount)
+ * - `total`    = subtotal + shipping − discount (TVA already included)
  */
 export function calculateOrderTotals(
-  items: PricingItem[], 
+  items: PricingItem[],
   shippingCost: number | string = 0,
   overrideTotal?: number | string | null,
-  overrideSubtotal?: number | string | null
+  overrideSubtotal?: number | string | null,
+  discount?: number | string | null
 ) {
   const calculatedSubtotal = items.reduce(
-    (sum, item) => sum + (Number(item.price) * item.quantity), 
+    (sum, item) => sum + (Number(item.price) * item.quantity),
     0
   )
-  
+
   const subtotal = overrideSubtotal ? Number(overrideSubtotal) : calculatedSubtotal
   const shipping = Number(shippingCost) || 0
+  const discountAmount = Math.max(0, Number(discount) || 0)
 
-  // TVA extraite du montant TTC TOTAL (subtotal + shipping)
-  const tax = vatFromGross(subtotal + shipping, VAT_RATE_PERCENT)
+  const netBase = Math.max(0, subtotal + shipping - discountAmount)
 
-  // Le total est subtotal + shipping
-  const total = overrideTotal ? Number(overrideTotal) : subtotal + shipping
+  // TVA extraite du montant TTC NET (subtotal + shipping − discount)
+  const tax = vatFromGross(netBase, VAT_RATE_PERCENT)
+
+  // Le total est subtotal + shipping − discount
+  const total = overrideTotal ? Number(overrideTotal) : netBase
 
   return {
     subtotal,
     shipping,
+    discount: discountAmount,
     tax,
     total
   }

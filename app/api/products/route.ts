@@ -77,11 +77,17 @@ export async function GET(request: NextRequest) {
     ])
     
     const response = NextResponse.json({
-      products: products.map(product => ({
-        ...product,
-        price: Number(product.price),
-        oldPrice: product.oldPrice ? Number(product.oldPrice) : null,
-      })),
+      // Strip internal fields (costPrice, supplierSku) — never expose to public
+      products: products.map((product) => {
+        const { costPrice, supplierSku, ...publicProduct } = product
+        void costPrice
+        void supplierSku
+        return {
+          ...publicProduct,
+          price: Number(product.price),
+          oldPrice: product.oldPrice ? Number(product.oldPrice) : null,
+        }
+      }),
       pagination: {
         page,
         limit,

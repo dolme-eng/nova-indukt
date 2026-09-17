@@ -30,6 +30,7 @@ interface OrderConfirmationEmailProps {
   items: OrderItem[]
   subtotal: number
   shipping: number
+  discount?: number
   tax: number
   total: number
   paymentMethod?: string
@@ -51,6 +52,7 @@ export const OrderConfirmationEmail = ({
   items,
   subtotal,
   shipping,
+  discount = 0,
   tax,
   total,
   paymentMethod,
@@ -134,8 +136,14 @@ export const OrderConfirmationEmail = ({
                 {shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}
               </Column>
             </Row>
+            {discount > 0 && (
+              <Row style={totalRow}>
+                <Column style={totalLabel}>Rabatt</Column>
+                <Column style={totalValue}>-{formatPrice(discount)}</Column>
+              </Row>
+            )}
             <Row style={totalRow}>
-              <Column style={totalLabel}>MwSt. (19%)</Column>
+              <Column style={totalLabel}>inkl. MwSt. (19%)</Column>
               <Column style={totalValue}>{formatPrice(tax)}</Column>
             </Row>
             <Row style={grandTotalRow}>

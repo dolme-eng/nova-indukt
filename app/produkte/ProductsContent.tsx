@@ -171,7 +171,7 @@ export function ProductsContent({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.images[0],
+      image: product.images[0] || '/placeholder.svg',
       slug: product.slug,
     })
   }
@@ -663,7 +663,7 @@ export function ProductsContent({
                                     {/* Image Section - Perfect Square */}
                                     <div className="relative aspect-square overflow-hidden bg-[#fdfdfd]">
                                       <Image
-                                        src={product.images[0]}
+                                        src={product.images[0] || '/placeholder.svg'}
                                         alt={product.name.de}
                                         fill
                                         className={`object-contain p-3 mix-blend-multiply transition-all duration-700 ease-out group-hover:scale-110 sm:p-5`}
@@ -789,7 +789,7 @@ export function ProductsContent({
                                       <div className="absolute inset-0 bg-white" />
                                       <div className="relative aspect-[3/4] w-full sm:aspect-auto sm:h-full">
                                         <Image
-                                          src={product.images[0]}
+                                          src={product.images[0] || '/placeholder.svg'}
                                           alt={product.name.de}
                                           fill
                                           className={`object-contain p-2 mix-blend-multiply transition-all duration-700 sm:p-4 ${product.images[1] ? 'group-hover:scale-95 group-hover:opacity-0' : 'group-hover:scale-105'}`}

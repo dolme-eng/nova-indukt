@@ -16,6 +16,9 @@ interface InvoiceData {
   shipping: number
   total: number
   createdAt: Date
+  discount?: number
+  tax?: number
+  customerName?: string
 }
 
 export function generateInvoicePDF(data: InvoiceData): jsPDF {
@@ -45,6 +48,12 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   doc.text(data.orderNumber, 80, 85)
   doc.text(data.createdAt.toLocaleDateString('de-DE'), 80, 92)
   doc.text('Banküberweisung', 80, 99)
+  if (data.customerName) {
+    doc.setFont('helvetica', 'bold')
+    doc.text('Kunde:', 20, 106)
+    doc.setFont('helvetica', 'normal')
+    doc.text(data.customerName, 80, 106)
+  }
 
   // Table header
   const tableTop = 120
@@ -86,6 +95,20 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   currentY += 10
   doc.text('Versand:', 120, currentY)
   doc.text(data.shipping === 0 ? 'Kostenlos' : formatPriceDe(data.shipping), 170, currentY)
+
+  if (data.discount && data.discount > 0) {
+    currentY += 10
+    doc.text('Rabatt:', 120, currentY)
+    doc.text(`-${formatPriceDe(data.discount)}`, 170, currentY)
+  }
+
+  if (data.tax !== undefined) {
+    currentY += 10
+    doc.setFontSize(9)
+    doc.text('inkl. MwSt. (19 %):', 120, currentY)
+    doc.text(formatPriceDe(data.tax), 170, currentY)
+    doc.setFontSize(10)
+  }
 
   currentY += 10
   doc.setFont('helvetica', 'bold')

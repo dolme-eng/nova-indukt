@@ -246,6 +246,7 @@ model Review {
   user        User?                @relation(fields: [userId], references: [id])
   helpfulVotes ReviewHelpfulVote[]
 
+  @@unique([userId, productId])
   @@index([productId])
   @@index([userId])
   @@index([productId, isPublished, createdAt])

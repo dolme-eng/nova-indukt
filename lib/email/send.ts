@@ -112,6 +112,7 @@ interface SendOrderConfirmationParams {
   items: OrderItem[]
   subtotal: number
   shipping: number
+  discount?: number
   tax: number
   total: number
   paymentMethod?: string
@@ -134,6 +135,7 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
         })),
         subtotal: params.subtotal,
         shipping: params.shipping,
+        discount: params.discount ?? 0,
         tax: params.tax,
         total: params.total,
         paymentMethod: params.paymentMethod,
@@ -160,8 +162,11 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
       })),
       subtotal: params.subtotal,
       shipping: params.shipping,
+      discount: params.discount ?? 0,
+      tax: params.tax,
       total: params.total,
       createdAt: params.orderDate ? new Date(params.orderDate) : new Date(),
+      customerName: params.customerName,
     })
 
     const pdfBuffer = Buffer.from(invoicePDF.output('arraybuffer'))
@@ -352,12 +357,13 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
 
     const shippingAddr = order.shippingAddress as Record<string, string>
 
-    // Calculate totals using shared utility
+    // Calculate totals using shared utility (discount-aware: VAT on net base)
     const totals = calculateOrderTotals(
       order.items.map((item) => ({ price: Number(item.unitPrice), quantity: item.quantity })),
       Number(order.shippingCost),
       Number(order.total),
-      Number(order.subtotal)
+      Number(order.subtotal),
+      Number(order.discountAmount) || 0
     )
 
     // Calculate estimated delivery (business days)
@@ -377,6 +383,7 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
       })),
       subtotal: totals.subtotal,
       shipping: totals.shipping,
+      discount: totals.discount,
       tax: totals.tax,
       total: totals.total,
       paymentMethod: order.paymentMethod,

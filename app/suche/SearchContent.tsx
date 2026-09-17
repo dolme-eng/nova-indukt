@@ -312,7 +312,7 @@ function ProductCard({
           className={`relative flex-shrink-0 bg-gray-50 ${viewMode === 'list' ? 'w-2/5 sm:w-48' : 'aspect-square'}`}
         >
           <Image
-            src={product.images[0]}
+            src={product.images[0] || '/placeholder.svg'}
             alt={product.name.de}
             fill
             sizes="(max-width: 640px) 40vw, (max-width: 1024px) 48px, 33vw"

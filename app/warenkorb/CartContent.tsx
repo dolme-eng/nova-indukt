@@ -191,7 +191,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                         className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 sm:h-32 sm:w-32"
                       >
                         <Image
-                          src={item.product.images[0]}
+                          src={item.product.images[0] || '/placeholder.svg'}
                           alt={item.product.name.de}
                           fill
                           className="object-contain p-2 mix-blend-multiply transition-transform duration-500 hover:scale-110"
@@ -327,7 +327,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                         >
                           <div className="relative h-16 w-16 flex-shrink-0 rounded-xl bg-gray-50">
                             <Image
-                              src={item.images[0]}
+                              src={item.images[0] || '/placeholder.svg'}
                               alt={item.name.de}
                               fill
                               className="object-contain p-2 mix-blend-multiply transition-transform duration-500 group-hover:scale-110"

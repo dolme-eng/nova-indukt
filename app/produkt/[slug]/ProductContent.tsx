@@ -91,7 +91,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.images[0],
+      image: product.images[0] || '/placeholder.svg',
       slug: product.slug,
     })
     setWishlistToastMessage(added ? 'Zur Wunschliste hinzugefügt' : 'Von Wunschliste entfernt')
@@ -154,7 +154,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <div className="relative hidden h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-gray-50 sm:block">
                   <Image
-                    src={product.images[0]}
+                    src={product.images[0] || '/placeholder.svg'}
                     alt={product.name.de}
                     fill
                     className="object-cover p-0.5 mix-blend-multiply"
@@ -804,7 +804,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-100/50 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] sm:rounded-2xl">
                       <div className="relative aspect-square overflow-hidden bg-[#fdfdfd]">
                         <Image
-                          src={item.images[0]}
+                          src={item.images[0] || '/placeholder.svg'}
                           alt={item.name.de}
                           fill
                           className="object-contain p-3 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110 sm:p-5"

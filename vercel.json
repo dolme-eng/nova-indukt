@@ -9,6 +9,12 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     }
   ],
+  "crons": [
+    {
+      "path": "/api/cron/review-requests",
+      "schedule": "0 10 * * *"
+    }
+  ],
   "redirects": [
     {
       "source": "/www.nova-indukt.de/:path*",

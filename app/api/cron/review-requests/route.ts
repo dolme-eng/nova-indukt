@@ -5,12 +5,21 @@ import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import crypto from 'crypto'
 
 /**
- * POST: Send review request emails
- * Cron: 0 10 * * * (Every day at 10 AM)
- * 
+ * Send review request emails.
+ * Cron: 0 10 * * * (Every day at 10 AM, see vercel.json).
+ * Vercel Cron invokes GET — POST kept for manual/external triggers.
+ *
  * This checks for orders delivered 7 days ago and sends review requests
  */
+export async function GET(request: NextRequest) {
+  return runReviewRequests(request)
+}
+
 export async function POST(request: NextRequest) {
+  return runReviewRequests(request)
+}
+
+async function runReviewRequests(request: NextRequest) {
   const ip = getIP(request)
   const { success } = await rateLimit(createRateLimitKey(ip, 'cron:review-requests'), { windowMs: 60_000, maxRequests: 5 })
   if (!success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })

@@ -559,7 +559,9 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     onClick={async () => {
                       try {
                         await fetch(`/api/reviews?id=${review.id}&action=report`, { method: 'PUT' })
-                      } catch {}
+                      } catch (err) {
+                        logError('Failed to report review:', err)
+                      }
                     }}
                     className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
                     aria-label={`Bewertung von ${review.user.displayName} melden`}

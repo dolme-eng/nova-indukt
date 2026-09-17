@@ -26,7 +26,14 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')
-    const published = searchParams.get('published') !== 'false'
+    // Unpublished reviews are moderation queue — admin only
+    const wantsUnpublished = searchParams.get('published') === 'false'
+    if (wantsUnpublished) {
+      const { requireAdmin } = await import('@/lib/admin/require-admin')
+      const authz = await requireAdmin()
+      if (!authz.ok) return NextResponse.json({ error: 'Nicht autorisiert' }, { status: authz.status })
+    }
+    const published = !wantsUnpublished
     const limit = Math.min(Math.max(parseInt(searchParams.get('limit') || '10', 10) || 10, 1), 50)
     const page = Math.max(parseInt(searchParams.get('page') || '1', 10) || 1, 1)
 
@@ -204,26 +211,43 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Create review (pending approval by default)
-    const review = await prisma.review.create({
-      data: {
-        userId: session.user.id,
-        productId,
-        rating,
-        title,
-        content,
-        isVerified: !!hasPurchased,
-        isPublished: false,
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
+    // Create review (pending approval by default).
+    // P2002 guard: if @@unique([userId, productId]) lands, parallel
+    // double-submit collapses to 409 instead of 500.
+    let review
+    try {
+      review = await prisma.review.create({
+        data: {
+          userId: session.user.id,
+          productId,
+          rating,
+          title,
+          content,
+          isVerified: !!hasPurchased,
+          isPublished: false,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
         },
-      },
-    })
+      })
+    } catch (createError) {
+      const { Prisma } = await import('@prisma/client')
+      if (
+        createError instanceof Prisma.PrismaClientKnownRequestError &&
+        createError.code === 'P2002'
+      ) {
+        return NextResponse.json(
+          { error: 'Sie haben dieses Produkt bereits bewertet' },
+          { status: 409 }
+        )
+      }
+      throw createError
+    }
 
     // NOTE: reviewCount et rating ne sont PAS mis à jour ici.
     // Ils seront recalculés quand l'admin publie la review (isPublished → true).

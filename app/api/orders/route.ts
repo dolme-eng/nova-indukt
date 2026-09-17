@@ -158,11 +158,11 @@ export async function POST(request: NextRequest) {
     for (const item of items) {
       const dbProduct = dbProductMap.get(item.id)
       if (!dbProduct) {
-        return NextResponse.json({ error: `Produkt ${item.name} nicht gefunden` }, { status: 404 })
+        return NextResponse.json({ error: 'Produkt nicht gefunden' }, { status: 404 })
       }
       if (!dbProduct.isActive) {
         return NextResponse.json(
-          { error: `Produkt ${item.name} ist nicht mehr verfügbar` },
+          { error: `Produkt ${dbProduct.nameDe} ist nicht mehr verfügbar` },
           { status: 400 }
         )
       }
@@ -238,7 +238,11 @@ export async function POST(request: NextRequest) {
           shippingCost: serverShipping,
           discountAmount: serverDiscountAmount,
           appliedPromoCode: serverDiscountAmount > 0 ? appliedPromoCode : null,
-          vatAmount: vatFromGross(serverSubtotal + serverShipping, VAT_RATE_PERCENT),
+          // VAT extracted from NET taxable base (gross minus discount)
+          vatAmount: vatFromGross(
+            Math.max(0, serverSubtotal + serverShipping - serverDiscountAmount),
+            VAT_RATE_PERCENT
+          ),
           total: serverTotal,
           items: {
             create: serverItems.map((item) => {

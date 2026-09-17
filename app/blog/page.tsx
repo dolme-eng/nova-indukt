@@ -23,9 +23,23 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
+  // Select only listing fields — contentDe (long markdown) stays in DB
   const posts = await prisma.blogPost.findMany({
     where: { isPublished: true },
-    orderBy: { publishedAt: 'desc' }
+    select: {
+      id: true,
+      slug: true,
+      titleDe: true,
+      excerptDe: true,
+      image: true,
+      publishedAt: true,
+      createdAt: true,
+      readTime: true,
+      category: true,
+      author: true,
+    },
+    orderBy: { publishedAt: 'desc' },
+    take: 100,
   })
 
   // Adapter le format DB au format attendu par le composant
