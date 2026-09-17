@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
@@ -61,10 +62,13 @@ export async function POST(request: NextRequest) {
       entityType: "BlogPost",
       entityId: post.id,
       userId: authz.session.user.id,
-      newValues: post,
+      newValues: { titleDe: post.titleDe, slug: post.slug, isPublished: post.isPublished },
       ipAddress: getIP(request),
       userAgent: request.headers.get("user-agent"),
     })
+
+    revalidatePath('/blog')
+    revalidatePath('/')
 
     return NextResponse.json(post)
   } catch (error) {

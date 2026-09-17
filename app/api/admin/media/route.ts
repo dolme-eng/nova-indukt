@@ -9,8 +9,8 @@ import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
 
 const mediaAssetSchema = z.object({
-  publicId: z.string().min(1),
-  url: z.string().url(),
+  publicId: z.string().min(1).max(200),
+  url: z.string().url().max(2000),
   width: z.number().positive().optional(),
   height: z.number().positive().optional(),
   bytes: z.number().nonnegative().optional(),
@@ -28,14 +28,22 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url)
     const folder = searchParams.get("folder") || undefined
+    // Cursor pagination (publicId is @unique): ?cursor=<publicId> continues
+    // after it. Without cursor the first page is returned.
+    const cursor = searchParams.get("cursor") || undefined
 
     const assets = await prisma.mediaAsset.findMany({
       where: folder ? { folder } : undefined,
       orderBy: { createdAt: "desc" },
+      ...(cursor ? { cursor: { publicId: cursor }, skip: 1 } : {}),
       take: 200,
     })
 
-    return NextResponse.json(assets)
+    return NextResponse.json({
+      assets,
+      nextCursor:
+        assets.length === 200 ? assets[assets.length - 1].publicId : null,
+    })
   } catch (error) {
     logError("[MEDIA_GET]", error)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
@@ -128,7 +136,19 @@ export async function DELETE(req: NextRequest) {
     }
 
     if (before) {
-      await prisma.mediaAsset.delete({ where: { publicId } })
+      try {
+        await prisma.mediaAsset.delete({ where: { publicId } })
+      } catch (dbError) {
+        const { Prisma } = await import("@prisma/client")
+        // P2025 = deleted concurrently after our read
+        if (
+          dbError instanceof Prisma.PrismaClientKnownRequestError &&
+          dbError.code === "P2025"
+        ) {
+          return NextResponse.json({ success: true, deduped: true })
+        }
+        throw dbError
+      }
     }
 
     if (before) {

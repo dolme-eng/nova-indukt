@@ -19,19 +19,24 @@ type MediaAsset = {
 
 export function MediaAdminClient() {
   const [items, setItems] = useState<MediaAsset[]>([])
+  const [nextCursor, setNextCursor] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
   const [folder, setFolder] = useState('nova-indukt/uploads')
 
-  async function refresh() {
+  async function refresh(cursor?: string | null) {
     setIsLoading(true)
     try {
       const qs = new URLSearchParams()
       if (folder) qs.set('folder', folder)
+      if (cursor) qs.set('cursor', cursor)
       const res = await fetch(`/api/admin/media?${qs.toString()}`, { cache: 'no-store' })
       if (!res.ok) throw new Error('Medien konnten nicht geladen werden')
       const json = await res.json()
-      setItems(Array.isArray(json) ? json : [])
+      // API answers { assets, nextCursor } (legacy: plain array)
+      const page: MediaAsset[] = Array.isArray(json) ? json : (json.assets ?? [])
+      setItems((prev) => (cursor ? [...prev, ...page] : page))
+      setNextCursor(Array.isArray(json) ? null : (json.nextCursor ?? null))
     } catch (e: unknown) {
       toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
@@ -160,6 +165,17 @@ export function MediaAdminClient() {
           {items.length === 0 && (
             <div className="col-span-full text-sm text-slate-600">
               Keine Medien in diesem Ordner.
+            </div>
+          )}
+          {nextCursor && (
+            <div className="col-span-full flex justify-center">
+              <button
+                onClick={() => refresh(nextCursor)}
+                disabled={isLoading}
+                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50 disabled:opacity-50"
+              >
+                Weitere laden
+              </button>
             </div>
           )}
         </div>

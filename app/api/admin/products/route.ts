@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
@@ -141,6 +142,10 @@ export async function POST(req: NextRequest) {
       ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })
+
+    // ISR pages (/, /produkte) would otherwise stay stale up to `revalidate`
+    revalidatePath('/')
+    revalidatePath('/produkte')
 
     return NextResponse.json(product)
   } catch (error) {

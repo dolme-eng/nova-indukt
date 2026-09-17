@@ -197,24 +197,19 @@ export async function applyPromotionsToProducts(
 }
 
 /**
- * Incrémente le compteur d'utilisation d'une promotion
+ * Incrémente le compteur d'utilisation d'une promotion.
+ * Single statement (atomic): the read-then-write race that could exceed
+ * usageLimit is impossible — the limit is enforced in the WHERE clause.
+ * Returns false when the promotion is missing or its limit is reached.
  */
-export async function incrementPromotionUsage(promotionId: string): Promise<void> {
-  const promotion = await prisma.promotion.findUnique({ where: { id: promotionId }, select: { usageLimit: true } })
-  if (!promotion) return
-
-  if (promotion.usageLimit !== null) {
-    const result = await prisma.promotion.updateMany({
-      where: { id: promotionId, usageCount: { lt: promotion.usageLimit } },
-      data: { usageCount: { increment: 1 } },
-    })
-    if (result.count === 0) return
-  } else {
-    await prisma.promotion.update({
-      where: { id: promotionId },
-      data: { usageCount: { increment: 1 } },
-    })
-  }
+export async function incrementPromotionUsage(promotionId: string): Promise<boolean> {
+  const result = await prisma.$executeRaw`
+    UPDATE "Promotion"
+    SET "usageCount" = "usageCount" + 1, "updatedAt" = NOW()
+    WHERE "id" = ${promotionId}
+      AND ("usageLimit" IS NULL OR "usageCount" < "usageLimit")
+  `
+  return Number(result) === 1
 }
 
 /**

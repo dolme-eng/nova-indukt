@@ -6,7 +6,7 @@ export const createBlogPostSchema = z.object({
   titleDe: z.string().min(1, 'Titel ist erforderlich').max(200),
   slug: z.string().min(1, 'Slug ist erforderlich').max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug muss gültig sein'),
   excerptDe: z.string().max(500).optional().nullable(),
-  contentDe: z.string().min(1, 'Inhalt ist erforderlich'),
+  contentDe: z.string().min(1, 'Inhalt ist erforderlich').max(100000, 'Inhalt ist zu lang'),
   image: z.string().url().optional().nullable(),
   category: z.string().max(100).optional().nullable(),
   author: z.string().max(100).optional().nullable(),
@@ -24,15 +24,15 @@ export const createPromotionAdminSchema = z.object({
   code: z.string().min(1, 'Code ist erforderlich').max(50).optional().nullable(),
   isCoupon: z.boolean().default(false),
   discountType: z.enum(['PERCENTAGE', 'FIXED_AMOUNT']),
-  discountValue: z.number().positive('Rabattwert muss positiv sein'),
+  discountValue: z.number().positive('Rabattwert muss positiv sein').max(999999.99, 'Rabattwert ist zu hoch'),
   isGlobal: z.boolean().default(false),
   productIds: z.array(z.string().cuid()).max(100).default([]),
   categoryIds: z.array(z.string().cuid()).max(50).default([]),
   startDate: z.string().datetime().or(z.date()),
   endDate: z.string().datetime().or(z.date()),
-  minOrderAmount: z.number().nonnegative().optional().nullable(),
-  maxDiscount: z.number().positive().optional().nullable(),
-  usageLimit: z.number().int().positive().optional().nullable(),
+  minOrderAmount: z.number().nonnegative().max(999999.99).optional().nullable(),
+  maxDiscount: z.number().positive().max(999999.99).optional().nullable(),
+  usageLimit: z.number().int().positive().max(1000000).optional().nullable(),
   badge: z.string().max(50).optional().nullable(),
   bannerText: z.string().max(200).optional().nullable(),
   highlightColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid hex color').optional().nullable(),
@@ -60,7 +60,7 @@ export const updateProductSchema = z.object({
   nameDe: z.string().min(1, 'Name ist erforderlich').max(200),
   slug: z.string().min(1, 'Slug ist erforderlich').max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   ean: z.string().max(20).optional().nullable(),
-  descriptionDe: z.string().optional().nullable(),
+  descriptionDe: z.string().max(5000, 'Beschreibung ist zu lang').optional().nullable(),
   shortDescription: z.string().max(500).optional().nullable(),
   price: z.number().positive('Preis muss positiv sein').max(99999.99, 'Preis darf 99.999,99 € nicht überschreiten'),
   oldPrice: z.number().positive().max(99999.99).optional().nullable(),
@@ -113,13 +113,13 @@ export const marketingReviewSchema = z.discriminatedUnion('action', [
 export const createStaticPageSchema = z.object({
   slug: z.string().min(1, 'Slug ist erforderlich').max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   title: z.string().min(1, 'Titel ist erforderlich').max(200),
-  content: z.string().min(1, 'Inhalt ist erforderlich'),
+  content: z.string().min(1, 'Inhalt ist erforderlich').max(100000, 'Inhalt ist zu lang'),
   isActive: z.boolean().default(true),
 })
 
 export const updateStaticPageSchema = z.object({
   title: z.string().min(1).max(200).optional(),
-  content: z.string().min(1).optional(),
+  content: z.string().min(1).max(100000).optional(),
   isActive: z.boolean().optional(),
 })
 

@@ -89,8 +89,9 @@ export async function PUT(req: NextRequest) {
       entityType: "AppConfig",
       entityId: cfg.id,
       userId: authz.session.user.id,
-      oldValues: before?.data ?? null,
-      newValues: cfg.data,
+      // Keys only: settings payloads may contain secrets (SMTP, tokens)
+      oldValues: before?.data ? { keys: Object.keys(before.data as object) } : null,
+      newValues: { keys: Object.keys((cfg.data ?? {}) as object) },
       ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })

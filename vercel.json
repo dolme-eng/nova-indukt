@@ -13,6 +13,10 @@
     {
       "path": "/api/cron/review-requests",
       "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/promotions/check",
+      "schedule": "0 9 * * *"
     }
   ],
   "redirects": [

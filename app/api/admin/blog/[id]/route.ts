@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
@@ -62,11 +63,15 @@ export async function PUT(
       entityType: "BlogPost",
       entityId: post.id,
       userId: authz.session.user.id,
-      oldValues: currentPost,
-      newValues: post,
+      oldValues: { titleDe: currentPost.titleDe, isPublished: currentPost.isPublished },
+      newValues: { titleDe: post.titleDe, isPublished: post.isPublished },
       ipAddress: getIP(request),
       userAgent: request.headers.get("user-agent"),
     })
+
+    revalidatePath('/blog')
+    revalidatePath('/')
+    revalidatePath(`/blog/${post.slug}`)
 
     return NextResponse.json(post)
   } catch (error) {
@@ -101,10 +106,13 @@ export async function DELETE(
       entityType: "BlogPost",
       entityId: id,
       userId: authz.session.user.id,
-      oldValues: post,
+      oldValues: { titleDe: post.titleDe, slug: post.slug },
       ipAddress: getIP(request),
       userAgent: request.headers.get("user-agent"),
     })
+
+    revalidatePath('/blog')
+    revalidatePath('/')
 
     return NextResponse.json({ success: true })
   } catch (error) {

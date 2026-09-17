@@ -53,9 +53,10 @@ export async function POST(request: NextRequest) {
 
     const { email } = result.data
 
-    // Find user
+    // Find user (id only — never load the password hash for an existence check)
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
+      select: { id: true },
     })
 
     // Always return success to prevent email enumeration

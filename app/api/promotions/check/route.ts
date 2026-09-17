@@ -10,7 +10,16 @@ import crypto from 'crypto'
 // 
 // Cron: 0 9 * * * (Every day at 9 AM)
 // Or: Every 30 minutes (30 * * * *) for more frequent checks
+// Vercel Cron invokes GET — POST kept for manual/external triggers.
+export async function GET(request: NextRequest) {
+  return runPromotionCheck(request)
+}
+
 export async function POST(request: NextRequest) {
+  return runPromotionCheck(request)
+}
+
+async function runPromotionCheck(request: NextRequest) {
   try {
     // Rate-limit before secret check — slows online brute-force of CRON_SECRET
     const { success } = await rateLimit(createRateLimitKey(getIP(request), 'promotions:check'), {

@@ -324,8 +324,17 @@ export async function POST(request: NextRequest) {
         }
       }
 
-        return newOrder
-      })
+      // Clear the buyer's cart in the same transaction: a crash between order
+      // creation and cart clearing previously kept the cart (retry → the
+      // idempotency key now dedupes, but a clean cart is still correct).
+      if (session?.user?.id) {
+        await tx.cartItem.deleteMany({
+          where: { cart: { userId: session.user.id } },
+        })
+      }
+
+      return newOrder
+    })
     } catch (txError) {
       const { Prisma } = await import('@prisma/client')
       if (
@@ -351,17 +360,6 @@ export async function POST(request: NextRequest) {
         }
       }
       throw txError
-    }
-
-    // 4. Clear user's cart if logged in
-    if (session?.user?.id) {
-      await prisma.cartItem.deleteMany({
-        where: {
-          cart: {
-            userId: session.user.id,
-          },
-        },
-      })
     }
 
     // Send order confirmation email

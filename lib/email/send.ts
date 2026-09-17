@@ -332,17 +332,19 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
   try {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
+      // Minimal select: never load User.password hash or full product rows
       include: {
         items: {
           include: {
             product: {
-              include: {
-                images: true,
+              select: {
+                nameDe: true,
+                images: { select: { url: true }, take: 1 },
               },
             },
           },
         },
-        user: true,
+        user: { select: { email: true, name: true } },
       },
     })
 

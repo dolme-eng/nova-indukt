@@ -156,7 +156,10 @@ export async function DELETE(req: NextRequest) {
       entityType: "Review",
       entityId: id,
       userId: authz.session.user.id,
-      oldValues: before,
+      // No full content: review text may contain names/phone numbers (PII)
+      oldValues: before
+        ? { productId: before.productId, rating: before.rating, isPublished: before.isPublished }
+        : null,
       ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })

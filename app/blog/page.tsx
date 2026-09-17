@@ -3,7 +3,9 @@ import { prisma } from '@/lib/prisma'
 import BlogContent from './BlogContent'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
-export const dynamic = 'force-dynamic'
+// ISR (not force-dynamic): the listing is public and cacheable;
+// admin blog writes revalidatePath('/blog').
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Nova Magazin',

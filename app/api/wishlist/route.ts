@@ -23,9 +23,10 @@ export async function GET() {
     }
     
     // Only active products — deactivated items disappear instead of
-    // resurrecting hidden products
+    // resurrecting hidden products. take:200 bounds the payload.
     const wishlistItems = await prisma.wishlistItem.findMany({
       where: { userId: session.user.id, product: { isActive: true } },
+      take: 200,
       include: {
         product: {
           include: {
@@ -124,20 +125,36 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Add to wishlist
-    const wishlistItem = await prisma.wishlistItem.create({
-      data: {
-        userId: session.user.id,
-        productId,
-      },
-      include: {
-        product: {
-          include: {
-            images: true,
+    // Add to wishlist.
+    // P2002 = parallel double-add won the race → same answer as "exists".
+    let wishlistItem
+    try {
+      wishlistItem = await prisma.wishlistItem.create({
+        data: {
+          userId: session.user.id,
+          productId,
+        },
+        include: {
+          product: {
+            include: {
+              images: true,
+            },
           },
         },
-      },
-    })
+      })
+    } catch (createError) {
+      const { Prisma } = await import('@prisma/client')
+      if (
+        createError instanceof Prisma.PrismaClientKnownRequestError &&
+        createError.code === 'P2002'
+      ) {
+        return NextResponse.json(
+          { error: 'Produkt bereits auf der Wunschliste' },
+          { status: 409 }
+        )
+      }
+      throw createError
+    }
     
     return NextResponse.json(
       {

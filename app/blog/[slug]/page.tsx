@@ -12,11 +12,18 @@ import { SHOP_DOMAIN } from '@/lib/constants/shop'
 export const revalidate = 600
 
 export async function generateStaticParams() {
-  const posts = await prisma.blogPost.findMany({
-    where: { isPublished: true },
-    select: { slug: true },
-  })
-  return posts.map((p) => ({ slug: p.slug }))
+  // try/catch: a cold/unreachable Neon at build time must not fail the build
+  // (pages then render on demand via ISR)
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { isPublished: true },
+      select: { slug: true },
+      take: 5000,
+    })
+    return posts.map((p) => ({ slug: p.slug }))
+  } catch {
+    return []
+  }
 }
 
 const getBlogPostBySlug = cache(async (slug: string) => {

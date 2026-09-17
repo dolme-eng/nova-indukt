@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 import { getResend, FROM_EMAIL, FROM_NAME } from './resend'
 import { render } from '@react-email/render'
 import ShippingNotificationEmail from './templates/shipping-notification'
@@ -53,13 +52,20 @@ export async function sendShippingNotification(
   try {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: {
+      // Minimal select: never load User.password hash or full product rows
+      select: {
+        orderNumber: true,
+        customerEmail: true,
+        customerName: true,
+        shippingAddress: true,
         items: {
-          include: {
-            product: true,
+          select: {
+            quantity: true,
+            productName: true,
+            product: { select: { nameDe: true } },
           },
         },
-        user: true,
+        user: { select: { email: true, name: true } },
       },
     })
 
@@ -126,64 +132,68 @@ export async function sendReviewRequests() {
     const oneDayAgo = new Date()
     oneDayAgo.setDate(oneDayAgo.getDate() - 1)
 
-    // Find orders delivered 7 days ago that haven't received review request
+    // Find orders delivered ~7 days ago that haven't received a review request.
+    // deliveredAt (not updatedAt: admin edits must not shift the window).
+    // Guests included via customerEmail. take:100 bounds the Vercel timeout.
     const orders = await prisma.order.findMany({
       where: {
         status: 'DELIVERED',
-        updatedAt: {
+        deliveredAt: {
           gte: sevenDaysAgo,
           lt: oneDayAgo,
         },
-        // M18 FIX: Filter out orders that already received review email
         reviewEmailSentAt: null,
-        user: {
-          isNot: null,
-        },
       },
-      include: {
+      // Minimal select: never load User.password hash or full product rows
+      // (costPrice, supplierSku) just to send an email.
+      select: {
+        id: true,
+        orderNumber: true,
+        customerEmail: true,
+        customerName: true,
         items: {
-          include: {
+          select: {
+            productId: true,
+            productName: true,
             product: {
-              include: {
-                images: true,
+              select: {
+                nameDe: true,
+                slug: true,
+                images: { select: { url: true }, take: 1 },
               },
             },
           },
         },
-        user: true,
+        user: {
+          select: { id: true, email: true, name: true },
+        },
       },
+      orderBy: { deliveredAt: 'asc' },
+      take: 100,
     })
 
-    // Found N orders ready for review requests
-
-    type OrderWithProduct = Prisma.OrderGetPayload<{
-      include: {
-        items: {
-          include: {
-            product: {
-              include: {
-                images: true
-              }
-            }
-          }
-        }
-        user: true
-      }
-    }>
-
-    const results = []
-    const successfulOrderIds: string[] = []
+    const results: Array<{ orderId: string; success: boolean; error?: unknown; id?: string }> = []
+    let sent = 0
 
     for (const order of orders) {
-      const typedOrder = order as OrderWithProduct
-      if (!typedOrder.user?.email) continue
+      const recipientEmail = order.user?.email || order.customerEmail
+      const customerName = order.user?.name || order.customerName || 'Kunde'
+      if (!recipientEmail) continue
+
+      // Atomic per-order claim: concurrent cron runs skip already-claimed rows
+      // instead of double-sending.
+      const claimed = await prisma.order.updateMany({
+        where: { id: order.id, reviewEmailSentAt: null },
+        data: { reviewEmailSentAt: new Date() },
+      })
+      if (claimed.count === 0) continue
 
       try {
         const html = await render(
           ReviewRequestEmail({
-            orderNumber: typedOrder.orderNumber,
-            customerName: typedOrder.user.name || 'Kunde',
-            items: typedOrder.items.map((item) => ({
+            orderNumber: order.orderNumber,
+            customerName,
+            items: order.items.map((item) => ({
               productId: item.productId,
               name: item.product?.nameDe || item.productName || 'Produkt',
               image: item.product?.images?.[0]?.url,
@@ -194,33 +204,34 @@ export async function sendReviewRequests() {
 
         const result = await sendWithRetry({
           from: `${FROM_NAME} <${FROM_EMAIL}>`,
-          to: typedOrder.user.email,
-          subject: `Wie gefällt Ihnen Ihre Bestellung ${typedOrder.orderNumber}?`,
+          to: recipientEmail,
+          subject: `Wie gefällt Ihnen Ihre Bestellung ${order.orderNumber}?`,
           html,
         })
 
         if (result.error || !result.data) {
-          results.push({ orderId: typedOrder.id, success: false, error: result.error })
+          // Release the claim so a later run retries
+          await prisma.order.updateMany({
+            where: { id: order.id },
+            data: { reviewEmailSentAt: null },
+          })
+          results.push({ orderId: order.id, success: false, error: result.error })
           continue
         }
 
-        successfulOrderIds.push(typedOrder.id)
-        results.push({ orderId: typedOrder.id, success: true, id: result.data?.id })
+        sent++
+        results.push({ orderId: order.id, success: true, id: result.data?.id })
       } catch (error) {
         logError(`Failed to send review request for order ${order.id}:`, error)
+        await prisma.order.updateMany({
+          where: { id: order.id },
+          data: { reviewEmailSentAt: null },
+        })
         results.push({ orderId: order.id, success: false, error })
       }
     }
 
-    // Batch update all successfully sent orders (single query instead of N queries)
-    if (successfulOrderIds.length > 0) {
-      await prisma.order.updateMany({
-        where: { id: { in: successfulOrderIds } },
-        data: { reviewEmailSentAt: new Date() },
-      })
-    }
-
-    return { success: true, sent: results.filter((r) => r.success).length, results }
+    return { success: true, sent, results }
   } catch (error) {
     logError('Error in review request batch:', error)
     return { success: false, error }
@@ -265,7 +276,15 @@ export async function sendNewOrderNotification(orderId: string) {
   try {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { items: true },
+      select: {
+        id: true,
+        orderNumber: true,
+        customerName: true,
+        customerEmail: true,
+        total: true,
+        paymentMethod: true,
+        _count: { select: { items: true } },
+      },
     })
 
     if (!order) {
@@ -284,7 +303,7 @@ export async function sendNewOrderNotification(orderId: string) {
         customerName: order.customerName || 'Gast',
         customerEmail: order.customerEmail,
         total: Number(order.total),
-        itemCount: order.items.length,
+        itemCount: order._count.items,
         paymentMethod: order.paymentMethod,
         orderId: order.id,
       })

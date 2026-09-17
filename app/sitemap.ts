@@ -30,10 +30,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
+    // take:5000 bounds memory on Neon serverless (sitemap caps at 50k URLs anyway)
     const [dbProducts, dbCategories, dbBlogPosts] = await Promise.all([
-      prisma.product.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
-      prisma.category.findMany({ where: { isActive: true }, select: { slug: true, createdAt: true } }),
-      prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, publishedAt: true, createdAt: true, updatedAt: true } }),
+      prisma.product.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true }, take: 5000 }),
+      prisma.category.findMany({ where: { isActive: true }, select: { slug: true, createdAt: true }, take: 5000 }),
+      prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, publishedAt: true, createdAt: true, updatedAt: true }, take: 5000 }),
     ])
 
     const productRoutes: MetadataRoute.Sitemap = dbProducts.map((product) => ({
@@ -60,8 +61,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
     return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...blogRoutes]
-  } catch {
-    // DB unavailable at build time — return static routes only
+  } catch (error) {
+    // DB unavailable at build time — return static routes only (logged, not silent)
+    console.error('[sitemap] DB unavailable, serving static routes only:', error)
     return staticRoutes
   }
 }

@@ -174,9 +174,10 @@ export async function POST(request: NextRequest) {
     const title = stripHtml(rawTitle)
     const content = stripHtml(rawContent)
 
-    // Check if product exists
+    // Check if product exists (id only)
     const product = await prisma.product.findUnique({
       where: { id: productId },
+      select: { id: true },
     })
 
     if (!product) {
@@ -329,21 +330,41 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Create vote and increment helpful count in a transaction
-    const [, updated] = await prisma.$transaction([
-      prisma.reviewHelpfulVote.create({
-        data: { userId: session.user.id, reviewId },
-      }),
-      prisma.review.update({
-        where: { id: reviewId },
-        data: { helpful: { increment: 1 } },
-      }),
-    ])
+    // Create vote and increment helpful count in a transaction.
+    // P2002 = parallel double-vote won the race → idempotent success.
+    try {
+      const [, updated] = await prisma.$transaction([
+        prisma.reviewHelpfulVote.create({
+          data: { userId: session.user.id, reviewId },
+        }),
+        prisma.review.update({
+          where: { id: reviewId },
+          data: { helpful: { increment: 1 } },
+        }),
+      ])
 
-    return NextResponse.json({
-      success: true,
-      helpful: updated.helpful,
-    })
+      return NextResponse.json({
+        success: true,
+        helpful: updated.helpful,
+      })
+    } catch (txError) {
+      const { Prisma } = await import('@prisma/client')
+      if (
+        txError instanceof Prisma.PrismaClientKnownRequestError &&
+        txError.code === 'P2002'
+      ) {
+        const current = await prisma.review.findUnique({
+          where: { id: reviewId },
+          select: { helpful: true },
+        })
+        return NextResponse.json({
+          success: true,
+          helpful: current?.helpful ?? 0,
+          deduped: true,
+        })
+      }
+      throw txError
+    }
   } catch (error) {
     logError('Error updating review:', error)
     return NextResponse.json({ error: 'Failed to update review' }, { status: 500 })

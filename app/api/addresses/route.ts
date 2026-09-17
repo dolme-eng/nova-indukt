@@ -170,24 +170,27 @@ export async function PUT(request: NextRequest) {
     }
     
     const data = result.data
-    
-    // If setting as default, unset other defaults
-    if (data.isDefault) {
-      await prisma.address.updateMany({
-        where: { 
-          userId: session.user.id, 
-          isDefault: true,
-          id: { not: addressId }
-        },
-        data: { isDefault: false },
+
+    // Unset-other-defaults + update in one transaction: concurrent PUTs can
+    // otherwise leave 0 or 2 default addresses.
+    const address = await prisma.$transaction(async (tx) => {
+      if (data.isDefault) {
+        await tx.address.updateMany({
+          where: {
+            userId: session.user.id,
+            isDefault: true,
+            id: { not: addressId }
+          },
+          data: { isDefault: false },
+        })
+      }
+
+      return tx.address.update({
+        where: { id: addressId },
+        data,
       })
-    }
-    
-    const address = await prisma.address.update({
-      where: { id: addressId },
-      data,
     })
-    
+
     return NextResponse.json(address)
   } catch (error) {
     logError("Error updating address:", error)

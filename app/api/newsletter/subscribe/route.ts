@@ -78,15 +78,28 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create new subscription
-    const subscriber = await prisma.newsletterSubscriber.create({
-      data: {
-        email,
-        firstName,
-        source,
-        isActive: true,
-      },
-    })
+    // Create new subscription.
+    // P2002 = parallel double-submit won the race → same answer as "exists".
+    let subscriber
+    try {
+      subscriber = await prisma.newsletterSubscriber.create({
+        data: {
+          email,
+          firstName,
+          source,
+          isActive: true,
+        },
+      })
+    } catch (createError) {
+      const { Prisma } = await import('@prisma/client')
+      if (
+        createError instanceof Prisma.PrismaClientKnownRequestError &&
+        createError.code === 'P2002'
+      ) {
+        return NextResponse.json({ error: 'Diese E-Mail ist bereits angemeldet' }, { status: 409 })
+      }
+      throw createError
+    }
 
     // Send confirmation email (non-blocking)
     try {

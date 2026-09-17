@@ -17,7 +17,9 @@ export async function GET(req: NextRequest) {
     if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
 
     const promotions = await prisma.promotion.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      // Bound memory: admin list paginates client-side over this payload
+      take: 500,
     })
 
     return NextResponse.json(promotions)

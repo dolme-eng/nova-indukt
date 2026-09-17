@@ -14,18 +14,18 @@ export const createProductSchema = z.object({
   ean: z.string().max(13, 'EAN must be 13 characters').optional().nullable(),
   descriptionDe: z.string().max(5000, 'Description too long').optional().nullable(),
   shortDescription: z.string().max(500, 'Short description too long').optional().nullable(),
-  price: z.number().positive('Price must be positive'),
-  oldPrice: z.number().positive('Old price must be positive').optional().nullable(),
-  costPrice: z.number().nonnegative('Cost price cannot be negative').optional().nullable(),
+  price: z.number().positive('Price must be positive').max(99999.99, 'Price too high'),
+  oldPrice: z.number().positive('Old price must be positive').max(99999.99).optional().nullable(),
+  costPrice: z.number().nonnegative('Cost price cannot be negative').max(99999.99).optional().nullable(),
   categoryId: z.string().cuid('Invalid category ID'),
   isActive: z.boolean().default(true),
-  weightKg: z.number().nonnegative().optional().nullable(),
+  weightKg: z.number().nonnegative().max(10000).optional().nullable(),
   brand: z.string().max(100, 'Brand name too long').optional().nullable(),
   material: z.string().max(200, 'Material too long').optional().nullable(),
   dimensions: z.string().max(100, 'Dimensions too long').optional().nullable(),
   dishwasherSafe: z.boolean().default(false),
   inductionSafe: z.boolean().default(false),
-  images: z.array(productImageSchema).min(1, 'At least one image is required'),
+  images: z.array(productImageSchema).min(1, 'At least one image is required').max(20, 'Too many images'),
 })
 
 export type CreateProductInput = z.infer<typeof createProductSchema>

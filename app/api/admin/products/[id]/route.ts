@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 import { requireAdmin } from "@/lib/admin/require-admin"
 import { auditLog } from "@/lib/admin/audit"
 import { prisma } from "@/lib/prisma"
@@ -70,6 +71,10 @@ export async function PATCH(
       userAgent: req.headers.get("user-agent"),
     })
 
+    revalidatePath('/')
+    revalidatePath('/produkte')
+    revalidatePath(`/produkt/${product.slug}`)
+
     return NextResponse.json(product)
   } catch (error) {
     logError("[PRODUCT_PATCH]", error)
@@ -107,11 +112,14 @@ export async function DELETE(
       userAgent: req.headers.get("user-agent"),
     })
 
+    revalidatePath('/')
+    revalidatePath('/produkte')
+
     return new NextResponse(null, { status: 204 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
       return NextResponse.json(
-        { error: 'Produkt kann nicht gelöscht werden — es wird noch in Bestellungen oder Warenkörben verwendet' },
+        { error: 'Produkt kann nicht gelöscht werden — es wird noch in Bestellungen, Warenkörben oder Bewertungen verwendet' },
         { status: 409 }
       )
     }

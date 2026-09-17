@@ -10,11 +10,18 @@ import { safeJsonLd } from '@/lib/utils/json-ld'
 export const revalidate = 120
 
 export async function generateStaticParams() {
-  const products = await prisma.product.findMany({
-    where: { isActive: true },
-    select: { slug: true },
-  })
-  return products.map((p) => ({ slug: p.slug }))
+  // try/catch: a cold/unreachable Neon at build time must not fail the build
+  // (pages then render on demand via ISR)
+  try {
+    const products = await prisma.product.findMany({
+      where: { isActive: true },
+      select: { slug: true },
+      take: 5000,
+    })
+    return products.map((p) => ({ slug: p.slug }))
+  } catch {
+    return []
+  }
 }
 
 const getProductBySlug = cache(async (slug: string) => {

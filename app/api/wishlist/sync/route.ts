@@ -101,7 +101,8 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({
       success: true,
-      added: itemsToAdd.length,
+      // Actual additions, not candidates: invalid/inactive ids never reach the DB
+      added: Math.max(0, updatedWishlist.length - existingDbItems.length),
       wishlist: updatedWishlist.map(item => ({
         id: item.product.id,
         wishlistItemId: item.id,

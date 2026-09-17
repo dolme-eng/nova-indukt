@@ -68,9 +68,10 @@ export async function POST(request: NextRequest) {
     const { name: rawName, email, password } = parsed.data
     const name = stripHtml(rawName)
 
-    // Check if user exists
+    // Check if user exists (id only — never load the password hash for an existence check)
     const existingUser = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
+      select: { id: true },
     })
 
     if (existingUser) {
