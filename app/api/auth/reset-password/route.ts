@@ -84,12 +84,14 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Update middleware tokenVersion cache in Redis (do not del — keep key for revocation check)
+    // Update middleware tokenVersion cache in Redis (do not del — keep key for revocation check).
+    // A failed write is logged loudly: the Edge revocation check degrades until
+    // the next login rewrites the key (5-min grace covers fresh tokens).
     const redis = getRedis()
     if (redis) {
       await redis
         .set(`nova:tv:${user.id}`, String(updatedUser.tokenVersion), { ex: 30 * 24 * 3600 })
-        .catch(() => {})
+        .catch((redisError) => logError('[reset-password] tokenVersion cache write failed:', redisError))
     }
 
     return NextResponse.json(

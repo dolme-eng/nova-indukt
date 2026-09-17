@@ -184,7 +184,21 @@ export const useCartStore = create<CartState>()(
 
           try {
             const raw = JSON.parse(str) as CartStorage
-            const persistedItems: CartPersistedItem[] = raw?.state?.items ?? []
+            // Validate shape: localStorage is user-controlled, never trust it blindly
+            const candidates: unknown = raw?.state?.items ?? []
+            const persistedItems: CartPersistedItem[] = (Array.isArray(candidates) ? candidates : [])
+              .filter(
+                (item): item is CartPersistedItem =>
+                  typeof item === 'object' &&
+                  item !== null &&
+                  typeof (item as CartPersistedItem).id === 'string' &&
+                  (item as CartPersistedItem).id.length > 0 &&
+                  Number.isInteger((item as CartPersistedItem).quantity)
+              )
+              .map((item) => ({
+                id: item.id,
+                quantity: Math.min(MAX_QTY, Math.max(1, item.quantity)),
+              }))
             return {
               ...raw,
               state: {

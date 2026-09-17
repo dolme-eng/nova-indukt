@@ -11,7 +11,6 @@ import {
   Hr,
   Link,
 } from '@react-email/components'
-import * as React from 'react'
 import { SHOP_DOMAIN, SUPPORT_EMAIL } from '@/lib/constants/shop'
 
 interface WelcomeEmailProps {

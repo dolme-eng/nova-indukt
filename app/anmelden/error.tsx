@@ -11,7 +11,7 @@ export default function AnmeldenError({
   reset: () => void
 }) {
   useEffect(() => {
-    logError('Page error', error)
+    logError('Page error [/anmelden]', error)
   }, [error])
 
   return (
@@ -29,4 +29,5 @@ export default function AnmeldenError({
     </div>
   )
 }
+
 

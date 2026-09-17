@@ -11,7 +11,7 @@ export default function AdminError({
   reset: () => void
 }) {
   useEffect(() => {
-    logError('Page error', error)
+    logError('Page error [/admin]', error)
   }, [error])
 
   return (
@@ -29,3 +29,4 @@ export default function AdminError({
     </div>
   )
 }
+

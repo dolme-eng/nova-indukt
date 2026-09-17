@@ -14,11 +14,14 @@ export function DeleteSubscriberButton({ subscriberId }: { subscriberId: string 
     setIsDeleting(true)
     try {
       const res = await fetch(`/api/admin/newsletter?id=${subscriberId}`, { method: 'DELETE' })
-      if (!res.ok) throw new Error('Fehler beim Löschen')
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data?.error || 'Fehler beim Löschen')
+      }
       toast.success('Abonnent gelöscht')
       router.refresh()
-    } catch {
-      toast.error('Fehler beim Löschen')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Fehler beim Löschen')
     } finally {
       setIsDeleting(false)
     }

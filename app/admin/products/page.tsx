@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 export const dynamic = 'force-dynamic'
 import Image from 'next/image'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 import { ProductsFilter } from './_components/products-filter'
 import { DeleteProductButton } from './_components/delete-product-button'
@@ -166,11 +167,11 @@ export default async function AdminProductsPage({
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
                       <span className="text-sm font-bold text-slate-900">
-                        {Number(product.price).toFixed(2)} €
+                        {formatPriceDe(Number(product.price))}
                       </span>
                       {product.oldPrice && (
                         <span className="text-xs text-slate-400 line-through">
-                          {Number(product.oldPrice).toFixed(2)} €
+                          {formatPriceDe(Number(product.oldPrice))}
                         </span>
                       )}
                     </div>

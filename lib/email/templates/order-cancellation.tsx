@@ -10,8 +10,8 @@ import {
   Hr,
   Link,
 } from '@react-email/components'
-import * as React from 'react'
 import { SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
+import { formatPriceDe as formatPrice } from '@/lib/utils/vat'
 
 interface OrderCancellationEmailProps {
   orderNumber: string
@@ -26,12 +26,6 @@ export const OrderCancellationEmail = ({
   total,
   reason,
 }: OrderCancellationEmailProps) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(price)
-  }
 
   return (
     <Html>

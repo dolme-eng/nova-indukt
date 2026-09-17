@@ -11,7 +11,7 @@ export default function KategorieError({
   reset: () => void
 }) {
   useEffect(() => {
-    logError('Page error', error)
+    logError('Page error [/kategorie/[id]]', error)
   }, [error])
 
   return (
@@ -29,4 +29,5 @@ export default function KategorieError({
     </div>
   )
 }
+
 

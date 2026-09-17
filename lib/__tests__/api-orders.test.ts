@@ -465,7 +465,7 @@ describe('POST /api/orders', () => {
     const req = makePostRequest(body)
     await POST(req)
 
-    expect(capturedTx!.promotion.update).toHaveBeenCalledWith({
+    expect((capturedTx!.promotion as { update: ReturnType<typeof vi.fn> }).update).toHaveBeenCalledWith({
       where: { id: 'promo-abc' },
       data: { usageCount: { increment: 1 } },
     })

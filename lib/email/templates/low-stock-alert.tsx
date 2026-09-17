@@ -12,7 +12,6 @@ import {
   Hr,
   Button,
 } from '@react-email/components'
-import * as React from 'react'
 
 interface LowStockAlertEmailProps {
   lowStockProducts: Array<{

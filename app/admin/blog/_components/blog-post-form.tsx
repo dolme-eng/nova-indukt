@@ -83,14 +83,17 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
         body: JSON.stringify(formData),
       })
 
-      if (!response.ok) throw new Error('Fehler beim Speichern')
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data?.error || 'Fehler beim Speichern')
+      }
 
       toast.success(initialData ? 'Artikel aktualisiert' : 'Artikel erfolgreich erstellt')
       router.push('/admin/blog')
       router.refresh()
     } catch (error) {
       logError('Failed to save blog post', error)
-      toast.error('Ein Fehler ist aufgetreten')
+      toast.error(error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten')
     } finally {
       setIsSubmitting(false)
     }

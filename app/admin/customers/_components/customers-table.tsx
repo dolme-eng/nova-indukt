@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { formatPriceDe } from '@/lib/utils/vat'
 import {
   Search,
   Mail,
@@ -216,11 +217,11 @@ export default function CustomersTable({ initialCustomers }: { initialCustomers:
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
                         <span className="text-sm font-bold text-emerald-600">
-                          {totalSpent.toFixed(2)} €
+                          {formatPriceDe(totalSpent)}
                         </span>
                         {customer._count.orders > 0 && (
                           <span className="text-[10px] font-bold text-slate-400">
-                            Durchschn. {(totalSpent / customer._count.orders).toFixed(2)} €
+                            Durchschn. {formatPriceDe(totalSpent / customer._count.orders)}
                           </span>
                         )}
                       </div>

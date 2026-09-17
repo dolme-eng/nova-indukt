@@ -125,13 +125,14 @@ export default async function Page() {
       author: p.author,
     }))
     testimonials = dbReviews
-      .filter((r) => r.product)
+      // Type predicate (not a truthiness filter): narrows product to non-null
+      .filter((r): r is typeof r & { product: { nameDe: string } } => r.product !== null)
       .map((r) => ({
         id: r.id,
         name: r.user?.name ?? 'Kunde',
         rating: r.rating,
         comment: r.content,
-        productName: r.product!.nameDe,
+        productName: r.product.nameDe,
         createdAt: r.createdAt.toISOString(),
         isVerified: r.isVerified,
       }))

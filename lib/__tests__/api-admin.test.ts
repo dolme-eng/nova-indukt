@@ -87,7 +87,7 @@ function makeCsrfError(): NextResponse {
 }
 
 function mockRateLimitBlocked(): void {
-  vi.mocked(rateLimit).mockResolvedValue({ success: false } as ReturnType<typeof vi.fn> extends (...args: any) => infer R ? R : never)
+  vi.mocked(rateLimit).mockResolvedValue({ success: false, limit: 0, remaining: 0, resetTime: 0 })
 }
 
 describe('Admin API Routes', () => {

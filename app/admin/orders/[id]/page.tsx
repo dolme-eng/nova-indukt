@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { formatPriceDe } from '@/lib/utils/vat'
 import {
   ArrowLeft,
   Package,
@@ -160,7 +161,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                         </h3>
                       </div>
                       <p className="font-bold text-slate-900">
-                        {(Number(item.unitPrice) * item.quantity).toFixed(2)} €
+                        {formatPriceDe((Number(item.unitPrice) * item.quantity))}
                       </p>
                     </div>
                     <div className="mt-3 flex items-center gap-4 text-sm">
@@ -169,7 +170,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                       </span>
                       <span className="text-slate-400">×</span>
                       <span className="font-medium text-slate-600">
-                        {Number(item.unitPrice).toFixed(2)} € / Einheit
+                        {formatPriceDe(Number(item.unitPrice))} / Einheit
                       </span>
                     </div>
                   </div>
@@ -180,19 +181,19 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
               <div className="ml-auto max-w-sm space-y-3">
                 <div className="flex justify-between text-sm text-slate-600">
                   <span>Zwischensumme</span>
-                  <span>{Number(order.subtotal).toFixed(2)} €</span>
+                  <span>{formatPriceDe(Number(order.subtotal))}</span>
                 </div>
                 <div className="flex justify-between text-sm text-slate-600">
                   <span>Versandkosten</span>
-                  <span>{Number(order.shippingCost).toFixed(2)} €</span>
+                  <span>{formatPriceDe(Number(order.shippingCost))}</span>
                 </div>
                 <div className="flex justify-between text-sm text-slate-600">
                   <span>MwSt. (Inklusive)</span>
-                  <span>{Number(order.vatAmount).toFixed(2)} €</span>
+                  <span>{formatPriceDe(Number(order.vatAmount))}</span>
                 </div>
                 <div className="flex justify-between border-t border-slate-200 pt-3 text-lg font-bold text-slate-900">
                   <span>Gesamt</span>
-                  <span>{Number(order.total).toFixed(2)} €</span>
+                  <span>{formatPriceDe(Number(order.total))}</span>
                 </div>
               </div>
             </div>

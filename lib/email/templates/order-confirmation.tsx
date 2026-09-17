@@ -13,8 +13,8 @@ import {
   Hr,
   Link,
 } from '@react-email/components'
-import * as React from 'react'
 import { SHOP_NAME, SHOP_DOMAIN, SUPPORT_EMAIL } from '@/lib/constants/shop'
+import { formatPriceDe as formatPrice } from '@/lib/utils/vat'
 import { getBankDetailsSync } from '@/lib/data/bank-details'
 
 interface OrderItem {
@@ -60,13 +60,6 @@ export const OrderConfirmationEmail = ({
   estimatedDelivery,
   orderDate,
 }: OrderConfirmationEmailProps) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(price)
-  }
-
   const bank = getBankDetailsSync()
 
   return (

@@ -18,8 +18,8 @@ export const INFO_EMAIL       = COMPANY.email.info
 export const DATENSCHUTZ_EMAIL = COMPANY.email.datenschutz
 export const WIDERRUF_EMAIL   = COMPANY.email.widerruf
 export const NEWSLETTER_EMAIL = COMPANY.email.newsletter
-export const FROM_EMAIL       = COMPANY.email.noreply
-export const FROM_NAME        = COMPANY.nameShort
+// NOTE: no FROM_EMAIL/FROM_NAME here — single source is lib/email/resend.ts
+// (env-driven). Use those imports instead.
 
 /**
  * Returns the shipping cost based on the subtotal.

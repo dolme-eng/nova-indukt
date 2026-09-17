@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { Product, Category } from '@/lib/data/products'
 import { formatPriceDe } from '@/lib/utils/vat'
+import { useDebounce } from '@/lib/hooks/use-debounce'
 import { useCart } from '@/lib/store/cart'
 import { useWishlist } from '@/lib/store/wishlist'
 import { TiltCard } from '@/components/animations'
@@ -60,7 +61,7 @@ export function ProductsContent({
   const { isInWishlist, toggleItem } = useWishlist()
 
   const [searchQuery, setSearchQuery] = useState(initialSearch)
-  const debouncedSearchQuery = useDebouncedValue(searchQuery, 300)
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(activeCategory || null)
   const [priceRange, setPriceRange] = useState<[number, number]>(initialPriceRange)
   const [sortBy, setSortBy] = useState(initialSort)
@@ -949,16 +950,5 @@ export function ProductsContent({
       </div>
     </div>
   )
-}
-
-function useDebouncedValue<T>(value: T, delayMs: number): T {
-  const [debounced, setDebounced] = useState(value)
-
-  useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), delayMs)
-    return () => clearTimeout(t)
-  }, [value, delayMs])
-
-  return debounced
 }
 

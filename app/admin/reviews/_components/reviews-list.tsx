@@ -79,12 +79,15 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
         headers: { 'Content-Type': 'application/json' },
       })
 
-      if (!response.ok) throw new Error()
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data?.error || 'Fehler bei der Aktualisierung')
+      }
 
       setReviews(reviews.map((r) => (r.id === id ? { ...r, isPublished: newPublishedState } : r)))
       toast.success(newPublishedState ? 'Bewertung veröffentlicht' : 'Bewertung ausgeblendet')
-    } catch {
-      toast.error('Fehler bei der Aktualisierung')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Fehler bei der Aktualisierung')
     } finally {
       setIsLoading(null)
     }
@@ -99,12 +102,15 @@ export default function ReviewsList({ initialReviews }: { initialReviews: Review
         method: 'DELETE',
       })
 
-      if (!response.ok) throw new Error()
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data?.error || 'Fehler beim Löschen')
+      }
 
       setReviews(reviews.filter((r) => r.id !== id))
       toast.success('Bewertung gelöscht')
-    } catch {
-      toast.error('Fehler beim Löschen')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Fehler beim Löschen')
     } finally {
       setIsLoading(null)
     }

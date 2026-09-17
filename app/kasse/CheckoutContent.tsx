@@ -86,19 +86,13 @@ export default function CheckoutContent() {
 
   useEffect(() => {
     fetch('/api/bank-details')
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`Bank details API: ${r.status}`)
+        return r.json()
+      })
       .then(setBankDetails)
-      .catch(() => {})
+      .catch((err) => logError('Failed to fetch bank details:', err))
   }, [])
-
-  // Clé d'idempotence: stable par état du panier, régénérée si le panier change.
-  // Les retries/double-clics renvoient la même clé → pas de doublon côté serveur.
-  const cartSignature = JSON.stringify({
-    i: items.map((item) => [item.product.id, item.quantity]),
-    t: total,
-  })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const idempotencyKey = useMemo(() => crypto.randomUUID(), [cartSignature])
 
   // Carnet d'adresses: pré-remplit le formulaire si l'utilisateur en a
   useEffect(() => {
@@ -173,6 +167,16 @@ export default function CheckoutContent() {
   // Same rule as server: free-shipping threshold on DISCOUNTED subtotal
   const shipping = calculateShipping(Math.max(0, subtotal - discountAmount))
   const total = Math.max(0, subtotal + shipping - discountAmount)
+
+  // Clé d'idempotence: stable par état du panier, régénérée si le panier change.
+  // Les retries/double-clics renvoient la même clé → pas de doublon côté serveur.
+  // (Déclarée après `total`: useMemo dépend de la signature du panier.)
+  const cartSignature = JSON.stringify({
+    i: items.map((item) => [item.product.id, item.quantity]),
+    t: total,
+  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const idempotencyKey = useMemo(() => crypto.randomUUID(), [cartSignature])
 
   const validateShippingField = (name: string, value: string) => {
     const result = shippingSchema.safeParse({ ...shippingData, [name]: value })

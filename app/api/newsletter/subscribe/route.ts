@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email (non-blocking)
     try {
-      await sendNewsletterConfirmationEmail(email, firstName)
+      await sendNewsletterConfirmationEmail(email, firstName ?? undefined)
     } catch (emailError) {
       logError('Failed to send newsletter confirmation email:', emailError)
       // Continue - subscription is still created even if email fails

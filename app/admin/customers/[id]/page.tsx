@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { formatPriceDe } from '@/lib/utils/vat'
 import {
   ArrowLeft,
   Mail,
@@ -115,7 +116,7 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
         <StatItem
           label="Gesamtumsatz"
-          value={`${totalSpent.toFixed(2)} €`}
+          value={`${formatPriceDe(totalSpent)}`}
           icon={<Banknote className="text-emerald-600" size={20} />}
           color="bg-emerald-50 border-emerald-100"
         />
@@ -127,7 +128,7 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
         />
         <StatItem
           label="Ø Bestellwert"
-          value={`${averageOrderValue.toFixed(2)} €`}
+          value={`${formatPriceDe(averageOrderValue)}`}
           icon={<TrendingUp className="text-orange-600" size={20} />}
           color="bg-orange-50 border-orange-100"
         />
@@ -168,7 +169,7 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
                     <div className="flex items-center gap-6">
                       <div className="text-right">
                         <p className="font-bold text-slate-900">
-                          {Number(order.total).toFixed(2)} €
+                          {formatPriceDe(Number(order.total))}
                         </p>
                         <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                           {order.items.length} Artikel

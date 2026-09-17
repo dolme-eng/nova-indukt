@@ -11,7 +11,7 @@ export default function WunschlisteError({
   reset: () => void
 }) {
   useEffect(() => {
-    logError('Page error', error)
+    logError('Page error [/wunschliste]', error)
   }, [error])
 
   return (
@@ -29,4 +29,5 @@ export default function WunschlisteError({
     </div>
   )
 }
+
 

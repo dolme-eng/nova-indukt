@@ -13,7 +13,6 @@ import {
   Hr,
   Link,
 } from '@react-email/components'
-import * as React from 'react'
 import { SUPPORT_EMAIL } from '@/lib/constants/shop'
 
 interface ShippingNotificationEmailProps {

@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { formatPriceDe } from '@/lib/utils/vat'
 import {
   Eye,
   Banknote,
@@ -236,7 +237,7 @@ export default async function AdminOrdersPage({
                       href={`/admin/orders/${order.id}`}
                       className="block font-bold text-slate-900"
                     >
-                      {Number(order.total).toFixed(2)} €
+                      {formatPriceDe(Number(order.total))}
                     </Link>
                   </td>
                   <td className="px-6 py-4 text-right">

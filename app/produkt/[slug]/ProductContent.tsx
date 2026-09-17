@@ -109,10 +109,14 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
       void navigator.clipboard
         .writeText(window.location.href)
         .then(() => {
-          import('sonner').then(({ toast }) => toast.success('Link in die Zwischenablage kopiert'))
+          import('sonner')
+            .then(({ toast }) => toast.success('Link in die Zwischenablage kopiert'))
+            .catch(() => {})
         })
         .catch(() => {
-          import('sonner').then(({ toast }) => toast.error('Kopieren fehlgeschlagen'))
+          import('sonner')
+            .then(({ toast }) => toast.error('Kopieren fehlgeschlagen'))
+            .catch(() => {})
         })
     }
   }

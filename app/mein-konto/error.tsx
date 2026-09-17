@@ -11,7 +11,7 @@ export default function MeinKontoError({
   reset: () => void
 }) {
   useEffect(() => {
-    logError('Page error', error)
+    logError('Page error [/mein-konto]', error)
   }, [error])
 
   return (
@@ -29,4 +29,5 @@ export default function MeinKontoError({
     </div>
   )
 }
+
 

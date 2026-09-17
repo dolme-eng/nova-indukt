@@ -15,9 +15,6 @@ async function main() {
   await prisma.productImage.deleteMany({})
   console.log('  🗑️  Images de produits supprimées')
   
-  // Optional: delete cart items related to products
-  // await prisma.cartItem.deleteMany({}) 
-  
   await prisma.product.deleteMany({})
   console.log('  🗑️  Produits supprimés')
 

@@ -93,13 +93,16 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
         }
       )
 
-      if (!response.ok) throw new Error('Ein Fehler ist aufgetreten')
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data?.error || 'Ein Fehler ist aufgetreten')
+      }
 
       toast.success(initialData ? 'Produkt aktualisiert' : 'Produkt erstellt')
       router.push('/admin/products')
       router.refresh()
-    } catch {
-      toast.error('Fehler beim Speichern')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Fehler beim Speichern')
     } finally {
       setIsLoading(false)
     }

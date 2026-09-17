@@ -1,5 +1,6 @@
 import { Html, Head, Preview, Body, Container, Section, Text, Link, Hr, Row, Column } from '@react-email/components'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
+import { formatPriceDe } from '@/lib/utils/vat'
 
 interface NewOrderNotificationEmailProps {
   orderNumber: string
@@ -23,7 +24,7 @@ export default function NewOrderNotificationEmail({
   return (
     <Html>
       <Head />
-      <Preview>Neue Bestellung {orderNumber} — {total.toFixed(2)}€</Preview>
+      <Preview>Neue Bestellung {orderNumber} — {formatPriceDe(total)}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={header}>
@@ -56,7 +57,7 @@ export default function NewOrderNotificationEmail({
               <Row>
                 <Column>
                   <Text style={label}>Gesamtsumme:</Text>
-                  <Text style={valueBold}>{total.toFixed(2)}€</Text>
+                  <Text style={valueBold}>{formatPriceDe(total)}</Text>
                 </Column>
               </Row>
               <Row>

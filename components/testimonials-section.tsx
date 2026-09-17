@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Star, Quote, MessageSquare } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { logError } from '@/lib/logger'
 
 interface Testimonial {
   id: string
@@ -38,9 +39,15 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
   useEffect(() => {
     if (initialTestimonials && initialTestimonials.length > 0) return
     fetch('/api/testimonials')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`Testimonials API: ${res.status}`)
+        return res.json()
+      })
       .then((data) => setTestimonials(data.testimonials ?? []))
-      .catch(() => setTestimonials([]))
+      .catch((err) => {
+        logError('Failed to fetch testimonials:', err)
+        setTestimonials([])
+      })
       .finally(() => setLoading(false))
   }, [initialTestimonials])
 
