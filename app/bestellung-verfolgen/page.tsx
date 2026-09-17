@@ -138,7 +138,7 @@ export default function OrderTrackingPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] py-3 font-semibold text-white transition-colors hover:bg-[#3db892] disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] py-3 font-semibold text-[#0C211E] transition-colors hover:bg-[#3db892] disabled:opacity-50"
             >
               <Search className="h-5 w-5" />
               {loading ? 'Suche...' : 'Bestellung suchen'}
@@ -255,3 +255,4 @@ export default function OrderTrackingPage() {
     </div>
   )
 }
+

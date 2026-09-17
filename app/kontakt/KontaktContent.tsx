@@ -149,7 +149,7 @@ export function KontaktContent() {
               <span>Startseite</span>
             </Link>
             <div className="hidden items-center gap-2.5 lg:flex">
-              <Link href="/" className="text-gray-400 transition-colors hover:text-[#4ECCA3]">
+              <Link href="/" className="text-gray-400 transition-colors hover:text-nova-700">
                 Startseite
               </Link>
               <ChevronRight className="h-3.5 w-3.5 text-gray-300" />
@@ -192,7 +192,7 @@ export function KontaktContent() {
               >
                 <div className="flex items-start gap-6">
                   <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-[#4ECCA3]/10 transition-transform duration-300 group-hover:scale-110">
-                    <item.icon className="h-8 w-8 text-[#4ECCA3]" />
+                    <item.icon className="h-8 w-8 text-nova-700" />
                   </div>
                   <div>
                     <h3 className="mb-2 text-lg font-bold text-[#0C211E]">{item.title}</h3>
@@ -431,3 +431,4 @@ export function KontaktContent() {
     </div>
   )
 }
+

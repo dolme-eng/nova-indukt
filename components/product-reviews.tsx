@@ -229,9 +229,11 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
     }
 
     document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
       previouslyFocused?.focus()
     }
   }, [showReviewForm])
@@ -306,7 +308,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
           {session?.user ? (
             <button
               onClick={() => setShowReviewForm(true)}
-              className="rounded-xl bg-[#4ECCA3] px-6 py-3 font-medium text-white transition-colors hover:bg-[#3BA88A]"
+              className="rounded-xl bg-[#4ECCA3] px-6 py-3 font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A]"
             >
               Bewertung schreiben
             </button>
@@ -351,9 +353,9 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                   <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{submitError}</div>
                 )}
 
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">Bewertung</label>
-                  <div className="flex gap-2">
+                <fieldset>
+                  <legend className="mb-2 block text-sm font-medium text-gray-700">Bewertung</legend>
+                  <div className="flex gap-2" role="radiogroup" aria-label="Sternebewertung">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <label
                         key={star}
@@ -370,8 +372,10 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                           className="sr-only"
                           checked={selectedRating === star}
                           onChange={() => setSelectedRating(star)}
+                          aria-label={`${star} von 5 Sternen`}
                         />
                         <Star
+                          aria-hidden="true"
                           className={`h-8 w-8 transition-colors ${
                             star <= (hoverRating || selectedRating)
                               ? 'fill-amber-400 text-amber-400'
@@ -381,32 +385,32 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                       </label>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">Titel</label>
+                  <label htmlFor="review-title" className="mb-1 block text-sm font-medium text-gray-700">Titel</label>
                   <input
+                    id="review-title"
                     name="title"
                     required
                     minLength={3}
                     maxLength={100}
-                    aria-label="Bewertungstitel"
                     className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-[#4ECCA3] focus:outline-none"
                     placeholder="Zusammenfassung Ihrer Erfahrung"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                  <label htmlFor="review-content" className="mb-1 block text-sm font-medium text-gray-700">
                     Ihre Bewertung
                   </label>
                   <textarea
+                    id="review-content"
                     name="content"
                     required
                     minLength={10}
                     maxLength={2000}
                     rows={4}
-                    aria-label="Ihre Bewertung"
                     className="w-full resize-none rounded-lg border border-gray-200 px-4 py-2 focus:border-[#4ECCA3] focus:outline-none"
                     placeholder="Was hat Ihnen gefallen oder nicht gefallen?"
                   />
@@ -424,7 +428,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] py-3 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] py-3 font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
                 >
                   {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
                   Bewertung absenden
@@ -533,7 +537,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                       onClick={() =>
                         setExpandedReview(expandedReview === review.id ? null : review.id)
                       }
-                      className="mt-2 text-sm font-medium text-[#4ECCA3] hover:underline"
+                      className="mt-2 text-sm font-medium text-nova-700 hover:underline"
                     >
                       {expandedReview === review.id ? 'Weniger anzeigen' : 'Weiterlesen'}
                     </button>
@@ -546,7 +550,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     onClick={() => markHelpful(review.id)}
                     className={`flex items-center gap-1.5 text-sm ${
                       helpfulReviews.includes(review.id)
-                        ? 'text-[#4ECCA3]'
+                        ? 'text-nova-700'
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -581,7 +585,7 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
             {filterRating !== null && (
               <button
                 onClick={clearFilters}
-                className="mt-2 font-medium text-[#4ECCA3] hover:underline"
+                className="mt-2 font-medium text-nova-700 hover:underline"
               >
                 Filter zurücksetzen
               </button>
@@ -604,3 +608,4 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
     </div>
   )
 }
+

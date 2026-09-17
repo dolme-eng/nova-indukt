@@ -68,7 +68,7 @@ export default async function ImpressumPage() {
             <div className="space-y-2 text-gray-700">
               <p>
                 Telefon:{' '}
-                <a href={`tel:${COMPANY.phone.numberRaw}`} className="hover:text-[#4ECCA3]">
+                <a href={`tel:${COMPANY.phone.numberRaw}`} className="hover:text-nova-700">
                   {COMPANY.phone.number}
                 </a>
               </p>
@@ -126,7 +126,7 @@ export default async function ImpressumPage() {
               href="https://ec.europa.eu/consumers/odr"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#4ECCA3] hover:underline"
+              className="text-nova-700 hover:underline"
             >
               https://ec.europa.eu/consumers/odr
             </a>
@@ -184,3 +184,4 @@ export default async function ImpressumPage() {
     </div>
   )
 }
+

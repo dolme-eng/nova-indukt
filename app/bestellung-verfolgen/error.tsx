@@ -22,10 +22,11 @@ export default function BestellungVerfolgenError({
       </p>
       <button
         onClick={reset}
-        className="rounded-xl bg-[#4ECCA3] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#3BA88A]"
+        className="rounded-xl bg-[#4ECCA3] px-6 py-3 font-semibold text-[#0C211E] transition-colors hover:bg-[#3BA88A]"
       >
         Erneut versuchen
       </button>
     </div>
   )
 }
+

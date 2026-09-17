@@ -78,7 +78,7 @@ export default async function WiderrufPage() {
                 <p className="mt-4">
                   mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief, Telefax oder E-Mail) 
                   über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte 
-                  <Link href="#widerrufsformular" className="text-[#4ECCA3] hover:underline ml-1">Muster-Widerrufsformular</Link> verwenden, das jedoch nicht vorgeschrieben ist.
+                  <Link href="#widerrufsformular" className="text-nova-700 hover:underline ml-1">Muster-Widerrufsformular</Link> verwenden, das jedoch nicht vorgeschrieben ist.
                 </p>
               </div>
 
@@ -148,17 +148,19 @@ export default async function WiderrufPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Datum</label>
-                    <input 
-                      type="date" 
+                    <label htmlFor="widerruf-datum" className="block text-sm font-medium text-gray-700 mb-1">Datum</label>
+                    <input
+                      id="widerruf-datum"
+                      type="date"
                       className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über den Kauf der folgenden Waren (*)/die Erbringung der folgenden Dienstleistung (*)</label>
-                  <textarea 
+                  <label htmlFor="widerruf-waren" className="block text-sm font-medium text-gray-700 mb-1">Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über den Kauf der folgenden Waren (*)/die Erbringung der folgenden Dienstleistung (*)</label>
+                  <textarea
+                    id="widerruf-waren"
                     rows={3}
                     placeholder="Artikelnummer und Bezeichnung der Ware(n)"
                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm"
@@ -166,25 +168,30 @@ export default async function WiderrufPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Bestellt am (*)/erhalten am (*)</label>
-                  <input 
-                    type="date" 
+                  <label htmlFor="widerruf-daten" className="block text-sm font-medium text-gray-700 mb-1">Bestellt am (*)/erhalten am (*)</label>
+                  <input
+                    id="widerruf-daten"
+                    type="date"
                     className="w-full md:w-1/2 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name des/der Verbraucher(s)</label>
-                  <input 
-                    type="text" 
+                  <label htmlFor="widerruf-name" className="block text-sm font-medium text-gray-700 mb-1">Name des/der Verbraucher(s)</label>
+                  <input
+                    id="widerruf-name"
+                    type="text"
+                    autoComplete="name"
                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Anschrift des/der Verbraucher(s)</label>
-                  <textarea 
+                  <label htmlFor="widerruf-anschrift" className="block text-sm font-medium text-gray-700 mb-1">Anschrift des/der Verbraucher(s)</label>
+                  <textarea
+                    id="widerruf-anschrift"
                     rows={2}
+                    autoComplete="street-address"
                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
@@ -292,3 +299,4 @@ export default async function WiderrufPage() {
     </div>
   )
 }
+

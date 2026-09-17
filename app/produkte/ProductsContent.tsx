@@ -227,13 +227,13 @@ export function ProductsContent({
       <nav className="sticky top-[72px] z-[40] border-b border-gray-100 bg-white/80 backdrop-blur-md lg:top-[88px]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center gap-2 py-2 text-[10px] font-medium tracking-wide sm:text-xs">
-            <Link href="/" className="text-gray-400 transition-colors hover:text-[#4ECCA3]">
+            <Link href="/" className="text-gray-400 transition-colors hover:text-nova-700">
               Startseite
             </Link>
             <ChevronRightIcon className="h-3.5 w-3.5 text-gray-300" />
             <Link
               href="/produkte"
-              className={`transition-colors ${!selectedCategory ? 'font-bold text-[#0C211E]' : 'text-gray-400 hover:text-[#4ECCA3]'}`}
+              className={`transition-colors ${!selectedCategory ? 'font-bold text-[#0C211E]' : 'text-gray-400 hover:text-nova-700'}`}
             >
               Produkte
             </Link>
@@ -285,7 +285,7 @@ export function ProductsContent({
                 {/* Categories Filter */}
                 <div>
                   <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-900">
-                    <SlidersHorizontal className="h-4 w-4 text-[#4ECCA3]" /> Kategorien
+                    <SlidersHorizontal className="h-4 w-4 text-nova-700" /> Kategorien
                   </h3>
                   <div className="space-y-1.5">
                     <button
@@ -293,7 +293,7 @@ export function ProductsContent({
                       onClick={() => setSelectedCategory(null)}
                       className={`flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-left text-sm font-semibold transition-all duration-300 ${!selectedCategory ? 'bg-[#0C211E] text-white shadow-md shadow-[#0C211E]/10' : 'border border-transparent text-gray-600 hover:border-gray-200 hover:bg-gray-50'}`}
                     >
-                      Alle {!selectedCategory && <Check className="h-4 w-4 text-[#4ECCA3]" />}
+                      Alle {!selectedCategory && <Check className="h-4 w-4 text-nova-700" />}
                     </button>
                     {initialCategories.map((cat) => (
                       <button
@@ -304,7 +304,7 @@ export function ProductsContent({
                       >
                         <span className="flex items-center gap-2">{cat.name.de}</span>
                         {selectedCategory === cat.slug && (
-                          <Check className="h-4 w-4 text-[#4ECCA3]" />
+                          <Check className="h-4 w-4 text-nova-700" />
                         )}
                       </button>
                     ))}
@@ -526,7 +526,7 @@ export function ProductsContent({
                     {(searchQuery || isSyncing) && (
                       <div className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center">
                         {isSyncing ? (
-                          <Loader2 className="h-4 w-4 animate-spin text-[#4ECCA3]" />
+                          <Loader2 className="h-4 w-4 animate-spin text-nova-700" />
                         ) : (
                           <button
                             onClick={() => setSearchQuery('')}
@@ -560,16 +560,20 @@ export function ProductsContent({
                       <button
                         data-testid="grid-view-button"
                         onClick={() => setViewMode('grid')}
-                        className={`rounded-lg p-2 transition-all ${viewMode === 'grid' ? 'bg-white text-[#4ECCA3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                        aria-label="Rasteransicht"
+                        aria-pressed={viewMode === 'grid'}
+                        className={`rounded-lg p-2 transition-all ${viewMode === 'grid' ? 'bg-white text-nova-700 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                       >
-                        <Grid3X3 className="h-5 w-5" />
+                        <Grid3X3 className="h-5 w-5" aria-hidden="true" />
                       </button>
                       <button
                         data-testid="list-view-button"
                         onClick={() => setViewMode('list')}
-                        className={`rounded-lg p-2 transition-all ${viewMode === 'list' ? 'bg-white text-[#4ECCA3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                        aria-label="Listenansicht"
+                        aria-pressed={viewMode === 'list'}
+                        className={`rounded-lg p-2 transition-all ${viewMode === 'list' ? 'bg-white text-nova-700 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                       >
-                        <LayoutList className="h-5 w-5" />
+                        <LayoutList className="h-5 w-5" aria-hidden="true" />
                       </button>
                     </div>
                   </div>
@@ -825,7 +829,7 @@ export function ProductsContent({
 
                                     <div className="flex flex-1 flex-col bg-white p-4 sm:p-8">
                                       <div className="mb-auto">
-                                        <h3 className="mb-2 line-clamp-2 text-base font-bold leading-tight text-[#0C211E] transition-colors group-hover:text-[#4ECCA3] sm:mb-3 sm:text-2xl lg:text-3xl">
+                                        <h3 className="mb-2 line-clamp-2 text-base font-bold leading-tight text-[#0C211E] transition-colors group-hover:text-nova-700 sm:mb-3 sm:text-2xl lg:text-3xl">
                                           {product.name.de}
                                         </h3>
                                         {/* Stars - list view */}
@@ -873,7 +877,7 @@ export function ProductsContent({
                                             className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors sm:h-12 sm:w-12 sm:rounded-xl ${isInWishlist(product.id) ? 'border-red-100 bg-red-50' : 'border-gray-200 bg-gray-50 hover:border-[#4ECCA3] hover:bg-white'}`}
                                           >
                                             <Heart
-                                              className={`h-4 w-4 transition-colors sm:h-5 sm:w-5 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-[#4ECCA3]'}`}
+                                              className={`h-4 w-4 transition-colors sm:h-5 sm:w-5 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-nova-700'}`}
                                             />
                                           </button>
                                           <button
@@ -957,3 +961,4 @@ function useDebouncedValue<T>(value: T, delayMs: number): T {
 
   return debounced
 }
+

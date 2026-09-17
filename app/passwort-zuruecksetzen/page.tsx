@@ -92,11 +92,11 @@ function ResetPasswordContent() {
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#4ECCA3]/10 rounded-full flex items-center justify-center mx-auto mb-4">
               {isSuccess ? (
-                <CheckCircle className="w-8 h-8 text-[#4ECCA3]" />
+                <CheckCircle className="w-8 h-8 text-nova-700" />
               ) : !isValidToken ? (
                 <AlertCircle className="w-8 h-8 text-red-400" />
               ) : (
-                <Lock className="w-8 h-8 text-[#4ECCA3]" />
+                <Lock className="w-8 h-8 text-nova-700" />
               )}
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">
@@ -128,7 +128,7 @@ function ResetPasswordContent() {
 
               <Link 
                 href="/anmelden"
-                className="flex items-center justify-center gap-2 text-[#4ECCA3] hover:text-[#3DB892] transition-colors"
+                className="flex items-center justify-center gap-2 text-nova-700 hover:text-[#3DB892] transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Jetzt anmelden
@@ -139,7 +139,7 @@ function ResetPasswordContent() {
             <div className="space-y-6">
               <Link 
                 href="/passwort-vergessen"
-                className="flex items-center justify-center gap-2 text-[#4ECCA3] hover:text-[#3DB892] transition-colors"
+                className="flex items-center justify-center gap-2 text-nova-700 hover:text-[#3DB892] transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Neuen Link anfordern
@@ -214,7 +214,7 @@ function ResetPasswordContent() {
               <div className="text-center">
                 <Link 
                   href="/anmelden"
-                  className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-[#4ECCA3] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-nova-700 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Zurück zur Anmeldung
@@ -235,7 +235,7 @@ export default function ResetPasswordPage() {
         <div className="w-full max-w-md">
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-[#4ECCA3]/20 p-8">
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 text-[#4ECCA3] animate-spin" />
+              <Loader2 className="w-8 h-8 text-nova-700 animate-spin" />
             </div>
           </div>
         </div>
@@ -245,3 +245,4 @@ export default function ResetPasswordPage() {
     </Suspense>
   )
 }
+

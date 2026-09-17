@@ -65,7 +65,7 @@ export function CartDrawer({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-gray-100 p-6">
               <h2 className="flex items-center gap-2 font-heading text-xl font-bold text-[#0C211E]">
-                <ShoppingCart className="h-6 w-6 text-[#4ECCA3]" /> Warenkorb ({totalItems})
+                <ShoppingCart className="h-6 w-6 text-nova-700" /> Warenkorb ({totalItems})
               </h2>
               <button
                 ref={closeButtonRef}
@@ -82,7 +82,7 @@ export function CartDrawer({
               {items.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center space-y-6 py-8 text-center">
                   <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#4ECCA3]/10">
-                    <ShoppingCart className="h-10 w-10 text-[#4ECCA3]/40" />
+                    <ShoppingCart className="h-10 w-10 text-nova-700/40" />
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-heading text-2xl font-bold text-[#0C211E]">
@@ -148,7 +148,7 @@ export function CartDrawer({
                                 <Link
                                   href={`/produkt/${item.product.slug}`}
                                   onClick={onClose}
-                                  className="transition-colors hover:text-[#4ECCA3]"
+                                  className="transition-colors hover:text-nova-700"
                                 >
                                   {item.product.name.de}
                                 </Link>
@@ -207,9 +207,9 @@ export function CartDrawer({
                     {totalPrice < FREE_SHIPPING_THRESHOLD ? (
                       <div className="rounded-2xl border border-[#4ECCA3]/20 bg-[#4ECCA3]/10 p-4">
                         <p className="mb-3 flex items-center gap-2 text-sm font-bold text-[#0C211E]">
-                          <Truck className="h-4 w-4 text-[#4ECCA3]" />
+                          <Truck className="h-4 w-4 text-nova-700" />
                           Nur noch {formatPriceDe(FREE_SHIPPING_THRESHOLD - totalPrice)} bis zum{' '}
-                          <span className="text-[#4ECCA3]">Gratisversand</span>!
+                          <span className="text-nova-700">Gratisversand</span>!
                         </p>
                         <div className="h-2.5 overflow-hidden rounded-full border border-gray-50 bg-white">
                           <motion.div
@@ -296,3 +296,4 @@ export function CartDrawer({
     </AnimatePresence>
   )
 }
+

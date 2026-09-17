@@ -158,7 +158,7 @@ export function SearchOverlay({
             className="w-full rounded-2xl border border-transparent bg-gray-50/50 px-14 py-5 font-heading text-xl font-bold text-gray-900 outline-none transition-all placeholder:text-gray-400 hover:bg-gray-50 focus:border-[#4ECCA3] focus:ring-4 focus:ring-[#4ECCA3]/10 md:text-2xl"
           />
           <div className="absolute right-4 flex items-center gap-2">
-            {isSearching && <Loader2 className="h-5 w-5 animate-spin text-[#4ECCA3]" aria-hidden="true" />}
+            {isSearching && <Loader2 className="h-5 w-5 animate-spin text-nova-700" aria-hidden="true" />}
             {searchQuery && (
               <button
                 onClick={() => onQueryChange('')}
@@ -254,7 +254,7 @@ export function SearchOverlay({
                       />
                     </div>
                     <div className="flex flex-1 flex-col border-t border-gray-50 p-4">
-                      <h3 className="mb-2 line-clamp-2 text-sm font-bold text-gray-900 transition-colors group-hover:text-[#4ECCA3]">
+                      <h3 className="mb-2 line-clamp-2 text-sm font-bold text-gray-900 transition-colors group-hover:text-nova-700">
                         {product.nameDe}
                       </h3>
                       <div className="mt-auto flex items-baseline gap-2 pt-2">
@@ -269,7 +269,7 @@ export function SearchOverlay({
               <Link
                 href={`/suche?q=${encodeURIComponent(searchQuery)}`}
                 onClick={onClose}
-                className="mt-8 inline-flex items-center gap-2 font-bold text-[#0C211E] transition-colors hover:text-[#4ECCA3]"
+                className="mt-8 inline-flex items-center gap-2 font-bold text-[#0C211E] transition-colors hover:text-nova-700"
               >
                 Alle Ergebnisse für &quot;{searchQuery}&quot; ansehen{' '}
                 <ArrowRight className="h-5 w-5" />
@@ -294,3 +294,4 @@ export function SearchOverlay({
     </motion.div>
   )
 }
+

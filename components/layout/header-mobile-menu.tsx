@@ -205,7 +205,7 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
             onClick={onClose}
             className="group mb-3 flex items-center gap-4 rounded-2xl border border-transparent px-4 py-3 font-bold text-gray-800 transition-all hover:border-gray-200 hover:bg-white"
           >
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm transition-colors group-hover:text-[#4ECCA3]">
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm transition-colors group-hover:text-nova-700">
               <User className="h-5 w-5" />
             </div>
             Mein Konto
@@ -240,3 +240,4 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
     </motion.div>
   )
 }
+

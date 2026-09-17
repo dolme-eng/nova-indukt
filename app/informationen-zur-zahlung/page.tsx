@@ -77,7 +77,7 @@ export default async function ZahlungsinformationenPage() {
                 <p className="text-sm text-gray-700">
                   Die Bankverbindung wird Ihnen nach der Bestellung per E-Mail mitgeteilt. Bei Fragen
                   kontaktieren Sie uns unter{' '}
-                  <a href={`mailto:${COMPANY.email.support}`} className="font-semibold text-[#4ECCA3] hover:underline">
+                  <a href={`mailto:${COMPANY.email.support}`} className="font-semibold text-nova-700 hover:underline">
                     {COMPANY.email.support}
                   </a>
                   {' '}oder per Telefon.
@@ -120,7 +120,7 @@ export default async function ZahlungsinformationenPage() {
                 E-Mail:{' '}
                 <a
                   href={`mailto:${COMPANY.email.support}`}
-                  className="text-[#4ECCA3] hover:underline"
+                  className="text-nova-700 hover:underline"
                 >
                   {COMPANY.email.support}
                 </a>
@@ -129,7 +129,7 @@ export default async function ZahlungsinformationenPage() {
                 Telefon:{' '}
                 <a
                   href={`tel:${COMPANY.phone.number.replace(/\s/g, '')}`}
-                  className="text-[#4ECCA3] hover:underline"
+                  className="text-nova-700 hover:underline"
                 >
                   {COMPANY.phone.number}
                 </a>
@@ -151,7 +151,7 @@ export default async function ZahlungsinformationenPage() {
                 E-Mail:{' '}
                 <a
                   href={`mailto:${COMPANY.email.support}`}
-                  className="text-[#4ECCA3] hover:underline"
+                  className="text-nova-700 hover:underline"
                 >
                   {COMPANY.email.support}
                 </a>
@@ -160,7 +160,7 @@ export default async function ZahlungsinformationenPage() {
                 Telefon:{' '}
                 <a
                   href={`tel:${COMPANY.phone.number.replace(/\s/g, '')}`}
-                  className="text-[#4ECCA3] hover:underline"
+                  className="text-nova-700 hover:underline"
                 >
                   {COMPANY.phone.number}
                 </a>
@@ -191,3 +191,4 @@ export default async function ZahlungsinformationenPage() {
     </div>
   )
 }
+

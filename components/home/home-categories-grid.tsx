@@ -33,14 +33,14 @@ export const HomeCategoriesGrid = memo(function HomeCategoriesGrid({ categories 
           className="flex flex-col sm:flex-row items-end justify-between mb-6 gap-3"
         >
           <div>
-            <span className="text-nova-500 font-semibold tracking-wider text-sm uppercase mb-2 block">
+            <span className="text-nova-700 font-semibold tracking-wider text-sm uppercase mb-2 block">
               Unsere Kategorien
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-heading">Beliebte Kategorien</h2>
           </div>
           <Link
             href="/produkte"
-            className="group text-gray-600 hover:text-nova-500 font-medium flex items-center gap-2 transition-colors pb-1 border-b-2 border-transparent hover:border-nova-500"
+            className="group text-gray-600 hover:text-nova-700 font-medium flex items-center gap-2 transition-colors pb-1 border-b-2 border-transparent hover:border-nova-700"
           >
             Alle ansehen
             <span className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:bg-nova-50 transition-colors">

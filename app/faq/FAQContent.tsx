@@ -167,7 +167,7 @@ export function FAQContent(props: {
               onClick={() => setSelectedCategory(null)}
               className={`rounded-full px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
                 selectedCategory === null
-                  ? 'bg-[#4ECCA3] text-white'
+                  ? 'bg-[#4ECCA3] text-[#0C211E]'
                   : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -179,7 +179,7 @@ export function FAQContent(props: {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-medium transition-colors sm:gap-2 sm:px-4 sm:text-sm ${
                   selectedCategory === cat.id
-                    ? 'bg-[#4ECCA3] text-white'
+                    ? 'bg-[#4ECCA3] text-[#0C211E]'
                     : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-100'
                 }`}
               >
@@ -204,7 +204,7 @@ export function FAQContent(props: {
                 >
                   <summary className="flex cursor-pointer select-none list-none items-center gap-3 px-4 py-3 marker:hidden sm:gap-4 sm:px-6 sm:py-4 [&::-webkit-details-marker]:hidden">
                     <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#4ECCA3]/10 sm:h-10 sm:w-10">
-                      <item.icon className="h-4 w-4 text-[#4ECCA3] sm:h-5 sm:w-5" />
+                      <item.icon className="h-4 w-4 text-nova-700 sm:h-5 sm:w-5" />
                     </div>
                     <span className="flex-1 pr-2 text-sm font-medium text-gray-900 sm:text-base">
                       {item.question}
@@ -242,3 +242,4 @@ export function FAQContent(props: {
     </div>
   )
 }
+

@@ -40,7 +40,8 @@ module.exports = {
         foreground: 'hsl(var(--foreground))',
         primary: {
           DEFAULT: '#4ECCA3',
-          foreground: '#FFFFFF',
+          // Dark text on mint: white (#FFFFFF) fails WCAG AA on #4ECCA3
+          foreground: '#0C211E',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -56,7 +57,8 @@ module.exports = {
         },
         accent: {
           DEFAULT: '#4ECCA3',
-          foreground: '#FFFFFF',
+          // Dark text on mint: white (#FFFFFF) fails WCAG AA on #4ECCA3
+          foreground: '#0C211E',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',

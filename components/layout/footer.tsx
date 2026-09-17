@@ -139,7 +139,7 @@ export function Footer() {
                 href={COMPANY.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-transparent bg-white/10 text-gray-500 transition-colors hover:bg-[#4ECCA3] hover:text-white"
+                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-transparent bg-white/10 text-gray-500 transition-colors hover:bg-[#4ECCA3] hover:text-[#0C211E]"
                 aria-label="Facebook"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -154,7 +154,7 @@ export function Footer() {
                 href={COMPANY.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-transparent bg-white/10 text-gray-500 transition-colors hover:bg-[#4ECCA3] hover:text-white"
+                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-transparent bg-white/10 text-gray-500 transition-colors hover:bg-[#4ECCA3] hover:text-[#0C211E]"
                 aria-label="Instagram"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -257,7 +257,7 @@ export function Footer() {
                 ].map((s) => (
                   <span
                     key={s.name}
-                    className={`rounded-lg border px-4 py-2 text-xs font-bold ${s.accent ? 'border-[#4ECCA3]/40 bg-[#4ECCA3]/20 text-[#4ECCA3]' : 'border-[#236456]/50 bg-[#17423C] text-white transition-colors hover:border-[#4ECCA3]/50'} cursor-default`}
+                    className={`rounded-lg border px-4 py-2 text-xs font-bold ${s.accent ? 'border-[#4ECCA3]/40 bg-[#4ECCA3]/20 text-[#4ECCA3]' : 'border-[#236456]/50 bg-[#17423C] text-[#0C211E] transition-colors hover:border-[#4ECCA3]/50'} cursor-default`}
                   >
                     {s.name}
                   </span>
@@ -316,3 +316,4 @@ export function Footer() {
     </footer>
   )
 }
+

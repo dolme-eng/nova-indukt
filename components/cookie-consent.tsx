@@ -157,7 +157,7 @@ export function CookieConsent() {
                 <div className="p-4 sm:p-5 lg:p-4">
                   <div className="flex items-start gap-3 sm:gap-3">
                     <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#4ECCA3]/10 sm:h-10 sm:w-10 lg:h-9 lg:w-9">
-                      <Cookie className="h-4 w-4 text-[#4ECCA3] sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                      <Cookie className="h-4 w-4 text-nova-700 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="mb-1 text-sm font-semibold text-gray-900 lg:text-xs">
@@ -166,14 +166,14 @@ export function CookieConsent() {
                       <p className="mb-2 text-xs leading-relaxed text-gray-600 lg:text-[11px]">
                         Wir nutzen Cookies, um Ihr Einkaufserlebnis zu verbessern und unseren
                         Service zu optimieren.{' '}
-                        <Link href="/datenschutz" className="text-[#4ECCA3] hover:underline">
+                        <Link href="/datenschutz" className="text-nova-700 hover:underline">
                           Mehr erfahren
                         </Link>
                       </p>
                       <div className="flex flex-col flex-wrap items-stretch gap-2 sm:flex-row sm:items-center lg:gap-1.5">
                         <button
                           onClick={acceptAll}
-                          className="whitespace-nowrap rounded-lg bg-[#4ECCA3] px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-[#3BA88A] sm:px-4"
+                          className="whitespace-nowrap rounded-lg bg-[#4ECCA3] px-3 py-2 text-xs font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] sm:px-4"
                         >
                           Alle akzeptieren
                         </button>
@@ -204,7 +204,7 @@ export function CookieConsent() {
                 <div className="max-h-[80vh] overflow-y-auto p-4 sm:p-5 lg:p-4">
                   <div className="mb-3 flex items-center justify-between lg:mb-2">
                     <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900 lg:text-xs">
-                      <Shield className="h-4 w-4 text-[#4ECCA3] lg:h-3.5 lg:w-3.5" /> Einstellungen
+                      <Shield className="h-4 w-4 text-nova-700 lg:h-3.5 lg:w-3.5" /> Einstellungen
                     </h3>
                     <button
                       onClick={() => setShowDetails(false)}
@@ -221,7 +221,7 @@ export function CookieConsent() {
                       <div className="min-w-0 flex-1">
                         <div className="mb-0.5 flex flex-wrap items-center gap-1.5">
                           <span className="text-xs font-medium text-gray-900">Notwendig</span>
-                          <span className="rounded-full bg-[#4ECCA3]/10 px-1.5 py-0.5 text-[10px] text-[#4ECCA3]">
+                          <span className="rounded-full bg-[#4ECCA3]/10 px-1.5 py-0.5 text-[10px] text-nova-700">
                             Erforderlich
                           </span>
                         </div>
@@ -307,7 +307,7 @@ export function CookieConsent() {
                   <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center lg:gap-1.5">
                     <button
                       onClick={savePreferences}
-                      className="rounded-lg bg-[#4ECCA3] px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-[#3BA88A] sm:px-4"
+                      className="rounded-lg bg-[#4ECCA3] px-3 py-2 text-xs font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] sm:px-4"
                     >
                       Auswahl speichern
                     </button>
@@ -352,3 +352,4 @@ export function useCookieConsent() {
     openSettings: () => window.openCookieSettings?.(),
   }
 }
+

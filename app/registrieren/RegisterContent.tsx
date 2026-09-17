@@ -245,7 +245,7 @@ export function RegisterContent() {
                 id="terms"
                 checked={formData.acceptTerms}
                 onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-[#4ECCA3] focus:ring-[#4ECCA3]"
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-nova-700 focus:ring-[#4ECCA3]"
               />
               <label htmlFor="terms" className="text-sm text-gray-600">
                 Ich akzeptiere die Datenschutzbestimmungen und AGB.
@@ -259,7 +259,7 @@ export function RegisterContent() {
                 id="newsletter"
                 checked={formData.acceptNewsletter}
                 onChange={(e) => setFormData({ ...formData, acceptNewsletter: e.target.checked })}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-[#4ECCA3] focus:ring-[#4ECCA3]"
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-nova-700 focus:ring-[#4ECCA3]"
               />
               <label htmlFor="newsletter" className="text-sm text-gray-600">
                 Ich möchte den Newsletter abonnieren.
@@ -287,7 +287,7 @@ export function RegisterContent() {
           <div className="mt-6 border-t border-gray-100 pt-6">
             <p className="text-center text-sm text-gray-600">
               Bereits ein Konto?{' '}
-              <Link href="/anmelden" className="font-medium text-[#4ECCA3] hover:underline">
+              <Link href="/anmelden" className="font-medium text-nova-700 hover:underline">
                 Anmelden
               </Link>
             </p>
@@ -297,3 +297,4 @@ export function RegisterContent() {
     </div>
   )
 }
+

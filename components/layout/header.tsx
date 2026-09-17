@@ -166,15 +166,15 @@ export function Header() {
         <div className="container mx-auto flex items-center justify-between px-4 font-bold uppercase tracking-wider sm:px-6">
           <div className="flex items-center gap-4 text-[#9FE1CD] sm:gap-8">
             <span className="flex cursor-default items-center gap-1.5 transition-colors hover:text-white sm:gap-2">
-              <Truck className="h-3.5 w-3.5 text-[#4ECCA3]" />
+              <Truck className="h-3.5 w-3.5 text-nova-700" />
               <span className="hidden sm:inline">Kostenlose Lieferung ab 500 €</span>
               <span className="sm:hidden">Gratis ab 500€</span>
             </span>
             <span className="hidden cursor-default items-center gap-2 transition-colors hover:text-white sm:flex">
-              <Sparkles className="h-3.5 w-3.5 text-[#4ECCA3]" />2 Jahre Garantie
+              <Sparkles className="h-3.5 w-3.5 text-nova-700" />2 Jahre Garantie
             </span>
             <span className="hidden cursor-default items-center gap-2 transition-colors hover:text-white md:flex">
-              <Tag className="h-3.5 w-3.5 text-[#4ECCA3]" />
+              <Tag className="h-3.5 w-3.5 text-nova-700" />
               Inkl. 19% MwSt.
             </span>
           </div>
@@ -424,3 +424,4 @@ export function Header() {
     </>
   )
 }
+

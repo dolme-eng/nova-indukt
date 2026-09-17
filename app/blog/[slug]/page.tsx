@@ -177,7 +177,7 @@ function renderLink(text: string): React.ReactNode {
         <a
           key={key++}
           href={url}
-          className="text-[#4ECCA3] hover:underline"
+          className="text-nova-700 hover:underline"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -443,7 +443,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <div className="mx-auto max-w-4xl">
               <Link
                 href="/blog"
-                className="mb-6 inline-flex items-center gap-2 text-gray-500 transition-colors hover:text-[#4ECCA3]"
+                className="mb-6 inline-flex items-center gap-2 text-gray-500 transition-colors hover:text-nova-700"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Blog
@@ -462,7 +462,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
-                  <span className="mb-3 inline-block rounded-full bg-[#4ECCA3] px-3 py-1 text-sm font-bold text-white">
+                  <span className="mb-3 inline-block rounded-full bg-[#4ECCA3] px-3 py-1 text-sm font-bold text-[#0C211E]">
                     {post.category}
                   </span>
                   <h1 className="text-2xl font-bold text-white md:text-3xl">{post.titleDe}</h1>
@@ -526,10 +526,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         )}
                       </div>
                       <div className="p-4">
-                        <span className="text-xs font-medium text-[#4ECCA3]">
+                        <span className="text-xs font-medium text-nova-700">
                           {relatedPost.category}
                         </span>
-                        <h3 className="mt-1 font-semibold text-gray-900 transition-colors group-hover:text-[#4ECCA3]">
+                        <h3 className="mt-1 font-semibold text-gray-900 transition-colors group-hover:text-nova-700">
                           {relatedPost.titleDe}
                         </h3>
                       </div>
@@ -544,3 +544,4 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     </>
   )
 }
+

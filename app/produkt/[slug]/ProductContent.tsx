@@ -204,14 +204,14 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
             <div className="hidden min-w-0 flex-1 items-center gap-2 lg:flex">
               <Link
                 href="/"
-                className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]"
+                className="shrink-0 text-gray-400 transition-colors hover:text-nova-700"
               >
                 Startseite
               </Link>
               <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
               <Link
                 href="/produkte"
-                className="shrink-0 text-gray-400 transition-colors hover:text-[#4ECCA3]"
+                className="shrink-0 text-gray-400 transition-colors hover:text-nova-700"
               >
                 Produkte
               </Link>
@@ -371,7 +371,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     exit={{ opacity: 0 }}
                     className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-xl bg-[#0C211E] px-3 py-1.5 text-[10px] font-bold text-white shadow-lg"
                   >
-                    <Check className="h-3 w-3 text-[#4ECCA3]" />
+                    <Check className="h-3 w-3 text-nova-700" />
                     {wishlistToastMessage}
                   </motion.div>
                 )}
@@ -416,19 +416,25 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
+                    aria-label="Menge verringern"
                     className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white disabled:opacity-30"
                   >
-                    <Minus className="h-3 w-3" />
+                    <Minus className="h-3 w-3" aria-hidden="true" />
                   </button>
-                  <span className="flex-1 text-center text-xs font-bold text-[#0C211E]">
+                  <span
+                    className="flex-1 text-center text-xs font-bold text-[#0C211E]"
+                    role="status"
+                    aria-label={`Menge: ${quantity}`}
+                  >
                     {quantity}
                   </span>
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.min(quantity + 1, 99))}
+                    aria-label="Menge erhöhen"
                     className="flex h-full w-9 items-center justify-center text-gray-400 hover:bg-white"
                   >
-                    <Plus className="h-3 w-3" />
+                    <Plus className="h-3 w-3" aria-hidden="true" />
                   </button>
                 </div>
                 <motion.button
@@ -485,7 +491,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   className="flex gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
                 >
                   <div className="bg-[#4ECCA3]/12 flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
-                    <item.icon className="h-5 w-5 text-[#4ECCA3]" />
+                    <item.icon className="h-5 w-5 text-nova-700" />
                   </div>
                   <div>
                     <p className="text-sm font-bold text-[#0C211E]">{item.title}</p>
@@ -507,7 +513,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   key={b.label}
                   className="flex items-center gap-2 rounded-xl border border-gray-100 bg-gray-50/80 px-2.5 py-2 text-[10px] font-bold text-gray-700 sm:text-xs"
                 >
-                  <b.icon className="h-3.5 w-3.5 shrink-0 text-[#4ECCA3] sm:h-4 sm:w-4" />
+                  <b.icon className="h-3.5 w-3.5 shrink-0 text-nova-700 sm:h-4 sm:w-4" />
                   {b.label}
                 </div>
               ))}
@@ -524,7 +530,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               </button>
               <Link
                 href="/lieferung"
-                className="inline-flex h-12 flex-1 items-center justify-center text-center text-sm font-bold text-[#4ECCA3] underline-offset-2 hover:text-[#0C211E] hover:underline"
+                className="inline-flex h-12 flex-1 items-center justify-center text-center text-sm font-bold text-nova-700 underline-offset-2 hover:text-[#0C211E] hover:underline"
               >
                 Versand & Rückgabe
               </Link>
@@ -580,7 +586,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     <h2 className="mb-6 font-heading text-xl font-bold text-[#0C211E] sm:text-2xl xl:text-3xl">
                       Produktdetails
                     </h2>
-                    <div className="prose prose-gray prose-headings:font-heading prose-headings:text-[#0C211E] prose-bold:font-bold prose-li:marker:text-[#4ECCA3] mb-10 max-w-4xl max-w-none text-base leading-relaxed text-gray-600 xl:text-lg">
+                    <div className="prose prose-gray prose-headings:font-heading prose-headings:text-[#0C211E] prose-bold:font-bold prose-li:marker:text-nova-700 mb-10 max-w-4xl max-w-none text-base leading-relaxed text-gray-600 xl:text-lg">
                       <Markdown remarkPlugins={[remarkGfm]}>{product.description.de}</Markdown>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -599,7 +605,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                           className="flex gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 p-4"
                         >
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0C211E]">
-                            <f.icon className="h-5 w-5 text-[#4ECCA3]" />
+                            <f.icon className="h-5 w-5 text-nova-700" />
                           </div>
                           <div>
                             <h3 className="font-bold text-[#0C211E]">{f.title}</h3>
@@ -642,7 +648,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                           key={`${spec.label}-${index}`}
                           className="flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm transition-shadow hover:shadow-md"
                         >
-                          <spec.icon className="mb-3 h-8 w-8 text-[#4ECCA3]" />
+                          <spec.icon className="mb-3 h-8 w-8 text-nova-700" />
                           <span className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
                             {spec.label}
                           </span>
@@ -682,7 +688,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
               id: 'description',
               label: 'Beschreibung',
               content: (
-                <div className="prose prose-gray prose-li:marker:text-[#4ECCA3] max-w-none space-y-4 text-sm leading-relaxed text-gray-600">
+                <div className="prose prose-gray prose-li:marker:text-nova-700 max-w-none space-y-4 text-sm leading-relaxed text-gray-600">
                   <Markdown remarkPlugins={[remarkGfm]}>{product.description.de}</Markdown>
                   <div className="grid gap-2">
                     {[
@@ -694,7 +700,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                         className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3"
                       >
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0C211E]">
-                          <x.icon className="h-4 w-4 text-[#4ECCA3]" />
+                          <x.icon className="h-4 w-4 text-nova-700" />
                         </div>
                         <div>
                           <p className="font-bold text-[#0C211E]">{x.t}</p>
@@ -726,7 +732,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                       key={`${spec.label}-m-${index}`}
                       className="rounded-xl border border-gray-100 bg-gray-50 p-3 text-center"
                     >
-                      <spec.icon className="mx-auto mb-1 h-5 w-5 text-[#4ECCA3]" />
+                      <spec.icon className="mx-auto mb-1 h-5 w-5 text-nova-700" />
                       <p className="text-[9px] font-bold uppercase text-gray-400">{spec.label}</p>
                       <p className="text-xs font-bold text-[#0C211E]">{spec.value}</p>
                     </div>
@@ -848,3 +854,4 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
     </article>
   )
 }
+

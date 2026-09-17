@@ -161,7 +161,7 @@ export default function AboutContent() {
                 className="bg-gray-50/50 rounded-[2.5rem] p-10 text-center border border-gray-100 hover:shadow-xl transition-all duration-300 group"
               >
                 <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-sm group-hover:scale-110 transition-transform duration-300">
-                  <value.icon className="w-10 h-10 text-[#4ECCA3]" />
+                  <value.icon className="w-10 h-10 text-nova-700" />
                 </div>
                 <h3 className="text-2xl font-bold text-[#0C211E] mb-4">{value.title}</h3>
                 <p className="text-gray-500 text-base leading-relaxed font-medium">{value.description}</p>
@@ -197,7 +197,7 @@ export default function AboutContent() {
                    />
                 </div>
                 <h3 className="text-xl font-bold text-[#0C211E] mb-1">{member.name}</h3>
-                <p className="text-[#4ECCA3] font-bold text-sm uppercase tracking-wider mb-4">{member.role}</p>
+                <p className="text-nova-700 font-bold text-sm uppercase tracking-wider mb-4">{member.role}</p>
                 <p className="text-gray-500 text-sm leading-relaxed">{member.description}</p>
               </motion.div>
             ))}
@@ -208,7 +208,7 @@ export default function AboutContent() {
       {/* Promise */}
       <section className="py-24 lg:py-32 bg-[#0C211E] text-center px-4">
         <div className="container mx-auto max-w-5xl">
-          <Heart className="w-16 h-16 text-[#4ECCA3] mx-auto mb-8 animate-pulse" />
+          <Heart className="w-16 h-16 text-nova-700 mx-auto mb-8 animate-pulse" />
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-heading">Unser Kundenversprechen</h2>
           <p className="text-xl text-gray-400 leading-relaxed mb-16 max-w-3xl mx-auto font-medium">
             Ihre Zufriedenheit steht für uns an erster Stelle. Deshalb bieten wir Ihnen mehr als nur erstklassige Produkte.
@@ -217,15 +217,15 @@ export default function AboutContent() {
           <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 sm:p-12 inline-block shadow-2xl">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 text-center divide-y sm:divide-y-0 sm:divide-x divide-white/10">
               <div className="pt-4 sm:pt-0">
-                <div className="text-5xl font-black text-[#4ECCA3] mb-2 font-heading">2 Jahre</div>
+                <div className="text-5xl font-black text-nova-700 mb-2 font-heading">2 Jahre</div>
                 <p className="font-bold text-white tracking-wider">Garantie auf alle Produkte</p>
               </div>
               <div className="pt-8 sm:pt-0">
-                <div className="text-5xl font-black text-[#4ECCA3] mb-2 font-heading">30 Tage</div>
+                <div className="text-5xl font-black text-nova-700 mb-2 font-heading">30 Tage</div>
                 <p className="font-bold text-white tracking-wider">Kostenlose Rückgabe</p>
               </div>
               <div className="pt-8 sm:pt-0">
-                <div className="text-5xl font-black text-[#4ECCA3] mb-2 font-heading">Kostenlos</div>
+                <div className="text-5xl font-black text-nova-700 mb-2 font-heading">Kostenlos</div>
                 <p className="font-bold text-white tracking-wider">Versand ab 500 €</p>
               </div>
             </div>
@@ -244,25 +244,25 @@ export default function AboutContent() {
               <div className="grid grid-cols-2 gap-6">
                 <div className="bg-gray-50 rounded-[2rem] p-8 text-center border border-gray-100 hover:bg-white hover:shadow-lg transition-all">
                   <div className="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl shadow-sm flex items-center justify-center">
-                    <Medal className="w-8 h-8 text-[#4ECCA3]" />
+                    <Medal className="w-8 h-8 text-nova-700" />
                   </div>
                   <p className="font-bold text-[#0C211E]">Made in Germany</p>
                 </div>
                 <div className="bg-gray-50 rounded-[2rem] p-8 text-center border border-gray-100 hover:bg-white hover:shadow-lg transition-all">
                   <div className="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl shadow-sm flex items-center justify-center">
-                    <Recycle className="w-8 h-8 text-[#4ECCA3]" />
+                    <Recycle className="w-8 h-8 text-nova-700" />
                   </div>
                   <p className="font-bold text-[#0C211E]">Eco-Friendly</p>
                 </div>
                 <div className="bg-gray-50 rounded-[2rem] p-8 text-center border border-gray-100 hover:bg-white hover:shadow-lg transition-all">
                   <div className="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl shadow-sm flex items-center justify-center">
-                    <ShieldCheck className="w-8 h-8 text-[#4ECCA3]" />
+                    <ShieldCheck className="w-8 h-8 text-nova-700" />
                   </div>
                   <p className="font-bold text-[#0C211E]">TÜV Geprüft</p>
                 </div>
                 <div className="bg-gray-50 rounded-[2rem] p-8 text-center border border-gray-100 hover:bg-white hover:shadow-lg transition-all">
                   <div className="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl shadow-sm flex items-center justify-center">
-                    <Star className="w-8 h-8 text-[#4ECCA3]" />
+                    <Star className="w-8 h-8 text-nova-700" />
                   </div>
                   <p className="font-bold text-[#0C211E]">Trusted Shops</p>
                 </div>
@@ -275,7 +275,7 @@ export default function AboutContent() {
               <div className="bg-[#0C211E] text-white rounded-[2rem] p-10 lg:p-12 shadow-2xl relative overflow-hidden h-full flex flex-col justify-center">
                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#4ECCA3]/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
                 
-                <h3 className="text-2xl font-bold text-[#4ECCA3] mb-6 relative z-10">{COMPANY.nameShort} Zentrale</h3>
+                <h3 className="text-2xl font-bold text-nova-700 mb-6 relative z-10">{COMPANY.nameShort} Zentrale</h3>
                 <div className="space-y-4 text-gray-300 font-medium text-lg relative z-10">
                   <p className="text-white font-bold text-xl">{COMPANY.name}</p>
                   <p>{COMPANY.street}<br/>{COMPANY.zip} {COMPANY.city}<br/>{COMPANY.country}</p>
@@ -341,3 +341,4 @@ export default function AboutContent() {
     </div>
   )
 }
+

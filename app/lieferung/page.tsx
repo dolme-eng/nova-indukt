@@ -57,21 +57,21 @@ export default async function LieferungPage() {
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#4ECCA3]/10">
-                  <Truck className="h-6 w-6 text-[#4ECCA3]" />
+                  <Truck className="h-6 w-6 text-nova-700" />
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900">Deutschland</h3>
                   <p className="text-sm text-gray-600">
                     {formatPriceDe(SHIPPING_COST)} Versandpauschale
                   </p>
-                  <p className="text-sm font-semibold text-[#4ECCA3]">
+                  <p className="text-sm font-semibold text-nova-700">
                     Versandfrei ab {formatPriceDe(FREE_SHIPPING_THRESHOLD)}
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#4ECCA3]/10">
-                  <Truck className="h-6 w-6 text-[#4ECCA3]" />
+                  <Truck className="h-6 w-6 text-nova-700" />
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900">EU-Länder</h3>
@@ -87,7 +87,7 @@ export default async function LieferungPage() {
             <div className="space-y-4">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#4ECCA3]/10">
-                  <Clock className="h-6 w-6 text-[#4ECCA3]" />
+                  <Clock className="h-6 w-6 text-nova-700" />
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900">Deutschland</h3>
@@ -96,7 +96,7 @@ export default async function LieferungPage() {
               </div>
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#4ECCA3]/10">
-                  <Clock className="h-6 w-6 text-[#4ECCA3]" />
+                  <Clock className="h-6 w-6 text-nova-700" />
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900">EU-Länder</h3>
@@ -111,15 +111,15 @@ export default async function LieferungPage() {
             <h2 className="mb-6 text-2xl font-bold text-[#0C211E]">Zahlung & Versand</h2>
             <div className="space-y-3 text-sm text-gray-700">
               <div className="flex items-start gap-3">
-                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-nova-700" />
                 <p>Die Lieferung erfolgt erst nach Eingang der Zahlung auf unserem Bankkonto.</p>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-nova-700" />
                 <p>Sie erhalten eine E-Mail mit den Zahlungsinformationen nach der Bestellung.</p>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-nova-700" />
                 <p>Das Lieferrisiko trägt NOVA INDUKT GmbH.</p>
               </div>
             </div>
@@ -148,11 +148,11 @@ export default async function LieferungPage() {
             <h2 className="mb-4 text-lg font-semibold text-gray-900">Fragen zum Versand?</h2>
             <p className="text-gray-700">
               Kontaktieren Sie uns über unser{' '}
-              <Link href="/kontakt" className="font-semibold text-[#4ECCA3] hover:underline">
+              <Link href="/kontakt" className="font-semibold text-nova-700 hover:underline">
                 Kontaktformular
               </Link>{' '}
               oder per{' '}
-              <a href={COMPANY.whatsapp.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#4ECCA3] hover:underline">
+              <a href={COMPANY.whatsapp.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-nova-700 hover:underline">
                 WhatsApp
               </a>.
             </p>
@@ -162,3 +162,4 @@ export default async function LieferungPage() {
     </div>
   )
 }
+

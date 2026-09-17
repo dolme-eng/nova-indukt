@@ -65,9 +65,9 @@ export default function ForgotPasswordPage() {
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#4ECCA3]/10 rounded-full flex items-center justify-center mx-auto mb-4">
               {isSuccess ? (
-                <CheckCircle className="w-8 h-8 text-[#4ECCA3]" />
+                <CheckCircle className="w-8 h-8 text-nova-700" />
               ) : (
-                <Mail className="w-8 h-8 text-[#4ECCA3]" />
+                <Mail className="w-8 h-8 text-nova-700" />
               )}
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">
@@ -86,7 +86,7 @@ export default function ForgotPasswordPage() {
             <div className="space-y-6">
               <div className="bg-[#4ECCA3]/10 border border-[#4ECCA3]/20 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-[#4ECCA3] mt-0.5 flex-shrink-0" />
+                  <AlertCircle className="w-5 h-5 text-nova-700 mt-0.5 flex-shrink-0" />
                   <p className="text-sm text-white/80">
                     Wenn ein Konto mit der E-Mail <strong className="text-white">{email}</strong> existiert, 
                     wurde eine E-Mail mit Anweisungen zum Zurücksetzen des Passworts gesendet. 
@@ -97,7 +97,7 @@ export default function ForgotPasswordPage() {
 
               <Link 
                 href="/anmelden"
-                className="flex items-center justify-center gap-2 text-[#4ECCA3] hover:text-[#3DB892] transition-colors"
+                className="flex items-center justify-center gap-2 text-nova-700 hover:text-[#3DB892] transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Zurück zur Anmeldung
@@ -140,7 +140,7 @@ export default function ForgotPasswordPage() {
               <div className="text-center">
                 <Link 
                   href="/anmelden"
-                  className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-[#4ECCA3] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-nova-700 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Zurück zur Anmeldung
@@ -153,3 +153,4 @@ export default function ForgotPasswordPage() {
     </div>
   )
 }
+

@@ -11,7 +11,7 @@ export default function ThankYouPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-lg">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#4ECCA3]/10">
-          <CheckCircle className="h-8 w-8 text-[#4ECCA3]" />
+          <CheckCircle className="h-8 w-8 text-nova-700" />
         </div>
 
         <h1 className="mb-2 text-2xl font-bold text-gray-900">Vielen Dank!</h1>
@@ -35,7 +35,7 @@ export default function ThankYouPage() {
         <div className="space-y-3">
           <Link
             href="/produkte"
-            className="block w-full rounded-xl bg-[#4ECCA3] py-3 font-semibold text-white transition-colors hover:bg-[#3db892]"
+            className="block w-full rounded-xl bg-[#4ECCA3] py-3 font-semibold text-[#0C211E] transition-colors hover:bg-[#3db892]"
           >
             Weiter einkaufen
           </Link>
@@ -60,3 +60,4 @@ export default function ThankYouPage() {
     </div>
   )
 }
+

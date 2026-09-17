@@ -80,8 +80,8 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
               viewport={{ once: true }}
               className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#4ECCA3]/10 px-4 py-2"
             >
-              <Quote className="h-4 w-4 text-[#4ECCA3]" />
-              <span className="text-sm font-medium text-[#4ECCA3]">Kundenstimmen</span>
+              <Quote className="h-4 w-4 text-nova-700" />
+              <span className="text-sm font-medium text-nova-700">Kundenstimmen</span>
             </motion.div>
 
             <motion.h2
@@ -181,7 +181,7 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
                   </div>
 
                   <blockquote className="relative z-10 flex-1 text-[15px] italic leading-relaxed text-gray-600 sm:text-base">
-                    <span className="absolute -left-2 -top-4 -z-10 font-serif text-4xl text-[#4ECCA3] opacity-20">
+                    <span className="absolute -left-2 -top-4 -z-10 font-serif text-4xl text-nova-700 opacity-20">
                       &ldquo;
                     </span>
                     {testimonial.comment}
@@ -189,7 +189,7 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
 
                   <div className="mt-6 flex items-center justify-between border-t border-gray-100/60 pt-5">
                     {testimonial.productName ? (
-                      <p className="max-w-[200px] truncate pr-4 text-xs font-bold text-[#4ECCA3]">
+                      <p className="max-w-[200px] truncate pr-4 text-xs font-bold text-nova-700">
                         {testimonial.productName}
                       </p>
                     ) : (
@@ -208,7 +208,7 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
           <div className="mt-12 text-center">
             <button
               onClick={() => router.push('/kontakt')}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-8 py-4 font-semibold text-white shadow-lg transition-colors hover:bg-[#3BA88A] hover:shadow-xl"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-8 py-4 font-semibold text-[#0C211E] shadow-lg transition-colors hover:bg-[#3BA88A] hover:shadow-xl"
             >
               <MessageSquare className="h-5 w-5" />
               Bewertung schreiben
@@ -219,3 +219,4 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
     </section>
   )
 }
+

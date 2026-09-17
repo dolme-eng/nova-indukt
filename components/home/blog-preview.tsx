@@ -59,7 +59,7 @@ export function BlogPreview({ initialBlogPosts }: { initialBlogPosts: BlogPost[]
                     <span className="w-1 h-1 rounded-full bg-gray-300" />
                     <span>{new Date(post.date).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 leading-snug group-hover:text-nova-500 transition-colors">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 leading-snug group-hover:text-nova-700 transition-colors">
                     {post.title.de}
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">

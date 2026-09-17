@@ -188,7 +188,7 @@ export default function TechnologieContent() {
                 viewport={{ once: true }}
               >
                 <h2 className="mb-6 text-3xl font-bold">
-                  Warum Induktion die <span className="text-[#4ECCA3]">bessere Wahl</span> ist
+                  Warum Induktion die <span className="text-nova-700">bessere Wahl</span> ist
                 </h2>
                 <p className="mb-8 leading-relaxed text-gray-300">
                   Induktion ist nicht nur eine Alternative zu Gas und Elektro - es ist die
@@ -205,7 +205,7 @@ export default function TechnologieContent() {
                       className="flex items-center gap-4"
                     >
                       <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#4ECCA3]/20">
-                        <benefit.icon className="h-6 w-6 text-[#4ECCA3]" />
+                        <benefit.icon className="h-6 w-6 text-nova-700" />
                       </div>
                       <span className="text-lg">{benefit.text}</span>
                     </motion.div>
@@ -221,7 +221,7 @@ export default function TechnologieContent() {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#4ECCA3]/10 to-blue-500/10" />
                 <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
-                  <Zap className="mb-6 h-20 w-20 text-[#4ECCA3]" />
+                  <Zap className="mb-6 h-20 w-20 text-nova-700" />
                   <div className="mb-2 text-5xl font-bold">90%</div>
                   <p className="text-xl text-gray-300">Energieeffizienz</p>
                   <p className="mt-4 text-sm text-gray-500">vs. nur 40% bei Gasherden</p>
@@ -253,7 +253,7 @@ export default function TechnologieContent() {
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
                         Eigenschaft
                       </th>
-                      <th className="px-6 py-4 text-center font-semibold text-[#4ECCA3]">
+                      <th className="px-6 py-4 text-center font-semibold text-nova-700">
                         Induktion
                       </th>
                       <th className="px-6 py-4 text-center font-semibold text-gray-600">Gas</th>
@@ -264,7 +264,7 @@ export default function TechnologieContent() {
                     {comparisons.map((row, index) => (
                       <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                         <td className="px-6 py-4 text-gray-700">{row.feature}</td>
-                        <td className="px-6 py-4 text-center font-semibold text-[#4ECCA3]">
+                        <td className="px-6 py-4 text-center font-semibold text-nova-700">
                           {row.induction}
                         </td>
                         <td className="px-6 py-4 text-center text-gray-600">{row.gas}</td>
@@ -299,7 +299,7 @@ export default function TechnologieContent() {
                   transition={{ delay: index * 0.1 }}
                   className="rounded-xl bg-white p-6 shadow-sm"
                 >
-                  <award.icon className="mx-auto mb-3 h-8 w-8 text-[#4ECCA3]" />
+                  <award.icon className="mx-auto mb-3 h-8 w-8 text-nova-700" />
                   <p className="text-sm font-medium text-gray-700">{award.label}</p>
                 </motion.div>
               ))}
@@ -330,7 +330,7 @@ export default function TechnologieContent() {
               </Link>
               <Link
                 href="/kontakt"
-                className="rounded-xl border-2 border-white/30 px-8 py-4 font-semibold text-white transition-colors hover:border-[#4ECCA3] hover:text-[#4ECCA3]"
+                className="rounded-xl border-2 border-white/30 px-8 py-4 font-semibold text-white transition-colors hover:border-[#4ECCA3] hover:text-nova-700"
               >
                 Beratung anfragen
               </Link>
@@ -341,3 +341,4 @@ export default function TechnologieContent() {
     </div>
   )
 }
+

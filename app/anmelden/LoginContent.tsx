@@ -159,7 +159,7 @@ export function LoginContent() {
                 <label htmlFor="login-password" className="block text-sm font-medium text-gray-700">Passwort</label>
                 <Link
                   href="/passwort-vergessen"
-                  className="text-sm text-[#4ECCA3] hover:text-[#3BA88A] hover:underline"
+                  className="text-sm text-nova-700 hover:text-[#3BA88A] hover:underline"
                 >
                   Passwort vergessen?
                 </Link>
@@ -209,7 +209,7 @@ export function LoginContent() {
           <div className="mt-6 space-y-3 border-t border-gray-100 pt-6">
             <p className="text-center text-sm text-gray-600">
               Noch kein Konto?{' '}
-              <Link href="/registrieren" className="font-medium text-[#4ECCA3] hover:underline">
+              <Link href="/registrieren" className="font-medium text-nova-700 hover:underline">
                 Jetzt registrieren
               </Link>
             </p>
@@ -221,3 +221,4 @@ export function LoginContent() {
     </div>
   )
 }
+

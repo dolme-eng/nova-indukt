@@ -78,6 +78,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <h1 className="sr-only">Produktsuche</h1>
       {/* Search Header */}
       <div className="sticky top-0 z-30 border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4 py-4">
@@ -128,7 +129,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                     setSelectedCategory('all')
                     setPriceRange([0, maxPrice])
                   }}
-                  className="text-sm text-[#4ECCA3] hover:underline"
+                  className="text-sm text-nova-700 hover:underline"
                 >
                   Zurücksetzen
                 </button>
@@ -145,7 +146,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                       value="all"
                       checked={selectedCategory === 'all'}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="h-4 w-4 text-[#4ECCA3]"
+                      className="h-4 w-4 text-nova-700"
                     />
                     <span className="text-gray-600">Alle</span>
                   </label>
@@ -157,7 +158,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                         value={cat.id}
                         checked={selectedCategory === cat.id}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="h-4 w-4 text-[#4ECCA3]"
+                        className="h-4 w-4 text-nova-700"
                       />
                       <span className="text-gray-600">{cat.name.de}</span>
                     </label>
@@ -225,15 +226,19 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                 <div className="hidden items-center gap-1 rounded-xl border border-gray-200 bg-white p-1 sm:flex">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`rounded-lg p-2 transition-colors ${viewMode === 'grid' ? 'bg-[#4ECCA3] text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                    aria-label="Rasteransicht"
+                    aria-pressed={viewMode === 'grid'}
+                    className={`rounded-lg p-2 transition-colors ${viewMode === 'grid' ? 'bg-[#4ECCA3] text-[#0C211E]' : 'text-gray-600 hover:bg-gray-100'}`}
                   >
-                    <Grid3X3 className="h-4 w-4" />
+                    <Grid3X3 className="h-4 w-4" aria-hidden="true" />
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-[#4ECCA3] text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                    aria-label="Listenansicht"
+                    aria-pressed={viewMode === 'list'}
+                    className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-[#4ECCA3] text-[#0C211E]' : 'text-gray-600 hover:bg-gray-100'}`}
                   >
-                    <List className="h-4 w-4" />
+                    <List className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -319,7 +324,7 @@ function ProductCard({
             className="object-contain p-4 mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
           />
           {product.badges?.includes('premium') && (
-            <span className="absolute left-2 top-2 rounded-md bg-[#4ECCA3] px-2 py-0.5 text-[9px] font-bold text-white sm:left-3 sm:top-3 sm:rounded-full sm:py-1 sm:text-xs">
+            <span className="absolute left-2 top-2 rounded-md bg-[#4ECCA3] px-2 py-0.5 text-[9px] font-bold text-[#0C211E] sm:left-3 sm:top-3 sm:rounded-full sm:py-1 sm:text-xs">
               Premium
             </span>
           )}
@@ -339,7 +344,7 @@ function ProductCard({
             </div>
           )}
           <h3
-            className={`font-bold text-gray-900 ${viewMode === 'list' ? 'text-sm leading-tight sm:text-xl' : 'text-[13px] leading-snug sm:text-base'} mb-2 line-clamp-2 flex-1 transition-colors group-hover:text-[#4ECCA3]`}
+            className={`font-bold text-gray-900 ${viewMode === 'list' ? 'text-sm leading-tight sm:text-xl' : 'text-[13px] leading-snug sm:text-base'} mb-2 line-clamp-2 flex-1 transition-colors group-hover:text-nova-700`}
           >
             {product.name.de}
           </h3>
@@ -377,3 +382,4 @@ function ProductCard({
     </motion.div>
   )
 }
+

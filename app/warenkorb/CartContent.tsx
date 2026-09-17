@@ -88,7 +88,7 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
             className="fixed left-1/2 top-24 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl border border-[#17423C] bg-[#0C211E] px-6 py-3 text-sm font-bold text-white shadow-xl"
           >
             <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#4ECCA3]/20">
-              <CheckCircle className="h-4 w-4 text-[#4ECCA3]" />
+              <CheckCircle className="h-4 w-4 text-nova-700" />
             </div>
             Artikel aus dem Warenkorb entfernt
           </motion.div>
@@ -107,13 +107,13 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
               <span>Weiter einkaufen</span>
             </Link>
             <div className="hidden items-center gap-2.5 lg:flex">
-              <Link href="/" className="text-gray-400 transition-colors hover:text-[#4ECCA3]">
+              <Link href="/" className="text-gray-400 transition-colors hover:text-nova-700">
                 Startseite
               </Link>
               <ChevronRight className="h-3.5 w-3.5 text-gray-300" />
               <Link
                 href="/produkte"
-                className="text-gray-400 transition-colors hover:text-[#4ECCA3]"
+                className="text-gray-400 transition-colors hover:text-nova-700"
               >
                 Produkte
               </Link>
@@ -348,11 +348,11 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
                                 </span>
                               )}
                             </div>
-                            <p className="line-clamp-2 text-sm font-bold leading-tight text-[#0C211E] transition-colors group-hover:text-[#4ECCA3]">
+                            <p className="line-clamp-2 text-sm font-bold leading-tight text-[#0C211E] transition-colors group-hover:text-nova-700">
                               {item.name.de}
                             </p>
                           </div>
-                          <div className="mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-[#0C211E] transition-colors group-hover:border-[#4ECCA3] group-hover:bg-[#4ECCA3] group-hover:text-white">
+                          <div className="mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-[#0C211E] transition-colors group-hover:border-[#4ECCA3] group-hover:bg-[#4ECCA3] group-hover:text-[#0C211E]">
                             <ArrowRight className="h-4 w-4" />
                           </div>
                         </Link>
@@ -474,3 +474,4 @@ export function CartContent({ recommendedProducts = [] }: CartContentProps) {
     </div>
   )
 }
+

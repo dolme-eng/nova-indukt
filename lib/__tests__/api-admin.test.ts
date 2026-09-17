@@ -22,6 +22,7 @@ vi.mock('@/lib/prisma', () => ({
     },
     blogPost: {
       create: vi.fn(),
+      findUnique: vi.fn().mockResolvedValue(null),
     },
     user: {
       findMany: vi.fn(),

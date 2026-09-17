@@ -39,7 +39,7 @@ export default function KarrierePage() {
             <div className="py-12 text-center">
               <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#4ECCA3]/10">
                 <svg
-                  className="h-10 w-10 text-[#4ECCA3]"
+                  className="h-10 w-10 text-nova-700"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -96,7 +96,7 @@ export default function KarrierePage() {
                   <div key={i} className="flex gap-4">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#4ECCA3]/10">
                       <svg
-                        className="h-5 w-5 text-[#4ECCA3]"
+                        className="h-5 w-5 text-nova-700"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -123,3 +123,4 @@ export default function KarrierePage() {
     </div>
   )
 }
+

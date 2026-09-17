@@ -458,7 +458,7 @@ export default function CheckoutContent() {
                 Sie können sie jederzeit über{' '}
                 <Link
                   href="/bestellung-verfolgen"
-                  className="font-bold text-[#4ECCA3] hover:underline"
+                  className="font-bold text-nova-700 hover:underline"
                 >
                   Bestellung verfolgen
                 </Link>{' '}
@@ -508,7 +508,7 @@ export default function CheckoutContent() {
             {/* Bank Transfer Details */}
             <div className="mb-10 rounded-[2rem] bg-[#0C211E] p-6 text-left text-white sm:p-8">
               <div className="mb-6 flex items-center gap-3">
-                <Mail className="h-6 w-6 text-[#4ECCA3]" />
+                <Mail className="h-6 w-6 text-nova-700" />
                 <h3 className="text-xl font-bold">Zahlungsinformationen</h3>
               </div>
               <p className="mb-6 text-white/70">
@@ -589,6 +589,7 @@ export default function CheckoutContent() {
       </nav>
 
       <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+        <h1 className="sr-only">Kasse – Bestellung abschließen</h1>
         {/* Progress */}
         <div className="mb-8 lg:mb-10">
           <div className="mx-auto flex max-w-2xl items-center justify-center">
@@ -657,7 +658,7 @@ export default function CheckoutContent() {
                   {/* Guest login prompt — optional, non-blocking */}
                   {!isAuthenticated && (
                     <div className="mb-6 flex items-start gap-3 rounded-2xl border border-[#4ECCA3]/30 bg-[#4ECCA3]/10 p-4">
-                      <Shield className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                      <Shield className="mt-0.5 h-5 w-5 flex-shrink-0 text-nova-700" />
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-bold text-[#0C211E]">
                           Haben Sie bereits ein Konto?
@@ -665,7 +666,7 @@ export default function CheckoutContent() {
                         <p className="mt-0.5 text-xs text-gray-500">
                           <Link
                             href={`/anmelden?redirect=/kasse`}
-                            className="font-bold text-[#4ECCA3] hover:underline"
+                            className="font-bold text-nova-700 hover:underline"
                           >
                             Jetzt anmelden
                           </Link>{' '}
@@ -946,7 +947,7 @@ export default function CheckoutContent() {
                 >
                   <div className="mb-8 flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#0C211E] shadow-lg shadow-[#0C211E]/10">
-                      <ShieldCheck className="h-6 w-6 text-[#4ECCA3]" />
+                      <ShieldCheck className="h-6 w-6 text-nova-700" />
                     </div>
                     <h2 className="font-heading text-2xl font-bold text-[#0C211E]">
                       Zahlungsmethode
@@ -980,7 +981,7 @@ export default function CheckoutContent() {
                         <div className="space-y-3">
                           <label
                             htmlFor="bank-transfer-email"
-                            className="text-xs font-bold uppercase tracking-wider text-[#4ECCA3]"
+                            className="text-xs font-bold uppercase tracking-wider text-nova-700"
                           >
                             E-Mail für Rechnung
                           </label>
@@ -1045,7 +1046,7 @@ export default function CheckoutContent() {
                     </div>
 
                     <div className="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-400">
-                      <Lock className="h-4 w-4 text-[#4ECCA3]" />
+                      <Lock className="h-4 w-4 text-nova-700" />
                       <span>Ihre Zahlungsdaten werden sicher verschlüsselt (SSL/TLS).</span>
                     </div>
                   </div>
@@ -1178,11 +1179,11 @@ export default function CheckoutContent() {
 
               <div className="mt-8 space-y-3 border-t border-gray-100 pt-6">
                 <div className="flex items-center gap-3 text-sm font-bold text-gray-500">
-                  <Shield className="h-5 w-5 text-[#4ECCA3]" />
+                  <Shield className="h-5 w-5 text-nova-700" />
                   <span>Sichere Zahlung mit SSL-Verschlüsselung</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm font-bold text-gray-500">
-                  <Truck className="h-5 w-5 text-[#4ECCA3]" />
+                  <Truck className="h-5 w-5 text-nova-700" />
                   <span>Lieferzeit: 2-4 Werktage</span>
                 </div>
               </div>
@@ -1307,3 +1308,4 @@ export default function CheckoutContent() {
     </div>
   )
 }
+

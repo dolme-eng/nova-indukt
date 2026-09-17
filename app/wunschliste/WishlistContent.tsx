@@ -124,7 +124,7 @@ export default function WishlistContent() {
             <p className="text-gray-600 mb-6 text-sm sm:text-base max-w-md mx-auto">Füge Produkte hinzu, die Dir gefallen, um sie später einfacher wiederzufinden.</p>
             <Link 
               href="/produkte" 
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#4ECCA3] text-white font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#4ECCA3] text-[#0C211E] font-medium rounded-xl hover:bg-[#3BA88A] transition-colors text-sm sm:text-base"
             >
               <Package className="w-4 h-4 sm:w-5 sm:h-5" />
               Produkte durchstöbern
@@ -161,14 +161,14 @@ export default function WishlistContent() {
                     </div>
                     <div className="p-3 sm:p-4">
                       <Link href={`/produkt/${item.slug || item.id}`} className="block">
-                        <h3 className="font-medium text-gray-900 line-clamp-1 hover:text-[#4ECCA3] transition-colors text-sm sm:text-base">
+                        <h3 className="font-medium text-gray-900 line-clamp-1 hover:text-nova-700 transition-colors text-sm sm:text-base">
                           {item.name.de}
                         </h3>
                       </Link>
                       <div className="flex items-center gap-1 mt-2">
                         <span className="text-xs text-gray-400">Wunschliste</span>
                       </div>
-                      <p className="text-base sm:text-lg font-semibold text-[#4ECCA3] mt-2 tabular-nums whitespace-nowrap">
+                      <p className="text-base sm:text-lg font-semibold text-nova-700 mt-2 tabular-nums whitespace-nowrap">
                         {formatPriceDe(item.price)}
                       </p>
                       <button 
@@ -203,3 +203,4 @@ export default function WishlistContent() {
     </div>
   )
 }
+

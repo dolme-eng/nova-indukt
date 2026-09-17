@@ -50,7 +50,7 @@ export default async function RueckgabePage() {
             <h2 className="mb-6 text-2xl font-bold text-[#0C211E]">30 Tage Rückgaberecht</h2>
             <div className="space-y-4 text-sm text-gray-700">
               <div className="flex items-start gap-3">
-                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-nova-700" />
                 <p>
                   Sie haben das Recht, binnen <strong>30 Tagen</strong> ohne Angabe von Gründen
                   diesen Vertrag zu widerrufen. NOVA INDUKT gewährt Ihnen freiwillig ein
@@ -59,14 +59,14 @@ export default async function RueckgabePage() {
                 </p>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-nova-700" />
                 <p>
                   Die Widerrufsfrist beträgt 30 Tage ab dem Tag, an dem Sie oder ein von Ihnen
                   benannter Dritter die Waren in Besitz genommen haben.
                 </p>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#4ECCA3]" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-nova-700" />
                 <p>
                   Um Ihr Widerrufsrecht auszuüben, müssen Sie uns mittels einer eindeutigen
                   Erklärung über Ihren Entschluss informieren.
@@ -137,14 +137,14 @@ export default async function RueckgabePage() {
                 E-Mail:{' '}
                 <a
                   href={`mailto:${COMPANY.email.widerruf}`}
-                  className="font-semibold text-[#4ECCA3] hover:underline"
+                  className="font-semibold text-nova-700 hover:underline"
                 >
                   {COMPANY.email.widerruf}
                 </a>
               </p>
               <p>
                 Kontaktformular:{' '}
-                <Link href="/kontakt" className="font-semibold text-[#4ECCA3] hover:underline">
+                <Link href="/kontakt" className="font-semibold text-nova-700 hover:underline">
                   Zum Kontaktformular
                 </Link>
               </p>
@@ -155,3 +155,4 @@ export default async function RueckgabePage() {
     </div>
   )
 }
+

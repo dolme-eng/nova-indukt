@@ -222,12 +222,12 @@ export default function AccountPageClient() {
                       setActiveTab(tab.id)
                       setMobileMenuOpen(false)
                     }}
-                    className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left ${activeTab === tab.id ? 'bg-[#4ECCA3]/10 text-[#4ECCA3]' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left ${activeTab === tab.id ? 'bg-[#4ECCA3]/10 text-nova-700' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     <tab.icon className="h-5 w-5" />
                     <span className="font-medium">{tab.label}</span>
                     {tab.id === 'wishlist' && wishlistCount > 0 && (
-                      <span className="ml-auto rounded-full bg-[#4ECCA3] px-2 py-0.5 text-xs text-white">
+                      <span className="ml-auto rounded-full bg-[#4ECCA3] px-2 py-0.5 text-xs text-[#0C211E]">
                         {wishlistCount}
                       </span>
                     )}
@@ -265,7 +265,7 @@ export default function AccountPageClient() {
                 <div className="bg-gradient-to-br from-[#4ECCA3] to-[#3BA88A] p-6">
                   <div className="flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm lg:h-14 lg:w-14">
-                      <User className="h-6 w-6 text-[#4ECCA3] lg:h-7 lg:w-7" />
+                      <User className="h-6 w-6 text-nova-700 lg:h-7 lg:w-7" />
                     </div>
                     <div className="min-w-0 text-white">
                       <p className="truncate font-semibold">{user?.name}</p>
@@ -279,12 +279,12 @@ export default function AccountPageClient() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition-colors lg:px-4 lg:py-3 lg:text-base ${activeTab === tab.id ? 'bg-[#4ECCA3]/10 font-medium text-[#4ECCA3]' : 'text-gray-600 hover:bg-gray-50'}`}
+                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition-colors lg:px-4 lg:py-3 lg:text-base ${activeTab === tab.id ? 'bg-[#4ECCA3]/10 font-medium text-nova-700' : 'text-gray-600 hover:bg-gray-50'}`}
                     >
                       <tab.icon className="h-4 w-4 lg:h-5 lg:w-5" />
                       <span>{tab.label}</span>
                       {tab.id === 'wishlist' && wishlistCount > 0 && (
-                        <span className="ml-auto rounded-full bg-[#4ECCA3] px-2 py-0.5 text-xs text-white">
+                        <span className="ml-auto rounded-full bg-[#4ECCA3] px-2 py-0.5 text-xs text-[#0C211E]">
                           {wishlistCount}
                         </span>
                       )}
@@ -385,7 +385,7 @@ function OverviewTab({
         </p>
         <Link
           href="/produkte"
-          className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#3BA88A] sm:px-6 sm:py-3 sm:text-base"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 text-sm font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] sm:px-6 sm:py-3 sm:text-base"
         >
           <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
           Produkte durchstöbern
@@ -558,7 +558,7 @@ function OrdersTab() {
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-gray-500 sm:text-sm">Gesamt</p>
-                  <p className="text-base font-bold text-[#4ECCA3] sm:text-lg">
+                  <p className="text-base font-bold text-nova-700 sm:text-lg">
                     {formatPriceDe(order.total)}
                   </p>
                 </div>
@@ -664,7 +664,7 @@ function WishlistTab({
         </p>
         <Link
           href="/produkte"
-          className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#3BA88A] sm:px-6 sm:py-3 sm:text-base"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 text-sm font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] sm:px-6 sm:py-3 sm:text-base"
         >
           Produkte durchstöbern
         </Link>
@@ -700,12 +700,12 @@ function WishlistTab({
               <h3 className="mb-1 line-clamp-1 text-sm font-medium text-gray-900 sm:text-base">
                 {item.name.de}
               </h3>
-              <p className="whitespace-nowrap text-base font-bold tabular-nums text-[#4ECCA3] sm:text-lg">
+              <p className="whitespace-nowrap text-base font-bold tabular-nums text-nova-700 sm:text-lg">
                 {formatPriceDe(item.price)}
               </p>
               <button
                 onClick={() => onAddToCart(item)}
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#4ECCA3] py-2 text-xs font-medium text-white transition-colors hover:bg-[#3BA88A] sm:mt-3 sm:rounded-xl sm:py-2.5 sm:text-sm"
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#4ECCA3] py-2 text-xs font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] sm:mt-3 sm:rounded-xl sm:py-2.5 sm:text-sm"
               >
                 <Plus className="h-4 w-4" />
                 In den Warenkorb
@@ -819,7 +819,7 @@ function AddressesTab() {
         </div>
         <button
           onClick={handleAdd}
-          className="flex items-center gap-2 rounded-lg bg-[#4ECCA3] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#3BA88A] sm:rounded-xl"
+          className="flex items-center gap-2 rounded-lg bg-[#4ECCA3] px-4 py-2 text-sm font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] sm:rounded-xl"
         >
           <Plus className="h-4 w-4" />
           <span className="hidden sm:inline">Neue Adresse</span>
@@ -839,7 +839,7 @@ function AddressesTab() {
           </p>
           <button
             onClick={handleAdd}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#3BA88A] sm:px-6 sm:py-3 sm:text-base"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 text-sm font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] sm:px-6 sm:py-3 sm:text-base"
           >
             <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
             Adresse hinzufügen
@@ -936,7 +936,7 @@ function SettingsTab({
         <h3 className="mb-3 text-sm font-medium text-gray-900 sm:mb-4 sm:text-base">Passwort</h3>
         <Link
           href="/passwort-vergessen"
-          className="block w-full rounded-lg border-2 border-gray-200 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:border-[#4ECCA3] hover:text-[#4ECCA3] sm:rounded-xl sm:py-3 sm:text-base"
+          className="block w-full rounded-lg border-2 border-gray-200 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:border-[#4ECCA3] hover:text-nova-700 sm:rounded-xl sm:py-3 sm:text-base"
         >
           Passwort zurücksetzen
         </Link>
@@ -944,3 +944,4 @@ function SettingsTab({
     </div>
   )
 }
+

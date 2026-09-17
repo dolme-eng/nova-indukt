@@ -9,31 +9,31 @@ import { Flame, Sparkles, ChefHat, ArrowRight, Shield, Heart } from 'lucide-reac
 export const megaMenuDepartments = [
   {
     title: 'Induktionspfannen',
-    icon: <Flame className="h-5 w-5 text-[#4ECCA3]" />,
+    icon: <Flame className="h-5 w-5 text-nova-700" />,
     href: '/produkte?kategorie=induktionspfannen',
     description: 'Bratpfannen, Schmorpfannen, Woks & mehr',
   },
   {
     title: 'Induktionstöpfe',
-    icon: <ChefHat className="h-5 w-5 text-[#4ECCA3]" />,
+    icon: <ChefHat className="h-5 w-5 text-nova-700" />,
     href: '/produkte?kategorie=induktionstoepfe',
     description: 'Kochtöpfe, Stieltöpfe, Bräter & Kasserollen',
   },
   {
     title: 'Topf- & Pfannensets',
-    icon: <Sparkles className="h-5 w-5 text-[#4ECCA3]" />,
+    icon: <Sparkles className="h-5 w-5 text-nova-700" />,
     href: '/produkte?kategorie=induktions-sets',
     description: 'Topfsets, Pfannensets, Kombisets',
   },
   {
     title: 'Induktions-Zubehör',
-    icon: <Shield className="h-5 w-5 text-[#4ECCA3]" />,
+    icon: <Shield className="h-5 w-5 text-nova-700" />,
     href: '/produkte?kategorie=induktions-zubehoer',
     description: 'Pflegemittel, Kratzschutzmatten, Adapterplatten',
   },
   {
     title: 'Kochfelder & Herde',
-    icon: <Sparkles className="h-5 w-5 text-[#4ECCA3]" />,
+    icon: <Sparkles className="h-5 w-5 text-nova-700" />,
     href: '/produkte?kategorie=induktionskochfelder-herde',
     description: 'Einbau-Kochfelder, Kochfelder mit Abzug, Mobile Induktionsplatten',
   },
@@ -134,7 +134,7 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
                   transition={{ delay: 0.05 * idx }}
                 >
                   <Link href={dept.href} onClick={onClose} className="group block" role="menuitem">
-                    <h3 className="mb-5 flex items-center gap-2.5 border-b border-gray-100 pb-3 font-bold text-gray-900 transition-colors group-hover:text-[#4ECCA3]">
+                    <h3 className="mb-5 flex items-center gap-2.5 border-b border-gray-100 pb-3 font-bold text-gray-900 transition-colors group-hover:text-nova-700">
                       <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#4ECCA3]/10 transition-colors group-hover:bg-[#4ECCA3]/20">
                         {dept.icon}
                       </span>
@@ -186,7 +186,7 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
               href="/produkte"
               onClick={onClose}
               role="menuitem"
-              className="group flex items-center gap-2 text-sm font-bold text-gray-900 transition-colors hover:text-[#4ECCA3]"
+              className="group flex items-center gap-2 text-sm font-bold text-gray-900 transition-colors hover:text-nova-700"
             >
               Alle Produkte ansehen
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 transition-colors group-hover:bg-[#4ECCA3]/10">
@@ -195,13 +195,13 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
             </Link>
             <div className="flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
               <span className="flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-[#4ECCA3]" /> Made in Germany
+                <Sparkles className="h-3.5 w-3.5 text-nova-700" /> Made in Germany
               </span>
               <span className="flex items-center gap-1.5">
-                <Shield className="h-3.5 w-3.5 text-[#4ECCA3]" /> TÜV Geprüft
+                <Shield className="h-3.5 w-3.5 text-nova-700" /> TÜV Geprüft
               </span>
               <span className="flex items-center gap-1.5">
-                <Heart className="h-3.5 w-3.5 text-[#4ECCA3]" /> Trusted Shops
+                <Heart className="h-3.5 w-3.5 text-nova-700" /> Trusted Shops
               </span>
             </div>
           </div>
@@ -210,3 +210,4 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
     </>
   )
 }
+

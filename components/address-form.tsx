@@ -77,7 +77,7 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4ECCA3]/10">
-              <MapPin className="h-5 w-5 text-[#4ECCA3]" />
+              <MapPin className="h-5 w-5 text-nova-700" />
             </div>
             <h2 className="text-lg font-bold text-gray-900">
               {address?.id ? 'Adresse bearbeiten' : 'Neue Adresse'}
@@ -274,7 +274,7 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#4ECCA3] px-4 py-2.5 font-medium text-[#0C211E] transition-colors hover:bg-[#3BA88A] disabled:opacity-50"
             >
               {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
               {address?.id ? 'Speichern' : 'Hinzufügen'}
@@ -285,3 +285,4 @@ export function AddressForm({ address, onSubmit, onCancel, isSubmitting }: Addre
     </motion.div>
   )
 }
+

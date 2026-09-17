@@ -116,7 +116,7 @@ export function CustomCursor() {
         {cursorText && (
           <motion.div
             key="cursor-text"
-            className="pointer-events-none fixed left-0 top-0 z-[9997] rounded-full bg-[#4ECCA3] px-3 py-1 text-xs font-medium text-white"
+            className="pointer-events-none fixed left-0 top-0 z-[9997] rounded-full bg-[#4ECCA3] px-3 py-1 text-xs font-medium text-[#0C211E]"
             style={{
               x: cursorXSpring,
               y: cursorYSpring,
@@ -134,3 +134,4 @@ export function CustomCursor() {
     </>
   )
 }
+
