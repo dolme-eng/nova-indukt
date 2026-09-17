@@ -18,7 +18,8 @@ export const updateBlogPostSchema = createBlogPostSchema.partial()
 
 // ── Promotions ──────────────────────────────────────────────────────────────
 
-export const createPromotionAdminSchema = z.object({
+// Base object WITHOUT refinements (Zod v4 throws on .partial() of refined schemas)
+const promotionAdminBaseSchema = z.object({
   name: z.string().min(1, 'Name ist erforderlich').max(200),
   description: z.string().max(1000).optional().nullable(),
   code: z.string().min(1, 'Code ist erforderlich').max(50).optional().nullable(),
@@ -37,14 +38,24 @@ export const createPromotionAdminSchema = z.object({
   bannerText: z.string().max(200).optional().nullable(),
   highlightColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid hex color').optional().nullable(),
   isActive: z.boolean().default(true),
-}).refine(data => {
+})
+
+export const createPromotionAdminSchema = promotionAdminBaseSchema.refine(data => {
   if (data.discountType === 'PERCENTAGE' && data.discountValue > 100) return false
   return true
 }, { message: 'Percentage discount cannot exceed 100%', path: ['discountValue'] }).refine(data => {
   return new Date(data.endDate) > new Date(data.startDate)
 }, { message: 'End date must be after start date', path: ['endDate'] })
 
-export const updatePromotionAdminSchema = createPromotionAdminSchema.partial()
+// Partial variant: same rules, but each refine only applies when the fields
+// it checks are actually present in the PATCH payload.
+export const updatePromotionAdminSchema = promotionAdminBaseSchema.partial().refine(data => {
+  if (data.discountType === 'PERCENTAGE' && data.discountValue !== undefined && data.discountValue > 100) return false
+  return true
+}, { message: 'Percentage discount cannot exceed 100%', path: ['discountValue'] }).refine(data => {
+  if (data.endDate === undefined || data.startDate === undefined) return true
+  return new Date(data.endDate) > new Date(data.startDate)
+}, { message: 'End date must be after start date', path: ['endDate'] })
 
 export const autoGeneratePromotionSchema = z.object({
   type: z.enum(['flash', 'weekend', 'clearance', 'new-arrival']),
