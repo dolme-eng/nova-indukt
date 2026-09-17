@@ -57,11 +57,11 @@ describe('createRateLimitKey', () => {
 })
 
 describe('getIP', () => {
-  it('extracts first IP from x-forwarded-for', () => {
+  it('prefers x-real-ip over x-forwarded-for', () => {
     const req = new Request('http://localhost', {
-      headers: { 'x-forwarded-for': '1.2.3.4, 5.6.7.8' },
+      headers: { 'x-real-ip': '9.8.7.6', 'x-forwarded-for': '1.2.3.4, 5.6.7.8' },
     })
-    expect(getIP(req)).toBe('1.2.3.4')
+    expect(getIP(req)).toBe('9.8.7.6')
   })
 
   it('falls back to x-real-ip', () => {
@@ -76,10 +76,17 @@ describe('getIP', () => {
     expect(getIP(req)).toBe('unknown')
   })
 
+  it('extracts LAST IP from x-forwarded-for (proxies append, left side is spoofable)', () => {
+    const req = new Request('http://localhost', {
+      headers: { 'x-forwarded-for': '1.2.3.4, 5.6.7.8' },
+    })
+    expect(getIP(req)).toBe('5.6.7.8')
+  })
+
   it('trims whitespace from forwarded IP', () => {
     const req = new Request('http://localhost', {
-      headers: { 'x-forwarded-for': '  1.2.3.4  , 5.6.7.8' },
+      headers: { 'x-forwarded-for': '  1.2.3.4  , 5.6.7.8  ' },
     })
-    expect(getIP(req)).toBe('1.2.3.4')
+    expect(getIP(req)).toBe('5.6.7.8')
   })
 })

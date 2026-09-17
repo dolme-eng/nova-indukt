@@ -153,6 +153,7 @@ describe('verifyRecaptcha', () => {
 
     const call = fetchSpy.mock.calls[0]
     const body = (call?.[1] as { body?: URLSearchParams })?.body as URLSearchParams
-    expect(body.get('remoteip')).toBe('1.2.3.4')
+    // Last XFF entry: proxies append, left side is client-spoofable
+    expect(body.get('remoteip')).toBe('5.6.7.8')
   })
 })

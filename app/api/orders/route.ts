@@ -92,13 +92,8 @@ export async function GET(request: NextRequest) {
 // Create new order
 export async function POST(request: NextRequest) {
   try {
-    const csrfError = validateCsrfToken(request)
-    if (csrfError) return csrfError
-
-    const recaptchaError = await verifyRecaptcha(request, 'checkout')
-    if (recaptchaError) return recaptchaError
-
-    // Rate limit: 5 orders per minute per IP
+    // Rate limit first (cheap): 5 orders per minute per IP —
+    // before costly Google reCAPTCHA call
     const ip = getIP(request)
     const rl = await rateLimit(createRateLimitKey(ip, 'orders'), {
       windowMs: 60_000,
@@ -117,6 +112,12 @@ export async function POST(request: NextRequest) {
         }
       )
     }
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
+    const recaptchaError = await verifyRecaptcha(request, 'checkout')
+    if (recaptchaError) return recaptchaError
 
     const session = await auth()
     const body = await request.json()

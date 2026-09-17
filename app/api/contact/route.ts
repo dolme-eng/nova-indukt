@@ -13,13 +13,7 @@ const RATE_LIMIT_MAX = 5 // 5 messages per hour per IP
 
 export async function POST(request: NextRequest) {
   try {
-    const csrfError = validateCsrfToken(request)
-    if (csrfError) return csrfError
-
-    const recaptchaError = await verifyRecaptcha(request, 'contact')
-    if (recaptchaError) return recaptchaError
-
-    // Rate limiting
+    // Rate limiting first (cheap) — before costly Google reCAPTCHA call
     const ip = getIP(request)
     const key = createRateLimitKey(ip, 'contact')
     const limitResult = await rateLimit(key, {
@@ -33,6 +27,12 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       )
     }
+
+    const csrfError = validateCsrfToken(request)
+    if (csrfError) return csrfError
+
+    const recaptchaError = await verifyRecaptcha(request, 'contact')
+    if (recaptchaError) return recaptchaError
 
     const body = await request.json()
 

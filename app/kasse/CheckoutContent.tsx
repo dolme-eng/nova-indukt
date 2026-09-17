@@ -210,9 +210,13 @@ export default function CheckoutContent() {
 
     setIsApplyingPromo(true)
     try {
+      const recaptchaToken = await execute('coupon')
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(recaptchaToken ? { 'x-recaptcha-token': recaptchaToken } : {}),
+        },
         body: JSON.stringify({
           code: promoCode,
           amount: subtotal,

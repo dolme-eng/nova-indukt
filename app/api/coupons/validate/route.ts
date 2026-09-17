@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 const validateCouponSchema = z.object({
   code: z.string().min(1, 'Code ist erforderlich').max(50),
@@ -32,6 +33,11 @@ export async function POST(request: NextRequest) {
     // CSRF protection
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
+
+    // reCAPTCHA: this endpoint oracles code validity (404 vs 400) —
+    // require a token so codes can't be brute-forced cheaply
+    const recaptchaError = await verifyRecaptcha(request, 'coupon')
+    if (recaptchaError) return recaptchaError
 
     const body = await request.json()
 

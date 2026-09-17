@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logError } from '@/lib/logger'
+import { getIP } from '@/lib/rate-limit'
 
 const RECAPTCHA_THRESHOLD = 0.5
 
@@ -37,8 +38,8 @@ export async function verifyRecaptcha(
     body.append('secret', secret)
     body.append('response', token)
 
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-    if (ip) body.append('remoteip', ip)
+    const ip = getIP(request)
+    if (ip && ip !== 'unknown') body.append('remoteip', ip)
 
     const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
       method: 'POST',

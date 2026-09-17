@@ -4,17 +4,22 @@ import { prisma } from '@/lib/prisma'
 import Credentials from 'next-auth/providers/credentials'
 import { isLockedOut, recordFailedLogin, recordSuccessfulLogin } from './login-lockout'
 import { logError } from '@/lib/logger'
+import { loginSchema } from '@/lib/validations/auth'
 
 const { handlers, auth, signOut, signIn } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null
-        }
+        // Zod gate: rejects malformed input AND caps password length
+        // (bcrypt CPU-DoS) before any DB/crypto work
+        const parsed = loginSchema.safeParse({
+          email: credentials?.email,
+          password: credentials?.password,
+        })
+        if (!parsed.success) return null
 
-        const email = (credentials.email as string).toLowerCase()
+        const email = parsed.data.email.toLowerCase()
 
         try {
           // Check brute-force lockout
@@ -31,7 +36,7 @@ const { handlers, auth, signOut, signIn } = NextAuth({
             return null
           }
 
-          const isValid = await verifyPassword(credentials.password as string, user.password)
+          const isValid = await verifyPassword(parsed.data.password, user.password)
 
           if (!isValid) {
             await recordFailedLogin(email)

@@ -25,7 +25,10 @@ export function CsrfProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!getCookie(CSRF_COOKIE_NAME)) {
       const token = generateToken()
-      document.cookie = `${CSRF_COOKIE_NAME}=${token}; Path=/; SameSite=Strict${window.location.protocol === 'https:' ? '; Secure' : ''}`
+      // Max-Age 24h: token rotates daily (set only when missing).
+      // Host-only (no Domain), SameSite=Strict, Secure on https.
+      // Non-HttpOnly by design (double-submit: JS must read it).
+      document.cookie = `${CSRF_COOKIE_NAME}=${token}; Path=/; Max-Age=86400; SameSite=Strict${window.location.protocol === 'https:' ? '; Secure' : ''}`
     }
 
     const originalFetch = window.fetch

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkAndCreateRandomPromotion, cleanupExpiredPromotions } from '@/lib/promotions/random-promotions'
 import { logError } from '@/lib/logger'
+import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import crypto from 'crypto'
 
 // API Route: Check and create random promotions
@@ -10,6 +11,15 @@ import crypto from 'crypto'
 // Or: Every 30 minutes (30 * * * *) for more frequent checks
 export async function POST(request: NextRequest) {
   try {
+    // Rate-limit before secret check — slows online brute-force of CRON_SECRET
+    const { success } = await rateLimit(createRateLimitKey(getIP(request), 'promotions:check'), {
+      windowMs: 60_000,
+      maxRequests: 5,
+    })
+    if (!success) {
+      return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+    }
+
     // Verify cron secret — mandatory in all environments (fail closed)
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET

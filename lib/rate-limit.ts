@@ -1,14 +1,15 @@
 /**
- * Rate limiting module — Upstash Redis (distribué, compatible serverless Netlify).
+ * Rate limiting module — Upstash Redis (distribué, compatible serverless).
  *
  * Required environment variables:
  *   UPSTASH_REDIS_REST_URL   — URL REST de votre base Redis Upstash
  *   UPSTASH_REDIS_REST_TOKEN — Token d'authentification Upstash
  *
- * Si ces variables sont absentes :
- *   - En dev local → fallback in-memory (suffisant pour un seul process)
- *   - En production → fail closed (bloque les requêtes) car le fallback
- *     in-memory est inutile en serverless (pas de partage entre instances)
+ * - Redis configuré → Sliding Window Redis distribué.
+ * - Redis NON configuré → fallback in-memory (dev local uniquement).
+ * - Redis configuré mais INJOIGNABLE en production → fail closed (429/503
+ *   côté appelant) : un rate-limiter local par instance serait contournable
+ *   en distribué et masquerait la panne. En dev → fallback mémoire.
  *
  * Docs : https://upstash.com/docs/redis/sdks/ratelimit-ts/overview
  */
@@ -112,8 +113,10 @@ export interface RateLimitResult {
 /**
  * Applies rate limiting to `identifier`.
  *
- * - En production avec Upstash configuré → Sliding Window Redis distribué.
- * - Sinon (dev / Redis non configuré) → fallback in-memory (non distribué).
+ * - Redis configuré → Sliding Window Redis distribué.
+ * - Redis non configuré → fallback in-memory (dev local).
+ * - Redis configuré mais erreur → fail closed en production
+ *   (`success: false`), fallback mémoire en dev uniquement.
  *
  * @param identifier - Clé unique, ex. `"${ip}:contact"`
  * @param options    - windowMs et maxRequests
@@ -129,7 +132,7 @@ export async function rateLimit(
   const limiter = getRatelimiter(maxRequests, windowSeconds)
 
   if (!limiter) {
-    // No Redis configured: fallback to in-memory (non-distributed in serverless, but better than DoS)
+    // No Redis configured: in-memory fallback (dev local only).
     if (process.env.NODE_ENV === 'production') {
       logError('[rate-limit] Redis not configured in production — falling back to memory')
     }
@@ -145,7 +148,12 @@ export async function rateLimit(
       resetTime: Number(reset),
     }
   } catch (err) {
-    logError('[rate-limit] Redis error, falling back to memory:', err)
+    logError('[rate-limit] Redis error:', err)
+    if (process.env.NODE_ENV === 'production') {
+      // Fail closed: a per-instance memory bucket would be bypassable in
+      // serverless and would hide the outage. Callers translate to 429.
+      return { success: false, limit: maxRequests, remaining: 0, resetTime: Date.now() + windowMs }
+    }
     return memoryRateLimit(identifier, windowMs, maxRequests)
   }
 }
@@ -154,13 +162,21 @@ export async function rateLimit(
 
 /** Extracts the real IP address from request headers */
 export function getIP(request: Request): string {
-  // Trust x-forwarded-for when behind Vercel's trusted proxy (first entry is real client IP)
-  // Fallback to x-real-ip for other deployments
-  const forwarded = request.headers.get('x-forwarded-for')
-  if (forwarded) return forwarded.split(',')[0].trim()
-
+  // Prefer x-real-ip: set (and overwritten) by the hosting edge (Vercel),
+  // single value — not spoofable through the proxy.
   const realIp = request.headers.get('x-real-ip')
-  if (realIp) return realIp.trim().split(',')[0]
+  if (realIp) {
+    const ip = realIp.split(',')[0].trim()
+    if (ip) return ip
+  }
+
+  // x-forwarded-for is client-controlled on its left side: proxies APPEND
+  // the real client IP, so the LAST entry is the most trustworthy, not the first.
+  const forwarded = request.headers.get('x-forwarded-for')
+  if (forwarded) {
+    const parts = forwarded.split(',').map((p) => p.trim()).filter(Boolean)
+    if (parts.length > 0) return parts[parts.length - 1]
+  }
 
   return 'unknown'
 }
