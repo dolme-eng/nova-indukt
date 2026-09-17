@@ -101,6 +101,13 @@ export interface RateLimitOptions {
   windowMs?: number
   /** Nombre maximum de requêtes par fenêtre (défaut : 10) */
   maxRequests?: number
+  /**
+   * Si true, une panne Redis en production dégrade vers le bucket mémoire
+   * local au lieu de refuser. Réservé aux lectures publiques (catalogue) :
+   * mieux vaut un rate-limit approximatif qu'un catalogue 100 % down.
+   * Écritures/auth : laisser false (fail closed).
+   */
+  allowMemoryFallback?: boolean
 }
 
 export interface RateLimitResult {
@@ -149,13 +156,32 @@ export async function rateLimit(
     }
   } catch (err) {
     logError('[rate-limit] Redis error:', err)
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production' && !options.allowMemoryFallback) {
       // Fail closed: a per-instance memory bucket would be bypassable in
       // serverless and would hide the outage. Callers translate to 429.
       return { success: false, limit: maxRequests, remaining: 0, resetTime: Date.now() + windowMs }
     }
     return memoryRateLimit(identifier, windowMs, maxRequests)
   }
+}
+
+/**
+ * Standard 429 response with Retry-After + X-RateLimit-* headers so
+ * legitimate clients (and auditors) back off instead of hammering.
+ */
+export function rateLimitResponse(result: RateLimitResult, message = 'Zu viele Anfragen'): Response {
+  const retryAfter = Math.max(1, Math.ceil((result.resetTime - Date.now()) / 1000))
+  return Response.json(
+    { error: message },
+    {
+      status: 429,
+      headers: {
+        'Retry-After': String(retryAfter),
+        'X-RateLimit-Limit': String(result.limit),
+        'X-RateLimit-Remaining': '0',
+      },
+    }
+  )
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────

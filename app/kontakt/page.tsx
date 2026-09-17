@@ -18,6 +18,15 @@ export const metadata: Metadata = {
     siteName: 'NOVA INDUKT',
     images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT' }],
     type: 'website',
+    locale: 'de_DE',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@novaindukt',
+    creator: '@novaindukt',
+    title: 'Kontakt | NOVA INDUKT',
+    description: 'Kontaktieren Sie NOVA INDUKT. Wir sind für Sie da!',
+    images: [`${SHOP_DOMAIN}/og-image.png`],
   },
 }
 

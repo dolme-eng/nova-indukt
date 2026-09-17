@@ -128,7 +128,7 @@ export default async function ZahlungsinformationenPage() {
               <li>
                 Telefon:{' '}
                 <a
-                  href={`tel:${COMPANY.phone.number.replace(/\s/g, '')}`}
+                  href={`tel:${COMPANY.phone.number.replace(/[^+\d]/g, "")}`}
                   className="text-nova-700 hover:underline"
                 >
                   {COMPANY.phone.number}
@@ -159,7 +159,7 @@ export default async function ZahlungsinformationenPage() {
               <p>
                 Telefon:{' '}
                 <a
-                  href={`tel:${COMPANY.phone.number.replace(/\s/g, '')}`}
+                  href={`tel:${COMPANY.phone.number.replace(/[^+\d]/g, "")}`}
                   className="text-nova-700 hover:underline"
                 >
                   {COMPANY.phone.number}

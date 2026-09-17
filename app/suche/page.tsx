@@ -36,6 +36,8 @@ export default async function SuchePage({
 }: {
   searchParams: Promise<{
     q?: string
+    // Legacy alias (?suche=): SearchAction + old links used it; map to ?q=
+    suche?: string
     category?: string
     priceMin?: string
     priceMax?: string
@@ -43,7 +45,7 @@ export default async function SuchePage({
   }>
 }) {
   const params = await searchParams
-  const q = params.q?.trim() || ''
+  const q = params.q?.trim() || params.suche?.trim() || ''
   const category = params.category || ''
   const priceMin = params.priceMin ? parseFloat(params.priceMin) : undefined
   const priceMax = params.priceMax ? parseFloat(params.priceMax) : undefined
@@ -86,7 +88,7 @@ export default async function SuchePage({
     }),
     prisma.category.findMany({
       where: { isActive: true },
-      include: { _count: { select: { products: true } } },
+      include: { _count: { select: { products: { where: { isActive: true } } } } },
     }),
   ])
 
@@ -101,17 +103,20 @@ export default async function SuchePage({
   }))
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#4ECCA3]/30 border-t-[#4ECCA3]" />
-            <p className="text-gray-600">Laden...</p>
+    <>
+      <h1 className="sr-only">Produktsuche{q ? `: ${q}` : ''}</h1>
+      <Suspense
+        fallback={
+          <div className="flex min-h-screen items-center justify-center bg-gray-50">
+            <div className="text-center">
+              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#4ECCA3]/30 border-t-[#4ECCA3]" />
+              <p className="text-gray-600">Laden...</p>
+            </div>
           </div>
-        </div>
-      }
-    >
-      <SearchContent initialProducts={formattedProducts} initialCategories={formattedCategories} />
-    </Suspense>
+        }
+      >
+        <SearchContent initialProducts={formattedProducts} initialCategories={formattedCategories} />
+      </Suspense>
+    </>
   )
 }

@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { Product, Category, mapDbProductToUi, mapDbCategoryToUi } from '@/lib/data/products'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
+import { safeJsonLd } from '@/lib/utils/json-ld'
 
 const ProductsContent = dynamic(
   () => import('./ProductsContent').then((m) => m.ProductsContent),
@@ -36,7 +37,7 @@ export async function generateMetadata({
     })
     if (category) {
       return {
-        title: `${category.nameDe} | Premium Induktions-Kochgeschirr | NOVA INDUKT`,
+        title: `${category.nameDe} | Premium Induktions-Kochgeschirr`,
         description: `Entdecken Sie unsere Auswahl an ${category.nameDe}. Premium-Qualität von NOVA INDUKT für höchste Ansprüche.`,
         openGraph: {
           title: `${category.nameDe} | NOVA INDUKT`,
@@ -66,7 +67,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: 'Unsere Produkte | Premium Induktions-Kochgeschirr | NOVA INDUKT',
+    title: 'Unsere Produkte | Premium Induktions-Kochgeschirr',
     description:
       'Entdecken Sie unser Premium-Sortiment an Induktions-Kochgeschirr, Pfannen, Töpfen und Küchenzubehör. Deutsche Qualität für Ihre Küche.',
     openGraph: {
@@ -81,6 +82,7 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       site: '@novaindukt',
+      creator: '@novaindukt',
       title: 'Unsere Produkte | NOVA INDUKT',
       description: 'Premium-Sortiment an Induktions-Kochgeschirr und Küchenzubehör.',
       images: [`${SHOP_DOMAIN}/og-image.png`],
@@ -164,7 +166,7 @@ export default async function ProductsPage({
           isActive: true,
           products: { some: { isActive: true } },
         },
-        include: { _count: { select: { products: true } } },
+        include: { _count: { select: { products: { where: { isActive: true } } } } },
         orderBy: { sortOrder: 'asc' },
       }),
   ])
@@ -173,7 +175,21 @@ export default async function ProductsPage({
   const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
 
+  const breadcrumbData = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Startseite', item: SHOP_DOMAIN },
+      { '@type': 'ListItem', position: 2, name: 'Produkte', item: `${SHOP_DOMAIN}/produkte` },
+    ],
+  }
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbData) }}
+      />
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center">
@@ -193,5 +209,6 @@ export default async function ProductsPage({
         totalProducts={total}
       />
     </Suspense>
+    </>
   )
 }

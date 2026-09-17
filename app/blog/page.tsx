@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@novaindukt',
+    creator: '@novaindukt',
     title: 'Nova Magazin | NOVA INDUKT',
     description: 'Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.',
     images: [`${SHOP_DOMAIN}/og-image.png`],

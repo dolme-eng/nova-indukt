@@ -139,7 +139,7 @@ export default async function WiderrufPage() {
               <div className="space-y-4" role="region" aria-label="Muster-Widerrufsformular">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">An</label>
+                    <p className="block text-sm font-medium text-gray-700 mb-1">An</p>
                     <div className="bg-white p-3 rounded-lg text-sm text-gray-600 border">
                       <p>{COMPANY.name}</p>
                       <p>{COMPANY.street}</p>
@@ -198,7 +198,7 @@ export default async function WiderrufPage() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier)</label>
+                    <p className="block text-sm font-medium text-gray-700 mb-1">Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier)</p>
                     <div className="h-20 bg-white border border-gray-300 rounded-lg border-dashed flex items-center justify-center text-gray-400 text-sm">
                       (Unterschrift)
                     </div>

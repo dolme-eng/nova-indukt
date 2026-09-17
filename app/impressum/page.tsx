@@ -68,7 +68,7 @@ export default async function ImpressumPage() {
             <div className="space-y-2 text-gray-700">
               <p>
                 Telefon:{' '}
-                <a href={`tel:${COMPANY.phone.numberRaw}`} className="hover:text-nova-700">
+                <a href={`tel:+${COMPANY.phone.numberRaw.replace(/\D/g, '')}`} className="hover:text-nova-700">
                   {COMPANY.phone.number}
                 </a>
               </p>

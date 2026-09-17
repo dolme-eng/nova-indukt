@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { rateLimit, rateLimitResponse, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
   try {
-    const rl = await rateLimit(createRateLimitKey(getIP(request), 'promotions:list'), { windowMs: 60_000, maxRequests: 30 })
-    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'promotions:list'), { windowMs: 60_000, maxRequests: 30, allowMemoryFallback: true })
+    if (!rl.success) return rateLimitResponse(rl)
 
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')

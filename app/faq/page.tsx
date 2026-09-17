@@ -19,7 +19,18 @@ export const metadata: Metadata = {
     description:
       'Finden Sie Antworten auf häufig gestellte Fragen zu Versand, Zahlung, Rückgabe, Garantie und Produkten von NOVA INDUKT.',
     url: `${SHOP_DOMAIN}/faq`,
+    siteName: 'NOVA INDUKT',
+    type: 'website',
+    locale: 'de_DE',
     images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'FAQ | NOVA INDUKT' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@novaindukt',
+    creator: '@novaindukt',
+    title: 'FAQ - Häufig gestellte Fragen | NOVA INDUKT',
+    description: 'Antworten zu Versand, Zahlung, Rückgabe, Garantie und Produkten.',
+    images: [`${SHOP_DOMAIN}/og-image.png`],
   },
 }
 

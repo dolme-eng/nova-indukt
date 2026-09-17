@@ -81,6 +81,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
+      site: '@novaindukt',
+      creator: '@novaindukt',
       title,
       description,
       images: post.image ? [post.image] : [],

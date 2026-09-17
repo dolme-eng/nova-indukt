@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { z } from 'zod'
-import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { rateLimit, rateLimitResponse, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
@@ -21,8 +21,8 @@ const reviewSchema = z.object({
 // GET - Fetch reviews for a product
 export async function GET(request: NextRequest) {
   try {
-    const rl = await rateLimit(createRateLimitKey(getIP(request), 'reviews:get'), { windowMs: 60_000, maxRequests: 120 })
-    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+    const rl = await rateLimit(createRateLimitKey(getIP(request), 'reviews:get'), { windowMs: 60_000, maxRequests: 120, allowMemoryFallback: true })
+    if (!rl.success) return rateLimitResponse(rl)
 
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')

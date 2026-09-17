@@ -24,5 +24,10 @@ export const metadata: Metadata = {
 }
 
 export default function CheckoutPage() {
-  return <CheckoutContent />
+  return (
+    <>
+      <h1 className="sr-only">Kasse – Bestellung abschließen</h1>
+      <CheckoutContent />
+    </>
+  )
 }

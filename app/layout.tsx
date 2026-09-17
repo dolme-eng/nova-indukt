@@ -108,8 +108,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
-    // iOS ignores SVG touch icons — PNG required (og-image scaled by iOS)
-    apple: '/og-image.png',
+    // iOS ignores SVG touch icons — PNG required (og-image scaled by iOS).
+    // Absolute URL: metadataBase does not resolve icons consistently.
+    apple: `${SHOP_DOMAIN}/og-image.png`,
   },
 }
 
@@ -143,7 +144,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               logo: `${SHOP_DOMAIN}/logo0.png`,
               email: SUPPORT_EMAIL,
               sameAs: [COMPANY.social.facebook, COMPANY.social.instagram],
-              telephone: COMPANY.phone.number,
+              // E.164 from the digit-only raw number — never the display
+              // string (env typos like "(030 ..." must not leak into JSON-LD)
+              telephone: `+${COMPANY.phone.numberRaw.replace(/\D/g, '')}`,
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'customer service',

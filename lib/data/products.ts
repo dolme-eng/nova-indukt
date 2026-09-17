@@ -23,7 +23,9 @@ export function mapDbProductToUi(p: DbProduct): Product {
       const imgs = [...p.images]
         .sort((a, b) => a.sortOrder - b.sortOrder)
         .map((img) => img.url)
-        .filter((url): url is string => !!url)
+        // Dedupe by URL: duplicate image rows (same url 3x seen in prod)
+        // otherwise render as triplicate gallery slides + JSON-LD entries
+        .filter((url, index, arr): url is string => !!url && arr.indexOf(url) === index)
       return imgs.length > 0 ? imgs : ['/placeholder.svg']
     })(),
     rating: Number(p.rating),

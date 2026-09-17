@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { rateLimit, rateLimitResponse, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 
 const MAX_QUERY_LENGTH = 200
@@ -10,8 +10,9 @@ export async function GET(req: NextRequest) {
     const rl = await rateLimit(createRateLimitKey(getIP(req), 'search'), {
       windowMs: 60_000,
       maxRequests: 30,
+      allowMemoryFallback: true,
     })
-    if (!rl.success) return NextResponse.json({ error: 'Zu viele Anfragen' }, { status: 429 })
+    if (!rl.success) return rateLimitResponse(rl)
 
     const { searchParams } = new URL(req.url)
     let query = searchParams.get('q')

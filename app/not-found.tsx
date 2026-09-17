@@ -1,5 +1,12 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Search, Home } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Seite nicht gefunden',
+  description: 'Die gesuchte Seite existiert nicht.',
+  robots: { index: false, follow: true },
+}
 
 export default function NotFound() {
   return (

@@ -1,21 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { logError } from "@/lib/logger"
-import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
+import { rateLimit, rateLimitResponse, getIP, createRateLimitKey } from "@/lib/rate-limit"
 
 // GET - Fetch published testimonials (reviews with product name + user name)
 export async function GET(request: NextRequest) {
   try {
-    // Rate limit: 20 requests per minute per IP
+    // Rate limit: 20 requests per minute per IP (public read: memory fallback)
     const rl = await rateLimit(createRateLimitKey(getIP(request), 'testimonials'), {
       windowMs: 60_000,
       maxRequests: 20,
+      allowMemoryFallback: true,
     })
     if (!rl.success) {
-      return NextResponse.json(
-        { error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
-        { status: 429 }
-      )
+      return rateLimitResponse(rl, 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.')
     }
 
     const { searchParams } = new URL(request.url)
