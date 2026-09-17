@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/agb`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
     { url: `${BASE_URL}/impressum`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
     { url: `${BASE_URL}/karriere`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE_URL}/informationen-zur-zahlung`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
+    // /informationen-zur-zahlung is noindex (post-order utility with bank details)
   ]
 
   // Skip DB queries at build time if DATABASE_URL is not set
@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const [dbProducts, dbCategories, dbBlogPosts] = await Promise.all([
       prisma.product.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
-      prisma.category.findMany({ where: { isActive: true }, select: { slug: true } }),
+      prisma.category.findMany({ where: { isActive: true }, select: { slug: true, createdAt: true } }),
       prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, publishedAt: true, createdAt: true, updatedAt: true } }),
     ])
 
@@ -43,9 +43,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
+    // /kategorie/* only redirects to /produkte?kategorie= — list the final URL
+    // instead of a redirect chain.
     const categoryRoutes: MetadataRoute.Sitemap = dbCategories.map((category) => ({
-      url: `${BASE_URL}/kategorie/${category.slug}`,
-      lastModified: new Date(),
+      url: `${BASE_URL}/produkte?kategorie=${category.slug}`,
+      lastModified: category.createdAt,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))

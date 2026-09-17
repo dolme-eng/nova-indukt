@@ -11,6 +11,7 @@ import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
 import { stripHtml } from '@/lib/utils/sanitize'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 /**
  * API Route de registration.
@@ -99,12 +100,9 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Send verification email
-    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.vercel.app').replace(
-      /\/+$/,
-      ''
-    )
-    const verificationUrl = `${siteUrl}/api/auth/verify-email?token=${verificationToken}`
+    // Send verification email (SHOP_DOMAIN: single domain source — the token
+    // link must live on the canonical domain, never diverge per env var)
+    const verificationUrl = `${SHOP_DOMAIN}/api/auth/verify-email?token=${verificationToken}`
 
     const html = await render(
       EmailVerificationEmail({

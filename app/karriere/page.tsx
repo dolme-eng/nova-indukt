@@ -15,6 +15,10 @@ export const metadata: Metadata = {
     title: 'Karriere bei NOVA INDUKT',
     description: 'Werden Sie Teil des NOVA INDUKT Teams. Entdecken Sie aktuelle Stellenangebote in der Premium-Küchenzubehör Branche.',
     url: `${SHOP_DOMAIN}/karriere`,
+    siteName: 'NOVA INDUKT',
+    type: 'website',
+    locale: 'de_DE',
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'Karriere | NOVA INDUKT' }],
   },
 }
 

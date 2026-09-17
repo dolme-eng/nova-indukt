@@ -57,9 +57,10 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-        url: `${SHOP_DOMAIN}/produkt/${product.slug}`,
+      url: `${SHOP_DOMAIN}/produkt/${product.slug}`,
       siteName: 'NOVA INDUKT',
       type: 'website',
+      locale: 'de_DE',
       images: mainImage ? [{ url: mainImage, alt: product.nameDe, width: 800, height: 600 }] : [],
     },
     twitter: {
@@ -109,7 +110,22 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           name: 'Produkte',
           item: `${SHOP_DOMAIN}/produkte`,
         },
-        { '@type': 'ListItem', position: 3, name: product.category?.nameDe || 'Produkt' },
+        ...(product.category
+          ? [
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: product.category.nameDe,
+                item: `${SHOP_DOMAIN}/produkte?kategorie=${product.category.slug}`,
+              },
+            ]
+          : []),
+        {
+          '@type': 'ListItem',
+          position: product.category ? 4 : 3,
+          name: product.nameDe,
+          item: `${SHOP_DOMAIN}/produkt/${product.slug}`,
+        },
       ],
     },
     {
@@ -119,7 +135,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       image: product.images.map((img) => img.url),
       description: product.descriptionDe || product.shortDescription,
       sku: product.id,
-      gtin13: product.ean,
+      // gtin13 omitted when null — schema.org rejects explicit null
+      ...(product.ean ? { gtin13: product.ean } : {}),
       mpn: product.supplierSku || product.id,
       itemCondition: 'https://schema.org/NewCondition',
       brand: {
@@ -148,6 +165,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               '@type': 'AggregateRating',
               ratingValue: product.rating,
               reviewCount: product.reviewCount,
+              bestRating: 5,
+              worstRating: 1,
             },
           }
         : {}),

@@ -15,6 +15,7 @@ import { Providers } from '@/components/providers'
 import { AuthSync } from '@/components/auth-sync'
 import { GoogleAnalytics } from '@/components/google-analytics'
 import { SHOP_DOMAIN, SHOP_NAME, SUPPORT_EMAIL } from '@/lib/constants/shop'
+import { COMPANY } from '@/lib/constants/company'
 import { safeJsonLd } from '@/lib/utils/json-ld'
 
 const inter = Inter({
@@ -88,7 +89,7 @@ export const metadata: Metadata = {
     creator: '@novaindukt',
     title: 'NOVA INDUKT | Premium Induktions-Kochgeschirr',
     description: 'Erstklassiges Kochgeschirr und Zubehör für Induktion. Deutsche Qualität.',
-    images: ['/og-image.png'],
+    images: [`${SHOP_DOMAIN}/og-image.png`],
   },
   robots: {
     index: true,
@@ -107,12 +108,16 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    // iOS ignores SVG touch icons — PNG required (og-image scaled by iOS)
+    apple: '/og-image.png',
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#4ECCA3',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#4ECCA3' },
+    { media: '(prefers-color-scheme: dark)', color: '#0C211E' },
+  ],
   width: 'device-width',
   initialScale: 1,
 }
@@ -137,12 +142,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               url: SHOP_DOMAIN,
               logo: `${SHOP_DOMAIN}/logo0.png`,
               email: SUPPORT_EMAIL,
+              sameAs: [COMPANY.social.facebook, COMPANY.social.instagram],
+              telephone: COMPANY.phone.number,
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'customer service',
                 url: `${SHOP_DOMAIN}/kontakt`,
                 areaServed: 'DE',
-                availableLanguage: 'German',
+                availableLanguage: 'de',
               },
               // Adresse : renseigner NEXT_PUBLIC_COMPANY_ADDRESS_STREET, _CITY, _ZIP en prod
               ...(process.env.NEXT_PUBLIC_COMPANY_ADDRESS_STREET

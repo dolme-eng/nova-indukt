@@ -14,6 +14,10 @@ export const metadata: Metadata = {
     title: 'Widerrufsrecht | NOVA INDUKT',
     description: 'Widerrufsbelehrung und Widerrufsformular der NOVA INDUKT GmbH',
     url: `${SHOP_DOMAIN}/widerruf`,
+    siteName: 'NOVA INDUKT',
+    type: 'website',
+    locale: 'de_DE',
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'Widerrufsrecht | NOVA INDUKT' }],
   },
 }
 

@@ -493,11 +493,9 @@ export async function sendPasswordResetEmail(
   resetToken: string
 ) {
   try {
-    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.vercel.app').replace(
-      /\/+$/,
-      ''
-    )
-    const resetUrl = `${baseUrl}/passwort-zuruecksetzen?token=${resetToken}`
+    // Single domain source (SHOP_DOMAIN) — reset links must live on the same
+    // domain as the canonical site, never diverge per env var.
+    const resetUrl = `${SHOP_DOMAIN}/passwort-zuruecksetzen?token=${resetToken}`
 
     const html = await render(
       PasswordResetEmail({

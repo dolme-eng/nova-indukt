@@ -16,6 +16,10 @@ export const metadata: Metadata = {
     title: 'AGB - Allgemeine Geschäftsbedingungen | NOVA INDUKT',
     description: 'Allgemeine Geschäftsbedingungen der NOVA INDUKT GmbH',
     url: `${SHOP_DOMAIN}/agb`,
+    siteName: 'NOVA INDUKT',
+    type: 'website',
+    locale: 'de_DE',
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'AGB | NOVA INDUKT' }],
   },
 }
 

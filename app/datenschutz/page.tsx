@@ -13,6 +13,10 @@ export const metadata: Metadata = {
     title: 'Datenschutzerklärung | NOVA INDUKT',
     description: 'Datenschutzerklärung der NOVA INDUKT GmbH gemäß DSGVO',
     url: `${SHOP_DOMAIN}/datenschutz`,
+    siteName: 'NOVA INDUKT',
+    type: 'website',
+    locale: 'de_DE',
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'Datenschutz | NOVA INDUKT' }],
   },
 }
 

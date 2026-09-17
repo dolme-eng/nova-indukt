@@ -60,6 +60,8 @@ export async function generateMetadata({
       alternates: {
         canonical: `${SHOP_DOMAIN}/produkte?suche=${encodeURIComponent(search)}`,
       },
+      // Search-result pages are never indexed (same policy as /suche)
+      robots: { index: false, follow: true },
     }
   }
 

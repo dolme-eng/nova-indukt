@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     title: 'Lieferung & Versand | NOVA INDUKT',
     description: 'Informationen zur Lieferung und zum Versand von NOVA INDUKT Produkten. Schneller Versand innerhalb Deutschlands.',
     url: `${SHOP_DOMAIN}/lieferung`,
+    siteName: 'NOVA INDUKT',
+    type: 'website',
+    locale: 'de_DE',
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'Lieferung & Versand | NOVA INDUKT' }],
   },
 }
 

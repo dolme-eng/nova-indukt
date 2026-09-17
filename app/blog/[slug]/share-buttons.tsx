@@ -1,6 +1,7 @@
 'use client'
 
 import { Facebook, Twitter, Linkedin, Share2 } from 'lucide-react'
+import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 interface ShareButtonsProps {
   slug: string
@@ -8,8 +9,7 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ slug, title }: ShareButtonsProps) {
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nova-indukt.vercel.app').replace(/\/+$/, '')
-  const url = `${siteUrl}/blog/${slug}`
+  const url = `${SHOP_DOMAIN}/blog/${slug}`
 
   const handleShare = async () => {
     if (navigator.share) {

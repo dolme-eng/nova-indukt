@@ -19,6 +19,13 @@ export const metadata: Metadata = {
     siteName: 'NOVA INDUKT',
     images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'NOVA INDUKT Blog' }],
     type: 'website',
+    locale: 'de_DE',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nova Magazin | NOVA INDUKT',
+    description: 'Entdecke Tipps, Rezepte und Neuigkeiten rund um die moderne Küche.',
+    images: [`${SHOP_DOMAIN}/og-image.png`],
   },
 }
 

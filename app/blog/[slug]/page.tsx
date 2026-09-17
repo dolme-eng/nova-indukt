@@ -62,10 +62,21 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      images: post.image ? [{ url: post.image }] : [],
+      url: `${SHOP_DOMAIN}/blog/${resolvedParams.slug}`,
+      siteName: 'NOVA INDUKT',
+      images: post.image
+        ? [{ url: post.image, width: 1200, height: 630, alt: title }]
+        : [],
       type: 'article',
+      locale: 'de_DE',
       publishedTime: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
       authors: [post.author],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: post.image ? [post.image] : [],
     },
   }
 }
@@ -387,6 +398,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     orderBy: { publishedAt: 'desc' },
   })
 
+  const canonicalUrl = `${SHOP_DOMAIN}/blog/${resolvedParams.slug}`
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -394,6 +406,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     image: post.image ? [post.image] : [],
     datePublished: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
     dateModified: post.updatedAt.toISOString(),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+    ...(post.category ? { articleSection: post.category } : {}),
     author: [
       {
         '@type': 'Person',
@@ -405,7 +422,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       name: 'NOVA INDUKT',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nova-indukt.de/favicon.svg',
+        url: `${SHOP_DOMAIN}/og-image.png`,
+        width: 1200,
+        height: 630,
       },
     },
     description: post.excerptDe,
@@ -438,6 +457,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     fill
                     className="object-cover"
                     priority
+                    sizes="(max-width: 896px) 100vw, 896px"
                   />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />

@@ -172,9 +172,10 @@ export default async function Page() {
       description: 'Premium Induktions-Kochgeschirr aus Deutschland',
       potentialAction: {
         '@type': 'SearchAction',
+        // /suche reads ?q (suche/page.tsx) — ?suche= would return empty
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: `${SHOP_DOMAIN}/suche?suche={search_term_string}`,
+          urlTemplate: `${SHOP_DOMAIN}/suche?q={search_term_string}`,
         },
         'query-input': 'required name=search_term_string',
       },

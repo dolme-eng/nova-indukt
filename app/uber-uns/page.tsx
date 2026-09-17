@@ -14,6 +14,10 @@ export const metadata: Metadata = {
     title: 'Über uns | NOVA INDUKT',
     description: 'Lernen Sie NOVA INDUKT kennen - Ihr Spezialist für Premium Induktions-Kochgeschirr aus Deutschland',
     url: `${SHOP_DOMAIN}/uber-uns`,
+    siteName: 'NOVA INDUKT',
+    type: 'website',
+    locale: 'de_DE',
+    images: [{ url: `${SHOP_DOMAIN}/og-image.png`, width: 1200, height: 630, alt: 'Über uns | NOVA INDUKT' }],
   },
 }
 

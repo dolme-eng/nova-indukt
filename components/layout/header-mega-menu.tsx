@@ -152,7 +152,7 @@ export function MegaMenu({ onClose, onMouseEnter, onMouseLeave }: MegaMenuProps)
             <div className="col-span-3 border-l border-gray-100 pl-10">
               <div className="group relative flex h-full min-h-[200px] flex-col justify-end overflow-hidden rounded-3xl bg-[#0C211E] p-6">
                 <Image
-                  src="/images/Die Premium/Die Premium.jpeg"
+                  src="/images/die-premium/die-premium.jpeg"
                   alt="Die Premium Serie"
                   fill
                   className="object-cover opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-70"
