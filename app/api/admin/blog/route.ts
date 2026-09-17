@@ -28,6 +28,19 @@ export async function POST(request: NextRequest) {
     }
 
     const data = parsed.data
+
+    // Slug collision → 409 (was: raw Prisma P2002 → 500)
+    const existing = await prisma.blogPost.findUnique({
+      where: { slug: data.slug },
+      select: { id: true },
+    })
+    if (existing) {
+      return NextResponse.json(
+        { error: 'Ein Artikel mit diesem Slug existiert bereits' },
+        { status: 409 }
+      )
+    }
+
     const post = await prisma.blogPost.create({
       data: {
         titleDe: data.titleDe,

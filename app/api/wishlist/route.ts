@@ -22,8 +22,10 @@ export async function GET() {
       )
     }
     
+    // Only active products — deactivated items disappear instead of
+    // resurrecting hidden products
     const wishlistItems = await prisma.wishlistItem.findMany({
-      where: { userId: session.user.id },
+      where: { userId: session.user.id, product: { isActive: true } },
       include: {
         product: {
           include: {
@@ -91,13 +93,14 @@ export async function POST(request: NextRequest) {
     }
     
     const { productId } = result.data
-    
-    // Check if product exists
+
+    // Check if product exists and is active (no wishlist for hidden products)
     const product = await prisma.product.findUnique({
       where: { id: productId },
+      select: { id: true, isActive: true },
     })
-    
-    if (!product) {
+
+    if (!product || !product.isActive) {
       return NextResponse.json(
         { error: "Produkt nicht gefunden" },
         { status: 404 }

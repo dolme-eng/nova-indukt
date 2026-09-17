@@ -134,11 +134,38 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { items, shippingData, appliedPromoCode, paymentMethod } = parsed.data
+    const { items, shippingData, appliedPromoCode, paymentMethod, idempotencyKey } = parsed.data
     // ────────────────────────────────────────────────────────────────────────
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
+    }
+
+    // Idempotency: retry/double-submit with the same key returns the existing
+    // order instead of creating a duplicate. Scoped to owner (user or email)
+    // so a key can never leak another customer's order.
+    if (idempotencyKey) {
+      const existing = await prisma.order.findUnique({
+        where: { idempotencyKey },
+        include: {
+          items: {
+            include: { product: { include: { images: true } } },
+          },
+        },
+      })
+      const ownerMatch = session?.user?.id
+        ? existing?.userId === session.user.id
+        : existing?.userId === null &&
+          existing?.customerEmail === shippingData.email.toLowerCase()
+      if (existing && ownerMatch) {
+        return NextResponse.json({
+          ...existing,
+          total: Number(existing.total),
+          subtotal: Number(existing.subtotal),
+          shippingCost: Number(existing.shippingCost),
+          deduped: true,
+        })
+      }
     }
 
     // ── Verify product prices from database ─────────────────────────────────
@@ -185,9 +212,8 @@ export async function POST(request: NextRequest) {
       return sum + item.dbPrice * item.quantity
     }, 0)
 
-    const serverShipping = calculateShipping(serverSubtotal)
-
-    // VERIFY COUPON ON SERVER
+    // VERIFY COUPON ON SERVER (before shipping: free-shipping threshold
+    // applies to the DISCOUNTED subtotal — documented business rule)
     let serverDiscountAmount = 0
     let verifiedPromotionId: string | undefined
 
@@ -207,14 +233,20 @@ export async function POST(request: NextRequest) {
       verifiedPromotionId = couponResult.promotionId
     }
 
+    const serverShipping = calculateShipping(Math.max(0, serverSubtotal - serverDiscountAmount))
+
     const serverTotal = Math.max(0, serverSubtotal + serverShipping - serverDiscountAmount)
     // ────────────────────────────────────────────────────────────────────────
 
     // 2. Generate collision-safe order number (UUID v4, no Date.now() race condition)
     const orderNumber = `NOV-${randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()}`
 
-    // 3. Create order in a transaction to include stock update
-    const order = await prisma.$transaction(async (tx) => {
+    // 3. Create order in a transaction.
+    // P2002 on idempotencyKey = parallel double-submit won the race:
+    // return the existing order instead of erroring.
+    let order
+    try {
+      order = await prisma.$transaction(async (tx) => {
       // Create the order — using server-calculated totals
       const newOrder = await tx.order.create({
         data: {
@@ -235,6 +267,7 @@ export async function POST(request: NextRequest) {
           paymentMethod: paymentMethod.toUpperCase() as import('@prisma/client').PaymentMethod,
           status: 'PENDING',
           paymentStatus: 'PENDING',
+          idempotencyKey: idempotencyKey ?? null,
           subtotal: serverSubtotal,
           shippingCost: serverShipping,
           discountAmount: serverDiscountAmount,
@@ -291,8 +324,34 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      return newOrder
-    })
+        return newOrder
+      })
+    } catch (txError) {
+      const { Prisma } = await import('@prisma/client')
+      if (
+        idempotencyKey &&
+        txError instanceof Prisma.PrismaClientKnownRequestError &&
+        txError.code === 'P2002'
+      ) {
+        // Parallel retry won the race — return the order created by the twin request
+        const twin = await prisma.order.findUnique({
+          where: { idempotencyKey },
+          include: {
+            items: { include: { product: { include: { images: true } } } },
+          },
+        })
+        if (twin) {
+          return NextResponse.json({
+            ...twin,
+            total: Number(twin.total),
+            subtotal: Number(twin.subtotal),
+            shippingCost: Number(twin.shippingCost),
+            deduped: true,
+          })
+        }
+      }
+      throw txError
+    }
 
     // 4. Clear user's cart if logged in
     if (session?.user?.id) {

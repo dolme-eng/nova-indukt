@@ -7,9 +7,37 @@ import {
   updateCartItem as updateServerCartItem,
   removeFromCart as removeFromServerCart,
   clearCart as clearServerCart,
+  getDbCartIds,
 } from '@/app/actions/cart'
-import { getProductsForHydration } from '@/app/actions/cart-hydration'
+import { getProductsForHydration, type HydratedProduct } from '@/app/actions/cart-hydration'
 import { logError } from '@/lib/logger'
+
+const MAX_QTY = 99
+
+function toStoreItem(fresh: HydratedProduct, quantity: number): CartItem {
+  return {
+    product: {
+      id: fresh.id,
+      slug: fresh.slug,
+      name: { de: fresh.nameDe },
+      category: '',
+      price: fresh.price,
+      images: fresh.imageUrl ? [fresh.imageUrl] : ['/placeholder.svg'],
+      rating: 0,
+      reviewCount: 0,
+      description: { de: '' },
+      shortDescription: { de: '' },
+      specs: {
+        material: '',
+        dimensions: '',
+        weight: '',
+        dishwasher: false,
+        induction: false,
+      },
+    } as Product,
+    quantity: Math.min(MAX_QTY, Math.max(1, quantity)),
+  }
+}
 
 export interface CartItem {
   product: Product
@@ -39,6 +67,8 @@ interface CartState {
   updateQuantity: (productId: string, quantity: number) => void
   clearCart: () => void
   setHydrated: () => void
+  /** Replace store with server DB cart (post-login truth). No-op for guests. */
+  syncFromServer: () => Promise<void>
 
   // Computed
   totalItems: () => number
@@ -60,12 +90,12 @@ export const useCartStore = create<CartState>()(
           set({
             items: items.map((item) =>
               item.product.id === product.id
-                ? { ...item, quantity: item.quantity + quantity }
+                ? { ...item, quantity: Math.min(MAX_QTY, item.quantity + quantity) }
                 : item
             ),
           })
         } else {
-          set({ items: [...items, { product, quantity }] })
+          set({ items: [...items, { product, quantity: Math.min(MAX_QTY, quantity) }] })
         }
 
         addToCart(product.id, quantity).catch((err) => {
@@ -75,13 +105,15 @@ export const useCartStore = create<CartState>()(
       },
 
       removeItem: (productId) => {
+        const previousItems = get().items
         set({
-          items: get().items.filter((item) => item.product.id !== productId),
+          items: previousItems.filter((item) => item.product.id !== productId),
         })
 
-        removeFromServerCart(productId).catch((err) =>
+        removeFromServerCart(productId).catch((err) => {
           logError('Failed to sync cart item removal:', err)
-        )
+          set({ items: previousItems })
+        })
       },
 
       updateQuantity: (productId, quantity) => {
@@ -90,15 +122,37 @@ export const useCartStore = create<CartState>()(
           return
         }
 
+        const previousItems = get().items
+        const clamped = Math.min(MAX_QTY, quantity)
         set({
-          items: get().items.map((item) =>
-            item.product.id === productId ? { ...item, quantity } : item
+          items: previousItems.map((item) =>
+            item.product.id === productId ? { ...item, quantity: clamped } : item
           ),
         })
 
-        updateServerCartItem(productId, quantity).catch((err) =>
+        updateServerCartItem(productId, clamped).catch((err) => {
           logError('Failed to sync cart item update:', err)
-        )
+          set({ items: previousItems })
+        })
+      },
+
+      syncFromServer: async () => {
+        try {
+          const ids = await getDbCartIds()
+          if (ids.length === 0) return
+          const products = await getProductsForHydration(ids.map((i) => i.productId))
+          const productMap = new Map(products.map((p) => [p.id, p]))
+          const serverItems: CartItem[] = []
+          for (const item of ids) {
+            const fresh = productMap.get(item.productId)
+            if (!fresh) continue
+            serverItems.push(toStoreItem(fresh, item.quantity))
+          }
+          // DB is truth post-merge: replace local items (drops stale/inactive)
+          set({ items: serverItems })
+        } catch (err) {
+          logError('Failed to sync cart from server:', err)
+        }
       },
 
       clearCart: () => {

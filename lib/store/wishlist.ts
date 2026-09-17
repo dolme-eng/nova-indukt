@@ -69,8 +69,9 @@ export function useWishlist() {
     if (isAuthenticated && !hasSynced.current) {
       hasSynced.current = true
       ;(async () => {
-        await syncOnLogin()
-        await fetchWishlistFromApi()
+        // sync already returns the merged list — fetch only as fallback
+        const synced = await syncOnLogin()
+        if (!synced) await fetchWishlistFromApi()
       })()
     }
     if (!isAuthenticated) {
@@ -99,8 +100,8 @@ export function useWishlist() {
     }
   }
 
-  const syncOnLogin = async () => {
-    if (items.length === 0) return
+  const syncOnLogin = async (): Promise<boolean> => {
+    if (items.length === 0) return false
 
     try {
       setIsSyncing(true)
@@ -123,10 +124,13 @@ export function useWishlist() {
               slug: item.slug,
             }))
           )
+          return true
         }
       }
+      return false
     } catch (error) {
       logError('Error syncing wishlist:', error)
+      return false
     } finally {
       setIsSyncing(false)
     }

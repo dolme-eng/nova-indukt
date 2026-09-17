@@ -169,6 +169,10 @@ model Order {
   internalNote    String?
   shippingEmailSentAt DateTime?   // M18: Track shipping notification email
   reviewEmailSentAt   DateTime?   // M18: Track review request email
+  // Client-generated idempotency key (one per cart state): retries/double
+  // submits reuse it — the server returns the existing order instead of
+  // creating a duplicate. NULL for orders created before this field.
+  idempotencyKey String? @unique
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   user            User?         @relation(fields: [userId], references: [id])

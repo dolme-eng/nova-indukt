@@ -5,8 +5,8 @@ import { z } from 'zod'
 export const orderItemSchema = z.object({
   id: z.string().cuid('Invalid product ID'),
   quantity: z.number().int().positive('Quantity must be at least 1').max(99, 'Quantity must be at most 99'),
-  name: z.string().min(1, 'Product name is required'),
-  slug: z.string().optional(),
+  name: z.string().min(1, 'Product name is required').max(200),
+  slug: z.string().max(200).optional(),
 })
 
 // Schéma pour l'adresse de livraison
@@ -28,11 +28,13 @@ export const createOrderSchema = z.object({
   items: z.array(orderItemSchema).min(1, 'At least one item is required').max(50),
   shippingData: shippingDataSchema,
   paymentMethod: z.enum(['BANK_TRANSFER']),
-  subtotal: z.number().positive('Subtotal must be positive'),
-  shipping: z.number().nonnegative('Shipping cannot be negative'),
-  discountAmount: z.number().nonnegative().optional().default(0),
-  appliedPromoCode: z.string().optional().nullable(),
-  total: z.number().positive('Total must be positive'),
+  subtotal: z.number().positive('Subtotal must be positive').max(999999.99),
+  shipping: z.number().nonnegative('Shipping cannot be negative').max(9999),
+  discountAmount: z.number().nonnegative().max(999999.99).optional().default(0),
+  appliedPromoCode: z.string().max(50).optional().nullable(),
+  total: z.number().positive('Total must be positive').max(999999.99),
+  // Client-generated UUID, stable per cart state: retries reuse it → no duplicates
+  idempotencyKey: z.string().uuid().optional(),
 }).refine((data) => {
   // Verify that the total is consistent
   const calculatedTotal = data.subtotal + data.shipping - (data.discountAmount || 0)

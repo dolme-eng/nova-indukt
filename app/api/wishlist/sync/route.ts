@@ -59,10 +59,11 @@ export async function POST(request: NextRequest) {
     
     // Add new items to DB
     if (itemsToAdd.length > 0) {
-      // Verify products exist
+      // Verify products exist AND are active
       const existingProducts = await prisma.product.findMany({
         where: {
           id: { in: itemsToAdd },
+          isActive: true,
         },
         select: { id: true },
       })
@@ -84,9 +85,9 @@ export async function POST(request: NextRequest) {
       }
     }
     
-    // Fetch updated wishlist
+    // Fetch updated wishlist (active products only)
     const updatedWishlist = await prisma.wishlistItem.findMany({
-      where: { userId },
+      where: { userId, product: { isActive: true } },
       include: {
         product: {
           include: {

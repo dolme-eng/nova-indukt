@@ -42,9 +42,11 @@ export async function generateMetadata({
   const resolvedParams = await params
   const post = await getBlogPostBySlug(resolvedParams.slug)
 
-  if (!post) {
+  // Drafts/missing must not leak title/excerpt into <head> metadata
+  if (!post || !post.isPublished) {
     return {
       title: 'Artikel nicht gefunden',
+      robots: { index: false, follow: false },
     }
   }
 

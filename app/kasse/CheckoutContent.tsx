@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
@@ -35,7 +35,8 @@ const shippingSchema = z.object({
   email: z.string().min(1, 'E-Mail ist erforderlich').email('Ungültige E-Mail-Adresse'),
   phone: z.string().max(50).regex(/^[\d\s\-+()]+$/, 'Ungültige Telefonnummer').optional().or(z.literal('')),
   address: z.string().min(1, 'Adresse ist erforderlich').max(200),
-  zipCode: z.string().min(1, 'PLZ ist erforderlich').max(20),
+  // Aligné serveur (order.ts): PLZ min 3 / max 10
+  zipCode: z.string().min(3, 'Ungültige Postleitzahl').max(10, 'Ungültige Postleitzahl'),
   city: z.string().min(1, 'Stadt ist erforderlich').max(100),
   country: z.string().min(1, 'Land ist erforderlich'),
 })
@@ -49,6 +50,25 @@ interface AppliedPromo {
   discountType: 'PERCENTAGE' | 'FIXED_AMOUNT'
   discountValue: number
   promotionId: string
+}
+
+// Adresse sauvegardée (GET /api/addresses) — pour pré-remplir le formulaire
+interface SavedAddress {
+  id: string
+  firstName: string
+  lastName: string
+  street: string
+  zipCode: string
+  city: string
+  country: string
+  phone?: string | null
+  isDefault?: boolean
+}
+
+const COUNTRY_CODE_TO_NAME: Record<string, string> = {
+  DE: 'Deutschland',
+  AT: 'Österreich',
+  CH: 'Schweiz',
 }
 
 export default function CheckoutContent() {
@@ -71,10 +91,53 @@ export default function CheckoutContent() {
       .catch(() => {})
   }, [])
 
+  // Clé d'idempotence: stable par état du panier, régénérée si le panier change.
+  // Les retries/double-clics renvoient la même clé → pas de doublon côté serveur.
+  const cartSignature = JSON.stringify({
+    i: items.map((item) => [item.product.id, item.quantity]),
+    t: total,
+  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const idempotencyKey = useMemo(() => crypto.randomUUID(), [cartSignature])
+
+  // Carnet d'adresses: pré-remplit le formulaire si l'utilisateur en a
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setSavedAddresses([])
+      return
+    }
+    let cancelled = false
+    fetch('/api/addresses')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (!cancelled && Array.isArray(data)) setSavedAddresses(data)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [isAuthenticated])
+
+  const applySavedAddress = (id: string) => {
+    const addr = savedAddresses.find((a) => a.id === id)
+    if (!addr) return
+    setShippingData((prev) => ({
+      ...prev,
+      firstName: addr.firstName || prev.firstName,
+      lastName: addr.lastName || prev.lastName,
+      phone: addr.phone || prev.phone,
+      address: addr.street || prev.address,
+      zipCode: addr.zipCode || prev.zipCode,
+      city: addr.city || prev.city,
+      country: COUNTRY_CODE_TO_NAME[addr.country] || addr.country || prev.country,
+    }))
+  }
+
   const [step, setStep] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
   const [showMobileSummary, setShowMobileSummary] = useState(false)
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([])
   const { execute } = useRecaptcha()
   const [shippingErrors, setShippingErrors] = useState<ShippingFormErrors>({})
   const [shippingTouched, setShippingTouched] = useState<Record<string, boolean>>({})
@@ -106,8 +169,9 @@ export default function CheckoutContent() {
     bankName: '',
   })
   const subtotal = totalPrice
-  const shipping = calculateShipping(subtotal)
   const discountAmount = appliedPromo ? appliedPromo.discountAmount : 0
+  // Same rule as server: free-shipping threshold on DISCOUNTED subtotal
+  const shipping = calculateShipping(Math.max(0, subtotal - discountAmount))
   const total = Math.max(0, subtotal + shipping - discountAmount)
 
   const validateShippingField = (name: string, value: string) => {
@@ -164,6 +228,7 @@ export default function CheckoutContent() {
           discountAmount,
           appliedPromoCode: appliedPromo?.code ?? null,
           total,
+          idempotencyKey,
         }
 
         const recaptchaToken = await execute('checkout')
@@ -192,7 +257,7 @@ export default function CheckoutContent() {
         return null
       }
     },
-    [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total, execute]
+    [items, shippingData, subtotal, shipping, discountAmount, appliedPromo?.code, total, execute, idempotencyKey]
   )
 
   if (!isHydrated)
@@ -223,6 +288,7 @@ export default function CheckoutContent() {
           items: items.map((item) => ({
             id: item.product.id,
             categoryId: item.product.category,
+            quantity: item.quantity,
           })),
         }),
       })
@@ -248,7 +314,8 @@ export default function CheckoutContent() {
     toast.success('Gutscheincode entfernt')
   }
 
-  // Normalise le nom de pays (texte long → code ISO 2 lettres)
+  // Normalise le nom de pays (texte long → code ISO 2 lettres).
+  // Valeurs inconnues passées telles quelles (jamais tronquées).
   const normalizeCountry = (country: string): string => {
     const map: Record<string, string> = {
       Deutschland: 'DE',
@@ -258,7 +325,7 @@ export default function CheckoutContent() {
       Austria: 'AT',
       Switzerland: 'CH',
     }
-    return map[country] ?? country.slice(0, 2).toUpperCase()
+    return map[country] ?? country
   }
 
   if (items.length === 0 && !orderComplete) {
@@ -385,6 +452,19 @@ export default function CheckoutContent() {
               Wir haben Ihre Bestellung erhalten. Die Zahlungsinformationen werden Ihnen in Kürze
               per E-Mail zugesandt.
             </p>
+            {!isAuthenticated && (
+              <p className="mx-auto mb-8 max-w-xl text-sm text-gray-500">
+                Sie haben als Gast bestellt: Diese Bestellung erscheint nicht in einem Kundenkonto.
+                Sie können sie jederzeit über{' '}
+                <Link
+                  href="/bestellung-verfolgen"
+                  className="font-bold text-[#4ECCA3] hover:underline"
+                >
+                  Bestellung verfolgen
+                </Link>{' '}
+                mit Ihrer E-Mail-Adresse und Bestellnummer einsehen.
+              </p>
+            )}
 
             <div className="mb-10 rounded-[2rem] border border-gray-100 bg-gray-50/80 p-6 text-left sm:p-8">
               <div className="mb-4 flex items-center justify-between border-b border-gray-200/60 pb-4">
@@ -592,6 +672,34 @@ export default function CheckoutContent() {
                           um Ihre Bestellung zu verfolgen. Oder fahren Sie als Gast fort.
                         </p>
                       </div>
+                    </div>
+                  )}
+
+                  {/* Saved addresses — one click to prefill (address book was dead code) */}
+                  {isAuthenticated && savedAddresses.length > 0 && (
+                    <div className="mb-6 space-y-1">
+                      <label
+                        htmlFor="saved-address"
+                        className="ml-1 text-sm font-bold text-gray-700"
+                      >
+                        Gespeicherte Adresse verwenden
+                      </label>
+                      <select
+                        id="saved-address"
+                        data-testid="saved-address"
+                        defaultValue=""
+                        onChange={(e) => applySavedAddress(e.target.value)}
+                        className="w-full rounded-xl border border-transparent bg-gray-50 px-5 py-3.5 font-medium text-[#0C211E] outline-none transition-all focus:border-[#4ECCA3] focus:bg-white focus:ring-4 focus:ring-[#4ECCA3]/10"
+                      >
+                        <option value="">Adresse auswählen…</option>
+                        {savedAddresses.map((addr) => (
+                          <option key={addr.id} value={addr.id}>
+                            {addr.firstName} {addr.lastName}, {addr.street}, {addr.zipCode}{' '}
+                            {addr.city}
+                            {addr.isDefault ? ' (Standard)' : ''}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   )}
 

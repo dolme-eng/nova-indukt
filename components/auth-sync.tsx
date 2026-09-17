@@ -3,7 +3,9 @@
 import { useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { useAuth } from '@/lib/store/auth'
+import { useCartStore } from '@/lib/store/cart'
 import { mergeGuestCartOnLogin } from '@/app/actions/cart'
+import { logError } from '@/lib/logger'
 
 export function AuthSync() {
   const { data: session, status } = useSession()
@@ -21,7 +23,13 @@ export function AuthSync() {
           email: session.user.email as string,
           role: session.user.role as string,
         })
+        // guest(cookie) → DB, then DB → store (server truth wins).
+        // Errors are logged; local cart is kept as fallback.
         mergeGuestCartOnLogin()
+          .catch((err) => logError('Failed to merge guest cart:', err))
+          .finally(() => {
+            useCartStore.getState().syncFromServer()
+          })
       }
     } else if (status === 'unauthenticated') {
       if (user !== null) {

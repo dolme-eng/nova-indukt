@@ -110,7 +110,7 @@ describe('GET /api/wishlist', () => {
       addedAt: expect.stringContaining('2025-01-15'),
     })
     expect(prisma.wishlistItem.findMany).toHaveBeenCalledWith({
-      where: { userId: 'user1' },
+      where: { userId: 'user1', product: { isActive: true } },
       include: {
         product: {
           include: { images: true, category: true },

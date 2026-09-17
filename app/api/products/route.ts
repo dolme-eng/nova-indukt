@@ -29,6 +29,17 @@ export async function GET(request: NextRequest) {
       }
     }
     
+    // Same contract as /api/products/search: <2 chars → empty result
+    // (previously the filter was silently ignored → whole catalog returned)
+    if (search && search.length < 2) {
+      const empty = NextResponse.json({
+        products: [],
+        pagination: { page, limit, total: 0, totalPages: 0 },
+      })
+      empty.headers.set("Cache-Control", "public, s-maxage=30, stale-while-revalidate=120")
+      return empty
+    }
+
     if (search && search.length >= 2) {
       where.OR = [
         { nameDe: { contains: search, mode: "insensitive" } },

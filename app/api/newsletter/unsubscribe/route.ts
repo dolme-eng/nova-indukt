@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { z } from 'zod'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { verifyUnsubscribeToken } from '@/lib/unsubscribe-token'
 import { validateCsrfToken } from '@/lib/csrf'
 import { auth } from '@/lib/auth'
 import { newsletterUnsubscribeSchema } from '@/lib/validations/newsletter'
+
+// POST accepts session-owner/admin (account page) OR the signed email token
+// (logged-out callers) — and answers JSON, not HTML.
+const unsubscribePostSchema = newsletterUnsubscribeSchema.extend({
+  expires: z.string().optional(),
+  sig: z.string().optional(),
+})
 
 const HTML_TEMPLATE = `<!DOCTYPE html>
 <html lang="de">
@@ -43,13 +51,10 @@ export async function POST(request: NextRequest) {
     if (csrfError) return csrfError
 
     const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 })
-    }
 
     const body = await request.json()
 
-    const result = newsletterUnsubscribeSchema.safeParse(body)
+    const result = unsubscribePostSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
         { error: 'Validierung fehlgeschlagen' },
@@ -57,11 +62,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email: rawEmail } = result.data
+    const { email: rawEmail, expires, sig } = result.data
     const email = rawEmail.toLowerCase()
 
-    const userEmail = session.user.email?.toLowerCase()
-    if (email !== userEmail && session.user.role !== 'ADMIN') {
+    const userEmail = session?.user?.email?.toLowerCase()
+    const isOwnerOrAdmin =
+      session?.user?.id != null &&
+      (email === userEmail || session.user.role === 'ADMIN')
+    const hasValidToken =
+      !!expires && !!sig && verifyUnsubscribeToken(email, expires, sig) === email
+
+    if (!isOwnerOrAdmin && !hasValidToken) {
       return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 403 })
     }
 
@@ -79,9 +90,9 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    return new NextResponse(HTML_TEMPLATE, {
-      status: 200,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    return NextResponse.json({
+      success: true,
+      message: 'Sie wurden erfolgreich vom Newsletter abgemeldet.',
     })
   } catch (error) {
     logError('Error unsubscribing from newsletter:', error)

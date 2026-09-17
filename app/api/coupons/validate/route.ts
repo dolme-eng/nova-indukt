@@ -5,13 +5,15 @@ import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
+import { applyPromotionsToProducts, calculateDiscountedPrice } from '@/lib/promotions'
 
 const validateCouponSchema = z.object({
   code: z.string().min(1, 'Code ist erforderlich').max(50),
-  amount: z.number().positive('Betrag muss positiv sein'),
+  amount: z.number().positive('Betrag muss positiv sein').max(999999.99),
   items: z.array(z.object({
     id: z.string().cuid('Invalid product ID'),
     categoryId: z.string().cuid().optional(),
+    quantity: z.number().int().min(1).max(99).optional().default(1),
   })).max(100).optional(),
 })
 
@@ -73,9 +75,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Nutzungsgrenze für diesen Code erreicht' }, { status: 400 })
     }
 
-    if (promo.minOrderAmount && amount < Number(promo.minOrderAmount)) {
-      return NextResponse.json({ 
-        error: `Mindestbestellwert von ${Number(promo.minOrderAmount).toFixed(2)}€ nicht erreicht` 
+    // Server-side base: recompute from DB prices + auto-promotions when item
+    // details are provided (same base as order creation). Falls back to the
+    // client amount only when no usable items were sent.
+    let base = amount
+    if (items && items.length > 0) {
+      const dbProducts = await prisma.product.findMany({
+        where: { id: { in: items.map((i) => i.id) }, isActive: true },
+        select: { id: true, price: true, categoryId: true },
+      })
+      if (dbProducts.length > 0) {
+        const qtyById = new Map(items.map((i) => [i.id, i.quantity ?? 1]))
+        const promoMap = await applyPromotionsToProducts(
+          dbProducts.map((p) => ({ id: p.id, categoryId: p.categoryId, price: Number(p.price) }))
+        )
+        base = dbProducts.reduce((sum, p) => {
+          const discounted = promoMap.get(p.id)?.discountedPrice ?? Number(p.price)
+          return sum + discounted * (qtyById.get(p.id) ?? 1)
+        }, 0)
+      }
+    }
+
+    if (promo.minOrderAmount && base < Number(promo.minOrderAmount)) {
+      return NextResponse.json({
+        error: `Mindestbestellwert von ${Number(promo.minOrderAmount).toFixed(2)}€ nicht erreicht`
       }, { status: 400 })
     }
 
@@ -97,16 +120,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Calculate discount
-    let discount = 0
-    if (promo.discountType === 'PERCENTAGE') {
-      discount = amount * (Number(promo.discountValue) / 100)
-      if (promo.maxDiscount && discount > Number(promo.maxDiscount)) {
-        discount = Number(promo.maxDiscount)
-      }
-    } else {
-      discount = Number(promo.discountValue)
-    }
+    // Calculate discount on the server-side base, rounded to cents
+    // (same helper as order creation — no 1ct drift)
+    const { discountAmount: discount } = calculateDiscountedPrice(
+      base,
+      promo.discountType,
+      Number(promo.discountValue),
+      promo.maxDiscount ? Number(promo.maxDiscount) : null
+    )
 
     return NextResponse.json({
       valid: true,

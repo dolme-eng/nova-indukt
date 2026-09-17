@@ -23,6 +23,10 @@ export const FROM_NAME        = COMPANY.nameShort
 
 /**
  * Returns the shipping cost based on the subtotal.
+ *
+ * Business rule: pass the DISCOUNTED subtotal (after coupon/promo).
+ * Free shipping from 500 € net of discounts — no stacking of coupon
+ * discount with a threshold computed on the gross amount.
  */
 export function calculateShipping(subtotal: number): number {
   return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST

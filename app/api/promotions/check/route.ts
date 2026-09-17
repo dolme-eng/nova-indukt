@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkAndCreateRandomPromotion, cleanupExpiredPromotions } from '@/lib/promotions/random-promotions'
 import { logError } from '@/lib/logger'
 import { rateLimit, getIP, createRateLimitKey } from '@/lib/rate-limit'
+import { revalidateTag } from 'next/cache'
 import crypto from 'crypto'
 
 // API Route: Check and create random promotions
@@ -49,9 +50,12 @@ export async function POST(request: NextRequest) {
     
     // Cleanup expired promotions first
     const cleanedCount = await cleanupExpiredPromotions()
-    
+
     // Try to create a new random promotion
     const created = await checkAndCreateRandomPromotion()
+
+    // Writes happened above — bust the 60s promotions cache
+    revalidateTag('promotions', 'default')
     
     return NextResponse.json({
       success: true,

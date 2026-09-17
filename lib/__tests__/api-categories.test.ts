@@ -88,7 +88,7 @@ describe('GET /api/categories', () => {
     expect(prisma.category.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         select: expect.objectContaining({
-          _count: { select: { products: true } },
+          _count: { select: { products: { where: { isActive: true } } } },
         }),
       })
     )

@@ -46,6 +46,9 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     const { status, trackingNumber, carrier, trackingUrl, sendEmail } = parsed.data
 
+    // REFUNDED is terminal here on purpose: it is set exclusively by the
+    // payment route (payment → REFUNDED syncs order → REFUNDED), so money
+    // and order state can never desynchronize.
     const validTransitions: Record<string, string[]> = {
       PENDING: ['PROCESSING', 'CANCELLED'],
       PROCESSING: ['SHIPPED', 'CANCELLED'],

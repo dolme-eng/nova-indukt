@@ -150,7 +150,8 @@ export async function addToCart(productId: string, quantity: number = 1) {
       if (existingItem) {
         await prisma.cartItem.update({
           where: { id: existingItem.id },
-          data: { quantity: existingItem.quantity + validQuantity },
+          // Cap cumulative quantity at 99 (schema validates the delta only)
+          data: { quantity: Math.min(99, existingItem.quantity + validQuantity) },
         })
       } else {
         await prisma.cartItem.create({
@@ -169,7 +170,7 @@ export async function addToCart(productId: string, quantity: number = 1) {
       const existingIndex = items.findIndex((item) => item.productId === validProductId)
 
       if (existingIndex >= 0) {
-        items[existingIndex].quantity += validQuantity
+        items[existingIndex].quantity = Math.min(99, items[existingIndex].quantity + validQuantity)
       } else {
         items.push({ productId: validProductId, quantity: validQuantity })
       }
@@ -192,6 +193,13 @@ export async function addToCart(productId: string, quantity: number = 1) {
 
 // Update cart item quantity
 export async function updateCartItem(productId: string, quantity: number) {
+  // quantity <= 0 means "remove" (handled below); otherwise enforce 1..99
+  if (quantity > 0) {
+    const parsed = z.object({ quantity: z.number().int().min(1).max(99) }).safeParse({ quantity })
+    if (!parsed.success) {
+      return { success: false, error: 'Ungültige Menge (1–99)' }
+    }
+  }
   try {
     const cart = await getCartMeta()
 
@@ -259,25 +267,29 @@ export async function getCartItems() {
         quantity: item.quantity,
       }))
     } else {
-      // Cookie cart — hydrate product details from DB
+      // Cookie cart — hydrate product details from DB.
+      // Inactive/deleted products are dropped (no ghost items at 0 €).
       const items = cart.items
       const productIds = items.map((item) => item.productId)
 
       const products = await prisma.product.findMany({
-        where: { id: { in: productIds } },
+        where: { id: { in: productIds }, isActive: true },
         include: { images: true },
       })
 
-      return items.map((item) => {
+      return items.flatMap((item) => {
         const product = products.find((p) => p.id === item.productId)
-        return {
-          id: item.productId,
-          name: { de: product?.nameDe || 'Produkt' },
-          price: Number(product?.price || 0),
-          image: product?.images?.[0]?.url || '',
-          slug: product?.slug || '',
-          quantity: item.quantity,
-        }
+        if (!product) return []
+        return [
+          {
+            id: item.productId,
+            name: { de: product.nameDe },
+            price: Number(product.price),
+            image: product.images?.[0]?.url || '/placeholder.svg',
+            slug: product.slug,
+            quantity: item.quantity,
+          },
+        ]
       })
     }
   } catch (error) {
@@ -309,25 +321,59 @@ export async function clearCart() {
   }
 }
 
-// Merge guest cart on login
-export async function mergeGuestCartOnLogin() {
+// IDs + quantities of the logged-in user's DB cart (for client store sync)
+export async function getDbCartIds(): Promise<Array<{ productId: string; quantity: number }>> {
   try {
     const session = await auth()
-    if (!session?.user?.id) return
+    if (!session?.user?.id) return []
+    const cart = await prisma.cart.findUnique({
+      where: { userId: session.user.id },
+      include: { items: { select: { productId: true, quantity: true } } },
+    })
+    return cart?.items ?? []
+  } catch (error) {
+    logError('Error fetching DB cart ids:', error)
+    return []
+  }
+}
+
+// Merge guest cart on login
+export async function mergeGuestCartOnLogin(): Promise<{ success: boolean; error?: string }> {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) return { success: false }
 
     const cookieStore = await cookies()
     const cartCookie = cookieStore.get(CART_COOKIE)
 
-    if (!cartCookie) return
+    if (!cartCookie) return { success: true }
 
     let guestItems: CartCookieItem[] = []
     try {
-      guestItems = JSON.parse(cartCookie.value)
+      const raw = JSON.parse(cartCookie.value)
+      guestItems = Array.isArray(raw) ? raw : []
     } catch {
       cookieStore.delete(CART_COOKIE)
-      return
+      return { success: true }
     }
-    if (guestItems.length === 0) return
+    if (guestItems.length === 0) {
+      cookieStore.delete(CART_COOKIE)
+      return { success: true }
+    }
+
+    // Keep only sane entries: existing + active products, qty clamped 1..99.
+    // Deleted/inactive products are skipped (never fail the whole merge on FK).
+    const ids = [...new Set(guestItems.map((i) => i.productId).filter(Boolean))].slice(0, 100)
+    const validProducts = await prisma.product.findMany({
+      where: { id: { in: ids }, isActive: true },
+      select: { id: true },
+    })
+    const validIds = new Set(validProducts.map((p) => p.id))
+    const cleanItems = guestItems.filter((i) => validIds.has(i.productId))
+    if (cleanItems.length === 0) {
+      cookieStore.delete(CART_COOKIE)
+      return { success: true }
+    }
 
     // Get or create user cart
     let cart = await prisma.cart.findUnique({
@@ -342,22 +388,26 @@ export async function mergeGuestCartOnLogin() {
       })
     }
 
-    // Merge items in a transaction
+    const cartId = cart.id
+    const existingByProduct = new Map(cart.items.map((item) => [item.productId, item]))
+
+    // Merge items in a transaction (cumulative quantity capped at 99)
     await prisma.$transaction(async (tx) => {
-      for (const guestItem of guestItems) {
-        const existingItem = cart!.items.find((item) => item.productId === guestItem.productId)
+      for (const guestItem of cleanItems) {
+        const qty = Math.min(99, Math.max(1, Math.floor(guestItem.quantity) || 1))
+        const existingItem = existingByProduct.get(guestItem.productId)
 
         if (existingItem) {
           await tx.cartItem.update({
             where: { id: existingItem.id },
-            data: { quantity: existingItem.quantity + guestItem.quantity },
+            data: { quantity: Math.min(99, existingItem.quantity + qty) },
           })
         } else {
           await tx.cartItem.create({
             data: {
-              cartId: cart!.id,
+              cartId,
               productId: guestItem.productId,
-              quantity: guestItem.quantity,
+              quantity: qty,
             },
           })
         }
@@ -366,7 +416,9 @@ export async function mergeGuestCartOnLogin() {
 
     // Clear guest cart cookie
     cookieStore.delete(CART_COOKIE)
+    return { success: true }
   } catch (error) {
     logError('Error merging cart:', error)
+    return { success: false, error: 'Failed to merge cart' }
   }
 }

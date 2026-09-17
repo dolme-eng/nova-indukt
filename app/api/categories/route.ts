@@ -19,10 +19,11 @@ export async function GET(request: NextRequest) {
         description: true,
         image: true,
         _count: {
+          // Count only visible products — inactive ones are filtered everywhere else
           select: {
-            products: true
-          }
-        }
+            products: { where: { isActive: true } },
+          },
+        },
       },
       orderBy: {
         sortOrder: "asc"

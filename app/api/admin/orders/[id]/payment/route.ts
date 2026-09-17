@@ -73,43 +73,51 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     const previousPaymentStatus = order.paymentStatus
 
+    // REFUNDED payment keeps order + payment in sync: an order whose payment
+    // was refunded is itself REFUNDED (previously REFUNDED was unreachable).
     const updatedOrder = await prisma.order.update({
       where: { id },
       data: {
         paymentStatus: paymentStatus,
         ...(paymentStatus === 'PAID' ? { paidAt: new Date() } : {}),
+        ...(paymentStatus === 'REFUNDED' ? { status: 'REFUNDED' } : {}),
       },
     })
 
-    // Send payment confirmation email when marked as PAID
+    // Send payment confirmation email when marked as PAID (awaited: the admin
+    // gets the result instead of a silent background failure)
     if (paymentStatus === 'PAID' && previousPaymentStatus !== 'PAID') {
       const recipientEmail = order.user?.email || order.customerEmail
       if (recipientEmail) {
         const addr = (order.shippingAddress as Record<string, string>) || {}
-        sendPaymentConfirmationEmail({
-          orderNumber: order.orderNumber,
-          customerName: order.user?.name || order.customerName || 'Kunde',
-          customerEmail: recipientEmail,
-          items: order.items.map((item) => ({
-            productName: item.product.nameDe,
-            unitPrice: Number(item.unitPrice),
-            quantity: item.quantity,
-            product: {
-              nameDe: item.product.nameDe,
-              images: item.product.images,
-            },
-          })),
-          shippingCost: Number(order.shippingCost),
-          total: Number(order.total),
-          shippingAddress: {
-            name: addr.name || order.user?.name || '',
-            street: addr.street || '',
-            street2: addr.street2 || '',
-            postalCode: addr.postalCode || '',
-            city: addr.city || '',
-            country: addr.country || 'DE',
-          } as ShippingAddress,
-        }).catch((err) => logError('[PAYMENT_CONFIRMATION_EMAIL]', err))
+        try {
+          await sendPaymentConfirmationEmail({
+            orderNumber: order.orderNumber,
+            customerName: order.user?.name || order.customerName || 'Kunde',
+            customerEmail: recipientEmail,
+            items: order.items.map((item) => ({
+              productName: item.product.nameDe,
+              unitPrice: Number(item.unitPrice),
+              quantity: item.quantity,
+              product: {
+                nameDe: item.product.nameDe,
+                images: item.product.images,
+              },
+            })),
+            shippingCost: Number(order.shippingCost),
+            total: Number(order.total),
+            shippingAddress: {
+              name: addr.name || order.user?.name || '',
+              street: addr.street || '',
+              street2: addr.street2 || '',
+              postalCode: addr.postalCode || '',
+              city: addr.city || '',
+              country: addr.country || 'DE',
+            } as ShippingAddress,
+          })
+        } catch (err) {
+          logError('[PAYMENT_CONFIRMATION_EMAIL]', err)
+        }
       }
     }
 

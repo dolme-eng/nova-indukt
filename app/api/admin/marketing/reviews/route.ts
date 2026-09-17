@@ -131,22 +131,25 @@ export async function DELETE(req: NextRequest) {
     if (!id) return NextResponse.json({ error: "ID erforderlich" }, { status: 400 })
 
     const before = await prisma.review.findUnique({ where: { id } })
-    await prisma.review.delete({ where: { id } })
+    if (!before) return NextResponse.json({ error: "Nicht gefunden" }, { status: 404 })
 
-    if (before?.productId) {
-      const stats = await prisma.review.aggregate({
-        where: { productId: before.productId },
+    // Delete + published-only recount in one transaction (same rule as
+    // toggle-publish: product.rating/reviewCount reflect published reviews only)
+    await prisma.$transaction(async (tx) => {
+      await tx.review.delete({ where: { id } })
+      const stats = await tx.review.aggregate({
+        where: { productId: before.productId, isPublished: true },
         _avg: { rating: true },
         _count: { rating: true },
       })
-      await prisma.product.update({
+      await tx.product.update({
         where: { id: before.productId },
         data: {
           rating: stats._avg.rating ?? 0,
           reviewCount: stats._count.rating,
         },
       })
-    }
+    })
 
     await auditLog({
       action: "DELETE",
