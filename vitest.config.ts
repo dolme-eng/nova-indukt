@@ -7,6 +7,11 @@ export default defineConfig({
     environment: 'node',
     env: {
       CSRF_DISABLED: 'true',
+      // NextAuth v5 throws at import time without a secret — test-only value.
+      // Route files importing the real `@/lib/auth` (auth, orders, newsletter,
+      // email suites) failed collection without it.
+      AUTH_SECRET: 'test-only-auth-secret-32-chars-min',
+      NEXTAUTH_URL: 'http://localhost:3000',
     },
     exclude: ['tests/e2e/**', 'node_modules/**', '_bak_corrupt/**', '_old_nm/**'],
     environmentMatchGlobs: [

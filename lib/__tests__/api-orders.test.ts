@@ -26,7 +26,8 @@ const mockRandomUUID = vi.hoisted(() => vi.fn().mockReturnValue('550e8400-e29b-4
 vi.mock('@/lib/prisma', () => ({
   prisma: {
     product: { findMany: mockFindMany },
-    order: { create: vi.fn() },
+    // findUnique: idempotency-key lookup (no pending retry in these tests)
+    order: { create: vi.fn(), findUnique: vi.fn().mockResolvedValue(null) },
     promotion: { update: mockPromotionUpdate },
     cartItem: { deleteMany: mockCartDeleteMany },
     $transaction: mockTransaction,
@@ -147,7 +148,11 @@ function setupTransactionMock(orderResult?: Record<string, unknown>) {
   mockTransaction.mockImplementation(async (fn: (tx: Record<string, unknown>) => Promise<unknown>) => {
     const tx = {
       order: { create: vi.fn().mockResolvedValue(orderResult ?? mockCreatedOrder) },
-      promotion: { update: mockPromotionUpdate },
+      promotion: {
+        update: mockPromotionUpdate,
+        findUnique: vi.fn().mockResolvedValue({ usageLimit: null }),
+      },
+      cartItem: { deleteMany: mockCartDeleteMany },
     }
     return fn(tx)
   })
@@ -451,7 +456,11 @@ describe('POST /api/orders', () => {
     mockTransaction.mockImplementation(async (fn: (tx: Record<string, unknown>) => Promise<unknown>) => {
       const tx = {
         order: { create: vi.fn().mockResolvedValue(mockCreatedOrder) },
-        promotion: { update: vi.fn() },
+        promotion: {
+          update: vi.fn(),
+          findUnique: vi.fn().mockResolvedValue({ usageLimit: null }),
+        },
+        cartItem: { deleteMany: mockCartDeleteMany },
       }
       capturedTx = tx
       return fn(tx)

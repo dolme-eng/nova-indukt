@@ -50,8 +50,6 @@ export async function POST(request: NextRequest) {
     const csrfError = validateCsrfToken(request)
     if (csrfError) return csrfError
 
-    const session = await auth()
-
     const body = await request.json()
 
     const result = unsubscribePostSchema.safeParse(body)
@@ -61,6 +59,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    const session = await auth()
 
     const { email: rawEmail, expires, sig } = result.data
     const email = rawEmail.toLowerCase()

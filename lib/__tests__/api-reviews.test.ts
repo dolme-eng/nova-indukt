@@ -169,7 +169,8 @@ describe('GET /api/reviews', () => {
 
 describe('POST /api/reviews', () => {
   const validReview = {
-    productId: 'p1',
+    // Must satisfy z.string().cuid() in reviewSchema
+    productId: 'clx1234567890abcdefg',
     rating: 4,
     title: 'Great product',
     content: 'Really enjoyed this product very much.',

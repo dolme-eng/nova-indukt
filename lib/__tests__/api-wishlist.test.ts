@@ -111,6 +111,7 @@ describe('GET /api/wishlist', () => {
     })
     expect(prisma.wishlistItem.findMany).toHaveBeenCalledWith({
       where: { userId: 'user1', product: { isActive: true } },
+      take: 200,
       include: {
         product: {
           include: { images: true, category: true },
@@ -145,7 +146,7 @@ describe('POST /api/wishlist', () => {
     ;(rateLimit as ReturnType<typeof vi.fn>).mockResolvedValue({ success: true })
     ;(validateCsrfToken as ReturnType<typeof vi.fn>).mockReturnValue(null)
     ;(auth as ReturnType<typeof vi.fn>).mockResolvedValue({ user: mockUser })
-    ;(prisma.product.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'prod1' })
+    ;(prisma.product.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'prod1', isActive: true })
     ;(prisma.wishlistItem.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null)
     ;(prisma.wishlistItem.create as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 'wish1',
@@ -161,7 +162,7 @@ describe('POST /api/wishlist', () => {
 
   it('returns 401 for unauthenticated user', async () => {
     ;(auth as ReturnType<typeof vi.fn>).mockResolvedValue(null)
-    const req = makePostRequest({ productId: 'prod1' })
+    const req = makePostRequest({ productId: 'clx1234567890abcdefg' })
     const res = await POST(req)
 
     expect(res.status).toBe(401)
@@ -171,7 +172,7 @@ describe('POST /api/wishlist', () => {
 
   it('returns 429 when rate limited', async () => {
     ;(rateLimit as ReturnType<typeof vi.fn>).mockResolvedValue({ success: false })
-    const req = makePostRequest({ productId: 'prod1' })
+    const req = makePostRequest({ productId: 'clx1234567890abcdefg' })
     const res = await POST(req)
 
     expect(res.status).toBe(429)
@@ -182,7 +183,7 @@ describe('POST /api/wishlist', () => {
   it('returns 403 on CSRF failure', async () => {
     const csrfResponse = new Response(null, { status: 403 })
     ;(validateCsrfToken as ReturnType<typeof vi.fn>).mockReturnValue(csrfResponse)
-    const req = makePostRequest({ productId: 'prod1' })
+    const req = makePostRequest({ productId: 'clx1234567890abcdefg' })
     const res = await POST(req)
 
     expect(res.status).toBe(403)
@@ -199,7 +200,7 @@ describe('POST /api/wishlist', () => {
 
   it('returns 404 when product not found', async () => {
     ;(prisma.product.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null)
-    const req = makePostRequest({ productId: 'nonexistent' })
+    const req = makePostRequest({ productId: 'clx9999999999abcdefg' })
     const res = await POST(req)
 
     expect(res.status).toBe(404)
@@ -213,7 +214,7 @@ describe('POST /api/wishlist', () => {
       userId: 'user1',
       productId: 'prod1',
     })
-    const req = makePostRequest({ productId: 'prod1' })
+    const req = makePostRequest({ productId: 'clx1234567890abcdefg' })
     const res = await POST(req)
 
     expect(res.status).toBe(409)
@@ -222,7 +223,7 @@ describe('POST /api/wishlist', () => {
   })
 
   it('returns 201 on successful add', async () => {
-    const req = makePostRequest({ productId: 'prod1' })
+    const req = makePostRequest({ productId: 'clx1234567890abcdefg' })
     const res = await POST(req)
     const data = await res.json()
 
@@ -236,14 +237,14 @@ describe('POST /api/wishlist', () => {
       slug: 'induktionskochfeld',
     })
     expect(prisma.wishlistItem.create).toHaveBeenCalledWith({
-      data: { userId: 'user1', productId: 'prod1' },
+      data: { userId: 'user1', productId: 'clx1234567890abcdefg' },
       include: { product: { include: { images: true } } },
     })
   })
 
   it('returns 500 on database error', async () => {
     ;(prisma.wishlistItem.create as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('DB error'))
-    const req = makePostRequest({ productId: 'prod1' })
+    const req = makePostRequest({ productId: 'clx1234567890abcdefg' })
     const res = await POST(req)
 
     expect(res.status).toBe(500)

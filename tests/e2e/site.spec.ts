@@ -1,4 +1,4 @@
-import { test, expect, request } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 const ADMIN_EMAIL = process.env.PW_ADMIN_EMAIL ?? ''
 const ADMIN_PASSWORD = process.env.PW_ADMIN_PASSWORD ?? ''
@@ -76,8 +76,14 @@ test("protected pages redirect to login when logged out", async ({ page }) => {
   await page.goto("/admin", { waitUntil: "domcontentloaded" });
   await expect(page).toHaveURL(/\/anmelden\?redirect=/);
 
-  await page.goto("/kasse", { waitUntil: "domcontentloaded" });
+  await page.goto("/mein-konto", { waitUntil: "domcontentloaded" });
   await expect(page).toHaveURL(/\/anmelden\?redirect=/);
+});
+
+test("checkout is public (guest checkout allowed)", async ({ page }) => {
+  const res = await page.goto("/kasse", { waitUntil: "domcontentloaded" });
+  expect(res?.status()).toBe(200);
+  await expect(page).toHaveURL(/\/kasse/);
 });
 
 test("admin login works via UI and admin pages load", async ({ page }) => {
@@ -101,30 +107,26 @@ test("admin login works via UI and admin pages load", async ({ page }) => {
   }
 });
 
-test("admin business actions (create/update/delete) via API", async ({ baseURL }) => {
+test("admin business actions (create/update/delete) via API", async ({ page }) => {
   skipIfNoAdmin()
-  if (!baseURL) throw new Error("Missing baseURL");
 
-  const ctx = await request.newContext({ baseURL });
+  // Login via UI first — page.request shares the session cookies.
+  await page.goto("/anmelden", { waitUntil: "domcontentloaded" });
+  await page.getByTestId("login-email").fill(ADMIN_EMAIL);
+  await page.getByTestId("login-password").fill(ADMIN_PASSWORD);
+  await page.getByTestId("login-submit").click();
+  await expect(page.getByText("Erfolgreich angemeldet!")).toBeVisible({ timeout: 30_000 });
 
-  // Get CSRF (NextAuth)
-  const csrfRes = await ctx.get("/api/auth/csrf");
-  expect(csrfRes.ok()).toBeTruthy();
-  const csrf = await csrfRes.json();
-
-  // Login to get session cookies
-  const loginRes = await ctx.post("/api/auth/callback/credentials?redirect=false", {
-    form: {
-      csrfToken: csrf.csrfToken,
-      email: ADMIN_EMAIL,
-      password: ADMIN_PASSWORD,
-      json: "true",
-    },
-  });
-  expect([200, 302]).toContain(loginRes.status());
+  // Our API requires the double-submit CSRF header; the token lives in the
+  // `csrf-token` cookie set by CsrfProvider (client-side JS).
+  const csrfToken = await page.evaluate(
+    () => document.cookie.match(/(?:^| )csrf-token=([^;]+)/)?.[1] ?? ''
+  );
+  expect(csrfToken).toBeTruthy();
+  const apiHeaders = { 'x-csrf-token': csrfToken };
 
   // Need category id for product
-  const catsRes = await ctx.get("/api/admin/categories");
+  const catsRes = await page.request.get("/api/admin/categories");
   expect(catsRes.ok()).toBeTruthy();
   const cats = await catsRes.json();
   const categoryId = cats?.[0]?.id;
@@ -135,21 +137,24 @@ test("admin business actions (create/update/delete) via API", async ({ baseURL }
     nameDe: `PW Test Produkt ${unique}`,
     slug: `pw-test-produkt-${unique}`,
     price: 99.99,
-    stock: 3,
     categoryId,
     isActive: true,
     images: [{ url: "https://res.cloudinary.com/demo/image/upload/sample.jpg", alt: "test" }],
   };
 
   // Create product
-  const createProduct = await ctx.post("/api/admin/products", { data: productPayload });
+  const createProduct = await page.request.post("/api/admin/products", {
+    data: productPayload,
+    headers: apiHeaders,
+  });
   expect(createProduct.ok()).toBeTruthy();
   const createdProduct = await createProduct.json();
   expect(createdProduct?.id).toBeTruthy();
 
   // Update product
-  const patchProduct = await ctx.patch(`/api/admin/products/${createdProduct.id}`, {
+  const patchProduct = await page.request.patch(`/api/admin/products/${createdProduct.id}`, {
     data: { ...productPayload, nameDe: `PW Test Produkt Updated ${unique}`, price: 89.99 },
+    headers: apiHeaders,
   });
   expect(patchProduct.ok()).toBeTruthy();
 
@@ -166,22 +171,29 @@ test("admin business actions (create/update/delete) via API", async ({ baseURL }
     isPublished: false,
   };
 
-  const createBlog = await ctx.post("/api/admin/blog", { data: blogPayload });
+  const createBlog = await page.request.post("/api/admin/blog", {
+    data: blogPayload,
+    headers: apiHeaders,
+  });
   expect(createBlog.ok()).toBeTruthy();
   const createdBlog = await createBlog.json();
   expect(createdBlog?.id).toBeTruthy();
 
   // Update blog post
-  const putBlog = await ctx.put(`/api/admin/blog/${createdBlog.id}`, {
+  const putBlog = await page.request.put(`/api/admin/blog/${createdBlog.id}`, {
     data: { ...blogPayload, titleDe: `PW Test Blog Updated ${unique}` },
+    headers: apiHeaders,
   });
   expect(putBlog.ok()).toBeTruthy();
 
   // Cleanup
-  const delBlog = await ctx.delete(`/api/admin/blog/${createdBlog.id}`);
+  const delBlog = await page.request.delete(`/api/admin/blog/${createdBlog.id}`, {
+    headers: apiHeaders,
+  });
   expect(delBlog.ok()).toBeTruthy();
 
-  const delProduct = await ctx.delete(`/api/admin/products/${createdProduct.id}`);
+  const delProduct = await page.request.delete(`/api/admin/products/${createdProduct.id}`, {
+    headers: apiHeaders,
+  });
   expect(delProduct.status()).toBe(204);
 });
-

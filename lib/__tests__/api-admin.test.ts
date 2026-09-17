@@ -48,6 +48,12 @@ vi.mock('@/lib/csrf', () => ({
   validateCsrfToken: vi.fn().mockReturnValue(null),
 }))
 
+// next/cache throws outside a request scope — routes call revalidateTag/Path
+vi.mock('next/cache', () => ({
+  revalidateTag: vi.fn(),
+  revalidatePath: vi.fn(),
+}))
+
 vi.mock('@/lib/validations/product', () => ({
   createProductSchema: { safeParse: vi.fn() },
 }))

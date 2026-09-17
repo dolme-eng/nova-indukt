@@ -20,6 +20,14 @@ vi.mock('@/lib/logger', () => ({
   logError: vi.fn(),
 }))
 
+vi.mock('@/lib/auth', () => ({
+  auth: vi.fn().mockResolvedValue(null),
+}))
+
+vi.mock('@/lib/csrf', () => ({
+  validateCsrfToken: vi.fn().mockReturnValue(null),
+}))
+
 import { POST, GET } from '@/app/api/newsletter/unsubscribe/route'
 import { prisma } from '@/lib/prisma'
 import { NextRequest } from 'next/server'
@@ -42,8 +50,10 @@ function makeGetRequest(email?: string) {
 }
 
 describe('POST /api/newsletter/unsubscribe', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks()
+    const { auth } = await import('@/lib/auth')
+    ;(auth as ReturnType<typeof vi.fn>).mockResolvedValue(null)
     ;(prisma.newsletterSubscriber.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 'sub1',
       email: 'test@example.de',
@@ -52,22 +62,30 @@ describe('POST /api/newsletter/unsubscribe', () => {
     ;(prisma.newsletterSubscriber.update as ReturnType<typeof vi.fn>).mockResolvedValue({})
   })
 
-  it('returns HTML confirmation page (200)', async () => {
+  function signedBody(email: string) {
+    const params = new URLSearchParams(createUnsubscribeToken(email))
+    return {
+      email,
+      expires: params.get('expires')!,
+      sig: params.get('sig')!,
+    }
+  }
+
+  it('returns 403 without session and without token', async () => {
     const req = makePostRequest({ email: 'test@example.de' })
     const res = await POST(req)
 
-    expect(res.status).toBe(200)
-    expect(res.headers.get('Content-Type')).toContain('text/html')
-    const html = await res.text()
-    expect(html).toContain('Erfolgreich abgemeldet')
-    expect(html).toContain('NOVA INDUKT')
-    expect(html).toContain('Zurück zur Startseite')
+    expect(res.status).toBe(403)
   })
 
-  it('unsubscribes active subscriber', async () => {
-    const req = makePostRequest({ email: 'test@example.de' })
-    await POST(req)
+  it('unsubscribes with a valid signed token and returns JSON (200)', async () => {
+    const req = makePostRequest(signedBody('test@example.de'))
+    const res = await POST(req)
 
+    expect(res.status).toBe(200)
+    expect(res.headers.get('Content-Type')).toContain('application/json')
+    const data = await res.json()
+    expect(data.success).toBe(true)
     expect(prisma.newsletterSubscriber.update).toHaveBeenCalledWith({
       where: { email: 'test@example.de' },
       data: expect.objectContaining({
@@ -77,27 +95,41 @@ describe('POST /api/newsletter/unsubscribe', () => {
     })
   })
 
-  it('returns HTML even for already inactive subscriber', async () => {
-    ;(prisma.newsletterSubscriber.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
-      id: 'sub1',
-      email: 'test@example.de',
-      isActive: false,
+  it('unsubscribes session owner without token', async () => {
+    const { auth } = await import('@/lib/auth')
+    ;(auth as ReturnType<typeof vi.fn>).mockResolvedValue({
+      user: { id: 'user1', email: 'test@example.de', role: 'USER' },
     })
     const req = makePostRequest({ email: 'test@example.de' })
     const res = await POST(req)
 
     expect(res.status).toBe(200)
-    expect(res.headers.get('Content-Type')).toContain('text/html')
-    expect(prisma.newsletterSubscriber.update).not.toHaveBeenCalled()
+    expect(prisma.newsletterSubscriber.update).toHaveBeenCalled()
   })
 
-  it('returns HTML even for unknown email (no enumeration)', async () => {
-    ;(prisma.newsletterSubscriber.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null)
-    const req = makePostRequest({ email: 'unknown@example.de' })
+  it('returns JSON even for already inactive subscriber', async () => {
+    ;(prisma.newsletterSubscriber.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+      id: 'sub1',
+      email: 'test@example.de',
+      isActive: false,
+    })
+    const req = makePostRequest(signedBody('test@example.de'))
     const res = await POST(req)
 
     expect(res.status).toBe(200)
-    expect(res.headers.get('Content-Type')).toContain('text/html')
+    const data = await res.json()
+    expect(data.success).toBe(true)
+    expect(prisma.newsletterSubscriber.update).not.toHaveBeenCalled()
+  })
+
+  it('returns JSON even for unknown email (no enumeration)', async () => {
+    ;(prisma.newsletterSubscriber.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null)
+    const req = makePostRequest(signedBody('unknown@example.de'))
+    const res = await POST(req)
+
+    expect(res.status).toBe(200)
+    const data = await res.json()
+    expect(data.success).toBe(true)
   })
 
   it('rejects invalid email (400)', async () => {
@@ -111,7 +143,7 @@ describe('POST /api/newsletter/unsubscribe', () => {
     ;(prisma.newsletterSubscriber.findUnique as ReturnType<typeof vi.fn>).mockRejectedValue(
       new Error('DB error')
     )
-    const req = makePostRequest({ email: 'test@example.de' })
+    const req = makePostRequest(signedBody('test@example.de'))
     const res = await POST(req)
 
     expect(res.status).toBe(500)

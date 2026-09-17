@@ -110,26 +110,43 @@ describe('shippingDataSchema', () => {
     expect(result.success).toBe(true)
   })
 
-  it('rejects 3-digit ZIP', () => {
+  // ZIP contract: min 3 / max 10 chars (DE 5, AT/CH 4, PL 6, NL/UK alphanumeric)
+  it('accepts 3-char ZIP (minimum length)', () => {
     const result = shippingDataSchema.safeParse({
       ...validShipping,
       zipCode: '123',
     })
-    expect(result.success).toBe(false)
+    expect(result.success).toBe(true)
   })
 
-  it('rejects 6-digit ZIP', () => {
+  it('accepts 6-digit ZIP (e.g. Poland)', () => {
     const result = shippingDataSchema.safeParse({
       ...validShipping,
       zipCode: '123456',
     })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts alphanumeric ZIP (e.g. NL, UK)', () => {
+    const result = shippingDataSchema.safeParse({
+      ...validShipping,
+      zipCode: '1011 AB',
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects 2-char ZIP (too short)', () => {
+    const result = shippingDataSchema.safeParse({
+      ...validShipping,
+      zipCode: '12',
+    })
     expect(result.success).toBe(false)
   })
 
-  it('rejects non-numeric ZIP', () => {
+  it('rejects 11-char ZIP (too long)', () => {
     const result = shippingDataSchema.safeParse({
       ...validShipping,
-      zipCode: 'ABCDE',
+      zipCode: '12345678901',
     })
     expect(result.success).toBe(false)
   })
