@@ -72,6 +72,7 @@ export default async function ImpressumPage() {
                   {COMPANY.phone.number}
                 </a>
               </p>
+              {COMPANY.whatsapp.url.startsWith('https://') && (
               <p className="flex items-center gap-2">
                 WhatsApp-Kundenservice:
                 <a
@@ -86,6 +87,7 @@ export default async function ImpressumPage() {
                   Service kontaktieren
                 </a>
               </p>
+              )}
               <p>E-Mail: {COMPANY.email.info}</p>
             </div>
           </section>

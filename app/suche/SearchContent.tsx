@@ -78,7 +78,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <h1 className="sr-only">Produktsuche</h1>
+      {/* h1 lives in page.tsx (SSR) to avoid duplicates */}
       {/* Search Header */}
       <div className="sticky top-0 z-30 border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4 py-4">

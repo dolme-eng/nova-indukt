@@ -69,6 +69,7 @@ export default async function DatenschutzPage() {
               </p>
               <p>Deutschland</p>
               <p className="mt-2">E-Mail: {COMPANY.email.datenschutz}</p>
+              {COMPANY.whatsapp.url.startsWith('https://') && (
               <p className="flex items-center gap-2">
                 WhatsApp-Kundenservice:
                 <a
@@ -83,6 +84,7 @@ export default async function DatenschutzPage() {
                   Jetzt kontaktieren
                 </a>
               </p>
+              )}
 
               <p className="mt-4 font-medium">Datenschutzbeauftragter:</p>
               <p>{COMPANY.legal.datenschutzbeauftragter}</p>

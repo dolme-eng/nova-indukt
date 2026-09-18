@@ -279,17 +279,19 @@ export default function AboutContent() {
                 <div className="space-y-4 text-gray-300 font-medium text-lg relative z-10">
                   <p className="text-white font-bold text-xl">{COMPANY.name}</p>
                   <p>{COMPANY.street}<br/>{COMPANY.zip} {COMPANY.city}<br/>{COMPANY.country}</p>
+                  {COMPANY.whatsapp.url.startsWith('https://') && (
                   <div className="pt-4 flex items-center gap-3">
                     <span className="w-10 text-gray-500 text-sm uppercase">Service</span>
-                    <a 
-                      href={COMPANY.whatsapp.url} 
-                      target="_blank" 
+                    <a
+                      href={COMPANY.whatsapp.url}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-white hover:text-nova transition-colors font-bold"
                     >
                       WhatsApp-Kundenservice
                     </a>
                   </div>
+                  )}
                   <p className="flex items-center gap-3"><span className="w-10 text-gray-500 text-sm uppercase">Mail</span> {COMPANY.email.info}</p>
                 </div>
                 <div className="mt-10 pt-10 border-t border-white/10 relative z-10">

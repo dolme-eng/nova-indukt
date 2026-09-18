@@ -50,6 +50,7 @@ vi.mock('@/lib/constants/company', () => ({
     whatsapp: { url: 'https://wa.me/123' },
     email: { support: 'support@nova.de', info: 'info@nova.de', datenschutz: 'dp@nova.de' },
   },
+  getWhatsAppUrl: () => 'https://wa.me/123?text=test',
 }))
 
 vi.mock('@/lib/constants/shop', () => ({

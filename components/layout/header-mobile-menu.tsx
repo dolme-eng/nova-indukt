@@ -13,9 +13,11 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-import { COMPANY } from '@/lib/constants/company'
+import { getWhatsAppUrl } from '@/lib/constants/company'
 
-const WHATSAPP_URL = `${COMPANY.whatsapp.url}?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt.`
+const WHATSAPP_URL = getWhatsAppUrl(
+  'Hallo NOVA INDUKT Team, ich habe eine Frage zu einem Produkt.'
+)
 
 interface NavItem {
   label: string
@@ -211,30 +213,32 @@ export function MobileMenu({ isOpen, onClose, navItems, isActive }: MobileMenuPr
             Mein Konto
           </Link>
 
-          <div className="flex items-center justify-between rounded-2xl bg-[#0C211E] px-5 py-4 text-white shadow-xl shadow-black/20">
-            <div>
-              <span className="mb-1 block text-sm font-bold">Kundenservice</span>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-bold text-nova-200 hover:underline"
-              >
-                Jetzt Kontaktieren
-              </a>
+          {WHATSAPP_URL && (
+            <div className="flex items-center justify-between rounded-2xl bg-[#0C211E] px-5 py-4 text-white shadow-xl shadow-black/20">
+              <div>
+                <span className="mb-1 block text-sm font-bold">Kundenservice</span>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-bold text-nova-200 hover:underline"
+                >
+                  Jetzt Kontaktieren
+                </a>
+              </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-500/30 bg-[#25D366]/20">
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Kontakt via WhatsApp"
+                  className="flex h-full w-full items-center justify-center"
+                >
+                  <WhatsAppIcon />
+                </a>
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-500/30 bg-[#25D366]/20">
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Kontakt via WhatsApp"
-                className="flex h-full w-full items-center justify-center"
-              >
-                <WhatsAppIcon />
-              </a>
-            </div>
-          </div>
+          )}
         </div>
       </motion.div>
     </motion.div>

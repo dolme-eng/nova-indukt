@@ -36,9 +36,12 @@ const navItems = [
 
 // ─── WhatsApp helper ─────────────────────────────────────────────────────────
 
-import { COMPANY } from '@/lib/constants/company'
+import { getWhatsAppUrl } from '@/lib/constants/company'
 
-const WHATSAPP_URL = `${COMPANY.whatsapp.url}?text=Hallo%20NOVA%20INDUKT%20Team%2C%20ich%20habe%20eine%20Frage%20zu%20einem%20Produkt.`
+// Null when unconfigured (placeholder env) — the link is hidden, never a dead href
+const WHATSAPP_URL = getWhatsAppUrl(
+  'Hallo NOVA INDUKT Team, ich habe eine Frage zu einem Produkt.'
+)
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5 fill-[#25D366]">
@@ -179,15 +182,17 @@ export function Header() {
             </span>
           </div>
           <div className="flex items-center gap-5 text-[#9FE1CD]">
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 transition-colors hover:text-white"
-            >
-              <WhatsAppIcon />
-              Kundenservice
-            </a>
+            {WHATSAPP_URL && (
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 transition-colors hover:text-white"
+              >
+                <WhatsAppIcon />
+                Kundenservice
+              </a>
+            )}
             <span className="h-3 w-px bg-[#236456]" />
             <span className="text-[#6FD2B4]">Mo–Fr 9–18 Uhr</span>
           </div>

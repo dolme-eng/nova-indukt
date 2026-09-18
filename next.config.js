@@ -91,6 +91,18 @@ const nextConfig = {
         destination: '/',
         permanent: false,
       },
+      // Category hub lives at /produkte?kategorie= — hard 307 (no client refresh)
+      {
+        source: '/kategorie/:id',
+        destination: '/produkte?kategorie=:id',
+        permanent: false,
+      },
+      // Legacy French slug (also covered in vercel.json)
+      {
+        source: '/informations-de-paiement',
+        destination: '/informationen-zur-zahlung',
+        permanent: true,
+      },
     ]
   },
 }

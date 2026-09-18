@@ -44,7 +44,15 @@ export async function generateMetadata({
 
   const product = await getProductBySlug(decodedSlug)
 
-  if (!product) return {}
+  // Unknown slug: noindex + explicit title so a 404 never inherits the
+  // homepage title with index,follow
+  if (!product || !product.isActive) {
+    return {
+      title: 'Produkt nicht gefunden',
+      description: 'Das gesuchte Produkt existiert nicht oder ist nicht mehr verfügbar.',
+      robots: { index: false, follow: false },
+    }
+  }
 
   const title = (product.metaTitle || `${product.nameDe} | Premium Induktions-Kochgeschirr`)
     .replace(/\s*\|\s*NOVA\s*INDUKT\s*$/i, '')

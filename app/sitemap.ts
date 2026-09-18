@@ -5,22 +5,24 @@ import { SHOP_DOMAIN } from '@/lib/constants/shop'
 const BASE_URL = SHOP_DOMAIN
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static routes (always included)
+  // Static routes (always included).
+  // No lastModified: these pages have no DB timestamp — emitting "now" on
+  // every build would fake freshness and kill sitemap caching.
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
-    { url: `${BASE_URL}/produkte`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${BASE_URL}/kontakt`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/uber-uns`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/technologie`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/faq`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/lieferung`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE_URL}/widerruf`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/rueckgabe`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/datenschutz`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/agb`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/impressum`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/karriere`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.4 },
+    { url: BASE_URL, changeFrequency: 'daily', priority: 1 },
+    { url: `${BASE_URL}/produkte`, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/blog`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE_URL}/kontakt`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/uber-uns`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/technologie`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/faq`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/lieferung`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE_URL}/widerruf`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/rueckgabe`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/datenschutz`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/agb`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/impressum`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/karriere`, changeFrequency: 'monthly', priority: 0.4 },
     // /informationen-zur-zahlung is noindex (post-order utility with bank details)
   ]
 

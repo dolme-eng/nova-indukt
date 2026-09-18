@@ -169,7 +169,7 @@ export default async function AGBPage() {
                 diesen Vertrag zu widerrufen. Wir gewähren Ihnen freiwillig ein erweitertes
                 Rückgaberecht von 30 Tagen (siehe
                 <Link href="/rueckgabe" className="mx-1 text-nova-700 hover:underline">
-                  /rueckgabe
+                  Rückgabe &amp; Widerruf
                 </Link>
                 ). Die gesetzliche Widerrufsfrist beträgt vierzehn Tage ab dem Tag, an dem Sie oder
                 ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die Waren in Besitz
@@ -179,7 +179,7 @@ export default async function AGBPage() {
                 (2) Die Einzelheiten zum Widerrufsrecht finden Sie in unserer Widerrufsbelehrung
                 unter
                 <Link href="/widerruf" className="ml-1 text-nova-700 hover:underline">
-                  /widerruf
+                  Widerrufsbelehrung
                 </Link>
                 .
               </p>
@@ -246,7 +246,7 @@ export default async function AGBPage() {
               <p>
                 (2) Einzelheiten zum Datenschutz finden Sie in unserer Datenschutzerklärung unter
                 <Link href="/datenschutz" className="ml-1 text-nova-700 hover:underline">
-                  /datenschutz
+                  Datenschutzerklärung
                 </Link>
                 .
               </p>

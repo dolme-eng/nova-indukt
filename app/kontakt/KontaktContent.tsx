@@ -182,7 +182,10 @@ export function KontaktContent() {
         <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Contact Info Sidebar */}
           <div className="flex flex-col gap-6 lg:col-span-5">
-            {contactInfo.map((item, index) => (
+            {contactInfo
+              // Hide the WhatsApp card while unconfigured (no dead button)
+              .filter((item) => !item.isWhatsApp || COMPANY.whatsapp.url.startsWith('https://'))
+              .map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -20 }}

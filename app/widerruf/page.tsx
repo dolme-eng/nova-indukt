@@ -61,11 +61,12 @@ export default async function WiderrufPage() {
                   <p className="font-medium">{COMPANY.name}</p>
                   <p>{COMPANY.street}</p>
                   <p>{COMPANY.zip} {COMPANY.city}</p>
+                  {COMPANY.whatsapp.url.startsWith('https://') && (
                   <p className="flex items-center gap-2">
-                    WhatsApp: 
-                    <a 
-                      href={COMPANY.whatsapp.url} 
-                      target="_blank" 
+                    WhatsApp:
+                    <a
+                      href={COMPANY.whatsapp.url}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-[#25D366] hover:underline font-bold"
                     >
@@ -73,6 +74,7 @@ export default async function WiderrufPage() {
                       Service kontaktieren
                     </a>
                   </p>
+                  )}
                   <p>E-Mail: {COMPANY.email.widerruf}</p>
                 </div>
                 <p className="mt-4">

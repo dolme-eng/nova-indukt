@@ -150,11 +150,16 @@ export default async function LieferungPage() {
               Kontaktieren Sie uns über unser{' '}
               <Link href="/kontakt" className="font-semibold text-nova-700 hover:underline">
                 Kontaktformular
-              </Link>{' '}
-              oder per{' '}
-              <a href={COMPANY.whatsapp.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-nova-700 hover:underline">
-                WhatsApp
-              </a>.
+              </Link>
+              {COMPANY.whatsapp.url.startsWith('https://') && (
+                <>
+                  {' '}oder per{' '}
+                  <a href={COMPANY.whatsapp.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-nova-700 hover:underline">
+                    WhatsApp
+                  </a>
+                </>
+              )}
+              .
             </p>
           </div>
         </div>

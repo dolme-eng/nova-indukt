@@ -75,3 +75,16 @@ export const COMPANY = {
 } as const
 
 export type CompanyType = typeof COMPANY
+
+/**
+ * Validated WhatsApp deep link, or null when unconfigured.
+ * Guards against placeholder env values (e.g. "4930XXXXXXXX" without scheme):
+ * call sites must render WhatsApp links only when this returns a URL —
+ * never a dead href.
+ */
+export function getWhatsAppUrl(prefilledText?: string): string | null {
+  const base = COMPANY.whatsapp.url
+  if (!base.startsWith('https://')) return null
+  const text = prefilledText ?? COMPANY.whatsapp.message
+  return `${base}?text=${encodeURIComponent(text)}`
+}

@@ -100,6 +100,7 @@ export function Footer() {
             </p>
 
             <div className="mb-6 space-y-2">
+              {COMPANY.whatsapp.url.startsWith('https://') && (
               <a
                 href={COMPANY.whatsapp.url}
                 target="_blank"
@@ -113,15 +114,16 @@ export function Footer() {
                 </div>
                 WhatsApp
               </a>
+              )}
               <div className="group flex items-center gap-3 text-[11px] font-black uppercase tracking-tighter text-[#9FE1CD]">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17423C]">
                   <Mail className="h-3.5 w-3.5" />
                 </div>
                 <a
-                  href={`mailto:${COMPANY.email.info}`}
+                  href={`mailto:${COMPANY.email.support}`}
                   className="transition-colors hover:text-white"
                 >
-                  {COMPANY.email.info}
+                  {COMPANY.email.support}
                 </a>
               </div>
               <div className="group flex items-center gap-3 text-[11px] font-black uppercase tracking-tighter text-[#9FE1CD]">
