@@ -31,6 +31,10 @@ const FIX_STATEMENTS: { label: string; sql: string }[] = [
     sql: `DELETE FROM "ProductImage" WHERE "productId" = (SELECT id FROM "Product" WHERE slug = 'demeyere-proline-7-28cm') AND url = '/images/products/Demeyere Proline 7 - 28 cm/1.jpg'`,
   },
   {
+    label: 'p52 dedupe cloud by url',
+    sql: `DELETE FROM "ProductImage" a USING "ProductImage" b WHERE a."productId" = (SELECT id FROM "Product" WHERE slug = 'demeyere-proline-7-28cm') AND b."productId" = a."productId" AND a.url = b.url AND a.id > b.id`,
+  },
+  {
     label: 'p53 dedupe by url',
     sql: `DELETE FROM "ProductImage" a USING "ProductImage" b WHERE a."productId" = (SELECT id FROM "Product" WHERE slug = 'fissler-adamant-wok-32cm') AND b."productId" = a."productId" AND a.url = b.url AND a.id > b.id`,
   },
