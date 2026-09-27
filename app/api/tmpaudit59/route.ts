@@ -29,6 +29,10 @@ const FIX_STATEMENTS: { label: string; sql: string }[] = [
   },
   // p61: remove the two identical blueprint/technical-drawing images
   {
+    label: 'p59 dedupe cloud',
+    sql: `DELETE FROM "ProductImage" a USING "ProductImage" b WHERE a."productId" = (SELECT id FROM "Product" WHERE slug = 'fissler-intensa-topfset-5teilig') AND b."productId" = a."productId" AND a.url = b.url AND a.id > b.id`,
+  },
+  {
     label: 'p61 delete blueprints',
     sql: `DELETE FROM "ProductImage" WHERE "productId" = (SELECT id FROM "Product" WHERE slug = 'staub-cocotte-ronde-24cm') AND (url LIKE '%Cocotte 24 cm/2.jpg' OR url LIKE '%Cocotte 24 cm/3.jpg')`,
   },
