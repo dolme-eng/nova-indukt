@@ -64,7 +64,7 @@ const FIX_STATEMENTS: { label: string; sql: string }[] = [
   },
   {
     label: 'p73 insert new high-res image',
-    sql: `INSERT INTO "ProductImage" ("productId", url, alt, "sortOrder", "isMain") SELECT id, '${NEW_ZWILLING}', 'Zwilling Summit+ Grillpfanne 28 cm – am Herd', 0, true FROM "Product" WHERE slug = 'zwilling-summit-plus-grillpfanne-28cm'`,
+    sql: `INSERT INTO "ProductImage" ("id", "productId", url, alt, "sortOrder", "isMain") SELECT concat('c', substr(md5(random()::text || clock_timestamp()::text), 1, 24)), id, '${NEW_ZWILLING}', 'Zwilling Summit+ Grillpfanne 28 cm – am Herd', 0, true FROM "Product" WHERE slug = 'zwilling-summit-plus-grillpfanne-28cm'`,
   },
   // ---- p74 Le Creuset 28: drop the 2 identical blueprint images ----
   {
@@ -83,7 +83,7 @@ const FIX_STATEMENTS: { label: string; sql: string }[] = [
   },
   {
     label: 'p76 insert sourced image',
-    sql: `INSERT INTO "ProductImage" ("productId", url, alt, "sortOrder", "isMain") SELECT id, '${NEW_FISSLER}', 'Fissler Grillpfanne 28 cm – gerillte Oberfläche', 0, true FROM "Product" WHERE slug = 'fissler-opc-grillpfanne-28cm'`,
+    sql: `INSERT INTO "ProductImage" ("id", "productId", url, alt, "sortOrder", "isMain") SELECT concat('c', substr(md5(random()::text || clock_timestamp()::text), 1, 24)), id, '${NEW_FISSLER}', 'Fissler Grillpfanne 28 cm – gerillte Oberfläche', 0, true FROM "Product" WHERE slug = 'fissler-opc-grillpfanne-28cm'`,
   },
   // ---- hero pinning ----
   {
