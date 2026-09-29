@@ -72,15 +72,10 @@ const FIX_STATEMENTS: { label: string; sql: string }[] = [
     label: 'Fissler utensils reset (cookware-set heroes + blueprint locals)',
     sql: `DELETE FROM "ProductImage" WHERE "productId" IN (SELECT id FROM "Product" WHERE slug IN ('fissler-pure-collection-kochloeffel','fissler-pure-collection-schoepfkelle','fissler-pure-collection-saucenheber','fissler-pure-collection-nudelkelle'))`,
   },
-  {
-    label: 'Fissler utensils insert sourced images',
-    sql: Object.entries(NEW_UTENSILS)
-      .map(
-        ([slug, v]) =>
-          `INSERT INTO "ProductImage" ("id", "productId", url, alt, "sortOrder", "isMain") SELECT ${genId}, id, '${v.url}', '${v.alt}', 0, true FROM "Product" WHERE slug = '${slug}'`,
-      )
-      .join(' '),
-  },
+  ...Object.entries(NEW_UTENSILS).map(([slug, v]) => ({
+    label: `insert sourced image for ${slug}`,
+    sql: `INSERT INTO "ProductImage" ("id", "productId", url, alt, "sortOrder", "isMain") SELECT ${genId}, id, '${v.url}', '${v.alt}', 0, true FROM "Product" WHERE slug = '${slug}'`,
+  })),
   // ---- resequence sortOrder 0..n ----
   {
     label: 'resequence sortOrder',
