@@ -221,7 +221,7 @@ Die Profi Plus Tarte-Form - für professionelle Ergebnisse zu Hause.`,
   },
 
   {
-    slug: 'stash-cocotte-oval-31x21cm',
+    slug: 'staub-cocotte-oval-31x21cm',
     supplierSku: 'STB-COC-OV31',
     nameDe: 'Staub Cocotte Oval 31×21 cm',
     shortDescription: 'Französische Gusseisen-Cocotte - emailliert, ofenfest, made in France',

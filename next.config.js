@@ -103,6 +103,12 @@ const nextConfig = {
         destination: '/informationen-zur-zahlung',
         permanent: true,
       },
+      // Typo'd slug in seed data ("stash-" instead of "staub-"), fixed in DB
+      {
+        source: '/produkt/stash-cocotte-oval-31x21cm',
+        destination: '/produkt/staub-cocotte-oval-31x21cm',
+        permanent: true,
+      },
     ]
   },
 }
