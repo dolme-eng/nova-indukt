@@ -104,10 +104,11 @@ const nextConfig = {
         permanent: true,
       },
       // Typo'd slug in seed data ("stash-" instead of "staub-"), fixed in DB
+      // statusCode: 301 (not `permanent`, which yields a 308 in Next 16)
       {
         source: '/produkt/stash-cocotte-oval-31x21cm',
         destination: '/produkt/staub-cocotte-oval-31x21cm',
-        permanent: true,
+        statusCode: 301,
       },
     ]
   },
