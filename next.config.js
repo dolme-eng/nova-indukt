@@ -117,6 +117,12 @@ const nextConfig = {
         destination: '/produkt/staub-cocotte-ronde-20cm',
         statusCode: 301,
       },
+      // #266 duplicate of #109 (same name/brand/price), deactivated in DB.
+      {
+        source: '/produkt/wmf-professional-s-plus-saucenheber-2',
+        destination: '/produkt/wmf-profi-plus-saucenheber',
+        statusCode: 301,
+      },
     ]
   },
 }

@@ -147,44 +147,6 @@ Das komplette Set für den perfekten Raclette-Abend mit Familie und Freunden.`,
   },
 
   {
-    slug: 'bugatti-fondue-set-15l',
-    supplierSku: 'BUG-FD-15',
-    nameDe: 'Bugatti Fondue-Set 1,5 L',
-    shortDescription: 'Italienisches Fondue-Set mit Keramik-Heizkörper - Design und Qualität',
-    descriptionDe: `Das Bugatti Fondue-Set 1,5 L vereint italienisches Design mit höchster Funktionalität. Der innovative Keramik-Heizkörper sorgt für präzise und gleichmäßige Temperaturregelung, während das edle Edelstahldesign jeden Tisch verschönert.
-
-**Merkmale:**
-- Edelstahlkörper mit Keramik-Heizkörper - präzise Temperaturregelung
-- Volumen: 1,5 L - ideal für 4–6 Personen
-- Induktionsgeeignet
-- Spülmaschinengeeignet
-- Italienisches Design - elegante Optik
-- Inklusive Edelstahl-Fonduegabeln
-- Robuste Verarbeitung
-
-Das Bugatti Fondue-Set - wo italienische Lebensart auf erstklassige Kochkunst trifft.`,
-    price: 129.99,
-    oldPrice: 159.99,
-    brand: 'Bugatti',
-    material: 'Edelstahl + Keramik',
-    dimensions: '1,5 L',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 2.2,
-    badges: ['Italienisches Design', 'Keramik-Heizkörper'],
-    rating: 4.5,
-    reviewCount: 0,
-    metaTitle: 'Bugatti Fondue-Set 1,5 L - Italienisches Design, Keramik | NOVA INDUKT',
-    metaDescription:
-      'Bugatti Fondue-Set 1,5 L mit Keramik-Heizkörper. Italienisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
-    categorySlug: 'fondues-raclette',
-    folder: 'Bugatti Fondue-Set - 1,5 L',
-    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
-  },
-
-  {
     slug: 'zwilling-fondue-set-20l',
     supplierSku: 'ZWI-SPIR-FD20',
     nameDe: 'Zwilling Spirit Fondue-Set 2,0 L',

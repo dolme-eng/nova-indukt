@@ -272,41 +272,6 @@ Die Now S Serie bietet modernes Design zum fairen Preis.`,
     folder: 'Zwilling Now S Kartoffelstock',
     imageFiles: ['1.jpg', '2.jpg'],
   },
-  {
-    slug: 'wmf-professional-s-plus-saucenheber-2',
-    supplierSku: 'WMF-PP-SH2',
-    nameDe: 'WMF Profi Plus Saucenheber',
-    shortDescription: 'Edelstahl-Saucenheber aus der Profi Plus Serie - Made in Germany',
-    descriptionDe: `Der WMF Profi Plus Saucenheber ist ideal zum Servieren von Saucen, Suppen und Eintöpfen. Aus Cromargan® Edelstahl 18/10 gefertigt, bietet er optimale Haltbarkeit und ein elegantes Design.
-
-**Merkmale:**
-- Cromargan® Edelstahl 18/10
-- Perfekt zum Servieren von Saucen
-- Ergonomischer Griff
-- Spülmaschinenfest
-- Hergestellt in Deutschland
-
-Die Profi Plus Serie steht für professionelle Qualität im Küchenalltag.`,
-    price: 12.99,
-    oldPrice: 16.99,
-    brand: 'WMF',
-    material: 'Cromargan® Edelstahl 18/10',
-    dimensions: '30 cm',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 0.11,
-    badges: ['Made in Germany'],
-    rating: 4.4,
-    reviewCount: 0,
-    metaTitle: 'WMF Profi Plus Saucenheber - Edelstahl Utensil | NOVA INDUKT',
-    metaDescription:
-      'WMF Profi Plus Saucenheber - Cromargan® Edelstahl 18/10, Made in Germany, spülmaschinenfest. Jetzt bei NOVA INDUKT.',
-    categorySlug: 'ustensiles',
-    folder: 'WMF Profi Plus Saucenheber',
-    imageFiles: ['1.jpg', '2.jpg'],
-  },
 ]
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
