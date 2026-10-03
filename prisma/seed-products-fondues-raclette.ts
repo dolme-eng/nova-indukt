@@ -184,43 +184,6 @@ Das Spirit Fondue-Set - für großzügiges Fondue-Vergnügen in anspruchsvollem 
     imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
 
-  {
-    slug: 'de-buyer-raclette-pfanne-8-teilig',
-    supplierSku: 'DB-RAC-8',
-    nameDe: 'de Buyer Raclette-Pfanne 8-teilig',
-    shortDescription: 'Professionelles Raclette-Set aus Stahl und Emaille - Made in France',
-    descriptionDe: `Das de Buyer Raclette-Set bietet professionelle Qualität für anspruchsvolle Raclette-Liebhaber. Die Pfännchen aus Stahl mit Emaille-Innenbeschichtung sorgen für gleichmäßiges Garen und eine edle Optik.
-
-**Merkmale:**
-- Stahl-Pfännchen mit Emaille-Innenbeschichtung
-- 8 teilmöblierte Pfännchen - ideal für größere Gesellschaften
-- Induktionsgeeignet
-- Spülmaschinengeeignet
-- Professionelle Qualität - Made in France
-- Robuste Verarbeitung für langlebigen Einsatz
-- Gleichmäßige Wärmeverteilung
-
-Das de Buyer Raclette-Set - professionelle Qualität für den Raclette-Genuss zu Hause.`,
-    price: 69.99,
-    oldPrice: 89.99,
-    brand: 'de Buyer',
-    material: 'Stahl + Emaille',
-    dimensions: '8-teilig',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 2.5,
-    badges: ['Made in France', 'Professionell'],
-    rating: 4.6,
-    reviewCount: 0,
-    metaTitle: 'de Buyer Raclette-Pfanne 8-teilig - Profi-Qualität | NOVA INDUKT',
-    metaDescription:
-      'de Buyer Raclette-Set 8-teilig aus Stahl und Emaille. Professionelle Qualität, Made in France, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
-    categorySlug: 'fondues-raclette',
-    folder: 'de Buyer Raclette-Pfanne - 8-teilig',
-    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
-  },
 ]
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
