@@ -304,8 +304,8 @@ Der Petromax ft9 ist die perfekte Wahl für große Runden. Ob Schmorbraten, Eint
 - Hergestellt in Frankreich mit 5 Jahren Garantie
 
 Die kleinste Cocotte Ronde von Staub ist perfekt für Paare, Singles oder als Beilagen-Topf. Die selbstschließende Tropfstruktur sorgt auch in kleiner Portion für Saftigkeit und Aromen.`,
-    price: 149.0,
-    oldPrice: 189.0,
+    price: 134.99,
+    oldPrice: 149.0,
     brand: 'Staub',
     material: 'Emailliertes Gusseisen',
     dimensions: 'Ø 20 cm, Höhe 9 cm (mit Deckel 14 cm), 2,2 Liter',

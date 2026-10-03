@@ -110,6 +110,13 @@ const nextConfig = {
         destination: '/produkt/staub-cocotte-oval-31x21cm',
         statusCode: 301,
       },
+      // #165 duplicate of #86 (same name/brand/price), deactivated in DB.
+      // Kept as a redirect so the existing indexed URL keeps its SEO value.
+      {
+        source: '/produkt/stash-cocotte-ronde-20cm',
+        destination: '/produkt/staub-cocotte-ronde-20cm',
+        statusCode: 301,
+      },
     ]
   },
 }

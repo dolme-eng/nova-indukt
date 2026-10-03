@@ -371,45 +371,8 @@ Die DT6 vereint traditionelles Handwerk mit moderner Küchentechnik - für anspr
     folder: 'Petromax Dutch Oven DT6 - Oval',
     imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
-
-  {
-    slug: 'stash-cocotte-ronde-20cm',
-    supplierSku: 'STB-COC-R20',
-    nameDe: 'Staub Cocotte Ronde 20 cm',
-    shortDescription: 'Kompakte runde Gusseisen-Cocotte - ideal für Einzelportionen und Beilagen',
-    descriptionDe: `Die Staub Cocotte Ronde 20 cm ist die kompakte Lösung für kleinere Portionen, Beilagen oder spezielle Schmorgerichte. Aus emailliertem Gusseisen gefertigt, bietet sie die gleiche exzellente Wärmespeicherung wie große Cocottes - nur in handlicherem Format.
-
-**Merkmale:**
-- Emailliertes Gusseisen - gleichmäßige Wärmeverteilung
-- Kompaktes Format - ideal für Einzelportionen und Beilagen
-- Volumen: 2,2 Liter
-- Markanter Deckel mit Noppen - Saftigkeitskreislauf
-- Vollständig ofenfest und spülmaschinenfest
-- Induktionsgeeignet
-- Made in France
-
-Die kleine Cocotte für große Wirkung - für anspruchsvolle Einzelportionen.`,
-    price: 149.99,
-    oldPrice: 189.99,
-    brand: 'Staub',
-    material: 'Emailliertes Gusseisen',
-    dimensions: 'Ø 20 cm, 2,2 L',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 3.8,
-    badges: ['Made in France', 'Kompakt'],
-    rating: 4.7,
-    reviewCount: 0,
-    metaTitle: 'Staub Cocotte Ronde 20 cm - Kompakte Gusseisen-Cocotte | NOVA INDUKT',
-    metaDescription:
-      'Staub Cocotte Ronde 20 cm - kompakte Gusseisen-Cocotte, 2,2 L, Made in France. Induktionsgeeignet. Jetzt bei NOVA INDUKT.',
-    categorySlug: 'formes-de-cuisson',
-    folder: 'Staub Cocotte Ronde - 20 cm',
-    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
-  },
 ]
+
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
