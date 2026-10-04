@@ -103,43 +103,6 @@ Zwilling Qualität für die ordentliche Aufbewahrung Ihrer Kochgeschirre.`,
   },
 
   {
-    slug: 'rivsalt-topfregal-5-stufen',
-    supplierSku: 'RIV-TR-5S',
-    nameDe: 'Rivsalt Topfregal 5 Stufen',
-    shortDescription: 'Schwedisches Topfregal mit 5 Stufen - modernes Design für die Küchenzeile',
-    descriptionDe: `Das Rivsalt Topfregal besticht durch sein scandinavisches Design und bietet mit 5 Stufen großzügigen Platz für Pfannen, Töpfe und Kochgeschirr. Die schwarze Metallkonstruktion passt perfekt in moderne Küchen.
-
-**Merkmale:**
-- 5 Stufen für maximale Stauraumausnutzung
-- Schwedisches Minimalistendesign in Schwarz
-- Robuste Metallkonstruktion
-- Stabile Standfüße
-- Ideal für Küchenzeile oder Wandmontage
-- Induktionsgeeignet
-
-Schwedisches Design trifft auf praktische Stauraumlösung.`,
-    price: 79.99,
-    oldPrice: 89.99,
-    brand: 'Rivsalt',
-    material: 'Metall schwarz',
-    dimensions: '5 Stufen, 40×30×45 cm',
-    dishwasherSafe: false,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 2.8,
-    badges: ['Schwedisches Design', '5 Stufen'],
-    rating: 4.5,
-    reviewCount: 0,
-    metaTitle: 'Rivsalt Topfregal 5 Stufen - Schwedisches Design | NOVA INDUKT',
-    metaDescription:
-      'Rivsalt Topfregal 5 Stufen - schwedisches Design, schwarzes Metall, 5 Ebenen für Pfannen und Töpfe. Jetzt bei NOVA INDUKT.',
-    categorySlug: 'pfannenschoner-topfregale',
-    folder: 'Rivsalt Topfregal 5 Stufen',
-    imageFiles: ['1.jpg', '2.jpg'],
-  },
-
-  {
     slug: 'wmf-pfannenschoner-30cm',
     supplierSku: 'WMF-PS-30',
     nameDe: 'WMF Pfannenschoner 30 cm',
