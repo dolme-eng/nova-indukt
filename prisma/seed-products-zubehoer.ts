@@ -92,113 +92,6 @@ Hervorragendes Preis-Leistungs-Verhältnis für die alltäglichen kleinen Aufgab
     imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
-    slug: 'interkitchen-induktions-adapterplatte-20cm',
-    supplierSku: 'INT-ADAPT-20',
-    sortOrder: 3,
-    nameDe: 'INTERKITCHEN Induktions-Adapterplatte 20 cm',
-    shortDescription: 'Stabile, grifflose Induktions-Adapterplatte für exzellente Wärmeleitung',
-    descriptionDe: `Die INTERKITCHEN Adapterplatte ist minimalistisch und funktionell: Sie verzichtet bewusst auf einen Griff und bietet dafür eine extrem flache und stabile Basis. 
-
-**Merkmale:**
-- Hervorragende Wärmeleitung für Aluminium, Kupfer, Keramik und Glas
-- Ferromagnetischer Edelstahl (ca. 4 mm dick)
-- Hitzebeständig bis 250°C
-- Spülmaschinenfest
-
-*Hinweis: Da die Platte keinen Griff besitzt, muss sie nach dem Erhitzen vorsichtig mit einem Topflappen oder einer Zange bewegt werden.*`,
-    price: 19.49,
-    oldPrice: null,
-    brand: 'Interkitchen',
-    material: 'Ferromagnetischer Edelstahl',
-    dimensions: 'Ø 20 cm, Dicke 4 mm',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 0.6,
-    badges: ['Minimalistisches Design', 'Spülmaschinenfest'],
-    rating: 4.2,
-    reviewCount: 0,
-    metaTitle: 'INTERKITCHEN Induktions-Adapterplatte 20 cm | NOVA INDUKT',
-    metaDescription:
-      'Stabile INTERKITCHEN Induktions-Adapterplatte 20 cm. Extrem flaches Design ohne Griff für maximale Auflage und Hitzeverteilung.',
-    categorySlug: 'induktions-zubehoer',
-    folder: 'INTERKITCHEN - Induktions-Adapterplatte Ø 20 cm',
-    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
-  },
-  {
-    slug: 'lukata-silikon-induktionskochfeld-schutzmatte',
-    supplierSku: 'LUK-SILMAT-52',
-    sortOrder: 4,
-    nameDe: 'Lukata Silikon-Induktionskochfeld-Schutzmatte',
-    shortDescription: 'Magnetische, hitzebeständige Schutzmatte gegen Kratzer und Schmutz',
-    descriptionDe: `Verlängern Sie die Lebensdauer Ihres Induktionskochfeldes! Die Lukata Schutzmatte wird zwischen Herd und Topf gelegt. Dank ihrer magnetischen Eigenschaften haftet sie rutschfest auf dem Feld.
-
-**Merkmale:**
-- Schützt effektiv vor Kratzern, Flecken und Überkochen
-- 100% hitzebeständiges Lebensmittelsilikon (bis 300°C)
-- Magnetisch: perfekter Halt ohne Verrutschen
-- Waschmaschinen- und spülmaschinengeeignet
-- Kann auch als flexibler Untersetzer für heiße Töpfe verwendet werden
-
-Ein unverzichtbares Zubehör für alle, die ihr Glasfeld makellos erhalten wollen.`,
-    price: 10.99,
-    oldPrice: null,
-    brand: 'Lukata',
-    material: 'Lebensmittelsilikon (magnetisch)',
-    dimensions: '52 x 60 cm (Dicke 1,5-2 mm)',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 0.6,
-    badges: ['Magnetisch', 'Hitzebeständig bis 300°C'],
-    rating: 4.3,
-    reviewCount: 0,
-    metaTitle: 'Lukata Silikon-Schutzmatte für Induktion | NOVA INDUKT',
-    metaDescription:
-      'Magnetische Silikon-Schutzmatte für Induktionskochfelder von Lukata. Schützt vor Kratzern, rutschfest, hitzebeständig bis 300°C.',
-    categorySlug: 'induktions-zubehoer',
-    folder: 'Lukata - Silikon Induktionskochfeld-Schutzmatte (Magnétique)',
-    imageFiles: ['1.jpg', '2.jpg'],
-  },
-  {
-    slug: 'sallys-induktionsmatte-oval',
-    supplierSku: 'SAL-SILMAT-OV',
-    sortOrder: 5,
-    nameDe: 'Sallys Induktionsmatte Oval',
-    shortDescription: 'Ovale Premium-Silikonmatte für optimalen Kochfeldschutz',
-    descriptionDe: `Die beliebte ovale Induktionsmatte von Sallys Welt. Sie bietet zuverlässigen Schutz für Ihr Kochfeld und verhindert das Verrutschen von Töpfen und Pfannen beim Rühren.
-
-**Merkmale:**
-- Ovales Design, passend für viele Standard-Kochzonen
-- Widerstandsfähiges Lebensmittelsilikon (bis 240°C)
-- Anti-Rutsch-Effekt für sicheres Kochen
-- Verhindert Mikrokratzer durch Salz oder Sand auf dem Glasfeld
-- Spülmaschinenfest und leicht abwischbar
-
-Bewährte Qualität für ein entspanntes und sicheres Kocherlebnis auf Induktion.`,
-    price: 17.99,
-    oldPrice: null,
-    brand: 'Sallys',
-    material: 'Silikon',
-    dimensions: 'Oval',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 0.3,
-    badges: ['Premium Qualität', 'Anti-Rutsch'],
-    rating: 4.5,
-    reviewCount: 0,
-    metaTitle: 'Sallys Induktionsmatte Oval | NOVA INDUKT',
-    metaDescription:
-      'Ovale Induktionsmatte von Sallys Welt. Schützt das Glasfeld vor Kratzern, hitzebeständig bis 240°C, rutschfest.',
-    categorySlug: 'induktions-zubehoer',
-    folder: 'Sallys - Induktionsmatte Oval',
-    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
-  },
-  {
     slug: 'dietrix-kochschutzmatten-induktion-set',
     supplierSku: 'DIE-KOCHMAT-4',
     sortOrder: 6,
@@ -275,36 +168,37 @@ Die feste Paste löst selbst extremste Verkrustungen mühelos ohne jegliche Krat
     imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
   },
   {
-    slug: 'ceraclen-3in1-reiniger-pfleger',
-    supplierSku: 'CER-3IN1-250',
+slug: 'ceraclen-3in1-reiniger-pfleger',
+    supplierSku: 'CER-3IN1-200',
     sortOrder: 8,
-    nameDe: 'Ceraclen 3 in 1 Reiniger & Pfleger',
-    shortDescription: 'Vergleich.org Platz 1 Testsieger - reinigt, poliert und schützt intensiv',
-    descriptionDe: `Ceraclen 3 in 1 ist der unangefochtene Testsieger auf Vergleich.org für die regelmäßige Pflege von Glaskeramik- und Induktionskochfeldern. 
+    nameDe: 'Ceraclen 3 in 1 Reiniger & Pfleger 200 ml',
+    shortDescription: 'Reinigt, poliert und schützt Glaskeramik- und Induktionskochfelder',
+    descriptionDe: `Ceraclen 3 in 1 ist ein Reiniger und Pfleger für Glaskeramik- und Induktionskochfelder sowie Edelstahloberflächen.
 
 **Merkmale:**
-- 3-in-1 Formel: reinigt gründlich, poliert sanft für Hochglanz und schützt die Oberfläche vor neuem Schmutz
-- Hinterlässt einen unsichtbaren, hitzebeständigen Schutzfilm, der das Einbrennen von überkochenden Speisen (z.B. Zucker) verhindert
-- Entfernt spielend Alltagsfett, Fingerabdrücke und leichte Kalkflecken
-- Empfohlen für den täglichen Gebrauch nach dem Kochen
+- 3-in-1-Formel: reinigt gründlich, poliert sanft für Hochglanz und schützt die Oberfläche vor neuem Schmutz
+- Enthält natürliche Polierperlen aus Aprikosenkernen
+- Entfernt Alltagsfett, Fingerabdriffe und leichte Kalkflecken
+- Nicht für die Reinigung des Backofens geeignet (Herstellerangabe)
+- 200 ml (Hersteller: Reckitt Benckiser Deutschland GmbH)
 
 Die Profi-Pflege für Ihr Induktionsfeld, damit es auch nach Jahren noch aussieht wie am ersten Tag!`,
-    price: 3.0,
+    price: 3.95,
     oldPrice: null,
     brand: 'Ceraclen',
     material: 'Flüssiger Glaskeramik-Reiniger',
-    dimensions: '250 ml',
+    dimensions: '200 ml',
     dishwasherSafe: false,
     inductionSafe: false,
     vatRatePercent: 19,
     priceIncludesVat: true,
     weightKg: 0.4,
-    badges: ['Platz 1 Vergleich.org', 'Testsieger', '3-in-1 Formel'],
+    badges: ['3-in-1 Formel'],
     rating: 4.5,
     reviewCount: 0,
-    metaTitle: 'Ceraclen 3 in 1 Reiniger & Pfleger 250ml | NOVA INDUKT',
+    metaTitle: 'Ceraclen 3 in 1 Reiniger & Pfleger 200ml | NOVA INDUKT',
     metaDescription:
-      'Ceraclen 3-in-1 Glaskeramikreiniger. Reinigt, poliert und schützt mit speziellem Hitzeschutzfilm. Testsieger auf Vergleich.org.',
+      'Ceraclen 3-in-1 Glaskeramikreiniger, 200 ml. Reinigt, poliert und schützt mit natürlichen Polierperlen. Für Glaskeramik und Induktion.',
     categorySlug: 'induktions-zubehoer',
     folder: 'Ceraclen - 3 in 1 Reiniger & Pfleger',
     imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],

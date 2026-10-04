@@ -216,33 +216,6 @@ const products = [
     folder: 'Demeyere Inducity Deckel - 24 cm',
     imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
-  {
-    slug: 'stal-ersatzgriff-universal',
-    supplierSku: 'STL-GR-UNI',
-    nameDe: 'Stal Universal-Ersatzgriff',
-    shortDescription: 'Universal-Ersatzgriff für Stal Pfannen und Töpfe',
-    descriptionDe:
-      'Der Stal Universal-Ersatzgriff ist der perfekte Ersatz für abgenutzte oder beschädigte Griffe. Einfache Montage und robuste Verarbeitung.',
-    price: 19.99,
-    oldPrice: 24.99,
-    brand: 'Stal',
-    material: 'Edelstahl + Bakelit',
-    dimensions: 'Universal-Passform',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 0.3,
-    badges: ['Universal', 'Einfacher Austausch'],
-    rating: 4.3,
-    reviewCount: 0,
-    metaTitle: 'Stal Universal-Ersatzgriff - Edelstahl | NOVA INDUKT',
-    metaDescription:
-      'Stal Universal-Ersatzgriff aus Edelstahl und Bakelit. Einfache Montage, robust. Jetzt bei NOVA INDUKT.',
-    categorySlug: 'deckel-griffe',
-    folder: 'Stal Universal-Ersatzgriff',
-    imageFiles: ['1.jpg', '2.jpg'],
-  },
 ]
 
 // ─── Main ──────────────────────────────────────────────────────────────────────

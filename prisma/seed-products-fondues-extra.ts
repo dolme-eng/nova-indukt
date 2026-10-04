@@ -162,33 +162,6 @@ const products = [
     folder: 'Tefal Raclette Party - 12-teilig',
     imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
   },
-  {
-    slug: 'bugatti-raclette-8-teilig',
-    supplierSku: 'BUG-RAC-8',
-    nameDe: 'Bugatti Raclette-Set 8-teilig',
-    shortDescription: 'Elegantes Raclette-Set mit italienischem Design',
-    descriptionDe:
-      'Das Bugatti Raclette-Set 8-teilig vereint italienisches Design mit erstklassiger Qualität. Die Pfännchen aus Aluminium mit Antihaftbeschichtung sorgen für perfekte Ergebnisse.',
-    price: 69.99,
-    oldPrice: 84.99,
-    brand: 'Bugatti',
-    material: 'Aluminium + Antihaft',
-    dimensions: '8-teilig',
-    dishwasherSafe: true,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 1.8,
-    badges: ['Italienisches Design', 'Antihaft'],
-    rating: 4.3,
-    reviewCount: 0,
-    metaTitle: 'Bugatti Raclette-Set 8-teilig - Italienisches Design | NOVA INDUKT',
-    metaDescription:
-      'Bugatti Raclette-Set 8-teilig mit Antihaftbeschichtung. Italienisches Design, induktionsgeeignet. Jetzt bei NOVA INDUKT.',
-    categorySlug: 'fondues-raclette',
-    folder: 'Bugatti Raclette - 8-teilig',
-    imageFiles: ['1.jpg', '2.jpg', '3.jpg'],
-  },
 ]
 
 // ─── Main ──────────────────────────────────────────────────────────────────────

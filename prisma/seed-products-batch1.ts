@@ -113,45 +113,6 @@ Die Excellence-Serie verbindet Alltagstauglichkeit mit Tefals jahrzehntelanger A
   },
 
   {
-    slug: 'amt-gastroguss-i428-28cm',
-    supplierSku: 'AMT-I428-28',
-    nameDe: 'AMT Gastroguss Induktionspfanne 28 cm',
-    shortDescription: 'Profi-Aluguss mit Lotan®-Beschichtung - Hergestellt in Deutschland',
-    descriptionDe: `Die AMT Gastroguss i-428 ist eine echte Profiküchenpfanne aus massivem Aluminiumguss mit einem schweren integrierten Stahlkern für maximale Induktionsleistung. Der Lotan®-Keramik-Antihaftbelag bietet hervorragende Langlebigkeit und Hitzebeständigkeit.
-
-**Merkmale:**
-- Massiver Aluminiumgusskörper mit Stahlkern-Induktionsboden
-- Lotan®-Keramik-Antihaftbeschichtung - extrem robust
-- Hoher Rand (ca. 5–7 cm) für mehr Fassungsvermögen
-- Ergonomischer Bakelit-Griff mit Hilfsgriff bei großen Modellen
-- Hervorragende Wärmespeicherung und gleichmäßige Hitzeverteilung
-- Wiederbe­schichtungsservice durch den Hersteller
-- Hergestellt in Deutschland
-- Ohne PFOA
-
-Schwer, aber unschlagbar in der thermischen Stabilität - die Wahl der Profis.`,
-    price: 89.99,
-    oldPrice: 119.0,
-    brand: 'AMT Gastroguss',
-    material: 'Aluminiumguss mit Stahlkern',
-    dimensions: 'Ø 28 cm, Höhe ca. 5 cm',
-    dishwasherSafe: false,
-    inductionSafe: true,
-    vatRatePercent: 19,
-    priceIncludesVat: true,
-    weightKg: 2.3,
-    badges: ['Made in Germany', 'Profi-Qualität', 'Lotan® Beschichtung'],
-    rating: 4.5,
-    reviewCount: 0,
-    metaTitle: 'AMT Gastroguss i-428 28 cm - Profi Induktionspfanne | NOVA INDUKT',
-    metaDescription:
-      'AMT Gastroguss Induktionspfanne 28 cm mit Lotan®-Beschichtung. Massiver Aluminiumguss, hergestellt in Deutschland - jetzt bei NOVA INDUKT.',
-    categorySlug: 'induktionspfannen',
-    folder: 'AMT Gastroguss i-428 - 28 cm  i-724 - 24 cm',
-    imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
-  },
-
-  {
     slug: 'woll-titanium-nowo-1528il-28cm',
     supplierSku: 'WOL-1528IL-28',
     nameDe: 'Woll Titanium Nowo Induktionspfanne 28 cm',
