@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
 import { COMPANY } from '@/lib/constants/company'
-import { BANK_TRANSFER } from '@/lib/constants/bank'
+import { getBankDetailsSync, type BankDetails } from '@/lib/data/bank-details'
 import { formatPriceDe } from '@/lib/utils/vat'
 
 interface InvoiceItem {
@@ -21,7 +21,12 @@ interface InvoiceData {
   customerName?: string
 }
 
-export function generateInvoicePDF(data: InvoiceData): jsPDF {
+/**
+ * `bank` is injected rather than imported: the PDF is emailed to the customer
+ * and must show the SAME account as the website, i.e. the admin overrides read
+ * from AppConfig — not the env-only snapshot from `getBankDetailsSync()`.
+ */
+export function generateInvoicePDF(data: InvoiceData, bank: BankDetails = getBankDetailsSync()): jsPDF {
   const doc = new jsPDF()
 
   // Header
@@ -124,10 +129,11 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   doc.setFont('helvetica', 'bold')
   doc.text('Zahlungsinformationen', 20, currentY)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Kontoinhaber: ${BANK_TRANSFER.holder}`, 20, currentY + 10)
-  doc.text(`IBAN: ${BANK_TRANSFER.iban}`, 20, currentY + 20)
-  doc.text(`BIC: ${BANK_TRANSFER.bic}`, 20, currentY + 30)
-  doc.text(`Verwendungszweck: ${data.orderNumber}`, 20, currentY + 40)
+  doc.text(`Kontoinhaber: ${bank.holder}`, 20, currentY + 10)
+  doc.text(`IBAN: ${bank.iban}`, 20, currentY + 20)
+  doc.text(`BIC: ${bank.bic}`, 20, currentY + 30)
+  doc.text(`Bank: ${bank.bankName}`, 20, currentY + 40)
+  doc.text(`Verwendungszweck: ${data.orderNumber}`, 20, currentY + 50)
 
   // Footer on last page
   doc.setFontSize(8)

@@ -23,6 +23,12 @@ vi.mock('@/lib/email/send', () => ({
   sendContactNotificationEmail: vi.fn().mockResolvedValue(undefined),
 }))
 
+// CSRF is covered by lib/__tests__/csrf.test.ts; mocked here to isolate the
+// validation/anti-spam behaviour under test.
+vi.mock('@/lib/csrf', () => ({
+  validateCsrfToken: vi.fn().mockReturnValue(null),
+}))
+
 import { POST } from '@/app/api/contact/route'
 import { prisma } from '@/lib/prisma'
 import { NextRequest } from 'next/server'

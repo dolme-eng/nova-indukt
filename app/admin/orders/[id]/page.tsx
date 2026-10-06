@@ -9,12 +9,11 @@ import {
   MapPin,
   Mail,
   Phone,
-  Printer,
   ShieldCheck,
   Plus,
 } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
-import { OrderStatus } from '@prisma/client'
+import { OrderStatus, PaymentStatus } from '@prisma/client'
 export const dynamic = 'force-dynamic'
 import { format } from 'date-fns'
 import { de } from 'date-fns/locale'
@@ -22,6 +21,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { ShippingActions } from './ShippingActions'
 import { PaymentActions } from './PaymentActions'
+import { PrintInvoiceButton } from './PrintInvoiceButton'
 
 async function getOrder(id: string) {
   const order = await prisma.order.findUnique({
@@ -90,13 +90,9 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
           </div>
         </div>
         <div className="flex gap-3">
-          <button
-            onClick={() => window.print()}
-            className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 print:hidden"
-          >
-            <Printer size={18} />
-            Rechnung drucken
-          </button>
+          {/* `window.print()` cannot live in a Server Component: an onClick
+              handler is a non-serialisable prop and breaks the RSC payload. */}
+          <PrintInvoiceButton />
           <a
             href="#shipping-actions"
             className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary/90 print:hidden"
@@ -120,7 +116,9 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
           <PaymentActions
             orderId={order.id}
             orderNumber={order.orderNumber}
-            currentPaymentStatus={order.paymentStatus as 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED'}
+            // Full enum: the previous cast to a 4-value union silently dropped
+            // AUTHORIZED / PARTIALLY_REFUNDED, which are then unmanageable.
+            currentPaymentStatus={order.paymentStatus as PaymentStatus}
             paymentMethod={order.paymentMethod ?? undefined}
             paidAt={order.paidAt ? order.paidAt.toISOString() : null}
           />

@@ -32,6 +32,10 @@ vi.mock('next/cache', () => ({
 vi.mock('@/lib/email/send', () => ({
   sendOrderCancellationEmail: vi.fn().mockResolvedValue(undefined),
 }))
+// CSRF is covered by lib/__tests__/csrf.test.ts.
+vi.mock('@/lib/csrf', () => ({
+  validateCsrfToken: vi.fn().mockReturnValue(null),
+}))
 
 import { GET, PATCH } from '@/app/api/orders/[id]/route'
 import { prisma } from '@/lib/prisma'

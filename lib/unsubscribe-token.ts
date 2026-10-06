@@ -19,19 +19,31 @@ function sign(data: string): string {
 }
 
 /**
+ * Canonical form of the signed payload. Both signing and verification MUST go
+ * through this: email addresses are case-insensitive, so signing the raw input
+ * and verifying a lower-cased copy produces signatures that never match for
+ * mixed-case addresses (silently breaking the one-click unsubscribe link).
+ */
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase()
+}
+
+/**
  * Generate a signed unsubscribe token for an email address.
  * Returns URL search params string: `email=...&expires=...&sig=...`
  */
 export function createUnsubscribeToken(email: string): string {
+  const normalized = normalizeEmail(email)
   const expires = Date.now() + EXPIRY_MS
-  const data = `${email}:${expires}`
+  const data = `${normalized}:${expires}`
   const sig = sign(data)
-  return `email=${encodeURIComponent(email)}&expires=${expires}&sig=${sig}`
+  return `email=${encodeURIComponent(normalized)}&expires=${expires}&sig=${sig}`
 }
 
 /**
  * Verify and extract email from a signed unsubscribe token.
- * Returns the email if valid, or null if expired/tampered.
+ * Returns the canonical (lower-cased) email if valid, or null if
+ * expired/tampered.
  */
 export function verifyUnsubscribeToken(
   email: string | null,
@@ -43,7 +55,8 @@ export function verifyUnsubscribeToken(
   const expiresMs = parseInt(expires, 10)
   if (isNaN(expiresMs) || Date.now() > expiresMs) return null
 
-  const data = `${email}:${expires}`
+  const normalized = normalizeEmail(email)
+  const data = `${normalized}:${expires}`
   const expectedSig = sign(data)
 
   // Timing-safe comparison
@@ -53,5 +66,5 @@ export function verifyUnsubscribeToken(
     return null
   }
 
-  return email.toLowerCase()
+  return normalized
 }

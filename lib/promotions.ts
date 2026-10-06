@@ -29,28 +29,75 @@ export function calculateDiscountedPrice(
   discountValue: number,
   maxDiscount?: number | null
 ): { discountedPrice: number; discountAmount: number } {
+  // A negative discount is a configuration mistake (the admin schemas only
+  // bound the upper bound). Left unhandled it made the customer pay MORE than
+  // the list price, e.g. -50% on 110 € produced 165 €.
+  const safePrice = Math.max(0, price)
+  const safeValue = Math.max(0, discountValue)
+
   let discountAmount = 0
 
   if (discountType === 'PERCENTAGE') {
-    discountAmount = (price * discountValue) / 100
-    if (maxDiscount && discountAmount > maxDiscount) {
+    discountAmount = (safePrice * Math.min(100, safeValue)) / 100
+    if (maxDiscount && maxDiscount > 0 && discountAmount > maxDiscount) {
       discountAmount = maxDiscount
     }
   } else {
-    discountAmount = discountValue
+    discountAmount = safeValue
   }
 
   // Ensure discount doesn't exceed price
-  if (discountAmount > price) {
-    discountAmount = price
+  if (discountAmount > safePrice) {
+    discountAmount = safePrice
   }
 
-  const discountedPrice = Math.max(0, price - discountAmount)
+  const discountedPrice = Math.max(0, safePrice - discountAmount)
 
   return {
     discountedPrice: Math.round(discountedPrice * 100) / 100,
     discountAmount: Math.round(discountAmount * 100) / 100,
   }
+}
+
+/** Minimal shape needed to rank candidate promotions. */
+type RankablePromotion = {
+  id: string
+  discountType: DiscountType
+  discountValue: unknown
+  maxDiscount?: unknown
+}
+
+/**
+ * Pick the promotion that actually saves the customer the most money for a
+ * given price.
+ *
+ * Sorting by `discountValue` (as the query does) is wrong: it compares a
+ * percentage against a fixed amount as if they were the same unit. A
+ * FIXED_AMOUNT 50 lost against a PERCENTAGE 20 on a 500 € product (100 € off),
+ * so the customer was shown a worse deal than the one on their own cart.
+ */
+export function pickBestPromotion<T extends RankablePromotion>(
+  candidates: T[],
+  price: number
+): { best: T; discountedPrice: number; discountAmount: number } | null {
+  let best: { best: T; discountedPrice: number; discountAmount: number } | null = null
+
+  for (const promo of candidates) {
+    const { discountedPrice, discountAmount } = calculateDiscountedPrice(
+      price,
+      promo.discountType,
+      Number(promo.discountValue),
+      promo.maxDiscount != null ? Number(promo.maxDiscount) : null
+    )
+
+    // Strict `>` keeps the first candidate on a tie, so the result stays stable
+    // relative to the query order.
+    if (!best || discountAmount > best.discountAmount) {
+      best = { best: promo, discountedPrice, discountAmount }
+    }
+  }
+
+  return best
 }
 
 /**
@@ -111,14 +158,13 @@ export async function applyBestPromotion(
     }
   }
 
-  // Get the best promotion (highest discount percentage)
-  const bestPromotion = applicablePromotions[0]
-  const { discountedPrice, discountAmount } = calculateDiscountedPrice(
-    price,
-    bestPromotion.discountType,
-    Number(bestPromotion.discountValue),
-    bestPromotion.maxDiscount ? Number(bestPromotion.maxDiscount) : null
-  )
+  // Rank by the money actually saved, not by the raw `discountValue` column.
+  const winner = pickBestPromotion(applicablePromotions, price)
+  /* istanbul ignore next — guarded by the early return above */
+  if (!winner) throw new Error('unreachable: applicablePromotions is non-empty')
+
+  const bestPromotion = winner.best
+  const { discountedPrice, discountAmount } = winner
 
   const discountPercentage = price > 0 ? Math.round((discountAmount / price) * 100) : 0
 
@@ -168,13 +214,14 @@ export async function applyPromotionsToProducts(
       continue
     }
 
-    const bestPromotion = applicablePromotions[0]
-    const { discountedPrice, discountAmount } = calculateDiscountedPrice(
-      product.price,
-      bestPromotion.discountType,
-      Number(bestPromotion.discountValue),
-      bestPromotion.maxDiscount ? Number(bestPromotion.maxDiscount) : null
-    )
+    // Rank by the money actually saved for THIS product price: a fixed amount
+    // and a percentage are not comparable as raw numbers.
+    const winner = pickBestPromotion(applicablePromotions, product.price)
+    /* istanbul ignore next — guarded by the early return above */
+    if (!winner) continue
+
+    const bestPromotion = winner.best
+    const { discountedPrice, discountAmount } = winner
 
     results.set(product.id, {
       originalPrice: product.price,

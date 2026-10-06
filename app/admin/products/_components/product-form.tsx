@@ -17,6 +17,7 @@ import {
 import Link from 'next/link'
 import { toast } from 'sonner'
 import Image from 'next/image'
+import { slugify } from '@/lib/utils/slugify'
 
 interface Category {
   id: string
@@ -52,6 +53,9 @@ interface ProductFormProps {
 export default function ProductForm({ initialData, categories }: ProductFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+ // Separate from isLoading: sharing it made the "Speichern" button report
+ // "Wird gespeichert…" while a batch of images was still uploading.
+ const [isUploadingImages, setIsUploadingImages] = useState(false)
   const [activeTab, setActiveTab] = useState('general')
 
   // Form states
@@ -109,12 +113,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
   }
 
   const generateSlug = () => {
-    const slug = formData.nameDe
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-    setFormData({ ...formData, slug })
+    setFormData({ ...formData, slug: slugify(formData.nameDe) })
   }
 
   return (
@@ -398,30 +397,51 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                           const files = e.target.files
                           if (!files) return
 
-                          setIsLoading(true)
+                          setIsUploadingImages(true)
                           const newImages = [...formData.images]
+                          let failures = 0
 
-                          for (let i = 0; i < files.length; i++) {
-                            const file = files[i]
+                          // Sequential on purpose: parallel uploads of many
+                          // 10 MB files spike memory and get throttled by
+                          // Cloudinary.
+                          for (const file of Array.from(files)) {
                             const uploadFormData = new FormData()
                             uploadFormData.append('file', file)
+                            uploadFormData.append('folder', 'nova-indukt/products')
 
                             try {
                               const res = await fetch('/api/admin/upload', {
                                 method: 'POST',
                                 body: uploadFormData,
                               })
-                              const data = await res.json()
+                              const data = await res.json().catch(() => ({}))
+                              if (!res.ok) {
+                                failures++
+                                toast.error(
+                                  data?.error || `Upload fehlgeschlagen für ${file.name}`
+                                )
+                                continue
+                              }
                               if (data.url) {
-                                newImages.push({ url: data.url, alt: '' })
+                                newImages.push({ url: data.url, alt: formData.nameDe || '' })
+                              } else {
+                                failures++
                               }
                             } catch {
+                              failures++
                               toast.error(`Upload fehlgeschlagen für ${file.name}`)
                             }
                           }
 
-                          setFormData({ ...formData, images: newImages })
-                          setIsLoading(false)
+                          setFormData((prev) => ({ ...prev, images: newImages }))
+                          if (newImages.length > 0) {
+                            toast.success(
+                              failures > 0
+                                ? `${newImages.length} Bild(er) hochgeladen, ${failures} fehlgeschlagen`
+                                : `${newImages.length} Bild(er) hochgeladen`
+                            )
+                          }
+                          setIsUploadingImages(false)
                         }}
                       />
                       <button
@@ -435,8 +455,10 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                       </button>
                     </div>
                   </div>
-                  <p className="text-xs italic text-slate-500">
-                    Die Bilder werden automatisch hochgeladen. Das erste Bild ist das Hauptbild.
+                    <p className="text-xs italic text-slate-500">
+                      {isUploadingImages
+                        ? 'Bilder werden hochgeladen...'
+                        : 'Die Bilder werden beim Auswählen hochgeladen. Das erste Bild ist das Hauptbild.'}
                   </p>
                 </div>
               </Section>

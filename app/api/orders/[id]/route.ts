@@ -5,6 +5,7 @@ import { rateLimit, getIP, createRateLimitKey } from "@/lib/rate-limit"
 import { sendOrderCancellationEmail } from "@/lib/email/send"
 import { logError } from "@/lib/logger"
 import { validateCsrfToken } from "@/lib/csrf"
+import { toPublicProduct } from "@/lib/utils/public-product"
 
 export async function GET(
   request: NextRequest,
@@ -58,13 +59,11 @@ export async function GET(
       total: Number(order.total),
       subtotal: Number(order.subtotal),
       shippingCost: Number(order.shippingCost),
+      // costPrice / supplierSku are stripped — see lib/utils/public-product.ts
       items: order.items.map(item => ({
         ...item,
         unitPrice: Number(item.unitPrice),
-        product: {
-          ...item.product,
-          price: Number(item.product.price)
-        }
+        product: toPublicProduct(item.product)
       }))
     })
   } catch (error) {

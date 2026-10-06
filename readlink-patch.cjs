@@ -1,4 +1,29 @@
-﻿const fs = require("fs");
+﻿/**
+ * Windows-only workaround, injected via NODE_OPTIONS (see `npm run build:win`
+ * and playwright.config.ts).
+ *
+ * WHY: the repository contains a `_bak_corrupt/` directory whose NTFS entry is
+ * damaged — Git cannot stat it ("could not open directory") and `rmdir` fails
+ * with "not empty" while listing no children. On Windows, `fs.readlink` on such
+ * a path yields EISDIR, whereas the POSIX behaviour Next.js expects is EINVAL.
+ * Without this patch, Next 16's file watcher aborts on Windows.
+ *
+ * This is a mitigation, not a fix: delete `_bak_corrupt/` (possibly with
+ * `chkdsk /f E:`) and drop this file along with the NODE_OPTIONS entries.
+ *
+ * NOTE: it patches `fs` globally for the whole process, which also affects
+ * unrelated callers — e.g. `crypto.timingSafeEqual` throws on mismatched buffer
+ * lengths, and that error type is not touched here, but future changes to fs
+ * semantics reach every dependency in the tree.
+ */
+const fs = require("fs");
+
+if (!process.env.NOVA_READLINK_PATCH_QUIET) {
+  console.error(
+    '[PATCH] readlink EISDIR→EINVAL shim active (Windows workaround). ' +
+      'See readlink-patch.cjs for the removal condition.'
+  );
+}
 
 // Patch async readlink
 const origReadlink = fs.readlink;
@@ -45,5 +70,3 @@ fs.readlinkSync = function(p, ...args) {
     throw e;
   }
 };
-
-console.error("[PATCH] All readlink variants patched (PID:", process.pid, ")");

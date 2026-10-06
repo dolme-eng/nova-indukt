@@ -58,6 +58,14 @@ export async function verifyRecaptcha(
       return NextResponse.json({ error: 'reCAPTCHA-Aktion ungültig' }, { status: 403 })
     }
 
+    // A missing/non-numeric score must be treated as a failure, not as a pass.
+    // `undefined < 0.5` evaluates to false, which would let an attacker bypass
+    // the check with a malformed/absent score field.
+    if (typeof data.score !== 'number' || Number.isNaN(data.score)) {
+      logError('reCAPTCHA response contained no usable score:', data)
+      return NextResponse.json({ error: 'Verdächtige Aktivität erkannt' }, { status: 403 })
+    }
+
     if (data.score < RECAPTCHA_THRESHOLD) {
       logError(`reCAPTCHA low score: ${data.score} (threshold: ${RECAPTCHA_THRESHOLD})`)
       return NextResponse.json({ error: 'Verdächtige Aktivität erkannt' }, { status: 403 })

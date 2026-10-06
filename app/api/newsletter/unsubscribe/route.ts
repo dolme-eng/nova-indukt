@@ -11,8 +11,10 @@ import { newsletterUnsubscribeSchema } from '@/lib/validations/newsletter'
 // POST accepts session-owner/admin (account page) OR the signed email token
 // (logged-out callers) — and answers JSON, not HTML.
 const unsubscribePostSchema = newsletterUnsubscribeSchema.extend({
-  expires: z.string().optional(),
-  sig: z.string().optional(),
+  // Bound the token fields: they are fed to crypto.timingSafeEqual, so an
+  // unbounded string would let a client force large buffer allocations.
+  expires: z.string().max(20).optional(),
+  sig: z.string().max(128).optional(),
 })
 
 const HTML_TEMPLATE = `<!DOCTYPE html>
@@ -63,14 +65,18 @@ export async function POST(request: NextRequest) {
     const session = await auth()
 
     const { email: rawEmail, expires, sig } = result.data
-    const email = rawEmail.toLowerCase()
+    const email = rawEmail.trim().toLowerCase()
 
-    const userEmail = session?.user?.email?.toLowerCase()
+    const userEmail = session?.user?.email?.trim().toLowerCase()
     const isOwnerOrAdmin =
       session?.user?.id != null &&
       (email === userEmail || session.user.role === 'ADMIN')
-    const hasValidToken =
-      !!expires && !!sig && verifyUnsubscribeToken(email, expires, sig) === email
+
+    // Pass the raw address to the verifier: it normalizes internally, so
+    // lowercasing here first would break the HMAC comparison for mixed-case
+    // addresses (the signature is computed over the canonical form).
+    const verified = expires && sig ? verifyUnsubscribeToken(rawEmail, expires, sig) : null
+    const hasValidToken = verified === email
 
     if (!isOwnerOrAdmin && !hasValidToken) {
       return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 403 })

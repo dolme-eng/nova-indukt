@@ -1,16 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { CreditCard, CheckCircle, XCircle, RotateCcw } from 'lucide-react'
 
 type PaymentStatus = 'PENDING' | 'AUTHORIZED' | 'PAID' | 'FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED'
 
-const paymentLabels: Record<string, string> = {
+// Must cover the whole enum: a missing key rendered a blank badge and left the
+// order unmanageable from the UI.
+const paymentLabels: Record<PaymentStatus, string> = {
   PENDING: 'Ausstehend',
+  AUTHORIZED: 'Autorisiert',
   PAID: 'Bezahlt',
   FAILED: 'Fehlgeschlagen',
   REFUNDED: 'Erstattet',
+  PARTIALLY_REFUNDED: 'Teilweise erstattet',
 }
 
 export function PaymentActions(props: {
@@ -23,6 +28,16 @@ export function PaymentActions(props: {
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(props.currentPaymentStatus)
   const [isSaving, setIsSaving] = useState(false)
   const [confirmStatus, setConfirmStatus] = useState<PaymentStatus | null>(null)
+  const [paidDate, setPaidDate] = useState<string | null>(
+    props.paidAt
+      ? new Date(props.paidAt).toLocaleDateString('de-DE', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        })
+      : null
+  )
+  const router = useRouter()
 
   async function updatePaymentStatus(newStatus: PaymentStatus) {
     setConfirmStatus(null)
@@ -38,22 +53,25 @@ export function PaymentActions(props: {
         throw new Error(data?.error || 'Zahlungsstatus konnte nicht aktualisiert werden')
       }
       setPaymentStatus(newStatus)
-      toast.success(`Zahlungsstatus auf „${paymentLabels[newStatus]}" aktualisiert`)
+      // The server recomputes paidAt; refresh so the RSC props stay truthful
+      // instead of showing the previous confirmation date.
+      if (newStatus === 'PAID') {
+        setPaidDate(
+          new Date().toLocaleDateString('de-DE', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          })
+        )
+      }
+      toast.success(`Zahlungsstatus auf „${paymentLabels[newStatus]}“ aktualisiert`)
+      router.refresh()
     } catch (e: unknown) {
       toast.error(e instanceof Error ? e.message : 'Fehler')
     } finally {
       setIsSaving(false)
     }
   }
-
-  // Show payment actions for all payment methods
-  const paidDate = props.paidAt
-    ? new Date(props.paidAt).toLocaleDateString('de-DE', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      })
-    : null
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -91,7 +109,7 @@ export function PaymentActions(props: {
       {confirmStatus ? (
         <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <p className="text-sm font-semibold text-slate-800">
-            Status auf „{paymentLabels[confirmStatus]}" ändern?
+            Status auf „{paymentLabels[confirmStatus]}“ ändern?
           </p>
           <div className="flex gap-2">
             <button

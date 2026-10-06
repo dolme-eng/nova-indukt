@@ -15,7 +15,7 @@ import {
 } from '@react-email/components'
 import { SHOP_NAME, SHOP_DOMAIN, SUPPORT_EMAIL } from '@/lib/constants/shop'
 import { formatPriceDe as formatPrice } from '@/lib/utils/vat'
-import { getBankDetailsSync } from '@/lib/data/bank-details'
+import { getBankDetailsSync, type BankDetails } from '@/lib/data/bank-details'
 
 interface OrderItem {
   name: string
@@ -44,6 +44,18 @@ interface OrderConfirmationEmailProps {
   }
   estimatedDelivery: string
   orderDate?: string
+  /**
+   * Injected by the caller so the email shows the account configured in the
+   * admin panel. The env-only fallback kept in place for standalone renders
+   * (previews, tests).
+   */
+  bank?: BankDetails
+  /**
+   * Set when the admin has received the transfer. The same template was
+   * previously re-sent as a "payment confirmation", which asked the customer to
+   * pay an invoice they had already settled.
+   */
+  paymentReceivedAt?: string
 }
 
 export const OrderConfirmationEmail = ({
@@ -59,13 +71,18 @@ export const OrderConfirmationEmail = ({
   shippingAddress,
   estimatedDelivery,
   orderDate,
+  bank = getBankDetailsSync(),
+  paymentReceivedAt,
 }: OrderConfirmationEmailProps) => {
-  const bank = getBankDetailsSync()
-
+  const paymentSettled = Boolean(paymentReceivedAt)
   return (
     <Html>
       <Head />
-      <Preview>Ihre Bestellung bei NOVA INDUKT - {orderNumber}</Preview>
+        <Preview>
+          {paymentSettled
+            ? `Zahlung eingegangen - ${orderNumber}`
+            : `Ihre Bestellung bei NOVA INDUKT - ${orderNumber}`}
+        </Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header */}
@@ -75,11 +92,14 @@ export const OrderConfirmationEmail = ({
 
           {/* Thank You */}
           <Section style={section}>
-            <Heading style={h2}>Vielen Dank für Ihre Bestellung!</Heading>
+            <Heading style={h2}>
+              {paymentSettled ? 'Ihre Zahlung ist eingegangen' : 'Vielen Dank für Ihre Bestellung!'}
+            </Heading>
             <Text style={text}>Hallo {customerName},</Text>
             <Text style={text}>
-              Wir haben Ihre Bestellung erhalten und bearbeiten diese umgehend. Hier sind die
-              Details zu Ihrer Bestellung:
+              {paymentSettled
+                ? `Wir haben den Zahlungseingang am ${paymentReceivedAt} zu Ihrer Bestellung bestätigt. Ihre Bestellung wird nun bearbeitet und versendet.`
+                : 'Wir haben Ihre Bestellung erhalten und bearbeiten diese umgehend. Hier sind die Details zu Ihrer Bestellung:'}
             </Text>
           </Section>
 
@@ -167,8 +187,8 @@ export const OrderConfirmationEmail = ({
             </Text>
           </Section>
 
-          {/* Payment Info for Bank Transfer */}
-          {paymentMethod === 'BANK_TRANSFER' && (
+          {/* Payment Info for Bank Transfer — hidden once the transfer landed */}
+          {paymentMethod === 'BANK_TRANSFER' && !paymentSettled && (
             <Section style={bankSection}>
               <Heading style={h3}>Zahlungsinformationen (Vorkasse)</Heading>
               <Text style={text}>
@@ -218,7 +238,7 @@ export const OrderConfirmationEmail = ({
 
           {/* CTA */}
           <Section style={ctaSection}>
-            <Button href={`${SHOP_DOMAIN}/mein-konto/orders`} style={button}>
+            <Button href={`${SHOP_DOMAIN}/bestellung-verfolgen`} style={button}>
               Bestellung verfolgen
             </Button>
           </Section>

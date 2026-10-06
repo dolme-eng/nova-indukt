@@ -98,12 +98,13 @@ describe('calculateDiscountedPrice', () => {
       expect(result.discountAmount).toBe(100_000)
     })
 
-    it('handles negative discount value as 0 effect on FIXED', () => {
-      const result = calculateDiscountedPrice(100, 'FIXED_AMOUNT', -10)
-      // negative fixed means discountAmount = -10, then clamped: if -10 > 100? no
-      // discountedPrice = max(0, 100 - (-10)) = max(0, 110) = 110
-      // This is unexpected but matches the code logic
-      expect(result.discountedPrice).toBe(110)
+    it('treats a negative discount value as no discount on FIXED', () => {
+        const result = calculateDiscountedPrice(100, 'FIXED_AMOUNT', -10)
+        // Previously this produced a discountedPrice of 110 — the customer paid
+        // MORE than the list price because the negative amount was subtracted.
+        // A negative value is a configuration error; it is now clamped to 0.
+        expect(result.discountAmount).toBe(0)
+        expect(result.discountedPrice).toBe(100)
     })
 
     it('handles very small price', () => {

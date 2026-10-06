@@ -95,6 +95,31 @@ describe('POST /api/newsletter/unsubscribe', () => {
     })
   })
 
+  // Regression: the HMAC was computed over the raw casing while the route
+  // lower-cased the address before verifying, so the one-click link in the
+  // confirmation email silently failed for any mixed-case address.
+  it('accepts a token for an address whose casing differs', async () => {
+    const mixedCase = 'Test.User@Example.DE'
+    const req = makePostRequest(signedBody(mixedCase))
+    const res = await POST(req)
+
+    expect(res.status).toBe(200)
+    const data = await res.json()
+    expect(data.success).toBe(true)
+    // The lookup always uses the canonical (lower-cased) form.
+    expect(prisma.newsletterSubscriber.findUnique).toHaveBeenCalledWith({
+      where: { email: 'test.user@example.de' },
+    })
+  })
+
+  it('rejects a token whose signature was tampered with', async () => {
+    const body = signedBody('test@example.de')
+    const req = makePostRequest({ ...body, sig: 'deadbeef'.repeat(8) })
+    const res = await POST(req)
+
+    expect(res.status).toBe(403)
+  })
+
   it('unsubscribes session owner without token', async () => {
     const { auth } = await import('@/lib/auth')
     ;(auth as ReturnType<typeof vi.fn>).mockResolvedValue({

@@ -35,7 +35,23 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const body = await request.json()
     const { paymentStatus } = body
 
-    if (!paymentStatus || !['PENDING', 'PAID', 'FAILED', 'REFUNDED'].includes(paymentStatus)) {
+    // Full enum: the previous 4-value list made AUTHORIZED and
+    // PARTIALLY_REFUNDED unreachable from the admin UI.
+    const VALID_PAYMENT_STATUSES = [
+      'PENDING',
+      'AUTHORIZED',
+      'PAID',
+      'FAILED',
+      'REFUNDED',
+      'PARTIALLY_REFUNDED',
+    ] as const
+
+    if (
+      !paymentStatus ||
+      !VALID_PAYMENT_STATUSES.includes(
+        paymentStatus as (typeof VALID_PAYMENT_STATUSES)[number]
+      )
+    ) {
       return NextResponse.json({ error: 'Ungültiger Zahlungsstatus' }, { status: 400 })
     }
 
@@ -58,9 +74,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     const validPaymentTransitions: Record<string, string[]> = {
-      PENDING: ['PAID', 'FAILED'],
-      FAILED: ['PAID'],
-      PAID: ['REFUNDED'],
+      PENDING: ['AUTHORIZED', 'PAID', 'FAILED'],
+      AUTHORIZED: ['PAID', 'FAILED'],
+      FAILED: ['AUTHORIZED', 'PAID'],
+      PAID: ['PARTIALLY_REFUNDED', 'REFUNDED'],
+      PARTIALLY_REFUNDED: ['REFUNDED'],
       REFUNDED: [],
     }
 
@@ -75,12 +93,24 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     // REFUNDED payment keeps order + payment in sync: an order whose payment
     // was refunded is itself REFUNDED (previously REFUNDED was unreachable).
+    //
+    // PAID also moves a PENDING order to PROCESSING. Without it the order kept
+    // status PENDING, which is exactly the state /api/orders/[id] accepts for a
+    // customer-initiated cancellation — so a paid order could be cancelled by
+    // the customer and the customer received a cancellation email.
+    const nextOrderStatus =
+      paymentStatus === 'REFUNDED'
+        ? 'REFUNDED'
+        : paymentStatus === 'PAID' && order.status === 'PENDING'
+          ? 'PROCESSING'
+          : undefined
+
     const updatedOrder = await prisma.order.update({
       where: { id },
       data: {
         paymentStatus: paymentStatus,
         ...(paymentStatus === 'PAID' ? { paidAt: new Date() } : {}),
-        ...(paymentStatus === 'REFUNDED' ? { status: 'REFUNDED' } : {}),
+        ...(nextOrderStatus ? { status: nextOrderStatus } : {}),
       },
     })
 

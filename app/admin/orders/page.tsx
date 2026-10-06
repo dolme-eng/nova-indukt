@@ -11,25 +11,38 @@ import {
   XCircle,
   RefreshCcw,
   Box,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic'
 import { format } from 'date-fns'
 import { de } from 'date-fns/locale'
 import { Prisma, OrderStatus, PaymentStatus } from '@prisma/client'
+import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/utils/pagination'
 
 import { OrdersFilter } from './_components/orders-filter'
 import { CsvExportButton } from '../_components/csv-export-button'
+import { AdminPagination } from '../_components/admin-pagination'
 
-const PAGE_SIZE = 50
+const PAGE_SIZE = DEFAULT_PAGE_SIZE
+
+const ORDER_STATUSES: readonly string[] = [
+  'PENDING',
+  'PROCESSING',
+  'SHIPPED',
+  'DELIVERED',
+  'CANCELLED',
+  'REFUNDED',
+]
 
 async function getOrders(search?: string, status?: string, page: number = 1, dateFrom?: string, dateTo?: string) {
   const where: Prisma.OrderWhereInput = {}
 
   if (status) {
-    where.status = status as OrderStatus
+    // A cast validates nothing at runtime: `?status=FOO` reached Prisma and
+    // produced a PrismaClientValidationError → HTTP 500.
+    if (ORDER_STATUSES.includes(status)) {
+      where.status = status as OrderStatus
+    }
   }
 
   if (search) {
@@ -63,9 +76,12 @@ async function getOrders(search?: string, status?: string, page: number = 1, dat
       take: PAGE_SIZE,
     }),
     prisma.order.count({ where }),
+    // CSV export: bounded, and only the exported columns (the previous query
+    // shipped the whole order table to the browser for every page view).
     prisma.order.findMany({
       where,
       orderBy: { createdAt: 'desc' },
+      take: 10_000,
       select: {
         orderNumber: true,
         customerName: true,
@@ -78,7 +94,7 @@ async function getOrders(search?: string, status?: string, page: number = 1, dat
     }),
   ])
 
-  return { orders, totalCount, totalPages: Math.ceil(totalCount / PAGE_SIZE), allOrders }
+  return { orders, totalCount, totalPages: Math.max(1, Math.ceil(totalCount / PAGE_SIZE)), allOrders }
 }
 
 const statusMap: Record<OrderStatus, { label: string; color: string; icon: React.ReactNode }> = {
@@ -129,7 +145,7 @@ export default async function AdminOrdersPage({
   searchParams: Promise<{ q?: string; status?: string; page?: string; dateFrom?: string; dateTo?: string }>
 }) {
   const resolvedParams = await searchParams
-  const page = Math.max(1, parseInt(resolvedParams.page || '1', 10))
+  const page = parsePageParam(resolvedParams.page)
   const { orders, totalCount, totalPages, allOrders } = await getOrders(
     resolvedParams.q,
     resolvedParams.status,
@@ -137,6 +153,7 @@ export default async function AdminOrdersPage({
     resolvedParams.dateFrom,
     resolvedParams.dateTo
   )
+  const safePage = Math.min(page, totalPages)
 
   return (
     <div className="space-y-6">
@@ -183,13 +200,30 @@ export default async function AdminOrdersPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {orders.map((order) => (
+              {orders.map((order) => {
+                // Guarded lookups: indexing the maps with a raw enum threw on
+                // any value added to Prisma without a matching entry.
+                const payment = paymentMap[order.paymentStatus] ?? {
+                  label: order.paymentStatus,
+                  color: 'bg-slate-50 text-slate-600',
+                }
+                const status = statusMap[order.status] ?? {
+                  label: order.status,
+                  color: 'bg-slate-50 text-slate-600',
+                  icon: null,
+                }
+
+                return (
                 <tr
                   key={order.id}
-                  className="group cursor-pointer transition-colors hover:bg-slate-50/50"
+                  className="group transition-colors hover:bg-slate-50/50"
                 >
                   <td className="px-6 py-4">
-                    <Link href={`/admin/orders/${order.id}`} className="flex items-center gap-3">
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="flex items-center gap-3"
+                      aria-label={`Bestellung ${order.orderNumber} öffnen`}
+                    >
                       <div className="rounded bg-slate-100 p-2 text-slate-500">
                         <Box size={16} />
                       </div>
@@ -197,62 +231,52 @@ export default async function AdminOrdersPage({
                     </Link>
                   </td>
                   <td className="px-6 py-4">
-                    <Link href={`/admin/orders/${order.id}`} className="flex flex-col">
+                    <span className="flex flex-col">
                       <span className="text-sm font-semibold text-slate-900">
                         {order.customerName}
                       </span>
                       <span className="text-xs text-slate-500">{order.customerEmail}</span>
-                    </Link>
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">
-                    <Link href={`/admin/orders/${order.id}`} className="block">
-                      {format(new Date(order.createdAt), 'dd MMM yyyy, HH:mm', { locale: de })}
-                    </Link>
+                    {format(new Date(order.createdAt), 'dd MMM yyyy, HH:mm', { locale: de })}
                   </td>
                   <td className="px-6 py-4">
-                    <Link href={`/admin/orders/${order.id}`} className="flex flex-col gap-1">
+                    <span className="flex flex-col gap-1">
                       <span
-                        className={`w-fit rounded-full px-2 py-0.5 text-[10px] font-bold ${paymentMap[order.paymentStatus].color}`}
+                        className={`w-fit rounded-full px-2 py-0.5 text-[10px] font-bold ${payment.color}`}
                       >
-                        {paymentMap[order.paymentStatus].label}
+                        {payment.label}
                       </span>
                       <span className="flex items-center gap-1 text-[10px] text-slate-400">
-                        <Banknote size={10} />
+                        <Banknote size={10} aria-hidden="true" />
                         {order.paymentMethod}
                       </span>
-                    </Link>
+                    </span>
                   </td>
                   <td className="px-6 py-4">
-                    <Link href={`/admin/orders/${order.id}`} className="block">
-                      <span
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold ${statusMap[order.status].color}`}
-                      >
-                        {statusMap[order.status].icon}
-                        {statusMap[order.status].label}
-                      </span>
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4">
-                    <Link
-                      href={`/admin/orders/${order.id}`}
-                      className="block font-bold text-slate-900"
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold ${status.color}`}
                     >
-                      {formatPriceDe(Number(order.total))}
-                    </Link>
+                      {status.icon}
+                      {status.label}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 font-bold text-slate-900">
+                    {formatPriceDe(Number(order.total))}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Link
-                        href={`/admin/orders/${order.id}`}
-                        className="rounded-lg p-2 text-slate-400 transition-all hover:bg-slate-100 hover:text-primary"
-                        title="Details"
-                      >
-                        <Eye size={18} />
-                      </Link>
-                    </div>
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      aria-label={`Details zu Bestellung ${order.orderNumber} ansehen`}
+                      className="inline-flex rounded-lg p-2 text-slate-400 transition-all hover:bg-slate-100 hover:text-primary"
+                    >
+                      <Eye size={18} />
+                    </Link>
                   </td>
                 </tr>
-              ))}
+                )
+              })}
               {orders.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
@@ -268,34 +292,21 @@ export default async function AdminOrdersPage({
         </div>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
-          <p className="text-sm text-slate-500">
-            Seite {page} von {totalPages}
-          </p>
-          <div className="flex gap-2">
-            {page > 1 && (
-              <Link
-                href={`/admin/orders?page=${page - 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}${resolvedParams.dateFrom ? `&dateFrom=${resolvedParams.dateFrom}` : ''}${resolvedParams.dateTo ? `&dateTo=${resolvedParams.dateTo}` : ''}`}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
-              >
-                <ChevronLeft size={16} />
-                Zurück
-              </Link>
-            )}
-            {page < totalPages && (
-              <Link
-                href={`/admin/orders?page=${page + 1}${resolvedParams.q ? `&q=${resolvedParams.q}` : ''}${resolvedParams.status ? `&status=${resolvedParams.status}` : ''}${resolvedParams.dateFrom ? `&dateFrom=${resolvedParams.dateFrom}` : ''}${resolvedParams.dateTo ? `&dateTo=${resolvedParams.dateTo}` : ''}`}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
-              >
-                Weiter
-                <ChevronRight size={16} />
-              </Link>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Pagination — URL built with URLSearchParams: the interpolated version
+          broke on any search containing `&`, `#` or a space. */}
+      <AdminPagination
+        basePath="/admin/orders"
+        currentParams={{
+          q: resolvedParams.q,
+          status: resolvedParams.status,
+          dateFrom: resolvedParams.dateFrom,
+          dateTo: resolvedParams.dateTo,
+        }}
+        page={safePage}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        itemLabel="Bestellungen"
+      />
     </div>
   )
 }

@@ -12,7 +12,8 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { formatPriceDe } from '@/lib/utils/vat'
-import { getBankDetailsSync } from '@/lib/data/bank-details'
+import { COMPANY } from '@/lib/constants/company'
+import type { BankDetails } from '@/lib/data/bank-details'
 
 interface OrderItem {
   productName: string
@@ -61,6 +62,10 @@ export default function OrderTrackingPage() {
   const [order, setOrder] = useState<Order | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  // Fetched from /api/bank-details (AppConfig + env fallback), NOT from
+  // getBankDetailsSync(): the env-only snapshot could show an IBAN that differs
+  // from the one shown at checkout and in the confirmation email.
+  const [bank, setBank] = useState<BankDetails | null>(null)
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -78,6 +83,17 @@ export default function OrderTrackingPage() {
         setError(data.error || 'Bestellung nicht gefunden.')
       } else {
         setOrder(data)
+
+        const needsBank =
+          data.paymentMethod === 'BANK_TRANSFER' && data.paymentStatus === 'PENDING'
+        if (needsBank) {
+          try {
+            const bankRes = await fetch('/api/bank-details')
+            if (bankRes.ok) setBank(await bankRes.json())
+          } catch {
+            // Payment instructions stay hidden rather than showing a wrong IBAN
+          }
+        }
       }
     } catch {
       setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
@@ -90,9 +106,10 @@ export default function OrderTrackingPage() {
   const paymentInfo = order
     ? paymentStatusLabels[order.paymentStatus] || paymentStatusLabels.PENDING
     : null
-  const bank = getBankDetailsSync()
   const showBankDetails =
-    order?.paymentMethod === 'BANK_TRANSFER' && order?.paymentStatus === 'PENDING'
+    order?.paymentMethod === 'BANK_TRANSFER' &&
+    order?.paymentStatus === 'PENDING' &&
+    bank !== null
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -184,7 +201,7 @@ export default function OrderTrackingPage() {
             )}
 
             {/* Bank Transfer Details (when payment pending) */}
-            {showBankDetails && (
+            {showBankDetails && bank && (
               <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
                 <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-amber-700">
                   <AlertCircle className="h-4 w-4" />
@@ -213,7 +230,7 @@ export default function OrderTrackingPage() {
                   </div>
                 </div>
                 <p className="mt-2 text-xs text-amber-500">
-                  Senden Sie den Zahlungsnachweis an support@nova-indukt.de
+                  Senden Sie den Zahlungsnachweis an {COMPANY.email.support}
                 </p>
               </div>
             )}

@@ -14,6 +14,7 @@ import { randomUUID } from 'crypto'
 import { logError } from '@/lib/logger'
 import { validateCsrfToken } from '@/lib/csrf'
 import { verifyRecaptcha } from '@/lib/recaptcha'
+import { toPublicProduct } from '@/lib/utils/public-product'
 
 export async function GET(request: NextRequest) {
   try {
@@ -65,13 +66,11 @@ export async function GET(request: NextRequest) {
         total: Number(order.total),
         subtotal: Number(order.subtotal),
         shippingCost: Number(order.shippingCost),
+        // costPrice / supplierSku are stripped — see lib/utils/public-product.ts
         items: order.items.map((item) => ({
           ...item,
           unitPrice: Number(item.unitPrice),
-          product: {
-            ...item.product,
-            price: Number(item.product.price),
-          },
+          product: toPublicProduct(item.product),
         })),
       })),
       pagination: {
@@ -141,6 +140,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
     }
 
+    // Canonical address form: order tracking and the guest dedup key both match
+    // on the lower-cased value, so storing the raw casing made both fail.
+    const normalizedEmail = shippingData.email.trim().toLowerCase()
+
     // Idempotency: retry/double-submit with the same key returns the existing
     // order instead of creating a duplicate. Scoped to owner (user or email)
     // so a key can never leak another customer's order.
@@ -153,16 +156,25 @@ export async function POST(request: NextRequest) {
           },
         },
       })
+      const normalizedEmail = shippingData.email.trim().toLowerCase()
       const ownerMatch = session?.user?.id
         ? existing?.userId === session.user.id
         : existing?.userId === null &&
-          existing?.customerEmail === shippingData.email.toLowerCase()
+          (existing?.customerEmail ?? '').toLowerCase() === normalizedEmail
       if (existing && ownerMatch) {
         return NextResponse.json({
           ...existing,
           total: Number(existing.total),
           subtotal: Number(existing.subtotal),
           shippingCost: Number(existing.shippingCost),
+          discountAmount: Number(existing.discountAmount),
+          vatAmount: Number(existing.vatAmount),
+          // costPrice / supplierSku are stripped — see lib/utils/public-product.ts
+          items: existing.items.map((item) => ({
+            ...item,
+            unitPrice: Number(item.unitPrice),
+            product: toPublicProduct(item.product),
+          })),
           deduped: true,
         })
       }
@@ -252,7 +264,10 @@ export async function POST(request: NextRequest) {
         data: {
           orderNumber,
           userId: session?.user?.id || null,
-          customerEmail: shippingData.email,
+          // Store canonical form: order tracking (/api/orders/track) and the
+          // guest dedup key both match on the lower-cased address, so keeping
+          // the raw casing here made lookups fail for mixed-case input.
+          customerEmail: normalizedEmail,
           customerName: `${shippingData.firstName} ${shippingData.lastName}`,
           customerPhone: shippingData.phone,
           shippingAddress: {
@@ -402,6 +417,14 @@ export async function POST(request: NextRequest) {
       total: Number(order.total),
       subtotal: Number(order.subtotal),
       shippingCost: Number(order.shippingCost),
+      discountAmount: Number(order.discountAmount),
+      vatAmount: Number(order.vatAmount),
+      // costPrice / supplierSku are stripped — see lib/utils/public-product.ts
+      items: order.items.map((item) => ({
+        ...item,
+        unitPrice: Number(item.unitPrice),
+        product: toPublicProduct(item.product),
+      })),
     })
   } catch (error) {
     logError('Error creating order:', error)

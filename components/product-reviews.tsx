@@ -252,16 +252,19 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
           <div className="text-center">
             <div className="text-5xl font-bold text-gray-900">{stats.average.toFixed(1)}</div>
             <div className="my-2 flex items-center justify-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-5 w-5 ${
-                    i < Math.round(stats.average)
-                      ? 'fill-amber-400 text-amber-400'
-                      : 'text-gray-300'
-                  }`}
-                />
-              ))}
+              <span className="sr-only">{stats.average.toFixed(1)} von 5 Sternen</span>
+              <span aria-hidden="true" className="inline-flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`h-5 w-5 ${
+                      i < Math.round(stats.average)
+                        ? 'fill-amber-400 text-amber-400'
+                        : 'text-gray-300'
+                    }`}
+                  />
+                ))}
+              </span>
             </div>
             <p className="text-sm text-gray-500">Basierend auf {stats.count} Bewertungen</p>
           </div>
@@ -275,17 +278,25 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
               return (
                 <button
                   key={rating}
+                  type="button"
                   onClick={() => {
+                    // Only the state change: the effect at the top of this
+                    // component refetches when `filterRating` changes. Calling
+                    // fetchReviews here too issued a second request with the
+                    // previous filter and could overwrite the good response.
                     setFilterRating(filterRating === rating ? null : rating)
                     setPage(1)
-                    fetchReviews(1, true)
                   }}
+                  aria-pressed={filterRating === rating}
+                  aria-label={`${rating} ${rating === 1 ? 'Stern' : 'Sterne'}, ${count} ${count === 1 ? 'Bewertung' : 'Bewertungen'}${filterRating === rating ? ', aktiv' : ', filtern'}`}
                   className={`flex w-full items-center gap-3 text-sm ${
                     filterRating === rating ? 'opacity-100' : 'opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <span className="w-3">{rating}</span>
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  <span aria-hidden="true" className="w-3">
+                    {rating}
+                  </span>
+                  <Star aria-hidden="true" className="h-4 w-4 fill-amber-400 text-amber-400" />
                   <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
                     <div
                       className="h-full rounded-full bg-amber-400"
@@ -513,14 +524,17 @@ export function ProductReviews({ productId, initialRating, initialCount }: Produ
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
+                    <span className="sr-only">{review.rating} von 5 Sternen</span>
+                    <span aria-hidden="true" className="inline-flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-4 w-4 ${
+                            i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </span>
                   </div>
                 </div>
 

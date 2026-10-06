@@ -13,6 +13,7 @@ import { SHOP_DOMAIN } from '../constants/shop'
 import { generateInvoicePDF } from '../utils/invoice'
 import { logError, logWarn } from '@/lib/logger'
 import { createUnsubscribeToken } from '@/lib/unsubscribe-token'
+import { getBankDetails } from '@/lib/data/bank-details'
 
 export { FROM_EMAIL, FROM_NAME }
 
@@ -36,6 +37,7 @@ function formatEstimatedDelivery(): string {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
+    timeZone: 'Europe/Berlin',
   })
 }
 
@@ -123,6 +125,11 @@ interface SendOrderConfirmationParams {
 
 export async function sendOrderConfirmation(params: SendOrderConfirmationParams) {
   try {
+    // Resolve the account configured in the admin panel: the email and the
+    // attached PDF must show the same IBAN as the checkout page, otherwise the
+    // customer may transfer to a stale account.
+    const bank = await getBankDetails()
+
     const html = await render(
       OrderConfirmationEmail({
         orderNumber: params.orderNumber,
@@ -149,10 +156,11 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
         },
         estimatedDelivery: params.estimatedDelivery,
         orderDate: params.orderDate,
+        bank,
       })
     )
 
-    // Generate PDF invoice
+    // Generate PDF invoice (same bank details as the email body)
     const invoicePDF = generateInvoicePDF({
       orderNumber: params.orderNumber,
       items: params.items.map((item) => ({
@@ -167,7 +175,7 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
       total: params.total,
       createdAt: params.orderDate ? new Date(params.orderDate) : new Date(),
       customerName: params.customerName,
-    })
+    }, bank)
 
     const pdfBuffer = Buffer.from(invoicePDF.output('arraybuffer'))
 
@@ -276,6 +284,8 @@ export async function sendPaymentConfirmationEmail(order: OrderInput) {
       order.total
     )
 
+    const bank = await getBankDetails()
+
     const html = await render(
       OrderConfirmationEmail({
         orderNumber: order.orderNumber,
@@ -305,13 +315,22 @@ export async function sendPaymentConfirmationEmail(order: OrderInput) {
           }
         })(),
         estimatedDelivery: formatEstimatedDelivery(),
+        bank,
+        // Marks the "already paid" variant: the template then drops the
+        // transfer instructions instead of asking for a second payment.
+        paymentReceivedAt: new Date().toLocaleDateString('de-DE', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          timeZone: 'Europe/Berlin',
+        }),
       })
     )
 
     const result = await sendEmailWithRetry({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: order.customerEmail,
-      subject: `Zahlung bestätigt - Bestellung ${order.orderNumber}`,
+      subject: `Zahlung eingegangen - Bestellung ${order.orderNumber}`,
       html,
     })
 
@@ -398,7 +417,9 @@ export async function sendOrderConfirmationForOrder(orderId: string) {
         country: shippingAddr?.country || 'DE',
       },
       estimatedDelivery,
-      orderDate: order.createdAt.toLocaleDateString('de-DE'),
+      // Pin the timezone: the server runs UTC on Vercel while the site renders
+      // in Europe/Berlin, which shifted order dates by a day.
+      orderDate: order.createdAt.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }),
     })
 
     return result

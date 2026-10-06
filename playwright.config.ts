@@ -17,10 +17,19 @@ export default defineConfig({
   webServer: {
     command: `npx next dev --webpack -p ${PORT}`,
     url: `http://localhost:${PORT}`,
-    reuseExistingServer: true,
+    // Pin to the port under test: otherwise a dev server the developer already
+    // had running on :3000 silently serves the whole suite, masking the state of
+    // the current branch.
+    reuseExistingServer: false,
     timeout: 5 * 60 * 1000,
     env: {
-      NODE_OPTIONS: "--require ./readlink-patch.cjs",
+      // Windows-only shim (see readlink-patch.cjs). On Linux/macOS NODE_OPTIONS
+      // is left untouched.
+      ...(process.platform === 'win32' ? { NODE_OPTIONS: '--require ./readlink-patch.cjs' } : {}),
+      // These tests mutate data (site.spec.ts creates then deletes products and
+      // blog posts). Point them at a throwaway database so a developer's local
+      // data is never touched.
+      ...(process.env.PW_DATABASE_URL ? { DATABASE_URL: process.env.PW_DATABASE_URL } : {}),
     },
   },
   workers: 1,

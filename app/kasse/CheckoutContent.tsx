@@ -154,8 +154,17 @@ export default function CheckoutContent() {
   const [isApplyingPromo, setIsApplyingPromo] = useState(false)
   const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>(null)
 
-  const [, setOrderId] = useState<string | null>(null)
   const [orderNumber, setOrderNumber] = useState<string>('')
+  // Totals of the placed order, snapshotted BEFORE clearCart().
+  // `total` is derived from the cart store (totalPrice), which drops to 0
+  // after clearCart() — rendering it on the confirmation screen used to show
+  // the shipping cost only (e.g. "9,99 €") instead of the real amount.
+  const [confirmedTotals, setConfirmedTotals] = useState<{
+    subtotal: number
+    shipping: number
+    discountAmount: number
+    total: number
+  } | null>(null)
   const [bankDetails, setBankDetails] = useState<BankDetails>({
     holder: '',
     iban: '',
@@ -252,7 +261,6 @@ export default function CheckoutContent() {
         }
 
         const order = await response.json()
-        setOrderId(order.id)
         setOrderNumber(order.orderNumber)
         return order
       } catch (err) {
@@ -418,6 +426,14 @@ export default function CheckoutContent() {
     try {
       const order = await createOrder('BANK_TRANSFER', effectiveEmail)
       if (order) {
+        // Snapshot the amounts while the cart still holds them. The server
+        // values win (it recomputes prices/promo authoritatively).
+        setConfirmedTotals({
+          subtotal: Number(order.subtotal ?? subtotal),
+          shipping: Number(order.shippingCost ?? shipping),
+          discountAmount: Number(order.discountAmount ?? discountAmount),
+          total: Number(order.total ?? total),
+        })
         setOrderComplete(true)
         clearCart()
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -431,7 +447,7 @@ export default function CheckoutContent() {
 
   const steps = [
     { id: 1, label: 'Versand', icon: Truck },
-    { id: 2, label: 'Bestellung', icon: Check },
+    { id: 2, label: 'Zahlungsmethode', icon: Check },
   ]
 
   if (orderComplete) {
@@ -481,10 +497,34 @@ export default function CheckoutContent() {
               <h3 className="mb-5 text-xl font-bold text-[#0C211E]">Bestellübersicht</h3>
 
               <div className="space-y-4 text-[15px]">
+                {confirmedTotals && confirmedTotals.subtotal !== confirmedTotals.total && (
+                  <div className="flex items-center justify-between text-gray-500">
+                    <span>Zwischensumme</span>
+                    <span className="whitespace-nowrap tabular-nums">
+                      {formatPriceDe(confirmedTotals.subtotal)}
+                    </span>
+                  </div>
+                )}
+                {confirmedTotals && confirmedTotals.discountAmount > 0 && (
+                  <div className="flex items-center justify-between text-gray-500">
+                    <span>Rabatt</span>
+                    <span className="whitespace-nowrap tabular-nums text-green-600">
+                      -{formatPriceDe(confirmedTotals.discountAmount)}
+                    </span>
+                  </div>
+                )}
+                {confirmedTotals && confirmedTotals.shipping > 0 && (
+                  <div className="flex items-center justify-between text-gray-500">
+                    <span>Versand</span>
+                    <span className="whitespace-nowrap tabular-nums">
+                      {formatPriceDe(confirmedTotals.shipping)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Gesamtsumme</span>
                   <span className="whitespace-nowrap text-lg font-bold tabular-nums text-[#0C211E] sm:text-xl">
-                    {formatPriceDe(total)}
+                    {formatPriceDe(confirmedTotals?.total ?? total)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-gray-500">

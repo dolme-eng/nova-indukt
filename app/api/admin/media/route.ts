@@ -126,7 +126,23 @@ export async function DELETE(req: NextRequest) {
     const publicId = searchParams.get("publicId")
     if (!publicId) return NextResponse.json({ error: "publicId required" }, { status: 400 })
 
+    // Ownership check. Without it, any admin could pass an arbitrary publicId
+    // and delete assets from other projects sharing the Cloudinary account —
+    // the `nova-indukt/` prefix alone is not a sufficient guard, so the row
+    // must exist in MediaAsset before we touch Cloudinary.
     const before = await prisma.mediaAsset.findUnique({ where: { publicId } })
+    if (!before) {
+      return NextResponse.json(
+        { error: "Unbekanntes Medium — nur indexierte Assets können gelöscht werden" },
+        { status: 404 }
+      )
+    }
+    if (before.folder && !before.folder.startsWith("nova-indukt/")) {
+      return NextResponse.json(
+        { error: "Dieses Asset gehört nicht zum Projekt" },
+        { status: 403 }
+      )
+    }
 
     try {
       await deleteImage(publicId)
@@ -135,33 +151,29 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Cloudinary-Löschfehlgeschlagen" }, { status: 500 })
     }
 
-    if (before) {
-      try {
-        await prisma.mediaAsset.delete({ where: { publicId } })
-      } catch (dbError) {
-        const { Prisma } = await import("@prisma/client")
-        // P2025 = deleted concurrently after our read
-        if (
-          dbError instanceof Prisma.PrismaClientKnownRequestError &&
-          dbError.code === "P2025"
-        ) {
-          return NextResponse.json({ success: true, deduped: true })
-        }
-        throw dbError
+    try {
+      await prisma.mediaAsset.delete({ where: { publicId } })
+    } catch (dbError) {
+      const { Prisma } = await import("@prisma/client")
+      // P2025 = deleted concurrently after our read
+      if (
+        dbError instanceof Prisma.PrismaClientKnownRequestError &&
+        dbError.code === "P2025"
+      ) {
+        return NextResponse.json({ success: true, deduped: true })
       }
+      throw dbError
     }
 
-    if (before) {
-      await auditLog({
-        action: "DELETE",
-        entityType: "MediaAsset",
-        entityId: before.id,
-        userId: authz.session.user.id,
-        oldValues: before,
-        ipAddress: getIP(req),
-        userAgent: req.headers.get("user-agent"),
-      })
-    }
+    await auditLog({
+      action: "DELETE",
+      entityType: "MediaAsset",
+      entityId: before.id,
+      userId: authz.session.user.id,
+      oldValues: before,
+      ipAddress: getIP(req),
+      userAgent: req.headers.get("user-agent"),
+    })
 
     return NextResponse.json({ success: true })
   } catch (error) {

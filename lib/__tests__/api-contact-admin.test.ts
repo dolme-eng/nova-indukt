@@ -24,6 +24,10 @@ vi.mock('@/lib/admin/audit', () => ({
 vi.mock('@/lib/logger', () => ({
   logError: vi.fn(),
 }))
+// CSRF is covered by lib/__tests__/csrf.test.ts.
+vi.mock('@/lib/csrf', () => ({
+  validateCsrfToken: vi.fn().mockReturnValue(null),
+}))
 
 import { PATCH, DELETE } from '@/app/api/admin/contact/[id]/route'
 import { prisma } from '@/lib/prisma'

@@ -45,6 +45,12 @@ vi.mock('@/lib/email/templates/email-verification', () => ({
 vi.mock('@/lib/logger', () => ({
   logError: vi.fn(),
 }))
+// These suites exercise validation/business rules, not the CSRF layer (covered
+// by lib/__tests__/csrf.test.ts). Mock it explicitly instead of relying on the
+// former global CSRF_DISABLED=true.
+vi.mock('@/lib/csrf', () => ({
+  validateCsrfToken: vi.fn().mockReturnValue(null),
+}))
 
 const { POST: registerPOST } = await import('@/app/api/auth/register/route')
 const { POST: forgotPOST } = await import('@/app/api/auth/forgot-password/route')

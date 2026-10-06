@@ -55,24 +55,11 @@ export function MediaAdminClient() {
       const form = new FormData()
       form.append('file', file)
       form.append('folder', folder)
-      const res = await fetch('/api/upload', { method: 'POST', body: form })
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: form })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Upload fehlgeschlagen')
 
-      const img = json?.image
-      await fetch('/api/admin/media', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          publicId: img.id,
-          url: img.url,
-          width: img.width,
-          height: img.height,
-          bytes: img.size,
-          format: img.format,
-          folder,
-        }),
-      })
+      // The endpoint already indexes the asset as a MediaAsset row.
       toast.success('Hochgeladen')
       await refresh()
     } catch (e: unknown) {
@@ -154,7 +141,9 @@ export function MediaAdminClient() {
               <div className="space-y-2 p-3">
                 <div className="truncate font-mono text-[10px] text-slate-500">{m.publicId}</div>
                 <button
+                  type="button"
                   onClick={() => remove(m.publicId)}
+                  aria-label={`Medium ${m.publicId} löschen`}
                   className="w-full rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-semibold text-red-700 hover:bg-red-100"
                 >
                   Löschen
@@ -170,6 +159,7 @@ export function MediaAdminClient() {
           {nextCursor && (
             <div className="col-span-full flex justify-center">
               <button
+                type="button"
                 onClick={() => refresh(nextCursor)}
                 disabled={isLoading}
                 className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50 disabled:opacity-50"

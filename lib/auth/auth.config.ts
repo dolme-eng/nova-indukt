@@ -58,13 +58,17 @@ export const authConfig: NextAuthConfig = {
             select: { tokenVersion: true },
           })
           if (dbUser && dbUser.tokenVersion !== token.tokenVersion) {
-            // Token has been invalidated (password was reset)
-            return {} as JWT
+            // Token has been invalidated (password was reset).
+            // MUST return null — Auth.js only destroys the session when the
+            // callback yields null. Returning an empty object yields a
+            // *truthy* session with undefined user fields, which would let a
+            // revoked token keep passing `!!session` guards.
+            return null
           }
         } catch {
           // Fail CLOSED in production: reject token if DB is unreachable
           if (process.env.NODE_ENV === 'production') {
-            return {} as JWT
+            return null
           }
           // In development, allow the token for availability
         }

@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
 
 interface ImageLightboxProps {
   images: string[]
@@ -26,7 +27,6 @@ export function ImageLightbox({
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
-  const containerRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   // Reset zoom when image changes
@@ -35,13 +35,12 @@ export function ImageLightbox({
     setPosition({ x: 0, y: 0 })
   }, [currentIndex])
 
-  // Handle keyboard navigation + focus trap
+  // Keyboard navigation. Focus trapping + scroll lock + focus restoration are
+  // delegated to useFocusTrap, which every other overlay uses; this file used
+  // to carry its own copy (and reset body overflow to 'unset', which fought
+  // with the drawer's lock).
   useEffect(() => {
     if (!isOpen) return
-
-    const previousFocus = document.activeElement as HTMLElement
-
-    setTimeout(() => closeButtonRef.current?.focus(), 50)
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
@@ -54,40 +53,29 @@ export function ImageLightbox({
         case 'ArrowRight':
           if (currentIndex < images.length - 1) onNavigate(currentIndex + 1)
           break
-        case 'Tab': {
-          const container = containerRef.current
-          if (!container) return
-          const focusable = container.querySelectorAll<HTMLElement>(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-          )
-          if (focusable.length === 0) return
-          const first = focusable[0]
-          const last = focusable[focusable.length - 1]
-          if (e.shiftKey) {
-            if (document.activeElement === first) {
-              e.preventDefault()
-              last.focus()
-            }
-          } else {
-            if (document.activeElement === last) {
-              e.preventDefault()
-              first.focus()
-            }
-          }
-          break
-        }
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
-    document.body.style.overflow = 'hidden'
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = 'unset'
-      previousFocus?.focus()
-    }
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, currentIndex, images.length, onClose, onNavigate])
+
+  // Arrow navigation changes `currentIndex`, which used to re-run the whole
+  // effect above and re-lock/re-focus the body on every image change.
+  const stableOnClose = useRef(onClose)
+  const stableOnNavigate = useRef(onNavigate)
+  useEffect(() => {
+    stableOnClose.current = onClose
+    stableOnNavigate.current = onNavigate
+  })
+
+  const dialogRef = useRef<HTMLDivElement>(null)
+  useFocusTrap({
+    isOpen,
+    onClose: () => stableOnClose.current(),
+    initialFocusRef: closeButtonRef,
+    containerRef: dialogRef,
+  })
 
   const handleZoomIn = () => {
     setScale((prev) => Math.min(prev + 0.5, 3))
@@ -135,19 +123,19 @@ export function ImageLightbox({
 
   if (!isOpen) return null
 
+  // No AnimatePresence wrapper: the early `return null` above unmounts the
+  // dialog immediately, so `exit` never ran. The open transition still works.
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          ref={containerRef}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Bildergalerie: ${productName}`}
-          onClick={onClose}
+    <>
+      <motion.div
+        ref={dialogRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Bildergalerie: ${productName}`}
+        onClick={onClose}
         >
           {/* Close Button */}
           <button
@@ -285,8 +273,7 @@ export function ImageLightbox({
           <div className="absolute left-4 top-4 text-sm text-white/60">
             <p>ESC zum Schließen • ← → zum Navigieren • Mausrad zum Zoomen</p>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      </motion.div>
+    </>
   )
 }

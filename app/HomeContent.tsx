@@ -345,14 +345,22 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product; i
             </h3>
             {/* Stars */}
             <div className="mb-1 flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-2.5 w-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
-                />
-              ))}
+              {/* The rating was conveyed by icon fill only, so it was
+                  invisible to screen readers. */}
+              <span className="sr-only">
+                Bewertung {product.rating.toFixed(1)} von 5 aus {product.reviewCount}{' '}
+                Bewertungen
+              </span>
+              <span aria-hidden="true" className="inline-flex items-center gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`h-2.5 w-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+                  />
+                ))}
+              </span>
               {product.reviewCount > 0 && (
-                <span className="ml-0.5 text-[10px] font-semibold text-gray-400">
+                <span aria-hidden="true" className="ml-0.5 text-[10px] font-semibold text-gray-400">
                   {product.reviewCount}
                 </span>
               )}
@@ -470,14 +478,20 @@ const FlashDealCard = memo(function FlashDealCard({
         </Link>
         {/* Stars */}
         <div className="mb-2 flex items-center gap-0.5">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              className={`h-2.5 w-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
-            />
-          ))}
+          <span className="sr-only">
+            Bewertung {product.rating.toFixed(1)} von 5 aus {product.reviewCount}{' '}
+            Bewertungen
+          </span>
+          <span aria-hidden="true" className="inline-flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                className={`h-2.5 w-2.5 ${i < Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+              />
+            ))}
+          </span>
           {product.reviewCount > 0 && (
-            <span className="ml-0.5 text-[10px] font-semibold text-gray-400">
+            <span aria-hidden="true" className="ml-0.5 text-[10px] font-semibold text-gray-400">
               {product.reviewCount}
             </span>
           )}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Star, Quote, MessageSquare } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
@@ -18,13 +18,26 @@ interface Testimonial {
   isVerified: boolean
 }
 
+/**
+ * The stars carry no accessible name, so a screen reader announced nothing
+ * useful ("graphic graphic graphic"). Pair them with visually hidden text.
+ */
 function renderStars(rating: number) {
-  return Array.from({ length: 5 }).map((_, i) => (
-    <Star
-      key={i}
-      className={`h-4 w-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`}
-    />
-  ))
+  return (
+    <>
+      <span className="sr-only">
+        {rating} von {5} Sternen
+      </span>
+      <span aria-hidden="true" className="inline-flex items-center gap-0.5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            className={`h-4 w-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`}
+          />
+        ))}
+      </span>
+    </>
+  )
 }
 
 interface TestimonialsSectionProps {
@@ -33,6 +46,7 @@ interface TestimonialsSectionProps {
 
 export function TestimonialsSection({ initialTestimonials }: TestimonialsSectionProps) {
   const router = useRouter()
+  const prefersReducedMotion = useReducedMotion()
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials ?? [])
   const [loading, setLoading] = useState(initialTestimonials === undefined)
 
@@ -135,18 +149,17 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
             <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-12 bg-gradient-to-l from-[#F4FBF9] to-transparent sm:w-32" />
 
             <motion.div
-              animate={{ x: ['0%', '-50%'] }}
+              animate={prefersReducedMotion ? undefined : { x: ['0%', '-50%'] }}
               transition={{ ease: 'linear', duration: 40, repeat: Infinity }}
               className="flex w-max gap-6"
             >
-              {[
-                ...displayTestimonials,
-                ...displayTestimonials,
-                ...displayTestimonials,
-                ...displayTestimonials,
-              ].map((testimonial, index) => (
+              {/* Two copies are enough for a seamless -50% loop; four doubled
+                  the DOM (and the avatar requests) for no visual gain. The
+                  duplicated half is hidden from assistive tech. */}
+              {[...displayTestimonials, ...displayTestimonials].map((testimonial, index) => (
                 <div
                   key={`${testimonial.id}-${index}`}
+                  aria-hidden={index >= displayTestimonials.length || undefined}
                   className="flex w-[280px] flex-shrink-0 flex-col rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#4ECCA3]/10 sm:w-[380px] sm:p-8"
                 >
                   <div className="mb-5 flex items-center gap-4">
@@ -171,6 +184,8 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
                       <div
                         className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-green-50"
                         title="Verifizierter Kauf"
+                        role="img"
+                        aria-label="Verifizierter Kauf"
                       >
                         <svg
                           className="h-4 w-4 text-green-500"

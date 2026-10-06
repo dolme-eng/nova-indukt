@@ -18,6 +18,7 @@ import {
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { logError } from '@/lib/logger'
+import { slugify } from '@/lib/utils/slugify'
 
 interface BlogPostData {
   id?: string
@@ -56,16 +57,16 @@ export default function BlogPostForm({ initialData }: BlogPostFormProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-
-    // Auto-generate slug from title
-    if (name === 'titleDe' && !initialData) {
-      const generatedSlug = value
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '')
-      setFormData((prev) => ({ ...prev, slug: generatedSlug }))
-    }
+    // Single state update: the previous version called setFormData twice per
+    // keystroke (once for the value, once for the derived slug), which relies
+    // on React batching to avoid losing either write.
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      // Auto-generate the slug from the title (only while creating: never
+      // clobber a slug the editor typed by hand).
+      ...(name === 'titleDe' && !initialData && !prev.slug ? { slug: slugify(value) } : {}),
+    }))
   }
 
   const handleToggle = () => {

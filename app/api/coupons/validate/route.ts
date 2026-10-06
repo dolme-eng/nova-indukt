@@ -120,14 +120,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Calculate discount on the server-side base, rounded to cents
-    // (same helper as order creation — no 1ct drift)
-    const { discountAmount: discount } = calculateDiscountedPrice(
+    // Calculate discount on the server-side base, rounded to cents.
+    // Also apply the auto-promotion discount, so the preview matches what the
+    // checkout will actually charge (base already reflects auto-promotions when
+    // item details were provided; without them it is the raw cart amount).
+    const { discountAmount: couponDiscount } = calculateDiscountedPrice(
       base,
       promo.discountType,
       Number(promo.discountValue),
-      promo.maxDiscount ? Number(promo.maxDiscount) : null
+      promo.maxDiscount != null ? Number(promo.maxDiscount) : null
     )
+    const discount = Math.min(couponDiscount, base)
 
     return NextResponse.json({
       valid: true,

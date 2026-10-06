@@ -4,6 +4,14 @@ import { SHOP_DOMAIN } from '@/lib/constants/shop'
 
 const BASE_URL = SHOP_DOMAIN
 
+/**
+ * Without this, Next.js treats the sitemap as a build-time static artifact
+ * (it uses no `fetch` and no dynamic API), so newly published products never
+ * reached search engines until the next deploy. Hourly regeneration is enough:
+ * the admin calls revalidatePath on product/category changes anyway.
+ */
+export const revalidate = 3600
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes (always included).
   // No lastModified: these pages have no DB timestamp — emitting "now" on
@@ -32,11 +40,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
-    // take:5000 bounds memory on Neon serverless (sitemap caps at 50k URLs anyway)
+    // take:5000 bounds memory on Neon serverless (sitemap caps at 50k URLs anyway).
+    // Deterministic orderBy: without it, `take` picks an arbitrary subset and
+    // the same catalog yields a different sitemap on every run.
     const [dbProducts, dbCategories, dbBlogPosts] = await Promise.all([
-      prisma.product.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true }, take: 5000 }),
-      prisma.category.findMany({ where: { isActive: true }, select: { slug: true, createdAt: true }, take: 5000 }),
-      prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, publishedAt: true, createdAt: true, updatedAt: true }, take: 5000 }),
+      prisma.product.findMany({
+        where: { isActive: true },
+        select: { slug: true, updatedAt: true },
+        orderBy: { updatedAt: 'desc' },
+        take: 5000,
+      }),
+      prisma.category.findMany({
+        where: { isActive: true },
+        select: { slug: true, createdAt: true },
+        orderBy: { sortOrder: 'asc' },
+        take: 5000,
+      }),
+      prisma.blogPost.findMany({
+        where: { isPublished: true },
+        select: { slug: true, publishedAt: true, createdAt: true, updatedAt: true },
+        orderBy: { publishedAt: 'desc' },
+        take: 5000,
+      }),
     ])
 
     const productRoutes: MetadataRoute.Sitemap = dbProducts.map((product) => ({
@@ -49,7 +74,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // /kategorie/* only redirects to /produkte?kategorie= — list the final URL
     // instead of a redirect chain.
     const categoryRoutes: MetadataRoute.Sitemap = dbCategories.map((category) => ({
-      url: `${BASE_URL}/produkte?kategorie=${category.slug}`,
+      url: `${BASE_URL}/produkte?kategorie=${encodeURIComponent(category.slug)}`,
+      // Categories have no updatedAt column; createdAt is the only signal.
       lastModified: category.createdAt,
       changeFrequency: 'weekly' as const,
       priority: 0.7,

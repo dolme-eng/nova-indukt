@@ -140,6 +140,15 @@ const mockCreatedOrder = {
       productName: 'Bratpfanne',
       productSlug: 'bratpfanne',
       vatRate: 19,
+      // Mirrors the `include: { product: { include: { images: true } } }`
+      // used by the route. `costPrice` / `supplierSku` are present on purpose:
+      // the response must strip them.
+      product: {
+        ...dbProduct,
+        costPrice: 24.99,
+        supplierSku: 'SKU-SECRET-1',
+        images: [{ id: 'img-1', url: '/images/p/1.jpg', alt: '', sortOrder: 0, isMain: true }],
+      },
     },
   ],
 }
@@ -192,6 +201,19 @@ describe('POST /api/orders', () => {
     expect(data.items[0].productName).toBe('Bratpfanne')
   })
 
+  it('never leaks costPrice / supplierSku to the client', async () => {
+    const res = await POST(makePostRequest(makeValidBody()))
+    const data = await res.json()
+
+    expect(res.status).toBe(200)
+    expect(JSON.stringify(data)).not.toContain('SKU-SECRET-1')
+    expect(data.items[0].product).not.toHaveProperty('costPrice')
+    expect(data.items[0].product).not.toHaveProperty('supplierSku')
+    // ...while the public fields survive
+    expect(data.items[0].product.slug).toBe('bratpfanne')
+    expect(data.items[0].product.price).toBe(49.99)
+  })
+
   it('creates an order with 2 items and verifies server-side price lookup', async () => {
     const dbProducts = [
       dbProduct,
@@ -218,6 +240,17 @@ describe('POST /api/orders', () => {
           productName: 'Produkt B',
           productSlug: 'produkt-b',
           vatRate: 19,
+          product: {
+            id: 'clx1234567890abcdefx',
+            price: 25.0,
+            nameDe: 'Produkt B',
+            isActive: true,
+            categoryId: 'cat-2',
+            slug: 'produkt-b',
+            costPrice: 12.5,
+            supplierSku: 'SKU-SECRET-2',
+            images: [],
+          },
         },
       ],
     }

@@ -82,6 +82,25 @@ describe('verifyRecaptcha', () => {
     expect(body.error).toBe('reCAPTCHA-Aktion ungültig')
   })
 
+  // Regression: the check was `data.score < THRESHOLD`, and `undefined < 0.5`
+  // is false — so a response without a `score` field PASSED verification.
+  it.each([
+    ['missing', { success: true, action: 'checkout' }],
+    ['null', { success: true, score: null, action: 'checkout' }],
+    ['non-numeric', { success: true, score: 'high', action: 'checkout' }],
+  ])('returns 403 when the score is %s', async (_label, payload) => {
+    process.env.RECAPTCHA_SECRET_KEY = 'test-secret'
+
+    vi.spyOn(global, 'fetch').mockResolvedValueOnce(new Response(JSON.stringify(payload)))
+
+    const result = await verifyRecaptcha(
+      mockRequest({ 'x-recaptcha-token': 'token-without-score' }),
+      'checkout'
+    )
+    expect(result).not.toBeNull()
+    expect(result!.status).toBe(403)
+  })
+
   it('returns 403 when Google returns success: false', async () => {
     process.env.RECAPTCHA_SECRET_KEY = 'test-secret'
 

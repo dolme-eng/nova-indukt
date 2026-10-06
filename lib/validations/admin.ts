@@ -67,28 +67,58 @@ export const autoGeneratePromotionSchema = z.object({
 
 // ── Products (PATCH) ────────────────────────────────────────────────────────
 
-export const updateProductSchema = z.object({
-  nameDe: z.string().min(1, 'Name ist erforderlich').max(200),
-  slug: z.string().min(1, 'Slug ist erforderlich').max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  ean: z.string().max(20).optional().nullable(),
-  descriptionDe: z.string().max(5000, 'Beschreibung ist zu lang').optional().nullable(),
-  shortDescription: z.string().max(500).optional().nullable(),
-  price: z.number().positive('Preis muss positiv sein').max(99999.99, 'Preis darf 99.999,99 € nicht überschreiten'),
-  oldPrice: z.number().positive().max(99999.99).optional().nullable(),
-  costPrice: z.number().nonnegative().max(99999.99).optional().nullable(),
-  categoryId: z.string().cuid('Invalid category ID'),
-  isActive: z.boolean().default(true),
-  weightKg: z.number().nonnegative().optional().nullable(),
-  brand: z.string().max(100).optional().nullable(),
-  material: z.string().max(100).optional().nullable(),
-  dimensions: z.string().max(100).optional().nullable(),
-  dishwasherSafe: z.boolean().optional().nullable(),
-  inductionSafe: z.boolean().optional().nullable(),
-  images: z.array(z.object({
-    url: z.string().url(),
-    alt: z.string().max(200).optional(),
-  })).max(20).optional(),
-})
+/**
+ * PATCH semantics: every field is optional. Only the keys actually present in
+ * the request body are written, so a partial edit can never silently reset a
+ * field it did not mention.
+ *
+ * This matters especially for `isActive`: with `.default(true)` a PATCH
+ * without `isActive` re-activated deactivated products.
+ */
+export const updateProductSchema = z
+  .object({
+    nameDe: z.string().min(1, 'Name ist erforderlich').max(200).optional(),
+    slug: z
+      .string()
+      .min(1, 'Slug ist erforderlich')
+      .max(200)
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug: nur Kleinbuchstaben, Zahlen und Bindestriche')
+      .optional(),
+    ean: z.string().max(20).optional().nullable(),
+    supplierSku: z.string().max(64).optional().nullable(),
+    descriptionDe: z.string().max(5000, 'Beschreibung ist zu lang').optional().nullable(),
+    shortDescription: z.string().max(500).optional().nullable(),
+    price: z
+      .number()
+      .positive('Preis muss positiv sein')
+      .max(99999.99, 'Preis darf 99.999,99 € nicht überschreiten')
+      .optional(),
+    oldPrice: z.number().positive().max(99999.99).optional().nullable(),
+    costPrice: z.number().nonnegative().max(99999.99).optional().nullable(),
+    categoryId: z.string().cuid('Invalid category ID').optional(),
+    isActive: z.boolean().optional(),
+    weightKg: z.number().nonnegative().optional().nullable(),
+    brand: z.string().max(100).optional().nullable(),
+    material: z.string().max(100).optional().nullable(),
+    dimensions: z.string().max(100).optional().nullable(),
+    metaTitle: z.string().max(200).optional().nullable(),
+    metaDescription: z.string().max(500).optional().nullable(),
+    badges: z.array(z.string().max(40)).max(10).optional(),
+    dishwasherSafe: z.boolean().optional().nullable(),
+    inductionSafe: z.boolean().optional().nullable(),
+    images: z
+      .array(
+        z.object({
+          url: z.string().url(),
+          alt: z.string().max(200).optional(),
+        })
+      )
+      .max(20)
+      .optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Keine Änderungen übermittelt',
+  })
 
 // ── Orders (Shipping) ──────────────────────────────────────────────────────
 

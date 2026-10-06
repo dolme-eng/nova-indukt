@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
@@ -26,7 +26,9 @@ export interface SearchContentProps {
 
 export default function SearchContent({ initialProducts, initialCategories }: SearchContentProps) {
   const searchParams = useSearchParams()
-  const initialQuery = searchParams.get('q') || ''
+  // `?suche=` is the legacy alias still emitted by the home SearchAction
+  // JSON-LD — the server accepts both, so the initial input must too.
+  const initialQuery = searchParams.get('q') || searchParams.get('suche') || ''
 
   // Calculate max price from products
   const maxPrice = useMemo(() => {
@@ -37,6 +39,14 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [priceRange, setPriceRange] = useState<[number, number]>([0, maxPrice])
+  // Track whether the user actually moved the slider. If not, keep the ceiling
+  // pinned to the current result set: a stale max would silently hide every
+  // result above it and show an empty list with no visible explanation.
+  const priceRangeTouched = useRef(false)
+  useEffect(() => {
+    if (priceRangeTouched.current) return
+    setPriceRange([0, maxPrice])
+  }, [maxPrice])
   const [sortBy, setSortBy] = useState('relevance')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showFilters, setShowFilters] = useState(false)
@@ -73,8 +83,10 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
     }
 
     return result
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, selectedCategory, priceRange, sortBy])
+    // `initialProducts` MUST stay in the deps: the server re-renders this
+    // component with a new result set on every query change, and omitting it
+    // made the memo return stale results after a router.push().
+  }, [initialProducts, searchQuery, selectedCategory, priceRange, sortBy])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -127,6 +139,7 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                 <button
                   onClick={() => {
                     setSelectedCategory('all')
+                    priceRangeTouched.current = false
                     setPriceRange([0, maxPrice])
                   }}
                   className="text-sm text-nova-700 hover:underline"
@@ -174,7 +187,10 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                     <input
                       type="number"
                       value={priceRange[0]}
-                      onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                      onChange={(e) => {
+                        priceRangeTouched.current = true
+                        setPriceRange([Number(e.target.value), priceRange[1]])
+                      }}
                       aria-label="Minimaler Preis"
                       className="w-20 rounded-lg bg-gray-100 px-3 py-2 text-sm"
                     />
@@ -182,7 +198,10 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                     <input
                       type="number"
                       value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      onChange={(e) => {
+                        priceRangeTouched.current = true
+                        setPriceRange([priceRange[0], Number(e.target.value)])
+                      }}
                       aria-label="Maximaler Preis"
                       className="w-20 rounded-lg bg-gray-100 px-3 py-2 text-sm"
                     />
@@ -193,7 +212,10 @@ export default function SearchContent({ initialProducts, initialCategories }: Se
                     min="0"
                     max={maxPrice}
                     value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                    onChange={(e) => {
+                      priceRangeTouched.current = true
+                      setPriceRange([priceRange[0], Number(e.target.value)])
+                    }}
                     aria-label="Preisbereich"
                     className="w-full"
                   />

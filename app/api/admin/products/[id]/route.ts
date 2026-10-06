@@ -44,13 +44,16 @@ export async function PATCH(
         data: productData as Prisma.ProductUpdateInput,
       })
 
-      if (images && Array.isArray(images)) {
+      // Only replace the image set when a non-empty list is sent. An empty
+      // array used to wipe every product photo (the admin form always submits
+      // `images`, even when the admin never touched it).
+      if (images && images.length > 0) {
         await tx.productImage.deleteMany({ where: { productId: id } })
         await tx.productImage.createMany({
           data: images.map((img, index) => ({
             productId: id,
             url: img.url,
-            alt: img.alt || productData.nameDe || '',
+            alt: img.alt || before?.nameDe || '',
             sortOrder: index,
             isMain: index === 0,
           }))
@@ -60,13 +63,19 @@ export async function PATCH(
       return updated
     })
 
+    // Never write costPrice (purchase cost) into the audit trail.
+    const { costPrice: _oldCost, ...beforeSafe } = before ?? {}
+    const { costPrice: _newCost, ...afterSafe } = product
+    void _oldCost
+    void _newCost
+
     await auditLog({
       action: "UPDATE",
       entityType: "Product",
       entityId: product.id,
       userId: authz.session.user.id,
-      oldValues: before,
-      newValues: product,
+      oldValues: beforeSafe,
+      newValues: afterSafe,
       ipAddress: getIP(req),
       userAgent: req.headers.get("user-agent"),
     })

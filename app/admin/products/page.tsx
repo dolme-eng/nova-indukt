@@ -1,15 +1,17 @@
 import Link from 'next/link'
-import { Plus, Edit, Eye, Image as ImageIcon, CheckCircle2, XCircle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus, Edit, Eye, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 export const dynamic = 'force-dynamic'
 import Image from 'next/image'
 import { formatPriceDe } from '@/lib/utils/vat'
+import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/utils/pagination'
 
 import { ProductsFilter } from './_components/products-filter'
 import { DeleteProductButton } from './_components/delete-product-button'
+import { AdminPagination } from '../_components/admin-pagination'
 
-const PAGE_SIZE = 50
+const PAGE_SIZE = DEFAULT_PAGE_SIZE
 
 async function getProducts(search?: string, category?: string, sort?: string, page: number = 1) {
   const where: Prisma.ProductWhereInput = {}
@@ -65,7 +67,7 @@ async function getProducts(search?: string, category?: string, sort?: string, pa
     prisma.product.count({ where }),
   ])
 
-  return { products, totalCount, totalPages: Math.ceil(totalCount / PAGE_SIZE) }
+  return { products, totalCount, totalPages: Math.max(1, Math.ceil(totalCount / PAGE_SIZE)) }
 }
 
 async function getCategories() {
@@ -80,22 +82,15 @@ export default async function AdminProductsPage({
   searchParams: Promise<{ q?: string; category?: string; sort?: string; page?: string }>
 }) {
   const resolvedParams = await searchParams
-  const page = Math.max(1, parseInt(resolvedParams.page || '1', 10))
+  // parsePageParam rejects NaN: `?page=abc` used to become `skip: NaN` and
+  // Prisma answered 500 instead of falling back to page 1.
+  const page = parsePageParam(resolvedParams.page)
   const [result, categories] = await Promise.all([
     getProducts(resolvedParams.q, resolvedParams.category, resolvedParams.sort, page),
     getCategories(),
   ])
   const { products, totalCount, totalPages } = result
-
-  const buildPageUrl = (p: number) => {
-    const params = new URLSearchParams()
-    if (resolvedParams.q) params.set('q', resolvedParams.q)
-    if (resolvedParams.category) params.set('category', resolvedParams.category)
-    if (resolvedParams.sort) params.set('sort', resolvedParams.sort)
-    if (p > 1) params.set('page', p.toString())
-    const qs = params.toString()
-    return `/admin/products${qs ? `?${qs}` : ''}`
-  }
+  const safePage = Math.min(page, totalPages)
 
   return (
     <div className="space-y-6">
@@ -224,33 +219,18 @@ export default async function AdminProductsPage({
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
-          <p className="text-sm text-slate-500">
-            Seite {page} von {totalPages}
-          </p>
-          <div className="flex gap-2">
-            {page > 1 && (
-              <Link
-                href={buildPageUrl(page - 1)}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
-              >
-                <ChevronLeft size={16} />
-                Zurück
-              </Link>
-            )}
-            {page < totalPages && (
-              <Link
-                href={buildPageUrl(page + 1)}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
-              >
-                Weiter
-                <ChevronRight size={16} />
-              </Link>
-            )}
-          </div>
-        </div>
-      )}
+      <AdminPagination
+        basePath="/admin/products"
+        currentParams={{
+          q: resolvedParams.q,
+          category: resolvedParams.category,
+          sort: resolvedParams.sort,
+        }}
+        page={safePage}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        itemLabel="Produkte"
+      />
     </div>
   )
 }
