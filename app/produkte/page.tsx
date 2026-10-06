@@ -6,6 +6,7 @@ import { Prisma } from '@prisma/client'
 import { Product, Category, mapDbProductToUi, mapDbCategoryToUi } from '@/lib/data/products'
 import { SHOP_DOMAIN } from '@/lib/constants/shop'
 import { safeJsonLd } from '@/lib/utils/json-ld'
+import { parsePageParam } from '@/lib/utils/pagination'
 
 const ProductsContent = dynamic(
   () => import('./ProductsContent').then((m) => m.ProductsContent),
@@ -21,6 +22,20 @@ const ProductsContent = dynamic(
 export const revalidate = 120
 
 const ITEMS_PER_PAGE = 12
+
+function getProductsPage(
+  where: Prisma.ProductWhereInput,
+  orderBy: Prisma.ProductOrderByWithRelationInput,
+  page: number
+) {
+  return prisma.product.findMany({
+    where,
+    include: { images: true, category: true },
+    orderBy,
+    skip: (page - 1) * ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
+  })
+}
 
 export async function generateMetadata({
   searchParams,
@@ -111,8 +126,7 @@ export default async function ProductsPage({
   const minPrice = params.minPrice ? Number(params.minPrice) : undefined
   const maxPrice = params.maxPrice ? Number(params.maxPrice) : undefined
   const sort = params.sort || 'newest'
-  const rawPage = Number.parseInt(params.page || '1', 10)
-  const page = Number.isFinite(rawPage) ? Math.max(rawPage, 1) : 1
+  const page = parsePageParam(params.page)
 
   const where: Prisma.ProductWhereInput = {
     isActive: true,
@@ -146,34 +160,28 @@ export default async function ProductsPage({
           ? { nameDe: 'asc' }
           : { createdAt: 'desc' }
 
-  const skip = (page - 1) * ITEMS_PER_PAGE
-
-  const [products, total, categories] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      include: {
-        images: true,
-        category: true,
-      },
-      orderBy,
-      skip,
-      take: ITEMS_PER_PAGE,
-    }),
+  const [total, categories] = await Promise.all([
     prisma.product.count({ where }),
-    prisma.category
-      .findMany({
-        where: {
-          isActive: true,
-          products: { some: { isActive: true } },
-        },
-        include: { _count: { select: { products: { where: { isActive: true } } } } },
-        orderBy: { sortOrder: 'asc' },
-      }),
+    prisma.category.findMany({
+      where: {
+        isActive: true,
+        products: { some: { isActive: true } },
+      },
+      include: { _count: { select: { products: { where: { isActive: true } } } } },
+      orderBy: { sortOrder: 'asc' },
+    }),
   ])
+
+  const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE))
+
+  // `?page=999` used to render an empty grid with no explanation. Offset is the
+  // right tool at this catalogue size (~330 products => at most a 28-row scan);
+  // the real defect was the unbounded page, not the offset.
+  const safePage = Math.min(page, totalPages)
+  const products = await getProductsPage(where, orderBy, safePage)
 
   const formattedProducts: Product[] = products.map(mapDbProductToUi)
   const formattedCategories: Category[] = categories.map(mapDbCategoryToUi)
-  const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
 
   const breadcrumbData = {
     '@context': 'https://schema.org',
@@ -204,7 +212,7 @@ export default async function ProductsPage({
         initialSearch={search}
         initialPriceRange={[minPrice || 0, maxPrice || 2500]}
         initialSort={sort}
-        currentPage={page}
+        currentPage={safePage}
         totalPages={totalPages}
         totalProducts={total}
       />

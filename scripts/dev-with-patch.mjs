@@ -25,25 +25,34 @@ if (!nextArgs) {
   process.exit(1)
 }
 
-const needsPatch = process.platform === 'win32' && existsSync(patchFile)
+const isWindows = process.platform === 'win32'
 
 const env = { ...process.env }
-if (needsPatch) {
-  const flag = '--require ./readlink-patch.cjs'
-  env.NODE_OPTIONS = env.NODE_OPTIONS ? `${env.NODE_OPTIONS} ${flag}` : flag
-} else {
-  if (process.platform === 'win32') {
+const args = [...nextArgs]
+
+if (isWindows) {
+  // Turbopack (the default bundler since Next 15) needs to create NTFS junction
+  // points inside .next/node_modules, which fails on Windows without elevated
+  // privileges ("os error 1"). The previous `build:win` script already forced
+  // webpack for that reason — this keeps that behaviour for dev as well.
+  args.push('--webpack')
+
+  if (existsSync(patchFile)) {
+    const flag = '--require ./readlink-patch.cjs'
+    env.NODE_OPTIONS = env.NODE_OPTIONS ? `${env.NODE_OPTIONS} ${flag}` : flag
+  } else {
     console.warn('[warn] readlink-patch.cjs not found — building without the Windows shim.')
   }
+} else {
   // Outside Windows the shim is unnecessary and would only mask real EISDIR bugs.
   delete env.NODE_OPTIONS
 }
 
-const child = spawn('npx', ['next', ...nextArgs], {
+const child = spawn('npx', ['next', ...args], {
   cwd: root,
   stdio: 'inherit',
   env,
-  shell: process.platform === 'win32',
+  shell: isWindows,
 })
 
 child.on('exit', (code, signal) => {

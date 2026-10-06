@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Edit, Eye, FileText, Calendar, CheckCircle2, XCircle } from 'lucide-react'
 import { format } from 'date-fns'
 import { de } from 'date-fns/locale'
 import { DeleteBlogButton } from './_components/delete-blog-button'
+import { buildQueryUrl } from '@/lib/utils/pagination'
 
 interface BlogPost {
   id: string
@@ -18,12 +20,37 @@ interface BlogPost {
   isPublished: boolean
 }
 
-export function BlogTable({ posts }: { posts: BlogPost[] }) {
-  const [searchQuery, setSearchQuery] = useState('')
+/**
+ * Search, status and category filtering run server-side, and the counters come
+ * from SQL: this table used to receive every post and derive both in the
+ * browser, so the numbers changed with the page you were on.
+ */
+export function BlogTable({
+  posts,
+  currentParams,
+  stats,
+  categories,
+  hasFilters,
+}: {
+  posts: BlogPost[]
+  currentParams: Record<string, string | undefined>
+  stats: { total: number; published: number; draft: number }
+  categories: string[]
+  hasFilters: boolean
+}) {
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState(currentParams.q ?? '')
 
-  const filtered = searchQuery
-    ? posts.filter((p) => p.titleDe.toLowerCase().includes(searchQuery.toLowerCase()))
-    : posts
+  function navigate(overrides: Record<string, string | number | undefined | null>) {
+    router.push(
+      buildQueryUrl(
+        '/admin/blog',
+        { ...currentParams, q: searchQuery.trim() || undefined },
+        overrides,
+        { resetPage: true }
+      )
+    )
+  }
 
   return (
     <>
@@ -33,36 +60,96 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
           <p className="text-sm font-medium uppercase tracking-wider text-slate-500">
             Gesamtartikel
           </p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{posts.length}</p>
+          <p className="mt-2 text-3xl font-bold text-slate-900">{stats.total}</p>
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-medium uppercase tracking-wider text-slate-500">
             Veröffentlicht
           </p>
           <p className="mt-2 text-3xl font-bold text-emerald-600">
-            {posts.filter((p) => p.isPublished).length}
+            {stats.published}
           </p>
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-medium uppercase tracking-wider text-slate-500">Entwürfe</p>
           <p className="mt-2 text-3xl font-bold text-amber-500">
-            {posts.filter((p) => !p.isPublished).length}
+            {stats.draft}
           </p>
         </div>
       </div>
 
       {/* Table */}
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex flex-col items-center justify-between gap-4 border-b border-slate-200 p-4 sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-b border-slate-200 p-4 sm:flex-row sm:items-center">
           <div className="relative w-full sm:w-96">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <label htmlFor="blog-search" className="sr-only">
+              Artikel durchsuchen
+            </label>
             <input
-              type="text"
-              placeholder="Suchen..."
+              id="blog-search"
+              type="search"
+              placeholder="Titel oder Auszug suchen..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onBlur={() => navigate({})}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') navigate({})
+              }}
               className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-primary"
             />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <label htmlFor="blog-status" className="sr-only">
+              Status filtern
+            </label>
+            <select
+              id="blog-status"
+              value={currentParams.status ?? 'all'}
+              onChange={(e) =>
+                navigate({ status: e.target.value === 'all' ? null : e.target.value })
+              }
+              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600"
+            >
+              <option value="all">Alle Status</option>
+              <option value="published">Veröffentlicht</option>
+              <option value="draft">Entwürfe</option>
+            </select>
+
+            {categories.length > 0 && (
+              <>
+                <label htmlFor="blog-category" className="sr-only">
+                  Kategorie filtern
+                </label>
+                <select
+                  id="blog-category"
+                  value={currentParams.category ?? ''}
+                  onChange={(e) => navigate({ category: e.target.value || null })}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600"
+                >
+                  <option value="">Alle Kategorien</option>
+                  {categories.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
+
+            {hasFilters && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('')
+                  router.push('/admin/blog')
+                }}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 underline hover:text-slate-900"
+              >
+                Zurücksetzen
+              </button>
+            )}
           </div>
         </div>
 
@@ -88,7 +175,7 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filtered.map((post) => (
+              {posts.map((post) => (
                 <tr key={post.id} className="group transition-colors hover:bg-slate-50/50">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
@@ -162,10 +249,10 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && (
+              {posts.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-slate-400">
-                    Keine Artikel gefunden.
+                    {hasFilters ? 'Keine Artikel gefunden.' : 'Noch keine Artikel.'}
                   </td>
                 </tr>
               )}

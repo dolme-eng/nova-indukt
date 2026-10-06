@@ -1,72 +1,146 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { Mail, UserCheck, UserX, Calendar, Search } from 'lucide-react'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Mail, UserCheck, UserX, Calendar, Search, Filter } from 'lucide-react'
 import { format } from 'date-fns'
 import { de } from 'date-fns/locale'
 import { DeleteSubscriberButton } from './delete-subscriber-button'
+import { buildQueryUrl } from '@/lib/utils/pagination'
 
-interface Subscriber {
+export interface SubscriberRow {
   id: string
   email: string
   firstName: string | null
-  lastName: string | null
   source: string | null
   isActive: boolean
-  createdAt: Date
+  createdAt: Date | string
 }
 
+/**
+ * Search and status filtering run server-side: this table used to receive every
+ * subscriber in the RSC payload and filter in the browser.
+ */
 export default function NewsletterTable({
-  initialSubscribers,
+  subscribers,
+  currentParams,
+  hasFilters,
 }: {
-  initialSubscribers: Subscriber[]
+  subscribers: SubscriberRow[]
+  currentParams: Record<string, string | undefined>
+  hasFilters: boolean
 }) {
-  const [searchQuery, setSearchQuery] = useState('')
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState(currentParams.q ?? '')
+  const [status, setStatus] = useState<'all' | 'active' | 'inactive'>(
+    (currentParams.status as 'active' | 'inactive') ?? 'all'
+  )
 
-  const filteredSubscribers = useMemo(() => {
-    if (!searchQuery) return initialSubscribers
-    const q = searchQuery.toLowerCase()
-    return initialSubscribers.filter(
-      (s) =>
-        s.email.toLowerCase().includes(q) ||
-        s.firstName?.toLowerCase().includes(q) ||
-        s.lastName?.toLowerCase().includes(q) ||
-        s.source?.toLowerCase().includes(q)
+  function navigate(overrides: Record<string, string | number | undefined | null>) {
+    router.push(
+      buildQueryUrl(
+        '/admin/newsletter',
+        {
+          ...currentParams,
+          q: searchQuery.trim() || undefined,
+          status: status === 'all' ? undefined : status,
+        },
+        overrides,
+        { resetPage: true }
+      )
     )
-  }, [initialSubscribers, searchQuery])
+  }
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-      <div className="flex flex-col gap-4 border-b border-slate-100 p-4 md:flex-row">
+      <div className="flex flex-col gap-4 border-b border-slate-100 p-4 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <label htmlFor="newsletter-search" className="sr-only">
+            Abonnenten suchen
+          </label>
           <input
-            type="text"
+            id="newsletter-search"
+            type="search"
             placeholder="Abonnenten suchen..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onBlur={() => navigate({})}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') navigate({})
+            }}
             className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-primary"
           />
         </div>
+
+        <div className="flex items-center gap-2">
+          <label htmlFor="newsletter-status" className="sr-only">
+            Status filtern
+          </label>
+          <select
+            id="newsletter-status"
+            value={status}
+            onChange={(e) => {
+              const value = e.target.value as 'all' | 'active' | 'inactive'
+              setStatus(value)
+              navigate({ status: value === 'all' ? null : value })
+            }}
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600"
+          >
+            <option value="all">Alle Status</option>
+            <option value="active">Aktiv</option>
+            <option value="inactive">Abgemeldet</option>
+          </select>
+
+          {hasFilters && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('')
+                setStatus('all')
+                router.push('/admin/newsletter')
+              }}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
+            >
+              <Filter size={16} />
+              Zurücksetzen
+            </button>
+          )}
+        </div>
       </div>
+
       <div className="overflow-x-auto">
         <table className="w-full text-left">
+          <caption className="sr-only">Newsletter-Abonnenten</caption>
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-widest text-slate-500">
-              <th className="px-6 py-4">Abonnent</th>
-              <th className="px-6 py-4">Quelle</th>
-              <th className="px-6 py-4">Registriert am</th>
-              <th className="px-6 py-4">Status</th>
-              <th className="px-6 py-4 text-right">Aktionen</th>
+              <th scope="col" className="px-6 py-4">
+                Abonnent
+              </th>
+              <th scope="col" className="px-6 py-4">
+                Quelle
+              </th>
+              <th scope="col" className="px-6 py-4">
+                Registriert am
+              </th>
+              <th scope="col" className="px-6 py-4">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-4 text-right">
+                Aktionen
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {filteredSubscribers.map((subscriber) => (
-              <tr key={subscriber.id} className="group transition-colors hover:bg-slate-50/50">
+            {subscribers.map((subscriber) => (
+              <tr
+                key={subscriber.id}
+                className="transition-colors hover:bg-slate-50/50"
+              >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-400">
-                      <Mail size={16} />
+                      <Mail size={16} aria-hidden="true" />
                     </div>
                     <div className="flex min-w-0 flex-col">
                       <span className="truncate font-bold text-slate-900">{subscriber.email}</span>
@@ -82,20 +156,20 @@ export default function NewsletterTable({
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-slate-600">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar size={14} className="text-slate-400" />
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={14} className="text-slate-400" aria-hidden="true" />
                     {format(new Date(subscriber.createdAt), 'dd MMM yyyy', { locale: de })}
-                  </div>
+                  </span>
                 </td>
                 <td className="px-6 py-4">
                   {subscriber.isActive ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-700">
-                      <UserCheck size={12} />
+                      <UserCheck size={12} aria-hidden="true" />
                       Aktiv
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                      <UserX size={12} />
+                      <UserX size={12} aria-hidden="true" />
                       Abgemeldet
                     </span>
                   )}
@@ -107,10 +181,10 @@ export default function NewsletterTable({
                 </td>
               </tr>
             ))}
-            {filteredSubscribers.length === 0 && (
+            {subscribers.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
-                  {searchQuery
+                  {hasFilters
                     ? 'Keine Abonnenten gefunden.'
                     : 'Derzeit sind keine Newsletter-Abonnenten vorhanden.'}
                 </td>
