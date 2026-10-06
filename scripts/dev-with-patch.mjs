@@ -1,10 +1,14 @@
 /**
- * Runs `next dev` / `next build` with the Windows readlink shim preloaded, and
- * without it on every other platform.
+ * Runs `next dev` / `next build` on Windows.
  *
- * Replaces the inline `node -e` one-liner that used to live in package.json for
- * `build:win`, so the same logic also covers `dev` and documents *why* the shim
- * exists in one place (see readlink-patch.cjs).
+ * Two exFAT limitations on the dev volume are worked around, both documented in
+ * readlink-patch.cjs:
+ *   1. `fs.readlink*` returns EISDIR on regular files → shim preloaded via
+ *      NODE_OPTIONS.
+ *   2. Turbopack needs NTFS junction points, which exFAT cannot create → force
+ *      webpack.
+ *
+ * Neither applies on Linux/macOS, where the script passes through untouched.
  *
  * Usage: node scripts/dev-with-patch.mjs <dev|build>
  */
@@ -26,25 +30,19 @@ if (!nextArgs) {
 }
 
 const isWindows = process.platform === 'win32'
-
-const env = { ...process.env }
 const args = [...nextArgs]
+const env = { ...process.env }
 
 if (isWindows) {
-  // Turbopack (the default bundler since Next 15) needs to create NTFS junction
-  // points inside .next/node_modules, which fails on Windows without elevated
-  // privileges ("os error 1"). The previous `build:win` script already forced
-  // webpack for that reason — this keeps that behaviour for dev as well.
   args.push('--webpack')
-
   if (existsSync(patchFile)) {
     const flag = '--require ./readlink-patch.cjs'
     env.NODE_OPTIONS = env.NODE_OPTIONS ? `${env.NODE_OPTIONS} ${flag}` : flag
   } else {
-    console.warn('[warn] readlink-patch.cjs not found — building without the Windows shim.')
+    console.warn('[warn] readlink-patch.cjs missing — build may fail on exFAT volumes.')
   }
 } else {
-  // Outside Windows the shim is unnecessary and would only mask real EISDIR bugs.
+  // The shim would only mask real EISDIR errors on a normal filesystem.
   delete env.NODE_OPTIONS
 }
 

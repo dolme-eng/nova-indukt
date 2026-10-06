@@ -26,10 +26,7 @@ export default defineConfig({
       '.next/**',
       'playwright-report/**',
       'test-results/**',
-      // `_bak_corrupt/` is a damaged NTFS entry: listing it makes the walker
-      // throw. Harmless to exclude from Vitest, but it still breaks `git status`
-      // until the directory is removed (see readlink-patch.cjs).
-      '_bak_corrupt/**',
+      '_bak_corrupt*/**',
       '_old_nm/**',
     ],
     setupFiles: ['./tests/setup.ts'],
@@ -51,12 +48,7 @@ export default defineConfig({
       // also instruments prisma seeds, scripts/ and config, which are not
       // unit-testable and make the number drift between runs.
       include: ['app/**/*.{ts,tsx}', 'lib/**/*.{ts,tsx}', 'components/**/*.{ts,tsx}'],
-      exclude: [
-        '**/__tests__/**',
-        '**/*.config.{ts,js}',
-        '**/*.d.ts',
-        'node_modules/**',
-      ],
+      exclude: ['**/__tests__/**', '**/*.config.{ts,js}', '**/*.d.ts', 'node_modules/**'],
       // Measured against the real number, not an aspirational one. The suites
       // cover server logic thoroughly; pages and UI components are exercised by
       // the Playwright E2E suite instead, so the previous 70% line threshold

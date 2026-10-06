@@ -74,3 +74,8 @@ scratch/
 /scripts/search-results.json
 /scripts/search-additional-results.json
 /scripts/products-for-images.json
+
+# Damaged NTFS entry left behind by an earlier corrupt-directory backup.
+# Cannot be read or deleted by userspace tools (needs chkdsk /f on the exFAT
+# volume). Kept out of git so it never breaks tooling again.
+_bak_corrupt*/

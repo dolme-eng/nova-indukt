@@ -33,6 +33,6 @@ export default defineConfig([
     'prisma/seed*.ts',
     'prisma/seed*.js',
     'readlink-patch.cjs',
-    '_bak_corrupt/**',
+    '_bak_corrupt*/**',
   ]),
 ])

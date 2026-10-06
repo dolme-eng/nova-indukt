@@ -1,72 +1,60 @@
 ﻿/**
- * Windows-only workaround, injected via NODE_OPTIONS (see `npm run build:win`
- * and playwright.config.ts).
+ * Windows + exFAT shim.
  *
- * WHY: the repository contains a `_bak_corrupt/` directory whose NTFS entry is
- * damaged — Git cannot stat it ("could not open directory") and `rmdir` fails
- * with "not empty" while listing no children. On Windows, `fs.readlink` on such
- * a path yields EISDIR, whereas the POSIX behaviour Next.js expects is EINVAL.
- * Without this patch, Next 16's file watcher aborts on Windows.
+ * The dev volume holding `E:\` is exFAT, where `fs.readlink*` always fails
+ * with `EISDIR` — even on a regular file (reproduced on
+ * `app/api/addresses/route.ts`). Webpack calls readlink to resolve its module
+ * graph, so without this the build fails with:
  *
- * This is a mitigation, not a fix: delete `_bak_corrupt/` (possibly with
- * `chkdsk /f E:`) and drop this file along with the NODE_OPTIONS entries.
+ *   Error: EISDIR: illegal operation on a directory, readlink '...\route.ts'
  *
- * NOTE: it patches `fs` globally for the whole process, which also affects
- * unrelated callers — e.g. `crypto.timingSafeEqual` throws on mismatched buffer
- * lengths, and that error type is not touched here, but future changes to fs
- * semantics reach every dependency in the tree.
+ * Linux returns EINVAL there, which is what webpack expects, so we translate.
+ *
+ * This is a property of the development filesystem, not of the repository:
+ * the Vercel build runs on ext4 and never loads this file.
+ *
+ * Loaded via NODE_OPTIONS by `scripts/dev-with-patch.mjs` and
+ * `playwright.config.ts`, and only on win32.
  */
-const fs = require("fs");
+const fs = require('fs')
 
-if (!process.env.NOVA_READLINK_PATCH_QUIET) {
-  console.error(
-    '[PATCH] readlink EISDIR→EINVAL shim active (Windows workaround). ' +
-      'See readlink-patch.cjs for the removal condition.'
-  );
-}
-
-// Patch async readlink
-const origReadlink = fs.readlink;
-fs.readlink = function(p, cb) {
-  if (typeof cb === "function") {
-    return origReadlink.call(this, p, function(err, result) {
-      if (err && err.code === "EISDIR") {
-        const newErr = new Error('EINVAL: invalid argument, readlink \'' + p + '\'');
-        newErr.code = "EINVAL";
-        newErr.path = p;
-        return cb(newErr);
-      }
-      return cb(err, result);
-    });
+const translate = (err, p) => {
+  if (err && err.code === 'EISDIR') {
+    const next = new Error(`EINVAL: invalid argument, readlink '${p}'`)
+    next.code = 'EINVAL'
+    next.path = p
+    return next
   }
-  return origReadlink.apply(this, arguments);
-};
-
-// Patch promise version
-const origReadlinkPromises = fs.promises?.readlink;
-if (origReadlinkPromises) {
-  fs.promises.readlink = function(p, ...args) {
-    return origReadlinkPromises.call(this, p, ...args).catch(e => {
-      if (e.code === "EISDIR") {
-        e.code = "EINVAL";
-      }
-      throw e;
-    });
-  };
+  return err
 }
 
-// Patch readlinkSync
-const origReadlinkSync = fs.readlinkSync;
-fs.readlinkSync = function(p, ...args) {
+const origReadlink = fs.readlink
+fs.readlink = function (p, ...args) {
+  if (typeof args[0] === 'function') {
+    const cb = args[0]
+    return origReadlink.call(this, p, (err, result) => cb(translate(err, p), result))
+  }
   try {
-    return origReadlinkSync.call(this, p, ...args);
-  } catch(e) {
-    if (e.code === "EISDIR") {
-      const err = new Error('EINVAL: invalid argument, readlink \'' + p + '\'');
-      err.code = "EINVAL";
-      err.path = p;
-      throw err;
-    }
-    throw e;
+    return origReadlink.call(this, p, ...args)
+  } catch (err) {
+    throw translate(err, p)
   }
-};
+}
+
+const origPromises = fs.promises?.readlink
+if (origPromises) {
+  fs.promises.readlink = function (p, ...args) {
+    return origPromises.call(this, p, ...args).catch((err) => {
+      throw translate(err, p)
+    })
+  }
+}
+
+const origSync = fs.readlinkSync
+fs.readlinkSync = function (p, ...args) {
+  try {
+    return origSync.call(this, p, ...args)
+  } catch (err) {
+    throw translate(err, p)
+  }
+}

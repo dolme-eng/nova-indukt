@@ -1,18 +1,18 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test'
 
-const PORT = process.env.PW_PORT ?? "3000";
+const PORT = process.env.PW_PORT ?? '3000'
 
 export default defineConfig({
-  testDir: "tests/e2e",
+  testDir: 'tests/e2e',
   timeout: 90_000,
   expect: { timeout: 15_000 },
   retries: 0,
-  reporter: [["list"], ["html", { open: "never" }]],
+  reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: `http://localhost:${PORT}`,
-    trace: "retain-on-failure",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
   webServer: {
     command: `npx next dev --webpack -p ${PORT}`,
@@ -23,8 +23,9 @@ export default defineConfig({
     reuseExistingServer: false,
     timeout: 5 * 60 * 1000,
     env: {
-      // Windows-only shim (see readlink-patch.cjs). On Linux/macOS NODE_OPTIONS
-      // is left untouched.
+      // exFAT on the dev volume: fs.readlink fails with EISDIR on regular
+      // files, which breaks webpack's module resolution. See
+      // readlink-patch.cjs — not needed on Linux/macOS.
       ...(process.platform === 'win32' ? { NODE_OPTIONS: '--require ./readlink-patch.cjs' } : {}),
       // These tests mutate data (site.spec.ts creates then deletes products and
       // blog posts). Point them at a throwaway database so a developer's local
@@ -35,17 +36,16 @@ export default defineConfig({
   workers: 1,
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
     },
     {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
   ],
-});
-
+})
