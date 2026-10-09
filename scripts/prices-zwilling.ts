@@ -23,6 +23,54 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    slug: 'zwilling-magnetic-messerschiene',
+    plancher: 43.95,
+    source:
+      'idealo 12 offres, 43,95–55,58 € — ZWILLING Magnetleiste Aluminium 45 cm ' +
+      '(32622-450-0). zwilling.com affiche la même référence à 54,95 €. Notre slug ne ' +
+      'portait pas la longueur : les deux versions existent (30 cm et 45 cm), le prix ' +
+      'dépend de la longueur. Sur 45 cm, plancher 43,95 €.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/1708717_-magnetleiste-aluminium-45-cm-zwilling.html',
+  },
+  {
+    slug: 'zwilling-four-star-chefmesser-16cm',
+    plancher: 56.83,
+    source:
+      'idealo 20 offres, 56,83–99,00 € — ZWILLING Vier Sterne Kochmesser 16 cm, forgé, ' +
+      'eisgehärté, poignée polygone. testbericht confirme de son côté 56,99 € en offre ' +
+      'courante (Tiefstpreis 56,99 €). Plancher 56,83 €.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/709125_-vier-sterne-kochmesser-16-cm-zwilling.html',
+  },
+  {
+    slug: 'zwilling-plus-deckel-20cm',
+    plancher: 13.0,
+    source:
+      'esmeyer-shop.de, TWIN Specials Glasdeckel 20 cm (401-1631) : 13,00 EUR la piece, ' +
+      'port offert des 250 EUR. zwilling.com affiche la meme reference ' +
+      '(40990-920-0) a 16,95 EUR. Notre fiche est un « Plus Glasdeckel 20 cm » : ' +
+      'on retient le plancher le plus bas des deux series de couvercle de 20 cm, ' +
+      'pour rester sous le marche dans les deux cas.',
+    url: 'https://www.esmeyer-shop.de/deckel-20-cm-rund-glas-serie-twin-specials-marke-zwilling',
+  },
+  {
+    slug: 'zwilling-now-s-kochloeffel',
+    plancher: 13.38,
+    source:
+      'NON APPLIQUE — idealo, ZWILLING Pro Edelstahlloeffel : 13,38 EUR (12 offres, ' +
+      '13,38-30,95 EUR). Serie Pro, pas Now S. Ecarté : le prix d une ligne ' +
+      'differente ne donne pas le prix de notre fiche.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/205610926_-henckels-pro-edelstahlloeffel-zwilling.html',
+  },
+  {
+    slug: 'zwilling-now-s-bestechenset-30-teilig',
+    plancher: 53.99,
+    source:
+      'NON APPLIQUE — moebel.de, Besteck-Set 30 pieces : 53,99 EUR (OTTO, mars 2026) ; ' +
+      'zwilling.com, Aberdeen 30 pieces : 94,95 EUR. Ni l un ni l autre n est le ' +
+      '« Now S ». Notre fiche est a 49,99 EUR, deja sous les deux : rien a corriger.',
+    url: 'https://www.moebel.de/marken/zwilling/rubrik:geschirr?data-sheet=202ae3ac3f057188f6fb7231aafaddbf',
+  },
+  {
     slug: 'zwilling-fondue-set-20cm',
     plancher: 54.95,
     source:

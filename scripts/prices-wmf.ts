@@ -23,6 +23,15 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    slug: 'wmf-compact-cuisine-dampfgareinsatz-24cm',
+    plancher: 55.93,
+    source:
+      'idealo 8 offres, 55,93–98,95 € — WMF Compact Cuisine Dämpfereinsatz 24 cm ' +
+      '(réf. 793246380), Cromargan 18/10. koempf24 confirme la référence ' +
+      '(ancienne 0793246380) à 65,55 € en promotion, UVP 99,99 €. Plancher 55,93 €.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/6839561_-compact-cuisine-daempfereinsatz-24-cm-793246380-wmf.html',
+  },
+  {
     slug: 'wmf-diadem-plus-bratpfanne-28cm',
     plancher: 75.94,
     source:
