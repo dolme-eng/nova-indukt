@@ -23,6 +23,39 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    slug: 'wmf-diadem-plus-kochtopf-hoch-20cm',
+    plancher: 34.31,
+    source:
+      'idealo 11 offres, 34,31–99,95 € — WMF Diadem Plus Fleischtopf 20 cm, 3,5 L, ' +
+      'couvercle à emboîtement, TransTherm. Plancher 34,31 € atteint chez deux ' +
+      'vendeurs. À distinguer du Bratentopf 20 cm (plancher 34,06 €) : deux ' +
+      'hauteurs de corps différentes, notre fiche est le kochtopf haut.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687226_-diadem-plus-fleischtopf-20-cm-wmf.html',
+  },
+  {
+    slug: 'wmf-diadem-plus-stielkasserolle-16cm',
+    plancher: 34.94,
+    source:
+      'mydealz.de, relevé du 10/08/2026 : WMF Diadem Plus Stielkasserolle mit Deckel ' +
+      '16 cm à 29,99 EUR chez WMF lui-même, 34,94 EUR port compris, avec un code ' +
+      'promo de 25 % (27,44 EUR effectif). Prochain vendeur cité : Otto à 40,49 EUR. ' +
+      'deutschlandcard donne 34,99 EUR pour le même EAN 4000530532237. ' +
+      'Plancher 34,94 EUR : la promo de 29,99 EUR est datée et le code-coupon ' +
+      'réduit de 25 % ne vaut pas comme référence de marché.',
+    url: 'https://www.mydealz.de/deals/cb-wmf-diadem-plus-stielkasserolle-mit-deckel-16-cm-2822959',
+  },
+  {
+    slug: 'wmf-diadem-plus-kochtopf-hoch-24cm',
+    plancher: 39.04,
+    source:
+      'idealo 11 offres, 39,04–119,95 € — WMF Diadem Plus Fleischtopf 24 cm, 6,0 L, ' +
+      'couvercle à emboîtement, TransTherm. wmf.com confirme la référence ' +
+      '(Diadem Plus Kochtopf mit Deckel, 24 cm, EAN 4000530570444, 6,5 L, ' +
+      'Cromargan 18/10) — c’est bien la variante haute que nous vendons. ' +
+      'Plancher 39,04 €, atteint chez Amazon, kaufland et un troisième vendeur.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687227_-diadem-plus-fleischtopf-24-cm-wmf.html',
+  },
+  {
     slug: 'wmf-mondo-messerset-3-teilig',
     plancher: 66.91,
     source:
