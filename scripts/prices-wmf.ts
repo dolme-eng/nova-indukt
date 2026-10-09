@@ -23,6 +23,28 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    slug: 'wmf-mondo-messerset-3-teilig',
+    plancher: 66.91,
+    source:
+      'NON APPLIQUE — Mondo est introuvable. La reference la plus proche cotee ' +
+      'est la WMF Kineo Messerset 3-teilig (haushaltsparadies) : 66,91 EUR, UVP ' +
+      '99,99 EUR ; la Spitzenklasse Plus 3-teilig est a 99,99 EUR (idealo, 11 ' +
+      'offres). Notre fiche est a 59,99 EUR, deja sous les deux references ' +
+      'relevees. Aucune ecriture.',
+    url: 'https://haushaltsparadies.de/WMF-Messerset-3-teilig-Kineo',
+  },
+  {
+    slug: 'wmf-antihaft-reiniger',
+    plancher: 14.99,
+    source:
+      'NON APPLIQUÉ — wmf.com ne vend plus d « Antihaft-Reiniger » : les produits ' +
+      'd entretien WMF actuels sont le Purargan (250 ml, EAN 4000530211040) et le ' +
+      'Fusiontec Reinigungsmittel (250 ml, 14,99 EUR sur wmf.com/at). Notre fiche ' +
+      '« Antihaft-Reiniger 250 ml » n est plus au catalogue du fabricant. Référence ' +
+      'fournie pour arbitrage, non appliquée.',
+    url: 'https://www.wmf.com/at/de/produkte/kuechenhelfer/pflege-reinigungsmittel.html',
+  },
+  {
     // Fiche inexistante : le catalogue porte « wmf-function-4-bratentopf-20cm »
     // (EAN 4000530605856). Il n'y a pas de version 24 cm chez nous, alors que
     // le relevé ci-dessous porte précisément sur le 24 cm. Écartée : appliquer un
