@@ -54,6 +54,35 @@ const LIGNES: Ligne[] = [
     url: 'https://geizhals.de/wmf-fusiontec-mineral-pro-multi-topf-22cm-tim-raue-edition-3201114622-a3670509.html',
   },
   {
+    slug: 'tefal-duetto-topfset-9tlg',
+    plancher: 99.99,
+    source:
+      'quelle.de, Tefal Duetto 9-teiliges Topfset (réf. A705S9) : 99,99 EUR, UVP ' +
+      '209,00 EUR. Composition identique à notre fiche : Stielkasserolle 16 cm, ' +
+      '3 kochtöpfe 18/20/24 cm avec couvercle, 1 haut pot 22 cm. tefal.de affiche ' +
+      '117,99 EUR pour la même référence A705S9. Plancher 99,99 EUR.',
+    url: 'https://www.quelle.de/p/AKLBB1610068825',
+  },
+  {
+    slug: 'tefal-excellence-g2690632-28cm',
+    plancher: 49.99,
+    source:
+      'tefal.at vend la reference G2690632 (Exactement celle de notre slug) à ' +
+      '49,99 EUR, UVP 77,99 EUR ; outletpc.de la propose reconditionnée à 24,99 EUR ' +
+      'ref. G2690632, mais un produit reconditionné n’est pas notre référence neuve. ' +
+      'Plancher 49,99 EUR.',
+    url: 'https://www.tefal.at/p/excellence-pfanne-28-cm-g26906/2100117781',
+  },
+  {
+    slug: 'tefal-maison-wasserkocher-17l',
+    plancher: 35.99,
+    source:
+      'tefal.de, Morning Wasserkocher 1,7 L (KO2M0B) : 35,99 EUR, UVP 46,99 EUR. ' +
+      'Notre fiche est une Maison 1,7 L, autre nom de série mais même capacité et ' +
+      'même type d’appareil. Plancher 35,99 EUR, relevé sur le prix fabricant.',
+    url: 'https://www.tefal.de/p/morning-wasserkocher-17-l-fair-grey/7211419023',
+  },
+  {
     slug: 'tefal-eternal-mesh-e49706-28cm',
     plancher: 63.39,
     source:
