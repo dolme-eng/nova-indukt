@@ -23,60 +23,22 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
-    slug: 'zwilling-fondue-set-20l',
+    slug: 'zwilling-fondue-set-20cm',
     plancher: 54.95,
     source:
-      'idealo 5 offres, 54,95–99,00 € — ZWILLING Fondue-Set 40201-001 : caquelon en fonte ' +
-      'émail rouge Ø 20 cm, 1,8 L, 6 fourchettes, brûleur à pâte. Capacité 20 cm, pas 20 L : ' +
-      'notre libellé « 20l » désigne le diamètre, l’unité est fausse dans notre nom.',
+      'idealo 5 offres, 54,95–99,00 € — ZWILLING Fondue-Set 40201-001, caquelon fonte ' +
+      'émaillé rouge Ø 20 cm / 1,8 L, 6 fourchettes, brûleur à pâte. EAN 4009839396113. ' +
+      'Notre fiche annonçait 2,0 L pour un produit de 1,8 L : corrigé en nomenclature.',
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/5831457_-fondue-set-40201-001-zwilling.html',
-  },
-  {
-    slug: 'zwilling-four-star-chefmesser-20cm',
-    plancher: 49.99,
-    source:
-      'idealo 32 offres, 49,99–113,00 € — ZWILLING Vier Sterne Kochmesser 20 cm, forgé, ' +
-      'eisgehärtet, poignée polygone. Le plancher idealo (49,99 €) est le moins cher des 32 ; ' +
-      'retenu plutôt que le 39,90 € d’AP Stahlwaren sur geizhals,-listed mais hors livraison ' +
-      'et noté comme marchand autrichien — non représentatif du prix rendu en Allemagne.',
-    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/709126_-vier-sterne-kochmesser-20-cm-zwilling.html',
-  },
-  {
-    slug: 'zwilling-pro-s-messerset-3-teilig',
-    plancher: 159.9,
-    source:
-      'idealo 19 offres, 159,90–295,00 € — ZWILLING Pro Messerset 3 tlg. (384300070), ' +
-      'composition identique à notre fiche : Spickmesser 10 + Kochmesser 20 + Fleischmesser 20, ' +
-      'forgé, poignée plastique. Notre fiche était à 49,99 € pour un set forgé triple : ' +
-      'écart d’un facteur 3.',
-    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/3767792_-pro-messerset-3-tlg-384300070-zwilling.html',
-  },
-  {
-    slug: 'zwilling-twin-classic-kochtopf-20cm',
-    plancher: 44.95,
-    source:
-      'zwilling.com, article 66583-200-0 : 44,95 € — TWIN Classic Kochtopf 3,5 l / 20 cm, ' +
-      'SIGMA Classic, couvercle inox. 1a-neuware le propose à 53,98 € (UVP 89,95 €). ' +
-      'Plancher 44,95 € = prix fabricant direct.',
-    url: 'https://www.zwilling.com/de/zwilling-twin-classic-kochtopf-35-l-20-cm-18%2F10-edelstahl-66583-200-0/66583-200-0.html',
-  },
-  {
-    slug: 'zwilling-madura-plus-28cm',
-    plancher: 59.95,
-    source:
-      'zwilling.com, série Madura Plus, Bratpfanne 28 cm (1030790) : prix barré 79,95 €, ' +
-      'prix de vente affiché 59,95 € (-25 %). On retient le prix RÉELLEMENT payé, 59,95 €, ' +
-      'et non le prix barré.',
-    url: 'https://www.zwilling.com/de/zwilling/kochgeschirr/madura-plus/',
   },
   {
     slug: 'zwilling-plus-kochtopf-hoch-20cm',
     plancher: 79.95,
     source:
-      'zwilling.com, article 71083-200-0 (ZWILLING Pro S Kochtopf 20 cm, 3,5 L, ' +
-      'deckel): 79,95 € en promotion, 129,00 € prix plein. Notre fiche est un kochtopf ' +
-      'haut 20 cm ; Pro S et Plus partagent ce corps. On retient 79,95 €, le prix ' +
-      'actuellement affiché, et non le prix plein barré.',
+      'zwilling.com, article 71083-200-0 (ZWILLING Pro S Kochtopf 20 cm, 3,5 l, avec ' +
+      'couvercle) : 79,95 € en promotion, 129,00 € prix plein. Notre fiche est un kochtopf ' +
+      'haut 20 cm ; Plus et Pro S partagent ce corps. On retient le prix actuellement ' +
+      'affiché, pas le prix barré.',
     url: 'https://www.zwilling.com/de/zwilling-pro-s-kochtopf-20-cm-18%2F10-edelstahl-71083-200-0/71083-200-0.html',
   },
   {

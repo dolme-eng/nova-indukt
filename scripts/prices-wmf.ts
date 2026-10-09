@@ -23,15 +23,32 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
-    slug: 'wmf-function-4-bratentopf-24cm',
-    plancher: 109.99,
+    slug: 'wmf-diadem-plus-bratpfanne-28cm',
+    plancher: 75.94,
     source:
-      'idealo 3 offres, 109,99 € — WMF Function 4 Advanced Kochtopf mit Deckel 24 cm, ' +
-      '4,1 l, Glasdeckel, Cromargan. kulinagroup propose le Function 4 simple (EAN ' +
-      '4000530605832) à 128 €. On retient le plancher le plus BAS (109,99 €) : le prix ' +
-      'reste sous les deux versions. Notre fiche était à 69,99 € pour un inox 24 cm ' +
-      'avec couvercle — très en dessous du marché.',
-    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/205047219_-function-4-advanced-kochtopf-mit-deckel-24-cm-4-1l-wmf.html',
+      'testberichte.de, comparaison 75,94–89,90 € pour la WMF Diadem Plus Bratpfanne 28 cm ' +
+      'en Cromargan, induction ; WhichOne confirme 84,56 € sur la même référence. ' +
+      'Plancher 75,94 € (galaxus, livraison offerte).',
+    url: 'https://www.testberichte.de/heim-garten/wmf-diadem-plus-bratpfanne-28-cm.html',
+  },
+  {
+    slug: 'tefal-natural-on-induction-grillpfanne-26cm',
+    plancher: 47.28,
+    source:
+      'moebel.de, référence fabricant G2801902 : 47,28 € (offre du mois d octobre 2026). ' +
+      'La même fiche affiche 97,72 € sur un relevé de mars 2026 : on retient le relevé ' +
+      'le plus récent, le plus bas. Gril 26 cm, antiadhésif Mineralia, induction.',
+    url: 'https://www.moebel.de/p/7930733031ecfb23a28a376fadde18f3',
+  },
+  {
+    slug: 'wmf-function-4-bratentopf-20cm',
+    plancher: 104.99,
+    source:
+      'idealo, WMF Function4 Fleischtopf 20 cm, 3,9 l, avec couvercle, 109,00–160,00 €. ' +
+      'Deutschlandcard, sur le même EAN 4000530605856 : 104,99 € avec livraison offerte. ' +
+      'Référence fabricant identique à celle posée en base (Function 4 Kochtopf mit ' +
+      'Deckel, 20 cm) : plancher 104,99 €.',
+    url: 'https://www.deutschlandcard.de/preisvergleich/p/4000530605856-wmf-kochtopf-wmf-function-4-kochtopf-mit-deckel-20-cm-8900535527',
   },
 ]
 
