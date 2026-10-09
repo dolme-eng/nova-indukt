@@ -54,6 +54,17 @@ const LIGNES: Ligne[] = [
     url: 'https://geizhals.de/wmf-fusiontec-mineral-pro-multi-topf-22cm-tim-raue-edition-3201114622-a3670509.html',
   },
   {
+    slug: 'tefal-intuition-kochtopf-24cm',
+    plancher: 27.9,
+    source:
+      'NON APPLIQUE / REFERENCE — la référence la plus proche est la Tefal ' +
+      'Intuition B8644674 Kasserolle mit Deckel 24 cm (5 L) chez alza.de, qui affiche ' +
+      '0,00 EUR et la marque « Discontinued ». Le set Intuition 7-teilig (B864S7) est ' +
+      'chez tefal.de à 99,99 EUR, UVP 139,99 EUR. Notre catalogue ne porte pas de ' +
+      'kochtopf Intuition isolé : fiches à trancher.',
+    url: 'https://www.tefal.de/p/intuition-7-teiliges-topfset-edelstahl-b864s7/2100125773',
+  },
+  {
     slug: 'tefal-duetto-topfset-9tlg',
     plancher: 99.99,
     source:
