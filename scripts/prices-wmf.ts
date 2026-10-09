@@ -19,20 +19,40 @@ const prisma = new PrismaClient()
 const APPLY = process.argv.includes('--apply')
 const MARGE = 0.03
 
-type Ligne = { slug: string; plancher: number; source: string; url: string }
+/**
+ * Une ligne de relevé.
+ *
+ * `appliquer: false` marque un relevé conservé pour arbitrage mais non écrit
+ * en base. Le champ est explicite et le runner le respecte — écrire « NON
+ * APPLIQUÉ » dans le texte de `source` ne suffisait pas et a caused une
+ * écriture : le Gourmet Plus 5-teilig a été calé sur le Diadem Plus voisin et
+ * enregistré à 126 € au lieu de 319 €. Un relevé refusé doit l'être dans la
+ * donnée, pas dans sa description.
+ */
+type Ligne = {
+  slug: string
+  plancher: number
+  source: string
+  url: string
+  appliquer?: false
+}
 
 const LIGNES: Ligne[] = [
   {
     slug: 'wmf-gourmet-plus-topfset-5tlg',
-    plancher: 129.99,
+    plancher: 329.0,
     source:
-      'NON APPLIQUE par reference — geizhals.de, WMF Diadem Plus Kochtopf-Set ' +
-      '5-tlg. (EAN 4000530736482) : 108,39 EUR. Notre fiche est le Gourmet Plus ' +
-      '5-teilig : autre serie, autre composition. Releve de la serie voisine ' +
-      'fourni pour arbitrage.',
-    url: 'https://geizhals.de/wmf-diadem-plus-kochtopf-set-07-3035-6040-a1052347.html',
+      'testbericht.de, relevé du 09/10/2026 : WMF Gourmet Plus Kochtopf-Set mit ' +
+      'Stieltopf 5-teilig (0720056030) à 329,00 EUR, Ø 348 EUR sur un mois, ' +
+      'Tiefstpreis 315,47 EUR, 3 offres. Composition : Bratentopf 20 cm, ' +
+      'Fleischtopf 16/20/24 cm, Stielkasserolle 16 cm — TransTherm, ' +
+      'Dampföffnung. Notre fiche est à 299,00 EUR. On retient le plancher ' +
+      'courant 329,00 EUR et non le Tiefstpreis de 315,47 EUR, atteint mais ' +
+      'non garanti.',
+    url: 'https://www.testbericht.de/produkte/wmf-gourmet-plus-kochgeschirr-set-5-tlg-0720056030',
   },
   {
+    appliquer: false,
     slug: 'wmf-gourmet-plus-kochtopf-24cm',
     plancher: 99.14,
     source:
@@ -43,6 +63,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.koempf24.de/wmf-fleischtopf-o-24-cm-gourmet-plus',
   },
   {
+    appliquer: false,
     slug: 'wmf-fusiontec-schmorpfanne-28cm',
     plancher: 119.99,
     source:
@@ -52,8 +73,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/6615027_-fusiontec-schmorpfanne-28-cm-wmf.html',
   },
   {
-    // Pas de 16 cm chez nous (le catalogue WMF porte 20 et 24 cm), le releve
-    // porte sur le Fleischtopf 16 cm : ecarte plutot que de transposer.
+    appliquer: false,
     slug: 'wmf-diadem-plus-kochtopf-hoch-16cm',
     plancher: 29.99,
     source:
@@ -75,6 +95,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687224_-diadem-plus-bratentopf-24-cm-wmf.html',
   },
   {
+    appliquer: false,
     slug: 'wmf-diadem-plus-set-7-teilig',
     plancher: 129.99,
     source:
@@ -119,6 +140,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687227_-diadem-plus-fleischtopf-24-cm-wmf.html',
   },
   {
+    appliquer: false,
     slug: 'wmf-mondo-messerset-3-teilig',
     plancher: 66.91,
     source:
@@ -130,6 +152,7 @@ const LIGNES: Ligne[] = [
     url: 'https://haushaltsparadies.de/WMF-Messerset-3-teilig-Kineo',
   },
   {
+    appliquer: false,
     slug: 'wmf-antihaft-reiniger',
     plancher: 14.99,
     source:
@@ -141,11 +164,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.wmf.com/at/de/produkte/kuechenhelfer/pflege-reinigungsmittel.html',
   },
   {
-    // Fiche inexistante : le catalogue porte « wmf-function-4-bratentopf-20cm »
-    // (EAN 4000530605856). Il n'y a pas de version 24 cm chez nous, alors que
-    // le relevé ci-dessous porte précisément sur le 24 cm. Écartée : appliquer un
-    // prix 24 cm à une fiche 20 cm serait l'erreur de variante qu'on a déjà
-    // commise deux fois (couvercles 16/20 cm, ustensiles Now S).
+    appliquer: false,
     slug: 'wmf-function-4-bratentopf-24cm',
     plancher: 106.08,
     source:
@@ -199,6 +218,15 @@ async function main() {
   console.log(`\nWMF — ${LIGNES.length} lignes (plancher − ${MARGE * 100} %)\n`)
   let n = 0
   for (const l of LIGNES) {
+    // Relevé conservé pour arbitrage : reported, jamais écrit.
+    if (l.appliquer === false) {
+      const existe = await prisma.product.findUnique({
+        where: { slug: l.slug },
+        select: { slug: true },
+      })
+      console.log(`  [refuse] ${l.slug}${existe ? '' : '   (pas de fiche)'}`)
+      continue
+    }
     const propose = Math.round(l.plancher * (1 - MARGE))
     const p = await prisma.product.findUnique({ where: { slug: l.slug }, select: { price: true } })
     if (!p) {

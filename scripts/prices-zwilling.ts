@@ -19,7 +19,7 @@ const prisma = new PrismaClient()
 const APPLY = process.argv.includes('--apply')
 const MARGE = 0.03
 
-type Ligne = { slug: string; plancher: number; source: string; url: string }
+type Ligne = { slug: string; plancher: number; source: string; url: string; appliquer?: false }
 
 const LIGNES: Ligne[] = [
   {
@@ -65,6 +65,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.esmeyer-shop.de/deckel-20-cm-rund-glas-serie-twin-specials-marke-zwilling',
   },
   {
+    appliquer: false,
     slug: 'zwilling-now-s-kochloeffel',
     plancher: 13.38,
     source:
@@ -74,6 +75,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/205610926_-henckels-pro-edelstahlloeffel-zwilling.html',
   },
   {
+    appliquer: false,
     slug: 'zwilling-now-s-besteckenset-30-teilig',
     plancher: 53.99,
     source:
@@ -85,6 +87,7 @@ const LIGNES: Ligne[] = [
     url: 'https://www.moebel.de/marken/zwilling/rubrik:geschirr?data-sheet=202ae3ac3f057188f6fb7231aafaddbf',
   },
   {
+    appliquer: false,
     slug: 'zwilling-spirit-sauteuse-24cm',
     plancher: 113.67,
     source:
@@ -158,6 +161,16 @@ async function main() {
   console.log(`\nZwilling — ${LIGNES.length} lignes (plancher − ${MARGE * 100} %)\n`)
   let n = 0
   for (const l of LIGNES) {
+    // Relevé conservé pour arbitrage : reporté, jamais écrit. Voir le détail
+    // de ce garde-fou dans prices-wmf.ts.
+    if (l.appliquer === false) {
+      const existe = await prisma.product.findUnique({
+        where: { slug: l.slug },
+        select: { slug: true },
+      })
+      console.log(`  [refusé] ${l.slug}${existe ? '' : '   (pas de fiche)'}`)
+      continue
+    }
     const propose = Math.round(l.plancher * (1 - MARGE))
     const p = await prisma.product.findUnique({
       where: { slug: l.slug },
