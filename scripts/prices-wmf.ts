@@ -54,15 +54,25 @@ const LIGNES: Ligne[] = [
     url: 'https://geizhals.de/wmf-fusiontec-mineral-pro-multi-topf-22cm-tim-raue-edition-3201114622-a3670509.html',
   },
   {
-    appliquer: false,
-    slug: 'wmf-comfort-line-stielkasserolle-16cm',
-    plancher: 63.99,
+    slug: 'tefal-eternal-mesh-e49706-28cm',
+    plancher: 63.39,
     source:
-      'NON APPLIQUE — geizhals.de, WMF Function 4 Stielkasserolle ohne Deckel ' +
-      '16 cm (07.6316.6381, EAN 4000530605894) : 63,99 EUR. wmf.com affiche la ' +
-      'même page « en ligne épuisée ». Notre fiche est une Comfort Line, autre ' +
-      'série. Relevé fourni pour arbitrage.',
-    url: 'https://www.wmf.com/de/de/function-4-stielkasserolle-ohne-deckel-16-cm-8910000107.html',
+      'billiger.de, 8 offres, 81,12-95,05 EUR pour la Tefal Eternal Mesh ' +
+      'Bratpfanne 28 cm (ref. E49706) ; juuhu.at affiche 63,39 EUR port compris ' +
+      'sur la meme reference. Notre fiche porte l EAN 3168430304642, qui est ' +
+      'precisement celui de E49706 : reference verifiee. Plancher 63,39 EUR.',
+    url: 'https://www.juuhu.at/produkt/1989525629',
+  },
+  {
+    slug: 'wmf-comfort-line-stielkasserolle-16cm',
+    plancher: 37.17,
+    source:
+      'koempf24.de, WMF Comfort Line Stielkasserolle 16 cm : 37,17 EUR, UVP 69,99 ' +
+      'EUR ; TransTherm, Cromargan 18/10. otto.de vend la meme reference ' +
+      '« Comfort Line Stielkasserolle mit Deckel, 16 cm » a 44,99 EUR (UVP 89,99 EUR, ' +
+      '-50 %) : le prix otto inclut le couvercle, koempf24 affiche la casserole ' +
+      'seule. Plancher 37,17 EUR.',
+    url: 'https://www.koempf24.de/wmf-comfort-line-stielkasserolle-16-cm',
   },
   {
     slug: 'wmf-gourmet-plus-topfset-5tlg',
