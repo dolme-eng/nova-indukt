@@ -23,6 +23,40 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    // Pas de 16 cm chez nous (le catalogue WMF porte 20 et 24 cm), le releve
+    // porte sur le Fleischtopf 16 cm : ecarte plutot que de transposer.
+    slug: 'wmf-diadem-plus-kochtopf-hoch-16cm',
+    plancher: 29.99,
+    source:
+      'NON APPLIQUE — idealo, 8 offres, 29,99-89,95 EUR pour le WMF Diadem Plus ' +
+      'Fleischtopf 16 cm / 2,0 L ; wmf.com confirme l EAN 4000530570420. Mais ' +
+      'notre catalogue n a que les versions 20 et 24 cm. Reference fournie pour ' +
+      'arbitrage.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687225_-diadem-plus-fleischtopf-16-cm-wmf.html',
+  },
+  {
+    slug: 'wmf-diadem-plus-sauteuse-24cm',
+    plancher: 47.02,
+    source:
+      'idealo 6 offres, 47,02–99,95 € — WMF Diadem Plus Bratentopf 24 cm, 4,5 L, ' +
+      'couvercle à emboîtement, TransTherm. wmf.com confirme la référence (CMMF ' +
+      '3201115498, EAN 4000530570413, 4,5 L, hauteur 97 mm) : c est bien la ' +
+      'sauteuse à haut bord que nous vendons, pas une simple sauteuse. ' +
+      'Plancher 47,02 €.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687224_-diadem-plus-bratentopf-24-cm-wmf.html',
+  },
+  {
+    slug: 'wmf-diadem-plus-set-7-teilig',
+    plancher: 129.99,
+    source:
+      'NON APPLIQUE par défaut — la référence la plus proche est le Diadem Plus ' +
+      'Topf-Set 5-teilig (EAN 4000530736482) : 149,99 EUR chez wmf.com (30 jours ' +
+      'au meilleur prix) et 129,99 EUR chez Alternate. Notre fiche est un ' +
+      '« Set 7-teilig » : la composition differe, donc ce prix ne lui est pas ' +
+      'applicable. Releve fourni pour arbitrage.',
+    url: 'https://www.alternate.de/WMF/Topf-Set-Diadem-Plus-5-teilig/html/product/100096394',
+  },
+  {
     slug: 'wmf-diadem-plus-kochtopf-hoch-20cm',
     plancher: 34.31,
     source:
