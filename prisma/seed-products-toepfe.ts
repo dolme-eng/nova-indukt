@@ -23,11 +23,21 @@ const products = [
   // ══════════════════════════════════════════════════════════════
   {
     slug: 'fissler-original-profi-collection-kochtopf-24cm',
+    // Fissler Art.-Nr. 084 128 24 000 0
     supplierSku: 'FIS-OPC-KT24',
+    // EAN lu sur le site du fabricant, dans le nom du fichier image de la
+    // variante (`4009209379890-…`). Confirme aussi par le tableau `variants`.
+    // La fiche n'en comportait aucun.
+    ean: '4009209379890',
     sortOrder: 1,
-    nameDe: 'Fissler Original Profi Collection Kochtopf hoch 24 cm',
-    shortDescription: 'Profikochtopf aus massivem Edelstahl mit CookStar® Allherdboden - 6,3 L',
-    descriptionDe: `Der Fissler Original Profi Collection Kochtopf (hoch, 24 cm) ist die absolute Referenz in deutschen Profiküchen. Hergestellt aus extrem dickwandigem, mattiertem Edelstahl 18/10, ist dieser Topf extrem robust, langlebig und perfekt auf moderne Induktionskochfelder abgestimmt.
+    // « hoch » est justifié : c'est le *hoher Kochtopf*, article distinct du
+    // kochtopf standard 6,3 L. Le nom de fichier du visuel officiel et le
+    // prix fabricant (239 €) designent la variante haute. La mention n'est donc
+    // pas retirée, mais complétée.
+    nameDe: 'Fissler Original Profi Collection hoher Kochtopf 24 cm',
+    shortDescription:
+      'Hoher Profikochtopf aus massivem Edelstahl mit CookStar® Allherdboden - 9,1 L',
+    descriptionDe: `Der Fissler Original Profi Collection Kochtopf (24 cm) ist die absolute Referenz in deutschen Profiküchen. Hergestellt aus extrem dickwandigem, mattiertem Edelstahl 18/10, ist dieser Topf extrem robust, langlebig und perfekt auf moderne Induktionskochfelder abgestimmt.
 
 **Merkmale:**
 - CookStar® Allherdboden (7,2 mm) für perfekte Planstabilität und maximale Energieeffizienz auf Induktion
@@ -39,22 +49,34 @@ const products = [
 - Hergestellt in Deutschland (Made in Germany)
 
 Indestructible, lourd et thermiquement parfait - l'excellence absolue de Fissler.`,
+    // Prix fabricant relevé sur le site officiel (JSON-LD `offers`) :
+    //   239,00 € pour le *hoher* Kochtopf 24 cm / 9,1 L, EAN 4009209379890.
+    // ⚠ Le prix de 129,00 € retenu plus tôt portait sur la variante 6,3 L
+    // (fabricant 149,00 €). Il ne vaut pas pour ce produit : le ramener ici
+    // serait une remise de 46 % sur un article plus grand. 199,00 € est
+    // conservé, déjà 17 % sous le tarif fabricant. La marge reste invérifiable :
+    // `costPrice` est vide sur les 316 produits.
     price: 199.0,
-    oldPrice: 220.0,
+    oldPrice: 239.0,
     brand: 'Fissler',
     material: 'Edelstahl 18/10 (unbeschichtet)',
-    dimensions: 'Ø 24 cm, Höhe 14 cm, 6,3 Liter',
+    // Hauteur 21,5 cm et 9,1 L : c'est la variante haute. Les 14 cm d'origine ne
+    // correspondaient à aucune des deux variantes du fabricant.
+    dimensions: 'Ø 24 cm, Höhe 21,5 cm, 9,1 Liter',
     dishwasherSafe: true,
     inductionSafe: true,
     vatRatePercent: 19,
     priceIncludesVat: true,
-    weightKg: 3.2,
+    // Poids de la variante haute : 3,54 kg. Les 3,17 kg relevés plus tôt
+    // concernaient la variante 6,3 L, et le 3,2 kg d'origine une moyenne non
+    // sourcée. Le poids conditionne la valeur du colis en portage.
+    weightKg: 3.54,
     badges: ['Made in Germany', 'CookStar®', 'Kaltmetallgriffe'],
     rating: 4.8,
     reviewCount: 0,
-    metaTitle: 'Fissler Original Profi Collection Kochtopf 24 cm | NOVA INDUKT',
+    metaTitle: 'Fissler Original Profi Collection hoher Kochtopf 24 cm | NOVA INDUKT',
     metaDescription:
-      'Fissler Original Profi Collection Kochtopf hoch 24 cm (6,3 L). Inox 18/10, CookStar-Boden, induktionsgeeignet. Hergestellt in Deutschland bei NOVA INDUKT.',
+      'Fissler Original Profi Collection hoher Kochtopf 24 cm (9,1 L, Metalldeckel). Inox 18/10, CookStar-Boden, induktionsgeeignet. Hergestellt in Deutschland.',
     categorySlug: 'induktionstoepfe',
     folder: 'Fissler Original Profi Collection - Kochtopf 24 cm',
     imageFiles: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],

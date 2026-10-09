@@ -79,3 +79,6 @@ scratch/
 # Cannot be read or deleted by userspace tools (needs chkdsk /f on the exFAT
 # volume). Kept out of git so it never breaks tooling again.
 _bak_corrupt*/
+
+# Cache de scraping (scripts/fissler-sync.ts) : reproductible, ne pas versionner
+.cache/
