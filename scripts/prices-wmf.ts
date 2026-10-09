@@ -23,6 +23,22 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    // Fiche inexistante : le catalogue porte « wmf-function-4-bratentopf-20cm »
+    // (EAN 4000530605856). Il n'y a pas de version 24 cm chez nous, alors que
+    // le relevé ci-dessous porte précisément sur le 24 cm. Écartée : appliquer un
+    // prix 24 cm à une fiche 20 cm serait l'erreur de variante qu'on a déjà
+    // commise deux fois (couvercles 16/20 cm, ustensiles Now S).
+    slug: 'wmf-function-4-bratentopf-24cm',
+    plancher: 106.08,
+    source:
+      'koempf24.de, WMF Fleischtopf Ø 24 cm Function 4 (ancienne art. 0761246380, ' +
+      '5,7 l, Chromargan 18/10, TransTherm) : 106,08 € en promotion, 113,25 € avant ' +
+      'promo, UVP 179,99 €. wmf.com confirme la même référence (Kochtopf mit ' +
+      'Deckel, 24 cm) à 119,99 €, UVP 179,99 €. Plancher 106,08 €, le moins cher ' +
+      'des deux et la seule offre avec remise active.',
+    url: 'https://www.koempf24.de/wmf-fleischtopf-o-24-cm-function-4',
+  },
+  {
     slug: 'wmf-compact-cuisine-dampfgareinsatz-24cm',
     plancher: 55.93,
     source:

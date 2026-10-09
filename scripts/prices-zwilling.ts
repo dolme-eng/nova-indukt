@@ -23,6 +23,18 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    // Notre slug annonce 16 cm ; la référence Pro S Utility 16 cm porte l EAN
+    // 4009839072802 (zwilling.com.au). Le seul prix public trouvé est en
+    // dollars australiens, hors marché allemand : écarté.
+    slug: 'zwilling-pro-s-utility-messer-16cm',
+    plancher: 0,
+    source:
+      'NON APPLIQUÉ — référence identifiée (EAN 4009839072802) mais seul prix public ' +
+      'trouvé : 299,95 AUD chez zwilling.com.au. Marché allemand non documenté, ' +
+      'conversion automatique refusée.',
+    url: 'https://zwilling.com.au/professional-s-utility-knife-16cm/',
+  },
+  {
     slug: 'zwilling-magnetic-messerschiene',
     plancher: 43.95,
     source:
@@ -62,13 +74,26 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/205610926_-henckels-pro-edelstahlloeffel-zwilling.html',
   },
   {
-    slug: 'zwilling-now-s-bestechenset-30-teilig',
+    slug: 'zwilling-now-s-besteckenset-30-teilig',
     plancher: 53.99,
     source:
-      'NON APPLIQUE — moebel.de, Besteck-Set 30 pieces : 53,99 EUR (OTTO, mars 2026) ; ' +
-      'zwilling.com, Aberdeen 30 pieces : 94,95 EUR. Ni l un ni l autre n est le ' +
-      '« Now S ». Notre fiche est a 49,99 EUR, deja sous les deux : rien a corriger.',
+      'NON APPLIQUE — trois games pour 30 pieces releves : Now S est introuvable ' +
+      'sur le marché allemand. References voisinees : Aberdeen 30 tlg 94,95 EUR ' +
+      '(zwilling.com), Cult 30 tlg 99,00 EUR (tischkulturshop), set generique ' +
+      '53,99 EUR (moebel.de, mars 2026). Notre fiche est a 49,99 EUR, deja sous ' +
+      'les trois : aucune correction needed, on n ecrit rien.',
     url: 'https://www.moebel.de/marken/zwilling/rubrik:geschirr?data-sheet=202ae3ac3f057188f6fb7231aafaddbf',
+  },
+  {
+    slug: 'zwilling-spirit-sauteuse-24cm',
+    plancher: 113.67,
+    source:
+      'NON APPLIQUE — zwilling.com ne liste que la sauteuse Spirit en dollars ' +
+      '(139,99 USD, 64097-280). En Allemagne, le comparateur remonte une TWIN ' +
+      'Classic Sauteuse 24 cm (kulinagroup, EAN 4009839260834) a 113,67 EUR : ' +
+      'autre serie, meme type. Ecarté : le prix d une Twin Classic ne vaut pas ' +
+      'pour une Spirit.',
+    url: 'https://www.zwilling.com/us/zwilling-spirit-3-ply-5-qt-stainless-steel-saute-pan-64097-280/64097-280-0.html',
   },
   {
     slug: 'zwilling-fondue-set-20cm',
