@@ -39,6 +39,32 @@ type Ligne = {
 
 const LIGNES: Ligne[] = [
   {
+    appliquer: false,
+    slug: 'wmf-fusiontec-mineral-pro-bratentopf-22cm',
+    plancher: 84.99,
+    source:
+      'NON APPLIQUE — doute sur la nature du produit. geizhals.de : ' +
+      'Fusiontec Mineral Pro Multi-Topf mit Deckel 22 cm Tim Raue Edition ' +
+      '(3201114622, EAN 4000530762238) à 84,99 EUR, 4 offres ; idealo, 7 offres, ' +
+      '118,99-149,99 EUR. Même série et même diamètre que notre fiche, mais ' +
+      'c’est un MULTI-Topf (bratpfanne + petit wok), pas un Bratentopf. Le ' +
+      'Bratentopf 22 cm documenté chez WMF relève de la série Aromatic (199,99 EUR ' +
+      'UVP 249,00 EUR). Notre fiche est peut-être le Multi-Touf renommé à tort, ' +
+      'peut-être un vrai Bratentopf absent du marché : à trancher sur l’image.',
+    url: 'https://geizhals.de/wmf-fusiontec-mineral-pro-multi-topf-22cm-tim-raue-edition-3201114622-a3670509.html',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-comfort-line-stielkasserolle-16cm',
+    plancher: 63.99,
+    source:
+      'NON APPLIQUE — geizhals.de, WMF Function 4 Stielkasserolle ohne Deckel ' +
+      '16 cm (07.6316.6381, EAN 4000530605894) : 63,99 EUR. wmf.com affiche la ' +
+      'même page « en ligne épuisée ». Notre fiche est une Comfort Line, autre ' +
+      'série. Relevé fourni pour arbitrage.',
+    url: 'https://www.wmf.com/de/de/function-4-stielkasserolle-ohne-deckel-16-cm-8910000107.html',
+  },
+  {
     slug: 'wmf-gourmet-plus-topfset-5tlg',
     plancher: 329.0,
     source:
