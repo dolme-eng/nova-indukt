@@ -78,6 +78,24 @@ const TYPE_WORDS = [
   'sandwich',
   'multikocher',
   'gusseisen',
+  // Vocabulaire du thème Fissler courant. Les pages s'appellent
+  // « Pfanne », « Servierpfanne », « Sautépfanne » ou « Stielpfanne » selon la
+  // ligne ; sans ces entrées, typeOf() ne reconnaissait pas le candidat et la
+  // fiche était rejetée alors que la page est exactement le bon produit.
+  'servierpfanne',
+  'stielpfanne',
+  'sautepfanne',
+  'schaumkelle',
+  'schoepfkelle',
+  'pfannenwender',
+  'kartoffelstock',
+  'kuechenzange',
+  'kuchengabel',
+  'gussgratin',
+  'gratinpfanne',
+  'dampfgarer',
+  'multifunktionspfanne',
+  'gemiusepfanne',
 ]
 const ACCESSORY = [
   'deckel',
@@ -123,10 +141,37 @@ function toks(s: string): string[] {
   }
   return [...new Set(out)]
 }
+/**
+ * Synonymes de dénomination.
+ *
+ * Fissler nomme ses poêles « Pfanne » là où notre catalogue écrit
+ * « Bratpfanne ». Même produit, même ligne, même corps — mais deux mots
+ * différents, donc deux types différents, donc un rejet. Idem « Sautépfanne »
+ * que le thème écrit sans accent, et « Servierpfanne » que nous appelons
+ * « Sauteuse ».
+ *
+ * Sans cette table, la ligne la plus vendue du catalogue (Adamant Comfort)
+ * restait sans image alors que la page fabricant est disponible et correcte.
+ */
+const SYNONYMES: Record<string, string> = {
+  pfanne: 'bratpfanne',
+  stielpfanne: 'bratpfanne',
+  sautepfanne: 'sauteuse',
+  servierpfanne: 'sauteuse',
+  gemiusepfanne: 'gratinpfanne',
+  gussgratin: 'gratinpfanne',
+  schmortopf: 'schmortopf',
+  topf: 'kochtopf',
+  stieltopf: 'stielkasserolle',
+  kasserolle: 'stielkasserolle',
+}
+
 function typeOf(s: string): string | null {
   const t = s.toLowerCase()
   const hits = TYPE_WORDS.filter((w) => t.includes(w))
-  return hits.length ? hits.sort((a, b) => b.length - a.length)[0] : null
+  if (!hits.length) return null
+  const long = hits.sort((a, b) => b.length - a.length)[0]
+  return SYNONYMES[long] ?? long
 }
 function sizesIn(s: string): string[] {
   return [...new Set([...s.matchAll(/(\d{2})\s*[-–]?\s*(?:cm|l\b|liter)/gi)].map((m) => m[1]))]
@@ -258,8 +303,21 @@ async function main() {
           // n'affirme rien — l'identité se prouve, elle ne se devine pas.
           if (!ourType && !theirType) return null
           // Taille inconnue côté candidat : deux cotes différentes se
-          // partageraient la même photo ( lids Plus 16 et 20 cm → 1034175).
-          if (ourSizes.length && !theirSizes.some((s) => ourSizes.includes(s))) return null
+          // partageraient la même photo (lids Plus 16 et 20 cm → 1034175).
+          //
+          // Une page dont le titre ne porte AUCUNE cote est différente : le
+          // thème Fissler mutualise la page pour toutes les diameters
+          // (« adamant-comfort-pfanne », variantes 20 à 32 cm) et chaque
+          // variante a sa photo. Rejeter ces pages écartait la ligne la plus
+          // vendue du catalogue alors que les images sont précisément
+          // disponibles. On les accepte, et la sélection se fait par EAN.
+          if (
+            ourSizes.length &&
+            theirSizes.length &&
+            !theirSizes.some((s) => ourSizes.includes(s))
+          ) {
+            return null
+          }
           const tt = new Set(toks(libelle))
           const serie = target.filter((t) => tt.has(t)).length / (target.length || 1)
           return { c, serie }

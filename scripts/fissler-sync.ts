@@ -436,13 +436,37 @@ type TheirVariant = {
  */
 function parseVariants(html: string): TheirVariant[] {
   const at = html.indexOf('"variants":[')
-  if (at < 0) return []
+  const parsed = at < 0 ? null : extractJsonArray(html, at, '"variants":')
+  const variants = Array.isArray(parsed) ? normaliserVariants(parsed) : []
+  // Format JSON absent ou vide : on tente le bloc de thème, seul format qui
+  // porte les images par variante sur les pages récentes.
+  if (variants.some((v) => v.image)) return variants
+  return parseVariantsScript(html)
+}
 
-  // Extraction par equilibre d'accolades : le tableau est du JSON inline.
+/**
+ * Variantes dans un bloc `<script>` de thème Shopify.
+ *
+ * Le thème actuel n'expose plus `"variants":[` en JSON : il émet un objet
+ * JavaScript littéral, `variants: [{...}]`, sans guillemets autour de la clé.
+ * Chercher la forme avec guillemets renvoyait zéro variante, et donc zéro
+ * image, pour toutes les pages du thème récent — dont Adamant Comfort, la
+ * ligne la plus vendue du catalogue.
+ */
+function parseVariantsScript(html: string): TheirVariant[] {
+  const at = html.indexOf('variants: [')
+  if (at < 0) return []
+  const parsed = extractJsonArray(html, at, 'variants: ')
+  if (!Array.isArray(parsed)) return []
+  return normaliserVariants(parsed)
+}
+
+/** Lit un tableau JSON à partir d'un décalage, par équilibre de crochets. */
+function extractJsonArray(html: string, at: number, prefix: string): unknown {
   let depth = 0
   let start = -1
   let end = -1
-  for (let i = at + '"variants":'.length; i < html.length; i++) {
+  for (let i = at + prefix.length; i < html.length; i++) {
     const c = html[i]
     if (c === '[') {
       if (depth === 0) start = i
@@ -455,29 +479,33 @@ function parseVariants(html: string): TheirVariant[] {
       }
     }
   }
-  if (start < 0 || end < 0) return []
-
-  let parsed: unknown
+  if (start < 0 || end < 0) return null
   try {
-    parsed = JSON.parse(html.slice(start, end))
+    return JSON.parse(html.slice(start, end))
   } catch {
-    return []
+    return null
   }
-  if (!Array.isArray(parsed)) return []
+}
 
-  return parsed.flatMap((v: Record<string, unknown>) => {
+/**
+ * Le bloc de thème porte les vraies images par variante (`image.src`), là où
+ * le format JSON historique ne les donnait qu'au niveau produit.
+ */
+function normaliserVariants(parsed: unknown[]): TheirVariant[] {
+  return parsed.flatMap((v) => {
+    const rec = v as Record<string, unknown>
     const image =
-      (v.image as { src?: string } | null)?.src ??
-      (v.images as { src?: string }[] | undefined)?.[0]?.src ??
+      (rec.image as { src?: string } | null)?.src ??
+      (rec.images as { src?: string }[] | undefined)?.[0]?.src ??
       null
-    const price = (v.price as { amount?: number } | undefined)?.amount ?? null
+    const prix = (rec.price as { amount?: number } | undefined)?.amount
     return [
       {
         ean: image ? eanFromImage(image) : null,
-        sku: String(v.sku ?? ''),
-        title: String(v.title ?? ''),
-        price: typeof price === 'number' ? price : null,
-        image: image ? `https:${image}` : null,
+        sku: String(rec.sku ?? ''),
+        title: String(rec.title ?? ''),
+        price: typeof prix === 'number' ? prix : null,
+        image: image ? `https:${image.replace(/^https?:/, '')}` : null,
       },
     ]
   })
