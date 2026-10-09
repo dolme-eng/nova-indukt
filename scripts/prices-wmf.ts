@@ -23,6 +23,35 @@ type Ligne = { slug: string; plancher: number; source: string; url: string }
 
 const LIGNES: Ligne[] = [
   {
+    slug: 'wmf-gourmet-plus-topfset-5tlg',
+    plancher: 129.99,
+    source:
+      'NON APPLIQUE par reference — geizhals.de, WMF Diadem Plus Kochtopf-Set ' +
+      '5-tlg. (EAN 4000530736482) : 108,39 EUR. Notre fiche est le Gourmet Plus ' +
+      '5-teilig : autre serie, autre composition. Releve de la serie voisine ' +
+      'fourni pour arbitrage.',
+    url: 'https://geizhals.de/wmf-diadem-plus-kochtopf-set-07-3035-6040-a1052347.html',
+  },
+  {
+    slug: 'wmf-gourmet-plus-kochtopf-24cm',
+    plancher: 99.14,
+    source:
+      'koempf24.de, WMF Fleischtopf Ø 24 cm Gourmet Plus : 99,14 EUR en promotion, ' +
+      '106,16 EUR avant promo, UVP 179,99 EUR ; 5,7 L, TransTherm, couvercle inox ' +
+      'à dégagement de vapeur. idealo, 6 offres, 101,99-179,99 EUR. Les deux ' +
+      'sources se recoupent sur la même référence. Plancher 99,14 EUR.',
+    url: 'https://www.koempf24.de/wmf-fleischtopf-o-24-cm-gourmet-plus',
+  },
+  {
+    slug: 'wmf-fusiontec-schmorpfanne-28cm',
+    plancher: 119.99,
+    source:
+      'idealo 12 offres, 119,99-202,89 EUR — WMF Fusiontec Schmorpfanne 28 cm, ' +
+      '4,1 L, haut bord, kratzfest. deutschlandcard confirme l EAN 4000530702746 ' +
+      '(variante Black) à 149,99 EUR. Plancher 119,99 EUR.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/6615027_-fusiontec-schmorpfanne-28-cm-wmf.html',
+  },
+  {
     // Pas de 16 cm chez nous (le catalogue WMF porte 20 et 24 cm), le releve
     // porte sur le Fleischtopf 16 cm : ecarte plutot que de transposer.
     slug: 'wmf-diadem-plus-kochtopf-hoch-16cm',
