@@ -154,6 +154,39 @@ const LIGNES: Ligne[] = [
     url: 'https://www.wmf.com/de/de/glasdeckel-fuer-pfannen-20-cm-3201002621.html',
   },
   {
+    slug: 'wmf-function-4-sauteuse-24cm',
+    plancher: 118.89,
+    source:
+      'guenstiger.de, WMF Function 4 Gemuesetopf mit Deckel 20 cm (art. 07.6220.6380, ' +
+      '5,3 L, TransTherm) : 118,89 EUR avec 5 offres (118,89-170,28 EUR) ; idealo ' +
+      'recense la meme reference avec 8 offres a 133,09 EUR de plancher. Notre fiche ' +
+      'est une sauteuse 24 cm : corps plus petit que le Gemuesetopf 20 cm, mais ' +
+      'meme serie et meme famille de produit. Plancher 118,89 EUR, le moins cher ' +
+      'des deux comparateurs et en dessous du plancher idealo.',
+    url: 'https://www.guenstiger.de/Produkt/WMF/Function_4_Gemuesetopf_mit_Deckel_20_cm.html',
+  },
+  {
+    slug: 'wmf-function-4-stielkasserolle-16cm',
+    plancher: 84.93,
+    source:
+      'testbericht.de, releve du 11/08/2026 : 84,93 EUR en offre courante sur la ' +
+      'reference WMF Function 4 Stielkasserolle 16 cm mit Deckel (1,4 L), moyenne ' +
+      '85 EUR, Tiefstpreis 83,67 EUR, 7 offres. idealo affiche 89,72 EUR de ' +
+      'plancher sur la meme reference ; geizhals 89,99 EUR. Plancher 84,93 EUR, ' +
+      'offre courante et non le Tiefstpreis.',
+    url: 'https://www.testbericht.de/produkte/wmf-function-4-stielkasserolle-16-cm-mit-deckel',
+  },
+  {
+    slug: 'wmf-function-4-sauteuse-28cm',
+    plancher: 68.95,
+    source:
+      'halloholger.de, WMF Sautéuse 28 cm mit Glasdeckel, Durit Select Pro ' +
+      'antihaft, Chromargan 18/10, TransTherm : 68,95 EUR. BAUR affiche la WMF ' +
+      'Flavour Sautierpfanne 28 cm a 74,36 EUR (UVP 129,99 EUR) — autre ligne ' +
+      '(Flavour, fonte), non retenue. Plancher 68,95 EUR.',
+    url: 'https://halloholger.de/products/wmf-sautergryde-28-cm-med-glaslag-non-stick',
+  },
+  {
     slug: 'wmf-bestedeckhalter-edelstahl',
     plancher: 26.88,
     source:
