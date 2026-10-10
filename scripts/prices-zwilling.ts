@@ -88,6 +88,18 @@ const LIGNES: Ligne[] = [
     url: 'https://dalivo.de/shop/122-stielkasserollen/56931-zwilling-pro-kasserolle-16-cm-rostfreies-stahl/',
   },
   {
+    appliquer: false,
+    slug: 'zwilling-summit-plus-bratpfanne-24cm',
+    plancher: 69.95,
+    source:
+      'NON APPLIQUE par reference — zwilling.com affiche la Plus Bratpfanne 24 cm ' +
+      '(1034786, CERAFORCE sans PFAS) à 79,95 EUR, « temporairement épuisée », et la ' +
+      'Terreno Plus 24 cm (1030652) à 69,95 EUR. Le cache ne contient aucun article ' +
+      '« Summit Plus ». Si notre fiche est en fait une Plus ou une Terreno Plus, le ' +
+      'prix à retenir est 69,95 EUR ; à confirmer sur l image.',
+    url: 'https://www.zwilling.com/de/zwilling-plus-bratpfanne-24-cm-18%2F10-edelstahl-keramische-antihaftbeschichtung/1034786.html',
+  },
+  {
     slug: 'zwilling-madura-plus-28cm',
     plancher: 59.75,
     source:
