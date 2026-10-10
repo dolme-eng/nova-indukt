@@ -54,6 +54,42 @@ const LIGNES: Ligne[] = [
     url: 'https://geizhals.de/wmf-fusiontec-mineral-pro-multi-topf-22cm-tim-raue-edition-3201114622-a3670509.html',
   },
   {
+    appliquer: false,
+    slug: 'wmf-replacement-griff-set',
+    plancher: 9.49,
+    source:
+      'NON APPLIQUE — notre fiche est un « Ersatzgriff-Set Profi Plus » a 17,99 EUR. ' +
+      'koempf24.de publie le WMF Perfect Plus Griff (piece unique, original) a ' +
+      '82,62 EUR en promotion, UVP 89,99 EUR, et la Kochsignal-Dichtung Perfect a ' +
+      '9,49 EUR. Aucun « Ersatzgriff-Set » Profi Plus dans le catalogue : c est un ' +
+      'concept de rechange que WMF n utilise pas sous cette forme. A arbitrer.',
+    url: 'https://www.koempf24.de/wmf-perfect-plus-griff',
+  },
+  {
+    slug: 'wmf-topfregal-edelstahl-3fach',
+    plancher: 32.99,
+    source:
+      'intersmile.de : Topfregal-Organizer en acier Scheduling, 3 niveaux (et ' +
+      'variantes 2/3/4/5 niveaux), a 32,99 EUR. Notre fiche annonce du 3-fach : la ' +
+      'variante correspondante existe chez ce revendeur. LaHUGE propose un modele ' +
+      ' ULISEM a 10 casiers a 38,57 EUR, mais sans contrainte sur le nombre de ' +
+      'niveaux — different produit. Plancher 32,99 EUR.',
+    url: 'https://www.intersmile.de/products/verstellbarer-topfregal-organizer-kuchen-topf-aufbewahrungsregal-aus-edelstahl-mehrschichtiger-haushaltstopf-und-pfannen-organizer-fur-die-kuche',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-diadem-plus-set-7-teilig',
+    plancher: 108.39,
+    source:
+      'NON APPLIQUE par composition — geizhals.de : WMF Diadem Plus Kochtopf-Set ' +
+      '5-tlg. (0730356040) a 108,39 EUR ; idealo, 19 offres, 110,42-329,95 EUR pour ' +
+      'la meme reference. Notre fiche annonce 7 pieces. Le set Diadem Plus ' +
+      'documente contient 5 pieces (Bratentopf 20, Fleischtopf 24/20/16, ' +
+      'Stielkasserolle 16) : notre fiche 7-teilig ne correspond a aucune reference ' +
+      'publiee. Releve fourni pour arbitrage.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/202168167_-diadem-plus-topfset-5-tlg-wmf.html',
+  },
+  {
     slug: 'wmf-bestedeckhalter-edelstahl',
     plancher: 26.88,
     source:
@@ -236,15 +272,14 @@ const LIGNES: Ligne[] = [
   },
   {
     appliquer: false,
-    slug: 'wmf-diadem-plus-set-7-teilig',
-    plancher: 129.99,
+    slug: 'wmf-diadem-plus-set-7-teilig-leer',
+    plancher: 0,
     source:
-      'NON APPLIQUE par défaut — la référence la plus proche est le Diadem Plus ' +
-      'Topf-Set 5-teilig (EAN 4000530736482) : 149,99 EUR chez wmf.com (30 jours ' +
-      'au meilleur prix) et 129,99 EUR chez Alternate. Notre fiche est un ' +
-      '« Set 7-teilig » : la composition differe, donc ce prix ne lui est pas ' +
-      'applicable. Releve fourni pour arbitrage.',
-    url: 'https://www.alternate.de/WMF/Topf-Set-Diadem-Plus-5-teilig/html/product/100096394',
+      'PLACE RESERVEE — supprimee. Le releve retenu pour cette fiche est en tete de ' +
+      'liste (plancher 108,39 EUR, geizhals + idealo, composition 5 pieces contre ' +
+      '7 annoncees). Deux entrees pour le meme slug faisaient doubler le rapport ' +
+      'sans rien ajouter.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/202168167_-diadem-plus-topfset-5-tlg-wmf.html',
   },
   {
     slug: 'wmf-diadem-plus-kochtopf-hoch-20cm',
