@@ -90,6 +90,30 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/202168167_-diadem-plus-topfset-5-tlg-wmf.html',
   },
   {
+    appliquer: false,
+    slug: 'wmf-profi-plus-schoepfkellen-set-3tlg',
+    plancher: 58.74,
+    source:
+      'NON APPLIQUE par taille de set — idealo, 28 offres, 58,74-119,99 EUR pour le ' +
+      'WMF Profi Plus SCHOEPFLOEFFEL-Set 6 tlg. Notre fiche annonce 3 pieces. Le set ' +
+      'de 6 coute presque deux fois le prix d un set de 3 : un plancher de 3 pieces ' +
+      'calque sur un set de 6 nous ferait perdre de la marge. Referenc e voisine ' +
+      'fournie pour arbitrage.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/626269_-profi-plus-schoepfloeffel-set-6-tlg-wmf.html',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-gourmet-plus-kochtopf-16cm',
+    plancher: 66.93,
+    source:
+      'NON APPLIQUE — pas de fiche dans notre catalogue (releve fourni pour ' +
+      'arbitrage). idealo, WMF Gourmet Plus Fleischtopf 16 cm / 1,9 L : 66,93 EUR ' +
+      'plancher, 87,50-103,99 EUR sur les autres offres ; deutschlandcard affiche ' +
+      '82,75 EUR sur l EAN 4000530581198. Composition du set Gourmet Plus releve ' +
+      'ailleurs : 16/20/24 cm + Stielkasserolle 16 cm, donc le 16 cm y existe bien.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687191_-gourmet-plus-fleischtopf-16-cm-wmf.html',
+  },
+  {
     slug: 'wmf-bestedeckhalter-edelstahl',
     plancher: 26.88,
     source:
