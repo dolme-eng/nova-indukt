@@ -221,6 +221,30 @@ const LIGNES: Ligne[] = [
     url: 'https://www.wmf.com/de/de/produkte/kuechenzubehoer/schneidebretter.html',
   },
   {
+    slug: 'wmf-function-4-topfset-5tlg',
+    plancher: 306.9,
+    source:
+      'guenstiger.de, WMF Function 4 Topf-Set 5-teilig (8900547704), 15 offres : ' +
+      '306,90 EUR de plancher. Composition conforme a notre fiche : Bratentopf 20 cm, ' +
+      'Fleischtöpfe 16/20/24 cm, Stielkasserolle 16 cm, tous avec couvercle et ' +
+      'bouchons a égoutter. heise preisvergleich affiche 339,90 EUR sur la meme ' +
+      'reference. Plancher 306,90 EUR.',
+    url: 'https://www.guenstiger.de/Produkt/WMF/Function_4_Topf_Set_5_teilig_8900547704.html',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-function-4-topfset-5teilig',
+    plancher: 306.9,
+    source:
+      'DOUBLON PROBABLE — meme reference que wmf-function-4-topfset-5tlg (EAN ' +
+      '4000530720207, 8900547704), deux slugs et deux prix dans notre catalogue : ' +
+      '« Topfset Induktion 5-teilig » a 319,00 EUR et « Topf-Vorteils-Set 5-teilig » ' +
+      'a 309,00 EUR. Les deux fiches portent le meme EAN et le meme nombre de ' +
+      'pieces. A l image du doublon Intensa traite plus haut : garder une seule ' +
+      'fiche, celle dont le libelle est le plus lisible pour le client.',
+    url: 'https://preisvergleich.heise.de/wmf-function-4-kochtopf-set-8900547704-a3085200.html',
+  },
+  {
     slug: 'wmf-bestedeckhalter-edelstahl',
     plancher: 26.88,
     source:

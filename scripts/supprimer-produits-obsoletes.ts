@@ -31,6 +31,19 @@ type Candidat = { slug: string; motif: string; preuve: string }
 
 const CANDIDATS: Candidat[] = [
   {
+    slug: 'wmf-function-4-topfset-5teilig',
+    motif: 'Doublon strict de wmf-function-4-topfset-5tlg.',
+    preuve:
+      'Les deux fiches portent le meme EAN 4000530720207 et la meme reference ' +
+      'fabricant 8900547704 (Function 4 Topf-Vorteils-Set 5-teilig), avec une ' +
+      'composition identique : Bratentopf 20 cm, Fleischtöpfe 16/20/24 cm, ' +
+      'Stielkasserolle 16 cm. Deux fiches pour un seul article dégradent le ' +
+      'catalogue et nous faisons nous-meme concurrence. On garde ' +
+      '« wmf-function-4-topfset-5tlg », dont le libellé reprend le nom du ' +
+      'fabricant, et on retire cette fiche. Même arbitrage que le doublon Intensa ' +
+      '« 5tlg » / « 5teilig » traité plus haut.',
+  },
+  {
     slug: 'wmf-replacement-griff-set',
     motif: 'WMF ne vend aucun « Ersatzgriff-Set ».',
     preuve:
