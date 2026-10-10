@@ -54,6 +54,38 @@ const LIGNES: Ligne[] = [
     url: 'https://geizhals.de/wmf-fusiontec-mineral-pro-multi-topf-22cm-tim-raue-edition-3201114622-a3670509.html',
   },
   {
+    slug: 'wmf-bestedeckhalter-edelstahl',
+    plancher: 26.88,
+    source:
+      'gastro-experte.de, WMF Tablett/Besteck-Halter (Cromargan 18/10, série ' +
+      'Suppenstation) : 26,88 EUR, UVP 38,40 EUR ; mahoga.de le vend 28,90 EUR ' +
+      '(27,9 x 12 x 7,1 cm, 460 g). Notre fiche est un bestedeckhalter inox sans ' +
+      'dimension : c est bien ce produit de restauration. Plancher 26,88 EUR.',
+    url: 'https://gastro-experte.de/WMF-Tablett-/-Besteck-Halter',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-kitchenmaxx-schneidebrett',
+    plancher: 28.85,
+    source:
+      'NON APPLIQUE par reference — le cache de 1 013 pages wmf.com ne contient ' +
+      'aucun article « Küchenmaxx ». koempf24.de publie le WMF Schneidebrett 38 x ' +
+      '25 cm (art. 1879961000) a 28,85 EUR, UVP 35,99 EUR, et le Touch ' +
+      'Schneidebrett 32 x 20 cm a 14,99 EUR sur wmf.com. Sans cote dans notre slug, ' +
+      'le bon modele est indeterminate. Releve fourni pour arbitrage.',
+    url: 'https://www.koempf24.de/wmf-schneidebrett-38x-25-cm',
+  },
+  {
+    slug: 'wmf-profi-plus-backform-set',
+    plancher: 22.95,
+    source:
+      'moebel-bernskoetter.de, Backformen Set Inspiration Plus 3-teilig (Königskuchen' +
+      'form 30 cm, Springform 26 cm, Bundform 22 cm) : 22,95 EUR, prix regulier ' +
+      '49,99 EUR. Notre fiche annonce 3 pieces, ce qui correspond. Plancher 22,95 ' +
+      'EUR.',
+    url: 'https://www.moebel-bernskoetter.de/backformen-set-wmf-inspiration-plus/1411595',
+  },
+  {
     slug: 'tefal-pfannenschoner-30cm',
     plancher: 10.99,
     source:
