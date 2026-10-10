@@ -85,6 +85,92 @@ function charger(dossier: string): Page[] {
   return out
 }
 
+/**
+ * Types de produit reconnus.
+ *
+ * Même table que dans fix-images.ts, pour la même raison : sans elle, une
+ * fiche dont le type est inconnu — « grillzange », « nudelkelle » — se
+ * rapproche d'une page dont le type est inconnu aussi, et le score ne repose
+ * plus que sur le nom de série. C'est ainsi qu'une pince à barbecue se
+ * retrouvait rattachée à une casserole, et une cuillère à soupe à un set de
+ * cinq pièces : deux EAN FAUX posés sur des fiches réelles.
+ */
+const TYPES = [
+  'pfannenschoner',
+  'schneebesen',
+  'reiniger',
+  'adapterplatte',
+  'daempfeinsatz',
+  'auflaufform',
+  'backform',
+  'kastenform',
+  'tarteform',
+  'schmortopf',
+  'bratentopf',
+  'stielkasserolle',
+  'stieltopf',
+  'sauteuse',
+  'kochtopf',
+  'grillpfanne',
+  'bratpfanne',
+  'topfset',
+  'pfannenset',
+  'kasserolle',
+  'deckel',
+  'pfanne',
+  'topf',
+  'wok',
+  'schale',
+  'fondue',
+  'topfregal',
+  'wasserkocher',
+  'handmixer',
+  'stabmixer',
+  'schneidebrett',
+  'besteckset',
+  'essbesteck',
+  'messerset',
+  'teller',
+  'schluessel',
+  'gussgratin',
+  'gratinpfanne',
+  'servierpfanne',
+  'stielpfanne',
+  'sautepfanne',
+  'kelle',
+  'loeffel',
+  'pfannenwender',
+  'kartoffelstock',
+  'kuechenzange',
+  'schuessel',
+  'multikocher',
+  'gusseisen',
+]
+
+function typeDe(s: string): string | null {
+  const bas = s.toLowerCase()
+  const hits = TYPES.filter((w) => bas.includes(w))
+  if (!hits.length) return null
+  const long = hits.sort((a, b) => b.length - a.length)[0]
+  return SYNONYMES[long] ?? long
+}
+
+/**
+ * Garde-fou de type — repris de fix-images.ts.
+ *
+ * Un type connu de notre côté et inconnu côté cache, ou l'inverse, ou deux
+ * types différents : on refuse. Sans ce garde-fou, `pure-collection-grillzange`
+ * se rapprochait de `pure-collection-kochtopf-mit-metalldeckel` — deux mots de
+ * série communs, aucun mot de produit — et l'EAN d'une casserole allait se
+ * retrouver sur une pince.
+ */
+function typesCompatibles(lesNôtres: string, page: Page): boolean {
+  const a = typeDe(lesNôtres)
+  const b = typeDe(page.nom)
+  if (!a || !b) return false
+  return a === b
+}
+
 const MOTS_IGNORES = new Set([
   'fissler',
   'wmf',
@@ -149,6 +235,7 @@ function cotes(s: string): string[] {
 }
 
 function scorer(lesNôtres: string, page: Page): number {
+  if (!typesCompatibles(lesNôtres, page)) return 0
   const a = tokens(lesNôtres)
   const b = tokens(page.nom)
   if (!a.size || !b.size) return 0
