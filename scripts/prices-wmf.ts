@@ -54,6 +54,38 @@ const LIGNES: Ligne[] = [
     url: 'https://geizhals.de/wmf-fusiontec-mineral-pro-multi-topf-22cm-tim-raue-edition-3201114622-a3670509.html',
   },
   {
+    slug: 'tefal-pfannenschoner-30cm',
+    plancher: 10.99,
+    source:
+      'tefal.de, Ingenio Filzschoner 4er Set Ø 38 cm (K22030) : 10,99 EUR ; otto.de ' +
+      'vend le meme set à 9,48 EUR (UVP 12,99 EUR). Notre fiche est une pièce ' +
+      'unique de 30 cm, le seul article de protection publie par Tefal est un set ' +
+      'de 4 feutres Ø 38 cm. Plancher 10,99 EUR, prix fabricant du set.',
+    url: 'https://www.tefal.de/p/ingenio-filzschoner-4er-set-%C3%B8-38-cm-k22030/2100095266',
+  },
+  {
+    slug: 'tefal-pfannenschoner-28cm',
+    plancher: 10.99,
+    source:
+      'tefal.de, Ingenio Filzschoner 4er Set Ø 38 cm (K22030) : 10,99 EUR ; otto.de ' +
+      'vend le meme set à 9,48 EUR (UVP 12,99 EUR). Notre fiche est une pièce ' +
+      'unique de 28 cm, le seul article de protection publie par Tefal est un set ' +
+      'de 4 feutres Ø 38 cm. Plancher 10,99 EUR, prix fabricant du set.',
+    url: 'https://www.tefal.de/p/ingenio-filzschoner-4er-set-%C3%B8-38-cm-k22030/2100095266',
+  },
+  {
+    slug: 'tefal-pfannenschoner-26cm',
+    plancher: 10.99,
+    source:
+      'tefal.de, Ingenio Filzschoner 4er Set Ø 38 cm (K22030) : 10,99 EUR. otto.de ' +
+      'vend le meme set Ingenio 4 pièces à 9,48 EUR (UVP 12,99 EUR). Notre fiche ' +
+      '« Pfannenschoner 26 cm » est une pièce unique ; le seul article de protection ' +
+      'que Tefal publie est un set de 4 feutres Ø 38 cm. Plancher retenu 10,99 EUR, ' +
+      'prix fabricant du set — plus haut que l offre otto, donc notre prix unitaire ' +
+      'reste très concurrentiel.',
+    url: 'https://www.tefal.de/p/ingenio-filzschoner-4er-set-%C3%B8-38-cm-k22030/2100095266',
+  },
+  {
     slug: 'tefal-intuition-kochtopf-24cm',
     plancher: 27.9,
     source:
