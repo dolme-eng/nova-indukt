@@ -54,6 +54,51 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/709125_-vier-sterne-kochmesser-16-cm-zwilling.html',
   },
   {
+    appliquer: false,
+    slug: 'zwilling-two-move-deckel-24cm',
+    plancher: 17.06,
+    source:
+      'NON APPLIQUE — idealo, ZWILLING Twin Glasdeckel 24 cm (11 offres, 17,06-58,84 ' +
+      'EUR) : c est un couvercle TWIN Specials, pas Two Move. zwilling.com ne ' +
+      'propose pas de Two Move 24 cm dans les 1 984 pages du cache. Deux ' +
+      'couvercles de 24 cm de series differentes ne partagent pas un prix.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/206613364_-twin-glasdeckel-24-cm-zwilling.html',
+  },
+  {
+    appliquer: false,
+    slug: 'zwilling-spirit-messerset-3-teilig',
+    plancher: 79.99,
+    source:
+      'NON APPLIQUE — zwilling.com affiche un Gourmet Messerset 3-tlg. (36130-003-0) ' +
+      'à 79,99 EUR, prix normal 139,00 EUR. Aucun « Spirit Messerset 3-teilig » dans le ' +
+      'catalogue Zwilling : la serie Spirit est inoxcloakless et sans couteaux. ' +
+      'Notre fiche à 149,99 EUR semble incoherent avec un set 3 lames. Releve ' +
+      'fourni pour arbitrage.',
+    url: 'https://www.zwilling.com/de/zwilling-gourmet-messerset-3-tlg-36130-003-0/36130-003-0.html',
+  },
+  {
+    slug: 'zwilling-plus-stielkasserolle-18cm',
+    plancher: 57.99,
+    source:
+      'dalivo.de, Zwilling Pro Kasserolle 16 cm (18/10, 1,5 L) : 57,99 EUR, prix ' +
+      'barre 99,95 EUR. zwilling.com affiche la Pro S Stieltopf 16 cm (71085-160-0, ' +
+      '1,5 L, avec couvercle) à 59,95 EUR, prix plein 99,95 EUR. Notre fiche est une ' +
+      'stielkasserolle 18 cm avec couvercle ; les deux references relevees sont en ' +
+      '16 cm. Plancher 57,99 EUR, le plus bas des deux.',
+    url: 'https://dalivo.de/shop/122-stielkasserollen/56931-zwilling-pro-kasserolle-16-cm-rostfreies-stahl/',
+  },
+  {
+    slug: 'zwilling-madura-plus-28cm',
+    plancher: 59.75,
+    source:
+      'proshop.de : Madura Plus Ceramic Sauté Pan 28 cm à 59,75 EUR, Cerforce ' +
+      'Titanium sans PFAS, corps alu, haut bord, fabriqué en Italie. zwilling.com ' +
+      ' affiche la même série (réf. 1030790) à 79,95 EUR pour une Bratpfanne sans ' +
+      'couvercle. Nos deux fiches sont des sauteuses à 28 cm : on retient le ' +
+      'plancher le plus bas des deux, pour rester sous le marché des deux lignes.',
+    url: 'https://www.proshop.de/Pfannen/Zwilling-Madura-Plus-Ceramic-Saute-Pan-Sort-28-cm/3394358',
+  },
+  {
     slug: 'zwilling-plus-deckel-20cm',
     plancher: 13.0,
     source:
