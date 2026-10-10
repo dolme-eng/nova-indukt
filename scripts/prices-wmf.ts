@@ -114,6 +114,46 @@ const LIGNES: Ligne[] = [
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/687191_-gourmet-plus-fleischtopf-16-cm-wmf.html',
   },
   {
+    slug: 'wmf-professional-s-plus-tarte-form',
+    plancher: 18.99,
+    source:
+      'wmf.com, KAISER La Forme Plus Tarte- und Quicheform mit Hebeboden 28 cm : ' +
+      '18,99 EUR, UVP 29,99 EUR. geizhals.de ne trouve qu une seule offre pour la ' +
+      'Bake Pro 28 cm, a 26,90 EUR chez galaxus. Deux references distinctes : on ' +
+      'retient le plancher le plus bas des deux pour rester sous le marche dans les ' +
+      'deux cas.',
+    url: 'https://www.wmf.com/de/de/produkte/backzubehoer/backformen/quicheformen.html',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-professional-s-plus-kastenform',
+    plancher: 44.99,
+    source:
+      'NON APPLIQUE — erreur de reference deja commise puis corrigee. La ligne avait ' +
+      'ete ecrite a 44,99 EUR et appliquee par defaut : le prix du catalogue est ' +
+      'passe de 19,99 a 44,00 EUR (+120 %) sur une base fausse, avant retour a ' +
+      '19,99 EUR dans le meme tour. La reference citee, la KAISER La Forme Plus ' +
+      'Springform 26 cm (EAN 4006932638003) a 44,99 EUR, est une SPRINGFORM ronde ' +
+      'a fond demontable ; notre fiche est une KASTENFORM rectangulaire a fond ' +
+      'fixe. Deux formes de cuisson sans commune mesure : 44 EUR contre 20 EUR est ' +
+      'un signal d erreur, pas une opportunite de marge. J avais ecrit NON APPLIQUE ' +
+      'dans le texte sans poser ce drapeau, c est-a-dire exactement l erreur que ' +
+      'le drapeau existe pour empecher.',
+    url: 'https://www.wmf.com/de/de/kaiser-la-forme-plus-springform-mit-rohrboden-und-safeclick-26-cm-3201004071.html',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-professional-select-deckel-20cm',
+    plancher: 29.99,
+    source:
+      'NON APPLIQUE par serie — wmf.com publie un « Glasdeckel für Pfannen, ' +
+      '20 cm » (EAN 4000530534583, borosilicate, 730 g) sans prix affiche ; ' +
+      'moebel.de vend un « Pfannen-Topfdeckel 20 cm » universal a 29,99 EUR ' +
+      '(art. 6051229990). Aucune des deux references ne porte l appellation ' +
+      '« Professional Select ».',
+    url: 'https://www.wmf.com/de/de/glasdeckel-fuer-pfannen-20-cm-3201002621.html',
+  },
+  {
     slug: 'wmf-bestedeckhalter-edelstahl',
     plancher: 26.88,
     source:
