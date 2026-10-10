@@ -126,6 +126,21 @@ const LIGNES: Ligne[] = [
   },
   {
     appliquer: false,
+    slug: 'zwilling-summit-plus-bratpfanne-24cm',
+    plancher: 69.95,
+    source:
+      'IDENTITE NON DETERMINEE MAIS CACHE RESOLU A MOITIE — le cache zwilling.com ' +
+      '(1 984 pages) contient bien deux references de 24 cm : la Terreno Plus ' +
+      'Bratpfanne 24 cm (1030652) a 69,95 EUR et la Plus Bratpfanne 24 cm ' +
+      '(1034786) a 79,95 EUR, toutes deux en aluminium antiadhésif CERAFORCE ' +
+      'TITANIUM. Notre fiche ne dit pas laquelle. Plancher retenu 69,95 EUR, le ' +
+      'moins cher des deux : si la fiche est la Terreno Plus, le prix est juste ; ' +
+      'si c est la Plus, nous laissons 10 EUR de marge au marche. Ecartee en ' +
+      'l attente de l image, qui tranche immediatement entre les deux logos.',
+    url: 'https://www.zwilling.com/de/zwilling-terreno-plus-bratpfanne-24-cm-aluminium-titanverstaerkte-keramische-antihaftbeschichtung/1030652.html',
+  },
+  {
+    appliquer: false,
     slug: 'wmf-professional-s-plus-kastenform',
     plancher: 44.99,
     source:
@@ -185,6 +200,25 @@ const LIGNES: Ligne[] = [
       'Flavour Sautierpfanne 28 cm a 74,36 EUR (UVP 129,99 EUR) — autre ligne ' +
       '(Flavour, fonte), non retenue. Plancher 68,95 EUR.',
     url: 'https://halloholger.de/products/wmf-sautergryde-28-cm-med-glaslag-non-stick',
+  },
+  {
+    appliquer: false,
+    slug: 'wmf-kitchenmaxx-schneidebrett',
+    plancher: 44.99,
+    source:
+      'IDENTITE NON DETERMINEE — le cache wmf.com (1 013 pages) ne contient aucun ' +
+      'article « Kuechenmaxx ». Douze planches a Cuts y sont publiees ; les plus ' +
+      'proches de notre fiche, sans cote dans notre slug pour trancher : ' +
+      'Schneidebrett 38 x 25 cm (EAN 4000530645470) a 44,99 EUR, ' +
+      'Schneidebrett 27 x 36 cm (EAN 4000530597427) a 47,99 EUR, ' +
+      'Schneidebrett 45 x 30 cm (EAN 4000530645487) a 59,99 EUR, ' +
+      'Schneidebrett Bambus 26 x 20 cm (EAN 4000530625045) a 17,99 EUR. ' +
+      'koempf24.de vend la 38 x 25 cm a 28,85 EUR, wmf.com la Touch 32 x 20 cm a ' +
+      '14,99 EUR. Quatre prix pour quatre planches distinctes, et aucun identifiant ' +
+      'dans notre nom : impossible de choisir. La ligne est tracee avec les ' +
+      'candidats plutot que supprimee : une planche de cette taille existe chez ' +
+      'WMF, seule l identite est inconnue.',
+    url: 'https://www.wmf.com/de/de/produkte/kuechenzubehoer/schneidebretter.html',
   },
   {
     slug: 'wmf-bestedeckhalter-edelstahl',
