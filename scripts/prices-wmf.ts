@@ -222,14 +222,16 @@ const LIGNES: Ligne[] = [
   },
   {
     slug: 'wmf-function-4-topfset-5tlg',
-    plancher: 306.9,
+    plancher: 315.0,
     source:
-      'guenstiger.de, WMF Function 4 Topf-Set 5-teilig (8900547704), 15 offres : ' +
-      '306,90 EUR de plancher. Composition conforme a notre fiche : Bratentopf 20 cm, ' +
-      'Fleischtöpfe 16/20/24 cm, Stielkasserolle 16 cm, tous avec couvercle et ' +
-      'bouchons a égoutter. heise preisvergleich affiche 339,90 EUR sur la meme ' +
-      'reference. Plancher 306,90 EUR.',
-    url: 'https://www.guenstiger.de/Produkt/WMF/Function_4_Topf_Set_5_teilig_8900547704.html',
+      'guenstiger.de, WMF Function 4 Topf-Set 5-teilig (8900547704), 11 offres : ' +
+      '315,00 EUR de plancher. Composition conforme a notre fiche : Bratentopf 20 cm, ' +
+      'Fleischtoepfe 16/20/24 cm, Stielkasserolle 16 cm, tous avec couvercle et ' +
+      'bouchons a egoutter. heise preisvergleich affiche 339,90 EUR sur la meme ' +
+      'reference, avec 8 offres. Plancher 315,00 EUR. Le plancher etait de ' +
+      '306,90 EUR lors du releve precedent, sur 15 offres : le prix de marche a ' +
+      'monte de 8,10 EUR entre les deux releves, sans changement de produit.',
+    url: 'https://suche.guenstiger.de/Produkt/WMF/Function_4_Topf_Set_5_teilig_8900547704.html',
   },
   {
     appliquer: false,
