@@ -245,6 +245,20 @@ const LIGNES: Ligne[] = [
     url: 'https://preisvergleich.heise.de/wmf-function-4-kochtopf-set-8900547704-a3085200.html',
   },
   {
+    appliquer: false,
+    slug: 'wmf-function-4-besteckenset-68-teilig',
+    plancher: 234.26,
+    source:
+      'NON VERIFIE PAR SERIE — un Besteck-Set 68 pieces n existe pas dans la serie ' +
+      'Function 4, qui ne contient que de la vaisselle. La reference 68 pieces la ' +
+      'moins chère relevee est la WMF Merit 30-teilig (EAN 4000530633200) a ' +
+      '234,26 EUR avec 38 offres sur idealo ; notre fiche est a 129,99 EUR. Aucune ' +
+      'reference Function 4 a 68 pieces trouvee. Releve fourni pour arbitrage : si ' +
+      'notre fiche est en realite un Merit 30 pieces renomme, le prix de 229 EUR ' +
+      '-(234,26 - 3 %) s applique.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/5647462_-merit-besteckset-wmf.html',
+  },
+  {
     slug: 'wmf-bestedeckhalter-edelstahl',
     plancher: 26.88,
     source:
