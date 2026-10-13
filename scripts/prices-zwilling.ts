@@ -212,6 +212,21 @@ const LIGNES: Ligne[] = [
       'double du plancher : écart massif, à corriger.',
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/709084_-professional-s-kochmesser-26-cm-zwilling.html',
   },
+  {
+    slug: 'bob-kramer-meiji-chefmesser-20cm',
+    plancher: 348.91,
+    source:
+      'AVERTISSEMENT DE SERIE. Notre fiche s appelle « Meiji », mais la gamme ' +
+      'Bob Kramer publiee sous le nom de Meiji est un jeu de couteaux de table ' +
+      'presentes en droguerie, pas un couteau de chef. La premiere recherche est ' +
+      'tombée sur Euro Stainless, une autre serie, et elle ne va pas dans le ' +
+      'releve. Deux lectures se contredisent sur Meiji : berondi.de ne cite que ' +
+      'le Schinkenmesser Meiji 230 mm (38260-231) a 276,58 EUR, et aucun ' +
+      'Kochmesser 20 cm de cette serie n est reference. La ligne reste en attente ' +
+      'tant que la reference fabricant du Kochmesser Meiji 20 cm n est pas ' +
+      'etablie — un plancher lu sur une autre serie vaut mieux que rien.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/4570873_-bob-kramer-euro-stainless-kochmesser-20-cm-zwilling.html',
+  },
 ]
 
 async function main() {
