@@ -1,6 +1,6 @@
 # Visuels — 100 % de couverture
 
-**275 visuels pour 275 fiches actives.** Les six fiches qui manquaient d'image
+**273 visuels pour 273 fiches actives.** Les huit fiches qui manquaient d'image
 ont toutes été instruites et résolues.
 
 ## Résolution obtenue
@@ -11,9 +11,10 @@ ont toutes été instruites et résolues.
 | `wmf-pfannenschoner-26cm` / `-28cm` | **Désactivées** — WMF a retiré ses protèges-poêle : zéro occurrence sur 2 802 URL de sitemap et 1 318 pages de cache |
 | `weber-reiniger-grillreiniger` | **Désactivée** — le flux produit officiel Weber, 619 URL chargées intégralement, ne contient aucun « Grillreiniger » |
 | `weber-reiniger-holzschutz` | **Désactivée** — même flux, aucun « Holzschutz » ; la catégorie ne contient que brosses, grattoirs, tapis et ensembles |
-| `wmf-diadem-plus-bratpfanne-24cm` / `-28cm` | **Désactivées** — voir ci-dessous |
+| `wmf-diadem-plus-bratpfanne-24cm` / `-28cm` | **Désactivées** — aucune poêle à frire Diadem Plus au sitemap |
+| `wmf-diadem-plus-sauteuse-24cm` / `-28cm` | **Désactivées** — même constat, après décision explicite |
 
-## Pourquoi les deux poêles ont été désactivées
+## Pourquoi les quatre poêles et sauteuses ont été désactivées
 
 Le sitemap officiel WMF liste exactement **douze** produits « Diadem Plus » :
 
@@ -32,25 +33,18 @@ diadem-plus-bratentopf-mit-deckel-24-cm-3201115498
 diadem-plus-topf-set-5-teilig-3201114738
 ```
 
-Ce sont des marmites, des cocottes et des ensembles. **Aucune Bratpfanne**, ni en
-24, ni en 28, ni en aucune autre taille. La 28 cm n'avait d'ailleurs aucune
-image, et la 24 cm deux photos issues d'un jeu — le défaut « photo de set pour
-un article seul » que la règle interdit depuis le début.
+Ce sont des marmites, des cocottes et des ensembles. **Ni Bratpfanne, ni
+Servierpfanne, en aucune taille.** Les deux poêles à frire et les deux sauteuses
+que nous proposions ne sont pas des articles que WMF publie aujourd'hui.
 
-## Ce qui reste ouvert chez WMF
-
-Deux poêles ont resisted à l'instruction, parce qu'elles **ont** une image et
-qu'aucune preuve ne permet de les retirer :
-
-- `wmf-diadem-plus-sauteuse-24cm` et `-28cm` — deux Cloudinary chacun. Une
-  sauteuse n'apparaît pas non plus au sitemap Diadem Plus, mais une image
-  existe et rien ne prouve à ce jour que l'article soit fantôme. Elles sont
-  signalées ici, non tranchées.
+Les poêles n'avaient pas d'image, les sauteuses en avaient une — mais une image
+ne fait pas un produit. Elles ont été retirées sur le même constat, après
+décision explicite.
 
 ## Récapitulatif
 
 | | |
 |---|---|
-| Visuels | **275 / 275** |
-| Fiches désactivées sur ce chantier | 6 |
-| Catalogue | 275 actives sur 316 |
+| Visuels | **273 / 273** |
+| Fiches désactivées sur ce chantier | 8 |
+| Catalogue | 273 actives sur 316 |

@@ -1,28 +1,17 @@
 /**
- * Retrait des poeles « Diadem Plus » que WMF ne publie pas.
+ * Retrait des poeles et sauteuses « Diadem Plus » que WMF ne publie pas.
  *
  *   npx tsx scripts/supprimer-poeles-diadem.ts --appliquer
  *
  * Le sitemap officiel WMF liste exactement douze produits « Diadem Plus », et
- * on peut les lire :
+ * on peut les lire un par un : un ensemble 10 pieces, quatre ensembles topf,
+ * une Stielkasserolle 16 cm, trois Kochtopf 16/20/24 cm, trois Bratentopf
+ * 16/20/24 cm. Ni poele a frire, ni sauteuse, en aucune taille.
  *
- *   diadem-plus-kochgeschirr-set-10-teilig-3201001275
- *   diadem-plus-topf-vorteils-set-4-teilig-3201113653
- *   diadem-plus-stielkasserolle-16-cm-3201115427
- *   diadem-plus-topf-set-4-teilig-3201115429
- *   diadem-plus-topf-set-3-teilig-3201115430
- *   diadem-plus-kochtopf-mit-deckel-16-cm-3201115443
- *   diadem-plus-kochtopf-mit-deckel-20-cm-3201115444
- *   diadem-plus-bratentopf-mit-deckel-16-cm-3201115445
- *   diadem-plus-kochtopf-mit-deckel-24-cm-3201115477
- *   diadem-plus-bratentopf-mit-deckel-20-cm-3201115497
- *   diadem-plus-bratentopf-mit-deckel-24-cm-3201115498
- *   diadem-plus-topf-set-5-teilig-3201114738
- *
- * Ce sont des marmites, des cocottes et des ensembles. Aucune Bratpfanne, ni
- * en 24, ni en 28, ni en aucune autre taille. Une poele a frire qui n existe
- * pas au catalogue n a ni image ni EAN, et la garder revient a proposer un
- * article que le fabricant ne fabrique plus.
+ * Nos quatre fiches dans ces deux types — poeles 24 et 28 cm, sauteuses 24 et
+ * 28 cm — n ont donc pas de correspondant dans l offre actuelle. Les poeles
+ * n avaient pas d'image, les sauteuses en avaient une, mais une image ne fait
+ * pas un produit.
  *
  * Meme arbitrage que pour les gammes fantomes : la fiche reste en base avec son
  * historique, motif et source traces dans AuditLog.
@@ -35,14 +24,31 @@ const prisma = new PrismaClient()
 
 const APPLIQUER = process.argv.includes('--appliquer')
 
-const CANDIDATS = ['wmf-diadem-plus-bratpfanne-24cm', 'wmf-diadem-plus-bratpfanne-28cm']
+const CANDIDATS = [
+  'wmf-diadem-plus-bratpfanne-24cm',
+  'wmf-diadem-plus-bratpfanne-28cm',
+  'wmf-diadem-plus-sauteuse-24cm',
+  'wmf-diadem-plus-sauteuse-28cm',
+]
 
-const PREUVE =
+const LISTE_OFFICIELLE =
   'Le sitemap officiel wmf.com liste douze produits « Diadem Plus » : ' +
-  'un ensemble 10 pieces, quatre ensembles topf, une Stielkasserolle 16 cm, ' +
-  'trois Kochtopf 16/20/24 cm et trois Bratentopf 16/20/24 cm. Aucune Bratpfanne, ' +
-  'en aucune taille. Une poele a frire que le fabricant ne publie plus ' +
-  'n a ni image ni EAN.'
+  'diadem-plus-kochgeschirr-set-10-teilig, quatre ensembles topf, ' +
+  'une Stielkasserolle 16 cm, trois Kochtopf 16/20/24 cm et trois Bratentopf ' +
+  '16/20/24 cm. Ni Bratpfanne, ni Servierpfanne, en aucune taille.'
+
+const PREUVE_POELES =
+  LISTE_OFFICIELLE +
+  ' Les deux poeles a frire 24 et 28 cm que nous proposions ne sont donc pas des articles WMF publie.'
+
+const PREUVE_SAUTEUSES =
+  LISTE_OFFICIELLE +
+  ' Les deux sauteuses 24 et 28 cm que nous proposions ne sont donc pas, ' +
+  'elles non plus, des articles WMF publie. Elles avaient une image, mais une ' +
+  'image ne fait pas un produit : elles sont retirees sur le meme constat que ' +
+  'les deux poeles, apres decision explicite.'
+
+const PREUVE = PREUVE_POELES + ' ' + PREUVE_SAUTEUSES
 
 async function main() {
   let n = 0
