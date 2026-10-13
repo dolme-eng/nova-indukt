@@ -48,17 +48,38 @@ les 12 Function 4 qui ont déjà 8 EAN confirmés.
 
 ### Zwilling — 38 fiches, 2 EAN, 38 visuels
 
-- Le sitemap `sitemap_0-product.xml` liste **1986 URL en purs numéros
-  d'article** (`1023054.html`). C'est la meilleure clé technique du catalogue :
-  le numéro est la référence fabricant.
-- Chaque page contient l'EAN en JSON-LD. Méthode vérifiée.
+- Le sitemap `sitemap_0-product.xml` liste **1986 URL produits**, dont beaucoup
+  en pur numéro d'article (`1023054.html`) et d'autres en désignation
+  complète. Chaque page article rend **un unique code-barres** — c'est la
+  lecture la plus sûre dont on dispose.
 - **Problème** : l'éditeur publie aussi Ballarini et Staub sous la même
   boutique. Nos fiches ne doivent pas être rapprochées de ces pages.
 - **Échec documenté** : le rapprochement par nom a produit 3 faux EAN, révoqués
   depuis (Enfinigy pour Now S, Twin Specials pour Plus, Pro pour Spirit).
 
-**À faire** : 36 fiches. Séquence sûre : ouvrir la page du numéro d'article,
-lire l'EAN, vérifier que la série et le type concordent.
+**Ce que le sitemap officiel prouve sur nos 36 fiches sans EAN** — vérifié par
+comptage direct sur les 1986 URL :
+
+| Lignée | Occurrences au sitemap |
+|---|---|
+| Four Star | **0** |
+| Two Move | **0** |
+| Spirit | **0** |
+| Magnetic Messerschiene | **0** |
+| Kartoffelstock | **0** |
+| Raclette | **0** |
+| Now S | 7 (autres produits) |
+| Pro S | 5 (autres produits) |
+| Plus Deckel | 1 |
+
+Zéro occurrence ne prouve pas que le produit a disparu — Zwilling publie
+aussi sous d'autres marques et son catalogue change. Mais une lignée absente du
+sitemap **n'a aucun EAN à y publier**. Ces fiches-là ne se résoudront pas par
+une recherche : il faut une source archivale, un catalogue papier, ou un compte
+revendeur.
+
+Le fichier `docs/REVUE-ZWILLING.md` présente les 36 fiches avec leur page
+fabricant candidate, pour relecture humaine.
 
 ### Fissler — 37 fiches, 13 EAN, 37 visuels
 
