@@ -61,6 +61,52 @@ const LIGNES: Ligne[] = [
       'Hob2Hood, serie 5000, 4 zones, 7 350 W, EAN 7333394024592.',
     url: 'https://meta-preisvergleich.de/s/aeg-ikb6431axb.htm',
   },
+  {
+    slug: 'siemens-iq300-eh801hfb1e-induktionskochfeld',
+    plancher: 534.34,
+    source:
+      'idealo.de : Siemens EH801HFB1E, 30 offres, 534,34 a 1 126,46 EUR. ' +
+      'check24.de confirme sur la meme reference un plancher de 399 EUR en ' +
+      'livraison payante et 584,90 EUR en livraison gratuite. Les deux ' +
+      'comparateurs portent le meme numero de modele et la meme largeur de ' +
+      '79,2 cm. On retient le plancher le plus bas des deux sources, ' +
+      '534,34 EUR, conformement a la regle qui prend toujours le plus bas.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/203272085_-eh801hfb1e-siemens.html',
+  },
+  {
+    slug: 'bosch-serie-4-pif64rbb5e-induktionskochfeld',
+    plancher: 374.01,
+    source:
+      'idealo.de : Bosch PIF64RBB5E, 32 offres, 374,01 a 749,55 EUR. ' +
+      'check24.de confirme 399,00 EUR comme meilleur prix produit sur le meme ' +
+      'modele, largeur 58,3 cm, 4 zones. Plancher retenu : 374,01 EUR.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/202114536_-pif64rbb5e-bosch.html',
+  },
+  {
+    slug: 'neff-t58tt20n0-flexinduction-induktionskochfeld',
+    plancher: 689.0,
+    source:
+      'cherrymoebel.de : Neff FlexInduction TTT5820N / T58TT20N0 a 689,00 EUR ' +
+      'contre UVP 2 139,00 EUR, offre OTTO, avec le meme numero de modele, ' +
+      '5 zones, largeur de coupe 75 cm. idealo.de le classe dans les ' +
+      'meilleurs rapports qualite-prix en 80 cm. Le prix de 939,99 EUR ' +
+      'affiche par MediaMarkt est le prix plancher du revendeur, affiche a ' +
+      'cot du prix fabricant, donc nous ne le retenons pas comme plancher de ' +
+      'marche. Plancher retenu : 689,00 EUR.',
+    url: 'https://cherrymoebel.de/neff-flexinduction-kochfeld-ttt5820n-t58tt20n0/',
+  },
+  {
+    slug: 'siemens-iq700-ex975lxc1e-induktionskochfeld',
+    plancher: 732.78,
+    source:
+      'idealo.de : Siemens EX975LXC1E, plancher 732,78 EUR chez mybauer.de, ' +
+      '767,77 EUR porte inclus, le tout en B-Ware et occasion a partir de ' +
+      '862,00 EUR. 90 cm, 5 zones, 11 100 W. MediaMarkt affiche 759,99 EUR ' +
+      'contre UVP 2 996 EUR. Les deux sources portent le meme numero de ' +
+      'modele et la meme largeur de 91,2 cm. Plancher retenu : 732,78 EUR, le ' +
+      'plus bas des deux.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/4850308_-ex975lxc1e-siemens.html',
+  },
 ]
 
 async function main() {
