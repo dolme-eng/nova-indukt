@@ -214,18 +214,40 @@ const LIGNES: Ligne[] = [
   },
   {
     slug: 'bob-kramer-meiji-chefmesser-20cm',
-    plancher: 348.91,
+    plancher: 276.75,
     source:
-      'AVERTISSEMENT DE SERIE. Notre fiche s appelle « Meiji », mais la gamme ' +
-      'Bob Kramer publiee sous le nom de Meiji est un jeu de couteaux de table ' +
-      'presentes en droguerie, pas un couteau de chef. La premiere recherche est ' +
-      'tombée sur Euro Stainless, une autre serie, et elle ne va pas dans le ' +
-      'releve. Deux lectures se contredisent sur Meiji : berondi.de ne cite que ' +
-      'le Schinkenmesser Meiji 230 mm (38260-231) a 276,58 EUR, et aucun ' +
-      'Kochmesser 20 cm de cette serie n est reference. La ligne reste en attente ' +
-      'tant que la reference fabricant du Kochmesser Meiji 20 cm n est pas ' +
-      'etablie — un plancher lu sur une autre serie vaut mieux que rien.',
-    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/4570873_-bob-kramer-euro-stainless-kochmesser-20-cm-zwilling.html',
+      'mygoodknife.com : Zwilling J.A. Henckels Bob Kramer Meiji Kochmesser 20 cm, ' +
+      'reference 38261-201-0, EAN 4009839370380, a 276,75 EUR TTC. La fiche ' +
+      'confirme lame 200 mm, noyau FC61, 100 couches d aciers speciaux, ' +
+      'manche pakkawood, fabrication japonaise. ACKermann (CH) vend le meme ' +
+      'couteau a 157,00 CHF et homemade.ch le Santoku Meiji a 230,00 CHF, ' +
+      'ce qui confirme que la serie existe bien en Europe. Notre premiere ' +
+      'recherche etait tombee sur Euro Stainless, une autre serie : la ' +
+      'reference 38261-201-0 tranche, et elle est differente.',
+    url: 'https://mygoodknife.com/de/shop/chef-knife-zwilling-j-a-henckels-bob-kramer-meiji-38261-201-0-20cm/',
+  },
+  {
+    slug: 'miyabi-5000mcd-gyuto-20cm',
+    plancher: 251.8,
+    source:
+      'idealo.de : ZWILLING Miyabi 5000MCD Gyutoh 20 cm, 26 offres, ' +
+      '251,80 a 499,79 EUR, plancher chez barax.de. dalivo.de confirme ' +
+      '263,09 EUR sur le meme article. 100 couches damas, noyau MicroCarbide, ' +
+      '63 HRC, manche en bouleau Masur, longueur de lame 200 mm. Plancher ' +
+      '251,80 EUR.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/3751772_-miyabi-5000mcd-gyutoh-20-cm-zwilling.html',
+  },
+  {
+    slug: 'miyabi-5000mcd-santoku-18cm',
+    plancher: 283.14,
+    source:
+      'idealo.de : Miyabi 5000MCD 67 Gyutoh 20 cm, 23 offres, plancher ' +
+      '283,14 EUR chez kaufland.de, sur la meme collection 5000MCD que notre ' +
+      'Santoku 18 cm. Le Santoku et le Gyuto ne sont pas le meme article, mais ' +
+      'nous n avons pas de source allemande propre au Santoku : on applique ' +
+      'le plancher du Gyuto, plus haut, plutot que d inventer un prix. Si le ' +
+      'Santoku se vend moins cher, la marge absorbe l erreur.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/5281025_-miyabi-5000mcd-67-gyutoh-20-cm-zwilling.html',
   },
 ]
 
