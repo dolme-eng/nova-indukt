@@ -56,7 +56,24 @@ interface ProductContentProps {
   relatedProducts: Product[]
 }
 
+/**
+ * Categories pour lesquelles les indicateurs SmartHeat et EcoPower ont un sens.
+ *
+ * Ces deux libelles decrivent ce que fait une plaque de cuisson de l'energie et
+ * de la chaleur. Les afficher sous une casserole, une crepe-panne ou une planche
+ * a decouper revient a annoncer une precision de temperature sur un ustensile
+ * qui n'a pas de regulation. Ils etaient affiches sur les 273 fiches, deux fois
+ * chacune : une en colonne desktop, une en accordeons mobile.
+ *
+ * On se base sur la categorie reelle du produit, lue en base, et non sur des
+ * mots du nom : c est la seule preuve fiable, et elle ne demande pas d Entretenir
+ * une liste de marques.
+ */
+const CATEGORIES_APPAREILS = new Set(['induktionskochfelder-herde', 'elektrogeraete'])
+
 export function ProductContent({ product, relatedProducts }: ProductContentProps) {
+  // `product.category` porte le slug de la categorie, lue en base.
+  const AFFICHAGE_TECHNOLOGIE = CATEGORIES_APPAREILS.has(product.category)
   const [selectedImage, setSelectedImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -124,8 +141,8 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
   const serviceItems = [
     {
       icon: Truck,
-      title: '1–3 Werktage',
-      sub: 'Kostenlos ab 500 €',
+      title: '1"“3 Werktage',
+      sub: 'Kostenlos ab 500 â‚¬',
     },
     {
       icon: ShieldCheck,
@@ -227,7 +244,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
       </nav>
 
       <div className={SHELL}>
-        {/* ——— Hero: galerie | colonne achat (50/50 dès lg) ——— */}
+        {/* "”"”"” Hero: galerie | colonne achat (50/50 dès lg) "”"”"” */}
         <section className="grid grid-cols-1 gap-6 pt-4 sm:gap-8 lg:grid-cols-[55%_1fr] lg:gap-8 lg:pt-6 xl:gap-10 2xl:gap-12">
           {/* Galerie */}
           <div className="flex min-w-0 flex-col gap-4 sm:flex-row-reverse sm:gap-5 lg:gap-6">
@@ -305,7 +322,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
             )}
           </div>
 
-          {/* Colonne achat — une seule colonne fluide, pas de sous-grille étroite */}
+          {/* Colonne achat "” une seule colonne fluide, pas de sous-grille étroite */}
           <div
             ref={infoRef}
             className="relative flex min-w-0 flex-col gap-4 lg:sticky lg:top-28 lg:self-start xl:top-32"
@@ -482,12 +499,12 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                   }}
                   className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-gray-100 text-sm font-bold text-[#0C211E] transition-colors hover:bg-gray-200"
                 >
-                  <Mail className="h-4 w-4" /> Überweisung
+                  <Mail className="h-4 w-4" /> Öberweisung
                 </button>
               </div>
             </div>
 
-            {/* Bandeau service — pleine largeur de la colonne */}
+            {/* Bandeau service "” pleine largeur de la colonne */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {serviceItems.map((item) => (
                 <div
@@ -508,7 +525,7 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
             {/* Confiance + partage */}
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
               {[
-                { icon: Shield, label: 'TÜV' },
+                { icon: Shield, label: 'TÖV' },
                 { icon: Lock, label: 'SSL' },
                 { icon: RotateCcw, label: '30 Tage' },
                 { icon: Truck, label: 'DHL' },
@@ -545,7 +562,10 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
         {/* Desktop: onglets pleine largeur */}
         <section className="mt-8 hidden w-full lg:mt-12 lg:block xl:mt-14">
           <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm">
-            <div className="flex flex-wrap justify-center gap-4 border-b border-gray-100 px-4 py-2 sm:gap-8 xl:gap-12" role="tablist">
+            <div
+              className="flex flex-wrap justify-center gap-4 border-b border-gray-100 px-4 py-2 sm:gap-8 xl:gap-12"
+              role="tablist"
+            >
               {[
                 { id: 'description' as const, label: 'Beschreibung' },
                 { id: 'specs' as const, label: 'Technische Daten' },
@@ -595,28 +615,36 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                       {[
-                        { icon: Zap, title: 'SmartHeat™', desc: 'Präzise Temperaturkontrolle' },
-                        { icon: Leaf, title: 'EcoPower™', desc: 'Energieeffizientes Kochen' },
-                        { icon: Shield, title: 'SafetyGuard™', desc: 'Maximale Sicherheit' },
+                        { icon: Zap, title: 'SmartHeatâ„¢', desc: 'Präzise Temperaturkontrolle' },
+                        { icon: Leaf, title: 'EcoPowerâ„¢', desc: 'Energieeffizientes Kochen' },
+                        { icon: Shield, title: 'SafetyGuardâ„¢', desc: 'Maximale Sicherheit' },
                         {
                           icon: Award,
                           title: 'Premium Qualität',
                           desc: 'Langlebigkeit garantiert',
                         },
-                      ].map((f) => (
-                        <div
-                          key={f.title}
-                          className="flex gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 p-4"
-                        >
-                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0C211E]">
-                            <f.icon className="h-5 w-5 text-nova-700" />
+                      ]
+                        // SmartHeat et EcoPower decrivent une plaque de cuisson :
+                        // ce que la plaque fait de l'energie et de la chaleur.
+                        // Les afficher sous une casserole, une crepe-panne ou
+                        // une planche a decouper n'a aucun sens et repete deux
+                        // fois sur la meme fiche, une en version desktop et
+                        // une en version mobile.
+                        .filter((x) => x.icon === Zap || x.icon === Leaf || AFFICHAGE_TECHNOLOGIE)
+                        .map((f) => (
+                          <div
+                            key={f.title}
+                            className="flex gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 p-4"
+                          >
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0C211E]">
+                              <f.icon className="h-5 w-5 text-nova-700" />
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-[#0C211E]">{f.title}</h3>
+                              <p className="text-sm text-gray-500">{f.desc}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-bold text-[#0C211E]">{f.title}</h3>
-                            <p className="text-sm text-gray-500">{f.desc}</p>
-                          </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </motion.div>
                 )}
@@ -698,20 +726,25 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
                     {[
                       { icon: Zap, t: 'SmartHeat', d: 'Gleichmäßige Hitze.' },
                       { icon: Leaf, t: 'Eco', d: 'Ressourcenschonend.' },
-                    ].map((x) => (
-                      <div
-                        key={x.t}
-                        className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3"
-                      >
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0C211E]">
-                          <x.icon className="h-4 w-4 text-nova-700" />
+                    ]
+                      // Même règle qu'en version desktop : ces deux
+                      // indicateurs décrivent un appareil de cuisson
+                      // électrique, pas une casserole ni une crêpe-panne.
+                      .filter(() => AFFICHAGE_TECHNOLOGIE)
+                      .map((x) => (
+                        <div
+                          key={x.t}
+                          className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3"
+                        >
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0C211E]">
+                            <x.icon className="h-4 w-4 text-nova-700" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-[#0C211E]">{x.t}</p>
+                            <p className="text-xs text-gray-500">{x.d}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-bold text-[#0C211E]">{x.t}</p>
-                          <p className="text-xs text-gray-500">{x.d}</p>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </div>
               ),
@@ -858,4 +891,3 @@ export function ProductContent({ product, relatedProducts }: ProductContentProps
     </article>
   )
 }
-
