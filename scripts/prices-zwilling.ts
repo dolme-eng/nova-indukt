@@ -249,6 +249,42 @@ const LIGNES: Ligne[] = [
       'Santoku se vend moins cher, la marge absorbe l erreur.',
     url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/5281025_-miyabi-5000mcd-67-gyutoh-20-cm-zwilling.html',
   },
+  {
+    slug: 'zwilling-pro-s-messerset-3-teilig',
+    plancher: 159.0,
+    source:
+      'idealo.de : ZWILLING Professional S Messerset 3 tlg, reference 35645002, ' +
+      '6 offres, plancher 159,00 EUR chez zwilling.com, jusqu a 230,00 EUR ' +
+      'sur Amazon et kulinagroup. Composition donnee par le comparateur : ' +
+      'Gemu semesser 18,5 cm, Fleischmesser 28 cm, Kochmesser 34 cm. Notre ' +
+      'fiche etait a 155,00 EUR.',
+    url: 'https://www.idealo.de/preisvergleich/OffersOfProduct/5094558_-professional-s-messerset-3-tlg-35645002-zwilling.html',
+  },
+  {
+    slug: 'zwilling-four-star-chefmesser-20cm',
+    plancher: 39.9,
+    source:
+      'geizhals.de : Zwilling Vier Sterne Kochmesser 20 cm, reference ' +
+      '31071-201-0, 22 offres, plancher 39,90 EUR chez AP Stahlwaren, mise a jour ' +
+      'du 13.10.2026. idealo.de confirme 32 offres sur le meme article a partir ' +
+      'de 49,99 EUR. Les deux comparateurs donnent la meme reference fabricant ' +
+      'et la meme longueur de lame. Notre fiche etait a 48,00 EUR, 20 % au- ' +
+      'dessus du plancher.',
+    url: 'https://geizhals.de/zwilling-vier-sterne-kochmesser-20cm-31071-201-0-a1178115.html',
+  },
+  {
+    appliquer: false,
+    slug: 'zwilling-twin-fin-ii-schaerfstahl',
+    plancher: 0,
+    source:
+      'NON VERIFIE PAR TYPE. Notre fiche est un Schärfstahl, un rod d affutage. ' +
+      'La recherche ne renvoie que des Twin Fin II Küchenmesser et Santokumesser ' +
+      '— des couteaux, pas des rods. nordicnest.de liste un Twin Fin II ' +
+      'Küchenmesser 20 cm, article 39831-01, a 99 EUR, et le dit « Artikel nicht ' +
+      'mehr verfugbar ». Aucun rod Twin Fin II n a ete trouve. Rien n est ecrit ' +
+      'tant que le bon article n est pas identifie.',
+    url: 'https://www.nordicnest.de/marken/zwilling/zwilling-twin-fin-ii-kuchenmesser/',
+  },
 ]
 
 async function main() {
